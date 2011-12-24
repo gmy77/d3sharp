@@ -36,6 +36,11 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Run()
         {
+            if (Rune_D > 0)
+            {
+                UsePrimaryResource(ScriptFormula(8) - ScriptFormula(16));
+            }
+            else
             UsePrimaryResource(ScriptFormula(8));
 
             // cast effect
@@ -78,6 +83,14 @@ namespace Mooege.Core.GS.Powers.Implementations
                 WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(0),
                     RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Fire, DamageType.Cold, DamageType.Arcane, DamageType.Fire));
 
+                //NoRune = Molten fire damage increased to 28 - 42 Fire damage over 3 seconds.
+
+                //Rune_A = increase the damage of Molten Fire
+
+                //Rune_C = freezing mist and slows enemies to 60% movement for 3 seconds
+
+                //Rune_E = crit targets -> fire duration for 18 seconds
+
                 // pool effect
                 if (Rune_B == 0)
                 {
@@ -94,6 +107,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.Electrocute)]
     public class WizardElectrocute : ChanneledSkill
     {
+        //TODO:Need Rune Effects
         public override void OnChannelOpen()
         {
             EffectsPerSecond = 0.5f;
@@ -154,20 +168,47 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.MagicMissile)]
     public class WizardMagicMissile : PowerScript
     {
+        //TODO-FIX: if you quickly press Magic Missiles, it wont complete the full animation..
+        //TODO: Pierce Chance to Target and hit another Target for Rune_D
         public override IEnumerable<TickTimer> Run()
         {
-            UsePrimaryResource(20f);
+            UsePrimaryResource(ScriptFormula(7));
 
             User.PlayEffectGroup(19305); // cast effect
-            
-            var projectile = new Projectile(this, 99567, User.Position);
-            projectile.OnCollision = (hit) =>
+            /*
+            //Rune_B is supposed to play 8 missiles
+            if (Rune_B > 0)
             {
-                SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
-                projectile.Destroy();
-                WeaponDamage(hit, 1.10f, DamageType.Arcane);
-            };
-            projectile.Launch(TargetPosition, 1f);
+                for (int i = 0; i < 8; ++i)
+                {
+                    var projectile = new Projectile(this, 99567, User.Position);
+                    projectile.OnCollision = (hit) =>
+                    {
+                        SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
+                        projectile.Destroy();
+                        //TODO:Rune_B -> increased to 141 weapon damage as Arcane.
+                        WeaponDamage(hit, 0f, DamageType.Arcane);
+                    };
+                    projectile.Launch(TargetPosition, ScriptFormula(4));
+                }
+            }
+            else*/
+            {
+                var projectile = new Projectile(this, 99567, User.Position);
+                projectile.OnCollision = (hit) =>
+                {
+                    SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
+                    projectile.Destroy();
+                    //TODO: Rune_A -> increased to 141 weapon damage as Arcane.
+                    //TODO: Rune_E -> track nearest target increased to 141 weapon damage as Arcane.
+                    WeaponDamage(hit, 1.10f, DamageType.Arcane);
+                    if (Rune_D > 0)
+                    {
+                        GeneratePrimaryResource(ScriptFormula(16));
+                    }
+                };
+                projectile.Launch(TargetPosition, ScriptFormula(4));
+            }
 
             yield break;
         }
@@ -316,7 +357,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 var targets = GetEnemiesInRadius(Target.Position, 10f);
                 if (targets.Actors.Count > 0)
                 {
-                    WeaponDamage(targets, 1.00f, DamageType.Arcane);
+                    WeaponDamage(targets, ScriptFormula(11), DamageType.Arcane);
                     return true;
                 }
 
@@ -335,7 +376,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 var targets = GetEnemiesInRadius(Target.Position, 10f);
                 if (targets.Actors.Count > 0)
                 {
-                    WeaponDamage(targets, 1.00f, DamageType.Arcane);
+                    WeaponDamage(targets, ScriptFormula(11), DamageType.Arcane);
                     return true;
                 }
 
@@ -353,7 +394,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 var targets = GetEnemiesInRadius(Target.Position, 10f);
                 if (targets.Actors.Count > 0)
                 {
-                    WeaponDamage(targets, 1.00f, DamageType.Arcane);
+                    WeaponDamage(targets, ScriptFormula(11), DamageType.Arcane);
                     return true;
                 }
 
@@ -372,7 +413,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 var targets = GetEnemiesInRadius(Target.Position, 10f);
                 if (targets.Actors.Count > 0)
                 {
-                    WeaponDamage(targets, 1.00f, DamageType.Arcane);
+                    WeaponDamage(targets, ScriptFormula(11), DamageType.Arcane);
                     return true;
                 }
 
@@ -391,6 +432,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             // cast effect
             SpawnEffect(RuneSelect(6560, 215311, 6560, 6560, 215324, 210804), TargetPosition);
                 //Tornados need to move randomdirections
+                //Seems like it's classified as a buff (Buff Group 3)
                 //and leave trail behind them (79940), think actor already does this.
 
                     // NoRune = Unleash a twister, deals 60% weapon damage per second Arcane to everything caught within it. 
@@ -400,7 +442,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     //          then User needs to cast signature spell, then One Big Tornado
                     // Rune_B = Normal Twisters, if two touch, they merge with increased AoE
                     // Rune_D = Reduced cost of casting resource
-
+                
                 yield return WaitSeconds(2f);
         }
     }
@@ -408,6 +450,17 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Disintegrate)]
     public class WizardDisintegrate : ChanneledSkill
     {
+        //Rune_A -> Damage increases slowly over time to inflict a maximum of 4620% weapon damage as Arcane.
+             //(10) - Chargeup Time, (11) - Dmg Modifier
+        //Rune_B -> Increase the width of the beam allowing it to hit more enemies for 2100% weapon damage as Arcane.
+             //ScriptFormula(5) - Damage Modifier, (6) - Radius Modifier
+        //Rune_C -> The beam fractures into a short ranged cone causing 239400% weapon damage per second as Arcane.
+             //ScriptFormula(2) - Damage Modifier, (4) - Range, (15) - Tick Period
+        //Rune_D -> When casting the beam you become charged with energy that spits out at nearby enemies doing 5700% weapon damage as Arcane.
+             //(7) - AOE Weapon Dmg Scalar, (8) - AOE Radius, (21) - Cost Reduction
+        //Rune_E -> Enemies killed by the beam have a 35% chance to explode causing 12800% weapon damage as Arcane to all enemies within 8 yards.
+             //(9) - Weapon dmg Scalar, (12) - Chance, (25) - Explosion Radius
+
         const float BeamLength = 40f;
 
         private Actor _target = null;
@@ -444,6 +497,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override IEnumerable<TickTimer> Main()
         {
+            //todo: is this correct? why not just seconds?ScriptFormula(20) is 8mana per tick 
             UsePrimaryResource(23f * EffectsPerSecond);
 
             foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f).Actors)
@@ -461,6 +515,16 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.WaveOfForce)]
     public class WizardWaveOfForce : PowerScript
     {
+        //Rune_A -> Increases damage to 20300% weapon damage as Physical, but reduces knockback. 
+        // (19) - Weapon Scalar Modifier, (25) - Knockback Magnitude
+        //Rune_B -> Enemies hit have a 100% chance to cause a smaller Wave of Force that deals 4600% weapon damage as Physical and knocks back enemies caught in its wake.
+        // (15) - small wave radius and knockback modifier, (16) - Chance to proc small waves, (23) - Small wave weapon scalar, 
+        //Rune_C -> Enemies caught in the wave have a 70% chance to randomly teleport to somewhere else nearby.
+        //(12) - Teleport Dist Min, (13) - Teleport Dist Max, (14) - Chance to teleport, 
+        //Rune_D -> Reduce casting cost to {Resource Cost} Arcane Power and cooldown is reduced to 8 seconds. 
+        // (28) - Resource cost, (31) - Cooldown reduction
+        //Rune_E -> Increases the distance enemies are knocked back and stuns all affected enemies for [5|1|] seconds.
+        //(11) - Knockback amount increase, (10) Stun Duration per level, 
         public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(25f);
@@ -470,7 +534,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.PlayEffectGroup(19356);
 
             AttackPayload attack = new AttackPayload(this);
-            attack.Targets = GetEnemiesInRadius(User.Position, 20f);
+            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(1));
             attack.AddWeaponDamage(2.05f, DamageType.Physical);
             attack.OnHit = hitPayload => { Knockback(hitPayload.Target, ScriptFormula(0), ScriptFormula(4), ScriptFormula(5)); };
             attack.Apply();
@@ -598,6 +662,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneTorrent)]
     public class WizardArcaneTorrent : ChanneledSkill
     {
+
         private Actor _targetProxy = null;
         private Actor _userProxy = null;
 
@@ -647,6 +712,11 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.FrostNova)]
     public class WizardFrostNova : PowerScript
     {
+        //Rune_A - Enemies take 110% more damage while frozen or chilled by Frost Nova.
+        //Rune_B - A frozen enemy that is killed has a 21% chance of exploding another Frost Nova dealing 3400% weapon damage as Cold.
+        //Rune_C - The Frost Nova no longer freezes enemies, but instead leaves behind a mist of frost for 8 seconds that deals 2600% weapon damage per second as Cold to enemies standing in it.
+        //Rune_D - Reduce cooldown to [MAX(0,(12) - 7)|1|] seconds.
+        //Rune_E - If Frost Nova hits at least 5 targets, you gain 45% chance to critically hit for 12 seconds
         public const int FrostNova_Emitter = 4402;
 
         public override IEnumerable<TickTimer> Run()
@@ -656,7 +726,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             SpawnEffect(FrostNova_Emitter, User.Position);
 
             WeaponDamage(GetEnemiesInRadius(User.Position, 18f), 0.65f, DamageType.Cold);
-
+            //todo:freeze duration to 4 seconds and check damage multiplier
             yield break;
         }
     }
@@ -664,6 +734,11 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
     public class WizardBlizzard : PowerScript
     {
+        //Rune_A - Increase the duration of the Blizzard to [10|1|] seconds.
+        //Rune_B - Increase the size of the Blizzard to cover 22 yards, and deal 5800% weapon damage per second as Cold.
+        //Rune_C - After the Blizzard ends, cover the ground in a low lying mist for [6|1|] seconds that slows any enemies who enters it. 
+        //Rune_D - Reduce the casting cost to {Resource Cost} Arcane Power.
+        //Rune_E - Enemies caught in the storm have a 52.5% chance to be frozen for 3 seconds and the critical strike chance with Blizzard is increased by 80%.
         public const int Wizard_Blizzard = 0x1977;
 
         public override IEnumerable<TickTimer> Run()
@@ -693,6 +768,12 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.RayOfFrost)]
     public class WizardRayOfFrost : ChanneledSkill
     {
+        //Rune_A - Damage increases slowly over [1.5|1|] seconds to inflict a maximum of 24000% weapon damage as Cold.
+        //Rune_B - Create a swirling storm of sleet dealing [99 * 100}]% weapon damage as Cold to all enemies caught within it.
+        //Rune_C - Increase enemy slow amount to 50.5% for [8.5|1|] seconds, but damage is reduced to 7400% weapon damage as Cold.
+        //Rune_D - Reduce casting cost to 8.5714285714286 Arcane Power per second. 
+        //Rune_E - Enemies who die leave a patch of ice on the ground that causes 64500% weapon damage as Cold to enemies moving through it over 5 seconds.
+
         const float BeamLength = 40f;
 
         private Actor _target = null;
@@ -746,6 +827,12 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Teleport)]
     public class WizardTeleport : PowerScript
     {
+        //Rune_A - Casts a low power Wave of Force on arrival dealing 8500% weapon damage as Physical to all enemies nearby.
+        //Rune_B - Summon 2 mirror images for 15 |4second:seconds; on arrival.
+        //Rune_C - For 16 |4second:seconds; after you appear you will take 25% less damage.
+        //Rune_D - Casting Teleport again within 8 |4second:seconds; will instantly bring you back to your original location.
+        //Rune_E - After casting Teleport there is a [2|1|] second delay before the cooldown begins.
+
         public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(15f);
@@ -760,6 +847,11 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.SpectralBlade)]
     public class WizardSpectralBlade : PowerScript
     {
+        //A:Enemies hit by the blade will bleed for an additional [0.45 * {Script Formula 0} * 100]% weapon damage done over 3 seconds.
+        //B:Extends the blades out to reach everything within 20 yards dealing 71.75% weapon damage.
+        //C:Hits have a 44.6% chance to cause knockback and slow the movement of enemies by 60% for 2 seconds.
+        //D:Every enemy hit grants 7 Arcane Power.
+        //E:Whenever the blades do critical damage, you are healed [1 * 100|1|]% of the damage caused.
         public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(15f);
@@ -801,7 +893,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (!base.Apply())
                     return false;
 
-                //TODO:Increase Armor by 50% -> Correct?
+                //Increase Armor by 50% -> Correct?
                 User.Attributes[GameAttribute.Armor_Item_Percent] += ScriptFormula(2);
                 User.Attributes.BroadcastChangedIfRevealed();
 
@@ -1210,7 +1302,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 if(base.Update())
                     return true;
-
+                /*
                 AttackPayload attack = new AttackPayload(this);
                 if (Rune_A > 0)
                 {
@@ -1267,7 +1359,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 }
                 //increase physical damage by 20% - ScriptFormula(0)
                 attack.Apply();
-
+                */
                 return false;
             }
 
