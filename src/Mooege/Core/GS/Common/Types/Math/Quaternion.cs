@@ -46,9 +46,9 @@ namespace Mooege.Core.GS.Common.Types.Math
         /// <param name="buffer">The GameBitBuffer to parse from.</param>
         public void Parse(GameBitBuffer buffer)
         {
-            W = buffer.ReadFloat32();
             Vector3D = new Vector3D();
             Vector3D.Parse(buffer);
+            W = buffer.ReadFloat32();
         }
 
         /// <summary>
@@ -57,8 +57,8 @@ namespace Mooege.Core.GS.Common.Types.Math
         /// <param name="buffer">The GameBitBuffer to write.</param>
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteFloat32(W);
             Vector3D.Encode(buffer);
+            buffer.WriteFloat32(W);
         }
 
         public void AsText(StringBuilder b, int pad)

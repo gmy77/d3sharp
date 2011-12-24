@@ -617,7 +617,7 @@ namespace Mooege.Core.GS.Actors
         {
             this.SetFacingRotation(facingAngle);
 
-            var movementMessage = new NotifyActorMovementMessage
+            var movementMessage = new ACDTranslateNormalMessage
             {
                 ActorId = (int)this.DynamicID,
                 Position = point,

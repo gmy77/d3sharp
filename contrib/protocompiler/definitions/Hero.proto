@@ -50,6 +50,17 @@ message Digest
     required uint32 time_played = 16 [default = 0];
 }
 
+message DigestUI
+{
+    required sint32 last_played_act = 1;
+    required sint32 highest_unlocked_act = 2;
+    required sint32 last_played_difficulty = 3;
+    required sint32 highest_unlocked_difficulty = 4;
+    required sfixed32 last_played_quest = 5;
+    required sint32 last_played_quest_step = 6;
+    required uint32 time_played = 7 [default = 0];
+}
+
 message HotbarButtonData
 {
     required sfixed32 sno_power = 1 [default = -1];
@@ -102,7 +113,6 @@ message SavedData
     required .D3.Hero.SavedConversations saved_conversations = 8;
     repeated sfixed32 sno_active_skills = 9;
     repeated sfixed32 sno_traits = 10;
-    repeated sfixed32 seen_tutorials = 11;
     required .D3.Hero.SavePointData_Proto save_point = 12;
 }
 
@@ -123,11 +133,6 @@ message SavedDefinition
     repeated .D3.Hero.QuestRewardHistoryEntry quest_reward_history = 7;
 }
 
-message NameSequence
-{
-    optional int64 sequence = 1 [default = 0];
-}
-
 message NameText
 {
     required string name = 1;
@@ -145,5 +150,20 @@ message Escrow
 message HeroList
 {
     repeated .D3.OnlineService.EntityId hero_ids = 1;
+}
+
+message DigestList
+{
+    repeated .D3.Hero.Digest digests = 1;
+}
+
+message QuestHistoryList
+{
+    repeated .D3.Hero.QuestHistoryEntry quest_history = 1;
+}
+
+message SavedQuestList
+{
+    repeated .D3.Hero.SavedQuest saved_quests = 1;
 }
 

@@ -22,7 +22,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     [Message(new[] {
         Opcodes.DWordDataMessage1,Opcodes.DWordDataMessage2,Opcodes.DWordDataMessage3,Opcodes.DWordDataMessage4,Opcodes.DWordDataMessage5,
-        Opcodes.DWordDataMessage7,Opcodes.DWordDataMessage8,Opcodes.DWordDataMessage9,Opcodes.DWordDataMessage10,Opcodes.DWordDataMessage11})]
+        Opcodes.DWordDataMessage7,Opcodes.DWordDataMessage8,Opcodes.DWordDataMessage9,Opcodes.DWordDataMessage10,Opcodes.DWordDataMessage11,Opcodes.DWordDataMessage12})]
     public class DWordDataMessage : GameMessage, ISelfHandler
     {
         public int Field0;

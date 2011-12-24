@@ -35,20 +35,20 @@ namespace bnet.protocol.attribute {
       
       static Attribute() {
         byte[] descriptorData = global::System.Convert.FromBase64String(
-            "ChxsaWIvcHJvdG9jb2wvYXR0cmlidXRlLnByb3RvEhdibmV0LnByb3RvY29s" + 
-            "LmF0dHJpYnV0ZRoZbGliL3Byb3RvY29sL2VudGl0eS5wcm90byLhAQoHVmFy" + 
-            "aWFudBISCgpib29sX3ZhbHVlGAIgASgIEhEKCWludF92YWx1ZRgDIAEoAxIT" + 
-            "CgtmbG9hdF92YWx1ZRgEIAEoARIUCgxzdHJpbmdfdmFsdWUYBSABKAkSEgoK" + 
-            "YmxvYl92YWx1ZRgGIAEoDBIVCg1tZXNzYWdlX3ZhbHVlGAcgASgMEhQKDGZv" + 
-            "dXJjY192YWx1ZRgIIAEoCRISCgp1aW50X3ZhbHVlGAkgASgEEi8KDmVudGl0" + 
-            "eWlkX3ZhbHVlGAogASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZCJKCglB" + 
-            "dHRyaWJ1dGUSDAoEbmFtZRgBIAIoCRIvCgV2YWx1ZRgCIAIoCzIgLmJuZXQu" + 
-            "cHJvdG9jb2wuYXR0cmlidXRlLlZhcmlhbnQi4AEKD0F0dHJpYnV0ZUZpbHRl" + 
-            "chI+CgJvcBgBIAIoDjIyLmJuZXQucHJvdG9jb2wuYXR0cmlidXRlLkF0dHJp" + 
-            "YnV0ZUZpbHRlci5PcGVyYXRpb24SNQoJYXR0cmlidXRlGAIgAygLMiIuYm5l" + 
-            "dC5wcm90b2NvbC5hdHRyaWJ1dGUuQXR0cmlidXRlIlYKCU9wZXJhdGlvbhIO" + 
-            "CgpNQVRDSF9OT05FEAASDQoJTUFUQ0hfQU5ZEAESDQoJTUFUQ0hfQUxMEAIS" + 
-            "GwoXTUFUQ0hfQUxMX01PU1RfU1BFQ0lGSUMQAw==");
+            "ChRibmV0L2F0dHJpYnV0ZS5wcm90bxIXYm5ldC5wcm90b2NvbC5hdHRyaWJ1" + 
+            "dGUaEWJuZXQvZW50aXR5LnByb3RvIuEBCgdWYXJpYW50EhIKCmJvb2xfdmFs" + 
+            "dWUYAiABKAgSEQoJaW50X3ZhbHVlGAMgASgDEhMKC2Zsb2F0X3ZhbHVlGAQg" + 
+            "ASgBEhQKDHN0cmluZ192YWx1ZRgFIAEoCRISCgpibG9iX3ZhbHVlGAYgASgM" + 
+            "EhUKDW1lc3NhZ2VfdmFsdWUYByABKAwSFAoMZm91cmNjX3ZhbHVlGAggASgJ" + 
+            "EhIKCnVpbnRfdmFsdWUYCSABKAQSLwoOZW50aXR5aWRfdmFsdWUYCiABKAsy" + 
+            "Fy5ibmV0LnByb3RvY29sLkVudGl0eUlkIkoKCUF0dHJpYnV0ZRIMCgRuYW1l" + 
+            "GAEgAigJEi8KBXZhbHVlGAIgAigLMiAuYm5ldC5wcm90b2NvbC5hdHRyaWJ1" + 
+            "dGUuVmFyaWFudCLgAQoPQXR0cmlidXRlRmlsdGVyEj4KAm9wGAEgAigOMjIu" + 
+            "Ym5ldC5wcm90b2NvbC5hdHRyaWJ1dGUuQXR0cmlidXRlRmlsdGVyLk9wZXJh" + 
+            "dGlvbhI1CglhdHRyaWJ1dGUYAiADKAsyIi5ibmV0LnByb3RvY29sLmF0dHJp" + 
+            "YnV0ZS5BdHRyaWJ1dGUiVgoJT3BlcmF0aW9uEg4KCk1BVENIX05PTkUQABIN" + 
+            "CglNQVRDSF9BTlkQARINCglNQVRDSF9BTEwQAhIbChdNQVRDSF9BTExfTU9T" + 
+            "VF9TUEVDSUZJQxAD");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_attribute_Variant__Descriptor = Descriptor.MessageTypes[0];

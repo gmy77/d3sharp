@@ -16,17 +16,11 @@ namespace bnet.protocol {
     #region Extension registration
     public static void RegisterAllExtensions(pb::ExtensionRegistry registry) {
       registry.Add(global::bnet.protocol.Rpc.MethodId);
-      registry.Add(global::bnet.protocol.Rpc.Cost);
-      registry.Add(global::bnet.protocol.Rpc.Timeout);
     }
     #endregion
     #region Extensions
     public const int MethodIdFieldNumber = 50000;
     public static pb::GeneratedExtensionBase<uint> MethodId;
-    public const int CostFieldNumber = 50001;
-    public static pb::GeneratedExtensionBase<uint> Cost;
-    public const int TimeoutFieldNumber = 50002;
-    public static pb::GeneratedExtensionBase<float> Timeout;
     #endregion
     
     #region Static variables
@@ -53,23 +47,21 @@ namespace bnet.protocol {
     
     static Rpc() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "ChFsaWIvcnBjL3JwYy5wcm90bxINYm5ldC5wcm90b2NvbBogZ29vZ2xlL3By" + 
-          "b3RvYnVmL2Rlc2NyaXB0b3IucHJvdG8iDQoLTk9fUkVTUE9OU0UiTgoHQWRk" + 
-          "cmVzcxIPCgdhZGRyZXNzGAEgAigJEgwKBHBvcnQYAiABKA0SJAoEbmV4dBgD" + 
-          "IAEoCzIWLmJuZXQucHJvdG9jb2wuQWRkcmVzcyIpCglQcm9jZXNzSWQSDQoF" + 
-          "bGFiZWwYASACKA0SDQoFZXBvY2gYAiACKA0iTQoNT2JqZWN0QWRkcmVzcxIm" + 
-          "CgRob3N0GAEgAigLMhguYm5ldC5wcm90b2NvbC5Qcm9jZXNzSWQSFAoJb2Jq" + 
-          "ZWN0X2lkGAIgASgEOgEwIggKBk5vRGF0YSJ6CglFcnJvckluZm8SNAoOb2Jq" + 
-          "ZWN0X2FkZHJlc3MYASACKAsyHC5ibmV0LnByb3RvY29sLk9iamVjdEFkZHJl" + 
-          "c3MSDgoGc3RhdHVzGAIgAigNEhQKDHNlcnZpY2VfaGFzaBgDIAIoDRIRCglt" + 
-          "ZXRob2RfaWQYBCACKA0ioQEKBkhlYWRlchISCgpzZXJ2aWNlX2lkGAEgAigN" + 
-          "EhEKCW1ldGhvZF9pZBgCIAEoDRINCgV0b2tlbhgDIAIoDRIUCglvYmplY3Rf" + 
-          "aWQYBCABKAQ6ATASDwoEc2l6ZRgFIAEoDToBMBIRCgZzdGF0dXMYBiABKA06" + 
-          "ATASJwoFZXJyb3IYByADKAsyGC5ibmV0LnByb3RvY29sLkVycm9ySW5mbzoz" + 
-          "CgltZXRob2RfaWQSHi5nb29nbGUucHJvdG9idWYuTWV0aG9kT3B0aW9ucxjQ" + 
-          "hgMgASgNOi4KBGNvc3QSHi5nb29nbGUucHJvdG9idWYuTWV0aG9kT3B0aW9u" + 
-          "cxjRhgMgASgNOjEKB3RpbWVvdXQSHi5nb29nbGUucHJvdG9idWYuTWV0aG9k" + 
-          "T3B0aW9ucxjShgMgASgC");
+          "Cg5ibmV0L3JwYy5wcm90bxINYm5ldC5wcm90b2NvbBogZ29vZ2xlL3Byb3Rv" + 
+          "YnVmL2Rlc2NyaXB0b3IucHJvdG8iDQoLTk9fUkVTUE9OU0UiTgoHQWRkcmVz" + 
+          "cxIPCgdhZGRyZXNzGAEgAigJEgwKBHBvcnQYAiABKA0SJAoEbmV4dBgDIAEo" + 
+          "CzIWLmJuZXQucHJvdG9jb2wuQWRkcmVzcyIpCglQcm9jZXNzSWQSDQoFbGFi" + 
+          "ZWwYASACKA0SDQoFZXBvY2gYAiACKA0iTQoNT2JqZWN0QWRkcmVzcxImCgRo" + 
+          "b3N0GAEgAigLMhguYm5ldC5wcm90b2NvbC5Qcm9jZXNzSWQSFAoJb2JqZWN0" + 
+          "X2lkGAIgASgEOgEwIggKBk5vRGF0YSJ6CglFcnJvckluZm8SNAoOb2JqZWN0" + 
+          "X2FkZHJlc3MYASACKAsyHC5ibmV0LnByb3RvY29sLk9iamVjdEFkZHJlc3MS" + 
+          "DgoGc3RhdHVzGAIgAigNEhQKDHNlcnZpY2VfaGFzaBgDIAIoDRIRCgltZXRo" + 
+          "b2RfaWQYBCACKA0ioQEKBkhlYWRlchISCgpzZXJ2aWNlX2lkGAEgAigNEhEK" + 
+          "CW1ldGhvZF9pZBgCIAEoDRINCgV0b2tlbhgDIAIoDRIUCglvYmplY3RfaWQY" + 
+          "BCABKAQ6ATASDwoEc2l6ZRgFIAEoDToBMBIRCgZzdGF0dXMYBiABKA06ATAS" + 
+          "JwoFZXJyb3IYByADKAsyGC5ibmV0LnByb3RvY29sLkVycm9ySW5mbzozCglt" + 
+          "ZXRob2RfaWQSHi5nb29nbGUucHJvdG9idWYuTWV0aG9kT3B0aW9ucxjQhgMg" + 
+          "ASgN");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_NO_RESPONSE__Descriptor = Descriptor.MessageTypes[0];
@@ -101,8 +93,6 @@ namespace bnet.protocol {
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.Header, global::bnet.protocol.Header.Builder>(internal__static_bnet_protocol_Header__Descriptor,
                 new string[] { "ServiceId", "MethodId", "Token", "ObjectId", "Size", "Status", "Error", });
         global::bnet.protocol.Rpc.MethodId = pb::GeneratedSingleExtension<uint>.CreateInstance(global::bnet.protocol.Rpc.Descriptor.Extensions[0]);
-        global::bnet.protocol.Rpc.Cost = pb::GeneratedSingleExtension<uint>.CreateInstance(global::bnet.protocol.Rpc.Descriptor.Extensions[1]);
-        global::bnet.protocol.Rpc.Timeout = pb::GeneratedSingleExtension<float>.CreateInstance(global::bnet.protocol.Rpc.Descriptor.Extensions[2]);
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,

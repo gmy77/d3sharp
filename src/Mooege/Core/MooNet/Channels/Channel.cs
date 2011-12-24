@@ -99,7 +99,7 @@ namespace Mooege.Core.MooNet.Channels
 
         public bool HasToon(Toon toon) // checks if given toon is already channels member
         {
-            return this.Members.Any(pair => pair.Value.Identity.ToonId.Low == toon.BnetEntityID.Low);
+            return this.Members.Any(pair => pair.Value.Identity.AccountId.Low == toon.BnetEntityID.Low);
         }
 
         public Member GetMember(MooNetClient client)
@@ -214,7 +214,7 @@ namespace Mooege.Core.MooNet.Channels
 
         public void RemoveMemberByID(bnet.protocol.EntityId memberId, RemoveReason reason)
         {
-            var client = this.Members.FirstOrDefault(pair => pair.Value.Identity.ToonId == memberId).Key;
+            var client = this.Members.FirstOrDefault(pair => pair.Value.Identity.AccountId == memberId).Key;
             RemoveMember(client, reason, false);
         }
 
@@ -239,7 +239,7 @@ namespace Mooege.Core.MooNet.Channels
             {
                 Logger.Warn("Client {0} is being removed from a channel that is not its current one..", client.Connection.RemoteEndPoint.ToString());
             }
-            var memberId = this.Members[client].Identity.ToonId;
+            var memberId = this.Members[client].Identity.AccountId;
             var message = bnet.protocol.channel.RemoveNotification.CreateBuilder()
                 .SetMemberId(memberId)
                 .SetReason((uint)reason)

@@ -473,7 +473,7 @@ namespace Mooege.Core.GS.Players
             else if (message is AssignPassiveSkillMessage) OnAssignPassiveSkill(client, (AssignPassiveSkillMessage)message);
             else if (message is PlayerChangeHotbarButtonMessage) OnPlayerChangeHotbarButtonMessage(client, (PlayerChangeHotbarButtonMessage)message);
             else if (message is TargetMessage) OnObjectTargeted(client, (TargetMessage)message);
-            else if (message is PlayerMovementMessage) OnPlayerMovement(client, (PlayerMovementMessage)message);
+            else if (message is ACDTranslateNormalMessage) OnPlayerMovement(client, (ACDTranslateNormalMessage)message);
             else if (message is TryWaypointMessage) OnTryWaypoint(client, (TryWaypointMessage)message);
             else if (message is RequestBuyItemMessage) OnRequestBuyItem(client, (RequestBuyItemMessage)message);
             else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
@@ -636,7 +636,7 @@ namespace Mooege.Core.GS.Players
             this.ExpBonusData.Check(2);
         }
 
-        private void OnPlayerMovement(GameClient client, PlayerMovementMessage message)
+        private void OnPlayerMovement(GameClient client, ACDTranslateNormalMessage message)
         {
             // here we should also be checking the position and see if it's valid. If not we should be resetting player to a good position with ACDWorldPositionMessage
             // so we can have a basic precaution for hacks & exploits /raist.
@@ -648,7 +648,7 @@ namespace Mooege.Core.GS.Players
                 this.SetFacingRotation(message.Angle.Value);
 
 
-            var msg = new NotifyActorMovementMessage
+            var msg = new ACDTranslateNormalMessage
             {
                 ActorId = message.ActorId,
                 Position = this.Position,
@@ -1075,7 +1075,6 @@ namespace Mooege.Core.GS.Players
                 snoActiveSkills = this.SkillSet.ActiveSkills,
                 snoTraits = this.SkillSet.PassiveSkills,
                 SavePointData = new SavePointData { snoWorld = -1, SavepointId = -1, },
-                m_SeenTutorials = this.SeenTutorials,
             };
         }
 

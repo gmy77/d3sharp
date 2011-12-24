@@ -140,7 +140,7 @@ namespace Mooege.Net.MooNet
             if (acct) identityBuilder.SetAccountId(this.Account.BnetAccountID);
             if (gameacct) identityBuilder.SetGameAccountId(this.Account.BnetGameAccountID);
             if (toon && this.CurrentToon != null)
-                identityBuilder.SetToonId(this.CurrentToon.BnetEntityID);
+                identityBuilder.SetAccountId(this.CurrentToon.BnetEntityID);
             return identityBuilder.Build();
         }
 

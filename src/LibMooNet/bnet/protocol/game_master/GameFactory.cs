@@ -29,14 +29,13 @@ namespace bnet.protocol.game_master {
     
     static GameFactory() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "CjFzZXJ2aWNlL2dhbWVfbWFzdGVyL2RlZmluaXRpb24vZ2FtZV9mYWN0b3J5" + 
-          "LnByb3RvEhlibmV0LnByb3RvY29sLmdhbWVfbWFzdGVyGhxsaWIvcHJvdG9j" + 
-          "b2wvYXR0cmlidXRlLnByb3RvGhlsaWIvcHJvdG9jb2wvZW50aXR5LnByb3Rv" + 
-          "IsoBCg5HYW1lUHJvcGVydGllcxI/ChNjcmVhdGlvbl9hdHRyaWJ1dGVzGAEg" + 
-          "AygLMiIuYm5ldC5wcm90b2NvbC5hdHRyaWJ1dGUuQXR0cmlidXRlEjgKBmZp" + 
-          "bHRlchgCIAEoCzIoLmJuZXQucHJvdG9jb2wuYXR0cmlidXRlLkF0dHJpYnV0" + 
-          "ZUZpbHRlchIVCgZjcmVhdGUYAyABKAg6BWZhbHNlEhIKBG9wZW4YBCABKAg6" + 
-          "BHRydWUSEgoKcHJvZ3JhbV9pZBgFIAEoBw==");
+          "ChdibmV0L2dhbWVfZmFjdG9yeS5wcm90bxIZYm5ldC5wcm90b2NvbC5nYW1l" + 
+          "X21hc3RlchoUYm5ldC9hdHRyaWJ1dGUucHJvdG8aEWJuZXQvZW50aXR5LnBy" + 
+          "b3RvIsoBCg5HYW1lUHJvcGVydGllcxI/ChNjcmVhdGlvbl9hdHRyaWJ1dGVz" + 
+          "GAEgAygLMiIuYm5ldC5wcm90b2NvbC5hdHRyaWJ1dGUuQXR0cmlidXRlEjgK" + 
+          "BmZpbHRlchgCIAEoCzIoLmJuZXQucHJvdG9jb2wuYXR0cmlidXRlLkF0dHJp" + 
+          "YnV0ZUZpbHRlchIVCgZjcmVhdGUYAyABKAg6BWZhbHNlEhIKBG9wZW4YBCAB" + 
+          "KAg6BHRydWUSEgoKcHJvZ3JhbV9pZBgFIAEoBw==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_game_master_GameProperties__Descriptor = Descriptor.MessageTypes[0];

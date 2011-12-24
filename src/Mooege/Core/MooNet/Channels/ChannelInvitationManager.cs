@@ -32,7 +32,7 @@ namespace Mooege.Core.MooNet.Channels
 
         public void HandleInvitation(MooNetClient client, bnet.protocol.invitation.Invitation invitation)
         {
-            var invitee = this.Subscribers.FirstOrDefault(subscriber => subscriber.CurrentToon.BnetEntityID.Low == invitation.InviteeIdentity.ToonId.Low);
+            var invitee = this.Subscribers.FirstOrDefault(subscriber => subscriber.CurrentToon.BnetEntityID.Low == invitation.InviteeIdentity.AccountId.Low);
             if (invitee == null) return; // if we can't find invite just return - though we should actually check for it until expiration time.
 
             this._onGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.
@@ -48,7 +48,7 @@ namespace Mooege.Core.MooNet.Channels
             if (!this._onGoingInvitations.ContainsKey(request.InvitationId)) return null;
 
             var invitation = this._onGoingInvitations[request.InvitationId];
-            var channel = ChannelManager.GetChannelByEntityId(invitation.GetExtension(bnet.protocol.channel_invitation.Invitation.ChannelInvitation).ChannelDescription.ChannelId);
+            var channel = ChannelManager.GetChannelByEntityId(invitation.GetExtension(bnet.protocol.channel_invitation.ChannelInvitation.ChannelInvitationProp).ChannelDescription.ChannelId);
 
             channel.Join(client, request.ObjectId); // add invitee to channel -- so inviter and other members will also be notified too.
 
@@ -67,7 +67,7 @@ namespace Mooege.Core.MooNet.Channels
             if (!this._onGoingInvitations.ContainsKey(request.InvitationId)) return;
             var invitation = this._onGoingInvitations[request.InvitationId];
 
-            var inviter = ToonManager.GetToonByLowID(invitation.InviterIdentity.ToonId.Low);
+            var inviter = ToonManager.GetToonByLowID(invitation.InviterIdentity.AccountId.Low);
             if (inviter == null || inviter.Owner.LoggedInClient == null) return;
 
             var notification =
@@ -107,7 +107,7 @@ namespace Mooege.Core.MooNet.Channels
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Revoked);
 
-            var invitee = ToonManager.GetToonByLowID(invitation.InviteeIdentity.ToonId.Low);
+            var invitee = ToonManager.GetToonByLowID(invitation.InviteeIdentity.AccountId.Low);
             invitee.Owner.LoggedInClient.MakeTargetedRPC(this, () =>
                 bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(invitee.Owner.LoggedInClient).NotifyReceivedInvitationRemoved(null, invitationRemoved.Build(), callback => { }));
         }

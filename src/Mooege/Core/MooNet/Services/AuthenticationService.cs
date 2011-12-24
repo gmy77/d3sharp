@@ -62,11 +62,9 @@ namespace Mooege.Core.MooNet.Services
                 var logonResponseBuilder = bnet.protocol.authentication.LogonResponse.
                     CreateBuilder()
                     .SetAccount(Client.Account.BnetAccountID)
-                    .SetGameAccount(Client.Account.BnetGameAccountID);
+                    .AddGameAccount(Client.Account.BnetGameAccountID);
 
                 done(logonResponseBuilder.Build());
-
-                this.Client.EnableEncryption();
 
                 PlayerManager.PlayerConnected(this.Client);
 
@@ -86,6 +84,18 @@ namespace Mooege.Core.MooNet.Services
 
             if(request.ModuleId==0 && command==2)
                 AuthManager.HandleAuthResponse(this.Client, request.ModuleId, moduleMessage);
+        }
+
+        public override void SelectGameAccount(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.EntityId request, Action<bnet.protocol.NoData> done)
+        {
+            var SelectedAccount = request.Low;
+            Logger.Trace("SelectGameAccount(): {0}", SelectedAccount);
+
+            done(bnet.protocol.NoData.CreateBuilder().Build());
+
+            //Client seems to be expecting something here before encryption begins - Egris
+
+            this.Client.EnableEncryption();
         }
     }
 }

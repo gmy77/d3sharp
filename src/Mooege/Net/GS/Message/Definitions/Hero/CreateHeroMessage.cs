@@ -31,14 +31,14 @@ namespace Mooege.Net.GS.Message.Definitions.Hero
         {
             Name = buffer.ReadCharArray(49);
             Field1 = buffer.ReadInt(32);
-            Field2 = buffer.ReadInt(29);
+            Field2 = buffer.ReadInt(30);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteCharArray(49, Name);
             buffer.WriteInt(32, Field1);
-            buffer.WriteInt(29, Field2);
+            buffer.WriteInt(30, Field2);
         }
 
         public override void AsText(StringBuilder b, int pad)

@@ -56,7 +56,7 @@ namespace Mooege.Core.MooNet.Services
         {
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
             var extensionBytes = request.UnknownFields.FieldDictionary[103].LengthDelimitedList[0].ToByteArray();
-            var friendRequest = bnet.protocol.friends.SendInvitationRequest.ParseFrom(extensionBytes);
+            var friendRequest = bnet.protocol.friends.FriendInvitationParams.ParseFrom(extensionBytes);
 
             if (friendRequest.TargetEmail.ToLower() == this.Client.Account.Email.ToLower()) return; // don't allow him to invite himself - and we should actually return an error!
                                                                                                     // also he shouldn't be allowed to invite his current friends - put that check too!. /raist
@@ -71,7 +71,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetInviterName(this.Client.Account.Email) // we shoulde be instead using account owner's name here.
                 .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(inviteee.BnetAccountID))
                 .SetInviteeName(inviteee.Email) // again we should be instead using invitee's name.
-                .SetInvitationMessage(request.InvitationMessage)
+                .SetInvitationMessage(request.Params.InvitationMessage)
                 .SetCreationTime(DateTime.Now.ToUnixTime())
                 .SetExpirationTime(86400);
 
@@ -84,6 +84,11 @@ namespace Mooege.Core.MooNet.Services
 
             // notify the invitee on invitation.
             FriendManager.HandleInvitation(this.Client, invitation.Build());
+        }
+
+        public override void UpdateInvitation(IRpcController controller, bnet.protocol.invitation.UpdateInvitationRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
         }
 
         public override void AcceptInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
@@ -112,6 +117,11 @@ namespace Mooege.Core.MooNet.Services
         }
 
         public override void IgnoreInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AssignRole(IRpcController controller, bnet.protocol.friends.AssignRoleRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }

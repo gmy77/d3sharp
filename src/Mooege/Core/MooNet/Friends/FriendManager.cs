@@ -54,7 +54,7 @@ namespace Mooege.Core.MooNet.Friends
 
             OnGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.
 
-            var notification = bnet.protocol.friends.InvitationAddedNotification.CreateBuilder().SetInvitation(invitation);
+            var notification = bnet.protocol.friends.InvitationNotification.CreateBuilder().SetInvitation(invitation);
 
             invitee.MakeTargetedRPC(FriendManager.Instance, () =>
                 bnet.protocol.friends.FriendsNotify.CreateStub(invitee).NotifyReceivedInvitationAdded(null, notification.Build(), callback => { }));
@@ -70,18 +70,18 @@ namespace Mooege.Core.MooNet.Friends
             var inviteeAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(invitation.InviteeIdentity.AccountId).Build();
             var inviterAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(invitation.InviterIdentity.AccountId).Build();
 
-            var notificationToInviter = bnet.protocol.friends.InvitationRemovedNotification.CreateBuilder()
+            var notificationToInviter = bnet.protocol.friends.InvitationNotification.CreateBuilder()
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Accepted) // success?
-                .SetAddedFriend(inviteeAsFriend).Build();
+                .Build();
 
             inviter.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
                 bnet.protocol.friends.FriendsNotify.CreateStub(inviter.LoggedInClient).NotifyReceivedInvitationRemoved(null, notificationToInviter,callback => { }));
-            
-            var notificationToInvitee = bnet.protocol.friends.InvitationRemovedNotification.CreateBuilder()
+
+            var notificationToInvitee = bnet.protocol.friends.InvitationNotification.CreateBuilder()
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Accepted) // success?
-                .SetAddedFriend(inviterAsFriend).Build();
+                .Build();
 
             invitee.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
                 bnet.protocol.friends.FriendsNotify.CreateStub(invitee.LoggedInClient).NotifyReceivedInvitationRemoved(null, notificationToInvitee,callback => { }));
@@ -111,7 +111,7 @@ namespace Mooege.Core.MooNet.Friends
             var inviter = AccountManager.GetAccountByPersistentID(invitation.InviterIdentity.AccountId.Low);
             var invitee = AccountManager.GetAccountByPersistentID(invitation.InviteeIdentity.AccountId.Low);
 
-            var declinedNotification = bnet.protocol.friends.InvitationRemovedNotification.CreateBuilder()
+            var declinedNotification = bnet.protocol.friends.InvitationNotification.CreateBuilder()
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Declined).Build();
 

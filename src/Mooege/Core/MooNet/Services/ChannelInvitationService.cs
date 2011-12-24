@@ -82,24 +82,24 @@ namespace Mooege.Core.MooNet.Services
 
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
             var extensionBytes = request.UnknownFields.FieldDictionary[105].LengthDelimitedList[0].ToByteArray();
-            var channelInvitationInfo = bnet.protocol.channel_invitation.SendInvitationRequest.ParseFrom(extensionBytes);
+            var channelInvitationInfo = bnet.protocol.channel_invitation.ChannelInvitationParams.ParseFrom(extensionBytes);
 
-            var channelInvitation = bnet.protocol.channel_invitation.Invitation.CreateBuilder()
-                .SetChannelDescription(bnet.protocol.channel.ChannelDescription.CreateBuilder().SetChannelId(channelInvitationInfo.ChannelId).Build())
+            var channelInvitation = bnet.protocol.channel_invitation.ChannelInvitationParams.CreateBuilder()
+                .SetChannelId(channelInvitationInfo.ChannelId)
                 .SetReserved(channelInvitationInfo.Reserved)
                 .SetServiceType(channelInvitationInfo.ServiceType)
                 .SetRejoin(false).Build();
 
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder();
             invitation.SetId(ChannelInvitationManager.InvitationIdCounter++)
-                .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetToonId(Client.CurrentToon.BnetEntityID).Build())
+                .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(Client.CurrentToon.BnetEntityID).Build())
                 .SetInviterName(Client.CurrentToon.Name)
-                .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetToonId(request.TargetId).Build())
+                .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(request.TargetId).Build())
                 .SetInviteeName(invitee.Name)
-                .SetInvitationMessage(request.InvitationMessage)
+                .SetInvitationMessage(request.Params.InvitationMessage)
                 .SetCreationTime(DateTime.Now.ToExtendedEpoch())
-                .SetExpirationTime(DateTime.Now.ToUnixTime() + request.ExpirationTime)
-                .SetExtension(bnet.protocol.channel_invitation.Invitation.ChannelInvitation, channelInvitation);            
+                .SetExpirationTime(DateTime.Now.ToUnixTime() + request.Params.ExpirationTime)
+                .SetExtension(bnet.protocol.channel_invitation.ChannelInvitationParams.ChannelParams, channelInvitation);
 
             // oh blizz, cmon. your buggy client even doesn't care this message at all but waits the UpdateChannelStateNotification with embedded invitation proto to show "invitation sent message".
             // ADVICE TO POTENTIAL BLIZZ-WORKER READING THIS;

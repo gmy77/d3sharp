@@ -49,37 +49,38 @@ namespace D3.Items {
           "bmVTZXJ2aWNlLnByb3RvIp4BCgxSYXJlSXRlbU5hbWUSIgoTaXRlbV9uYW1l" + 
           "X2lzX3ByZWZpeBgBIAIoCDoFZmFsc2USIQoVc25vX2FmZml4X3N0cmluZ19s" + 
           "aXN0GAIgAigPOgItMRIjChdhZmZpeF9zdHJpbmdfbGlzdF9pbmRleBgDIAIo" + 
-          "EToCLTESIgoWaXRlbV9zdHJpbmdfbGlzdF9pbmRleBgEIAIoEToCLTEiygMK" + 
+          "EToCLTESIgoWaXRlbV9zdHJpbmdfbGlzdF9pbmRleBgEIAIoEToCLTEi9AMK" + 
           "CUdlbmVyYXRvchIPCgRzZWVkGAEgAigNOgEwEikKCWdiX2hhbmRsZRgCIAIo" + 
           "CzIWLkQzLkdhbWVCYWxhbmNlLkhhbmRsZRIUCgxiYXNlX2FmZml4ZXMYAyAD" + 
-          "KA8SLgoOcmFyZV9pdGVtX25hbWUYBCACKAsyFi5EMy5JdGVtcy5SYXJlSXRl" + 
-          "bU5hbWUSGQoNZW5jaGFudF9hZmZpeBgFIAIoDzoCLTESGAoMc29ja2V0X2Fm" + 
-          "Zml4GAYgAigPOgItMRIQCgVmbGFncxgHIAIoDToBMBISCgpkdXJhYmlsaXR5" + 
-          "GAggAigNEhIKCnN0YWNrX3NpemUYCSACKAQSEAoIZHllX3R5cGUYCiACKA0S" + 
-          "GgoSaXRlbV9xdWFsaXR5X2xldmVsGAsgAigREhoKEml0ZW1fYmluZGluZ19s" + 
-          "ZXZlbBgMIAIoERIWCg5tYXhfZHVyYWJpbGl0eRgNIAIoDRItCghjb250ZW50" + 
-          "cxgOIAMoCzIbLkQzLkl0ZW1zLkVtYmVkZGVkR2VuZXJhdG9yEhkKDWF0dHVu" + 
-          "ZWRfc2tpbGwYDyABKA86Ai0xEiAKFWl0ZW1fdW5sb2NrX3RpbWVzdGFtcBgQ" + 
-          "IAEoBDoBMCJhChFFbWJlZGRlZEdlbmVyYXRvchIkCgJpZBgBIAIoCzIYLkQz" + 
-          "Lk9ubGluZVNlcnZpY2UuSXRlbUlkEiYKCWdlbmVyYXRvchgCIAIoCzITLkQz" + 
-          "Lkl0ZW1zLkdlbmVyYXRvciKaAgoJU2F2ZWRJdGVtEiQKAmlkGAEgAigLMhgu" + 
-          "RDMuT25saW5lU2VydmljZS5JdGVtSWQSMwoPb3duZXJfZW50aXR5X2lkGAIg" + 
-          "ASgLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIrCglzb2NrZXRfaWQY" + 
-          "AyABKAsyGC5EMy5PbmxpbmVTZXJ2aWNlLkl0ZW1JZBIWCg5oaXJlbGluZ19j" + 
-          "bGFzcxgEIAIoERIRCglpdGVtX3Nsb3QYBSACKBESFAoMc3F1YXJlX2luZGV4" + 
-          "GAYgAigREhwKEXVzZWRfc29ja2V0X2NvdW50GAcgAigNOgEwEiYKCWdlbmVy" + 
-          "YXRvchgIIAEoCzITLkQzLkl0ZW1zLkdlbmVyYXRvciJzChJBdWN0aW9uQWNj" + 
-          "b3VudEluZm8SLgoKYWNjb3VudF9pZBgBIAIoCzIaLkQzLk9ubGluZVNlcnZp" + 
-          "Y2UuRW50aXR5SWQSLQoJZXNjcm93X2lkGAIgAigLMhouRDMuT25saW5lU2Vy" + 
-          "dmljZS5FbnRpdHlJZCJbCgtBdWN0aW9uSXRlbRIkCgJpZBgBIAIoCzIYLkQz" + 
-          "Lk9ubGluZVNlcnZpY2UuSXRlbUlkEiYKCWdlbmVyYXRvchgCIAIoCzITLkQz" + 
-          "Lkl0ZW1zLkdlbmVyYXRvciJXCgtBdWN0aW9uSW5mbxIkCgJpZBgBIAIoCzIY" + 
-          "LkQzLk9ubGluZVNlcnZpY2UuSXRlbUlkEiIKBW93bmVyGAIgASgLMhMuRDMu" + 
-          "SXRlbXMuT3duZXJzaGlwIi4KCEl0ZW1MaXN0EiIKBWl0ZW1zGAEgAygLMhMu" + 
-          "RDMuSXRlbXMuU2F2ZWRJdGVtIoQBCglPd25lcnNoaXASMwoPb3duZXJfZW50" + 
-          "aXR5X2lkGAEgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBITCgtk" + 
-          "ZWxldGVfdGltZRgCIAEoEhItCgllc2Nyb3dfaWQYAyABKAsyGi5EMy5Pbmxp" + 
-          "bmVTZXJ2aWNlLkVudGl0eUlk");
+          "KA8SLgoOcmFyZV9pdGVtX25hbWUYBCABKAsyFi5EMy5JdGVtcy5SYXJlSXRl" + 
+          "bU5hbWUSGQoNZW5jaGFudF9hZmZpeBgFIAEoDzoCLTESGAoMc29ja2V0X2Fm" + 
+          "Zml4GAYgASgPOgItMRIQCgVmbGFncxgHIAIoDToBMBISCgpkdXJhYmlsaXR5" + 
+          "GAggAigNEhIKCnN0YWNrX3NpemUYCSACKAQSEwoIZHllX3R5cGUYCiABKA06" + 
+          "ATASHQoSaXRlbV9xdWFsaXR5X2xldmVsGAsgASgROgExEh0KEml0ZW1fYmlu" + 
+          "ZGluZ19sZXZlbBgMIAEoEToBMBIZCg5tYXhfZHVyYWJpbGl0eRgNIAEoDToB" + 
+          "MBItCghjb250ZW50cxgOIAMoCzIbLkQzLkl0ZW1zLkVtYmVkZGVkR2VuZXJh" + 
+          "dG9yEhkKDWF0dHVuZWRfc2tpbGwYDyABKA86Ai0xEiAKFWl0ZW1fdW5sb2Nr" + 
+          "X3RpbWVzdGFtcBgQIAEoBDoBMBIcChFlbmNoYW50X3JhbmdlX3ZhbBgRIAEo" + 
+          "DToBMCJhChFFbWJlZGRlZEdlbmVyYXRvchIkCgJpZBgBIAIoCzIYLkQzLk9u" + 
+          "bGluZVNlcnZpY2UuSXRlbUlkEiYKCWdlbmVyYXRvchgCIAIoCzITLkQzLkl0" + 
+          "ZW1zLkdlbmVyYXRvciKaAgoJU2F2ZWRJdGVtEiQKAmlkGAEgAigLMhguRDMu" + 
+          "T25saW5lU2VydmljZS5JdGVtSWQSMwoPb3duZXJfZW50aXR5X2lkGAIgASgL" + 
+          "MhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIrCglzb2NrZXRfaWQYAyAB" + 
+          "KAsyGC5EMy5PbmxpbmVTZXJ2aWNlLkl0ZW1JZBIWCg5oaXJlbGluZ19jbGFz" + 
+          "cxgEIAIoERIRCglpdGVtX3Nsb3QYBSACKBESFAoMc3F1YXJlX2luZGV4GAYg" + 
+          "AigREhwKEXVzZWRfc29ja2V0X2NvdW50GAcgAigNOgEwEiYKCWdlbmVyYXRv" + 
+          "chgIIAEoCzITLkQzLkl0ZW1zLkdlbmVyYXRvciJzChJBdWN0aW9uQWNjb3Vu" + 
+          "dEluZm8SLgoKYWNjb3VudF9pZBgBIAIoCzIaLkQzLk9ubGluZVNlcnZpY2Uu" + 
+          "RW50aXR5SWQSLQoJZXNjcm93X2lkGAIgAigLMhouRDMuT25saW5lU2Vydmlj" + 
+          "ZS5FbnRpdHlJZCJbCgtBdWN0aW9uSXRlbRIkCgJpZBgBIAIoCzIYLkQzLk9u" + 
+          "bGluZVNlcnZpY2UuSXRlbUlkEiYKCWdlbmVyYXRvchgCIAIoCzITLkQzLkl0" + 
+          "ZW1zLkdlbmVyYXRvciJXCgtBdWN0aW9uSW5mbxIkCgJpZBgBIAIoCzIYLkQz" + 
+          "Lk9ubGluZVNlcnZpY2UuSXRlbUlkEiIKBW93bmVyGAIgASgLMhMuRDMuSXRl" + 
+          "bXMuT3duZXJzaGlwIi4KCEl0ZW1MaXN0EiIKBWl0ZW1zGAEgAygLMhMuRDMu" + 
+          "SXRlbXMuU2F2ZWRJdGVtIoQBCglPd25lcnNoaXASMwoPb3duZXJfZW50aXR5" + 
+          "X2lkGAEgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBITCgtkZWxl" + 
+          "dGVfdGltZRgCIAEoEhItCgllc2Nyb3dfaWQYAyABKAsyGi5EMy5PbmxpbmVT" + 
+          "ZXJ2aWNlLkVudGl0eUlk");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Items_RareItemName__Descriptor = Descriptor.MessageTypes[0];
@@ -89,7 +90,7 @@ namespace D3.Items {
         internal__static_D3_Items_Generator__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_Items_Generator__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.Generator, global::D3.Items.Generator.Builder>(internal__static_D3_Items_Generator__Descriptor,
-                new string[] { "Seed", "GbHandle", "BaseAffixes", "RareItemName", "EnchantAffix", "SocketAffix", "Flags", "Durability", "StackSize", "DyeType", "ItemQualityLevel", "ItemBindingLevel", "MaxDurability", "Contents", "AttunedSkill", "ItemUnlockTimestamp", });
+                new string[] { "Seed", "GbHandle", "BaseAffixes", "RareItemName", "EnchantAffix", "SocketAffix", "Flags", "Durability", "StackSize", "DyeType", "ItemQualityLevel", "ItemBindingLevel", "MaxDurability", "Contents", "AttunedSkill", "ItemUnlockTimestamp", "EnchantRangeVal", });
         internal__static_D3_Items_EmbeddedGenerator__Descriptor = Descriptor.MessageTypes[2];
         internal__static_D3_Items_EmbeddedGenerator__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.EmbeddedGenerator, global::D3.Items.EmbeddedGenerator.Builder>(internal__static_D3_Items_EmbeddedGenerator__Descriptor,
@@ -543,8 +544,8 @@ namespace D3.Items {
   public sealed partial class Generator : pb::GeneratedMessage<Generator, Generator.Builder> {
     private Generator() { }
     private static readonly Generator defaultInstance = new Generator().MakeReadOnly();
-    private static readonly string[] _generatorFieldNames = new string[] { "attuned_skill", "base_affixes", "contents", "durability", "dye_type", "enchant_affix", "flags", "gb_handle", "item_binding_level", "item_quality_level", "item_unlock_timestamp", "max_durability", "rare_item_name", "seed", "socket_affix", "stack_size" };
-    private static readonly uint[] _generatorFieldTags = new uint[] { 125, 29, 114, 64, 80, 45, 56, 18, 96, 88, 128, 104, 34, 8, 53, 72 };
+    private static readonly string[] _generatorFieldNames = new string[] { "attuned_skill", "base_affixes", "contents", "durability", "dye_type", "enchant_affix", "enchant_range_val", "flags", "gb_handle", "item_binding_level", "item_quality_level", "item_unlock_timestamp", "max_durability", "rare_item_name", "seed", "socket_affix", "stack_size" };
+    private static readonly uint[] _generatorFieldTags = new uint[] { 125, 29, 114, 64, 80, 45, 136, 56, 18, 96, 88, 128, 104, 34, 8, 53, 72 };
     public static Generator DefaultInstance {
       get { return defaultInstance; }
     }
@@ -669,7 +670,7 @@ namespace D3.Items {
     
     public const int ItemQualityLevelFieldNumber = 11;
     private bool hasItemQualityLevel;
-    private int itemQualityLevel_;
+    private int itemQualityLevel_ = 1;
     public bool HasItemQualityLevel {
       get { return hasItemQualityLevel; }
     }
@@ -729,22 +730,27 @@ namespace D3.Items {
       get { return itemUnlockTimestamp_; }
     }
     
+    public const int EnchantRangeValFieldNumber = 17;
+    private bool hasEnchantRangeVal;
+    private uint enchantRangeVal_;
+    public bool HasEnchantRangeVal {
+      get { return hasEnchantRangeVal; }
+    }
+    public uint EnchantRangeVal {
+      get { return enchantRangeVal_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasSeed) return false;
         if (!hasGbHandle) return false;
-        if (!hasRareItemName) return false;
-        if (!hasEnchantAffix) return false;
-        if (!hasSocketAffix) return false;
         if (!hasFlags) return false;
         if (!hasDurability) return false;
         if (!hasStackSize) return false;
-        if (!hasDyeType) return false;
-        if (!hasItemQualityLevel) return false;
-        if (!hasItemBindingLevel) return false;
-        if (!hasMaxDurability) return false;
         if (!GbHandle.IsInitialized) return false;
-        if (!RareItemName.IsInitialized) return false;
+        if (HasRareItemName) {
+          if (!RareItemName.IsInitialized) return false;
+        }
         foreach (global::D3.Items.EmbeddedGenerator element in ContentsList) {
           if (!element.IsInitialized) return false;
         }
@@ -756,43 +762,43 @@ namespace D3.Items {
       int size = SerializedSize;
       string[] field_names = _generatorFieldNames;
       if (hasSeed) {
-        output.WriteUInt32(1, field_names[13], Seed);
+        output.WriteUInt32(1, field_names[14], Seed);
       }
       if (hasGbHandle) {
-        output.WriteMessage(2, field_names[7], GbHandle);
+        output.WriteMessage(2, field_names[8], GbHandle);
       }
       if (baseAffixes_.Count > 0) {
         output.WriteSFixed32Array(3, field_names[1], baseAffixes_);
       }
       if (hasRareItemName) {
-        output.WriteMessage(4, field_names[12], RareItemName);
+        output.WriteMessage(4, field_names[13], RareItemName);
       }
       if (hasEnchantAffix) {
         output.WriteSFixed32(5, field_names[5], EnchantAffix);
       }
       if (hasSocketAffix) {
-        output.WriteSFixed32(6, field_names[14], SocketAffix);
+        output.WriteSFixed32(6, field_names[15], SocketAffix);
       }
       if (hasFlags) {
-        output.WriteUInt32(7, field_names[6], Flags);
+        output.WriteUInt32(7, field_names[7], Flags);
       }
       if (hasDurability) {
         output.WriteUInt32(8, field_names[3], Durability);
       }
       if (hasStackSize) {
-        output.WriteUInt64(9, field_names[15], StackSize);
+        output.WriteUInt64(9, field_names[16], StackSize);
       }
       if (hasDyeType) {
         output.WriteUInt32(10, field_names[4], DyeType);
       }
       if (hasItemQualityLevel) {
-        output.WriteSInt32(11, field_names[9], ItemQualityLevel);
+        output.WriteSInt32(11, field_names[10], ItemQualityLevel);
       }
       if (hasItemBindingLevel) {
-        output.WriteSInt32(12, field_names[8], ItemBindingLevel);
+        output.WriteSInt32(12, field_names[9], ItemBindingLevel);
       }
       if (hasMaxDurability) {
-        output.WriteUInt32(13, field_names[11], MaxDurability);
+        output.WriteUInt32(13, field_names[12], MaxDurability);
       }
       if (contents_.Count > 0) {
         output.WriteMessageArray(14, field_names[2], contents_);
@@ -801,7 +807,10 @@ namespace D3.Items {
         output.WriteSFixed32(15, field_names[0], AttunedSkill);
       }
       if (hasItemUnlockTimestamp) {
-        output.WriteUInt64(16, field_names[10], ItemUnlockTimestamp);
+        output.WriteUInt64(16, field_names[11], ItemUnlockTimestamp);
+      }
+      if (hasEnchantRangeVal) {
+        output.WriteUInt32(17, field_names[6], EnchantRangeVal);
       }
       UnknownFields.WriteTo(output);
     }
@@ -863,6 +872,9 @@ namespace D3.Items {
         }
         if (hasItemUnlockTimestamp) {
           size += pb::CodedOutputStream.ComputeUInt64Size(16, ItemUnlockTimestamp);
+        }
+        if (hasEnchantRangeVal) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(17, EnchantRangeVal);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1040,6 +1052,9 @@ namespace D3.Items {
         if (other.HasItemUnlockTimestamp) {
           ItemUnlockTimestamp = other.ItemUnlockTimestamp;
         }
+        if (other.HasEnchantRangeVal) {
+          EnchantRangeVal = other.EnchantRangeVal;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1156,6 +1171,10 @@ namespace D3.Items {
             }
             case 128: {
               result.hasItemUnlockTimestamp = input.ReadUInt64(ref result.itemUnlockTimestamp_);
+              break;
+            }
+            case 136: {
+              result.hasEnchantRangeVal = input.ReadUInt32(ref result.enchantRangeVal_);
               break;
             }
           }
@@ -1434,7 +1453,7 @@ namespace D3.Items {
       public Builder ClearItemQualityLevel() {
         PrepareBuilder();
         result.hasItemQualityLevel = false;
-        result.itemQualityLevel_ = 0;
+        result.itemQualityLevel_ = 1;
         return this;
       }
       
@@ -1559,6 +1578,26 @@ namespace D3.Items {
         PrepareBuilder();
         result.hasItemUnlockTimestamp = false;
         result.itemUnlockTimestamp_ = 0UL;
+        return this;
+      }
+      
+      public bool HasEnchantRangeVal {
+        get { return result.hasEnchantRangeVal; }
+      }
+      public uint EnchantRangeVal {
+        get { return result.EnchantRangeVal; }
+        set { SetEnchantRangeVal(value); }
+      }
+      public Builder SetEnchantRangeVal(uint value) {
+        PrepareBuilder();
+        result.hasEnchantRangeVal = true;
+        result.enchantRangeVal_ = value;
+        return this;
+      }
+      public Builder ClearEnchantRangeVal() {
+        PrepareBuilder();
+        result.hasEnchantRangeVal = false;
+        result.enchantRangeVal_ = 0;
         return this;
       }
     }
