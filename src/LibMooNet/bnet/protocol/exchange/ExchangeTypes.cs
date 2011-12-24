@@ -73,111 +73,111 @@ namespace bnet.protocol.exchange {
     
     static ExchangeTypes() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "CjBzZXJ2aWNlL2V4Y2hhbmdlL2RlZmluaXRpb24vZXhjaGFuZ2VfdHlwZXMu" + 
-          "cHJvdG8SFmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UaGWxpYi9wcm90b2NvbC9l" + 
-          "bnRpdHkucHJvdG8aG2xpYi9wcm90b2NvbC9leGNoYW5nZS5wcm90byKkAQoJ" + 
-          "T3JkZXJCb29rEjIKBm9iamVjdBgBIAIoCzIiLmJuZXQucHJvdG9jb2wuZXhj" + 
-          "aGFuZ2UuQmxvYk9mVHlwZRIPCgdwcm9ncmFtGAIgAigHEhUKDWNvbXBhdGli" + 
-          "aWxpdHkYAyACKA0SEAoIY3VycmVuY3kYBCACKAkSEgoKc3BlY2lhbGlzdBgF" + 
-          "IAIoBRIVCg1hbGxvd2VkX3JlYWxtGAYgAigNImMKD09yZGVyQm9va0hhbmRs" + 
-          "ZRI5CgxwYXJ0aXRpb25faWQYASACKAsyIy5ibmV0LnByb3RvY29sLmV4Y2hh" + 
-          "bmdlLlBhcnRpdGlvbklkEhUKDW9yZGVyX2Jvb2tfaWQYAiACKAQiqgIKFU9y" + 
-          "ZGVyQm9va05vdGlmaWNhdGlvbhI1CgpvcmRlcl9ib29rGAEgAigLMiEuYm5l" + 
-          "dC5wcm90b2NvbC5leGNoYW5nZS5PcmRlckJvb2sSOQoMcGFydGl0aW9uX2lk" + 
-          "GAIgAigLMiMuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25JZBIV" + 
-          "Cg1vcmRlcl9ib29rX2lkGAMgAigEEhoKD3RyYWRlX25vd19wcmljZRgEIAEo" + 
-          "BDoBMBIYCg13aW5uaW5nX3ByaWNlGAUgASgEOgEwEg4KBnN0YXR1cxgGIAIo" + 
-          "DRITCgt1cGRhdGVfdGltZRgHIAIoBBIWCgtjbG9zZWRfdGltZRgIIAEoBDoB" + 
-          "MBIVCg1maWxsZWRfYW1vdW50GAkgAigEIvsCChBPcmRlckJvb2tTdW1tYXJ5" + 
-          "EjkKDHBhcnRpdGlvbl9pZBgBIAIoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFu" + 
-          "Z2UuUGFydGl0aW9uSWQSFQoNb3JkZXJfYm9va19pZBgCIAIoBBIOCgZyZXN1" + 
-          "bHQYAyACKA0SNQoKb3JkZXJfYm9vaxgEIAEoCzIhLmJuZXQucHJvdG9jb2wu" + 
-          "ZXhjaGFuZ2UuT3JkZXJCb29rEg4KBmFtb3VudBgFIAEoBBIYChBiZXN0X29m" + 
-          "ZmVyX3ByaWNlGAYgASgEEhYKDmJlc3RfYmlkX3ByaWNlGAcgASgEEhAKCGVu" + 
-          "ZF90aW1lGAggASgEEg4KBnN0YXR1cxgJIAEoBRIUCgxjcmVhdGVkX3RpbWUY" + 
-          "CiABKAQSEwoLYWN0aXZlX3RpbWUYCyABKAQSEwoLY2xvc2VkX3RpbWUYDCAB" + 
-          "KAQSDgoGcmVhc29uGA0gASgNEhoKEm91dF9iaWRfdW5pdF9wcmljZRgOIAEo" + 
-          "BCK7AgoFT3JkZXISDgoGYW1vdW50GAEgAigNEhIKCnN0YXJ0X3RpbWUYAiAB" + 
-          "KAQSEAoIZW5kX3RpbWUYAyABKAQSOwoRYWNjb3VudF9mb3JfbW9uZXkYBCAB" + 
-          "KAsyIC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkJsb2JGcm9tEjoKEGFjY291" + 
-          "bnRfZm9yX2l0ZW0YBSABKAsyIC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkJs" + 
-          "b2JGcm9tEi0KDGJuZXRfYWNjb3VudBgGIAEoCzIXLmJuZXQucHJvdG9jb2wu" + 
-          "RW50aXR5SWQSLQoMZ2FtZV9hY2NvdW50GAcgASgLMhcuYm5ldC5wcm90b2Nv" + 
-          "bC5FbnRpdHlJZBIlCgR0b29uGAggASgLMhcuYm5ldC5wcm90b2NvbC5FbnRp" + 
-          "dHlJZCKPAwoJRXh0ZW5zaW9uEjkKDHBhcnRpdGlvbl9pZBgBIAIoCzIjLmJu" + 
-          "ZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQSFQoNb3JkZXJfYm9v" + 
-          "a19pZBgCIAIoBBIQCghvcmRlcl9pZBgDIAIoBBIVCg1maWxsZWRfYW1vdW50" + 
-          "GAQgASgEEhQKDG9yZGVyX3N0YXR1cxgFIAEoBRIXCg9hdXRob3JpemVkX3Rp" + 
-          "bWUYBiABKAQSFAoMY3JlYXRlZF90aW1lGAcgASgEEhMKC2Nsb3NlZF90aW1l" + 
-          "GAggASgEEg4KBnJlYXNvbhgJIAEoDRI1CgpvcmRlcl9ib29rGAogASgLMiEu" + 
-          "Ym5ldC5wcm90b2NvbC5leGNoYW5nZS5PcmRlckJvb2sSGQoRb3JkZXJfYm9v" + 
-          "a19zdGF0dXMYCyABKAQSFgoObW9uZXlfdG9fY2xhaW0YDCABKAQSFgoOaXRl" + 
-          "bXNfdG9fY2xhaW0YDSABKAQSGwoMcmlza19kZWxheWVkGA4gASgIOgVmYWxz" + 
-          "ZSJ8CgVPZmZlchIsCgVvcmRlchgBIAIoCzIdLmJuZXQucHJvdG9jb2wuZXhj" + 
-          "aGFuZ2UuT3JkZXISFwoPdHJhZGVfbm93X3ByaWNlGAIgASgEEhUKDXJlc2Vy" + 
-          "dmVfcHJpY2UYAyABKAQSFQoNb3V0X2JpZF9wcmljZRgEIAEoBCKSAQoNT2Zm" + 
-          "ZXJFeHRlbmRlZBIsCgVvZmZlchgBIAIoCzIdLmJuZXQucHJvdG9jb2wuZXhj" + 
-          "aGFuZ2UuT2ZmZXISNAoJZXh0ZW5zaW9uGAIgAigLMiEuYm5ldC5wcm90b2Nv" + 
-          "bC5leGNoYW5nZS5FeHRlbnNpb24SHQoVY3VycmVudF93aW5uaW5nX3ByaWNl" + 
-          "GAMgASgEIrUBCg1PZmZlckNyZWF0aW9uEiwKBW9mZmVyGAEgAigLMh0uYm5l" + 
-          "dC5wcm90b2NvbC5leGNoYW5nZS5PZmZlchIYChBhdWN0aW9uX2R1cmF0aW9u" + 
-          "GAIgASgEEhsKE2F1Y3Rpb25fc3RhcnRfZGVsYXkYAyABKAQSPwoPYmlsbGlu" + 
-          "Z19hZGRyZXNzGAQgASgLMiYuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5CaWxs" + 
-          "aW5nQWRkcmVzcyJnCgNCaWQSLAoFb3JkZXIYASACKAsyHS5ibmV0LnByb3Rv" + 
-          "Y29sLmV4Y2hhbmdlLk9yZGVyEhoKEmN1cnJlbnRfdW5pdF9wcmljZRgCIAEo" + 
-          "BBIWCg5tYXhfdW5pdF9wcmljZRgDIAEoBCLOAQoLQmlkRXh0ZW5kZWQSKAoD" + 
-          "YmlkGAEgAigLMhsuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5CaWQSNAoJZXh0" + 
-          "ZW5zaW9uGAIgAigLMiEuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5FeHRlbnNp" + 
-          "b24SGwoTb2ZmZXJfb3V0X2JpZF9wcmljZRgDIAEoBBIdChVvZmZlcl90cmFk" + 
-          "ZV9ub3dfcHJpY2UYBCABKAQSIwobb2ZmZXJfY3VycmVudF93aW5uaW5nX3By" + 
-          "aWNlGAUgASgEIq8BCgtCaWRDcmVhdGlvbhIoCgNiaWQYASACKAsyGy5ibmV0" + 
-          "LnByb3RvY29sLmV4Y2hhbmdlLkJpZBIYChBhdWN0aW9uX2R1cmF0aW9uGAIg" + 
-          "ASgEEhsKE2F1Y3Rpb25fc3RhcnRfZGVsYXkYAyABKAQSPwoPYmlsbGluZ19h" + 
-          "ZGRyZXNzGAQgASgLMiYuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5CaWxsaW5n" + 
-          "QWRkcmVzcyKdAQoNT3JkZXJFeHRlbmRlZBISCgpvcmRlcl90eXBlGAEgAigN" + 
-          "EjkKDGJpZF9leHRlbmRlZBgCIAEoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFu" + 
-          "Z2UuQmlkRXh0ZW5kZWQSPQoOb2ZmZXJfZXh0ZW5kZWQYAyABKAsyJS5ibmV0" + 
-          "LnByb3RvY29sLmV4Y2hhbmdlLk9mZmVyRXh0ZW5kZWQiUwoUUXVlcnlGaWx0" + 
-          "ZXJCeU9yZGVySWQSEgoKbWF4X3Jlc3VsdBgBIAIoDRIUCgxyZWZfb3JkZXJf" + 
-          "aWQYAiABKAQSEQoJcmVmX3ByaWNlGAMgASgEIkgKGFF1ZXJ5RmlsdGVyQnlD" + 
-          "cmVhdGVkVGltZRISCgptYXhfcmVzdWx0GAEgAigNEhgKEHJlZl9jcmVhdGVk" + 
-          "X3RpbWUYAiABKAQivwEKEFF1ZXJ5T3JkZXJGaWx0ZXISEAoIY3VycmVuY3kY" + 
-          "ASABKAkSEgoKc3BlY2lhbGlzdBgCIAEoDRISCgpvcmRlcl90eXBlGAMgASgN" + 
-          "EhQKCWNsYWltYWJsZRgEIAEoDToBMBIUCgxvcmRlcl9zdGF0dXMYBSACKAUS" + 
-          "RQoLdGltZV9maWx0ZXIYBiACKAsyMC5ibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
-          "LlF1ZXJ5RmlsdGVyQnlDcmVhdGVkVGltZSJoCgpTZXR0bGVtZW50EhUKDW9y" + 
-          "ZGVyX2Jvb2tfaWQYASACKAQSFAoMbW9uZXlfYW1vdW50GAIgAigEEhQKDGl0" + 
-          "ZW1zX2Ftb3VudBgDIAIoBBIXCg9vZmZlcl9zZXR0bGVfaWQYBCACKAQifgoO" + 
-          "Q3VycmVuY3lDb25maWcSEAoIY3VycmVuY3kYASACKAkSEQoJdGlja19zaXpl" + 
-          "GAIgAigEEhYKDm1pbl91bml0X3ByaWNlGAMgAigEEhYKDm1heF91bml0X3By" + 
-          "aWNlGAQgAigEEhcKD21heF90b3RhbF9wcmljZRgHIAIoBCKRAwoQU3BlY2lh" + 
-          "bGlzdENvbmZpZxISCgpzcGVjaWFsaXN0GAEgAigFEh0KEWF1Y3Rpb25fZHVy" + 
-          "YXRpb25zGAIgAygEQgIQARIgChRhdWN0aW9uX3N0YXJ0X2RlbGF5cxgDIAMo" + 
-          "BEICEAESJAocYW50aV9zbmlwaW5nX2V4dGVuc2lvbl9kZWxheRgEIAIoBBIY" + 
-          "ChBtYXhfaXRlbXNfYW1vdW50GAUgAigEEiAKGHN0YXJ0aW5nX3VuaXRfcHJp" + 
-          "Y2VfcnVsZRgGIAIoBRIgChhyZXNlcnZlZF91bml0X3ByaWNlX3J1bGUYByAC" + 
-          "KAUSIQoZdHJhZGVfbm93X3VuaXRfcHJpY2VfcnVsZRgIIAIoBRIfChdjdXJy" + 
-          "ZW50X3VuaXRfcHJpY2VfcnVsZRgJIAIoBRIfChdtYXhpbXVtX3VuaXRfcHJp" + 
-          "Y2VfcnVsZRgKIAIoBRI/Cg9jdXJyZW5jeV9jb25maWcYCyADKAsyJi5ibmV0" + 
-          "LnByb3RvY29sLmV4Y2hhbmdlLkN1cnJlbmN5Q29uZmlnIlYKDkJpbGxpbmdB" + 
-          "ZGRyZXNzEhIKCmNvdW50cnlfaWQYASACKAUSDAoEY2l0eRgCIAIoCRINCgVz" + 
-          "dGF0ZRgDIAEoCRITCgtwb3N0YWxfY29kZRgEIAEoCSL1AQoRRmVlRXN0aW1h" + 
-          "dGlvbkRhdGESDwoHcHJvZ3JhbRgBIAIoBxISCgpzcGVjaWFsaXN0GAIgAigF" + 
-          "EhAKCGN1cnJlbmN5GAMgAigJEg4KBnNvdXJjZRgEIAIoBxIUCgxtb25leV9h" + 
-          "bW91bnQYBSACKAQSEwoLaXRlbV9hbW91bnQYBiACKAQSLQoMYm5ldF9hY2Nv" + 
-          "dW50GAcgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBI/Cg9iaWxsaW5n" + 
-          "X2FkZHJlc3MYCCABKAsyJi5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkJpbGxp" + 
-          "bmdBZGRyZXNzIqMDCglGZWVEZXRhaWwSDgoGcm93bnVtGAEgAigEEhoKEmZl" + 
-          "ZV9hdXRoX2RldGFpbF9pZBgCIAIoBBIOCgZmZWVfaWQYAyABKAQSEgoKZmVl" + 
-          "X2Ftb3VudBgEIAEoBBIXCg9kaXNjb3VudF9hbW91bnQYBSABKAQSFAoMZmVl" + 
-          "X2dyb3VwX2lkGAYgASgEEhYKDmZlZV9ncm91cF9uYW1lGAcgASgJEhcKD2Zs" + 
-          "YXRfZmVlX2Ftb3VudBgIIAEoBBIaChJzY2FsaW5nX2ZlZV9hbW91bnQYCSAB" + 
-          "KAQSFgoObWF4X2ZlZV9hbW91bnQYCiABKAQSFwoPZmVlX2Rlc2NyaXB0aW9u" + 
-          "GAsgASgJEg4KBmlzX3RheBgMIAIoCBIWCg5jb3Vwb25fYm9va19pZBgNIAEo" + 
-          "BBITCgtjb3Vwb25fdHlwZRgOIAEoBBIaChJjb3Vwb25fZGVzY3JpcHRpb24Y" + 
-          "DyABKAkSHwoXbGVmdF9vdmVyX2NvdXBvbl9jcmVkaXQYECABKAQSHwoXbGVm" + 
-          "dF9vdmVyX2NvdXBvbl9jaGFyZ2UYESABKAQiMgoLUHJpY2VEZXRhaWwSEwoL" + 
-          "dHJhZGVfcHJpY2UYASACKAQSDgoGYW1vdW50GAIgAigE");
+          "ChlibmV0L2V4Y2hhbmdlX3R5cGVzLnByb3RvEhZibmV0LnByb3RvY29sLmV4" + 
+          "Y2hhbmdlGhFibmV0L2VudGl0eS5wcm90bxoTYm5ldC9leGNoYW5nZS5wcm90" + 
+          "byKkAQoJT3JkZXJCb29rEjIKBm9iamVjdBgBIAIoCzIiLmJuZXQucHJvdG9j" + 
+          "b2wuZXhjaGFuZ2UuQmxvYk9mVHlwZRIPCgdwcm9ncmFtGAIgAigHEhUKDWNv" + 
+          "bXBhdGliaWxpdHkYAyACKA0SEAoIY3VycmVuY3kYBCACKAkSEgoKc3BlY2lh" + 
+          "bGlzdBgFIAIoBRIVCg1hbGxvd2VkX3JlYWxtGAYgAigNImMKD09yZGVyQm9v" + 
+          "a0hhbmRsZRI5CgxwYXJ0aXRpb25faWQYASACKAsyIy5ibmV0LnByb3RvY29s" + 
+          "LmV4Y2hhbmdlLlBhcnRpdGlvbklkEhUKDW9yZGVyX2Jvb2tfaWQYAiACKAQi" + 
+          "qgIKFU9yZGVyQm9va05vdGlmaWNhdGlvbhI1CgpvcmRlcl9ib29rGAEgAigL" + 
+          "MiEuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5PcmRlckJvb2sSOQoMcGFydGl0" + 
+          "aW9uX2lkGAIgAigLMiMuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5QYXJ0aXRp" + 
+          "b25JZBIVCg1vcmRlcl9ib29rX2lkGAMgAigEEhoKD3RyYWRlX25vd19wcmlj" + 
+          "ZRgEIAEoBDoBMBIYCg13aW5uaW5nX3ByaWNlGAUgASgEOgEwEg4KBnN0YXR1" + 
+          "cxgGIAIoDRITCgt1cGRhdGVfdGltZRgHIAIoBBIWCgtjbG9zZWRfdGltZRgI" + 
+          "IAEoBDoBMBIVCg1maWxsZWRfYW1vdW50GAkgAigEIvsCChBPcmRlckJvb2tT" + 
+          "dW1tYXJ5EjkKDHBhcnRpdGlvbl9pZBgBIAIoCzIjLmJuZXQucHJvdG9jb2wu" + 
+          "ZXhjaGFuZ2UuUGFydGl0aW9uSWQSFQoNb3JkZXJfYm9va19pZBgCIAIoBBIO" + 
+          "CgZyZXN1bHQYAyACKA0SNQoKb3JkZXJfYm9vaxgEIAEoCzIhLmJuZXQucHJv" + 
+          "dG9jb2wuZXhjaGFuZ2UuT3JkZXJCb29rEg4KBmFtb3VudBgFIAEoBBIYChBi" + 
+          "ZXN0X29mZmVyX3ByaWNlGAYgASgEEhYKDmJlc3RfYmlkX3ByaWNlGAcgASgE" + 
+          "EhAKCGVuZF90aW1lGAggASgEEg4KBnN0YXR1cxgJIAEoBRIUCgxjcmVhdGVk" + 
+          "X3RpbWUYCiABKAQSEwoLYWN0aXZlX3RpbWUYCyABKAQSEwoLY2xvc2VkX3Rp" + 
+          "bWUYDCABKAQSDgoGcmVhc29uGA0gASgNEhoKEm91dF9iaWRfdW5pdF9wcmlj" + 
+          "ZRgOIAEoBCLNAgoFT3JkZXISDgoGYW1vdW50GAEgAigNEhIKCnN0YXJ0X3Rp" + 
+          "bWUYAiABKAQSEAoIZW5kX3RpbWUYAyABKAQSOwoRYWNjb3VudF9mb3JfbW9u" + 
+          "ZXkYBCABKAsyIC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkJsb2JGcm9tEjoK" + 
+          "EGFjY291bnRfZm9yX2l0ZW0YBSABKAsyIC5ibmV0LnByb3RvY29sLmV4Y2hh" + 
+          "bmdlLkJsb2JGcm9tEi0KDGJuZXRfYWNjb3VudBgGIAEoCzIXLmJuZXQucHJv" + 
+          "dG9jb2wuRW50aXR5SWQSLQoMZ2FtZV9hY2NvdW50GAcgASgLMhcuYm5ldC5w" + 
+          "cm90b2NvbC5FbnRpdHlJZBI3CgpzZXNzaW9uX2lkGAggASgLMiMuYm5ldC5w" + 
+          "cm90b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25JZCKPAwoJRXh0ZW5zaW9uEjkK" + 
+          "DHBhcnRpdGlvbl9pZBgBIAIoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
+          "UGFydGl0aW9uSWQSFQoNb3JkZXJfYm9va19pZBgCIAIoBBIQCghvcmRlcl9p" + 
+          "ZBgDIAIoBBIVCg1maWxsZWRfYW1vdW50GAQgASgEEhQKDG9yZGVyX3N0YXR1" + 
+          "cxgFIAEoBRIXCg9hdXRob3JpemVkX3RpbWUYBiABKAQSFAoMY3JlYXRlZF90" + 
+          "aW1lGAcgASgEEhMKC2Nsb3NlZF90aW1lGAggASgEEg4KBnJlYXNvbhgJIAEo" + 
+          "DRI1CgpvcmRlcl9ib29rGAogASgLMiEuYm5ldC5wcm90b2NvbC5leGNoYW5n" + 
+          "ZS5PcmRlckJvb2sSGQoRb3JkZXJfYm9va19zdGF0dXMYCyABKAQSFgoObW9u" + 
+          "ZXlfdG9fY2xhaW0YDCABKAQSFgoOaXRlbXNfdG9fY2xhaW0YDSABKAQSGwoM" + 
+          "cmlza19kZWxheWVkGA4gASgIOgVmYWxzZSJ8CgVPZmZlchIsCgVvcmRlchgB" + 
+          "IAIoCzIdLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuT3JkZXISFwoPdHJhZGVf" + 
+          "bm93X3ByaWNlGAIgASgEEhUKDXJlc2VydmVfcHJpY2UYAyABKAQSFQoNb3V0" + 
+          "X2JpZF9wcmljZRgEIAEoBCKSAQoNT2ZmZXJFeHRlbmRlZBIsCgVvZmZlchgB" + 
+          "IAIoCzIdLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuT2ZmZXISNAoJZXh0ZW5z" + 
+          "aW9uGAIgAigLMiEuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5FeHRlbnNpb24S" + 
+          "HQoVY3VycmVudF93aW5uaW5nX3ByaWNlGAMgASgEIrUBCg1PZmZlckNyZWF0" + 
+          "aW9uEiwKBW9mZmVyGAEgAigLMh0uYm5ldC5wcm90b2NvbC5leGNoYW5nZS5P" + 
+          "ZmZlchIYChBhdWN0aW9uX2R1cmF0aW9uGAIgASgEEhsKE2F1Y3Rpb25fc3Rh" + 
+          "cnRfZGVsYXkYAyABKAQSPwoPYmlsbGluZ19hZGRyZXNzGAQgASgLMiYuYm5l" + 
+          "dC5wcm90b2NvbC5leGNoYW5nZS5CaWxsaW5nQWRkcmVzcyJnCgNCaWQSLAoF" + 
+          "b3JkZXIYASACKAsyHS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLk9yZGVyEhoK" + 
+          "EmN1cnJlbnRfdW5pdF9wcmljZRgCIAEoBBIWCg5tYXhfdW5pdF9wcmljZRgD" + 
+          "IAEoBCLOAQoLQmlkRXh0ZW5kZWQSKAoDYmlkGAEgAigLMhsuYm5ldC5wcm90" + 
+          "b2NvbC5leGNoYW5nZS5CaWQSNAoJZXh0ZW5zaW9uGAIgAigLMiEuYm5ldC5w" + 
+          "cm90b2NvbC5leGNoYW5nZS5FeHRlbnNpb24SGwoTb2ZmZXJfb3V0X2JpZF9w" + 
+          "cmljZRgDIAEoBBIdChVvZmZlcl90cmFkZV9ub3dfcHJpY2UYBCABKAQSIwob" + 
+          "b2ZmZXJfY3VycmVudF93aW5uaW5nX3ByaWNlGAUgASgEIq8BCgtCaWRDcmVh" + 
+          "dGlvbhIoCgNiaWQYASACKAsyGy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkJp" + 
+          "ZBIYChBhdWN0aW9uX2R1cmF0aW9uGAIgASgEEhsKE2F1Y3Rpb25fc3RhcnRf" + 
+          "ZGVsYXkYAyABKAQSPwoPYmlsbGluZ19hZGRyZXNzGAQgASgLMiYuYm5ldC5w" + 
+          "cm90b2NvbC5leGNoYW5nZS5CaWxsaW5nQWRkcmVzcyKdAQoNT3JkZXJFeHRl" + 
+          "bmRlZBISCgpvcmRlcl90eXBlGAEgAigNEjkKDGJpZF9leHRlbmRlZBgCIAEo" + 
+          "CzIjLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmlkRXh0ZW5kZWQSPQoOb2Zm" + 
+          "ZXJfZXh0ZW5kZWQYAyABKAsyJS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLk9m" + 
+          "ZmVyRXh0ZW5kZWQiUwoUUXVlcnlGaWx0ZXJCeU9yZGVySWQSEgoKbWF4X3Jl" + 
+          "c3VsdBgBIAIoDRIUCgxyZWZfb3JkZXJfaWQYAiABKAQSEQoJcmVmX3ByaWNl" + 
+          "GAMgASgEIkgKGFF1ZXJ5RmlsdGVyQnlDcmVhdGVkVGltZRISCgptYXhfcmVz" + 
+          "dWx0GAEgAigNEhgKEHJlZl9jcmVhdGVkX3RpbWUYAiABKAQi2wEKEFF1ZXJ5" + 
+          "T3JkZXJGaWx0ZXISEAoIY3VycmVuY3kYASABKAkSEgoKc3BlY2lhbGlzdBgC" + 
+          "IAEoDRISCgpvcmRlcl90eXBlGAMgASgNEhQKCWNsYWltYWJsZRgEIAEoDToB" + 
+          "MBIZChFvcmRlcl9zdGF0dXNfbWFzaxgFIAIoDRIVCgZyb2xsdXAYBiABKAg6" + 
+          "BWZhbHNlEkUKC3RpbWVfZmlsdGVyGAcgAigLMjAuYm5ldC5wcm90b2NvbC5l" + 
+          "eGNoYW5nZS5RdWVyeUZpbHRlckJ5Q3JlYXRlZFRpbWUiaAoKU2V0dGxlbWVu" + 
+          "dBIVCg1vcmRlcl9ib29rX2lkGAEgAigEEhQKDG1vbmV5X2Ftb3VudBgCIAIo" + 
+          "BBIUCgxpdGVtc19hbW91bnQYAyACKAQSFwoPb2ZmZXJfc2V0dGxlX2lkGAQg" + 
+          "AigEIn4KDkN1cnJlbmN5Q29uZmlnEhAKCGN1cnJlbmN5GAEgAigJEhEKCXRp" + 
+          "Y2tfc2l6ZRgCIAIoBBIWCg5taW5fdW5pdF9wcmljZRgDIAIoBBIWCg5tYXhf" + 
+          "dW5pdF9wcmljZRgEIAIoBBIXCg9tYXhfdG90YWxfcHJpY2UYByACKAQilAMK" + 
+          "EFNwZWNpYWxpc3RDb25maWcSEgoKc3BlY2lhbGlzdBgBIAIoBRIdChFhdWN0" + 
+          "aW9uX2R1cmF0aW9ucxgCIAMoBEICEAESIAoUYXVjdGlvbl9zdGFydF9kZWxh" + 
+          "eXMYAyADKARCAhABEiQKHGFudGlfc25pcGluZ19leHRlbnNpb25fZGVsYXkY" + 
+          "BCACKAQSGwoQbWF4X2l0ZW1zX2Ftb3VudBgFIAEoBDoBMBIgChhzdGFydGlu" + 
+          "Z191bml0X3ByaWNlX3J1bGUYBiACKAUSIAoYcmVzZXJ2ZWRfdW5pdF9wcmlj" + 
+          "ZV9ydWxlGAcgAigFEiEKGXRyYWRlX25vd191bml0X3ByaWNlX3J1bGUYCCAC" + 
+          "KAUSHwoXY3VycmVudF91bml0X3ByaWNlX3J1bGUYCSACKAUSHwoXbWF4aW11" + 
+          "bV91bml0X3ByaWNlX3J1bGUYCiACKAUSPwoPY3VycmVuY3lfY29uZmlnGAsg" + 
+          "AygLMiYuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5DdXJyZW5jeUNvbmZpZyJW" + 
+          "Cg5CaWxsaW5nQWRkcmVzcxISCgpjb3VudHJ5X2lkGAEgAigFEgwKBGNpdHkY" + 
+          "AiACKAkSDQoFc3RhdGUYAyABKAkSEwoLcG9zdGFsX2NvZGUYBCABKAki9QEK" + 
+          "EUZlZUVzdGltYXRpb25EYXRhEg8KB3Byb2dyYW0YASACKAcSEgoKc3BlY2lh" + 
+          "bGlzdBgCIAIoBRIQCghjdXJyZW5jeRgDIAIoCRIOCgZzb3VyY2UYBCACKAcS" + 
+          "FAoMbW9uZXlfYW1vdW50GAUgAigEEhMKC2l0ZW1fYW1vdW50GAYgAigEEi0K" + 
+          "DGJuZXRfYWNjb3VudBgHIAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQS" + 
+          "PwoPYmlsbGluZ19hZGRyZXNzGAggASgLMiYuYm5ldC5wcm90b2NvbC5leGNo" + 
+          "YW5nZS5CaWxsaW5nQWRkcmVzcyKjAwoJRmVlRGV0YWlsEg4KBnJvd251bRgB" + 
+          "IAIoBBIaChJmZWVfYXV0aF9kZXRhaWxfaWQYAiACKAQSDgoGZmVlX2lkGAMg" + 
+          "ASgEEhIKCmZlZV9hbW91bnQYBCABKAQSFwoPZGlzY291bnRfYW1vdW50GAUg" + 
+          "ASgEEhQKDGZlZV9ncm91cF9pZBgGIAEoBBIWCg5mZWVfZ3JvdXBfbmFtZRgH" + 
+          "IAEoCRIXCg9mbGF0X2ZlZV9hbW91bnQYCCABKAQSGgoSc2NhbGluZ19mZWVf" + 
+          "YW1vdW50GAkgASgEEhYKDm1heF9mZWVfYW1vdW50GAogASgEEhcKD2ZlZV9k" + 
+          "ZXNjcmlwdGlvbhgLIAEoCRIOCgZpc190YXgYDCACKAgSFgoOY291cG9uX2Jv" + 
+          "b2tfaWQYDSABKAQSEwoLY291cG9uX3R5cGUYDiABKAQSGgoSY291cG9uX2Rl" + 
+          "c2NyaXB0aW9uGA8gASgJEh8KF2xlZnRfb3Zlcl9jb3Vwb25fY3JlZGl0GBAg" + 
+          "ASgEEh8KF2xlZnRfb3Zlcl9jb3Vwb25fY2hhcmdlGBEgASgEIjIKC1ByaWNl" + 
+          "RGV0YWlsEhMKC3RyYWRlX3ByaWNlGAEgAigEEg4KBmFtb3VudBgCIAIoBA==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_OrderBook__Descriptor = Descriptor.MessageTypes[0];
@@ -199,7 +199,7 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_Order__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_exchange_Order__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.Order, global::bnet.protocol.exchange.Order.Builder>(internal__static_bnet_protocol_exchange_Order__Descriptor,
-                new string[] { "Amount", "StartTime", "EndTime", "AccountForMoney", "AccountForItem", "BnetAccount", "GameAccount", "Toon", });
+                new string[] { "Amount", "StartTime", "EndTime", "AccountForMoney", "AccountForItem", "BnetAccount", "GameAccount", "SessionId", });
         internal__static_bnet_protocol_exchange_Extension__Descriptor = Descriptor.MessageTypes[5];
         internal__static_bnet_protocol_exchange_Extension__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.Extension, global::bnet.protocol.exchange.Extension.Builder>(internal__static_bnet_protocol_exchange_Extension__Descriptor,
@@ -243,7 +243,7 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_QueryOrderFilter__Descriptor = Descriptor.MessageTypes[15];
         internal__static_bnet_protocol_exchange_QueryOrderFilter__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.QueryOrderFilter, global::bnet.protocol.exchange.QueryOrderFilter.Builder>(internal__static_bnet_protocol_exchange_QueryOrderFilter__Descriptor,
-                new string[] { "Currency", "Specialist", "OrderType", "Claimable", "OrderStatus", "TimeFilter", });
+                new string[] { "Currency", "Specialist", "OrderType", "Claimable", "OrderStatusMask", "Rollup", "TimeFilter", });
         internal__static_bnet_protocol_exchange_Settlement__Descriptor = Descriptor.MessageTypes[16];
         internal__static_bnet_protocol_exchange_Settlement__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.Settlement, global::bnet.protocol.exchange.Settlement.Builder>(internal__static_bnet_protocol_exchange_Settlement__Descriptor,
@@ -2723,8 +2723,8 @@ namespace bnet.protocol.exchange {
   public sealed partial class Order : pb::GeneratedMessage<Order, Order.Builder> {
     private Order() { }
     private static readonly Order defaultInstance = new Order().MakeReadOnly();
-    private static readonly string[] _orderFieldNames = new string[] { "account_for_item", "account_for_money", "amount", "bnet_account", "end_time", "game_account", "start_time", "toon" };
-    private static readonly uint[] _orderFieldTags = new uint[] { 42, 34, 8, 50, 24, 58, 16, 66 };
+    private static readonly string[] _orderFieldNames = new string[] { "account_for_item", "account_for_money", "amount", "bnet_account", "end_time", "game_account", "session_id", "start_time" };
+    private static readonly uint[] _orderFieldTags = new uint[] { 42, 34, 8, 50, 24, 58, 66, 16 };
     public static Order DefaultInstance {
       get { return defaultInstance; }
     }
@@ -2815,14 +2815,14 @@ namespace bnet.protocol.exchange {
       get { return gameAccount_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
-    public const int ToonFieldNumber = 8;
-    private bool hasToon;
-    private global::bnet.protocol.EntityId toon_;
-    public bool HasToon {
-      get { return hasToon; }
+    public const int SessionIdFieldNumber = 8;
+    private bool hasSessionId;
+    private global::bnet.protocol.exchange.PartitionId sessionId_;
+    public bool HasSessionId {
+      get { return hasSessionId; }
     }
-    public global::bnet.protocol.EntityId Toon {
-      get { return toon_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.exchange.PartitionId SessionId {
+      get { return sessionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
@@ -2840,8 +2840,8 @@ namespace bnet.protocol.exchange {
         if (HasGameAccount) {
           if (!GameAccount.IsInitialized) return false;
         }
-        if (HasToon) {
-          if (!Toon.IsInitialized) return false;
+        if (HasSessionId) {
+          if (!SessionId.IsInitialized) return false;
         }
         return true;
       }
@@ -2854,7 +2854,7 @@ namespace bnet.protocol.exchange {
         output.WriteUInt32(1, field_names[2], Amount);
       }
       if (hasStartTime) {
-        output.WriteUInt64(2, field_names[6], StartTime);
+        output.WriteUInt64(2, field_names[7], StartTime);
       }
       if (hasEndTime) {
         output.WriteUInt64(3, field_names[4], EndTime);
@@ -2871,8 +2871,8 @@ namespace bnet.protocol.exchange {
       if (hasGameAccount) {
         output.WriteMessage(7, field_names[5], GameAccount);
       }
-      if (hasToon) {
-        output.WriteMessage(8, field_names[7], Toon);
+      if (hasSessionId) {
+        output.WriteMessage(8, field_names[6], SessionId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2905,8 +2905,8 @@ namespace bnet.protocol.exchange {
         if (hasGameAccount) {
           size += pb::CodedOutputStream.ComputeMessageSize(7, GameAccount);
         }
-        if (hasToon) {
-          size += pb::CodedOutputStream.ComputeMessageSize(8, Toon);
+        if (hasSessionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(8, SessionId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -3055,8 +3055,8 @@ namespace bnet.protocol.exchange {
         if (other.HasGameAccount) {
           MergeGameAccount(other.GameAccount);
         }
-        if (other.HasToon) {
-          MergeToon(other.Toon);
+        if (other.HasSessionId) {
+          MergeSessionId(other.SessionId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -3150,12 +3150,12 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 66: {
-              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasToon) {
-                subBuilder.MergeFrom(Toon);
+              global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
+              if (result.hasSessionId) {
+                subBuilder.MergeFrom(SessionId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Toon = subBuilder.BuildPartial();
+              SessionId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -3388,43 +3388,43 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasToon {
-       get { return result.hasToon; }
+      public bool HasSessionId {
+       get { return result.hasSessionId; }
       }
-      public global::bnet.protocol.EntityId Toon {
-        get { return result.Toon; }
-        set { SetToon(value); }
+      public global::bnet.protocol.exchange.PartitionId SessionId {
+        get { return result.SessionId; }
+        set { SetSessionId(value); }
       }
-      public Builder SetToon(global::bnet.protocol.EntityId value) {
+      public Builder SetSessionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasToon = true;
-        result.toon_ = value;
+        result.hasSessionId = true;
+        result.sessionId_ = value;
         return this;
       }
-      public Builder SetToon(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetSessionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasToon = true;
-        result.toon_ = builderForValue.Build();
+        result.hasSessionId = true;
+        result.sessionId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeToon(global::bnet.protocol.EntityId value) {
+      public Builder MergeSessionId(global::bnet.protocol.exchange.PartitionId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasToon &&
-            result.toon_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.toon_ = global::bnet.protocol.EntityId.CreateBuilder(result.toon_).MergeFrom(value).BuildPartial();
+        if (result.hasSessionId &&
+            result.sessionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.sessionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.sessionId_).MergeFrom(value).BuildPartial();
         } else {
-          result.toon_ = value;
+          result.sessionId_ = value;
         }
-        result.hasToon = true;
+        result.hasSessionId = true;
         return this;
       }
-      public Builder ClearToon() {
+      public Builder ClearSessionId() {
         PrepareBuilder();
-        result.hasToon = false;
-        result.toon_ = null;
+        result.hasSessionId = false;
+        result.sessionId_ = null;
         return this;
       }
     }
@@ -8072,8 +8072,8 @@ namespace bnet.protocol.exchange {
   public sealed partial class QueryOrderFilter : pb::GeneratedMessage<QueryOrderFilter, QueryOrderFilter.Builder> {
     private QueryOrderFilter() { }
     private static readonly QueryOrderFilter defaultInstance = new QueryOrderFilter().MakeReadOnly();
-    private static readonly string[] _queryOrderFilterFieldNames = new string[] { "claimable", "currency", "order_status", "order_type", "specialist", "time_filter" };
-    private static readonly uint[] _queryOrderFilterFieldTags = new uint[] { 32, 10, 40, 24, 16, 50 };
+    private static readonly string[] _queryOrderFilterFieldNames = new string[] { "claimable", "currency", "order_status_mask", "order_type", "rollup", "specialist", "time_filter" };
+    private static readonly uint[] _queryOrderFilterFieldTags = new uint[] { 32, 10, 40, 24, 48, 16, 58 };
     public static QueryOrderFilter DefaultInstance {
       get { return defaultInstance; }
     }
@@ -8134,17 +8134,27 @@ namespace bnet.protocol.exchange {
       get { return claimable_; }
     }
     
-    public const int OrderStatusFieldNumber = 5;
-    private bool hasOrderStatus;
-    private int orderStatus_;
-    public bool HasOrderStatus {
-      get { return hasOrderStatus; }
+    public const int OrderStatusMaskFieldNumber = 5;
+    private bool hasOrderStatusMask;
+    private uint orderStatusMask_;
+    public bool HasOrderStatusMask {
+      get { return hasOrderStatusMask; }
     }
-    public int OrderStatus {
-      get { return orderStatus_; }
+    public uint OrderStatusMask {
+      get { return orderStatusMask_; }
     }
     
-    public const int TimeFilterFieldNumber = 6;
+    public const int RollupFieldNumber = 6;
+    private bool hasRollup;
+    private bool rollup_;
+    public bool HasRollup {
+      get { return hasRollup; }
+    }
+    public bool Rollup {
+      get { return rollup_; }
+    }
+    
+    public const int TimeFilterFieldNumber = 7;
     private bool hasTimeFilter;
     private global::bnet.protocol.exchange.QueryFilterByCreatedTime timeFilter_;
     public bool HasTimeFilter {
@@ -8156,7 +8166,7 @@ namespace bnet.protocol.exchange {
     
     public override bool IsInitialized {
       get {
-        if (!hasOrderStatus) return false;
+        if (!hasOrderStatusMask) return false;
         if (!hasTimeFilter) return false;
         if (!TimeFilter.IsInitialized) return false;
         return true;
@@ -8170,7 +8180,7 @@ namespace bnet.protocol.exchange {
         output.WriteString(1, field_names[1], Currency);
       }
       if (hasSpecialist) {
-        output.WriteUInt32(2, field_names[4], Specialist);
+        output.WriteUInt32(2, field_names[5], Specialist);
       }
       if (hasOrderType) {
         output.WriteUInt32(3, field_names[3], OrderType);
@@ -8178,11 +8188,14 @@ namespace bnet.protocol.exchange {
       if (hasClaimable) {
         output.WriteUInt32(4, field_names[0], Claimable);
       }
-      if (hasOrderStatus) {
-        output.WriteInt32(5, field_names[2], OrderStatus);
+      if (hasOrderStatusMask) {
+        output.WriteUInt32(5, field_names[2], OrderStatusMask);
+      }
+      if (hasRollup) {
+        output.WriteBool(6, field_names[4], Rollup);
       }
       if (hasTimeFilter) {
-        output.WriteMessage(6, field_names[5], TimeFilter);
+        output.WriteMessage(7, field_names[6], TimeFilter);
       }
       UnknownFields.WriteTo(output);
     }
@@ -8206,11 +8219,14 @@ namespace bnet.protocol.exchange {
         if (hasClaimable) {
           size += pb::CodedOutputStream.ComputeUInt32Size(4, Claimable);
         }
-        if (hasOrderStatus) {
-          size += pb::CodedOutputStream.ComputeInt32Size(5, OrderStatus);
+        if (hasOrderStatusMask) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(5, OrderStatusMask);
+        }
+        if (hasRollup) {
+          size += pb::CodedOutputStream.ComputeBoolSize(6, Rollup);
         }
         if (hasTimeFilter) {
-          size += pb::CodedOutputStream.ComputeMessageSize(6, TimeFilter);
+          size += pb::CodedOutputStream.ComputeMessageSize(7, TimeFilter);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -8350,8 +8366,11 @@ namespace bnet.protocol.exchange {
         if (other.HasClaimable) {
           Claimable = other.Claimable;
         }
-        if (other.HasOrderStatus) {
-          OrderStatus = other.OrderStatus;
+        if (other.HasOrderStatusMask) {
+          OrderStatusMask = other.OrderStatusMask;
+        }
+        if (other.HasRollup) {
+          Rollup = other.Rollup;
         }
         if (other.HasTimeFilter) {
           MergeTimeFilter(other.TimeFilter);
@@ -8416,10 +8435,14 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 40: {
-              result.hasOrderStatus = input.ReadInt32(ref result.orderStatus_);
+              result.hasOrderStatusMask = input.ReadUInt32(ref result.orderStatusMask_);
               break;
             }
-            case 50: {
+            case 48: {
+              result.hasRollup = input.ReadBool(ref result.rollup_);
+              break;
+            }
+            case 58: {
               global::bnet.protocol.exchange.QueryFilterByCreatedTime.Builder subBuilder = global::bnet.protocol.exchange.QueryFilterByCreatedTime.CreateBuilder();
               if (result.hasTimeFilter) {
                 subBuilder.MergeFrom(TimeFilter);
@@ -8519,23 +8542,43 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasOrderStatus {
-        get { return result.hasOrderStatus; }
+      public bool HasOrderStatusMask {
+        get { return result.hasOrderStatusMask; }
       }
-      public int OrderStatus {
-        get { return result.OrderStatus; }
-        set { SetOrderStatus(value); }
+      public uint OrderStatusMask {
+        get { return result.OrderStatusMask; }
+        set { SetOrderStatusMask(value); }
       }
-      public Builder SetOrderStatus(int value) {
+      public Builder SetOrderStatusMask(uint value) {
         PrepareBuilder();
-        result.hasOrderStatus = true;
-        result.orderStatus_ = value;
+        result.hasOrderStatusMask = true;
+        result.orderStatusMask_ = value;
         return this;
       }
-      public Builder ClearOrderStatus() {
+      public Builder ClearOrderStatusMask() {
         PrepareBuilder();
-        result.hasOrderStatus = false;
-        result.orderStatus_ = 0;
+        result.hasOrderStatusMask = false;
+        result.orderStatusMask_ = 0;
+        return this;
+      }
+      
+      public bool HasRollup {
+        get { return result.hasRollup; }
+      }
+      public bool Rollup {
+        get { return result.Rollup; }
+        set { SetRollup(value); }
+      }
+      public Builder SetRollup(bool value) {
+        PrepareBuilder();
+        result.hasRollup = true;
+        result.rollup_ = value;
+        return this;
+      }
+      public Builder ClearRollup() {
+        PrepareBuilder();
+        result.hasRollup = false;
+        result.rollup_ = false;
         return this;
       }
       
@@ -9593,7 +9636,6 @@ namespace bnet.protocol.exchange {
       get {
         if (!hasSpecialist) return false;
         if (!hasAntiSnipingExtensionDelay) return false;
-        if (!hasMaxItemsAmount) return false;
         if (!hasStartingUnitPriceRule) return false;
         if (!hasReservedUnitPriceRule) return false;
         if (!hasTradeNowUnitPriceRule) return false;

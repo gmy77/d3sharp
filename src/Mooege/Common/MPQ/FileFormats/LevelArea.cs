@@ -29,31 +29,42 @@ namespace Mooege.Common.MPQ.FileFormats
     public class LevelArea : FileFormat
     {
         public Header Header { get; private set; }
-        public int[] I0 { get; private set; }
-        public int I1 { get; private set; }
-        public int SNOLevelAreaOverrideForGizmoLocs { get; private set; }
-        public GizmoLocSet LocSet { get; private set; }
-        public int SpawnPopulationEntries { get; private set; }
+        public int I0 { get; private set; }
+        public List<LevelAreaServerData> ServerData { get; private set; }
 
-        [PersistentProperty("SpawnPopulation")] public List<LevelAreaSpawnPopulation> SpawnPopulation { get; private set; }
+        [PersistentProperty("SpawnPopulation")]
+        public List<LevelAreaSpawnPopulation> SpawnPopulations { get; private set; }
 
         public LevelArea(MpqFile file)
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            this.I0 = new int[4];
+            this.I0 = stream.ReadValueS32();
+            this.ServerData = stream.ReadSerializedData<LevelAreaServerData>();
+            stream.Close();
+        }
+    }
+
+    public class LevelAreaServerData : ISerializableData
+    {
+        public int[] I0 { get; private set; }
+        public int SNOLevelAreaOverrideForGizmoLocs { get; private set; }
+        public GizmoLocSet LocSet { get; private set; }
+        public int I1 { get; private set; }
+        public List<LevelAreaSpawnPopulation> SpawnPopulations { get; private set; }
+
+        public void Read(MpqFileStream stream)
+        {
+            this.I0 = new int[4]; //0
             for (int i = 0; i < 4; i++)
                 this.I0[i] = stream.ReadValueS32();
-            this.I1 = stream.ReadValueS32();
-            this.SNOLevelAreaOverrideForGizmoLocs = stream.ReadValueS32();
+            this.SNOLevelAreaOverrideForGizmoLocs = stream.ReadValueS32(); //16
             stream.Position += 4;
-            this.LocSet = new GizmoLocSet(stream);
-            this.SpawnPopulationEntries = stream.ReadValueS32();
+            this.LocSet = new GizmoLocSet(stream); //24
+            this.I1 = stream.ReadValueS32(); //9176
+            stream.Position += 4;
+            this.SpawnPopulations = stream.ReadSerializedData<LevelAreaSpawnPopulation>();
             stream.Position += 12;
-
-            //mpq reading of spawn populations is disabled because its not working anymore. data is loaded from database instead
-            //this.SpawnPopulation = stream.ReadSerializedData<LevelAreaSpawnPopulation>();
-            stream.Close();
         }
     }
 

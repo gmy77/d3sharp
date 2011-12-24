@@ -44,7 +44,7 @@ namespace Mooege.Core.MooNet.Services
                 if (client.CurrentToon == null) continue;
 
                 Logger.Debug("RecentPlayer => " + client.CurrentToon);
-                var recentPlayer = bnet.protocol.user_manager.RecentPlayer.CreateBuilder().SetPlayer(client.CurrentToon.BnetEntityID);
+                var recentPlayer = bnet.protocol.user_manager.RecentPlayer.CreateBuilder().SetEntity(client.CurrentToon.BnetEntityID);
                 builder.AddRecentPlayers(recentPlayer);
             }
 
@@ -56,37 +56,32 @@ namespace Mooege.Core.MooNet.Services
             throw new NotImplementedException();
         }
 
-        public override void RemoveRecentPlayers(IRpcController controller, bnet.protocol.user_manager.RemoveRecentPlayersRequest request, Action<bnet.protocol.user_manager.RemoveRecentPlayersResponse> done)
+        public override void ClearRecentPlayers(IRpcController controller, bnet.protocol.NoData request, Action<bnet.protocol.user_manager.ClearRecentPlayersResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ReportToon(IRpcController controller, bnet.protocol.user_manager.ReportToonRequest request, Action<bnet.protocol.user_manager.ReportToonResponse> done)
+        public override void BlockEntity(IRpcController controller, bnet.protocol.user_manager.BlockEntityRequest request, Action<bnet.protocol.user_manager.BlockEntityResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void BlockToon(IRpcController controller, bnet.protocol.user_manager.BlockToonRequest request, Action<bnet.protocol.NoData> done)
+        public override void UnblockEntity(IRpcController controller, bnet.protocol.user_manager.UnblockEntityRequest request, Action<bnet.protocol.user_manager.UnblockEntityResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void UnblockToons(IRpcController controller, bnet.protocol.user_manager.UnblockToonsRequest request, Action<bnet.protocol.user_manager.UnblockToonsResponse> done)
+        public override void ClearBlockList(IRpcController controller, bnet.protocol.NoData request, Action<bnet.protocol.user_manager.ClearBlockListResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void ReportAccount(IRpcController controller, bnet.protocol.user_manager.ReportAccountRequest request, Action<bnet.protocol.user_manager.ReportAccountResponse> done)
+        public override void BlockEntityForSession(IRpcController controller, bnet.protocol.user_manager.BlockEntityRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void IgnoreInviter(IRpcController controller, bnet.protocol.user_manager.IgnoreInviterRequest request, Action<bnet.protocol.NoData> done)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void UnignoreInviters(IRpcController controller, bnet.protocol.user_manager.UnignoreInvitersRequest request, Action<bnet.protocol.user_manager.UnignoreInvitersResponse> done)
+        public override void LoadBlockList(IRpcController controller, bnet.protocol.EntityId request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }

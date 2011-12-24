@@ -187,7 +187,7 @@ namespace Mooege.Common.MPQ
                     }
                     catch (Exception e)
                     {
-                        Logger.Error("Error parsing {0}.\n{1}", asset.FileName, e.Message);
+                        Logger.Error("Error parsing {0}.\nMessage: {1}\n InnerException:{2}\nStack Trace:{3}", asset.FileName, e.Message, e.InnerException.Message, e.StackTrace);
                     }
                 }
             }

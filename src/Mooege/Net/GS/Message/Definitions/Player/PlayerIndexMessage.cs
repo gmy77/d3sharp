@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
-    [Message(new[] {Opcodes.PlayerIndexMessage1, Opcodes.PlayerIndexMessage2, Opcodes.PlayerIndexMessage3, Opcodes.PlayerIndexMessage4, Opcodes.PlayerIndexMessage5, Opcodes.PlayerIndexMessage6})]
+    [Message(new[] {Opcodes.PlayerIndexMessage1, Opcodes.PlayerIndexMessage2, Opcodes.PlayerIndexMessage3, Opcodes.PlayerIndexMessage4, Opcodes.PlayerIndexMessage5})]
     public class PlayerIndexMessage : GameMessage
     {
         public int Field0;

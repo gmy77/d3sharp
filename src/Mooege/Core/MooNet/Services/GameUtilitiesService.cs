@@ -42,26 +42,6 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void CreateToon(IRpcController controller, bnet.protocol.game_utilities.CreateToonRequest request, Action<bnet.protocol.NoData> done)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void DeleteToon(IRpcController controller, bnet.protocol.game_utilities.DeleteToonRequest request, Action<bnet.protocol.NoData> done)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void TransferToon(IRpcController controller, bnet.protocol.game_utilities.TransferToonRequest request, Action<bnet.protocol.NoData> done)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SelectToon(IRpcController controller, bnet.protocol.game_utilities.SelectToonRequest request, Action<bnet.protocol.NoData> done)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void PresenceChannelCreated(IRpcController controller, bnet.protocol.game_utilities.PresenceChannelCreatedRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
@@ -78,16 +58,6 @@ namespace Mooege.Core.MooNet.Services
         }
 
         public override void GetLoad(IRpcController controller, bnet.protocol.server_pool.GetLoadRequest request, Action<bnet.protocol.server_pool.ServerState> done)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void CreateToonEntity(IRpcController controller, bnet.protocol.toon.CreateToonEntityRequest request, Action<bnet.protocol.toon.CreateToonEntityResponse> done)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void FinalizeToonCreation(IRpcController controller, bnet.protocol.toon.FinalizeToonCreationRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }

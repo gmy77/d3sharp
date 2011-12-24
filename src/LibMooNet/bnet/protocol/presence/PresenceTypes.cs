@@ -36,24 +36,23 @@ namespace bnet.protocol.presence {
     
     static PresenceTypes() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "CjBzZXJ2aWNlL3ByZXNlbmNlL2RlZmluaXRpb24vcHJlc2VuY2VfdHlwZXMu" + 
-          "cHJvdG8SFmJuZXQucHJvdG9jb2wucHJlc2VuY2UaHGxpYi9wcm90b2NvbC9h" + 
-          "dHRyaWJ1dGUucHJvdG8aGWxpYi9wcm90b2NvbC9lbnRpdHkucHJvdG8aLnNl" + 
-          "cnZpY2UvY2hhbm5lbC9kZWZpbml0aW9uL2NoYW5uZWxfdHlwZXMucHJvdG8i" + 
-          "SwoIRmllbGRLZXkSDwoHcHJvZ3JhbRgBIAIoDRINCgVncm91cBgCIAIoDRIN" + 
-          "CgVmaWVsZBgDIAIoDRIQCgVpbmRleBgEIAEoBDoBMCJnCgVGaWVsZBItCgNr" + 
-          "ZXkYASACKAsyIC5ibmV0LnByb3RvY29sLnByZXNlbmNlLkZpZWxkS2V5Ei8K" + 
-          "BXZhbHVlGAIgAigLMiAuYm5ldC5wcm90b2NvbC5hdHRyaWJ1dGUuVmFyaWFu" + 
-          "dCKxAQoORmllbGRPcGVyYXRpb24SLAoFZmllbGQYASACKAsyHS5ibmV0LnBy" + 
-          "b3RvY29sLnByZXNlbmNlLkZpZWxkEkwKCW9wZXJhdGlvbhgCIAEoDjI0LmJu" + 
-          "ZXQucHJvdG9jb2wucHJlc2VuY2UuRmllbGRPcGVyYXRpb24uT3BlcmF0aW9u" + 
-          "VHlwZToDU0VUIiMKDU9wZXJhdGlvblR5cGUSBwoDU0VUEAASCQoFQ0xFQVIQ" + 
-          "ASLwAQoMQ2hhbm5lbFN0YXRlEioKCWVudGl0eV9pZBgBIAEoCzIXLmJuZXQu" + 
-          "cHJvdG9jb2wuRW50aXR5SWQSPwoPZmllbGRfb3BlcmF0aW9uGAIgAygLMiYu" + 
-          "Ym5ldC5wcm90b2NvbC5wcmVzZW5jZS5GaWVsZE9wZXJhdGlvbhIWCgdoZWFs" + 
-          "aW5nGAMgASgIOgVmYWxzZTJbCghwcmVzZW5jZRIjLmJuZXQucHJvdG9jb2wu" + 
-          "Y2hhbm5lbC5DaGFubmVsU3RhdGUYZSABKAsyJC5ibmV0LnByb3RvY29sLnBy" + 
-          "ZXNlbmNlLkNoYW5uZWxTdGF0ZQ==");
+          "ChlibmV0L3ByZXNlbmNlX3R5cGVzLnByb3RvEhZibmV0LnByb3RvY29sLnBy" + 
+          "ZXNlbmNlGhRibmV0L2F0dHJpYnV0ZS5wcm90bxoRYm5ldC9lbnRpdHkucHJv" + 
+          "dG8aGGJuZXQvY2hhbm5lbF90eXBlcy5wcm90byJLCghGaWVsZEtleRIPCgdw" + 
+          "cm9ncmFtGAEgAigNEg0KBWdyb3VwGAIgAigNEg0KBWZpZWxkGAMgAigNEhAK" + 
+          "BWluZGV4GAQgASgEOgEwImcKBUZpZWxkEi0KA2tleRgBIAIoCzIgLmJuZXQu" + 
+          "cHJvdG9jb2wucHJlc2VuY2UuRmllbGRLZXkSLwoFdmFsdWUYAiACKAsyIC5i" + 
+          "bmV0LnByb3RvY29sLmF0dHJpYnV0ZS5WYXJpYW50IrEBCg5GaWVsZE9wZXJh" + 
+          "dGlvbhIsCgVmaWVsZBgBIAIoCzIdLmJuZXQucHJvdG9jb2wucHJlc2VuY2Uu" + 
+          "RmllbGQSTAoJb3BlcmF0aW9uGAIgASgOMjQuYm5ldC5wcm90b2NvbC5wcmVz" + 
+          "ZW5jZS5GaWVsZE9wZXJhdGlvbi5PcGVyYXRpb25UeXBlOgNTRVQiIwoNT3Bl" + 
+          "cmF0aW9uVHlwZRIHCgNTRVQQABIJCgVDTEVBUhABIvABCgxDaGFubmVsU3Rh" + 
+          "dGUSKgoJZW50aXR5X2lkGAEgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJ" + 
+          "ZBI/Cg9maWVsZF9vcGVyYXRpb24YAiADKAsyJi5ibmV0LnByb3RvY29sLnBy" + 
+          "ZXNlbmNlLkZpZWxkT3BlcmF0aW9uEhYKB2hlYWxpbmcYAyABKAg6BWZhbHNl" + 
+          "MlsKCHByZXNlbmNlEiMuYm5ldC5wcm90b2NvbC5jaGFubmVsLkNoYW5uZWxT" + 
+          "dGF0ZRhlIAEoCzIkLmJuZXQucHJvdG9jb2wucHJlc2VuY2UuQ2hhbm5lbFN0" + 
+          "YXRl");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_presence_FieldKey__Descriptor = Descriptor.MessageTypes[0];

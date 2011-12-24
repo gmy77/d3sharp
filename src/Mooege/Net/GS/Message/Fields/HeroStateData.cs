@@ -36,7 +36,7 @@ namespace Mooege.Net.GS.Message.Fields
             Field0 = buffer.ReadInt(32);
             Field1 = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(32);
-            Gender = buffer.ReadInt(29);
+            Gender = buffer.ReadInt(30);
             PlayerSavedData = new PlayerSavedData();
             PlayerSavedData.Parse(buffer);
             QuestRewardHistoryEntriesCount = buffer.ReadInt(32);
@@ -53,7 +53,7 @@ namespace Mooege.Net.GS.Message.Fields
             buffer.WriteInt(32, Field0);
             buffer.WriteInt(32, Field1);
             buffer.WriteInt(32, Field2);
-            buffer.WriteInt(29, Gender);
+            buffer.WriteInt(30, Gender);
             PlayerSavedData.Encode(buffer);
             buffer.WriteInt(32, QuestRewardHistoryEntriesCount);
             buffer.WriteInt(7, tQuestRewardHistory.Length);

@@ -24,15 +24,15 @@ namespace Mooege.Net.GS.Message.Definitions.Console
     [Message(new[]{Opcodes.TryConsoleCommand1, Opcodes.TryConsoleCommand2})]
     public class TryConsoleCommand : GameMessage
     {
-        public string Field0;
-        public int Field1;
+        public int Field0;
+        public string Field1;
         public WorldPlace Field2;
         public int Field3;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadCharArray(512);
-            Field1 = buffer.ReadInt(4) + (-1);
+            Field0 = buffer.ReadInt(4) + (-1);
+            Field1 = buffer.ReadCharArray(512);
             Field2 = new WorldPlace();
             Field2.Parse(buffer);
             Field3 = buffer.ReadInt(32);
@@ -40,8 +40,8 @@ namespace Mooege.Net.GS.Message.Definitions.Console
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteCharArray(512, Field0);
-            buffer.WriteInt(4, Field1 - (-1));
+            buffer.WriteInt(4, Field0 - (-1));
+            buffer.WriteCharArray(512, Field1);
             Field2.Encode(buffer);
             buffer.WriteInt(32, Field3);
         }
@@ -52,8 +52,8 @@ namespace Mooege.Net.GS.Message.Definitions.Console
             b.AppendLine("TryConsoleCommand:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: \"" + Field0 + "\"");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: \"" + Field1 + "\"");
             Field2.AsText(b, pad);
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
             b.Append(' ', --pad);

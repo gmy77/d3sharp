@@ -125,14 +125,14 @@ namespace Mooege.Core.GS.Actors.Implementations
                 Field2 = 0x1FA21,
                 m_snoStringList = 0xF063,
 
-                Field4 = unchecked((int)0x9799F57B),
+                Field3 = unchecked((int)0x9799F57B),
+                Field9 = 0,
+                Field10 = 0,
+                Field11 = 0,
                 Field5 = 0,
-                Field6 = 0,
-                Field7 = 0,
-                Field8 = 0,
-                Field9 = true,
-                Field10 = false,
-                Field11 = false,
+                Field6 = true,
+                Field7 = false,
+                Field8 = false,
                 Field12 = 0
             });
 

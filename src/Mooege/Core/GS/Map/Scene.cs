@@ -73,7 +73,7 @@ namespace Mooege.Core.GS.Map
         /// <summary>
         /// Visibility in MiniMap.
         /// </summary>
-        public SceneMiniMapVisibility MiniMapVisibility { get; set; }
+        public bool MiniMapVisibility { get; set; }
 
         /// <summary>
         /// Scene Specification.
