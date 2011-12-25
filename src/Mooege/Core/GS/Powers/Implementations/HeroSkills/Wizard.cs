@@ -833,20 +833,48 @@ namespace Mooege.Core.GS.Powers.Implementations
     public class WizardFrostNova : PowerScript
     {
         //Rune_A - Enemies take 110% more damage while frozen or chilled by Frost Nova.
-        //Rune_B - A frozen enemy that is killed has a 21% chance of exploding another Frost Nova dealing 3400% weapon damage as Cold.
-        //Rune_C - The Frost Nova no longer freezes enemies, but instead leaves behind a mist of frost for 8 seconds that deals 2600% weapon damage per second as Cold to enemies standing in it.
-        //Rune_D - Reduce cooldown to [MAX(0,(12) - 7)|1|] seconds.
         //Rune_E - If Frost Nova hits at least 5 targets, you gain 45% chance to critically hit for 12 seconds
-        public const int FrostNova_Emitter = 4402;
-
-        public override IEnumerable<TickTimer> Run()
+       public override IEnumerable<TickTimer> Run()
         {
-            StartCooldown(WaitSeconds(12f));
+            if (Rune_C > 0)
+            {
+                StartCooldown(WaitSeconds(ScriptFormula(3)));
+                var moltenfire = SpawnEffect(RuneSelect(4402, 189047, 189048, 75631, 189049, 189050), User.Position, 0, WaitSeconds(ScriptFormula(9)));
+                moltenfire.UpdateDelay = 1f;
+                moltenfire.OnUpdate = () =>
+                {
+                    WeaponDamage(GetEnemiesInRadius(User.Position, ScriptFormula(6)), ScriptFormula(11), DamageType.Cold);
+                };
+            }
+            else
+            {
+                StartCooldown(WaitSeconds(ScriptFormula(3)));
+                SpawnEffect(RuneSelect(4402, 189047, 189048, 75631, 189049, 189050), User.Position);
+                WeaponDamage(GetEnemiesInRadius(User.Position, ScriptFormula(6)), 0.65f, DamageType.Cold);
 
-            SpawnEffect(FrostNova_Emitter, User.Position);
+                if (Rune_B > 0)
+                {
+                    if (Rand.NextDouble() < ScriptFormula(14))
+                    {
+                        SpawnEffect(RuneSelect(4402, 189047, 189048, 75631, 189049, 189050), User.Position);
+                        WeaponDamage(GetEnemiesInRadius(User.Position, ScriptFormula(15)), ScriptFormula(7), DamageType.Cold);
+                    }
+                }
 
-            WeaponDamage(GetEnemiesInRadius(User.Position, 18f), 0.65f, DamageType.Cold);
-            //todo:freeze duration to 4 seconds and check damage multiplier
+                //freeze duration(ScriptFormula(2))
+                //todo:while frozen or chilled enemies, Rune_A -> ScriptFormula(16)
+
+                if (Rune_E > 0)
+                {
+                    //If Frost Nova hits at least 5 targets, [ScriptFormula(13)]
+                    if (Rand.NextDouble() < ((Rune_E*5)+.10f))
+                    {
+                        //ycritically hit for 12 seconds
+                        //[ScriptFormula(18) / ScriptFormula(19)]
+                        //critBuff_swipe.acr [[215516]]
+                    }
+                }
+            }
             yield break;
         }
     }
@@ -854,33 +882,46 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
     public class WizardBlizzard : PowerScript
     {
-        //Rune_A - Increase the duration of the Blizzard to [10|1|] seconds.
-        //Rune_B - Increase the size of the Blizzard to cover 22 yards, and deal 5800% weapon damage per second as Cold.
-        //Rune_C - After the Blizzard ends, cover the ground in a low lying mist for [6|1|] seconds that slows any enemies who enters it. 
-        //Rune_D - Reduce the casting cost to {Resource Cost} Arcane Power.
         //Rune_E - Enemies caught in the storm have a 52.5% chance to be frozen for 3 seconds and the critical strike chance with Blizzard is increased by 80%.
         public const int Wizard_Blizzard = 0x1977;
 
         public override IEnumerable<TickTimer> Run()
         {
-            UsePrimaryResource(45f);
+            UsePrimaryResource(ScriptFormula(19));
 
             SpawnEffect(Wizard_Blizzard, TargetPosition);
 
-            const int blizzard_duration = 3;
-
-            for(int i = 0; i < blizzard_duration; ++i)
+            for (int i = 0; i < ScriptFormula(4); ++i)
             {
+                //if (E):{critical strike chance with Blizzard is increased by 80% -> scriptformula(9)}
+                
                 AttackPayload attack = new AttackPayload(this);
-                attack.Targets = GetEnemiesInRadius(TargetPosition, 18f);
-                attack.AddWeaponDamage(0.65f, DamageType.Cold);
+                attack.Targets = GetEnemiesInRadius(TargetPosition, ScriptFormula(3));
+                attack.AddWeaponDamage(ScriptFormula(0), DamageType.Cold);
                 attack.OnHit = (hit) =>
                 {
                     AddBuff(hit.Target, new DebuffChilled(WaitSeconds(3f)));
+                    if (Rune_E > 0)
+                    {
+                        if (Rand.NextDouble() < ScriptFormula(10))
+                        {
+                            //scriptformula(11)
+                        }
+                    }
                 };
                 attack.Apply();
 
                 yield return WaitSeconds(1f);
+            }
+            if (Rune_C > 0)
+            {
+                var BlizzMist = SpawnEffect(75642, User.Position, 0, WaitSeconds(ScriptFormula(7)));
+                BlizzMist.UpdateDelay = 1f;
+                BlizzMist.OnUpdate = () =>
+                {
+                    //slow enemies who enter mist
+                    //ScriptFormula(8) and (12)
+                };
             }
         }
     }
