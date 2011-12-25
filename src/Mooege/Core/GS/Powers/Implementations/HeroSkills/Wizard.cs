@@ -29,11 +29,15 @@ using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Players;
 
+//TODO (IMPORTANT): GO BACK through and any WaitSeconds/GameAttributes must be in Buff Apply() and Remove()
+
 namespace Mooege.Core.GS.Powers.Implementations
 {
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Meteor)]
     public class WizardMeteor : PowerScript
     {
+        //TODO:Correct chilled/slow effect in Rune_C
+        //TODO:Rune_E = crit targets from impact -> fire duration for 18 seconds
         public override IEnumerable<TickTimer> Run()
         {
             if (Rune_D > 0)
@@ -83,13 +87,33 @@ namespace Mooege.Core.GS.Powers.Implementations
                 WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(0),
                     RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Fire, DamageType.Cold, DamageType.Arcane, DamageType.Fire));
 
-                //NoRune = Molten fire damage increased to 28 - 42 Fire damage over 3 seconds.
+                WaitSeconds(ScriptFormula(4));
 
-                //Rune_A = increase the damage of Molten Fire
+                if (Rune_C > 0)
+                {
+                    var FreezingMist = SpawnEffect(92031, impactPos, 0, WaitSeconds(ScriptFormula(5)));
+                    FreezingMist.UpdateDelay = 1f;
+                    FreezingMist.OnUpdate = () =>
+                    {
+                        WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(2), DamageType.Cold);
+                        //Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] += 0.60f;
+                        //WaitSeconds(3f);
+                        //Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] -= 0.60f;
+                        //or
+                        //AddBuff(GetEnemiesInRadius(impactPos, ScriptFormula(3)), new DebuffChilled(WaitSeconds(3f)));
+                        //slow movement(60%) for three seconds
 
-                //Rune_C = freezing mist and slows enemies to 60% movement for 3 seconds
-
-                //Rune_E = crit targets -> fire duration for 18 seconds
+                    };
+                }
+                else
+                {
+                    var moltenfire = SpawnEffect(RuneSelect(86769, 215809, 91441, 92031, 217139, 217458), impactPos, 0, WaitSeconds(ScriptFormula(5)));
+                    moltenfire.UpdateDelay = 1f;
+                    moltenfire.OnUpdate = () =>
+                    {
+                        WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(2), RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Fire, DamageType.Cold, DamageType.Arcane, DamageType.Fire));
+                    };
+                }
 
                 // pool effect
                 if (Rune_B == 0)
@@ -107,7 +131,10 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.Electrocute)]
     public class WizardElectrocute : ChanneledSkill
     {
-        //TODO:Need Rune Effects
+        //TODOs
+        //A:Creates a streak of lightning that pierces targets, hitting all enemies in its path for 58% weapon damage as Lightning.
+        //C:Blast a cone of lightning that causes 52% weapon damage as Lightning to all affected targets. 
+        //E:Critical hits with this skill cause an explosion of 5 charged bolts in random directions, dealing 105% weapon damage as Lightning to any targets hit. 
         public override void OnChannelOpen()
         {
             EffectsPerSecond = 0.5f;
@@ -117,7 +144,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             User.TranslateFacing(TargetPosition);
 
-            UsePrimaryResource(10f);
+            UsePrimaryResource(ScriptFormula(4));
 
             if (Target == null)
             {
@@ -129,8 +156,8 @@ namespace Mooege.Core.GS.Powers.Implementations
                 IList<Actor> targets = new List<Actor>() { Target };
                 Actor ropeSource = User;
                 Actor curTarget = Target;
-                float damage = 0.4f;
-                while (targets.Count < 4) // original target + bounce 2 times
+                float damage = ScriptFormula(0);
+                while (targets.Count < ScriptFormula(9) + 1) // original target + bounce 2 times
                 {
                     // replace source with proxy if it died while doing bounce delay
                     if (ropeSource.World == null)
@@ -142,7 +169,15 @@ namespace Mooege.Core.GS.Powers.Implementations
                         ropeSource = curTarget;
 
                         WeaponDamage(curTarget, damage, DamageType.Lightning);
-                        damage *= 0.7f;
+                        //Only on Rune_B does the damage reduce per target
+                        if (Rune_B > 0)
+                        {
+                            damage *= 0.7f;
+                        }
+                        if (Rune_D > 0)
+                        {
+                            GeneratePrimaryResource(4f);
+                        }
                     }
                     else
                     {
@@ -150,7 +185,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                         break;
                     }
 
-                    curTarget = GetEnemiesInRadius(curTarget.Position, 15f, 3).Actors.FirstOrDefault(t => !targets.Contains(t));
+                    curTarget = GetEnemiesInRadius(curTarget.Position, ScriptFormula(2), 3).Actors.FirstOrDefault(t => !targets.Contains(t));
                     if (curTarget != null)
                     {
                         targets.Add(curTarget);
@@ -168,40 +203,41 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.MagicMissile)]
     public class WizardMagicMissile : PowerScript
     {
-        //TODO-FIX: if you quickly press Magic Missiles, it wont complete the full animation..
-        //TODO: Pierce Chance to Target and hit another Target for Rune_D
+        //TODO: Pierce Chance to Target and hit another Target for Rune_C
+        //      ScriptFormula(12)
+        //TODO:Rune_E - ScriptFormula(10,11)
         public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(ScriptFormula(7));
 
             User.PlayEffectGroup(19305); // cast effect
-            /*
-            //Rune_B is supposed to play 8 missiles
             if (Rune_B > 0)
             {
-                for (int i = 0; i < 8; ++i)
+
+                Vector3D[] projDestinations = PowerMath.GenerateSpreadPositions(User.Position, TargetPosition, ScriptFormula(8)/3f, (int)ScriptFormula(5));
+
+                foreach (Vector3D missilePos in projDestinations)
                 {
-                    var projectile = new Projectile(this, 99567, User.Position);
-                    projectile.OnCollision = (hit) =>
+                    var proj = new Projectile(this, 99567, User.Position);
+                    proj.OnCollision = (hit) =>
                     {
                         SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
-                        projectile.Destroy();
-                        //TODO:Rune_B -> increased to 141 weapon damage as Arcane.
-                        WeaponDamage(hit, 0f, DamageType.Arcane);
+                        proj.Destroy();
+                        WeaponDamage(hit, ScriptFormula(1), DamageType.Arcane);
                     };
-                    projectile.Launch(TargetPosition, ScriptFormula(4));
+                    proj.Launch(missilePos, ScriptFormula(4));
                 }
+
             }
-            else*/
+            else
             {
                 var projectile = new Projectile(this, 99567, User.Position);
                 projectile.OnCollision = (hit) =>
                 {
                     SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
                     projectile.Destroy();
-                    //TODO: Rune_A -> increased to 141 weapon damage as Arcane.
-                    //TODO: Rune_E -> track nearest target increased to 141 weapon damage as Arcane.
-                    WeaponDamage(hit, 1.10f, DamageType.Arcane);
+                    //ScriptFormula(1) handles Rune_A and Rune_E damage increases
+                    WeaponDamage(hit, ScriptFormula(1), DamageType.Arcane);
                     if (Rune_D > 0)
                     {
                         GeneratePrimaryResource(ScriptFormula(16));
@@ -227,14 +263,13 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Main()
         {
             UsePrimaryResource(60f);
-            //Spawn Pool[Maybe a bigger pool?], Spawn Hyrdas, 
-            //Hydras face targets in radius[TODO], projectile[TODO], despawn after 9 seconds[TODO]
+            //Spawn Hydras, Hydras face targets in radius[TODO], projectile[TODO], despawn after 9 seconds[TODO]
             //TODO: [Hard MODE!] - Rune Effects..
             // http://www.youtube.com/watch?v=twVSLGkoQqk
 
             Vector3D userCastPosition = new Vector3D(User.Position);
             Vector3D inFrontOfUser = PowerMath.TranslateDirection2D(User.Position, TargetPosition, User.Position, 7f);
-            Vector3D[] spawnPoints = PowerMath.GenerateSpreadPositions(inFrontOfUser, RandomDirection(inFrontOfUser, 0f), 180, 3);
+            Vector3D[] spawnPoints = PowerMath.GenerateSpreadPositions(inFrontOfUser, RandomDirection(inFrontOfUser, 0f), 120, 3);
             //Hydra1 = angle 0, Hydra2 = angle 120, Hydra3 = angle 240. this isnt a spread but the angle of animation? think its the Y axis?
             // it may even just be spreading out the heads by mere inches(?) 
 
@@ -305,6 +340,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             if (Rune_C > 0)
             {
                 //Somehow set a max to only have 4 orbs at a time.
+                //ScriptFormula(10) = Max Orbs -> min(( Rune_C * 1), 4)
                 AddBuff(User, new Orbit1());
                 AddBuff(User, new Orbit2());
                 AddBuff(User, new Orbit3());
@@ -319,17 +355,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 proj.OnCollision = (hit) =>
                 {
                     hit.PlayEffectGroup(RuneSelect(19308, 130020, 215580, -1, 216056, -1));
-
-                    if (Rune_A > 0)
-                    {
-                        WeaponDamage(GetEnemiesInRadius(proj.Position, 10f), ScriptFormula(6), DamageType.Arcane);
-                    }
-                    else if (Rune_B > 0)
-                    {
-                        WeaponDamage(GetEnemiesInRadius(proj.Position, 16f), ScriptFormula(1), DamageType.Arcane);
-                    }
-                    else
-                    WeaponDamage(GetEnemiesInRadius(proj.Position, 10f), ScriptFormula(7), DamageType.Arcane);
+                    WeaponDamage(GetEnemiesInRadius(proj.Position, ScriptFormula(5)), ScriptFormula(3), DamageType.Arcane);
 
                     if (Rune_E > 0)
                     {
@@ -357,7 +383,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 var targets = GetEnemiesInRadius(Target.Position, 10f);
                 if (targets.Actors.Count > 0)
                 {
-                    WeaponDamage(targets, ScriptFormula(11), DamageType.Arcane);
+                    WeaponDamage(targets, ScriptFormula(3), DamageType.Arcane);
                     return true;
                 }
 
@@ -376,7 +402,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 var targets = GetEnemiesInRadius(Target.Position, 10f);
                 if (targets.Actors.Count > 0)
                 {
-                    WeaponDamage(targets, ScriptFormula(11), DamageType.Arcane);
+                    WeaponDamage(targets, ScriptFormula(3), DamageType.Arcane);
                     return true;
                 }
 
@@ -394,7 +420,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 var targets = GetEnemiesInRadius(Target.Position, 10f);
                 if (targets.Actors.Count > 0)
                 {
-                    WeaponDamage(targets, ScriptFormula(11), DamageType.Arcane);
+                    WeaponDamage(targets, ScriptFormula(3), DamageType.Arcane);
                     return true;
                 }
 
@@ -413,7 +439,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 var targets = GetEnemiesInRadius(Target.Position, 10f);
                 if (targets.Actors.Count > 0)
                 {
-                    WeaponDamage(targets, ScriptFormula(11), DamageType.Arcane);
+                    WeaponDamage(targets, ScriptFormula(3), DamageType.Arcane);
                     return true;
                 }
 
@@ -423,16 +449,21 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.EnergyTwister)]
-    public class EnergyTwister : PowerScript
+    public class EnergyTwister : Skill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
-            UsePrimaryResource(ScriptFormula(0));
+            UsePrimaryResource(ScriptFormula(15));
 
             // cast effect
-            SpawnEffect(RuneSelect(6560, 215311, 6560, 6560, 215324, 210804), TargetPosition);
-                //Tornados need to move randomdirections
+            AddBuff(Target, new Twister());
+            //SpawnEffect(RuneSelect(6560, 215311, 6560, 6560, 215324, 210804), TargetPosition);
+                
+            //Tornados need to move randomdirections at first, if the tornado is heading towards an enemy close by,
+            // it will move towards the enemies.
+
                 //Seems like it's classified as a buff (Buff Group 3)
+
                 //and leave trail behind them (79940), think actor already does this.
 
                     // NoRune = Unleash a twister, deals 60% weapon damage per second Arcane to everything caught within it. 
@@ -445,11 +476,38 @@ namespace Mooege.Core.GS.Powers.Implementations
                 
                 yield return WaitSeconds(2f);
         }
+
+        [ImplementsPowerBuff(3)]
+        class Twister : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+
+                return false;
+            }
+        }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Disintegrate)]
     public class WizardDisintegrate : ChanneledSkill
     {
+        //TODOs
+        //Rune_A- same as NoRune.. -> todo: add the increase to damage
+        ///Rune-B- fatbeam
+        //Rune-C- parabola.acr (93560.acr) and field.efg (93563.efg)?
+        //Rune-D- Possibly Mini-Buff.efg/.rop and Dome.acr?
+        //Rune-E- explode when dead [explode.efg -> 93574], explode_proxy.acr and explodeBubble.acr
+
+        //no idea if sourceglow/pulseglow is used, most likely not.
+        //unknown hitfx_override.efg
+        //--------------------------------------------------------------------------------------------
         //Rune_A -> Damage increases slowly over time to inflict a maximum of 4620% weapon damage as Arcane.
              //(10) - Chargeup Time, (11) - Dmg Modifier
         //Rune_B -> Increase the width of the beam allowing it to hit more enemies for 2100% weapon damage as Arcane.
@@ -478,8 +536,8 @@ namespace Mooege.Core.GS.Powers.Implementations
             EffectsPerSecond = 0.1f;
 
             _calcTargetPosition();
-            _target = SpawnEffect(52687, TargetPosition, 0, WaitInfinite());
-            User.AddComplexEffect(18792, _target);
+            _target = SpawnEffect(RuneSelect(52687, 52687, 93544, -1, 52687, 215723), TargetPosition, 0, WaitInfinite());
+            User.AddComplexEffect(RuneSelect(18792, 18792, 93529, -1, 93593, 216368), _target);
         }
 
         public override void OnChannelClose()
@@ -497,13 +555,23 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override IEnumerable<TickTimer> Main()
         {
-            //todo: is this correct? why not just seconds?ScriptFormula(20) is 8mana per tick 
+            //todo: is this correct? why not just seconds?ScriptFormula(22) 
             UsePrimaryResource(23f * EffectsPerSecond);
 
             foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f).Actors)
             {
+                if (Rune_B > 0)
+                {
+                    if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 6f))
+                    {
+                        //ScriptFormula(23)
+                        WeaponDamage(actor, 1.35f * EffectsPerSecond, DamageType.Arcane);
+                    }
+                }
+                else
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
                 {
+                    //ScriptFormula(23)
                     WeaponDamage(actor, 1.35f * EffectsPerSecond, DamageType.Arcane);
                 }
             }
@@ -515,28 +583,53 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.WaveOfForce)]
     public class WizardWaveOfForce : PowerScript
     {
-        //Rune_A -> Increases damage to 20300% weapon damage as Physical, but reduces knockback. 
-        // (19) - Weapon Scalar Modifier, (25) - Knockback Magnitude
-        //Rune_B -> Enemies hit have a 100% chance to cause a smaller Wave of Force that deals 4600% weapon damage as Physical and knocks back enemies caught in its wake.
-        // (15) - small wave radius and knockback modifier, (16) - Chance to proc small waves, (23) - Small wave weapon scalar, 
-        //Rune_C -> Enemies caught in the wave have a 70% chance to randomly teleport to somewhere else nearby.
-        //(12) - Teleport Dist Min, (13) - Teleport Dist Max, (14) - Chance to teleport, 
-        //Rune_D -> Reduce casting cost to {Resource Cost} Arcane Power and cooldown is reduced to 8 seconds. 
-        // (28) - Resource cost, (31) - Cooldown reduction
-        //Rune_E -> Increases the distance enemies are knocked back and stuns all affected enemies for [5|1|] seconds.
-        //(11) - Knockback amount increase, (10) Stun Duration per level, 
         public override IEnumerable<TickTimer> Run()
         {
-            UsePrimaryResource(25f);
-            StartCooldown(WaitSeconds(15f));
+            UsePrimaryResource(ScriptFormula(26));
+            StartCooldown(WaitSeconds(ScriptFormula(30)));
 
             yield return WaitSeconds(0.350f); // wait for wizard to land
-            User.PlayEffectGroup(19356);
+
+            //I switched the effects of obsidian and golden because in-game they are opposite
+            User.PlayEffectGroup(RuneSelect(19356, 82649, 215399, 215403, 215400, 215404));
 
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(1));
-            attack.AddWeaponDamage(2.05f, DamageType.Physical);
-            attack.OnHit = hitPayload => { Knockback(hitPayload.Target, ScriptFormula(0), ScriptFormula(4), ScriptFormula(5)); };
+            attack.AddWeaponDamage(ScriptFormula(2), DamageType.Physical);
+            //TODO: Add Script 17 and 18 for slow movement
+            //TODO: Script 6,7,8,9
+            attack.OnHit = hitPayload => {
+                Knockback(hitPayload.Target, ScriptFormula(0), ScriptFormula(4), ScriptFormula(5));
+                if (Rune_D > 0)
+                {
+                    //get targets positions in user position radius
+                    //for each roll random
+                    if (Rand.NextDouble() < ScriptFormula(14))
+                    {
+                        //teleport somewhere else nearby via the minimum and maximum below.
+                        //ScriptFormula(12) - teleport min, ScriptFormula(13) - tele max
+
+                        //SpawnProxy(Target.Position).PlayEffectGroup(77975);
+                        //Target.Teleport(TargetPosition);
+                        //Target.PlayEffectGroup(77976);
+                    }
+                }
+                if (Rune_E > 0)
+                {
+                    //TODO:Stun all enemies in radius
+                    //ScriptFormula(10)
+                    Knockback(hitPayload.Target, ScriptFormula(0) + ScriptFormula(11), ScriptFormula(4), ScriptFormula(5));
+                }
+                if (Rune_B > 0)
+                {
+                    if (Rand.NextDouble() < ScriptFormula(16))
+                    {
+                        User.PlayEffectGroup(92798);
+                        attack.AddWeaponDamage(ScriptFormula(23), DamageType.Physical);
+                        Knockback(hitPayload.Target, ScriptFormula(0) * ScriptFormula(15), ScriptFormula(4), ScriptFormula(5));
+                    }
+                }
+            };
             attack.Apply();
             yield break;
         }
@@ -550,35 +643,29 @@ namespace Mooege.Core.GS.Powers.Implementations
             //For Damage Multipler -> I use damage modifier script formula, is that correct?
             if (Rune_D > 0)
             {
-                UsePrimaryResource(45f - ScriptFormula(17));
+                UsePrimaryResource(ScriptFormula(15));
                 StartCooldown(WaitSeconds(1f));
                 User.PlayEffectGroup(89449);
             }
             else if (Rune_A > 0)
             {
                 //there is no charge up effect since its instant
-                UsePrimaryResource(45f);
+                UsePrimaryResource(ScriptFormula(15));
                 StartCooldown(WaitSeconds(1f));
             }
             else if (Rune_C > 0)
             {
-                UsePrimaryResource(45f);
+                UsePrimaryResource(ScriptFormula(15));
                 StartCooldown(WaitSeconds(1f));
                 SpawnProxy(User.Position).PlayEffectGroup(89449);
             }
             else
             {
-                UsePrimaryResource(45f);
+                UsePrimaryResource(ScriptFormula(15));
                 StartCooldown(WaitSeconds(1f));
                 User.PlayEffectGroup(89449);
             }
 
-
-            if (Rune_A > 0)
-            {
-                //Dont wait.
-            }
-            else
                 yield return WaitSeconds(ScriptFormula(5));
 
             IEnumerable<TickTimer> subScript;
@@ -602,8 +689,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             SpawnEffect(61419, User.Position);
             AttackPayload attack = new AttackPayload(this);
-            attack.Targets = GetEnemiesInRadius(User.Position, 36f);
-            attack.AddWeaponDamage(ScriptFormula(9), DamageType.Physical);
+            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
+            attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
             attack.Apply();
             yield break;
         }
@@ -611,8 +698,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             SpawnEffect(192210, User.Position);
             AttackPayload attack = new AttackPayload(this);
-            attack.Targets = GetEnemiesInRadius(User.Position, 54f);
-            attack.AddWeaponDamage(ScriptFormula(18), DamageType.Physical);
+            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
+            attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
             attack.Apply();
             yield break;
         }
@@ -621,8 +708,8 @@ namespace Mooege.Core.GS.Powers.Implementations
             //TODO: place spawneffect at feet - does not follow with you
             SpawnEffect(61419, User.Position);
             AttackPayload attack = new AttackPayload(this);
-            attack.Targets = GetEnemiesInRadius(User.Position, 36f);
-            attack.AddWeaponDamage(ScriptFormula(11), DamageType.Physical);
+            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
+            attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
             attack.Apply();
             yield break;
         }
@@ -630,21 +717,21 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             SpawnEffect(192211, User.Position);
             AttackPayload attack = new AttackPayload(this);
-            attack.Targets = GetEnemiesInRadius(User.Position, 36f);
-            attack.AddWeaponDamage(ScriptFormula(3), DamageType.Physical);
+            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
+            attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
             attack.Apply();
             yield break;
         }
         IEnumerable<TickTimer> _RuneE()
         {
-            for (int i = 0; i < 8; ++i)
+            for (int i = 0; i < (Rune_E + 1); ++i)
             {
                 SpawnEffect(61419, User.Position);
                 AttackPayload attack = new AttackPayload(this);
-                attack.Targets = GetEnemiesInRadius(User.Position, 36f);
-                attack.AddWeaponDamage(ScriptFormula(13), DamageType.Physical);
+                attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
+                attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
                 attack.Apply();
-                yield return WaitSeconds(0.5f);
+                yield return WaitSeconds(ScriptFormula(14));
             }
             yield break;
         }
@@ -652,8 +739,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             SpawnEffect(61419, User.Position);
             AttackPayload attack = new AttackPayload(this);
-            attack.Targets = GetEnemiesInRadius(User.Position, 36f);
-            attack.AddWeaponDamage(ScriptFormula(3), DamageType.Physical);
+            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
+            attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
             attack.Apply();
             yield break;
         }
@@ -685,6 +772,19 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             UsePrimaryResource(20f * EffectsPerSecond);
 
+            //if (Rune_C > 0)
+
+            /* Instead of firing projectiles, lay Arcane mines that arm after 1 |4second:seconds;. 
+             * These mines explode when an enemy approaches, dealing [114 * Casting_Speed_Total * 100]% weapon damage as Arcane. 
+             * Enemies caught in the explosion have their movement and attack speeds reduced by 30% for 3 seconds. */
+
+            //else if (Rune_E > 0)
+
+            //Unleash the torrent beyond your control. You can no longer direct where the projectiles go 
+            //but their damage is increased to 19900% weapon damage as Arcane.
+
+            //else
+
             AddBuff(User, new CastEffect());
 
             Vector3D laggyPosition = new Vector3D(TargetPosition);
@@ -695,7 +795,27 @@ namespace Mooege.Core.GS.Powers.Implementations
             if (IsChannelOpen)
                 TranslateEffect(_targetProxy, laggyPosition, 8f);
 
-            WeaponDamage(GetEnemiesInRadius(laggyPosition, 6f), 2.00f * EffectsPerSecond, DamageType.Arcane);
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetEnemiesInRadius(laggyPosition, 6f);
+            attack.AddWeaponDamage(2.00f * EffectsPerSecond, DamageType.Arcane);
+            attack.OnHit = hitPayload =>
+            {
+                if (Rune_A > 0)
+                {
+                    //enemies get disrupted for six seconds and take 120% additional dmg from arcane attacks.
+                }
+                if (Rune_D > 0)
+                {
+                    if (Rand.NextDouble() < ScriptFormula(11))
+                    {
+                        //spawn a power stone that grants arcane power
+                    }
+                }
+            };
+            attack.Apply();
+
+            //Enemies killed by Arcane Torrent have a 95% chance to fire a new missile at a 
+            //nearby enemy dealing 5000% weapon damage as Arcane.
         }
 
         [ImplementsPowerBuff(0)]
