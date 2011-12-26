@@ -929,11 +929,10 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.RayOfFrost)]
     public class WizardRayOfFrost : ChanneledSkill
     {
-        //Rune_A - Damage increases slowly over [1.5|1|] seconds to inflict a maximum of 24000% weapon damage as Cold.
         //Rune_B - Create a swirling storm of sleet dealing [99 * 100}]% weapon damage as Cold to all enemies caught within it.
-        //Rune_C - Increase enemy slow amount to 50.5% for [8.5|1|] seconds, but damage is reduced to 7400% weapon damage as Cold.
-        //Rune_D - Reduce casting cost to 8.5714285714286 Arcane Power per second. 
-        //Rune_E - Enemies who die leave a patch of ice on the ground that causes 64500% weapon damage as Cold to enemies moving through it over 5 seconds.
+
+        //We need to change how frost beam powermath works -> Beam radius (SF(10)) and Beam end Radius (SF(11)), currently the function has a weird visual
+        //for other rune effects with a wider starting effect
 
         const float BeamLength = 40f;
 
@@ -950,16 +949,19 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override void OnChannelOpen()
         {
             EffectsPerSecond = 0.1f;
-
             _calcTargetPosition();
             _target = SpawnEffect(6535, TargetPosition, 0, WaitInfinite());
-            User.AddComplexEffect(19327, _target);
+            User.AddComplexEffect(RuneSelect(19327, 149835, -1, 149836, 149869, 149879), _target);
+
+            //148061 - swirling storm, is more of a user.playeffectgroup and not a rope
         }
 
         public override void OnChannelClose()
         {
             if (_target != null)
                 _target.Destroy();
+            
+            
         }
 
         public override void OnChannelUpdated()
@@ -971,60 +973,190 @@ namespace Mooege.Core.GS.Powers.Implementations
         
         public override IEnumerable<TickTimer> Main()
         {
-            UsePrimaryResource(29f * EffectsPerSecond);
+            //Total:Castin Cost vs. Resource Cost Min To Cast
+            UsePrimaryResource((Math.Max(ScriptFormula(19), 8f)));
 
             foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f).Actors)
             {
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
                 {
+                    if (Rune_A > 0)
+                    {
+                        //takes 1.5 seconds to reach the new maximum dmg(SF(20)) from the minimum dmg(base?)
+                        //Slows targets movement by 40%
+                        //targets attack speed by 30% for 5 seconds
+                        
+                    }
+                    else if (Rune_C > 0)
+                    {
+                        //WeaponDamage(actor, 2.70f * EffectsPerSecond, DamageType.Cold);
+                        //Slows targets movement [ScriptFormula(4)]
+                        //Chill Amount % {ScriptFormula(14)}
+                        //Atk Speed Reduction % {SF(24)}
+                        //Dmg Reduction {SF(25)}
+                        //targets attack speed by 30% for 5 seconds
+                    }
                     WeaponDamage(actor, 2.70f * EffectsPerSecond, DamageType.Cold);
+                    //Slows targets movement by 40%
+                    //targets attack speed by 30% for 5 seconds
                 }
             }
 
+            //Rune_E - Enemies who die leave a patch of ice on the ground that causes 64500% weapon damage as Cold to enemies moving through it over 5 seconds.
+            //if enemy dies {
+            //Target.playeffectgroup(149878); or on proxy?
+            //WeaponDamage(actor, 2.70f * EffectsPerSecond, DamageType.Cold);
+            //E: Ground Ice Dps (SF(3))
+            //E: Ground Ice Lifetime (SF(8))
+            //E: Ground Ice Chance (SF(9))
+            //E: Ground Ice Refresh Interval (SF(13))
+            //}
+
             yield break;
+        }
+
+        [ImplementsPowerBuff(1)]
+        class IceDomeBuff : PowerBuff
+        {
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                return true;
+            }
+
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+                return false;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+            }
         }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Teleport)]
     public class WizardTeleport : PowerScript
     {
-        //Rune_A - Casts a low power Wave of Force on arrival dealing 8500% weapon damage as Physical to all enemies nearby.
-        //Rune_B - Summon 2 mirror images for 15 |4second:seconds; on arrival.
-        //Rune_C - For 16 |4second:seconds; after you appear you will take 25% less damage.
-        //Rune_D - Casting Teleport again within 8 |4second:seconds; will instantly bring you back to your original location.
-        //Rune_E - After casting Teleport there is a [2|1|] second delay before the cooldown begins.
 
         public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(15f);
-            //StartCooldown(WaitSeconds(16f));
-            SpawnProxy(User.Position).PlayEffectGroup(191848);  // alt cast efg: 170231
+            //StartCooldown(WaitSeconds(ScriptFormula(20)));
+            
+            SpawnProxy(User.Position).PlayEffectGroup(RuneSelect(170231, 205685, 205684, 191913, 192074, 192151));  // alt cast efg: 170231
             yield return WaitSeconds(0.3f);
             User.Teleport(TargetPosition);
-            User.PlayEffectGroup(191849);
+            User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
+            
+            if (Rune_A > 0)
+            {
+                User.PlayEffectGroup(170289);
+                AttackPayload attack = new AttackPayload(this);
+                attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(1));
+                attack.AddWeaponDamage(ScriptFormula(2), DamageType.Physical);
+                attack.OnHit = hitPayload =>
+                {
+                    Knockback(hitPayload.Target, ScriptFormula(4), ScriptFormula(5), ScriptFormula(6));
+                };
+                attack.Apply();
+
+            }
+            if (Rune_B > 0)
+            {
+                //Rune_B - Summon 2 mirror images for 15 |4second:seconds; on arrival.
+                //SF(7,8,9,10,11)
+            }
+            if (Rune_C > 0)
+            {
+                //Rune_C - For 16 |4second:seconds; after you appear you will take 25% less damage.
+                AddBuff(User, new TeleDmgReductionBuff());
+            }
+            if (Rune_D > 0)
+            {
+                //User.PlayEffectGroup(206679); //golden_groundportal.efg
+                //Rune_D - Casting Teleport again within 8 |4second:seconds; will instantly bring you back to your original location.
+                //SF(18)
+            }
+            if (Rune_E > 0)
+            {
+                //User.PlayEffectGroup(192069); // -> obsidian buff
+                //Rune_E - After casting Teleport there is a [2|1|] second delay before the cooldown begins.
+                //E: SF(16) - runeE CoolDown Delay
+            }
+        }
+        [ImplementsPowerBuff(1)]
+        class TeleDmgReductionBuff : PowerBuff
+        {
+            public override void Init() { Timeout = WaitSeconds(ScriptFormula(15)); }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                return true;
+            }
+
+            public override void OnPayload(Payload payload)
+            {
+                if (payload.Target == Target && payload is HitPayload)
+                {
+                    //buff -> 25% less damage[SF(14)]
+                }
+            }
+
+            public override void Remove() { base.Remove(); }
         }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.SpectralBlade)]
     public class WizardSpectralBlade : PowerScript
     {
-        //A:Enemies hit by the blade will bleed for an additional [0.45 * {Script Formula 0} * 100]% weapon damage done over 3 seconds.
-        //B:Extends the blades out to reach everything within 20 yards dealing 71.75% weapon damage.
-        //C:Hits have a 44.6% chance to cause knockback and slow the movement of enemies by 60% for 2 seconds.
-        //D:Every enemy hit grants 7 Arcane Power.
-        //E:Whenever the blades do critical damage, you are healed [1 * 100|1|]% of the damage caused.
         public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(15f);
-
-            User.PlayEffectGroup(188941);
+            //these are changed around to actually identify with their rune color : visual effects
+            User.PlayEffectGroup(RuneSelect(19343, 189477, 19343, 189413, 188944, 189362));
 
             // calculate hit area of effect, just in front of the user
+            //(SF2)Pie Angle:60 || (SF3)Total:Pie Radius
             TargetPosition = PowerMath.TranslateDirection2D(User.Position, TargetPosition, User.Position, 9f);
 
             for (int n = 0; n < 3; ++n)
             {
-                WeaponDamage(GetEnemiesInRadius(TargetPosition, 9f), 0.30f, DamageType.Physical);
+                AttackPayload attack = new AttackPayload(this);
+                attack.Targets = GetEnemiesInRadius(TargetPosition, ScriptFormula(3));
+                attack.AddWeaponDamage(ScriptFormula(21), DamageType.Physical);
+                attack.OnHit = hitPayload =>
+                {
+                    //if Rune_A
+                    //BLEED DEBUFF
+                    //(SF4)A: Bleed Weapon Damage %
+                    //(SF5)A: Additional Bleed Damage Modifier
+                    //(SF6)A: Bleed Duration
+
+                    if (Rune_C > 0)
+                    {
+                        if (Rand.NextDouble() < ScriptFormula(19))
+                        {
+                            Knockback(Target, ScriptFormula(14));
+                            //Slow movement (SF(11) and SF(12))
+                        }
+                    }
+                    if (Rune_D > 0)
+                    {
+                        GeneratePrimaryResource(ScriptFormula(13));
+                    }
+                    if (Rune_E > 0)
+                    {
+                        //E:Whenever the blades do critical damage, you are healed [1 * 100|1|]% of the damage caused.
+                    }
+                };
+                attack.Apply();
                 yield return WaitSeconds(0.2f);
             }
         }
@@ -1046,7 +1178,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             public override void Init()
             {
-                Timeout = WaitSeconds(120f);
+                Timeout = WaitSeconds(ScriptFormula(3));
             }
 
             public override bool Apply()
@@ -1054,27 +1186,58 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (!base.Apply())
                     return false;
 
-                //Increase Armor by 50% -> Correct?
+                //Increase Armor by 50% -> Correct? -> TODO: make this a buff.
                 User.Attributes[GameAttribute.Armor_Item_Percent] += ScriptFormula(2);
                 User.Attributes.BroadcastChangedIfRevealed();
 
-                //TODO: Rune Stats
-                //Rune_C = IceArmorRune_IceBlade.acr/.efg
-
                 return true;
+            }
+
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+                if (Rune_C > 0)
+                {
+                    // This is wrong... It needs to be the playeffectgroup which is much bigger..and shouldnt keep recreating itself.
+                    var iceblade = SpawnEffect(88032, User.Position, 0, WaitInfinite());
+                    iceblade.UpdateDelay = 1f;
+                    iceblade.OnUpdate = () =>
+                    {
+                        WeaponDamage(GetEnemiesInRadius(User.Position, ScriptFormula(7)), ScriptFormula(9), DamageType.Cold);
+                    };
+                }
+                if (Rune_B > 0)
+                {
+                    GetEnemiesInRadius(User.Position, ScriptFormula(7));
+                    //SF(23) and SF(24)
+                    //Chilled Debuff, Slow Movement and Slow Attack Speeds
+                }
+                return false;
             }
 
             public override void OnPayload(Payload payload)
             {
                 if (payload.Target == Target && payload is HitPayload)
                 {
-                    //Affect monsters in radius
-                    //GetEnemiesInRadius(User.Position, ScriptFormula(7));
-                    //TODO:Chill for 2 Seconds? Attempted..
-                    WeaponDamage(payload.Context.User,0.12f, DamageType.Cold);
-                    Target.Attributes[GameAttribute.Chilled] = true;
-                    WaitSeconds(2f);
-                    Target.Attributes[GameAttribute.Chilled] = false;
+                    if (Rune_D > 0)
+                    {
+                        //this should call a buff, each hit should give the extra buff as long as you are under the max stacks.
+                        //SF(11) - max stacks
+                        //sf(26) - Bonus Armor per stack
+                        //sf(27) - bonus stack duration
+
+                    }
+                    if (Rune_E > 0)
+                    {
+                        if (Rand.NextDouble() < ScriptFormula(12))
+                        {
+                            SpawnEffect(4402, Target.Position);
+                            WeaponDamage(GetEnemiesInRadius(Target.Position, ScriptFormula(15)), ScriptFormula(13), DamageType.Cold);
+                        }
+                    }
+                    WeaponDamage(payload.Context.User, ScriptFormula(0), DamageType.Cold);   
+                    //Debuff Chills Enemies (SF(4))
                 }
             }
 
@@ -1082,6 +1245,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 base.Remove();
                 User.PlayEffectGroup(19326);
+                User.PlayEffectGroup(185652);
                 
             }
         }
@@ -1090,20 +1254,28 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.ShockPulse)]
     public class WizardShockPulse : PowerScript
     {
+
         public override IEnumerable<TickTimer> Run()
         {
-            User.PlayEffectGroup(0x0001061B); // cast effect
-
-            for (int n = 0; n < 3; ++n)
+            UsePrimaryResource(ScriptFormula(13));
+            User.PlayEffectGroup(RuneSelect(176277, 176290, 176354, 176355, 176250, 176353)); // cast effect
+            if (Rune_B > 0 || Rune_C > 0)
+            {
                 _SpawnBolt();
+            }
+            else
+            {
+                for (int n = 0; n < 3; ++n)
+                    _SpawnBolt();
+            }
 
             yield break;
         }
 
         private void _SpawnBolt()
         {
-            var eff = SpawnEffect(176247, User.Position, 0, WaitSeconds(10f));
-            
+            var eff = SpawnEffect(RuneSelect(176247, 176287, 176653, 201526, 176248, 176356), User.Position, 0, WaitSeconds(ScriptFormula(25)));
+
             World.BroadcastIfRevealed(new ACDTranslateDetPathMessage
             {
                 Id = 118,
@@ -1130,6 +1302,45 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Field15 = 0f  // spiral control? for charged bolt this is Position.Y and seems to effect nothing
             }, eff);
 
+            /*
+             * private void _calcTargetPosition()
+        {
+            // project beam end to always be a certain length
+            TargetPosition = PowerMath.TranslateDirection2D(User.Position, TargetPosition,
+                                                             new Vector3D(User.Position.X, User.Position.Y, TargetPosition.Z),
+                                                             50f);
+        }
+             * _calcTargetPosition();
+
+            
+            if (Rune_B > 0 || Rune_C > 0)
+            {
+                bolts = 1;
+            }
+            else bolts = 3;
+
+            Vector3D[] projDestinations = PowerMath.GenerateSpreadPositions(User.Position, TargetPosition, 10f, bolts);
+
+                foreach (Vector3D missilePos in projDestinations)
+                {
+                    var proj = new Projectile(this, RuneSelect(176247, 176287, 176653, 201526, 176248, 176356), User.Position);
+                    proj.OnCollision = (hit) =>
+                    {
+                        SpawnEffect(RuneSelect(176247, 176287, 176653, 201526, 176248, 176356), new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
+                        if (Rune_B > 0)
+                        {
+                            WeaponDamage(GetEnemiesInRadius(proj.Position, ScriptFormula(21)), ScriptFormula(4), DamageType.Lightning);
+                        }
+                        else
+                        {
+                            WeaponDamage(hit, ScriptFormula(4), DamageType.Lightning);
+                        }
+                    };
+                    proj.Launch(missilePos, ScriptFormula(6));
+
+                    WaitSeconds(ScriptFormula(25));
+                }*/
+            
         }
     }
 
@@ -1233,7 +1444,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield break;
         }
 
-        [ImplementsPowerBuff(2)] //TODO: check this, theres 3 groups..
+        [ImplementsPowerBuff(2)]
         class DiamondSkinBuff : PowerBuff
         {
             public override void Init()
