@@ -578,6 +578,22 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             yield break;
         }
+        [ImplementsPowerBuff(0)]
+        class MiniBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+        }
+        [ImplementsPowerBuff(1)]
+        class FieldBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+        }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.WaveOfForce)]
@@ -826,6 +842,14 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Timeout = WaitSeconds(0.3f);
             }
         }
+        [ImplementsPowerBuff(1)]
+        class Crimson_DestablizedEffect : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+        }
     }
 
     //bumbasher
@@ -877,6 +901,14 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
             yield break;
         }
+       [ImplementsPowerBuff(5)]
+       class FrostNova_Alabaster_Buff : PowerBuff
+       {
+           public override void Init()
+           {
+               Timeout = WaitSeconds(2f);
+           }
+       }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
@@ -1018,23 +1050,9 @@ namespace Mooege.Core.GS.Powers.Implementations
         [ImplementsPowerBuff(1)]
         class IceDomeBuff : PowerBuff
         {
-            public override bool Apply()
+            public override void Init()
             {
-                if (!base.Apply())
-                    return false;
-                return true;
-            }
-
-            public override bool Update()
-            {
-                if (base.Update())
-                    return true;
-                return false;
-            }
-
-            public override void Remove()
-            {
-                base.Remove();
+                Timeout = WaitSeconds(2f);
             }
         }
     }
@@ -1160,6 +1178,14 @@ namespace Mooege.Core.GS.Powers.Implementations
                 yield return WaitSeconds(0.2f);
             }
         }
+        [ImplementsPowerBuff(2)]
+        class BleedEffect : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+        }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.IceArmor)]
@@ -1247,6 +1273,22 @@ namespace Mooege.Core.GS.Powers.Implementations
                 User.PlayEffectGroup(19326);
                 User.PlayEffectGroup(185652);
                 
+            }
+        }
+        [ImplementsPowerBuff(0)]
+        class SwitchEffect : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+        }
+        [ImplementsPowerBuff(2)]
+        class SwitchBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
             }
         }
     }
@@ -1429,6 +1471,30 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             }
         }
+        [ImplementsPowerBuff(1)]
+        class TeslaBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+        }
+        [ImplementsPowerBuff(2)]
+        class IndigoBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+        }
+        [ImplementsPowerBuff(3)]
+        class GoldenBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+        }
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.DiamondSkin)]
@@ -1444,7 +1510,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield break;
         }
 
-        [ImplementsPowerBuff(2)]
+        [ImplementsPowerBuff(0)]
         class DiamondSkinBuff : PowerBuff
         {
             public override void Init()
@@ -1463,6 +1529,22 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 base.Remove();
                 User.PlayEffectGroup(RuneSelect(93077, 187716, 187805, 187822, 187831, 187851));
+            }
+        }
+        [ImplementsPowerBuff(1)]
+        class StoneSkinBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(5f);
+            }
+        }
+        [ImplementsPowerBuff(2)]
+        class StoneArmorBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(5f);
             }
         }
     }
@@ -1620,15 +1702,20 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                 public override void OnPayload(Payload payload)
                 {
-                    if (Rune_C > 0)
+                    if (payload.Target == Target && payload is HitPayload)
                     {
-                        //incoming attacks that would deal more than 26% of your maximum Life 
-                        //are reduced to deal 26% of your maximum Life instead.
-                        //TODO: take the two numbers, and find which is the minimum.
-                    }
-                    if (Rune_D > 0)
-                    {
-                    //You have a chance to gain 7 Arcane Power whenever you are hit by a ranged or melee attack.
+                        if (Rune_C > 0)
+                        {
+                            //Math.Min(Total Damage incoming/Maximum Life, 26% of Maximum Life)
+                        }
+                        if (Rune_D > 0)
+                        {
+                            //just a guess.
+                            if (Rand.NextDouble() < .4f)
+                            {
+                                GeneratePrimaryResource(ScriptFormula(11));
+                            }
+                        }
                     }
                 }
 
@@ -1644,6 +1731,38 @@ namespace Mooege.Core.GS.Powers.Implementations
                     base.Remove();
                 }
             }
+        [ImplementsPowerBuff(2)]
+        class EnergyReflectBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+        }
+        [ImplementsPowerBuff(3)]
+        class EnergyResourceBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+        }
+        [ImplementsPowerBuff(4)]
+        class EnergyAbsorbBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+        }
+        [ImplementsPowerBuff(5)]
+        class EnergyDamageBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(2f);
+            }
+        }
         }
    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.MagicWeapon)]
     public class MagicWeapon : Skill
