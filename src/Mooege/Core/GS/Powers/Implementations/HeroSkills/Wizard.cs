@@ -30,13 +30,14 @@ using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Players;
 
 //TODO (IMPORTANT): GO BACK through and any WaitSeconds/GameAttributes must be in Buff Apply() and Remove()
+//TODO: ADD TO buffs. Targets in Radius receiving debuff.
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
+    #region Meteor
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Meteor)]
     public class WizardMeteor : PowerScript
     {
-        //TODO:Rune_E = crit targets from impact -> fire duration for 18 seconds
         public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(ScriptFormula(8));
@@ -76,12 +77,26 @@ namespace Mooege.Core.GS.Powers.Implementations
             foreach (var impactPos in impactPositions)
             {
                 // impact
-                SpawnEffect(RuneSelect(86769, 215809, 91441, 92031, 217139, 217458), impactPos);
-
-                WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(0),
-                    RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Fire, DamageType.Cold, DamageType.Arcane, DamageType.Fire));
-
-                WaitSeconds(ScriptFormula(4));
+                SpawnEffect(RuneSelect(86769, 215809, 91441, 92031, 217139, 217458), impactPos, 0, WaitSeconds(ScriptFormula(4)));
+                AttackPayload attack = new AttackPayload(this);
+                attack.Targets = GetEnemiesInRadius(impactPos, ScriptFormula(3));
+                attack.AddWeaponDamage(ScriptFormula(0), RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Fire, DamageType.Cold, DamageType.Arcane, DamageType.Fire));
+                attack.OnHit = hitPayload =>
+                {
+                    if (Rune_E > 0)
+                    {
+                        if (hitPayload.IsCriticalHit)
+                        {
+                            var moltenfire = SpawnEffect(217458, impactPos, 0, WaitSeconds(18f));
+                            moltenfire.UpdateDelay = 1f;
+                            moltenfire.OnUpdate = () =>
+                            {
+                                WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(2), DamageType.Fire);
+                            };
+                        }
+                    }
+                };
+                attack.Apply();
 
                 if (Rune_C > 0)
                 {
@@ -90,7 +105,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     FreezingMist.OnUpdate = () =>
                     {
                         WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(2), DamageType.Cold);
-                        AddBuff(Target, new DebuffSlowed(0.6f, WaitSeconds(3f)));
+                        //AddBuff(Target, new DebuffSlowed(0.6f, WaitSeconds(3f)));
 
                     };
                 }
@@ -116,7 +131,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+#endregion
 
+    #region Electrocute
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.Electrocute)]
     public class WizardElectrocute : ChanneledSkill
     {
@@ -133,14 +150,14 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (Rune_A > 0)
             {
-                    var proj = new Projectile(this, 76019, User.Position);
-                    proj.Position.Z += 5f;  // fix height
-                    proj.OnCollision = (hit) =>
-                    {
-                        hit.PlayEffectGroup(77858);
-                        WeaponDamage(GetEnemiesInRadius(proj.Position, ScriptFormula(2)), ScriptFormula(0), DamageType.Lightning);
-                    };
-                    proj.Launch(TargetPosition, 1.25f);
+                var proj = new Projectile(this, 76019, User.Position);
+                proj.Position.Z += 5f;  // fix height
+                proj.OnCollision = (hit) =>
+                {
+                    hit.PlayEffectGroup(77858);
+                    WeaponDamage(GetEnemiesInRadius(proj.Position, ScriptFormula(2)), ScriptFormula(0), DamageType.Lightning);
+                };
+                proj.Launch(TargetPosition, 1.25f);
             }
             else if (Rune_C > 0)
             {
@@ -171,23 +188,33 @@ namespace Mooege.Core.GS.Powers.Implementations
                         ropeSource = curTarget;
 
                         WeaponDamage(curTarget, damage, DamageType.Lightning);
-                        if (Rune_E > 0)
-                        {
-                            //TODO: if critical damage
-                            /*Vector3D[] projDestinations = PowerMath.GenerateSpreadPositions(User.Position, TargetPosition, 72f, (int)ScriptFormula(14));
 
-                            foreach (Vector3D missilePos in projDestinations)
+                        /*AttackPayload attack = new AttackPayload(this);
+                        attack.OnHit = HitPayload =>
+                        {
+                            if (Rune_E > 0)
                             {
-                                var proj = new Projectile(this, 176247, TargetPosition);
-                                proj.OnCollision = (hit) =>
+                                if (HitPayload.IsCriticalHit)
                                 {
-                                    SpawnEffect(176262, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
-                                    proj.Destroy();
-                                    WeaponDamage(hit, ScriptFormula(12), DamageType.Lightning);
-                                };
-                                proj.Launch(missilePos, 1.25f);
-                            }*/
-                        }
+                                    Vector3D[] projDestinations = PowerMath.GenerateSpreadPositions(User.Position, TargetPosition, 72f, (int)ScriptFormula(14));
+
+                                    foreach (Vector3D missilePos in projDestinations)
+                                    {
+                                        var proj = new Projectile(this, 176247, TargetPosition);
+                                        proj.OnCollision = (hit) =>
+                                        {
+                                            SpawnEffect(176262, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
+                                            proj.Destroy();
+                                            WeaponDamage(hit, ScriptFormula(12), DamageType.Lightning);
+                                        };
+                                        proj.Launch(missilePos, 1.25f);
+                                    }
+                                }
+                            }
+
+                        };
+                        attack.Apply();*/
+
                         if (Rune_B > 0)
                         {
                             damage *= 0.7f;
@@ -217,22 +244,19 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+#endregion
 
+    #region MagicMissile
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.MagicMissile)]
-    public class WizardMagicMissile : PowerScript
+    public class WizardMagicMissile : Skill
     {
-        //TODO: Pierce Chance to Target and hit another Target for Rune_C
-        //      ScriptFormula(12) -> Rune_C ? (0.44 + Rune_C * 0.08) : 0
-
         //TODO:Rune_E - ScriptFormula(10 -> Seek Angle Rotate(36),11 -> Seek Update Rate(.15)) -> tracks to nearest target
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
             UsePrimaryResource(ScriptFormula(7));
-
             User.PlayEffectGroup(19305); // cast effect
             if (Rune_B > 0)
             {
-
                 Vector3D[] projDestinations = PowerMath.GenerateSpreadPositions(User.Position, TargetPosition, ScriptFormula(8)/3f, (int)ScriptFormula(5));
 
                 foreach (Vector3D missilePos in projDestinations)
@@ -246,8 +270,22 @@ namespace Mooege.Core.GS.Powers.Implementations
                     };
                     proj.Launch(missilePos, ScriptFormula(4));
                 }
-
             }
+            /*else if (Rune_E > 0)
+            {
+                var projectile = new Projectile(this, 99567, User.Position);
+                projectile.OnUpdate = () =>
+                {
+                    Target = GetEnemiesInRadius(projectile.Position, 8f).GetClosestTo(projectile.Position);
+                    if (Target != null)
+                    {
+                        SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
+                        projectile.Destroy();
+                        WeaponDamage(hit, ScriptFormula(1), DamageType.Arcane);
+                    }
+                };
+                projectile.Launch(Target.Position, ScriptFormula(4));
+            }*/
             else
             {
                 var projectile = new Projectile(this, 99567, User.Position);
@@ -255,11 +293,32 @@ namespace Mooege.Core.GS.Powers.Implementations
                 {
                     SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
                     projectile.Destroy();
-                    //ScriptFormula(1) handles Rune_A and Rune_E damage increases
                     WeaponDamage(hit, ScriptFormula(1), DamageType.Arcane);
+
                     if (Rune_D > 0)
                     {
                         GeneratePrimaryResource(ScriptFormula(16));
+                    }
+                    
+                    if (Rune_C > 0)
+                    {
+                        //TODO: GETCLOSESTTO sometimes gets the current target if its starting from a target's position.
+                        if (Rand.NextDouble() < ScriptFormula(12))
+                        {
+                            Target = GetEnemiesInRadius(hit.Position, 8f).GetClosestTo(hit.Position);
+                            if (Target != null)
+                            {
+                                var projectile2 = new Projectile(this, 99567, hit.Position);
+                                projectile2.OnCollision = (hit2) =>
+                                {
+                                    SpawnEffect(99572, new Vector3D(hit2.Position.X, hit2.Position.Y, hit2.Position.Z + 5f)); // impact effect (fix height)
+                                    projectile2.Destroy();
+                                    //ScriptFormula(1) handles Rune_A and Rune_E damage increases
+                                    WeaponDamage(hit2, ScriptFormula(1), DamageType.Arcane);
+                                };
+                                projectile2.Launch(Target.Position, ScriptFormula(4));
+                            }
+                        }
                     }
                 };
                 projectile.Launch(TargetPosition, ScriptFormula(4));
@@ -268,7 +327,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield break;
         }
     }
+#endregion
 
+    #region Hydra
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Hydra)]
         //No Rune = Default
         //Rune_A = Hydra_Frost
@@ -337,7 +398,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield return timeout;
         }
     }
+#endregion
 
+    #region ArcaneOrb
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneOrb)]
     public class ArcaneOrb : Skill
     {
@@ -345,7 +408,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             UsePrimaryResource(EvalTag(PowerKeys.ResourceCost));
 
-            // cast effect - taken from DemonHuner Bola Shot
             Vector3D[] targetDirs;
             {
                 targetDirs = new Vector3D[] { TargetPosition };
@@ -353,15 +415,12 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             if (Rune_C > 0)
             {
-                //Somehow set a max to only have 4 orbs at a time.
-                //ScriptFormula(10) = Max Orbs -> min(( Rune_C * 1), 4)
-                AddBuff(User, new Orbit1());
-                AddBuff(User, new Orbit2());
-                AddBuff(User, new Orbit3());
+                User.World.BuffManager.RemoveBuffs(User, Skills.Skills.Wizard.Offensive.ArcaneOrb);
                 AddBuff(User, new Orbit4());
                 yield break;
             }
             else
+
             foreach (Vector3D position in targetDirs)
             {
                 var proj = new Projectile(this, RuneSelect(6515, 130073, 215555, -1, 216040, 75650), User.Position);
@@ -383,47 +442,75 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                 yield return WaitSeconds(2f);
             }
-
-
         }
-        class OrbitBase : PowerBuff
+
+        abstract class OrbitBase : PowerBuff
         {
+            TickTimer timer;
+
+            public override void Init()
+            {
+                timer = WaitSeconds(1f);
+            }
+
             public override bool Update()
             {
+
                 if (base.Update())
                     return true;
 
-                var targets = GetEnemiesInRadius(Target.Position, 10f);
-                if (targets.Actors.Count > 0)
+                if (timer.TimedOut)
                 {
-                    WeaponDamage(targets, 1.00f, DamageType.Arcane);
-                    return true;
+                    var targets = GetEnemiesInRadius(Target.Position, 10f);
+                    if (targets.Actors.Count > 0)
+                    {
+                        WeaponDamage(targets, ScriptFormula(3), DamageType.Arcane);
+                        OrbitUsed();
+                        return true;
+                    }
                 }
 
                 return false;
             }
+
+            protected abstract void OrbitUsed();
         }
         [ImplementsPowerBuff(0)]
         class Orbit1 : OrbitBase
         {
+            protected override void OrbitUsed()
+            {
+                // do nothing, orbits all used up
+            }
         }
-
         [ImplementsPowerBuff(1)]
         class Orbit2 : OrbitBase
         {
+            protected override void OrbitUsed()
+            {
+                AddBuff(Target, new Orbit1());
+            }
         }
-
         [ImplementsPowerBuff(2)]
         class Orbit3 : OrbitBase
         {
+            protected override void OrbitUsed()
+            {
+                AddBuff(Target, new Orbit2());
+            }
         }
-
         [ImplementsPowerBuff(3)]
         class Orbit4 : OrbitBase
         {
+            protected override void OrbitUsed()
+            {
+                AddBuff(Target, new Orbit3());
+            }
         }
     }
+#endregion
 
+    #region EnergyTwister
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.EnergyTwister)]
     public class EnergyTwister : Skill
     {
@@ -470,7 +557,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+    #endregion
 
+    #region Disintegrate
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Disintegrate)]
     public class WizardDisintegrate : ChanneledSkill
     {
@@ -571,7 +660,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+    #endregion
 
+    #region WaveOfForce
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.WaveOfForce)]
     public class WizardWaveOfForce : PowerScript
     {
@@ -626,7 +717,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield break;
         }
     }
+    #endregion
 
+    #region ExplosiveBlast
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ExplosiveBlast)]
     public class ExplosiveBlast : Skill
     {
@@ -737,7 +830,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield break;
         }
     }
+    #endregion
 
+    #region ArcaneTorrent
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneTorrent)]
     public class WizardArcaneTorrent : ChanneledSkill
     {
@@ -827,7 +922,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+    #endregion
 
+    #region FrostNova
     //bumbasher
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.FrostNova)]
     public class WizardFrostNova : PowerScript
@@ -886,7 +983,9 @@ namespace Mooege.Core.GS.Powers.Implementations
            }
        }
     }
+    #endregion
 
+    #region Blizzard
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
     public class WizardBlizzard : PowerScript
     {
@@ -934,7 +1033,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+    #endregion
 
+    #region RayOfFrost
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.RayOfFrost)]
     public class WizardRayOfFrost : ChanneledSkill
     {
@@ -1033,7 +1134,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+    #endregion
 
+    #region Teleport
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Teleport)]
     public class WizardTeleport : PowerScript
     {
@@ -1108,7 +1211,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             public override void Remove() { base.Remove(); }
         }
     }
+    #endregion
 
+    #region SpectralBlade
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.SpectralBlade)]
     public class WizardSpectralBlade : PowerScript
     {
@@ -1165,7 +1270,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+    #endregion
 
+    #region Icearmor
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.IceArmor)]
     public class IceArmor : Skill
     {
@@ -1270,7 +1377,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+    #endregion
 
+    #region ShockPulse
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.ShockPulse)]
     public class WizardShockPulse : PowerScript
     {
@@ -1363,7 +1472,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             
         }
     }
+    #endregion
 
+    #region StormArmor
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.StormArmor)]
     public class StormArmor : Skill
     {
@@ -1474,7 +1585,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+    #endregion
 
+    #region DiamondSkin
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.DiamondSkin)]
     public class DiamondSkin : Skill
     {
@@ -1528,7 +1641,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+    #endregion
 
+    #region SlowTime
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.SlowTime)]
     public class SlowTime : Skill
     {
@@ -1640,77 +1755,81 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             }
         }
+    }
+    #endregion
+
+    #region EnergyArmor
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.EnergyArmor)]
-     public class EnergyArmor : Skill
+    public class EnergyArmor : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
         {
-            public override IEnumerable<TickTimer> Main()
+            StartDefaultCooldown();
+            UsePrimaryResource(25f);
+            AddBuff(User, new EnergyArmorBuff());
+            yield break;
+        }
+
+        [ImplementsPowerBuff(0)]
+        class EnergyArmorBuff : PowerBuff
+        {
+            public override void Init()
             {
-                StartDefaultCooldown();
-                UsePrimaryResource(25f);
-                AddBuff(User, new EnergyArmorBuff());
-                yield break;
+                Timeout = WaitSeconds(120f);
             }
 
-            [ImplementsPowerBuff(0)]
-            class EnergyArmorBuff : PowerBuff
+            public override bool Apply()
             {
-                public override void Init()
-                {
-                    Timeout = WaitSeconds(120f);
-                }
-
-                public override bool Apply()
-                {
-                    if (!base.Apply())
-                        return false;
-                    if (Rune_A > 0)
-                    {
-                        //increase resistance
-                    }
-                    if (Rune_B > 0)
-                    {
-                        //increase max resource by 40
-                    }
-                    if (Rune_E > 0)
-                    {
-                        //increase percision by 40$
-                    }
-                    //increasing your Defense by 20% but lowers your maximum Arcane Power by 20.
-                    //--> drains __ primary resource for every 1% of your maximum Life absorbed.
-                    return true;
-                }
-
-                public override void OnPayload(Payload payload)
-                {
-                    if (payload.Target == Target && payload is HitPayload)
-                    {
-                        if (Rune_C > 0)
-                        {
-                            //Math.Min(Total Damage incoming/Maximum Life, 26% of Maximum Life)
-                        }
-                        if (Rune_D > 0)
-                        {
-                            //just a guess.
-                            if (Rand.NextDouble() < .4f)
-                            {
-                                GeneratePrimaryResource(ScriptFormula(11));
-                            }
-                        }
-                    }
-                }
-
-                public override bool Update()
-                {
-                    if (base.Update())
-                        return true;
+                if (!base.Apply())
                     return false;
-                }
-
-                public override void Remove()
+                if (Rune_A > 0)
                 {
-                    base.Remove();
+                    //increase resistance
+                }
+                if (Rune_B > 0)
+                {
+                    //increase max resource by 40
+                }
+                if (Rune_E > 0)
+                {
+                    //increase percision by 40$
+                }
+                //increasing your Defense by 20% but lowers your maximum Arcane Power by 20.
+                //--> drains __ primary resource for every 1% of your maximum Life absorbed.
+                return true;
+            }
+
+            public override void OnPayload(Payload payload)
+            {
+                if (payload.Target == Target && payload is HitPayload)
+                {
+                    if (Rune_C > 0)
+                    {
+                        //Math.Min(Total Damage incoming/Maximum Life, 26% of Maximum Life)
+                    }
+                    if (Rune_D > 0)
+                    {
+                        //just a guess.
+                        if (Rand.NextDouble() < .4f)
+                        {
+                            GeneratePrimaryResource(ScriptFormula(11));
+                        }
+                    }
                 }
             }
+
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+                return false;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+            }
+        }
         [ImplementsPowerBuff(2)]
         class EnergyReflectBuff : PowerBuff
         {
@@ -1743,8 +1862,11 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Timeout = WaitSeconds(2f);
             }
         }
-        }
-   [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.MagicWeapon)]
+    }
+    #endregion
+
+    #region MagicWeapon
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.MagicWeapon)]
     public class MagicWeapon : Skill
     {
         public override IEnumerable<TickTimer> Main()
@@ -1771,7 +1893,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
             public override bool Update()
             {
-                if(base.Update())
+                if (base.Update())
                     return true;
                 /*
                 AttackPayload attack = new AttackPayload(this);
@@ -1840,96 +1962,104 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
-   [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Archon)]
-   public class Archon : Skill
-   {
-       /* Build up Buff Duration (SF(0))
+    #endregion
+
+    #region Archon
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Archon)]
+    public class Archon : Skill
+    {
+        /* Build up Buff Duration (SF(0))
         * Bonus duration Per Kill (SF(8))
         * 
         * 
         * 
         */
-       public override IEnumerable<TickTimer> Main()
-       {
-           //StartDefaultCooldown();
-           //UsePrimaryResource(ScriptFormula(12));
-           AddBuff(User, new ArchonBuff());
-           yield break;
-       }
-       [ImplementsPowerBuff(2)]
-       class ArchonBuff : PowerBuff
-       {
-           public override void Init()
-           {
-               Timeout = WaitSeconds(15f);
-           }
+        public override IEnumerable<TickTimer> Main()
+        {
+            //StartDefaultCooldown();
+            //UsePrimaryResource(ScriptFormula(12));
+            AddBuff(User, new ArchonBuff());
+            yield break;
+        }
+        [ImplementsPowerBuff(2)]
+        class ArchonBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(15f);
+            }
 
-           public override bool Apply()
-           {
-               if (!base.Apply())
-                   return false;
-               //SF(3) armor buff
-               //SF(4) resistance buff
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                //SF(3) armor buff
+                //SF(4) resistance buff
 
-               return true;
-           }
+                return true;
+            }
 
-           public override void Remove()
-           {
-               base.Remove();
-           }
-       }
-   }
-   [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.MirrorImage)]
-   public class MirrorImage : Skill
-   {
-       public override IEnumerable<TickTimer> Main()
-       {
-           //StartDefaultCooldown();
-           //UsePrimaryResource(ScriptFormula(12));
-           yield break;
-       }
-       [ImplementsPowerBuff(0)]
-       class MirrorImageBuff : PowerBuff
-       {
-           public override void Init()
-           {
-               Timeout = WaitSeconds(15f);
-           }
+            public override void Remove()
+            {
+                base.Remove();
+            }
+        }
+    }
+    #endregion
 
-           public override bool Apply()
-           {
-               if (!base.Apply())
-                   return false;
-               return true;
-           }
+    #region MirrorImage
+    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.MirrorImage)]
+    public class MirrorImage : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            //StartDefaultCooldown();
+            //UsePrimaryResource(ScriptFormula(12));
+            yield break;
+        }
+        [ImplementsPowerBuff(0)]
+        class MirrorImageBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(15f);
+            }
 
-           public override void Remove()
-           {
-               base.Remove();
-           }
-       }
-       [ImplementsPowerBuff(1)]
-       class MirrorImage1Buff : PowerBuff
-       {
-           public override void Init()
-           {
-               Timeout = WaitSeconds(15f);
-           }
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                return true;
+            }
 
-           public override bool Apply()
-           {
-               if (!base.Apply())
-                   return false;
-               return true;
-           }
+            public override void Remove()
+            {
+                base.Remove();
+            }
+        }
+        [ImplementsPowerBuff(1)]
+        class MirrorImage1Buff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(15f);
+            }
 
-           public override void Remove()
-           {
-               base.Remove();
-           }
-       }
-   }
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+            }
+        }
+    }
+    #endregion
+
         //[Hard Skills TODO] Mirror Image, Familiar, Archon
         //14 passive skills
         /*
@@ -1948,5 +2078,4 @@ namespace Mooege.Core.GS.Powers.Implementations
          * Evocation
          * Unstable Anomal
          */
-    }
 }
