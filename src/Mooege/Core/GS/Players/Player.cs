@@ -1651,17 +1651,16 @@ namespace Mooege.Core.GS.Players
         /// <param name="immediately">if false, lore will have new lore button</param>
         public void PlayLore(int loreSNOId, bool immediately)
         {
-            // TODO: Fixme
             // play lore to player
-            //InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Quest.LoreMessage
-            //{
-            //    Id = (int)(immediately ? Opcodes.PlayLoreImmediately : Opcodes.PlayLoreWithButton),
-            //    LoreSNOId = loreSNOId
-            //});
-            //if (!HasLore(loreSNOId))
-            //{
-            //    AddLore(loreSNOId);
-            //}
+            InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Quest.LoreMessage
+            {
+                Id = (int)(Opcodes.LoreMessage),
+                LoreSNOId = loreSNOId
+            });
+            if (!HasLore(loreSNOId))
+            {
+                AddLore(loreSNOId);
+            }
         }
 
         /// <summary>
