@@ -36,15 +36,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Meteor)]
     public class WizardMeteor : PowerScript
     {
-        //TODO:Correct chilled/slow effect in Rune_C
         //TODO:Rune_E = crit targets from impact -> fire duration for 18 seconds
         public override IEnumerable<TickTimer> Run()
         {
-            if (Rune_D > 0)
-            {
-                UsePrimaryResource(ScriptFormula(8) - ScriptFormula(16));
-            }
-            else
             UsePrimaryResource(ScriptFormula(8));
 
             // cast effect
@@ -96,12 +90,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     FreezingMist.OnUpdate = () =>
                     {
                         WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(2), DamageType.Cold);
-                        //Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] += 0.60f;
-                        //WaitSeconds(3f);
-                        //Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] -= 0.60f;
-                        //or
-                        //AddBuff(GetEnemiesInRadius(impactPos, ScriptFormula(3)), new DebuffChilled(WaitSeconds(3f)));
-                        //slow movement(60%) for three seconds
+                        AddBuff(Target, new DebuffSlowed(0.6f, WaitSeconds(3f)));
 
                     };
                 }
@@ -131,10 +120,6 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.Electrocute)]
     public class WizardElectrocute : ChanneledSkill
     {
-        //TODOs
-        //A:Creates a streak of lightning that pierces targets, hitting all enemies in its path for 58% weapon damage as Lightning.
-        //C:Blast a cone of lightning that causes 52% weapon damage as Lightning to all affected targets. 
-        //E:Critical hits with this skill cause an explosion of 5 charged bolts in random directions, dealing 105% weapon damage as Lightning to any targets hit. 
         public override void OnChannelOpen()
         {
             EffectsPerSecond = 0.5f;
@@ -146,7 +131,24 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             UsePrimaryResource(ScriptFormula(4));
 
-            if (Target == null)
+            if (Rune_A > 0)
+            {
+                    var proj = new Projectile(this, 76019, User.Position);
+                    proj.Position.Z += 5f;  // fix height
+                    proj.OnCollision = (hit) =>
+                    {
+                        hit.PlayEffectGroup(77858);
+                        WeaponDamage(GetEnemiesInRadius(proj.Position, ScriptFormula(2)), ScriptFormula(0), DamageType.Lightning);
+                    };
+                    proj.Launch(TargetPosition, 1.25f);
+            }
+            else if (Rune_C > 0)
+            {
+                User.PlayEffectGroup(77807);
+                //unsure of the arc distances, but seems to be fine.
+                WeaponDamage(GetEnemiesInArcDirection(User.Position, TargetPosition, ScriptFormula(2), 90f), ScriptFormula(0), DamageType.Lightning);
+            }
+            else if (Target == null)
             {
                 // no target, just zap the air with miss effect rope
                 User.AddRopeEffect(30913, TargetPosition);
@@ -169,14 +171,30 @@ namespace Mooege.Core.GS.Powers.Implementations
                         ropeSource = curTarget;
 
                         WeaponDamage(curTarget, damage, DamageType.Lightning);
-                        //Only on Rune_B does the damage reduce per target
+                        if (Rune_E > 0)
+                        {
+                            //TODO: if critical damage
+                            /*Vector3D[] projDestinations = PowerMath.GenerateSpreadPositions(User.Position, TargetPosition, 72f, (int)ScriptFormula(14));
+
+                            foreach (Vector3D missilePos in projDestinations)
+                            {
+                                var proj = new Projectile(this, 176247, TargetPosition);
+                                proj.OnCollision = (hit) =>
+                                {
+                                    SpawnEffect(176262, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
+                                    proj.Destroy();
+                                    WeaponDamage(hit, ScriptFormula(12), DamageType.Lightning);
+                                };
+                                proj.Launch(missilePos, 1.25f);
+                            }*/
+                        }
                         if (Rune_B > 0)
                         {
                             damage *= 0.7f;
                         }
                         if (Rune_D > 0)
                         {
-                            GeneratePrimaryResource(4f);
+                            GeneratePrimaryResource(ScriptFormula(6));
                         }
                     }
                     else
@@ -185,7 +203,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                         break;
                     }
 
-                    curTarget = GetEnemiesInRadius(curTarget.Position, ScriptFormula(2), 3).Actors.FirstOrDefault(t => !targets.Contains(t));
+                    curTarget = GetEnemiesInRadius(curTarget.Position, ScriptFormula(2), (int)ScriptFormula(9)).Actors.FirstOrDefault(t => !targets.Contains(t));
                     if (curTarget != null)
                     {
                         targets.Add(curTarget);
@@ -195,7 +213,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     {
                         break;
                     }
-                }             
+                }
             }
         }
     }
@@ -204,8 +222,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     public class WizardMagicMissile : PowerScript
     {
         //TODO: Pierce Chance to Target and hit another Target for Rune_C
-        //      ScriptFormula(12)
-        //TODO:Rune_E - ScriptFormula(10,11)
+        //      ScriptFormula(12) -> Rune_C ? (0.44 + Rune_C * 0.08) : 0
+
+        //TODO:Rune_E - ScriptFormula(10 -> Seek Angle Rotate(36),11 -> Seek Update Rate(.15)) -> tracks to nearest target
         public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(ScriptFormula(7));
@@ -245,7 +264,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 };
                 projectile.Launch(TargetPosition, ScriptFormula(4));
             }
-
+            
             yield break;
         }
     }
@@ -324,12 +343,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            if (Rune_D > 0)
-            {
-                UsePrimaryResource(ScriptFormula(0) - ScriptFormula(13));
-            }
-            else
-            UsePrimaryResource(ScriptFormula(0));
+            UsePrimaryResource(EvalTag(PowerKeys.ResourceCost));
 
             // cast effect - taken from DemonHuner Bola Shot
             Vector3D[] targetDirs;
@@ -370,10 +384,9 @@ namespace Mooege.Core.GS.Powers.Implementations
                 yield return WaitSeconds(2f);
             }
 
-            
+
         }
-        [ImplementsPowerBuff(0)]
-        class Orbit1 : PowerBuff
+        class OrbitBase : PowerBuff
         {
             public override bool Update()
             {
@@ -383,68 +396,31 @@ namespace Mooege.Core.GS.Powers.Implementations
                 var targets = GetEnemiesInRadius(Target.Position, 10f);
                 if (targets.Actors.Count > 0)
                 {
-                    WeaponDamage(targets, ScriptFormula(3), DamageType.Arcane);
+                    WeaponDamage(targets, 1.00f, DamageType.Arcane);
                     return true;
                 }
 
                 return false;
             }
+        }
+        [ImplementsPowerBuff(0)]
+        class Orbit1 : OrbitBase
+        {
         }
 
         [ImplementsPowerBuff(1)]
-        class Orbit2 : PowerBuff
+        class Orbit2 : OrbitBase
         {
-            public override bool Update()
-            {
-                if (base.Update())
-                    return true;
-
-                var targets = GetEnemiesInRadius(Target.Position, 10f);
-                if (targets.Actors.Count > 0)
-                {
-                    WeaponDamage(targets, ScriptFormula(3), DamageType.Arcane);
-                    return true;
-                }
-
-                return false;
-            }
         }
+
         [ImplementsPowerBuff(2)]
-        class Orbit3 : PowerBuff
+        class Orbit3 : OrbitBase
         {
-            public override bool Update()
-            {
-                if (base.Update())
-                    return true;
-
-                var targets = GetEnemiesInRadius(Target.Position, 10f);
-                if (targets.Actors.Count > 0)
-                {
-                    WeaponDamage(targets, ScriptFormula(3), DamageType.Arcane);
-                    return true;
-                }
-
-                return false;
-            }
         }
 
         [ImplementsPowerBuff(3)]
-        class Orbit4 : PowerBuff
+        class Orbit4 : OrbitBase
         {
-            public override bool Update()
-            {
-                if (base.Update())
-                    return true;
-
-                var targets = GetEnemiesInRadius(Target.Position, 10f);
-                if (targets.Actors.Count > 0)
-                {
-                    WeaponDamage(targets, ScriptFormula(3), DamageType.Arcane);
-                    return true;
-                }
-
-                return false;
-            }
         }
     }
 
@@ -932,7 +908,8 @@ namespace Mooege.Core.GS.Powers.Implementations
                 attack.AddWeaponDamage(ScriptFormula(0), DamageType.Cold);
                 attack.OnHit = (hit) =>
                 {
-                    AddBuff(hit.Target, new DebuffChilled(WaitSeconds(3f)));
+                    //Check to see if movement or attack is slowed down.
+                    AddBuff(hit.Target, new DebuffChilled(0f, WaitSeconds(3f)));
                     if (Rune_E > 0)
                     {
                         if (Rand.NextDouble() < ScriptFormula(10))
@@ -1069,6 +1046,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             SpawnProxy(User.Position).PlayEffectGroup(RuneSelect(170231, 205685, 205684, 191913, 192074, 192151));  // alt cast efg: 170231
             yield return WaitSeconds(0.3f);
             User.Teleport(TargetPosition);
+            //MDZ says this might work just as 191849.
             User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
             
             if (Rune_A > 0)
@@ -1522,12 +1500,14 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 if (!base.Apply())
                     return false;
+                User.Attributes[Mooege.Net.GS.Message.GameAttribute.Look_Override] = 0x061F7489;
                 return true;
             }
 
             public override void Remove()
             {
                 base.Remove();
+                User.Attributes[Mooege.Net.GS.Message.GameAttribute.Look_Override] = 0;
                 User.PlayEffectGroup(RuneSelect(93077, 187716, 187805, 187822, 187831, 187851));
             }
         }
@@ -1860,8 +1840,113 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+   [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Archon)]
+   public class Archon : Skill
+   {
+       /* Build up Buff Duration (SF(0))
+        * Bonus duration Per Kill (SF(8))
+        * 
+        * 
+        * 
+        */
+       public override IEnumerable<TickTimer> Main()
+       {
+           //StartDefaultCooldown();
+           //UsePrimaryResource(ScriptFormula(12));
+           AddBuff(User, new ArchonBuff());
+           yield break;
+       }
+       [ImplementsPowerBuff(2)]
+       class ArchonBuff : PowerBuff
+       {
+           public override void Init()
+           {
+               Timeout = WaitSeconds(15f);
+           }
 
+           public override bool Apply()
+           {
+               if (!base.Apply())
+                   return false;
+               //SF(3) armor buff
+               //SF(4) resistance buff
+
+               return true;
+           }
+
+           public override void Remove()
+           {
+               base.Remove();
+           }
+       }
+   }
+   [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.MirrorImage)]
+   public class MirrorImage : Skill
+   {
+       public override IEnumerable<TickTimer> Main()
+       {
+           //StartDefaultCooldown();
+           //UsePrimaryResource(ScriptFormula(12));
+           yield break;
+       }
+       [ImplementsPowerBuff(0)]
+       class MirrorImageBuff : PowerBuff
+       {
+           public override void Init()
+           {
+               Timeout = WaitSeconds(15f);
+           }
+
+           public override bool Apply()
+           {
+               if (!base.Apply())
+                   return false;
+               return true;
+           }
+
+           public override void Remove()
+           {
+               base.Remove();
+           }
+       }
+       [ImplementsPowerBuff(1)]
+       class MirrorImage1Buff : PowerBuff
+       {
+           public override void Init()
+           {
+               Timeout = WaitSeconds(15f);
+           }
+
+           public override bool Apply()
+           {
+               if (!base.Apply())
+                   return false;
+               return true;
+           }
+
+           public override void Remove()
+           {
+               base.Remove();
+           }
+       }
+   }
         //[Hard Skills TODO] Mirror Image, Familiar, Archon
-        //10 passive skills
+        //14 passive skills
+        /*
+         * Power Hungry
+         * Temporal Flux
+         * Glass Cannon
+         * Prodigy
+         * Virtuoso
+         * Astral Presence
+         * Illusionist
+         * Conflagration
+         * Glavanizing Ward
+         * Blur
+         * Arcane Dynamo
+         * Critical Mass
+         * Evocation
+         * Unstable Anomal
+         */
     }
 }

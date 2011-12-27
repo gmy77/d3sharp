@@ -106,10 +106,30 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerBuff(0)]
     public class DebuffChilled : SimpleBooleanStatusDebuff
     {
-        public DebuffChilled(TickTimer timeout)
+        public float Percentage;
+
+        public DebuffChilled(float percentage, TickTimer timeout)
             : base(GameAttribute.Chilled, null, null)
         {
+            Percentage = percentage;
             Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] -= Percentage;
+            Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] += Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] += Percentage;
+            Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] -= Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
         }
     }
 
@@ -121,6 +141,57 @@ namespace Mooege.Core.GS.Powers.Implementations
             : base(GameAttribute.Stunned, GameAttribute.Stun_Immune, FloatingNumberMessage.FloatType.Stunned)
         {
             Timeout = timeout;
+        }
+    }
+    [ImplementsPowerSNO(101002)] // DebuffFeared.pow
+    [ImplementsPowerBuff(0)]
+    public class DebuffFeared : SimpleBooleanStatusDebuff
+    {
+        public DebuffFeared(TickTimer timeout)
+            : base(GameAttribute.Feared, GameAttribute.Fear_Immune, FloatingNumberMessage.FloatType.Feared)
+        {
+            Timeout = timeout;
+        }
+    }
+    [ImplementsPowerSNO(101003)] // DebuffRooted.pow
+    [ImplementsPowerBuff(0)]
+    public class DebuffRooted : SimpleBooleanStatusDebuff
+    {
+        public DebuffRooted(TickTimer timeout)
+            : base(GameAttribute.IsRooted, GameAttribute.Root_Immune, FloatingNumberMessage.FloatType.Rooted)
+        {
+            Timeout = timeout;
+        }
+    }
+
+    [ImplementsPowerSNO(100971)] // DebuffSlowed.pow
+    [ImplementsPowerBuff(0)]
+    public class DebuffSlowed : SimpleBooleanStatusDebuff
+    {
+        public float Percentage;
+
+        public DebuffSlowed(float percentage, TickTimer timeout)
+            : base(GameAttribute.Slow, GameAttribute.Slowdown_Immune, FloatingNumberMessage.FloatType.Snared)
+        {
+            Percentage = percentage;
+            Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] -= Percentage;
+            Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] += Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] += Percentage;
+            Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] -= Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
         }
     }
 }
