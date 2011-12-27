@@ -92,7 +92,8 @@ namespace Mooege.Core.GS.Powers.Payloads
 
         public void Apply()
         {
-            this.Target.World.BuffManager.SendTargetPayload(this.Target, this);
+            if (this.Target.World != null)
+                this.Target.World.BuffManager.SendTargetPayload(this.Target, this);
 
             // if attack does damage and payload target is a player, run through and activate all the desctructibles
             if (this.Target is Player && this.DamageEntries.Count > 0)

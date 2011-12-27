@@ -113,12 +113,12 @@ namespace Mooege.Core.GS.Powers
             if (user is Player && powerSNO == (user as Player).SkillSet.HotBarSkills[4].SNOSkill)
             {
                 // number of monsters to spawn
-                int spawn_count = 10;
+                int spawn_count = 3;
 
                 // list of actorSNO values to pick from when spawning
-                int[] actorSNO_values = { 4282, 3893, 6652, 5428, 5346, 6024, 5393, 5467 };
-                int actorSNO = actorSNO_values[RandomHelper.Next(actorSNO_values.Length - 1)];
-                Logger.Debug("10 monsters spawning with actor sno {0}", actorSNO);
+                int[] actorSNO_values = { 5387, 6652, 5346 };
+                int actorSNO = actorSNO_values[RandomHelper.Next(actorSNO_values.Length)];
+                Logger.Debug("3 monsters spawning with actor sno {0}", actorSNO);
 
                 for (int n = 0; n < spawn_count; ++n)
                 {
@@ -147,6 +147,7 @@ namespace Mooege.Core.GS.Powers
                     }
 
                     Monster mon = new Monster(user.World, actorSNO, null);
+                    mon.SetBrain(new Mooege.Core.GS.AI.Brains.MonsterBrain(mon));
                     mon.Position = position;
                     mon.Scale = 1.35f;
                     mon.Attributes[GameAttribute.Hitpoints_Max_Total] = 5f;
@@ -156,6 +157,7 @@ namespace Mooege.Core.GS.Powers
                     mon.Attributes[GameAttribute.Attacks_Per_Second_Total] = 1.0f;
                     mon.Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] = 5f;
                     mon.Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] = 7f;
+                    mon.Attributes[GameAttribute.Casting_Speed_Total] = 1.0f;
                     user.World.Enter(mon);
                 }
 

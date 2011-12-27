@@ -44,6 +44,11 @@ namespace Mooege.Core.GS.Powers
             }
         }
 
+        public static bool HasImplementationForPowerSNO(int powerSNO)
+        {
+            return _implementations.ContainsKey(powerSNO);
+        }
+
         static PowerLoader()
         {
             // Find all subclasses of PowerImplementation and index them by the PowerSNO they are attributed with.

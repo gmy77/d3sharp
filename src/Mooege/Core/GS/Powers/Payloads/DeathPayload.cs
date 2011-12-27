@@ -46,6 +46,14 @@ namespace Mooege.Core.GS.Powers.Payloads
 
             // HACK: add to hackish list thats used to defer deleting actor and filter it from powers targetting
             this.Target.World.PowerManager.AddDeletingActor(this.Target);
+
+            // kill brain if monster
+            if (this.Target is Monster)
+            {
+                Monster mon = (Monster)this.Target;
+                if (mon.Brain != null)
+                    mon.Brain.Kill();
+            }
             
             // send this death payload to buffs
             this.Target.World.BuffManager.SendTargetPayload(this.Target, this);
