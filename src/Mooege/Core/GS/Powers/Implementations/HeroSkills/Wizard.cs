@@ -34,6 +34,7 @@ using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
+    //TODO: just need to fix buff then complete.
     #region Meteor
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Meteor)]
     public class WizardMeteor : PowerScript
@@ -133,6 +134,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 #endregion
 
+    //TODO: The charged bolts work, but regular electrocution does not.
     #region Electrocute
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.Electrocute)]
     public class WizardElectrocute : ChanneledSkill
@@ -246,6 +248,8 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 #endregion
 
+    //TODO: Rune_C: fix the missile that travels from one enemy to the next (sometimes it hits the same mob twice instead of an additional mob)
+    //TODO: also figure out Rune_E homing missile
     #region MagicMissile
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.MagicMissile)]
     public class WizardMagicMissile : Skill
@@ -329,6 +333,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 #endregion
 
+    //Very Imcomplete
     #region Hydra
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Hydra)]
         //No Rune = Default
@@ -400,6 +405,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 #endregion
 
+    //Complete
     #region ArcaneOrb
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneOrb)]
     public class ArcaneOrb : Skill
@@ -510,6 +516,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 #endregion
 
+    //Very Imcomplete
     #region EnergyTwister
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.EnergyTwister)]
     public class EnergyTwister : Skill
@@ -559,6 +566,8 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //TODO: InComplete Runes
+    //Unknown if targets are supposed to seizure.. Videos dont show the seezing zombies.
     #region Disintegrate
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Disintegrate)]
     public class WizardDisintegrate : ChanneledSkill
@@ -662,6 +671,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //TODO: teleporting Rune, Repelling Projectiles, SlowDebuff, and StunDebuff.
     #region WaveOfForce
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.WaveOfForce)]
     public class WizardWaveOfForce : PowerScript
@@ -680,7 +690,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(1));
             attack.AddWeaponDamage(ScriptFormula(2), DamageType.Physical);
             //TODO: Add Script 17 and 18 for slow movement
-            //TODO: Script 6,7,8,9
+            //TODO: Script 6,7,8,9 (repels projectiles)
             attack.OnHit = hitPayload => {
                 Knockback(hitPayload.Target, ScriptFormula(0), ScriptFormula(4), ScriptFormula(5));
                 if (Rune_D > 0)
@@ -719,13 +729,13 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //Rune_C TODO: place spawneffect at feet - does not follow with you
     #region ExplosiveBlast
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ExplosiveBlast)]
     public class ExplosiveBlast : Skill
     {
         public override IEnumerable<TickTimer> Main()
         {
-            //For Damage Multipler -> I use damage modifier script formula, is that correct?
             if (Rune_D > 0)
             {
                 UsePrimaryResource(ScriptFormula(15));
@@ -734,7 +744,6 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
             else if (Rune_A > 0)
             {
-                //there is no charge up effect since its instant
                 UsePrimaryResource(ScriptFormula(15));
                 StartCooldown(WaitSeconds(1f));
             }
@@ -754,34 +763,20 @@ namespace Mooege.Core.GS.Powers.Implementations
                 yield return WaitSeconds(ScriptFormula(5));
 
             IEnumerable<TickTimer> subScript;
-            if (Rune_A > 0)
-                subScript = _RuneA();
-            else if (Rune_B > 0)
-                subScript = _RuneB();
-            else if (Rune_C > 0)
+            if (Rune_C > 0)
                 subScript = _RuneC();
-            else if (Rune_D > 0)
-                subScript = _RuneD();
             else if (Rune_E > 0)
                 subScript = _RuneE();
             else
+                //NoRune will actually do the animation and formulas for A,B,D,and NoRune
                 subScript = _NoRune();
 
             foreach (var timeout in subScript)
                 yield return timeout;
         }
-        IEnumerable<TickTimer> _RuneA()
+        IEnumerable<TickTimer> _NoRune()
         {
-            SpawnEffect(61419, User.Position);
-            AttackPayload attack = new AttackPayload(this);
-            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
-            attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
-            attack.Apply();
-            yield break;
-        }
-        IEnumerable<TickTimer> _RuneB()
-        {
-            SpawnEffect(192210, User.Position);
+            SpawnEffect(RuneSelect(61419, 61419, 192210, -1, 192211, -1), User.Position);
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
             attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
@@ -792,15 +787,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             //TODO: place spawneffect at feet - does not follow with you
             SpawnEffect(61419, User.Position);
-            AttackPayload attack = new AttackPayload(this);
-            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
-            attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
-            attack.Apply();
-            yield break;
-        }
-        IEnumerable<TickTimer> _RuneD()
-        {
-            SpawnEffect(192211, User.Position);
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
             attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
@@ -820,18 +806,10 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
             yield break;
         }
-        IEnumerable<TickTimer> _NoRune()
-        {
-            SpawnEffect(61419, User.Position);
-            AttackPayload attack = new AttackPayload(this);
-            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
-            attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
-            attack.Apply();
-            yield break;
-        }
     }
     #endregion
 
+    //TODO: All Runes
     #region ArcaneTorrent
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneTorrent)]
     public class WizardArcaneTorrent : ChanneledSkill
@@ -924,6 +902,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //TODO: Rune_A,E
     #region FrostNova
     //bumbasher
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.FrostNova)]
@@ -985,6 +964,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //TODO: Rune_C,E
     #region Blizzard
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
     public class WizardBlizzard : PowerScript
@@ -1000,20 +980,23 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             for (int i = 0; i < ScriptFormula(4); ++i)
             {
-                //if (E):{critical strike chance with Blizzard is increased by 80% -> scriptformula(9)}
+                if (Rune_E > 0)
+                {
+                    //Crit Chance Bonus -> ScriptFormula(9)
+                }
                 
                 AttackPayload attack = new AttackPayload(this);
                 attack.Targets = GetEnemiesInRadius(TargetPosition, ScriptFormula(3));
                 attack.AddWeaponDamage(ScriptFormula(0), DamageType.Cold);
                 attack.OnHit = (hit) =>
                 {
-                    //Check to see if movement or attack is slowed down.
                     AddBuff(hit.Target, new DebuffChilled(0f, WaitSeconds(3f)));
                     if (Rune_E > 0)
                     {
                         if (Rand.NextDouble() < ScriptFormula(10))
                         {
                             //scriptformula(11)
+                            //DebuffFrozen
                         }
                     }
                 };
@@ -1035,6 +1018,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //TODO: Rune_A,B,C,E
     #region RayOfFrost
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.RayOfFrost)]
     public class WizardRayOfFrost : ChanneledSkill
@@ -1136,6 +1120,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //TODO: Rune_B,C,D,E
     #region Teleport
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Teleport)]
     public class WizardTeleport : PowerScript
@@ -1144,7 +1129,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(15f);
-            //StartCooldown(WaitSeconds(ScriptFormula(20)));
+            StartCooldown(WaitSeconds(ScriptFormula(20)));
             
             SpawnProxy(User.Position).PlayEffectGroup(RuneSelect(170231, 205685, 205684, 191913, 192074, 192151));  // alt cast efg: 170231
             yield return WaitSeconds(0.3f);
@@ -1197,15 +1182,8 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 if (!base.Apply())
                     return false;
+                //gameattribute damage reduction
                 return true;
-            }
-
-            public override void OnPayload(Payload payload)
-            {
-                if (payload.Target == Target && payload is HitPayload)
-                {
-                    //buff -> 25% less damage[SF(14)]
-                }
             }
 
             public override void Remove() { base.Remove(); }
@@ -1213,6 +1191,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //TODO: Rune_A,C,E
     #region SpectralBlade
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.SpectralBlade)]
     public class WizardSpectralBlade : PowerScript
@@ -1272,6 +1251,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //TODO: make ArmorBuff, Rune_B,C,D,E
     #region Icearmor
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.IceArmor)]
     public class IceArmor : Skill
@@ -1379,6 +1359,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //Incomplete
     #region ShockPulse
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.ShockPulse)]
     public class WizardShockPulse : PowerScript
@@ -1474,6 +1455,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //TODO: Rune_B: movementspeed Buff
+    //ArmorBuff: Update needs a cooldown delay
+    //TODO: Rune_C,E
     #region StormArmor
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.StormArmor)]
     public class StormArmor : Skill
@@ -1587,16 +1571,17 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //Rune_B+C:Done
+    //TODO:Rune_A,C
     #region DiamondSkin
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.DiamondSkin)]
     public class DiamondSkin : Skill
     {
-        //Wizard_StoneSkin.efg/stonearmor/diamondskin is also diamondskin..
         //gameattribute[Breakable Shield HP] + Invulnerable or No Damage?
         public override IEnumerable<TickTimer> Main()
         {
             StartDefaultCooldown();
-            UsePrimaryResource(25f);
+            //UsePrimaryResource(25f);
             AddBuff(User, new DiamondSkinBuff());
             yield break;
         }
@@ -1606,7 +1591,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             public override void Init()
             {
-                Timeout = WaitSeconds(5f);
+                //Rune_B is here
+                Timeout = WaitSeconds(ScriptFormula(5));
             }
 
             public override bool Apply()
@@ -1614,7 +1600,24 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (!base.Apply())
                     return false;
                 User.Attributes[Mooege.Net.GS.Message.GameAttribute.Look_Override] = 0x061F7489;
+
+                if (Rune_D > 0)
+                {
+                    User.Attributes[GameAttribute.Resource_Cost_Reduction_Amount] += (int)ScriptFormula(4);
+                }
                 return true;
+            }
+
+            public override void OnPayload(Payload payload)
+            {
+                if (payload.Target == Target && payload is HitPayload)
+                {
+                    if (Rune_A > 0)
+                    {
+                        //Reflect Damage back to Target SF(1)
+                    }
+                    //Absorb Damge (NoRune and Rune_C) -> ScriptFormula(0) or is it ScriptFormula(39)
+                }
             }
 
             public override void Remove()
@@ -1622,6 +1625,16 @@ namespace Mooege.Core.GS.Powers.Implementations
                 base.Remove();
                 User.Attributes[Mooege.Net.GS.Message.GameAttribute.Look_Override] = 0;
                 User.PlayEffectGroup(RuneSelect(93077, 187716, 187805, 187822, 187831, 187851));
+                if (Rune_D > 0)
+                {
+                    //reduce all arcane costs by sf(4) while storm armor is active
+                    User.Attributes[GameAttribute.Resource_Cost_Reduction_Amount] -= (int)ScriptFormula(4);
+                }
+                if (Rune_E > 0)
+                {
+                    User.PlayEffectGroup(92957);
+                    WeaponDamage(GetEnemiesInRadius(User.Position, ScriptFormula(6)), ScriptFormula(2), DamageType.Physical);
+                }
             }
         }
         [ImplementsPowerBuff(1)]
@@ -1629,7 +1642,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             public override void Init()
             {
-                Timeout = WaitSeconds(5f);
+                Timeout = WaitSeconds(ScriptFormula(5));
             }
         }
         [ImplementsPowerBuff(2)]
@@ -1637,34 +1650,37 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             public override void Init()
             {
-                Timeout = WaitSeconds(5f);
+                Timeout = WaitSeconds(ScriptFormula(5));
             }
         }
     }
     #endregion
 
+    //TODO: make sure that when AI works, that the SlowTime Bubble is the only area that gets the effects and not from the user's position.
+    //TODO: SlowBubbleDeBuff = Slowed Enemies, their Attack speed and Projectile Speeds are decreased.
+    //TODO:Rune_A,B,C,E
+    //TODO: Change buffs into Debuff.cs
     #region SlowTime
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.SlowTime)]
     public class SlowTime : Skill
     {
-        //TODO: make sure that when AI works, that the SlowTime Bubble is the only area that gets the effects and not from the user's position.
         public override IEnumerable<TickTimer> Main()
         {
             if (Rune_D > 0)
             {
-                StartCooldown(ScriptFormula(14));
-                //UsePrimaryResource(25f);
+                StartCooldown(ScriptFormula(15) - ScriptFormula(14));
+                UsePrimaryResource(25f);
                 AddBuff(User, new SlowTimeBuff());
                 yield break;
             }
             else
-            StartDefaultCooldown();
-            //UsePrimaryResource(25f);
+            StartCooldown(ScriptFormula(15));
+            UsePrimaryResource(25f);
             AddBuff(User, new SlowTimeBuff());
             yield break;
         }
 
-        [ImplementsPowerBuff(0)] //TODO: check this
+        [ImplementsPowerBuff(0)]
         class SlowTimeBuff : PowerBuff
         {
             public override void Init()
@@ -1758,6 +1774,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //TODO: All Runes
     #region EnergyArmor
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.EnergyArmor)]
     public class EnergyArmor : Skill
@@ -1784,18 +1801,23 @@ namespace Mooege.Core.GS.Powers.Implementations
                     return false;
                 if (Rune_A > 0)
                 {
+                    //increasing your Defense by 20% but lowers your maximum Arcane Power by 20.
                     //increase resistance
+                    return true;
                 }
                 if (Rune_B > 0)
                 {
+                    //increasing your Defense by 20%
                     //increase max resource by 40
+                    return true;
                 }
                 if (Rune_E > 0)
                 {
-                    //increase percision by 40$
+                    //increase percision by 40%
+                    //increasing your Defense by 20% but lowers your maximum Arcane Power by 20.
+                    return true;
                 }
                 //increasing your Defense by 20% but lowers your maximum Arcane Power by 20.
-                //--> drains __ primary resource for every 1% of your maximum Life absorbed.
                 return true;
             }
 
@@ -1805,6 +1827,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 {
                     if (Rune_C > 0)
                     {
+                        //ScriptFormula(8) = % of Wizard Total Health -> 0.54 - (Rune_C * 0.04)
                         //Math.Min(Total Damage incoming/Maximum Life, 26% of Maximum Life)
                     }
                     if (Rune_D > 0)
@@ -1815,6 +1838,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                             GeneratePrimaryResource(ScriptFormula(11));
                         }
                     }
+                    //drain __ primary resource for every 1% of your maximum Life absorbed.
                 }
             }
 
@@ -1865,6 +1889,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+    //TODO: All Runes
     #region MagicWeapon
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.MagicWeapon)]
     public class MagicWeapon : Skill
@@ -1889,6 +1914,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 if (!base.Apply())
                     return false;
+                User.PlayEffectGroup(RuneSelect(218923, 219289, 219306, 219390, 219396,219338));
                 return true;
             }
             public override bool Update()
@@ -1964,6 +1990,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
+
     #region Archon
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Archon)]
     public class Archon : Skill
@@ -2006,6 +2033,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
     #endregion
+
 
     #region MirrorImage
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.MirrorImage)]
