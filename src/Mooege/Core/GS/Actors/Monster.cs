@@ -204,6 +204,10 @@ namespace Mooege.Core.GS.Actors
                 }
             }
         }
-                    
+
+        public void SetBrain(Mooege.Core.GS.AI.Brain brain)
+        {
+            this.Brain = brain;
+        }
     }
 }
