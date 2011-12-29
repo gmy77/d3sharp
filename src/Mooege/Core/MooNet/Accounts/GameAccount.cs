@@ -27,6 +27,7 @@ using Mooege.Core.MooNet.Friends;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Core.MooNet.Toons;
+using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Accounts
@@ -39,8 +40,15 @@ namespace Mooege.Core.MooNet.Accounts
 
         public D3.Account.BannerConfiguration BannerConfiguration { get; set; }
         public D3.GameMessage.SetGameAccountSettings Settings { get; set; }
+
+        /// <summary>
+        /// Away status
+        /// </summary>
+        public AwayStatusFlag AwayStatus { get; private set; }
+
         private D3.OnlineService.EntityId _lastPlayedHeroId = AccountHasNoToons;
-        public D3.OnlineService.EntityId lastPlayedHeroId {
+        public D3.OnlineService.EntityId lastPlayedHeroId
+        {
             get
             {
                 if (_lastPlayedHeroId == AccountHasNoToons && Toons.Count > 0)
@@ -55,6 +63,15 @@ namespace Mooege.Core.MooNet.Accounts
 
         public List<bnet.protocol.achievements.AchievementUpdateRecord> Achievements { get; set; }
         public List<bnet.protocol.achievements.CriteriaUpdateRecord> AchievementCriteria { get; set; }
+
+        public D3.Profile.AccountProfile Profile
+        {
+            get
+            {
+                return D3.Profile.AccountProfile.CreateBuilder()
+                    .Build();
+            }
+        }
 
         private static readonly D3.OnlineService.EntityId AccountHasNoToons =
             D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).Build();
@@ -259,6 +276,141 @@ namespace Mooege.Core.MooNet.Accounts
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, notification.Build(), callback => { }));
         }
 
+        public void Update(bnet.protocol.presence.FieldOperation operation)
+        {
+            switch (operation.Operation)
+            {
+                case bnet.protocol.presence.FieldOperation.Types.OperationType.SET:
+                    DoSet(operation.Field);
+                    break;
+                case bnet.protocol.presence.FieldOperation.Types.OperationType.CLEAR:
+                    DoClear(operation.Field);
+                    break;
+            }
+        }
+
+        private void DoSet(bnet.protocol.presence.Field field)
+        {
+            switch ((FieldKeyHelper.Program)field.Key.Program)
+            {
+                case FieldKeyHelper.Program.D3:
+                    if (field.Key.Group == 4 && field.Key.Field == 1)
+                    {
+                        if (field.Value.HasMessageValue) //7727 Sends empty SET instead of a CLEAR -Egris
+                        {
+                            var entityId = D3.OnlineService.EntityId.ParseFrom(field.Value.MessageValue);
+                            var channel = ChannelManager.GetChannelByEntityId(entityId);
+                            this.Owner.LoggedInClient.CurrentChannel = channel;
+                        }
+                        else
+                        {
+                            Logger.Warn("Emtpy-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
+                        }
+                    }
+                    else if (field.Key.Group == 4 && field.Key.Field == 2)
+                    {
+                        //catch to stop Logger.Warn spam on client start and exit
+                        // should D3.4.2 int64 Current screen (0=in-menus, 1=in-menus, 3=in-menus); see ScreenStatus sent to ChannelService.UpdateChannelState call /raist
+                    }
+                    else if (field.Key.Group == 4 && field.Key.Field == 3)
+                    {
+                        //Looks to be the ToonFlags of the party leader/inviter when it is an int, OR the message set in an open to friends game when it is a string /dustinconrad
+                    }
+                    else
+                    {
+                        Logger.Warn("Unknown set-field: {0}, {1}, {2} := {3}", field.Key.Program, field.Key.Group, field.Key.Field, field.Value);
+                    }
+                    break;
+                case FieldKeyHelper.Program.BNet:
+                    if (field.Key.Group == 2 && field.Key.Field == 3) // Away status
+                    {
+                        this.AwayStatus = (AwayStatusFlag)field.Value.IntValue;
+                    }
+                    else
+                    {
+                        Logger.Warn("Unknown set-field: {0}, {1}, {2} := {3}", field.Key.Program, field.Key.Group, field.Key.Field, field.Value);
+                    }
+                    break;
+            }
+        }
+
+        private void DoClear(bnet.protocol.presence.Field field)
+        {
+            switch ((FieldKeyHelper.Program)field.Key.Program)
+            {
+                case FieldKeyHelper.Program.D3:
+                    Logger.Warn("Unknown clear-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
+                    break;
+                case FieldKeyHelper.Program.BNet:
+                    Logger.Warn("Unknown clear-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
+                    break;
+            }
+        }
+
+        public bnet.protocol.presence.Field QueryField(bnet.protocol.presence.FieldKey queryKey)
+        {
+            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(queryKey);
+
+            switch ((FieldKeyHelper.Program)queryKey.Program)
+            {
+                case FieldKeyHelper.Program.D3:
+                    if (queryKey.Group == 2 && queryKey.Field == 1) // Banner configuration
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.BannerConfiguration.ToByteString()).Build());
+                    }
+                    else if (queryKey.Group == 3 && queryKey.Field == 1) // Hero's class (GbidClass)
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.LoggedInClient.CurrentToon.ClassID).Build());
+                    }
+                    else if (queryKey.Group == 3 && queryKey.Field == 2) // Hero's current level
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.LoggedInClient.CurrentToon.Level).Build());
+                    }
+                    else if (queryKey.Group == 3 && queryKey.Field == 3) // Hero's visible equipment
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LoggedInClient.CurrentToon.Equipment.ToByteString()).Build());
+                    }
+                    else if (queryKey.Group == 3 && queryKey.Field == 4) // Hero's flags (gender and such)
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((uint)(this.LoggedInClient.CurrentToon.Flags | ToonFlags.AllUnknowns)).Build());
+                    }
+                    else if (queryKey.Group == 3 && queryKey.Field == 5) // Toon name
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.LoggedInClient.CurrentToon.Name).Build());
+                    }
+                    else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if the client is online
+                    {
+                        if (this.LoggedInClient != null && this.LoggedInClient.CurrentChannel != null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());
+                        else field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().Build());
+                    }
+                    else if (queryKey.Group == 4 && queryKey.Field == 2) // Current screen (all known values are just "in-menu"; also see ScreenStatuses sent in ChannelService.UpdateChannelState)
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build());
+                    }
+                    else
+                    {
+                        Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
+                    }
+                    break;
+                case FieldKeyHelper.Program.BNet:
+                    if (queryKey.Group == 2 && queryKey.Field == 4) // Program - always D3
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build());
+                    }
+                    else if (queryKey.Group == 2 && queryKey.Field == 6) // BattleTag
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Owner.BattleTag).Build());
+                    }
+                    else
+                    {
+                        Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
+                    }
+                    break;
+            }
+
+            return field.HasValue ? field.Build() : null;
+        }
+
         public override string ToString()
         {
             return String.Format("{{ GameAccount: {0} [lowId: {1}] }}", this.Owner.BattleTag, this.BnetGameAccountID.Low);
@@ -326,5 +478,14 @@ namespace Mooege.Core.MooNet.Accounts
             return reader.HasRows;
         }
 
+        //TODO: figure out what 1 and 3 represent, or if it is a flag since all observed values are powers of 2 so far /dustinconrad
+        public enum AwayStatusFlag : uint
+        {
+            Available = 0x00,
+            UnknownStatus1 = 0x01,
+            Away = 0x02,
+            UnknownStatus2 = 0x03,
+            Busy = 0x04
+        }
     }
 }

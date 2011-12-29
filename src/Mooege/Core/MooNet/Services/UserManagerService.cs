@@ -25,7 +25,7 @@ using Mooege.Net.MooNet;
 namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x5, serviceName: "bnet.protocol.user_manager.UserManagerService")]
-    public class UserManagerService : bnet.protocol.user_manager.UserManagerService,IServerService
+    public class UserManagerService : bnet.protocol.user_manager.UserManagerService, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
@@ -38,13 +38,24 @@ namespace Mooege.Core.MooNet.Services
             // temp hack: send him all online players on server where he should be normally get list of player he met in his last few games /raist.
 
             var builder = bnet.protocol.user_manager.SubscribeToUserManagerResponse.CreateBuilder();
+            uint i = 0;
             foreach (var client in PlayerManager.OnlinePlayers)
             {
                 if (client == this.Client) continue; // Don't add the requester to the list                
                 if (client.CurrentToon == null) continue;
 
                 Logger.Debug("RecentPlayer => " + client.CurrentToon);
-                var recentPlayer = bnet.protocol.user_manager.RecentPlayer.CreateBuilder().SetEntity(client.CurrentToon.BnetEntityID);
+                var recentPlayer = bnet.protocol.user_manager.RecentPlayer.CreateBuilder()
+                    .SetEntity(client.CurrentGameAccount.Owner.BnetAccountID)
+                    .SetProgramId("D3")
+                    .AddAttributes(bnet.protocol.attribute.Attribute.CreateBuilder()
+                        .SetName("GameAccountEntityId")
+                        .SetValue(bnet.protocol.attribute.Variant.CreateBuilder()
+                            .SetMessageValue(client.CurrentGameAccount.BnetGameAccountID.ToByteString())
+                            .Build())
+                        .Build())
+                    .SetId(i++)
+                    .Build();
                 builder.AddRecentPlayers(recentPlayer);
             }
 

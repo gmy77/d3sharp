@@ -145,7 +145,7 @@ namespace Mooege.Net.MooNet
             if (acct) identityBuilder.SetAccountId(this.Account.BnetAccountID);
             if (gameacct) identityBuilder.SetGameAccountId(this.CurrentGameAccount.BnetGameAccountID);
             if (toon && this.CurrentToon != null)
-                identityBuilder.SetAccountId(this.CurrentToon.BnetEntityID);
+                Logger.Warn("DEPRECATED: GetIdentity called with toon.");
             return identityBuilder.Build();
         }
 
@@ -342,9 +342,9 @@ namespace Mooege.Net.MooNet
             if (text.Trim() == string.Empty) return;
 
             var notification = bnet.protocol.notification.Notification.CreateBuilder()
-                .SetTargetId(this.CurrentToon.BnetEntityID)
+                .SetTargetId(this.CurrentGameAccount.BnetGameAccountID)
                 .SetType("WHISPER")
-                .SetSenderId(this.CurrentToon.BnetEntityID)
+                .SetSenderId(this.CurrentGameAccount.BnetGameAccountID)
                 .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("whisper")
                 .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(text).Build()).Build()).Build();
 
@@ -374,7 +374,7 @@ namespace Mooege.Net.MooNet
                     .SetMessageValue(this.CurrentChannel.D3EntityId.ToByteString()).Build()).Build();
 
                 var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
-                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.CurrentToon.BnetEntityID).AddFieldOperation(operation).Build();
+                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.CurrentGameAccount.BnetGameAccountID).AddFieldOperation(operation).Build();
 
                 this.SendStateChangeNotification(this.CurrentToon, state);
             }

@@ -59,16 +59,16 @@ namespace Mooege.Core.MooNet.Services
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
 
-            if (!request.HasMessage) 
+            if (!request.HasMessage)
                 return; // only continue if the request actually contains a message.
-            
+
             if (request.Message.AttributeCount == 0 || !request.Message.AttributeList.First().HasValue)
                 return; // check if it has attributes.
 
             var channel = ChannelManager.GetChannelByDynamicId(this.LastCallHeader.ObjectId);
             var parsedAsCommand = CommandManager.TryParse(request.Message.AttributeList[0].Value.StringValue, this.Client); // try parsing the message as a command
 
-            if(!parsedAsCommand)
+            if (!parsedAsCommand)
                 channel.SendMessage(this.Client, request.Message); // if it's not parsed as an command - let channel itself to broadcast message to it's members.              
         }
 
@@ -178,7 +178,7 @@ namespace Mooege.Core.MooNet.Services
                 channelState.PrivacyLevel = request.StateChange.PrivacyLevel;
 
             var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(this.Client.CurrentToon.BnetEntityID)
+                .SetAgentId(this.Client.CurrentGameAccount.BnetGameAccountID)
                 .SetStateChange(channelState)
                 .Build();
 

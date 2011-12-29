@@ -32,14 +32,14 @@ namespace Mooege.Core.MooNet.Channels
 
         public void HandleInvitation(MooNetClient client, bnet.protocol.invitation.Invitation invitation)
         {
-            var invitee = this.Subscribers.FirstOrDefault(subscriber => subscriber.CurrentToon.BnetEntityID.Low == invitation.InviteeIdentity.AccountId.Low);
+            var invitee = this.Subscribers.FirstOrDefault(subscriber => subscriber.CurrentGameAccount.BnetGameAccountID.Low == invitation.InviteeIdentity.AccountId.Low);
             if (invitee == null) return; // if we can't find invite just return - though we should actually check for it until expiration time.
 
             this._onGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.
 
-            var notification = bnet.protocol.channel_invitation.InvitationAddedNotification.CreateBuilder().SetInvitation(invitation);                      
+            var notification = bnet.protocol.channel_invitation.InvitationAddedNotification.CreateBuilder().SetInvitation(invitation);
 
-            invitee.MakeTargetedRPC(this,() =>
+            invitee.MakeTargetedRPC(this, () =>
                 bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(invitee).NotifyReceivedInvitationAdded(null, notification.Build(), callback => { }));
         }
 
@@ -52,11 +52,11 @@ namespace Mooege.Core.MooNet.Channels
 
             channel.Join(client, request.ObjectId); // add invitee to channel -- so inviter and other members will also be notified too.
 
-            var notification = bnet.protocol.channel_invitation.InvitationRemovedNotification.CreateBuilder().SetInvitation(invitation).SetReason((uint) InvitationRemoveReason.Accepted);
+            var notification = bnet.protocol.channel_invitation.InvitationRemovedNotification.CreateBuilder().SetInvitation(invitation).SetReason((uint)InvitationRemoveReason.Accepted);
             this._onGoingInvitations.Remove(invitation.Id);
 
             // notify invitee and let him remove the handled invitation.
-            client.MakeTargetedRPC(this,() =>
+            client.MakeTargetedRPC(this, () =>
                 bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(client).NotifyReceivedInvitationRemoved(null, notification.Build(), callback => { }));
 
             return channel;
@@ -74,7 +74,7 @@ namespace Mooege.Core.MooNet.Channels
                 bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
                 .SetAgentId(bnet.protocol.EntityId.CreateBuilder().SetHigh(0).SetLow(0)) // caps have this set to high: 0 low: 0 /raist.
                 .SetStateChange(bnet.protocol.channel.ChannelState.CreateBuilder().AddInvitation(invitation)
-                .SetReason((uint) InvitationRemoveReason.Declined));
+                .SetReason((uint)InvitationRemoveReason.Declined));
 
             this._onGoingInvitations.Remove(invitation.Id);
 
@@ -107,7 +107,7 @@ namespace Mooege.Core.MooNet.Channels
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Revoked);
 
-            var invitee = ToonManager.GetToonByLowID(invitation.InviteeIdentity.GameAccountId.Low);
+            var invitee = ToonManager.GetToonByLowID(invitation.InviteeIdentity.AccountId.Low);
             invitee.GameAccount.Owner.LoggedInClient.MakeTargetedRPC(this, () =>
                 bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(invitee.GameAccount.Owner.LoggedInClient).NotifyReceivedInvitationRemoved(null, invitationRemoved.Build(), callback => { }));
         }

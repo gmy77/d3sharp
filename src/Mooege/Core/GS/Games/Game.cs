@@ -285,7 +285,7 @@ namespace Mooege.Core.GS.Games
             target.InGameClient.SendMessage(new NewPlayerMessage
             {
                 PlayerIndex = joinedPlayer.PlayerIndex, // player index
-                ToonId = new EntityId() { High = (long)joinedPlayer.Toon.BnetEntityID.High, Low = (long)joinedPlayer.Toon.BnetEntityID.Low }, //Toon
+                ToonId = new EntityId() { High = (long)joinedPlayer.Toon.D3EntityID.IdHigh, Low = (long)joinedPlayer.Toon.D3EntityID.IdLow }, //Toon
                 GameAccountId = new EntityId() { High = (long)joinedPlayer.Toon.GameAccount.BnetGameAccountID.High, Low = (long)joinedPlayer.Toon.GameAccount.BnetGameAccountID.Low }, //GameAccount
                 ToonName = joinedPlayer.Toon.Name,
                 Field3 = 0x00000002, //party frame class
