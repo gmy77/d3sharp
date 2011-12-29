@@ -232,7 +232,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                 case 2:
                     if (Rune_B > 0)
                     {
-                        // TODO: make this use arc, not beam
                         attack.Targets = GetEnemiesInArcDirection(User.Position, TargetPosition, ScriptFormula(19), ScriptFormula(20));
                         int maxTargets = (int)ScriptFormula(18);
                         if (maxTargets < attack.Targets.Actors.Count)

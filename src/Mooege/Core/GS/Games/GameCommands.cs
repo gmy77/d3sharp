@@ -159,30 +159,6 @@ namespace Mooege.Core.GS.Games
         }
     }
 
-    [CommandGroup("killall", "Kills monsters in range.")]
-    public class KillAllCommand : CommandGroup
-    {
-        [DefaultCommand]
-        public string KillAll(string[] @params, MooNetClient invokerClient)
-        {
-            if (invokerClient == null)
-                return "You can not invoke this command from console.";
-
-            if (invokerClient.InGameClient == null)
-                return "You can only invoke this command while ingame.";
-
-            var player = invokerClient.InGameClient.Player;
-
-            var monstersInRange = player.GetActorsInRange<Monster>();
-            foreach (var monster in monstersInRange)
-            {
-                    monster.Die(player);
-            }
-
-            return string.Format("Killed {0} monsters in range.", monstersInRange.Count);
-        }
-    }
-
     //[CommandGroup("levelup", "Levels your character.")]
     //public class LevelUpCommand : CommandGroup
     //{

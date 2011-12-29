@@ -56,7 +56,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 WeaponDamage(hit, 2.00f, DamageType.Arcane);
                 proj.Destroy();
             };
-            proj.Launch(TargetPosition, 0.6f);
+            proj.Launch(TargetPosition, 0.5f);
 
             yield break;
         }

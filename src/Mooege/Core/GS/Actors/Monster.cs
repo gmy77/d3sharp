@@ -75,9 +75,7 @@ namespace Mooege.Core.GS.Actors
 
         public override void OnTargeted(Player player, TargetMessage message)
         {
-            this.Die(player);
         }
-
 
         public void Update(int tickCounter)
         {
@@ -85,106 +83,6 @@ namespace Mooege.Core.GS.Actors
                 return;
 
             this.Brain.Update(tickCounter);
-        }
-
-        // FIXME: Hardcoded hell. /komiga
-        public void Die(Player player)
-        {
-            /*var killAni = new int[]{
-                    0x2cd7,
-                    0x2cd4,
-                    0x01b378,
-                    0x2cdc,
-                    0x02f2,
-                    0x2ccf,
-                    0x2cd0,
-                    0x2cd1,
-                    0x2cd2,
-                    0x2cd3,
-                    0x2cd5,
-                    0x01b144,
-                    0x2cd6,
-                    0x2cd8,
-                    0x2cda,
-                    0x2cd9
-            };*/
-
-            this.World.BroadcastIfRevealed(new PlayEffectMessage()
-            {
-                ActorId = this.DynamicID,
-                Effect = Effect.Hit,
-                OptionalParameter = 0x2,
-            }, this);
-
-            this.World.BroadcastIfRevealed(new PlayEffectMessage()
-            {
-                ActorId = this.DynamicID,
-                Effect = Effect.Unknown12,
-            }, this);
-
-            this.World.BroadcastIfRevealed(new PlayHitEffectMessage()
-            {
-                ActorID = this.DynamicID,
-                HitDealer = player.DynamicID,
-                Field2 = 0x2,
-                Field3 = false,
-            }, this);
-
-            this.World.BroadcastIfRevealed(new FloatingNumberMessage()
-            {
-                ActorID = this.DynamicID,
-                Number = 9001.0f,
-                Type = FloatingNumberMessage.FloatType.White,
-            }, this);
-
-            this.World.BroadcastIfRevealed(new ANNDataMessage(Opcodes.ANNDataMessage13)
-            {
-                ActorID = this.DynamicID
-            }, this);
-
-            this.World.BroadcastIfRevealed(new PlayAnimationMessage()
-            {
-                ActorID = this.DynamicID,
-                Field1 = 0xb,
-                Field2 = 0,
-                tAnim = new PlayAnimationMessageSpec[1]
-                {
-                    new PlayAnimationMessageSpec()
-                    {
-                        Duration = 0x2,
-                        AnimationSNO = AnimationSet.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
-                        PermutationIndex = 0x0,
-                        Speed = 0.1f
-                    }
-                }
-            }, this);
-
-            this.World.BroadcastIfRevealed(new ANNDataMessage(Opcodes.ANNDataMessage24)
-            {
-                ActorID = this.DynamicID,
-            }, this);
-
-            GameAttributeMap attribs = this.Attributes; //TODO change it /fasbat
-            attribs[GameAttribute.Hitpoints_Cur] = 0f;
-            attribs[GameAttribute.Could_Have_Ragdolled] = true;
-            attribs[GameAttribute.Deleted_On_Server] = true;
-
-            attribs.BroadcastChangedIfRevealed();
-
-            // Spawn Random item and give exp for each player in range
-            List<Player> players = this.GetPlayersInRange(26f);
-            foreach (Player plr in players)
-            {
-                plr.UpdateExp(this.Attributes[GameAttribute.Experience_Granted]);
-                this.World.SpawnRandomItemDrop(this, plr);
-            }
-
-            player.ExpBonusData.Update(player.GBHandle.Type, this.GBHandle.Type);
-            this.World.SpawnGold(this, player);
-            if (RandomHelper.Next(1, 100) < 20)
-                this.World.SpawnHealthGlobe(this, player, this.Position);
-            this.PlayLore();
-            this.Destroy();
         }
 
         /// <summary>
