@@ -240,7 +240,7 @@ namespace Mooege.Core.MooNet.Channels
             {
                 Logger.Warn("Client {0} is being removed from a channel that is not its current one..", client.Connection.RemoteEndPoint.ToString());
             }
-            var memberId = this.Members[client].Identity.AccountId;
+            var memberId = this.Members[client].Identity.GameAccountId;
             var message = bnet.protocol.channel.RemoveNotification.CreateBuilder()
                 .SetMemberId(memberId)
                 .SetReason((uint)reason)

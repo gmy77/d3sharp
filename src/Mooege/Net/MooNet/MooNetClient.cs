@@ -376,7 +376,7 @@ namespace Mooege.Net.MooNet
                 var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
                 var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.CurrentGameAccount.BnetGameAccountID).AddFieldOperation(operation).Build();
 
-                this.SendStateChangeNotification(this.CurrentToon, state);
+                this.SendStateChangeNotification(this.CurrentGameAccount, state);
             }
         }
 
