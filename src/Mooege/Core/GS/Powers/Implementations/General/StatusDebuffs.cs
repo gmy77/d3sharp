@@ -143,6 +143,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             Timeout = timeout;
         }
     }
+
     [ImplementsPowerSNO(101002)] // DebuffFeared.pow
     [ImplementsPowerBuff(0)]
     public class DebuffFeared : SimpleBooleanStatusDebuff
@@ -153,6 +154,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             Timeout = timeout;
         }
     }
+
     [ImplementsPowerSNO(101003)] // DebuffRooted.pow
     [ImplementsPowerBuff(0)]
     public class DebuffRooted : SimpleBooleanStatusDebuff
@@ -161,6 +163,22 @@ namespace Mooege.Core.GS.Powers.Implementations
             : base(GameAttribute.IsRooted, GameAttribute.Root_Immune, FloatingNumberMessage.FloatType.Rooted)
         {
             Timeout = timeout;
+        }
+        //Seems there is no Rooted attribute.. so Stunned does the same thing.
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Stunned] = true;
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Stunned] = false;
+            Target.Attributes.BroadcastChangedIfRevealed();
         }
     }
 

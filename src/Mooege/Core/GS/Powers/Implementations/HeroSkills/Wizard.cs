@@ -627,8 +627,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         //TODOs
         //Rune_A- same as NoRune.. -> todo: add the increase to damage
-        ///Rune-B- fatbeam
-        //Rune-C- parabola.acr (93560.acr) and field.efg (93563.efg)?
+        //Rune-C- parabola.acr (6523.acr) and field.efg (93563.efg)?
         //Rune-D- Possibly Mini-Buff.efg/.rop and Dome.acr?
         //Rune-E- explode when dead [explode.efg -> 93574], explode_proxy.acr and explodeBubble.acr
 
@@ -637,8 +636,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         //--------------------------------------------------------------------------------------------
         //Rune_A -> Damage increases slowly over time to inflict a maximum of 4620% weapon damage as Arcane.
              //(10) - Chargeup Time, (11) - Dmg Modifier
-        //Rune_B -> Increase the width of the beam allowing it to hit more enemies for 2100% weapon damage as Arcane.
-             //ScriptFormula(5) - Damage Modifier, (6) - Radius Modifier
         //Rune_C -> The beam fractures into a short ranged cone causing 239400% weapon damage per second as Arcane.
              //ScriptFormula(2) - Damage Modifier, (4) - Range, (15) - Tick Period
         //Rune_D -> When casting the beam you become charged with energy that spits out at nearby enemies doing 5700% weapon damage as Arcane.
@@ -682,7 +679,6 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override IEnumerable<TickTimer> Main()
         {
-            //todo: is this correct? why not just seconds?ScriptFormula(22) 
             UsePrimaryResource(ScriptFormula(22) * EffectsPerSecond);
 
             foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f).Actors)
@@ -724,7 +720,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
-    //TODO: teleporting Rune, Repelling Projectiles, SlowDebuff, and StunDebuff.
+    //TODO: Repelling Projectiles.
     #region WaveOfForce
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.WaveOfForce)]
     public class WizardWaveOfForce : PowerScript
@@ -742,29 +738,28 @@ namespace Mooege.Core.GS.Powers.Implementations
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(1));
             attack.AddWeaponDamage(ScriptFormula(2), DamageType.Physical);
-            //TODO: Add Script 17 and 18 for slow movement
             //TODO: Script 6,7,8,9 (repels projectiles)
             attack.OnHit = hitPayload => {
                 Knockback(hitPayload.Target, ScriptFormula(0), ScriptFormula(4), ScriptFormula(5));
-                if (Rune_D > 0)
+                AddBuff(hitPayload.Target, new DebuffSlowed(ScriptFormula(18), WaitSeconds(ScriptFormula(17))));
+                if (Rune_C > 0)
                 {
-                    //get targets positions in user position radius
-                    //for each roll random
                     if (Rand.NextDouble() < ScriptFormula(14))
                     {
-                        //teleport somewhere else nearby via the minimum and maximum below.
-                        //ScriptFormula(12) - teleport min, ScriptFormula(13) - tele max
-
-                        //SpawnProxy(Target.Position).PlayEffectGroup(77975);
-                        //Target.Teleport(TargetPosition);
-                        //Target.PlayEffectGroup(77976);
+                        foreach (Actor actor in GetEnemiesInRadius(User.Position, ScriptFormula(1)).Actors)
+                        {
+                            Vector3D targets = RandomDirection(Target.Position, ScriptFormula(12), ScriptFormula(13));
+                            SpawnProxy(Target.Position).PlayEffectGroup(77975);
+                            actor.Teleport(targets);
+                            actor.PlayEffectGroup(77976);
+                        }
                     }
                 }
                 if (Rune_E > 0)
                 {
-                    //TODO:Stun all enemies in radius
-                    //ScriptFormula(10)
                     Knockback(hitPayload.Target, ScriptFormula(0) + ScriptFormula(11), ScriptFormula(4), ScriptFormula(5));
+                    AddBuff(hitPayload.Target, new DebuffStunned(WaitSeconds(ScriptFormula(10))));
+                    
                 }
                 if (Rune_B > 0)
                 {
@@ -782,13 +777,16 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
-    //Rune_C TODO: place spawneffect at feet - does not follow with you
+    //Complete, Rune_E seems slow but correct i guess?
     #region ExplosiveBlast
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ExplosiveBlast)]
     public class ExplosiveBlast : Skill
     {
         public override IEnumerable<TickTimer> Main()
         {
+            Vector3D blastspot = new Vector3D(User.Position);
+            Actor blast = SpawnProxy(blastspot);
+
             if (Rune_D > 0)
             {
                 UsePrimaryResource(ScriptFormula(15));
@@ -804,7 +802,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 UsePrimaryResource(ScriptFormula(15));
                 StartCooldown(WaitSeconds(1f));
-                SpawnProxy(User.Position).PlayEffectGroup(89449);
+                blast.PlayEffectGroup(89449);
             }
             else
             {
@@ -815,10 +813,17 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                 yield return WaitSeconds(ScriptFormula(5));
 
+                if (Rune_C > 0)
+                {
+                    SpawnEffect(61419, blastspot);
+                    AttackPayload attack = new AttackPayload(this);
+                    attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
+                    attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
+                    attack.Apply();
+                    yield break;
+                }
             IEnumerable<TickTimer> subScript;
-            if (Rune_C > 0)
-                subScript = _RuneC();
-            else if (Rune_E > 0)
+            if (Rune_E > 0)
                 subScript = _RuneE();
             else
                 //NoRune will actually do the animation and formulas for A,B,D,and NoRune
@@ -830,16 +835,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         IEnumerable<TickTimer> _NoRune()
         {
             SpawnEffect(RuneSelect(61419, 61419, 192210, -1, 192211, -1), User.Position);
-            AttackPayload attack = new AttackPayload(this);
-            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
-            attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
-            attack.Apply();
-            yield break;
-        }
-        IEnumerable<TickTimer> _RuneC()
-        {
-            //TODO: place spawneffect at feet - does not follow with you
-            SpawnEffect(61419, User.Position);
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(2));
             attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
@@ -932,8 +927,26 @@ namespace Mooege.Core.GS.Powers.Implementations
             };
             attack.Apply();
 
-            //Enemies killed by Arcane Torrent have a 95% chance to fire a new missile at a 
-            //nearby enemy dealing 5000% weapon damage as Arcane.
+            /*attack.OnDeath = () =>
+            {
+                if (Rune_B > 0)
+                {
+                    var proj = new Projectile(this, 170268, hitPayload.Position);
+                    proj.Position.Z += 5f;  // fix height
+                    proj.OnCollision = (hit) =>
+                    {
+                        hit.PlayEffectGroup(RuneSelect(19308, 130020, 215580, -1, 216056, -1));
+                        WeaponDamage(GetEnemiesInRadius(proj.Position, ScriptFormula(5)), ScriptFormula(3), DamageType.Arcane);
+                        proj.Destroy();
+                    };
+                    proj.Launch(position, ScriptFormula(2));
+                    //Enemies killed by Arcane Torrent have a 95% chance to fire a new missile at a nearby enemy dealing 5000% weapon damage as Arcane.
+                    //SF(12 -> Spawn Chance
+                    //SF(13 -> Weapon Damage
+                    //SF(23 -> 
+                    //SF(24 -> 25 yard radius
+                }
+            };*/
         }
 
         [ImplementsPowerBuff(0)]
@@ -962,45 +975,64 @@ namespace Mooege.Core.GS.Powers.Implementations
     public class WizardFrostNova : PowerScript
     {
         //Rune_A - Enemies take 110% more damage while frozen or chilled by Frost Nova.
+        //Rune_B - frozen enemy that is killed has a 21% chance of exploding another frost nova.
         //Rune_E - If Frost Nova hits at least 5 targets, you gain 45% chance to critically hit for 12 seconds
        public override IEnumerable<TickTimer> Run()
         {
             if (Rune_C > 0)
             {
                 StartCooldown(WaitSeconds(ScriptFormula(3)));
-                var moltenfire = SpawnEffect(RuneSelect(4402, 189047, 189048, 75631, 189049, 189050), User.Position, 0, WaitSeconds(ScriptFormula(9)));
-                moltenfire.UpdateDelay = 1f;
-                moltenfire.OnUpdate = () =>
+                var frozenMist = SpawnEffect(RuneSelect(4402, 189047, 189048, 75631, 189049, 189050), User.Position, 0, WaitSeconds(ScriptFormula(9)));
+                frozenMist.UpdateDelay = 1f;
+                frozenMist.OnUpdate = () =>
                 {
-                    WeaponDamage(GetEnemiesInRadius(User.Position, ScriptFormula(6)), ScriptFormula(11), DamageType.Cold);
+                    AttackPayload attack = new AttackPayload(this);
+                    attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(6));
+                    attack.AddWeaponDamage(ScriptFormula(11), DamageType.Cold);
+                    attack.OnHit = hitPayload =>
+                    {
+                        AddBuff(hitPayload.Target, new DebuffChilled(ScriptFormula(5), WaitSeconds(ScriptFormula(9))));
+                    };
+                    attack.Apply();
                 };
             }
             else
             {
                 StartCooldown(WaitSeconds(ScriptFormula(3)));
                 SpawnEffect(RuneSelect(4402, 189047, 189048, 75631, 189049, 189050), User.Position);
-                WeaponDamage(GetEnemiesInRadius(User.Position, ScriptFormula(6)), 0.65f, DamageType.Cold);
-
-                if (Rune_B > 0)
+                AttackPayload attack = new AttackPayload(this);
+                attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(6));
+                attack.AddWeaponDamage(0.65f, DamageType.Cold);
+                attack.OnDeath = hitPayload =>
                 {
-                    if (Rand.NextDouble() < ScriptFormula(14))
+                    //TODO:Add in "if Target is frozen".
+                    if (Rune_B > 0)
                     {
-                        SpawnEffect(RuneSelect(4402, 189047, 189048, 75631, 189049, 189050), User.Position);
-                        WeaponDamage(GetEnemiesInRadius(User.Position, ScriptFormula(15)), ScriptFormula(7), DamageType.Cold);
+                        if (Rand.NextDouble() < ScriptFormula(14))
+                        {
+                            //TODO:Does this work? Target.Position, will that get the target that dies?
+                            SpawnEffect(189048, Target.Position);
+                            WeaponDamage(GetEnemiesInRadius(Target.Position, ScriptFormula(15)), ScriptFormula(7), DamageType.Cold);
+                        }
                     }
-                }
+                };
+                attack.Apply();
 
-                //freeze duration(ScriptFormula(2))
-                //todo:while frozen or chilled enemies, Rune_A -> ScriptFormula(16)
+                //TODO: freeze duration(ScriptFormula(2))
+
+                if (Rune_A > 0)
+                {
+                    //todo:while frozen or chilled enemies, Rune_A -> ScriptFormula(16)
+                }
 
                 if (Rune_E > 0)
                 {
-                    //If Frost Nova hits at least 5 targets, [ScriptFormula(13)]
-                    if (Rand.NextDouble() < ((Rune_E*5)+.10f))
+                    //TODO: Add "If Frost Nova hits at least 5 targets, [ScriptFormula(13)]"
+                    if (Rand.NextDouble() < ((Rune_E * 5) + .10f))
                     {
-                        //ycritically hit for 12 seconds
+                        //critically hit for 12 seconds
                         //[ScriptFormula(18) / ScriptFormula(19)]
-                        //critBuff_swipe.acr [[215516]]
+                        //critBuff_swipe.acr [[215516]] -> this is possibly added when applying buff.
                     }
                 }
             }
@@ -1009,6 +1041,8 @@ namespace Mooege.Core.GS.Powers.Implementations
        [ImplementsPowerBuff(5)]
        class FrostNova_Alabaster_Buff : PowerBuff
        {
+           //crit hit stuff goes here.
+
            public override void Init()
            {
                Timeout = WaitSeconds(2f);
