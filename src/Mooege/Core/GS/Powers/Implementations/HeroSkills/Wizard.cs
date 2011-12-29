@@ -34,13 +34,14 @@ using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
-    //TODO: just need to fix buff then complete.
+    //Complete
     #region Meteor
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Meteor)]
     public class WizardMeteor : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
+            //Rune_D here as well.
             UsePrimaryResource(ScriptFormula(8));
 
             // cast effect
@@ -78,47 +79,43 @@ namespace Mooege.Core.GS.Powers.Implementations
             foreach (var impactPos in impactPositions)
             {
                 // impact
-                SpawnEffect(RuneSelect(86769, 215809, 91441, 92031, 217139, 217458), impactPos, 0, WaitSeconds(ScriptFormula(4)));
+                TickTimer poolTime = null;
                 AttackPayload attack = new AttackPayload(this);
                 attack.Targets = GetEnemiesInRadius(impactPos, ScriptFormula(3));
                 attack.AddWeaponDamage(ScriptFormula(0), RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Fire, DamageType.Cold, DamageType.Arcane, DamageType.Fire));
-                attack.OnHit = hitPayload =>
+                attack.OnHit = hit =>
                 {
                     if (Rune_E > 0)
                     {
-                        if (hitPayload.IsCriticalHit)
+                        if (hit.IsCriticalHit)
                         {
-                            var moltenfire = SpawnEffect(217458, impactPos, 0, WaitSeconds(18f));
-                            moltenfire.UpdateDelay = 1f;
-                            moltenfire.OnUpdate = () =>
-                            {
-                                WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(2), DamageType.Fire);
-                            };
+                            poolTime = WaitSeconds(ScriptFormula(7));
                         }
+                    }
+                    else 
+                    {
+                        poolTime = WaitSeconds(ScriptFormula(5));
                     }
                 };
                 attack.Apply();
 
-                if (Rune_C > 0)
+                var moltenFire = SpawnEffect(RuneSelect(86769, 215809, 91441, 92031, 217139, 217458), impactPos, 0, poolTime);
+                moltenFire.UpdateDelay = 1f;
+                moltenFire.OnUpdate = () =>
                 {
-                    var FreezingMist = SpawnEffect(92031, impactPos, 0, WaitSeconds(ScriptFormula(5)));
-                    FreezingMist.UpdateDelay = 1f;
-                    FreezingMist.OnUpdate = () =>
+                    AttackPayload DOTattack = new AttackPayload(this);
+                    DOTattack.Targets = GetEnemiesInRadius(impactPos, ScriptFormula(3));
+                    DOTattack.AddWeaponDamage(ScriptFormula(2), RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Fire, DamageType.Cold, DamageType.Arcane, DamageType.Fire));
+                    DOTattack.OnHit = hit =>
                     {
-                        WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(2), DamageType.Cold);
-                        //AddBuff(Target, new DebuffSlowed(0.6f, WaitSeconds(3f)));
-
+                        if (Rune_C > 0)
+                        {
+                            //Freezing Mist
+                            AddBuff(hit.Target, new DebuffChilled(0.6f, WaitSeconds(3f)));
+                        }
                     };
-                }
-                else
-                {
-                    var moltenfire = SpawnEffect(RuneSelect(86769, 215809, 91441, 92031, 217139, 217458), impactPos, 0, WaitSeconds(ScriptFormula(5)));
-                    moltenfire.UpdateDelay = 1f;
-                    moltenfire.OnUpdate = () =>
-                    {
-                        WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(2), RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Fire, DamageType.Cold, DamageType.Arcane, DamageType.Fire));
-                    };
-                }
+                    DOTattack.Apply();
+                };
 
                 // pool effect
                 if (Rune_B == 0)
@@ -132,6 +129,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+
 #endregion
 
     //TODO: The charged bolts work, but regular electrocution does not.
@@ -190,7 +188,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                         ropeSource = curTarget;
 
                         WeaponDamage(curTarget, damage, DamageType.Lightning);
-
                         /*AttackPayload attack = new AttackPayload(this);
                         attack.OnHit = HitPayload =>
                         {
@@ -248,7 +245,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 #endregion
 
-    //TODO: Rune_C: fix the missile that travels from one enemy to the next (sometimes it hits the same mob twice instead of an additional mob)
+    //TODO: Rune_B: projectiles come out of wizard one at a time but very fast, not all at the same time.
     //TODO: also figure out Rune_E homing missile
     #region MagicMissile
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.MagicMissile)]
@@ -296,7 +293,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                 projectile.OnCollision = (hit) =>
                 {
                     SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
-                    projectile.Destroy();
                     WeaponDamage(hit, ScriptFormula(1), DamageType.Arcane);
 
                     if (Rune_D > 0)
@@ -306,24 +302,14 @@ namespace Mooege.Core.GS.Powers.Implementations
                     
                     if (Rune_C > 0)
                     {
-                        //TODO: GETCLOSESTTO sometimes gets the current target if its starting from a target's position.
                         if (Rand.NextDouble() < ScriptFormula(12))
                         {
-                            Target = GetEnemiesInRadius(hit.Position, 8f).GetClosestTo(hit.Position);
-                            if (Target != null)
-                            {
-                                var projectile2 = new Projectile(this, 99567, hit.Position);
-                                projectile2.OnCollision = (hit2) =>
-                                {
-                                    SpawnEffect(99572, new Vector3D(hit2.Position.X, hit2.Position.Y, hit2.Position.Z + 5f)); // impact effect (fix height)
-                                    projectile2.Destroy();
-                                    //ScriptFormula(1) handles Rune_A and Rune_E damage increases
-                                    WeaponDamage(hit2, ScriptFormula(1), DamageType.Arcane);
-                                };
-                                projectile2.Launch(Target.Position, ScriptFormula(4));
-                            }
+                            //this is actually how i think it should work, pierce first target, if addition targets behind enemy, will continue to do damage to them as well.
                         }
+                        projectile.Destroy();
                     }
+                    else
+                    projectile.Destroy();
                 };
                 projectile.Launch(TargetPosition, ScriptFormula(4));
             }
@@ -334,6 +320,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 #endregion
 
     //Very Imcomplete
+    //Hydras are (most likely) Pets so this is incorrect
     #region Hydra
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Hydra)]
         //No Rune = Default
@@ -345,59 +332,123 @@ namespace Mooege.Core.GS.Powers.Implementations
 
     public class WizardHydra : Skill
     {
+        const float BeamLength = 50f;
+
         public override IEnumerable<TickTimer> Main()
         {
             UsePrimaryResource(60f);
-            //Spawn Hydras, Hydras face targets in radius[TODO], projectile[TODO], despawn after 9 seconds[TODO]
-            //TODO: [Hard MODE!] - Rune Effects..
-            // http://www.youtube.com/watch?v=twVSLGkoQqk
+
+            //This works much better, but all three heads fire at the same target, 
+            //then need to be firing off less than a second a part, like .5s.
 
             Vector3D userCastPosition = new Vector3D(User.Position);
-            Vector3D inFrontOfUser = PowerMath.TranslateDirection2D(User.Position, TargetPosition, User.Position, 7f);
-            Vector3D[] spawnPoints = PowerMath.GenerateSpreadPositions(inFrontOfUser, RandomDirection(inFrontOfUser, 0f), 120, 3);
-            //Hydra1 = angle 0, Hydra2 = angle 120, Hydra3 = angle 240. this isnt a spread but the angle of animation? think its the Y axis?
-            // it may even just be spreading out the heads by mere inches(?) 
+            Vector3D[] spawnPoints = PowerMath.GenerateSpreadPositions(TargetPosition, new Vector3D(TargetPosition.X, TargetPosition.Y + 0.7f, TargetPosition.Z), 120, 3);
 
             var timeout = WaitSeconds(ScriptFormula(0));
-            
-            SpawnEffect(RuneSelect(81103, 83028, 81238, 77112, 83964, 81239), inFrontOfUser, 0, timeout); //Lava Pool Spawn
-            
-            int[] actorSNOs = new int[] {   RuneSelect(80745, 82972, 82109, 82111, 83959, 81515), 
+
+            var lavapool = SpawnEffect(RuneSelect(81103, 83028, 81238, 77112, 83964, 81239), TargetPosition, 0, timeout); //Lava Pool Spawn
+                lavapool.PlayEffectGroup(RuneSelect(81102, 82995, 82116, -1, 86328, 81301));
+
+            int[] actorSNOs = new int[] {   RuneSelect(80745, 82972, 82109, 82111, -1, 81515), 
                                             RuneSelect(80757, 83024, 81229, 81226, -1, 81231), 
                                             RuneSelect(80758, 83025, 81230, 81227, -1, 81232) };
 
-            List<Actor> hydras = new List<Actor>();
-
-            for (int i = 0; i < 3; ++i)
+            if (Rune_D > 0)
             {
-                var hydra = SpawnEffect(actorSNOs[i], spawnPoints[i], 0, timeout);
-                hydra.UpdateDelay = 1f; // attack every half-second
-                hydra.OnUpdate = () =>
+                
+                //big hydra -> this throws an exception once spawned.
+                var hydra1 = new EffectActor(this, 83959, spawnPoints[0]);
+                hydra1.Scale = 2f;
+                hydra1.Spawn();
+                hydra1.UpdateDelay = 3f; 
+                hydra1.OnUpdate = () =>
                 {
-                    /* 
-                     * Hydras all face the same direction,
-                     * attacking in the area in front of them, 
-                     * not the whole 180 degrees that they are facing
-                     */
-                    var targets = GetEnemiesInRadius(hydra.Position, 60f);
-                    if (targets.Actors.Count > 0)
+                    var target = GetEnemiesInRadius(hydra1.Position, 50f).GetClosestTo(hydra1.Position);
+                    float castAngle = MovementHelpers.GetFacingAngle(hydra1.Position, target.Position);
+                    hydra1.TranslateFacing(target.Position, true);
+                    //timeout is set to 3, but starts while casting firewall, when it should start after firewall has spawned (1.8seconds)
+                    var firewall = SpawnEffect(86082, hydra1.Position, castAngle, WaitSeconds(3f));
+                    firewall.UpdateDelay = 1f;
+                    firewall.OnUpdate = () =>
                     {
-                        targets.SortByDistanceFrom(hydra.Position);
-                        var proj = new Projectile(this, RuneSelect(77116, 83043, -1, 77109, 86082, 77097), hydra.Position);
+                        WeaponDamage(GetEnemiesInBeamDirection(hydra1.Position, target.Position, 50f, 5f), 1.00f, DamageType.Fire);
+                    };
+
+                };
+            }
+            else
+            {
+                var hydra1 = SpawnEffect(actorSNOs[0], spawnPoints[0], 0, timeout);
+                hydra1.UpdateDelay = 1f; // attack every half-second
+                hydra1.OnUpdate = () =>
+                {
+                    var targets = GetEnemiesInRadius(hydra1.Position, 60f);
+                    if (targets.Actors.Count > 0 && targets != null)
+                    {
+                        targets.SortByDistanceFrom(hydra1.Position);
+                        var proj = new Projectile(this, RuneSelect(77116, 83043, -1, 77109, 86082, 77097), hydra1.Position);
                         proj.Position.Z += 5f;  // fix height
                         proj.OnCollision = (hit) =>
                         {
-                            // hit effect?
-                                WeaponDamage(hit, 1.00f, DamageType.Fire);
-         
+                            hit.PlayEffectGroup(RuneSelect(219760, 219770, 219776, 219789, -1, 81739));
+                            WeaponDamage(hit, 1.00f, DamageType.Fire);
+
                             proj.Destroy();
                         };
-                        proj.Launch(TargetPosition, ScriptFormula(2));
+                        hydra1.TranslateFacing(targets.Actors[0].Position, true);
+                        //need to fix how fast it fires -> its firing before head turns.
+                        proj.Launch(targets.Actors[0].Position, ScriptFormula(2));
                     }
-                    
+
                 };
 
-                hydras.Add(hydra);
+                var hydra2 = SpawnEffect(actorSNOs[1], spawnPoints[1], 0, timeout);
+                hydra2.UpdateDelay = 1f; // attack every half-second
+                hydra2.OnUpdate = () =>
+                {
+                    var targets = GetEnemiesInRadius(hydra2.Position, 60f);
+                    if (targets.Actors.Count > 0 && targets != null)
+                    {
+                        targets.SortByDistanceFrom(hydra2.Position);
+                        var proj = new Projectile(this, RuneSelect(77116, 83043, -1, 77109, 86082, 77097), hydra2.Position);
+                        proj.Position.Z += 5f;  // fix height
+                        proj.OnCollision = (hit) =>
+                        {
+                            hit.PlayEffectGroup(RuneSelect(219760, 219770, 219776, 219789, -1, 81739));
+                            WeaponDamage(hit, 1.00f, DamageType.Fire);
+
+                            proj.Destroy();
+                        };
+                        //need to fix how fast it fires -> its firing before head turns.
+                        hydra2.TranslateFacing(targets.Actors[0].Position, true);
+                        proj.Launch(targets.Actors[0].Position, ScriptFormula(2));
+                    }
+
+                };
+
+                var hydra3 = SpawnEffect(actorSNOs[2], spawnPoints[2], 0, timeout);
+                hydra3.UpdateDelay = 1f; // attack every half-second
+                hydra3.OnUpdate = () =>
+                {
+                    var targets = GetEnemiesInRadius(hydra3.Position, 60f);
+                    if (targets.Actors.Count > 0 && targets != null)
+                    {
+                        targets.SortByDistanceFrom(hydra3.Position);
+                        var proj = new Projectile(this, RuneSelect(77116, 83043, -1, 77109, 86082, 77097), hydra3.Position);
+                        proj.Position.Z += 5f;  // fix height
+                        proj.OnCollision = (hit) =>
+                        {
+                            hit.PlayEffectGroup(RuneSelect(219760, 219770, 219776, 219789, -1, 81739));
+                            WeaponDamage(hit, 1.00f, DamageType.Fire);
+
+                            proj.Destroy();
+                        };
+                        hydra3.TranslateFacing(targets.Actors[0].Position, true);
+                        //need to fix how fast it fires -> its firing before head turns.
+                        proj.Launch(targets.Actors[0].Position, ScriptFormula(2));
+                    }
+
+                };
             }
             // wait for duration of skill
             yield return timeout;
@@ -521,6 +572,8 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.EnergyTwister)]
     public class EnergyTwister : Skill
     {
+        //http://www.youtube.com/watch?v=atIsPKXAzCU
+
         public override IEnumerable<TickTimer> Main()
         {
             UsePrimaryResource(ScriptFormula(15));
@@ -630,7 +683,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Main()
         {
             //todo: is this correct? why not just seconds?ScriptFormula(22) 
-            UsePrimaryResource(23f * EffectsPerSecond);
+            UsePrimaryResource(ScriptFormula(22) * EffectsPerSecond);
 
             foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f).Actors)
             {
@@ -638,15 +691,15 @@ namespace Mooege.Core.GS.Powers.Implementations
                 {
                     if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 6f))
                     {
-                        //ScriptFormula(23)
-                        WeaponDamage(actor, 1.35f * EffectsPerSecond, DamageType.Arcane);
+                        //ScriptFormula(1)
+                        WeaponDamage(actor, ScriptFormula(1) * EffectsPerSecond, DamageType.Arcane);
                     }
                 }
                 else
                 if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
                 {
-                    //ScriptFormula(23)
-                    WeaponDamage(actor, 1.35f * EffectsPerSecond, DamageType.Arcane);
+                    //ScriptFormula(1)
+                    WeaponDamage(actor, ScriptFormula(1) * EffectsPerSecond, DamageType.Arcane);
                 }
             }
 
