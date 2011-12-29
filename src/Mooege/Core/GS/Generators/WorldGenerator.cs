@@ -324,6 +324,10 @@ namespace Mooege.Core.GS.Generators
                 // Load monsters for level area
                 foreach (var scene in levelAreas[la])
                 {
+                    // HACK: don't spawn monsters in tristram town scenes /mdz
+                    if (MPQStorage.Data.Assets[SNOGroup.Scene][scene.SceneSNO.Id].Name.StartsWith("trOut_Tristram_"))
+                        continue;
+
                     for (int i = 0; i < 100; i++)
                     {
                         if (RandomHelper.NextDouble() > 0.8)

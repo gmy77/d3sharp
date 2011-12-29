@@ -42,7 +42,7 @@ namespace Mooege.Core.GS.Powers
             ScriptFormula scriptFormula = FindScriptFormula(powerSNO, scriptTag);
             if (scriptFormula == null)
             {
-                Logger.Error("could not find script tag {0} in power {1}", scriptTag.ID, powerSNO);
+                //Logger.Error("could not find script tag {0} in power {1}", scriptTag.ID, powerSNO);
                 return false;
             }
 
