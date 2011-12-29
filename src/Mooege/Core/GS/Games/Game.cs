@@ -286,7 +286,7 @@ namespace Mooege.Core.GS.Games
             {
                 PlayerIndex = joinedPlayer.PlayerIndex, // player index
                 ToonId = new EntityId() { High = (long)joinedPlayer.Toon.BnetEntityID.High, Low = (long)joinedPlayer.Toon.BnetEntityID.Low }, //Toon
-                GameAccountId = new EntityId() { High = (long)joinedPlayer.Toon.Owner.BnetGameAccountID.High, Low = (long)joinedPlayer.Toon.Owner.BnetGameAccountID.Low }, //GameAccount
+                GameAccountId = new EntityId() { High = (long)joinedPlayer.Toon.GameAccount.BnetGameAccountID.High, Low = (long)joinedPlayer.Toon.GameAccount.BnetGameAccountID.Low }, //GameAccount
                 ToonName = joinedPlayer.Toon.Name,
                 Field3 = 0x00000002, //party frame class
                 Field4 = target!=joinedPlayer? 0x2 : 0x4, //party frame level /boyc - may mean something different /raist.

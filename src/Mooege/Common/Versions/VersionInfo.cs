@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "0.8101.*";
+            public const string Version = "1.8101.*";
         }
 
         /// <summary>

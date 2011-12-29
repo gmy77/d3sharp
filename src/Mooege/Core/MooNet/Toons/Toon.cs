@@ -70,7 +70,7 @@ namespace Mooege.Core.MooNet.Toons
         /// <summary>
         /// Toon's owner account.
         /// </summary>
-        public Account Owner { get; set; }
+        public GameAccount GameAccount { get; set; }
 
         /// <summary>
         /// Toon's class.
@@ -96,7 +96,7 @@ namespace Mooege.Core.MooNet.Toons
         /// Last login time for toon.
         /// </summary>
         public uint LoginTime { get; set; }
-        
+
         /// <summary>
         /// Away status for the toon? (shouldn't it be account stuff? /raist).
         /// </summary>
@@ -106,7 +106,7 @@ namespace Mooege.Core.MooNet.Toons
         /// The visual equipment for toon.
         /// </summary>
         public D3.Hero.VisualEquipment Equipment { get; protected set; }
-        
+
         /// <summary>
         /// Toon digest.
         /// </summary>
@@ -116,7 +116,7 @@ namespace Mooege.Core.MooNet.Toons
             {
                 return D3.Hero.Digest.CreateBuilder().SetVersion(891)
                                 .SetHeroId(this.D3EntityID)
-                                //.SetHeroName(this.Name) //no longer used in 7728, uses D3.Hero.NameText query -Egris
+                    //.SetHeroName(this.Name) //no longer used in 7728, uses D3.Hero.NameText query -Egris
                                 .SetGbidClass((int)this.ClassID)
                                 .SetPlayerFlags((uint)this.Flags)
                                 .SetLevel(this.Level)
@@ -136,11 +136,11 @@ namespace Mooege.Core.MooNet.Toons
         {
             get
             {
-                if (!this.Owner.IsOnline) return false;
+                if (!this.GameAccount.IsOnline) return false;
                 else
                 {
-                    if (this.Owner.LoggedInClient.CurrentToon != null)
-                        return this.Owner.LoggedInClient.CurrentToon.BnetEntityID == this.BnetEntityID;
+                    if (this.GameAccount.LoggedInClient.CurrentToon != null)
+                        return this.GameAccount.LoggedInClient.CurrentToon.BnetEntityID == this.BnetEntityID;
                     else
                         return false;
                 }
@@ -150,10 +150,10 @@ namespace Mooege.Core.MooNet.Toons
         public Toon(ulong persistentId, string name, int hashCode, byte @class, byte gender, byte level, long accountId, uint timePlayed) // Toon with given persistent ID
             : base(persistentId)
         {
-            this.SetFields(name, hashCode, (ToonClass)@class, (ToonFlags)gender, level, AccountManager.GetAccountByPersistentID((ulong)accountId),timePlayed);
+            this.SetFields(name, hashCode, (ToonClass)@class, (ToonFlags)gender, level, GameAccountManager.GetAccountByPersistentID((ulong)accountId), timePlayed);
         }
 
-        public Toon(string name, int hashCode, int classId, ToonFlags flags, byte level, Account account) // Toon with **newly generated** persistent ID
+        public Toon(string name, int hashCode, int classId, ToonFlags flags, byte level, GameAccount account) // Toon with **newly generated** persistent ID
             : base(StringHashHelper.HashIdentity(name + "#" + hashCode.ToString("D3")))
         {
             this.SetFields(name, hashCode, GetClassByID(classId), flags, level, account, 0);
@@ -209,11 +209,13 @@ namespace Mooege.Core.MooNet.Toons
             }
         }
 
-        private void SetFields(string name, int hashCode, ToonClass @class, ToonFlags flags, byte level, Account owner,uint timePlayed)
+        private void SetFields(string name, int hashCode, ToonClass @class, ToonFlags flags, byte level, GameAccount owner, uint timePlayed)
         {
-            this.ToonHandle = new ToonHandleHelper(this.PersistentID);
-            this.D3EntityID = this.ToonHandle.ToD3EntityID();
-            this.BnetEntityID = this.ToonHandle.ToBnetEntityID();
+            //this.ToonHandle = new ToonHandleHelper(this.PersistentID);
+            //this.D3EntityID = this.ToonHandle.ToD3EntityID();
+            //this.BnetEntityID = this.ToonHandle.ToBnetEntityID();
+            this.D3EntityID = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId + this.PersistentID).SetIdLow(this.PersistentID).Build();
+            this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ToonId + this.PersistentID).SetLow(this.PersistentID).Build();
             this.Name = name;
             this.HashCode = hashCode;
             this.HashCodeString = HashCode.ToString("D3");
@@ -221,7 +223,7 @@ namespace Mooege.Core.MooNet.Toons
             this.Class = @class;
             this.Flags = flags;
             this.Level = level;
-            this.Owner = owner;
+            this.GameAccount = owner;
             this.TimePlayed = timePlayed;
 
             var visualItems = new[]
@@ -274,7 +276,7 @@ namespace Mooege.Core.MooNet.Toons
                 case FieldKeyHelper.Program.D3:
                     if (queryKey.Group == 2 && queryKey.Field == 1) // Banner configuration
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.BannerConfiguration.ToByteString()).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.GameAccount.BannerConfiguration.ToByteString()).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 1) // Hero's class (GbidClass)
                     {
@@ -294,7 +296,7 @@ namespace Mooege.Core.MooNet.Toons
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 1) // Channel ID if the client is online
                     {
-                        if (this.Owner.LoggedInClient != null && this.Owner.LoggedInClient.CurrentChannel != null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Owner.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());
+                        if (this.GameAccount.LoggedInClient != null && this.GameAccount.LoggedInClient.CurrentChannel != null) field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.GameAccount.LoggedInClient.CurrentChannel.D3EntityId.ToByteString()).Build());
                         else field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().Build());
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 2) // Current screen (all known values are just "in-menu"; also see ScreenStatuses sent in ChannelService.UpdateChannelState)
@@ -357,7 +359,7 @@ namespace Mooege.Core.MooNet.Toons
                         {
                             var entityId = D3.OnlineService.EntityId.ParseFrom(field.Value.MessageValue);
                             var channel = ChannelManager.GetChannelByEntityId(entityId);
-                            this.Owner.LoggedInClient.CurrentChannel = channel;
+                            this.GameAccount.LoggedInClient.CurrentChannel = channel;
                         }
                         else
                         {
@@ -414,7 +416,7 @@ namespace Mooege.Core.MooNet.Toons
 
             // Banner configuration
             var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 2, 1, 0);
-            var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(client.Account.BannerConfiguration.ToByteString()).Build()).Build();
+            var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(client.CurrentGameAccount.BannerConfiguration.ToByteString()).Build()).Build();
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build());
 
             // Class
@@ -477,7 +479,7 @@ namespace Mooege.Core.MooNet.Toons
             var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
 
             // Make the RPC call
-            client.MakeTargetedRPC(this, () => 
+            client.MakeTargetedRPC(this, () =>
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, builder.Build(), callback => { }));
         }
 
@@ -495,7 +497,7 @@ namespace Mooege.Core.MooNet.Toons
                     var query =
                         string.Format(
                             "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, accountId={5}, timePlayed={6} WHERE id={7}",
-                            Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.Owner.PersistentID, this.TimePlayed, this.PersistentID);
+                            Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.GameAccount.PersistentID, this.TimePlayed, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -505,7 +507,7 @@ namespace Mooege.Core.MooNet.Toons
                     var query =
                         string.Format(
                             "INSERT INTO toons (id, name, hashCode, class, gender, level, timePlayed, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7})",
-                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.TimePlayed, this.Owner.PersistentID);
+                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.TimePlayed, this.GameAccount.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();

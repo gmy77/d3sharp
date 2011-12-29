@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using Gibbed.IO;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
+using Google.ProtocolBuffers;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -63,6 +64,12 @@ namespace Mooege.Core.MooNet.Services
                 case "GetToonSettings":
                     response = GetToonSettings(request);
                     break;
+                //case "GetAccountProfile":
+                //    response = GetAccountProfile(Client, request);
+                //    break;
+                //case "GetHeroProfiles":
+                //    response = GetHeroProfiles(Client, request);
+                //    break;
                 default:
                     Logger.Warn("Unhandled query: {0}", request.QueryName);
                     response = bnet.protocol.storage.ExecuteResponse.CreateBuilder().Build();
@@ -95,13 +102,13 @@ namespace Mooege.Core.MooNet.Services
 
                 var toonId = stream.ReadValueU64(false);
 
-                if (!client.Account.Toons.ContainsKey(toonId))
+                if (!client.CurrentGameAccount.Toons.ContainsKey(toonId))
                 {
                     Logger.Error("Can't find the requested toon: {0}", toonId);
                     continue;
                 }
 
-                var toon = client.Account.Toons[toonId];
+                var toon = client.CurrentGameAccount.Toons[toonId];
 
                 if (operation.ColumnId.Hash.Equals(HeroDigestColumn))
                     data = toon.Digest.ToByteString();
@@ -166,7 +173,7 @@ namespace Mooege.Core.MooNet.Services
                         .SetColumnId(request.OperationsList[0].ColumnId)
                         .SetRowId(request.OperationsList[0].RowId)
                         .SetVersion(1)
-                        .SetData(client.Account.Digest.ToByteString())
+                        .SetData(client.CurrentGameAccount.Digest.ToByteString())
                         .Build());
                 results.Add(operationResult.Build());
             }
@@ -202,5 +209,95 @@ namespace Mooege.Core.MooNet.Services
             }
             return builder.Build();
         }
+
+    //    private bnet.protocol.storage.ExecuteResponse GetHeroProfiles(MooNetClient client, bnet.protocol.storage.ExecuteRequest request)
+    //    {
+    //        var results = new List<bnet.protocol.storage.OperationResult>();
+    //        Logger.Trace("GetHeroProfiles()");
+    //        foreach (var operation in request.OperationsList)
+    //        {
+    //            var stream = new MemoryStream(operation.RowId.Hash.ToByteArray());
+
+    //            // contains ToonHandle in field form with one unknown field (which is not in message definition):
+    //            // int16 unknown; uint8 realm; uint8 region; uint32 program; uint64 id;
+    //            var x = stream.ReadValueU16(); // unknown
+    //            var y = stream.ReadValueU8(); // realm
+    //            var z = stream.ReadValueU8(); // region
+    //            var p = stream.ReadValueU32(false); // program
+
+    //            var toonId = stream.ReadValueU64(false);
+
+    //            if (!client.CurrentGameAccount.Toons.ContainsKey(toonId))
+    //            {
+    //                Logger.Error("Can't find the requested toon: {0}", toonId);
+    //                continue;
+    //            }
+
+    //            var toon = client.CurrentGameAccount.Toons[toonId];
+
+    //            var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
+    //            operationResult.AddData(
+    //                bnet.protocol.storage.Cell.CreateBuilder()
+    //                    .SetColumnId(request.OperationsList[0].ColumnId)
+    //                    .SetRowId(request.OperationsList[0].RowId)
+    //                    .SetVersion(1321757938329580)
+    //                    .SetData(toon.HeroProfile)
+    //                    .Build()
+    //                );
+    //            results.Add(operationResult.Build());
+    //        }
+
+    //        var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
+    //        foreach (var result in results)
+    //        {
+    //            builder.AddResults(result);
+    //        }
+    //        return builder.Build();
+    //    }
+
+    //    private bnet.protocol.storage.ExecuteResponse GetAccountProfile(MooNetClient client, bnet.protocol.storage.ExecuteRequest request)
+    //    {
+    //        var results = new List<bnet.protocol.storage.OperationResult>();
+    //        Logger.Trace("GetAccountProfile()");
+    //        foreach (var operation in request.OperationsList)
+    //        {
+    //            var stream = new MemoryStream(operation.RowId.Hash.ToByteArray());
+
+    //            // contains ToonHandle in field form with one unknown field (which is not in message definition):
+    //            // int16 unknown; uint8 realm; uint8 region; uint32 program; uint64 id;
+    //            var x = stream.ReadValueU16(); // unknown
+    //            var y = stream.ReadValueU8(); // realm
+    //            var z = stream.ReadValueU8(); // region
+    //            var p = stream.ReadValueU32(false); // program
+
+    //            var toonId = stream.ReadValueU64(false);
+
+    //            if (!client.CurrentGameAccount.Toons.ContainsKey(toonId))
+    //            {
+    //                Logger.Error("Can't find the requested toon: {0}", toonId);
+    //                continue;
+    //            }
+
+    //            var toon = client.CurrentGameAccount.Toons[toonId];
+
+    //            var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
+    //            operationResult.AddData(
+    //                bnet.protocol.storage.Cell.CreateBuilder()
+    //                    .SetColumnId(request.OperationsList[0].ColumnId)
+    //                    .SetRowId(request.OperationsList[0].RowId)
+    //                    .SetVersion(1321757938329580)
+    //                    .SetData(client.CurrentGameAccount.AccountProfile.ToByteString())
+    //                    .Build()
+    //                );
+    //            results.Add(operationResult.Build());
+    //        }
+
+    //        var builder = bnet.protocol.storage.ExecuteResponse.CreateBuilder();
+    //        foreach (var result in results)
+    //        {
+    //            builder.AddResults(result);
+    //        }
+    //        return builder.Build();
+    //    }
     }
 }

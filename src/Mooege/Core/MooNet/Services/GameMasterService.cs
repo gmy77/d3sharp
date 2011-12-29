@@ -48,7 +48,7 @@ namespace Mooege.Core.MooNet.Services
                     bnet.protocol.attribute.Attribute.CreateBuilder().SetName("min_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2)).Build(),
                     bnet.protocol.attribute.Attribute.CreateBuilder().SetName("max_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(4)).Build(),
                     bnet.protocol.attribute.Attribute.CreateBuilder().SetName("num_teams").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("0.3.1")).Build() //This should be a static string so all versions are the same -Egris
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("0.5.1")).Build() //This should be a static string so all versions are the same -Egris
                 };
 
             description.AddRangeAttribute(attributes);
@@ -95,9 +95,16 @@ namespace Mooege.Core.MooNet.Services
             var clients = new List<MooNetClient>();
             foreach (var player in request.PlayerList)
             {
-                var toon = ToonManager.GetToonByLowID(player.Identity.AccountId.Low);
-                if (toon.Owner.LoggedInClient == null) continue;
-                clients.Add(toon.Owner.LoggedInClient);
+                foreach (var account in Accounts.AccountManager.AccountsList)
+                {
+                    if (player.Identity.GameAccountId.Low == account.BnetAccountID.Low)
+                    {
+                        clients.Add(account.LoggedInClient);
+                    }
+                }
+                //var toon = ToonManager.GetToonByLowID(player.Identity.AccountId.Low);
+                //if (toon.Owner.LoggedInClient == null) continue;
+                //clients.Add(toon.Owner.LoggedInClient);
             }           
 
             // send game found notification.

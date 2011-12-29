@@ -144,8 +144,8 @@ namespace Mooege.Core.MooNet.Services
 
             var notification = bnet.protocol.channel_invitation.SuggestionAddedNotification.CreateBuilder().SetSuggestion(suggestion);
 
-            suggestee.Owner.LoggedInClient.MakeTargetedRPC(this._invitationManager, () => 
-                bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(suggestee.Owner.LoggedInClient).NotifyReceivedSuggestionAdded(null, notification.Build(), callback => { }));
+            suggestee.GameAccount.Owner.LoggedInClient.MakeTargetedRPC(this._invitationManager, () =>
+                bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(suggestee.GameAccount.Owner.LoggedInClient).NotifyReceivedSuggestionAdded(null, notification.Build(), callback => { }));
         }
 
         public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.UnsubscribeRequest request, Action<bnet.protocol.NoData> done)

@@ -37,10 +37,11 @@ namespace Mooege.Core.MooNet.Services
                 .SetObjectId(channel.DynamicId)
                 .SetChannelId(channel.BnetEntityId);
 
+            Logger.Trace("CreateChannel() {0} for {1}", channel, Client.CurrentToon);
+
             done(builder.Build());
             channel.SetOwner(Client); // Set the client that requested the creation of channel as the owner           
 
-            Logger.Trace("CreateChannel() {0} for {1}", channel, Client.CurrentToon);
         }
 
         public override void FindChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.FindChannelRequest request, System.Action<bnet.protocol.channel.FindChannelResponse> done)

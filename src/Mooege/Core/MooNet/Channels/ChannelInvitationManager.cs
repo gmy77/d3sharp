@@ -68,7 +68,7 @@ namespace Mooege.Core.MooNet.Channels
             var invitation = this._onGoingInvitations[request.InvitationId];
 
             var inviter = ToonManager.GetToonByLowID(invitation.InviterIdentity.AccountId.Low);
-            if (inviter == null || inviter.Owner.LoggedInClient == null) return;
+            if (inviter == null || inviter.GameAccount.Owner.LoggedInClient == null) return;
 
             var notification =
                 bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
@@ -79,8 +79,8 @@ namespace Mooege.Core.MooNet.Channels
             this._onGoingInvitations.Remove(invitation.Id);
 
             // notify invoker about the decline.
-            inviter.Owner.LoggedInClient.MakeTargetedRPC(inviter.Owner.LoggedInClient.CurrentChannel, () =>
-                bnet.protocol.channel.ChannelSubscriber.CreateStub(inviter.Owner.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
+            inviter.GameAccount.Owner.LoggedInClient.MakeTargetedRPC(inviter.GameAccount.Owner.LoggedInClient.CurrentChannel, () =>
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(inviter.GameAccount.Owner.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
         }
 
         public void Revoke(MooNetClient client, bnet.protocol.channel_invitation.RevokeInvitationRequest request)
@@ -107,9 +107,9 @@ namespace Mooege.Core.MooNet.Channels
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Revoked);
 
-            var invitee = ToonManager.GetToonByLowID(invitation.InviteeIdentity.AccountId.Low);
-            invitee.Owner.LoggedInClient.MakeTargetedRPC(this, () =>
-                bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(invitee.Owner.LoggedInClient).NotifyReceivedInvitationRemoved(null, invitationRemoved.Build(), callback => { }));
+            var invitee = ToonManager.GetToonByLowID(invitation.InviteeIdentity.GameAccountId.Low);
+            invitee.GameAccount.Owner.LoggedInClient.MakeTargetedRPC(this, () =>
+                bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(invitee.GameAccount.Owner.LoggedInClient).NotifyReceivedInvitationRemoved(null, invitationRemoved.Build(), callback => { }));
         }
 
         public enum InvitationRemoveReason : uint // not sure -- and don't have all the values yet /raist.

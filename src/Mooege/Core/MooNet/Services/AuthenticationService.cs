@@ -24,6 +24,7 @@ using Mooege.Common.Versions;
 using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
+using Mooege.Core.MooNet.Accounts;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -59,12 +60,19 @@ namespace Mooege.Core.MooNet.Services
                 }
 
                 Logger.Info("User {0} authenticated successfuly.", request.Email);
-                var logonResponseBuilder = bnet.protocol.authentication.LogonResponse.
-                    CreateBuilder()
-                    .SetAccount(Client.Account.BnetAccountID)
-                    .AddGameAccount(Client.Account.BnetGameAccountID);
+                var logonResponseBuilder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
+                    .SetAccount(this.Client.Account.BnetAccountID);
+
+                foreach (var gameAccount in this.Client.Account.GameAccounts.Values)
+                {
+                    logonResponseBuilder.AddGameAccount(gameAccount.BnetGameAccountID);
+                }
+
+                    //.AddGameAccount(Client.Account.BnetGameAccountID);
 
                 done(logonResponseBuilder.Build());
+
+                this.Client.EnableEncryption();
 
                 PlayerManager.PlayerConnected(this.Client);
 
@@ -88,14 +96,11 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SelectGameAccount(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.EntityId request, Action<bnet.protocol.NoData> done)
         {
-            var SelectedAccount = request.Low;
-            Logger.Trace("SelectGameAccount(): {0}", SelectedAccount);
+            this.Client.CurrentGameAccount = GameAccountManager.GetAccountByPersistentID(request.Low);
+            Logger.Trace("SelectGameAccount(): {0}", this.Client.CurrentGameAccount);
 
             done(bnet.protocol.NoData.CreateBuilder().Build());
 
-            //Client seems to be expecting something here before encryption begins - Egris
-
-            this.Client.EnableEncryption();
         }
     }
 }

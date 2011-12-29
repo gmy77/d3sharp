@@ -42,7 +42,9 @@ namespace Mooege.Core.MooNet.Services
             var builder = bnet.protocol.friends.SubscribeToFriendsResponse.CreateBuilder()
                 .SetMaxFriends(127)
                 .SetMaxReceivedInvitations(127)
-                .SetMaxSentInvitations(127);
+                .SetMaxSentInvitations(127)
+                .AddRole(bnet.protocol.Role.CreateBuilder().SetId(1).SetName("battle_tag_friend").Build())
+                .AddRole(bnet.protocol.Role.CreateBuilder().SetId(2).SetName("real_id_friend").Build());
 
             foreach (var friend in FriendManager.Friends[this.Client.Account.BnetAccountID.Low]) // send friends list.
             {
