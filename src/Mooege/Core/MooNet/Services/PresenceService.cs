@@ -55,8 +55,16 @@ namespace Mooege.Core.MooNet.Services
                         toon.AddSubscriber(this.Client, request.ObjectId); // The client will send us a Subscribe with ToonId of 0 the first time it tries to create a toon with a name that already exists. Let's handle that here.
                     }
                     break;
+                case EntityIdHelper.HighIdType.GameAccountId:
+                    var gameaccount = GameAccountManager.GetAccountByPersistentID(request.EntityId.Low);
+                    if (gameaccount != null)
+                    {
+                        Logger.Trace("Subscribe() {0} {1}", this.Client, gameaccount);
+                        gameaccount.AddSubscriber(this.Client, request.ObjectId);
+                    }
+                    break;
                 default:
-                    Logger.Warn("Recieved an unhandled Presence.Subscribe request with type {0}", request.EntityId.GetHighIdType());
+                    Logger.Warn("Recieved an unhandled Presence.Subscribe request with type {0} (0x{1})", request.EntityId.GetHighIdType(), request.EntityId.High.ToString("X16"));
                     break;
             }
 
@@ -87,8 +95,16 @@ namespace Mooege.Core.MooNet.Services
                         Logger.Trace("Unsubscribe() {0} {1}", this.Client, toon);
                     }
                     break;
+                case EntityIdHelper.HighIdType.GameAccountId:
+                    var gameaccount = GameAccountManager.GetAccountByPersistentID(request.EntityId.Low);
+                    if (gameaccount != null)
+                    {
+                        gameaccount.RemoveSubscriber(this.Client);
+                        Logger.Trace("Unsubscribe() {0} {1}", this.Client, gameaccount);
+                    }
+                    break;
                 default:
-                    Logger.Warn("Recieved an unhandled Presence.Unsubscribe request with type {0}", request.EntityId.GetHighIdType());
+                    Logger.Warn("Recieved an unhandled Presence.Unsubscribe request with type {0} (0x{1})", request.EntityId.GetHighIdType(), request.EntityId.High.ToString("X16"));
                     break;
             }
             
@@ -107,7 +123,7 @@ namespace Mooege.Core.MooNet.Services
             {
                 case EntityIdHelper.HighIdType.AccountId:
                     var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
-                    Logger.Trace("Update() {0} {1}", this.Client, account);
+                    Logger.Trace("Update() {0} {1} - {2} Operations", this.Client, account, request.FieldOperationCount);
                     break;
                 case EntityIdHelper.HighIdType.ToonId:
                     var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
@@ -117,8 +133,12 @@ namespace Mooege.Core.MooNet.Services
                         toon.Update(fieldOp);
                     }
                     break;
+                case EntityIdHelper.HighIdType.GameAccountId:
+                    var gameaccount = GameAccountManager.GetAccountByPersistentID(request.EntityId.Low);
+                    Logger.Trace("Update() {0} {1} - {2} Operations", this.Client, gameaccount, request.FieldOperationCount);
+                    break;
                 default:
-                    Logger.Warn("Recieved an unhandled Presence.Update request with type {0}", request.EntityId.GetHighIdType());
+                    Logger.Warn("Recieved an unhandled Presence.Update request with type {0} (0x{1})", request.EntityId.GetHighIdType(), request.EntityId.High.ToString("X16"));
                     break;
             }
 

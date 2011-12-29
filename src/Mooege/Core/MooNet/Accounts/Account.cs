@@ -137,10 +137,22 @@ namespace Mooege.Core.MooNet.Accounts
             var operations = new List<bnet.protocol.presence.FieldOperation>();
 
             //account
+            //D3,1,1,0 -> LastPlayedToon
+            //D3,1,1,0 -> SelectedGameAccount
             //Bnet,1,1,0 -> RealId Name
             //Bnet,1,2,0 -> true
             //Bnet,1,4,index -> GameAccount EntityIds
             //Bnet,1,5,0 -> BattleTag
+
+            //LastPlayedToon
+            var ToonKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 1, 0);
+            var ToonField = bnet.protocol.presence.Field.CreateBuilder().SetKey(ToonKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LoggedInClient.CurrentGameAccount.lastPlayedHeroId.ToByteString()).Build()).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(ToonField).Build());
+
+            //SelectedGameAccount
+            var GameAccountKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 2, 0);
+            var GameAccountField = bnet.protocol.presence.Field.CreateBuilder().SetKey(GameAccountKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LoggedInClient.CurrentGameAccount.D3GameAccountId.ToByteString()).Build()).Build();
+            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(GameAccountField).Build());
 
             // RealID name field - NOTE: Using BattleTag here since we don't use ReadlID names
             var realNameKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 1, 0);
@@ -153,10 +165,10 @@ namespace Mooege.Core.MooNet.Accounts
             operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(accountOnlineField).Build());
 
             // GameAccount List
-            foreach (var pair in this.GameAccounts)
+            foreach (var pair in this.GameAccounts.Values)
             {
-                var gameAccountKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 4, 0);
-                var gameAccountField = bnet.protocol.presence.Field.CreateBuilder().SetKey(gameAccountKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(pair.Value.BnetGameAccountID.ToByteString()).Build()).Build();
+                var gameAccountKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 4, pair.BnetGameAccountID.High);
+                var gameAccountField = bnet.protocol.presence.Field.CreateBuilder().SetKey(gameAccountKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetEntityidValue(pair.BnetGameAccountID).Build()).Build();
                 operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(gameAccountField).Build());
             }
 

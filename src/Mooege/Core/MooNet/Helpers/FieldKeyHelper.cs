@@ -26,7 +26,7 @@ namespace Mooege.Core.MooNet.Helpers
             D3 = 17459
         }
 
-        public static bnet.protocol.presence.FieldKey Create(Program program, uint group, uint field, uint index)
+        public static bnet.protocol.presence.FieldKey Create(Program program, uint group, uint field, ulong index)
         {
             return
                 bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram((uint) program).SetGroup(group).SetField(

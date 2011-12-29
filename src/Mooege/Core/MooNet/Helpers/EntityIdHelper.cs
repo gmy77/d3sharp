@@ -27,7 +27,7 @@ namespace Mooege.Core.MooNet.Helpers
         /// <returns><see cref="HighIdType"/></returns>
         public static HighIdType GetHighIdType(this bnet.protocol.EntityId id)
         {
-            switch (id.High >> 12)
+            switch (id.High >> 48)
             {
                 case 0x0100:
                     return HighIdType.AccountId;
