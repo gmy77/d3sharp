@@ -61,7 +61,7 @@ namespace Mooege.Core.MooNet.Services
                 case 1: //D3.GameMessage.GetAccountDigest -> D3.Account.Digest
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Client.CurrentGameAccount.Digest.ToByteString()).Build());
                     break;
-                case 2: //CreateHero()->D3.OnlineService.EntityId
+                case 2: //CreateHero() -> D3.OnlineService.EntityId
                     var heroCreateParams = D3.OnlineService.HeroCreateParams.ParseFrom(request.GetAttribute(2).Value.MessageValue);
                     int hashCode = ToonManager.GetUnusedHashCodeForToonName(heroCreateParams.Name);
                     var newToon = new Toon(heroCreateParams.Name, hashCode, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.CurrentGameAccount);
@@ -71,13 +71,13 @@ namespace Mooege.Core.MooNet.Services
                         attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(newToon.D3EntityID.ToByteString()).Build());
                     }
                     break;
-                case 3: //D3.GameMessage.DeleteHero->?
+                case 3: //D3.GameMessage.DeleteHero -> ?
                     var deleteToonId = D3.OnlineService.EntityId.ParseFrom(request.GetAttribute(2).Value.MessageValue);
                     var deleteToon = ToonManager.GetToonByLowID(deleteToonId.IdLow);
                     ToonManager.DeleteToon(deleteToon);
                     Logger.Trace("DeleteHero() {0}", deleteToon);
                     break;
-                case 4: //SelectToon()->D3.OnlineService.EntityId
+                case 4: //SelectToon() -> D3.OnlineService.EntityId
                     var selectToon = D3.OnlineService.EntityId.ParseFrom(request.GetAttribute(2).Value.MessageValue);
                     this.Client.CurrentToon = ToonManager.GetToonByLowID(selectToon.IdLow);
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Client.CurrentToon.D3EntityID.ToByteString()).Build());
@@ -113,7 +113,17 @@ namespace Mooege.Core.MooNet.Services
                     var profile = D3.Profile.AccountProfile.CreateBuilder().Build(); //Todo: Load AccountProfile from GameAccount
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(profile.ToByteString()).Build());
                     break;
-                case 20: //D3.GameMessage.GetHeroIds->D3.Hero.HeroList
+                case 16: //D3.GameMessage.GetHeroProfiles -> D3.Profile.HeroProfileList
+                    var heroList = D3.GameMessage.GetHeroProfiles.ParseFrom(request.GetAttribute(2).Value.MessageValue);
+                    var profileList = D3.Profile.HeroProfileList.CreateBuilder();
+                    foreach (var hero in heroList.HeroIdsList)
+                    {
+                        var toon = ToonManager.GetToonByLowID(hero.IdLow);
+                        profileList.AddHeros(toon.Profile);
+                    }
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(profileList.Build().ToByteString()).Build());
+                    break;
+                case 20: //D3.GameMessage.GetHeroIds -> D3.Hero.HeroList
                     var HeroList = D3.Hero.HeroList.CreateBuilder();
                     var gameAccount = D3.GameMessage.GetHeroIds.ParseFrom(request.GetAttribute(2).Value.MessageValue).AccountId;
                     foreach (var toon in this.Client.CurrentGameAccount.Toons.Values)

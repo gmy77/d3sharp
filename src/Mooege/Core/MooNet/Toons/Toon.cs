@@ -132,6 +132,23 @@ namespace Mooege.Core.MooNet.Toons
             }
         }
 
+        /// <summary>
+        /// Hero Profile.
+        /// </summary>
+        public D3.Profile.HeroProfile Profile
+        {
+            get
+            {
+                return D3.Profile.HeroProfile.CreateBuilder()
+                    .SetHardcore(false)
+                    .SetHeroId(this.D3EntityID)
+                    .SetHighestDifficulty(0)
+                    .SetHighestLevel(this.Level)
+                    .SetMonstersKilled(923)
+                    .Build();
+            }
+        }
+
         public bool IsSelected
         {
             get
