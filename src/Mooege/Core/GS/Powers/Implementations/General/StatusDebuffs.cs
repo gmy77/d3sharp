@@ -287,6 +287,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             Target.Attributes.BroadcastChangedIfRevealed();
         }
     }
+
     [ImplementsPowerSNO(1769)]
     [ImplementsPowerBuff(0)]
     public class SpeedBuff : PowerBuff
@@ -405,6 +406,83 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             base.Remove();
             Target.Attributes[GameAttribute.Crit_Damage_Percent] -= (int)ScriptFormula(9);
+            Target.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+    [ImplementsPowerBuff(0)]
+    public class ShoutReduceDamage : PowerBuff
+    {
+        public ShoutReduceDamage(TickTimer timeout)
+        {
+            Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Damage_Done_Reduction_Percent] += ScriptFormula(0);
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Damage_Done_Reduction_Percent] -= ScriptFormula(0);
+            Target.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+
+    [ImplementsPowerBuff(0)]
+    public class MovementDeBuff : PowerBuff
+    {
+        public float Percentage;
+
+        public MovementDeBuff(float percentage, TickTimer timeout)
+        {
+            Percentage = percentage;
+            Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] += Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] -= Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+
+    [ImplementsPowerBuff(0)]
+    public class AttackSpeedDeBuff : PowerBuff
+    {
+        public float Percentage;
+
+        public AttackSpeedDeBuff(float percentage, TickTimer timeout)
+        {
+            Percentage = percentage;
+            Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] += Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] -= Percentage;
             Target.Attributes.BroadcastChangedIfRevealed();
         }
     }

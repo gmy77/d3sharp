@@ -27,9 +27,12 @@ using Mooege.Core.GS.Ticker;
 using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Core.GS.Powers.Payloads;
+using Mooege.Core.GS.Actors.Movement;
+using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
+    #region Bash
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.Bash)]
     public class BarbarianBash : Skill
     {
@@ -57,7 +60,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             return ScriptFormula(13);
         }
     }
+#endregion
 
+    #region LeapAttack
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.LeapAttack)]
     public class BarbarianLeap : Skill
     {
@@ -97,7 +102,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             yield break;
         }
     }
+#endregion
 
+    #region WhirlWind
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FurySpenders.Whirlwind)]
     public class BarbarianWhirlwind : Skill
     {
@@ -158,7 +165,9 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
+#endregion
 
+    #region AncientSpear
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.AncientSpear)]
     public class BarbarianAncientSpear : Skill
     {
@@ -207,4 +216,146 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.AddRopeEffect(79402, return_proj);
         }
     }
+#endregion
+
+    #region ThreateningShout
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.FurySpenders.ThreateningShout)]
+    public class ThreateningShout : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            UsePrimaryResource(20f);
+            User.PlayEffectGroup(RuneSelect(18705, 99810, 216339, 99798, 201534, 99821));
+            //User.PlayEffectGroup(202891); //Yell Sound
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(9));
+            attack.OnHit = (hit) =>
+            {
+                AddBuff(hit.Target, new ShoutReduceDamage(WaitSeconds(ScriptFormula(2))));
+                if (Rune_A > 0)
+                {
+                    //Script(8) -> taunt duration
+                    //taunted to attack you... wut? guess more for multiple player...
+                }
+                if (Rune_B > 0)
+                {
+                    AddBuff(hit.Target, new MovementDeBuff(ScriptFormula(14), WaitSeconds(ScriptFormula(2))));
+                }
+
+                if (Rune_C > 0)
+                {
+                    if (Rand.NextDouble() < ScriptFormula(7))
+                    {
+                        attack.OnDeath = (dead) =>
+                            {
+                                //dead.Target
+                                //Drop another random loot :)
+                            };
+                    }
+                }
+                if (Rune_D > 0)
+                {
+                    AddBuff(hit.Target, new AttackSpeedDeBuff(ScriptFormula(4), WaitSeconds(ScriptFormula(17))));
+                }
+                if (Rune_E > 0)
+                {
+                    //Script(10) -> Fear Death Effect Duration? what is this for..
+                    if (Rand.NextDouble() < ScriptFormula(3))
+                    {
+                        AddBuff(hit.Target, new DebuffFeared(WaitSeconds(Rand.Next((int)ScriptFormula(5), (int)ScriptFormula(5) + (int)ScriptFormula(6)))));
+                    }
+                }
+
+            };
+            attack.Apply();
+
+            yield break;
+        }
+
+    }
+#endregion
+
+    #region HammerOfTheAncients
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.FurySpenders.HammerOfTheAncients)]
+    public class HammerOfTheAncients : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            //this does NoRune and A's area of effect
+            float castAngle = MovementHelpers.GetFacingAngle(User.Position, TargetPosition);
+            SpawnEffect(RuneSelect(220632, 220559, 220562, 220565, 220569, 162839), User.Position, castAngle);
+
+            if (Rune_B > 0)
+            {
+
+                AttackPayload attack = new AttackPayload(this);
+                attack.Targets = GetEnemiesInArcDirection(User.Position, TargetPosition, ScriptFormula(14), ScriptFormula(15));
+                attack.AddWeaponDamage(ScriptFormula(23), DamageType.Physical);
+                attack.Apply();
+                yield break;
+            }
+            else
+            {
+                TargetPosition = PowerMath.TranslateDirection2D(User.Position, TargetPosition, User.Position, ScriptFormula(11));
+
+                AttackPayload attack = new AttackPayload(this);
+                attack.Targets = GetEnemiesInRadius(TargetPosition, ScriptFormula(11));
+                attack.AddWeaponDamage(ScriptFormula(4), DamageType.Physical);
+                attack.OnHit = hitPayload =>
+                {
+                    if (Rune_D > 0)
+                    {
+                        if (hitPayload.IsCriticalHit)
+                        {
+                            if (Rand.NextDouble() < ScriptFormula(5))
+                            {
+                                //drop treasure or health globes.
+                            }
+                        }
+                    }
+                    if (Rune_C > 0)
+                    {
+                        AddBuff(hitPayload.Target, new MovementDeBuff(ScriptFormula(8), WaitSeconds(ScriptFormula(10))));
+                    }
+                };
+                attack.OnDeath = DeathPayload =>
+                    {
+                        if (Rune_E > 0)
+                        {
+                            //if (DeathPayload.Target)?
+                            {
+                                if (Rand.NextDouble() < ScriptFormula(16))
+                                {
+                                    AttackPayload Stunattack = new AttackPayload(this);
+                                    Stunattack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(18));
+                                    Stunattack.OnHit = stun =>
+                                        {
+                                            AddBuff(stun.Target, new DebuffStunned(WaitSeconds(ScriptFormula(17))));
+                                        };
+                                    Stunattack.Apply();
+                                }
+                            }
+                        }
+                    };
+                attack.Apply();
+
+                if (Rune_C > 0)
+                {
+                    var QuakeHammer = SpawnEffect(159030, User.Position, 0 , WaitSeconds(ScriptFormula(10)));
+                    QuakeHammer.UpdateDelay = 1f;
+                    QuakeHammer.OnUpdate = () =>
+                        {
+                            AttackPayload TremorAttack = new AttackPayload(this);
+                            TremorAttack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(7));
+                            TremorAttack.AddWeaponDamage(ScriptFormula(9), DamageType.Physical);
+                            TremorAttack.Apply();
+                        };
+                }
+            }
+            yield break;
+        }
+    }
+#endregion
+
+    //bash, leap attack, ancient spear, whirlwind, threateningshout, hammeroftheancients
 }
