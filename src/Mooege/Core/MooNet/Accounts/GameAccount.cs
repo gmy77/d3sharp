@@ -35,8 +35,10 @@ namespace Mooege.Core.MooNet.Accounts
     public class GameAccount : PersistentRPCObject
     {
         public Account Owner { get; set; }
-        public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
+
         public D3.OnlineService.EntityId D3GameAccountId { get; private set; }
+
+        public FieldKeyHelper.Program Program { get; private set; }
 
         public D3.Account.BannerConfiguration BannerConfiguration { get; set; }
         public D3.GameMessage.SetGameAccountSettings Settings { get; set; }
@@ -94,11 +96,11 @@ namespace Mooege.Core.MooNet.Accounts
         public GameAccount(ulong persistentId, ulong accountId)
             : base(persistentId)
         {
-            this.SetField(AccountManager.GetAccountByPersistentID(persistentId));
+            this.SetField(AccountManager.GetAccountByPersistentID(accountId));
         }
 
         public GameAccount(Account account)
-            : base(account.BnetAccountID.Low)
+            : base(account.BnetEntityId.Low)
         {
             this.SetField(account);
         }
@@ -107,9 +109,11 @@ namespace Mooege.Core.MooNet.Accounts
         {
             this.Owner = owner;
             var bnetGameAccountHigh = ((ulong)EntityIdHelper.HighIdType.GameAccountId) + (0x6200004433);
-            this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh(bnetGameAccountHigh).SetLow(this.PersistentID).Build();
+            this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh(bnetGameAccountHigh).SetLow(this.PersistentID).Build();
             this.D3GameAccountId = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(bnetGameAccountHigh).SetIdLow(this.PersistentID).Build();
 
+            //TODO: Now hardcode all game accounts to D3
+            this.Program = FieldKeyHelper.Program.D3;
             this.BannerConfiguration = D3.Account.BannerConfiguration.CreateBuilder()
                 .SetBannerShape(2952440006)
                 .SetSigilMain(976722430)
@@ -140,27 +144,34 @@ namespace Mooege.Core.MooNet.Accounts
             }
             set
             {
-                this._loggedInClient = this.Owner.LoggedInClient = value;
+                this._loggedInClient = value;
 
                 // notify friends.
-                if (FriendManager.Friends[this.Owner.BnetAccountID.Low].Count == 0) return; // if account has no friends just skip.
+                if (FriendManager.Friends[this.Owner.BnetEntityId.Low].Count == 0) return; // if account has no friends just skip.
 
                 var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
                 var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
                 var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
 
-                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.Owner.BnetAccountID).AddFieldOperation(operation).Build();
+                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.Owner.BnetEntityId).AddFieldOperation(operation).Build();
                 var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
                 var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
 
-                foreach (var friend in FriendManager.Friends[this.Owner.BnetAccountID.Low])
+                foreach (var friend in FriendManager.Friends[this.Owner.BnetEntityId.Low])
                 {
                     var account = AccountManager.GetAccountByPersistentID(friend.Id.Low);
-                    if (account == null || account.LoggedInClient == null) return; // only send to friends that are online.
+                    if (account == null || account.IsOnline == null) return; // only send to friends that are online.
 
                     // make the rpc call.
-                    account.LoggedInClient.MakeTargetedRPC(this, () =>
-                        bnet.protocol.channel.ChannelSubscriber.CreateStub(account.LoggedInClient).NotifyUpdateChannelState(null, notification, callback => { }));
+                    var d3GameAccounts = GameAccountManager.GetGameAccountsForAccountProgram(account, FieldKeyHelper.Program.D3);
+                    foreach (var d3GameAccount in d3GameAccounts.Values)
+                    {
+                        if (d3GameAccount.IsOnline)
+                        {
+                            d3GameAccount.LoggedInClient.MakeTargetedRPC(this, () =>
+                                bnet.protocol.channel.ChannelSubscriber.CreateStub(d3GameAccount.LoggedInClient).NotifyUpdateChannelState(null, notification, callback => { }));
+                        }
+                    }
                 }
             }
         }
@@ -178,9 +189,10 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        protected override void NotifySubscriptionAdded(MooNetClient client)
+//        protected override void NotifySubscriptionAdded(MooNetClient client)
+        public override List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications()
         {
-            var operations = new List<bnet.protocol.presence.FieldOperation>();
+            var operationList = new List<bnet.protocol.presence.FieldOperation>();
 
             //gameaccount
             //D3,2,1,0 -> D3.Account.BannerConfiguration
@@ -198,8 +210,8 @@ namespace Mooege.Core.MooNet.Accounts
 
             // Banner configuration
             var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 2, 1, 0);
-            var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(client.CurrentGameAccount.BannerConfiguration.ToByteString()).Build()).Build();
-            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build());
+            var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.BannerConfiguration.ToByteString()).Build()).Build();
+            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build());
 
             if (this.lastPlayedHeroId != AccountHasNoToons)
             {
@@ -208,72 +220,74 @@ namespace Mooege.Core.MooNet.Accounts
                 //ToonId
                 var fieldKey7 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 2, 2, 0);
                 var field7 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey7).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(toon.D3EntityID.ToByteString()).Build()).Build();
-                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field7).Build());
+                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field7).Build());
 
                 //Hero Class
                 var fieldKey8 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 1, 0);
                 var field8 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey8).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(toon.ClassID).Build()).Build();
-                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field8).Build());
+                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field8).Build());
 
                 //Hero Level
                 var fieldKey9 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 2, 0);
                 var field9 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey9).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(toon.Level).Build()).Build();
-                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field9).Build());
+                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field9).Build());
 
                 //D3.Hero.VisualEquipment
                 var fieldKey10 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 3, 0);
                 var field10 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey10).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(toon.Equipment.ToByteString()).Build()).Build();
-                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field10).Build());
+                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field10).Build());
 
                 //Hero Flags
                 var fieldKey11 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 4, 0);
                 var field11 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey11).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((int)(toon.Flags | ToonFlags.AllUnknowns)).Build()).Build();
-                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field11).Build());
+                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field11).Build());
 
                 //Hero Name
                 var fieldKey12 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 5, 0);
                 var field12 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey12).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(toon.Name).Build()).Build();
-                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field12).Build());
+                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field12).Build());
             }
 
 
             // ??
             var fieldKey2 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 2, 1, 0);
             var field2 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey2).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
-            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build());
+            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build());
 
             // Program - FourCC "D3"
             var fieldKey3 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 2, 4, 0);
             var field3 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey3).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build()).Build();
-            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field3).Build());
+            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field3).Build());
 
             // Unknown int
             var fieldKey4 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 2, 5, 0);
             var field4 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey4).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1324923597904795).Build()).Build();
-            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field4).Build());
+            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field4).Build());
 
             //BattleTag
             var fieldKey5 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 2, 6, 0);
             var field5 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey5).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Owner.BattleTag).Build()).Build();
-            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field5).Build());
+            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field5).Build());
 
             //Account.Low + "#1"
             var fieldKey6 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 2, 7, 0);
-            var field6 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey6).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(Owner.BnetAccountID.Low.ToString() + "#1").Build()).Build();
-            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field6).Build());
+            var field6 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey6).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(Owner.BnetEntityId.Low.ToString() + "#1").Build()).Build();
+            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field6).Build());
 
-            // Create a presence.ChannelState
-            var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetGameAccountID).AddRangeFieldOperation(operations).Build();
+            return operationList;
 
-            // Embed in channel.ChannelState
-            var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+            //// Create a presence.ChannelState
+            //var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetGameAccountID).AddRangeFieldOperation(operations).Build();
 
-            // Put in addnotification message
-            var notification = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
+            //// Embed in channel.ChannelState
+            //var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
 
-            // Make the rpc call
-            client.MakeTargetedRPC(this, () =>
-                bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, notification.Build(), callback => { }));
+            //// Put in addnotification message
+            //var notification = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
+
+            //// Make the rpc call
+            //client.MakeTargetedRPC(this, () =>
+            //    bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, notification.Build(), callback => { }));
         }
 
         public void Update(bnet.protocol.presence.FieldOperation operation)
@@ -300,7 +314,8 @@ namespace Mooege.Core.MooNet.Accounts
                         {
                             var entityId = D3.OnlineService.EntityId.ParseFrom(field.Value.MessageValue);
                             var channel = ChannelManager.GetChannelByEntityId(entityId);
-                            this.Owner.LoggedInClient.CurrentChannel = channel;
+
+                            this.LoggedInClient.CurrentChannel = channel;
                         }
                         else
                         {
@@ -413,7 +428,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         public override string ToString()
         {
-            return String.Format("{{ GameAccount: {0} [lowId: {1}] }}", this.Owner.BattleTag, this.BnetGameAccountID.Low);
+            return String.Format("{{ GameAccount: {0} [lowId: {1}] }}", this.Owner.BattleTag, this.BnetEntityId.Low);
         }
 
         public void SaveToDB()

@@ -117,7 +117,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         public static int GetUnusedHashCodeForBattleTag(string name)
         {
-            var query = string.Format("SELECT hashCode from account WHERE battletagname='{0}'", name);
+            var query = string.Format("SELECT hashCode from accounts WHERE battletagname='{0}'", name);
             Logger.Trace(query);
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();

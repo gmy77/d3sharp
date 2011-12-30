@@ -178,7 +178,7 @@ namespace Mooege.Core.MooNet.Services
                 channelState.PrivacyLevel = request.StateChange.PrivacyLevel;
 
             var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(this.Client.CurrentGameAccount.BnetGameAccountID)
+                .SetAgentId(this.Client.CurrentGameAccount.BnetEntityId)
                 .SetStateChange(channelState)
                 .Build();
 

@@ -238,11 +238,9 @@ namespace Mooege.Core.MooNet.Toons
 
         private void SetFields(string name, int hashCode, ToonClass @class, ToonFlags flags, byte level, GameAccount owner, uint timePlayed)
         {
-            //this.ToonHandle = new ToonHandleHelper(this.PersistentID);
-            //this.D3EntityID = this.ToonHandle.ToD3EntityID();
-            //this.BnetEntityID = this.ToonHandle.ToBnetEntityID();
-            this.D3EntityID = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId + this.PersistentID).SetIdLow(this.PersistentID).Build();
             //this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ToonId + this.PersistentID).SetLow(this.PersistentID).Build();
+            this.D3EntityID = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId + this.PersistentID).SetIdLow(this.PersistentID).Build();
+
             this.Name = name;
             this.HashCode = hashCode;
             this.HashCodeString = HashCode.ToString("D3");

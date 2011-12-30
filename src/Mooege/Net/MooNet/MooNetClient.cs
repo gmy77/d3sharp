@@ -142,8 +142,8 @@ namespace Mooege.Net.MooNet
         public bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon)
         {
             var identityBuilder = bnet.protocol.Identity.CreateBuilder();
-            if (acct) identityBuilder.SetAccountId(this.Account.BnetAccountID);
-            if (gameacct) identityBuilder.SetGameAccountId(this.CurrentGameAccount.BnetGameAccountID);
+            if (acct) identityBuilder.SetAccountId(this.Account.BnetEntityId);
+            if (gameacct) identityBuilder.SetGameAccountId(this.CurrentGameAccount.BnetEntityId);
             if (toon && this.CurrentToon != null)
                 Logger.Warn("DEPRECATED: GetIdentity called with toon.");
             return identityBuilder.Build();
@@ -342,9 +342,9 @@ namespace Mooege.Net.MooNet
             if (text.Trim() == string.Empty) return;
 
             var notification = bnet.protocol.notification.Notification.CreateBuilder()
-                .SetTargetId(this.CurrentGameAccount.BnetGameAccountID)
+                .SetTargetId(this.CurrentGameAccount.BnetEntityId)
                 .SetType("WHISPER")
-                .SetSenderId(this.CurrentGameAccount.BnetGameAccountID)
+                .SetSenderId(this.CurrentGameAccount.BnetEntityId)
                 .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("whisper")
                 .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(text).Build()).Build()).Build();
 
@@ -374,7 +374,7 @@ namespace Mooege.Net.MooNet
                     .SetMessageValue(this.CurrentChannel.D3EntityId.ToByteString()).Build()).Build();
 
                 var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
-                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.CurrentGameAccount.BnetGameAccountID).AddFieldOperation(operation).Build();
+                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.CurrentGameAccount.BnetEntityId).AddFieldOperation(operation).Build();
 
                 this.SendStateChangeNotification(this.CurrentGameAccount, state);
             }

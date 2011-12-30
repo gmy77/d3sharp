@@ -146,7 +146,7 @@ namespace Mooege.Core.GS.Games
             this.Players = new ConcurrentDictionary<GameClient, Player>();
             this._objects = new ConcurrentDictionary<uint, DynamicObject>();
             this._worlds = new ConcurrentDictionary<int, World>();
-            this.StartingWorldSNOId = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff. /komiga
+            this.StartingWorldSNOId = 86856; // 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff. /komiga
             this.Quests = new QuestManager(this);
 
             this._tickWatch = new Stopwatch();
@@ -286,7 +286,7 @@ namespace Mooege.Core.GS.Games
             {
                 PlayerIndex = joinedPlayer.PlayerIndex, // player index
                 ToonId = new EntityId() { High = (long)joinedPlayer.Toon.D3EntityID.IdHigh, Low = (long)joinedPlayer.Toon.D3EntityID.IdLow }, //Toon
-                GameAccountId = new EntityId() { High = (long)joinedPlayer.Toon.GameAccount.BnetGameAccountID.High, Low = (long)joinedPlayer.Toon.GameAccount.BnetGameAccountID.Low }, //GameAccount
+                GameAccountId = new EntityId() { High = (long)joinedPlayer.Toon.GameAccount.BnetEntityId.High, Low = (long)joinedPlayer.Toon.GameAccount.BnetEntityId.Low }, //GameAccount
                 ToonName = joinedPlayer.Toon.Name,
                 Field3 = 0x00000002, //party frame class
                 Field4 = target!=joinedPlayer? 0x2 : 0x4, //party frame level /boyc - may mean something different /raist.

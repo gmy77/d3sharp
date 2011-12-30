@@ -46,12 +46,12 @@ namespace Mooege.Core.MooNet.Services
 
                 Logger.Debug("RecentPlayer => " + client.CurrentToon);
                 var recentPlayer = bnet.protocol.user_manager.RecentPlayer.CreateBuilder()
-                    .SetEntity(client.CurrentGameAccount.Owner.BnetAccountID)
+                    .SetEntity(client.CurrentGameAccount.Owner.BnetEntityId)
                     .SetProgramId("D3")
                     .AddAttributes(bnet.protocol.attribute.Attribute.CreateBuilder()
                         .SetName("GameAccountEntityId")
                         .SetValue(bnet.protocol.attribute.Variant.CreateBuilder()
-                            .SetMessageValue(client.CurrentGameAccount.BnetGameAccountID.ToByteString())
+                            .SetMessageValue(client.CurrentGameAccount.BnetEntityId.ToByteString())
                             .Build())
                         .Build())
                     .SetId(i++)

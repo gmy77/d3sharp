@@ -82,7 +82,7 @@ namespace Mooege.Core.MooNet.Services
             Logger.Debug("{0} invited {1} to his channel.", Client.CurrentToon, invitee);
 
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
-            var extensionBytes = request.UnknownFields.FieldDictionary[105].LengthDelimitedList[0].ToByteArray();
+            var extensionBytes = request.Params.UnknownFields.FieldDictionary[105].LengthDelimitedList[0].ToByteArray();
             var channelInvitationInfo = bnet.protocol.channel_invitation.ChannelInvitationParams.ParseFrom(extensionBytes);
 
             var channelInvitation = bnet.protocol.channel_invitation.ChannelInvitationParams.CreateBuilder()
@@ -94,7 +94,7 @@ namespace Mooege.Core.MooNet.Services
             //Todo: Verify Inviter and Invitee names -Egris
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder();
             invitation.SetId(ChannelInvitationManager.InvitationIdCounter++)
-                .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(Client.CurrentGameAccount.BnetGameAccountID).Build())
+                .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(Client.CurrentGameAccount.BnetEntityId).Build())
                 .SetInviterName(Client.CurrentGameAccount.Owner.BattleTag)
                 .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(request.TargetId).Build())
                 .SetInviteeName(invitee.Owner.BattleTag)
@@ -115,7 +115,7 @@ namespace Mooege.Core.MooNet.Services
             // send bnet.protocol.channel.UpdateChannelStateNotification to inviter - update him on invitation is sent.          
 
             var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(Client.CurrentGameAccount.BnetGameAccountID)
+                .SetAgentId(Client.CurrentGameAccount.BnetEntityId)
                 .SetStateChange(bnet.protocol.channel.ChannelState.CreateBuilder().AddInvitation(invitation.Clone()));
 
             this.Client.MakeTargetedRPC(this.Client.CurrentChannel, () =>
@@ -138,9 +138,9 @@ namespace Mooege.Core.MooNet.Services
             // Even though it makes no sense, the suggester is used for all fields in the caps and is what works with the client. /dustinconrad
             var suggestion = bnet.protocol.invitation.Suggestion.CreateBuilder()
                 .SetChannelId(request.ChannelId)
-                .SetSuggesterId(suggester.BnetGameAccountID)
+                .SetSuggesterId(suggester.BnetEntityId)
                 .SetSuggesterName(suggester.Owner.BattleTag)
-                .SetSuggesteeId(suggester.BnetGameAccountID)
+                .SetSuggesteeId(suggester.BnetEntityId)
                 .SetSuggesteeName(suggester.Owner.BattleTag)
                 .Build();
 

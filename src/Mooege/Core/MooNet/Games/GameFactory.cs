@@ -103,7 +103,7 @@ namespace Mooege.Core.MooNet.Games
             //TODO: We should actually find the server's public-interface and use that /raist
 
             return bnet.protocol.game_master.ConnectInfo.CreateBuilder()
-                .SetMemberId(client.CurrentGameAccount.BnetGameAccountID)
+                .SetMemberId(client.CurrentGameAccount.BnetEntityId)
                 .SetHost(Net.Utils.GetGameServerIPForClient(client))
                 .SetPort(Config.Instance.Port)
                 .SetToken(ByteString.CopyFrom(new byte[] { 0x31, 0x33, 0x38, 0x38, 0x35, 0x34, 0x33, 0x33, 0x32, 0x30, 0x38, 0x34, 0x30, 0x30, 0x38, 0x38, 0x35, 0x37, 0x39, 0x36 }))
@@ -119,7 +119,7 @@ namespace Mooege.Core.MooNet.Games
                 .SetPrivacyLevel(bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_CLOSED).Build();
 
             var notificationPrivacyLevel = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(client.CurrentGameAccount.BnetGameAccountID)
+                .SetAgentId(client.CurrentGameAccount.BnetEntityId)
                 .SetStateChange(channelStatePrivacyLevel)
                 .Build();
 
@@ -133,7 +133,7 @@ namespace Mooege.Core.MooNet.Games
                 .Build()).Build();
 
             var notificationPartyLock = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(client.CurrentGameAccount.BnetGameAccountID)
+                .SetAgentId(client.CurrentGameAccount.BnetEntityId)
                 .SetStateChange(channelStatePartyLock)
                 .Build();
 
@@ -157,7 +157,7 @@ namespace Mooege.Core.MooNet.Games
 
             var notificationBuilder = bnet.protocol.notification.Notification.CreateBuilder()
                 .SetSenderId(bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(0).Build())
-                .SetTargetId(client.CurrentGameAccount.BnetGameAccountID)
+                .SetTargetId(client.CurrentGameAccount.BnetEntityId)
                 .SetType("GAME_CONNECTION_INFO")
                 .AddAttribute(connectionInfoAttribute)
                 .AddAttribute(gameHandleAttribute)

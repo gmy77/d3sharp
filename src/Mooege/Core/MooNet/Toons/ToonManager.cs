@@ -45,6 +45,12 @@ namespace Mooege.Core.MooNet.Toons
             return (toon != null) ? toon.GameAccount.Owner : null;
         }
 
+        public static GameAccount GetOwnerGameAccountByToonLowId(ulong id)
+        {
+            var toon = (from pair in Toons where pair.Value.PersistentID == id select pair.Value).FirstOrDefault();
+            return (toon != null) ? toon.GameAccount : null;
+        }
+
         public static Toon GetToonByLowID(ulong id)
         {
             return (from pair in Toons where pair.Value.PersistentID == id select pair.Value).FirstOrDefault();

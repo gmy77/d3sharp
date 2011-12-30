@@ -61,14 +61,14 @@ namespace Mooege.Core.MooNet.Services
 
                 Logger.Info("User {0} authenticated successfuly.", request.Email);
                 var logonResponseBuilder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
-                    .SetAccount(this.Client.Account.BnetAccountID);
+                    .SetAccount(this.Client.Account.BnetEntityId);
 
                 foreach (var gameAccount in this.Client.Account.GameAccounts.Values)
                 {
-                    logonResponseBuilder.AddGameAccount(gameAccount.BnetGameAccountID);
+                    logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
                 }
 
-                    //.AddGameAccount(Client.Account.BnetGameAccountID);
+                    //.AddGameAccount(Client.Account.BnetEntityId);
 
                 done(logonResponseBuilder.Build());
 
@@ -97,6 +97,8 @@ namespace Mooege.Core.MooNet.Services
         public override void SelectGameAccount(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.EntityId request, Action<bnet.protocol.NoData> done)
         {
             this.Client.CurrentGameAccount = GameAccountManager.GetAccountByPersistentID(request.Low);
+            this.Client.CurrentGameAccount.LoggedInClient = this.Client;
+
             Logger.Trace("SelectGameAccount(): {0}", this.Client.CurrentGameAccount);
 
             done(bnet.protocol.NoData.CreateBuilder().Build());

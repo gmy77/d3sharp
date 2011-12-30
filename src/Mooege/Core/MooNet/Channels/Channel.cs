@@ -100,7 +100,7 @@ namespace Mooege.Core.MooNet.Channels
 
         public bool HasMember(GameAccount gameAccount) //check if a given game account is already channels member
         {
-            return this.Members.Any(pair => pair.Value.Identity.AccountId.Low == gameAccount.BnetGameAccountID.Low);
+            return this.Members.Any(pair => pair.Value.Identity.AccountId.Low == gameAccount.BnetEntityId.Low);
         }
 
         public Member GetMember(MooNetClient client)
@@ -271,7 +271,7 @@ namespace Mooege.Core.MooNet.Channels
         public void SendMessage(MooNetClient client, bnet.protocol.channel.Message message)
         {
             var notification =
-                bnet.protocol.channel.SendMessageNotification.CreateBuilder().SetAgentId(client.CurrentGameAccount.BnetGameAccountID)
+                bnet.protocol.channel.SendMessageNotification.CreateBuilder().SetAgentId(client.CurrentGameAccount.BnetEntityId)
                     .SetMessage(message).SetRequiredPrivileges(0).Build();
 
 

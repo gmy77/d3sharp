@@ -66,8 +66,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8"));
             Field2.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
-            b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
+            b.Append(' ', pad); b.AppendLine("Field3: " + Field3.ToString("G"));
+            b.Append(' ', pad); b.AppendLine("Field4: " + Field4.ToString("G"));
             b.Append(' ', pad); b.AppendLine("Field5: 0x" + Field5.ToString("X8") + " (" + Field5 + ")");
             b.Append(' ', pad); b.AppendLine("Field6: 0x" + Field6.ToString("X8") + " (" + Field6 + ")");
             b.Append(' ', --pad);

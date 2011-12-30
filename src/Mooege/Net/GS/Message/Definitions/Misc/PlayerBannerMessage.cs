@@ -40,7 +40,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 
         public override void AsText(StringBuilder b, int pad)
         {
-            b.AppendLine("PlayCutsceneMessage:");
+            b.AppendLine("PlayerBannerMessage:");
             b.AppendLine(PlayerBanner.ToString());
         }
     }

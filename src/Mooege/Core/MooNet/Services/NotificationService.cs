@@ -52,7 +52,7 @@ namespace Mooege.Core.MooNet.Services
                     else
                     {
                         var notification = bnet.protocol.notification.Notification.CreateBuilder(request)
-                            .SetSenderId(this.Client.CurrentGameAccount.BnetGameAccountID)
+                            .SetSenderId(this.Client.CurrentGameAccount.BnetEntityId)
                             .Build();
 
                         targetAccount.LoggedInClient.MakeRPC(() =>
