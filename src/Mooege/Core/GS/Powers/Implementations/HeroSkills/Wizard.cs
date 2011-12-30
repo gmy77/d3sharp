@@ -1706,7 +1706,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
     #endregion
-
     
     //TODO: Rune_C and Rune_E
     //TODO: shock range and melee attacks for weapon damage as lightning (not in update. make your own update in Main())
