@@ -313,6 +313,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             base.Remove();
             Target.Attributes[GameAttribute.Casting_Speed_Percent] -= Percentage;
             Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] -= Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
         }
     }
     [ImplementsPowerSNO(86991)]
@@ -381,6 +382,30 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Target.Attributes[GameAttribute.Defense_Bonus_Percent] -= ScriptFormula(1);
                 Target.Attributes[GameAttribute.Resource_Max_Bonus] += ScriptFormula(2);
                 Target.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+    [ImplementsPowerSNO(30680)] //blizzard.pow
+    [ImplementsPowerBuff(0)]
+    public class BlizzardPowers : PowerBuff
+    {
+        public BlizzardPowers(TickTimer timeout)
+        {
+            Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Crit_Damage_Percent] += (int)ScriptFormula(9);
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Crit_Damage_Percent] -= (int)ScriptFormula(9);
+            Target.Attributes.BroadcastChangedIfRevealed();
         }
     }
 }

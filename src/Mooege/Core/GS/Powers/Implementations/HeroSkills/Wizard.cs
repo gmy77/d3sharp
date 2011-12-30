@@ -1075,7 +1075,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
-    //TODO: Crit Strike Chance bonus to Rune_E
+    //Complete
     #region Blizzard
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
     public class WizardBlizzard : PowerScript
@@ -1084,15 +1084,12 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override IEnumerable<TickTimer> Run()
         {
-            //Rune_D
             UsePrimaryResource(ScriptFormula(19));
 
             SpawnEffect(Wizard_Blizzard, TargetPosition);
 
-            //Rune_A
             for (int i = 0; i < ScriptFormula(4); ++i)
             {
-                //Rune_B
                 AttackPayload attack = new AttackPayload(this);
                 attack.Targets = GetEnemiesInRadius(TargetPosition, ScriptFormula(3));
                 attack.AddWeaponDamage(ScriptFormula(0), DamageType.Cold);
@@ -1103,10 +1100,11 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                     if (Rune_E > 0)
                     {
+                        //Crit Strike Chance(ScriptFormula(9)) -> there is no Crit Strike Chance, so i've used Crit Damage Percent..
+                        AddBuff(User, new BlizzardPowers(WaitSeconds(3f)));
                         if (Rand.NextDouble() < ScriptFormula(10))
                         {
                             {
-                                //TODO:Crit Strike Chance(ScriptFormula(9)) with BLizzard
                                 AddBuff(hit.Target, new DebuffFrozen(WaitSeconds(3f)));
                             }
                         }
@@ -1455,9 +1453,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                 AttackPayload bleed = new AttackPayload(this);
                 //Script for damage may be off. please check.
                 bleed.AddWeaponDamage(ScriptFormula(4), DamageType.Physical);
-                bleed.OnHit = (hit) =>
-                {
-                };
                 bleed.Apply();
                 return false;
             }
@@ -1930,7 +1925,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             public override void Init()
             {
-                Timeout = WaitSeconds(ScriptFormula(0));
+                Timeout = WaitSeconds(ScriptFormula(11));
             }
 
             public override bool Apply()
