@@ -22,7 +22,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
-    [Message(Opcodes.ACDTranslateNormalMessage, Consumers.Player)]
+    [Message(Opcodes.ACDTranslateNormalMessage)]
     class ACDTranslateNormalMessage : GameMessage
     {
         public int ActorId;
