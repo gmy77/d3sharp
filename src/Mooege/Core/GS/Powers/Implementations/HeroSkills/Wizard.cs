@@ -246,7 +246,8 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 #endregion
 
-    //TODO: Rune_B: projectiles come out of wizard one at a time but very fast, not all at the same time.
+    //Rune_B: much better(thanks Wesko), do you also see the weird order of missiles?
+    //        btw, I sped up the missiles even more to seem closer to the animation/video.
     //TODO: also figure out Rune_E homing missile
     #region MagicMissile
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.MagicMissile)]
@@ -259,20 +260,42 @@ namespace Mooege.Core.GS.Powers.Implementations
             User.PlayEffectGroup(19305); // cast effect
             if (Rune_B > 0)
             {
-                Vector3D[] projDestinations = PowerMath.GenerateSpreadPositions(User.Position, TargetPosition, ScriptFormula(8)/3f, (int)ScriptFormula(5));
+                Vector3D[] projDestinations = PowerMath.GenerateSpreadPositions(User.Position, TargetPosition, ScriptFormula(8) / 5f, (int)ScriptFormula(5));
 
-                foreach (Vector3D missilePos in projDestinations)
+                for (int i = 0; i < projDestinations.Length; i++)
                 {
-                    var proj = new Projectile(this, 99567, User.Position);
-                    proj.OnCollision = (hit) =>
+                    Int32 j = 1;
+                    if (i == 0)//First missile goes off right away.
                     {
-                        SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
-                        proj.Destroy();
-                        WeaponDamage(hit, ScriptFormula(1), DamageType.Arcane);
-                    };
-                    proj.Launch(missilePos, ScriptFormula(4));
+                        var proj = new Projectile(this, 99567, User.Position);
+                        proj.OnCollision = (hit) =>
+                        {
+                            SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
+                            proj.Destroy();
+                            WeaponDamage(hit, ScriptFormula(1), DamageType.Arcane);
+                        };
+                        proj.Launch(projDestinations[i], ScriptFormula(4));
+                    }
+                    else
+                    {
+                        for (j = 1; j < 4000001; j++) //This will generate a 40ms delay over each projectile launch.
+                        {
+                            if (j % 4000000 == 0)
+                            {
+                                var proj = new Projectile(this, 99567, User.Position);
+                                proj.OnCollision = (hit) =>
+                                {
+                                    SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
+                                    proj.Destroy();
+                                    WeaponDamage(hit, ScriptFormula(1), DamageType.Arcane);
+                                };
+                                proj.Launch(projDestinations[i], ScriptFormula(4));
+                            }
+                        }
+                    }
                 }
             }
+
             /*else if (Rune_E > 0)
             {
                 var projectile = new Projectile(this, 99567, User.Position);
@@ -300,7 +323,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     {
                         GeneratePrimaryResource(ScriptFormula(16));
                     }
-                    
+
                     if (Rune_C > 0)
                     {
                         if (Rand.NextDouble() < ScriptFormula(12))
@@ -310,15 +333,15 @@ namespace Mooege.Core.GS.Powers.Implementations
                         projectile.Destroy();
                     }
                     else
-                    projectile.Destroy();
+                        projectile.Destroy();
                 };
                 projectile.Launch(TargetPosition, ScriptFormula(4));
             }
-            
+
             yield break;
         }
     }
-#endregion
+    #endregion
 
     //Very Imcomplete
     //Hydras are (most likely) Pets so this is incorrect
@@ -1218,38 +1241,42 @@ namespace Mooege.Core.GS.Powers.Implementations
     #endregion
 
     //TODO: Rune_B -> mirror images
-    //TODO: Rune_D -> isnt teleporting back to original Spot, and groundportals arent going away.
     #region Teleport
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Teleport)]
     public class WizardTeleport : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
-
-            Vector3D OrigSpot = new Vector3D(User.Position.X, User.Position.Y, User.Position.Z);
-            Actor OrigTele = SpawnProxy(OrigSpot);
-
             UsePrimaryResource(15f);
-            if (Rune_E > 0 || Rune_D > 0)
+            if (!(Rune_E > 0 || Rune_D > 0))
             {
-            }
-            else
-            { 
-                StartCooldown(WaitSeconds(ScriptFormula(20))); 
+                StartCooldown(WaitSeconds(ScriptFormula(20)));
             }
 
             if (Rune_D > 0)
             {
-                if (AddBuff(User, new TeleRevertBuff()))
+                TeleRevertBuff buff = User.World.BuffManager.GetFirstBuff<TeleRevertBuff>(User);
+                if (buff != null)
                 {
-                    User.Teleport(OrigSpot);
-                    User.PlayEffectGroup(206679);
+                    User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
+                    yield return WaitSeconds(0.3f);
+                    User.Teleport(buff.OrigSpot);
+                    User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
+                    buff.Remove(); // Ensures that you can only revert the teleport once.
                 }
                 else
-                OrigTele.PlayEffectGroup(RuneSelect(170231, 205685, 205684, 191913, 192074, 192151));
-                yield return WaitSeconds(0.3f);
-                User.Teleport(TargetPosition);
-                User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
+                {
+                    Vector3D OrigSpot;
+                    Actor OrigTele;
+                    OrigSpot = new Vector3D(User.Position.X, User.Position.Y, User.Position.Z);
+                    OrigTele = SpawnProxy(OrigSpot, WaitSeconds(ScriptFormula(18)));
+                    OrigTele.PlayEffectGroup(RuneSelect(170231, 205685, 205684, 191913, 192074, 192151));
+                    OrigTele.PlayEffectGroup(206679);
+                    AddBuff(User, new TeleRevertBuff(OrigSpot, OrigTele));
+                    yield return WaitSeconds(0.3f);
+                    User.Teleport(TargetPosition);
+                    User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
+                }
 
             }
             else
@@ -1283,10 +1310,6 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 AddBuff(User, new TeleDmgReductionBuff());
             }
-            if (Rune_D > 0)
-            {
-                AddBuff(User, new TeleRevertBuff());
-            }
             if (Rune_E > 0)
             {
                 AddBuff(User, new TeleCoolDownBuff());
@@ -1302,22 +1325,31 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (!base.Apply())
                     return false;
                 //gameattribute damage reduction, Absorb should do the same thing?
-                //Target.Attributes[GameAttribute.Damage_Absorb_Percent] += ScriptFormula(14);
-                //Target.Attributes.BroadcastChangedIfRevealed();
+                Target.Attributes[GameAttribute.Damage_Absorb_Percent] += ScriptFormula(14);
+                Target.Attributes.BroadcastChangedIfRevealed();
                 return true;
             }
 
             public override void Remove()
             {
                 base.Remove();
-                //Target.Attributes[GameAttribute.Damage_Absorb_Percent] -= ScriptFormula(14);
-                //Target.Attributes.BroadcastChangedIfRevealed();
+                Target.Attributes[GameAttribute.Damage_Absorb_Percent] -= ScriptFormula(14);
+                Target.Attributes.BroadcastChangedIfRevealed();
 
             }
         }
         [ImplementsPowerBuff(5)]
         class TeleRevertBuff : PowerBuff
         {
+            public Vector3D OrigSpot;
+            public Actor OrigTele;
+
+            public TeleRevertBuff(Vector3D OrigSpot, Actor OrigTele)
+            {
+                this.OrigSpot = OrigSpot;
+                this.OrigTele = OrigTele;
+            }
+
             public override void Init()
             {
                 Timeout = WaitSeconds(ScriptFormula(18));
@@ -1330,6 +1362,10 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
             public override void Remove()
             {
+                Timeout.Stop();
+                //OrigTele.Destroy();  --   Removes the voidzone effect as though, but also throws an exception. 
+                //                          Perhaps one cannot Destroy() a proxy actor, 
+                //                          but is there any other way to quit the effectgroup early?
                 base.Remove();
                 StartCooldown(WaitSeconds(ScriptFormula(20)));
             }
