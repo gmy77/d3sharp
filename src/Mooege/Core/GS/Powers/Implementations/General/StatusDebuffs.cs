@@ -182,6 +182,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
+
     [ImplementsPowerSNO(100971)] // DebuffSlowed.pow
     [ImplementsPowerBuff(0)]
     public class DebuffSlowed : SimpleBooleanStatusDebuff
@@ -209,6 +210,43 @@ namespace Mooege.Core.GS.Powers.Implementations
             base.Remove();
             Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] += Percentage;
             Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] -= Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+
+    [ImplementsPowerBuff(0)]
+    public class DebuffFrozen : SimpleBooleanStatusDebuff
+    {
+        public DebuffFrozen(TickTimer timeout)
+            : base(GameAttribute.Frozen, GameAttribute.Freeze_Immune, FloatingNumberMessage.FloatType.Frozen)
+        {
+            Timeout = timeout;
+        }
+    }
+    //Wrong Section but i'm just gonna put it here.
+    [ImplementsPowerBuff(0)]
+    public class MovementBuff : PowerBuff
+    {
+        public float Percentage;
+
+        public MovementBuff(float percentage, TickTimer timeout)
+        {
+            Percentage = percentage;
+            Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Movement_Bonus_Run_Speed] += Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Movement_Bonus_Run_Speed] -= Percentage;
             Target.Attributes.BroadcastChangedIfRevealed();
         }
     }

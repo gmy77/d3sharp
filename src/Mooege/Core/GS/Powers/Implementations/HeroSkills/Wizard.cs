@@ -31,6 +31,7 @@ using Mooege.Core.GS.Players;
 
 //TODO (IMPORTANT): GO BACK through and any WaitSeconds/GameAttributes must be in Buff Apply() and Remove()
 //TODO: ADD TO buffs. Targets in Radius receiving debuff.
+//TODO any projectile that pierces through enemies needs to be inside an updater, so it doesnt constantly attack.
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -1051,39 +1052,40 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
-    //TODO: Rune_C,E
+    //TODO: Crit Strike Chance bonus to Rune_E
     #region Blizzard
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
     public class WizardBlizzard : PowerScript
     {
-        //Rune_E - Enemies caught in the storm have a 52.5% chance to be frozen for 3 seconds and the critical strike chance with Blizzard is increased by 80%.
         public const int Wizard_Blizzard = 0x1977;
 
         public override IEnumerable<TickTimer> Run()
         {
+            //Rune_D
             UsePrimaryResource(ScriptFormula(19));
 
             SpawnEffect(Wizard_Blizzard, TargetPosition);
 
+            //Rune_A
             for (int i = 0; i < ScriptFormula(4); ++i)
             {
-                if (Rune_E > 0)
-                {
-                    //Crit Chance Bonus -> ScriptFormula(9)
-                }
-                
+                //Rune_B
                 AttackPayload attack = new AttackPayload(this);
                 attack.Targets = GetEnemiesInRadius(TargetPosition, ScriptFormula(3));
                 attack.AddWeaponDamage(ScriptFormula(0), DamageType.Cold);
                 attack.OnHit = (hit) =>
                 {
-                    AddBuff(hit.Target, new DebuffChilled(0f, WaitSeconds(3f)));
+                    //seems like this should be obvious to have in Blizzard.
+                    AddBuff(hit.Target, new DebuffChilled(0.5f, WaitSeconds(3f)));
+
                     if (Rune_E > 0)
                     {
                         if (Rand.NextDouble() < ScriptFormula(10))
                         {
-                            //scriptformula(11)
-                            //DebuffFrozen
+                            {
+                                //TODO:Crit Strike Chance(ScriptFormula(9)) with BLizzard
+                                AddBuff(hit.Target, new DebuffFrozen(WaitSeconds(3f)));
+                            }
                         }
                     }
                 };
@@ -1094,11 +1096,16 @@ namespace Mooege.Core.GS.Powers.Implementations
             if (Rune_C > 0)
             {
                 var BlizzMist = SpawnEffect(75642, User.Position, 0, WaitSeconds(ScriptFormula(7)));
-                BlizzMist.UpdateDelay = 1f;
+                BlizzMist.UpdateDelay = 0.5f;
                 BlizzMist.OnUpdate = () =>
                 {
-                    //slow enemies who enter mist
-                    //ScriptFormula(8) and (12)
+                    AttackPayload attack = new AttackPayload(this);
+                    attack.Targets = GetEnemiesInRadius(TargetPosition, ScriptFormula(3));
+                    attack.AddWeaponDamage(0f, DamageType.Cold);
+                    attack.OnHit = (hit) =>
+                    {
+                        AddBuff(hit.Target, new DebuffChilled(0.75f, WaitSeconds(ScriptFormula(20))));
+                    };
                 };
             }
         }
@@ -1154,8 +1161,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         
         public override IEnumerable<TickTimer> Main()
         {
-            //Total:Castin Cost vs. Resource Cost Min To Cast
-            UsePrimaryResource((Math.Max(ScriptFormula(19), 8f)));
+            //Rune_D
+            UsePrimaryResource((Math.Max(ScriptFormula(19), 8f)) * EffectsPerSecond);
 
             foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f).Actors)
             {
@@ -1185,7 +1192,9 @@ namespace Mooege.Core.GS.Powers.Implementations
 
             //Rune_E - Enemies who die leave a patch of ice on the ground that causes 64500% weapon damage as Cold to enemies moving through it over 5 seconds.
             //if enemy dies {
-            //Target.playeffectgroup(149878); or on proxy?
+            //AddBuff(Hit.Target, new icyPatchBuff());
+            //playeffectgroup(149878);
+            //OnUpdate
             //WeaponDamage(actor, 2.70f * EffectsPerSecond, DamageType.Cold);
             //E: Ground Ice Dps (SF(3))
             //E: Ground Ice Lifetime (SF(8))
@@ -1199,6 +1208,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         [ImplementsPowerBuff(1)]
         class IceDomeBuff : PowerBuff
         {
+            //Rune_C
             public override void Init()
             {
                 Timeout = WaitSeconds(2f);
@@ -1207,23 +1217,50 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
-    //TODO: Rune_B,C,D,E
+    //TODO: Rune_B -> mirror images
+    //TODO: Rune_D -> isnt teleporting back to original Spot, and groundportals arent going away.
     #region Teleport
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Teleport)]
     public class WizardTeleport : PowerScript
     {
-
         public override IEnumerable<TickTimer> Run()
         {
+
+            Vector3D OrigSpot = new Vector3D(User.Position.X, User.Position.Y, User.Position.Z);
+            Actor OrigTele = SpawnProxy(OrigSpot);
+
             UsePrimaryResource(15f);
-            StartCooldown(WaitSeconds(ScriptFormula(20)));
-            
-            SpawnProxy(User.Position).PlayEffectGroup(RuneSelect(170231, 205685, 205684, 191913, 192074, 192151));  // alt cast efg: 170231
-            yield return WaitSeconds(0.3f);
-            User.Teleport(TargetPosition);
-            //MDZ says this might work just as 191849.
-            User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
-            
+            if (Rune_E > 0 || Rune_D > 0)
+            {
+            }
+            else
+            { 
+                StartCooldown(WaitSeconds(ScriptFormula(20))); 
+            }
+
+            if (Rune_D > 0)
+            {
+                if (AddBuff(User, new TeleRevertBuff()))
+                {
+                    User.Teleport(OrigSpot);
+                    User.PlayEffectGroup(206679);
+                }
+                else
+                OrigTele.PlayEffectGroup(RuneSelect(170231, 205685, 205684, 191913, 192074, 192151));
+                yield return WaitSeconds(0.3f);
+                User.Teleport(TargetPosition);
+                User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
+
+            }
+            else
+            {
+                SpawnProxy(User.Position).PlayEffectGroup(RuneSelect(170231, 205685, 205684, 191913, 192074, 192151));  // alt cast efg: 170231
+                yield return WaitSeconds(0.3f);
+                User.Teleport(TargetPosition);
+                //MDZ says this might work just as 191849.
+                User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
+            }
+
             if (Rune_A > 0)
             {
                 User.PlayEffectGroup(170289);
@@ -1244,20 +1281,15 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
             if (Rune_C > 0)
             {
-                //Rune_C - For 16 |4second:seconds; after you appear you will take 25% less damage.
                 AddBuff(User, new TeleDmgReductionBuff());
             }
             if (Rune_D > 0)
             {
-                //User.PlayEffectGroup(206679); //golden_groundportal.efg
-                //Rune_D - Casting Teleport again within 8 |4second:seconds; will instantly bring you back to your original location.
-                //SF(18)
+                AddBuff(User, new TeleRevertBuff());
             }
             if (Rune_E > 0)
             {
-                //User.PlayEffectGroup(192069); // -> obsidian buff
-                //Rune_E - After casting Teleport there is a [2|1|] second delay before the cooldown begins.
-                //E: SF(16) - runeE CoolDown Delay
+                AddBuff(User, new TeleCoolDownBuff());
             }
         }
         [ImplementsPowerBuff(1)]
@@ -1269,22 +1301,64 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 if (!base.Apply())
                     return false;
-                //gameattribute damage reduction
+                //gameattribute damage reduction, Absorb should do the same thing?
+                Target.Attributes[GameAttribute.Damage_Absorb_Percent] += ScriptFormula(14);
+                Target.Attributes.BroadcastChangedIfRevealed();
                 return true;
             }
 
-            public override void Remove() { base.Remove(); }
+            public override void Remove()
+            {
+                base.Remove();
+                Target.Attributes[GameAttribute.Damage_Absorb_Percent] -= ScriptFormula(14);
+                Target.Attributes.BroadcastChangedIfRevealed();
+
+            }
+        }
+        [ImplementsPowerBuff(5)]
+        class TeleRevertBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(18));
+            }
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                return true;
+            }
+            public override void Remove()
+            {
+                base.Remove();
+                StartCooldown(WaitSeconds(ScriptFormula(20)));
+            }
+        }
+        [ImplementsPowerBuff(5)]
+        class TeleCoolDownBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(16));
+            }
+            public override void Remove()
+            {
+                base.Remove();
+                StartCooldown(WaitSeconds(ScriptFormula(20)));
+            }
         }
     }
     #endregion
 
-    //TODO: Rune_A,C,E
+    //TODO: Rune_A -> time delay between bleeds? its 3 seconds, damage per second.
+    //TODO: Rune_E
     #region SpectralBlade
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.SpectralBlade)]
     public class WizardSpectralBlade : PowerScript
     {
         public override IEnumerable<TickTimer> Run()
         {
+            
             UsePrimaryResource(15f);
             //these are changed around to actually identify with their rune color : visual effects
             User.PlayEffectGroup(RuneSelect(19343, 189477, 19343, 189413, 188944, 189362));
@@ -1300,18 +1374,17 @@ namespace Mooege.Core.GS.Powers.Implementations
                 attack.AddWeaponDamage(ScriptFormula(21), DamageType.Physical);
                 attack.OnHit = hitPayload =>
                 {
-                    //if Rune_A
-                    //BLEED DEBUFF
-                    //(SF4)A: Bleed Weapon Damage %
-                    //(SF5)A: Additional Bleed Damage Modifier
-                    //(SF6)A: Bleed Duration
+                    if (Rune_A > 0)
+                    {
+                       AddBuff(hitPayload.Target, new BleedEffect());
+                    }
 
                     if (Rune_C > 0)
                     {
                         if (Rand.NextDouble() < ScriptFormula(19))
                         {
                             Knockback(Target, ScriptFormula(14));
-                            //Slow movement (SF(11) and SF(12))
+                            AddBuff(hitPayload.Target, new DebuffSlowed(0.6f, WaitSeconds(ScriptFormula(11))));
                         }
                     }
                     if (Rune_D > 0)
@@ -1320,7 +1393,11 @@ namespace Mooege.Core.GS.Powers.Implementations
                     }
                     if (Rune_E > 0)
                     {
-                        //E:Whenever the blades do critical damage, you are healed [1 * 100|1|]% of the damage caused.
+                        if (hitPayload.IsCriticalHit)
+                        {
+                            //hitPayload.TotalDamage
+                            //E:Whenever the blades do critical damage, you are healed [1 * 100|1|]% of the damage caused.
+                        }
                     }
                 };
                 attack.Apply();
@@ -1332,13 +1409,29 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             public override void Init()
             {
-                Timeout = WaitSeconds(2f);
+                Timeout = WaitSeconds(ScriptFormula(6)); 
+            }
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+
+                AttackPayload bleed = new AttackPayload(this);
+                //Script for damage may be off. please check.
+                bleed.AddWeaponDamage(ScriptFormula(4), DamageType.Physical);
+                bleed.OnHit = (hit) =>
+                {
+                };
+                bleed.Apply();
+                return false;
             }
         }
     }
     #endregion
 
-    //TODO: make ArmorBuff, Rune_B,C,D,E
+    //TODO: make ArmorBuff, Rune_C,E
+    //TODO: auras need to Update every 1-2 seconds..
+    //TODO: Someone cancel Iceblade effect, which is Rune_C
     #region Icearmor
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.IceArmor)]
     public class IceArmor : Skill
@@ -1348,6 +1441,45 @@ namespace Mooege.Core.GS.Powers.Implementations
             StartDefaultCooldown();
             UsePrimaryResource(25f);
             AddBuff(User, new IceArmorBuff());
+            if (Rune_C > 0)
+            {
+                User.PlayEffectGroup(87899); 
+                AttackPayload chillingAura = new AttackPayload(this);
+                chillingAura.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(7));
+                chillingAura.AddWeaponDamage(ScriptFormula(9), DamageType.Cold);
+                chillingAura.OnHit = (hit) =>
+                {
+                    AddBuff(hit.Target, new DebuffChilled(0.5f, WaitSeconds(ScriptFormula(23))));
+                };
+                chillingAura.Apply();
+            }
+            else
+            {
+                AttackPayload chillingAura = new AttackPayload(this);
+                chillingAura.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(7));
+                chillingAura.AddWeaponDamage(ScriptFormula(0), DamageType.Cold);
+                chillingAura.OnHit = (hit) =>
+                {
+                    AddBuff(hit.Target, new DebuffChilled(0.5f, WaitSeconds(ScriptFormula(23))));
+                    if (Rune_E > 0)
+                    {
+                        //if(hit. melee attack
+                        if (Rand.NextDouble() < ScriptFormula(12))
+                        {
+                            hit.Target.PlayEffectGroup(19321);
+                            AttackPayload frostNova = new AttackPayload(this);
+                            frostNova.Targets = GetEnemiesInRadius(hit.Target.Position, ScriptFormula(6));
+                            frostNova.AddWeaponDamage(ScriptFormula(19) * ScriptFormula(13), DamageType.Cold);
+                            frostNova.OnHit = hitPayload =>
+                            {
+                                AddBuff(hitPayload.Target, new DebuffFrozen(WaitSeconds(ScriptFormula(16))));
+                            };
+                            frostNova.Apply();
+                        }
+                    }
+                };
+                chillingAura.Apply();
+            }
             yield break;
         }
 
@@ -1357,41 +1489,17 @@ namespace Mooege.Core.GS.Powers.Implementations
             public override void Init()
             {
                 Timeout = WaitSeconds(ScriptFormula(3));
+                MaxStackCount = (int)ScriptFormula(11);
             }
 
             public override bool Apply()
             {
                 if (!base.Apply())
                     return false;
-
-                //Increase Armor by 50% -> Correct? -> TODO: make this a buff.
                 User.Attributes[GameAttribute.Armor_Item_Percent] += ScriptFormula(2);
                 User.Attributes.BroadcastChangedIfRevealed();
 
                 return true;
-            }
-
-            public override bool Update()
-            {
-                if (base.Update())
-                    return true;
-                if (Rune_C > 0)
-                {
-                    // This is wrong... It needs to be the playeffectgroup which is much bigger..and shouldnt keep recreating itself.
-                    var iceblade = SpawnEffect(88032, User.Position, 0, WaitInfinite());
-                    iceblade.UpdateDelay = 1f;
-                    iceblade.OnUpdate = () =>
-                    {
-                        WeaponDamage(GetEnemiesInRadius(User.Position, ScriptFormula(7)), ScriptFormula(9), DamageType.Cold);
-                    };
-                }
-                if (Rune_B > 0)
-                {
-                    GetEnemiesInRadius(User.Position, ScriptFormula(7));
-                    //SF(23) and SF(24)
-                    //Chilled Debuff, Slow Movement and Slow Attack Speeds
-                }
-                return false;
             }
 
             public override void OnPayload(Payload payload)
@@ -1400,47 +1508,64 @@ namespace Mooege.Core.GS.Powers.Implementations
                 {
                     if (Rune_D > 0)
                     {
-                        //this should call a buff, each hit should give the extra buff as long as you are under the max stacks.
-                        //SF(11) - max stacks
-                        //sf(26) - Bonus Armor per stack
-                        //sf(27) - bonus stack duration
-
+                        _AddArmor();
                     }
-                    if (Rune_E > 0)
+                    if (Rune_A > 0)
                     {
-                        if (Rand.NextDouble() < ScriptFormula(12))
-                        {
-                            SpawnEffect(4402, Target.Position);
-                            WeaponDamage(GetEnemiesInRadius(Target.Position, ScriptFormula(15)), ScriptFormula(13), DamageType.Cold);
-                        }
+                        WeaponDamage(payload.Context.Target, ScriptFormula(0), DamageType.Cold);
+                        AddBuff(payload.Context.Target, new DebuffChilled(0.5f, WaitSeconds(ScriptFormula(4))));
                     }
-                    WeaponDamage(payload.Context.User, ScriptFormula(0), DamageType.Cold);   
-                    //Debuff Chills Enemies (SF(4))
                 }
+            }
+            public override bool Stack(Buff buff)
+            {
+                bool stacked = StackCount < MaxStackCount;
+
+                base.Stack(buff);
+
+                if (stacked)
+                    _AddArmor();
+
+                return true;
             }
 
             public override void Remove()
             {
                 base.Remove();
+                User.Attributes[GameAttribute.Armor_Item_Percent] -= ScriptFormula(2);
+                User.Attributes.BroadcastChangedIfRevealed();
                 User.PlayEffectGroup(19326);
                 User.PlayEffectGroup(185652);
                 
             }
-        }
-        [ImplementsPowerBuff(0)]
-        class SwitchEffect : PowerBuff
-        {
-            public override void Init()
+
+            private void _AddArmor()
             {
-                Timeout = WaitSeconds(2f);
+                AddBuff(User, new BonusStackEffect());
             }
         }
-        [ImplementsPowerBuff(2)]
-        class SwitchBuff : PowerBuff
+        [ImplementsPowerBuff(0)]
+        class BonusStackEffect : PowerBuff
         {
             public override void Init()
             {
-                Timeout = WaitSeconds(2f);
+                Timeout = WaitSeconds(ScriptFormula(27));
+            }
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                User.Attributes[GameAttribute.Armor_Item_Percent] += ScriptFormula(26);
+                User.Attributes.BroadcastChangedIfRevealed();
+
+                return true;
+            }
+            public override void Remove()
+            {
+                base.Remove();
+                User.Attributes[GameAttribute.Armor_Item_Percent] -= StackCount * ScriptFormula(26);
+                User.Attributes.BroadcastChangedIfRevealed();
+
             }
         }
     }
@@ -1451,7 +1576,11 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.ShockPulse)]
     public class WizardShockPulse : PowerScript
     {
-
+        //A:Casts out bolts of fire to deal 195% weapon damage as Fire. 
+        //B:Turn the bolts into a floating orb of static lightning that drifts directly forward, zapping up to 5 nearby enemies for 46% weapon damage as Lightning. 
+        //C:Merge the bolts in a a single giant orb that oscillates forward dealing 95% weapon damage as Lightning to everything it hits with a 100% chance to pierce through enemies. 
+        //DONE -> D:Every target hit by a pulse restores 7 Arcane Power. 
+        //E:Slain enemies have a 100% chance to explode dealing 450% weapon damage as Lightning to every enemy within 10 yards. 
         public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(ScriptFormula(13));
@@ -1542,9 +1671,9 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
-    //TODO: Rune_B: movementspeed Buff
-    //ArmorBuff: Update needs a cooldown delay
-    //TODO: Rune_C,E
+    
+    //TODO: Rune_C and Rune_E
+    //TODO: shock range and melee attacks for weapon damage as lightning (not in update. make your own update in Main())
     #region StormArmor
     [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.StormArmor)]
     public class StormArmor : Skill
@@ -1560,7 +1689,6 @@ namespace Mooege.Core.GS.Powers.Implementations
         [ImplementsPowerBuff(0)]
         class StormArmorBuff : PowerBuff
         {
-            //TODO; Unknown how Rune_E works, if attack crits -> you shock nearby enemies.
             public override void Init()
             {
                 Timeout = WaitSeconds(120f);
@@ -1573,10 +1701,8 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                 if (Rune_D > 0)
                 {
-                    //reduce all arcane costs by 7 while storm armor is active
                     User.Attributes[GameAttribute.Resource_Cost_Reduction_Amount] += 7;
                 }
-
                 return true;
             }
 
@@ -1586,39 +1712,17 @@ namespace Mooege.Core.GS.Powers.Implementations
                 {
                     if (payload.Target == Target && payload is HitPayload)
                     {
-                        //increase movement speed 20% for 5 seconds
-                        User.Attributes[GameAttribute.Movement_Bonus_Run_Speed] += ScriptFormula(14);
-                        WaitSeconds(5f);
-                        User.Attributes[GameAttribute.Movement_Bonus_Run_Speed] -= ScriptFormula(14);
+                        AddBuff(User, new IndigoBuff());
+                        AddBuff(User, new MovementBuff(ScriptFormula(14), WaitSeconds(ScriptFormula(20))));
                     }
                 }
                 if (Rune_C > 0)
                 {
                     if (payload.Target == Target && payload is HitPayload)
                     {
-                        //you have a chance to be enveloped with a lightning shield for 8 seconds 
-                        //that shocks nearby enemies for 120% weapon damage as Lightning.
+                        AddBuff(User, new TeslaBuff());
                     }
                 }
-
-            }
-
-            public override bool Update()
-            {
-                if (base.Update())
-                    return true;
-                //add cooldown delay
-                var targets = GetEnemiesInRadius(Target.Position, ScriptFormula(19));
-                if (targets.Actors.Count > 0)
-                {
-                    if (Rune_A > 0)
-                    {
-                        WeaponDamage(targets, 2.20f, DamageType.Lightning);
-                    }
-                    else
-                        WeaponDamage(targets, 1.00f, DamageType.Lightning);
-                }
-                return false;
             }
 
             public override void Remove()
@@ -1628,15 +1732,39 @@ namespace Mooege.Core.GS.Powers.Implementations
                     User.Attributes[GameAttribute.Resource_Cost_Reduction_Amount] -= 7;
                 }
                 base.Remove();
-
             }
         }
         [ImplementsPowerBuff(1)]
         class TeslaBuff : PowerBuff
         {
+            //Rune_C
+
+            //you have a chance to be enveloped with a lightning shield for 8 seconds 
+            //that shocks nearby enemies for 120% weapon damage as Lightning.
+
+            //TeslaStrike.acr 80600
+            //tslaBolt.rop 80602
             public override void Init()
             {
-                Timeout = WaitSeconds(2f);
+                Timeout = WaitSeconds(8f);
+            }
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                return true;
+            }
+
+            public override bool Update()
+            {
+                if (base.Update())
+                    return true;
+                return false;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
             }
         }
         [ImplementsPowerBuff(2)]
@@ -1644,15 +1772,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             public override void Init()
             {
-                Timeout = WaitSeconds(2f);
-            }
-        }
-        [ImplementsPowerBuff(3)]
-        class GoldenBuff : PowerBuff
-        {
-            public override void Init()
-            {
-                Timeout = WaitSeconds(2f);
+                Timeout = WaitSeconds(5f);
             }
         }
     }
