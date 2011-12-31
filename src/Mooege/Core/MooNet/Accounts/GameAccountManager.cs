@@ -79,6 +79,13 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
+        public static GameAccount CreateGameAccount(Account account)
+        {
+            var gameAccount = new GameAccount(account);
+            GameAccounts.Add(gameAccount.PersistentID, gameAccount);
+            gameAccount.SaveToDB();
+            return gameAccount;
+        }
         public static void DeleteGameAccount(GameAccount GameAccount)
         {
             if (!GameAccounts.ContainsKey(GameAccount.PersistentID))
