@@ -247,6 +247,7 @@ namespace Mooege.Core.MooNet.Services
                     bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
             }
 
+            this.Client.CurrentGameAccount.lastPlayedHeroId = this.Client.CurrentToon.D3EntityID;
             return this.Client.CurrentToon.D3EntityID.ToByteString();
         }
 

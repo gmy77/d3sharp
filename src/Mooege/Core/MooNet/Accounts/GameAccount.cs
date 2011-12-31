@@ -53,8 +53,6 @@ namespace Mooege.Core.MooNet.Accounts
         {
             get
             {
-                if (_lastPlayedHeroId == AccountHasNoToons && Toons.Count > 0)
-                    _lastPlayedHeroId = this.Toons.First().Value.D3EntityID;
                 return _lastPlayedHeroId;
             }
             set
@@ -75,7 +73,7 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        private static readonly D3.OnlineService.EntityId AccountHasNoToons =
+        public static readonly D3.OnlineService.EntityId AccountHasNoToons =
             D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).Build();
 
         public Dictionary<ulong, Toon> Toons
@@ -305,6 +303,10 @@ namespace Mooege.Core.MooNet.Accounts
 
         private void DoSet(bnet.protocol.presence.Field field)
         {
+            var operation = bnet.protocol.presence.FieldOperation.CreateBuilder();
+
+            var returnField = bnet.protocol.presence.Field.CreateBuilder().SetKey(field.Key);
+
             switch ((FieldKeyHelper.Program)field.Key.Program)
             {
                 case FieldKeyHelper.Program.D3:
@@ -340,12 +342,40 @@ namespace Mooege.Core.MooNet.Accounts
                     if (field.Key.Group == 2 && field.Key.Field == 3) // Away status
                     {
                         this.AwayStatus = (AwayStatusFlag)field.Value.IntValue;
+                        returnField.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.AwayStatus).Build()).Build();
                     }
                     else
                     {
                         Logger.Warn("Unknown set-field: {0}, {1}, {2} := {3}", field.Key.Program, field.Key.Group, field.Key.Field, field.Value);
                     }
                     break;
+            }
+            if (returnField.HasValue)
+            {
+                operation.SetField(returnField);
+                // Create a presence.ChannelState
+                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityId).AddFieldOperation(operation).Build();
+
+                // Embed in channel.ChannelState
+                var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+
+                // Put in addnotification message
+                var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState);
+
+                // Make the rpc call
+                this.LoggedInClient.MakeTargetedRPC(this, () =>
+                    bnet.protocol.channel.ChannelSubscriber.CreateStub(this.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
+
+                // Update all online friends
+                //foreach (var friend in FriendManager.Friends[this.BnetEntityId.Low])
+                //{
+                //    var gameAccount = GameAccountManager.GetAccountByPersistentID(friend.Id.Low);
+                //    if (gameAccount.IsOnline)
+                //    {
+                //        gameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                //            bnet.protocol.channel.ChannelSubscriber.CreateStub(gameAccount.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
+                //    }
+                //}
             }
         }
 
@@ -439,7 +469,7 @@ namespace Mooege.Core.MooNet.Accounts
                 {
                     var query =
                         string.Format(
-                            "UPDATE gameaccount SET accountId={0} WHERE id={1}",
+                            "UPDATE gameaccounts SET accountId={0} WHERE id={1}",
                             this.Owner.PersistentID, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
@@ -449,7 +479,7 @@ namespace Mooege.Core.MooNet.Accounts
                 {
                     var query =
                         string.Format(
-                            "INSERT INTO gameaccount (id, accountId) VALUES({0},{1})",
+                            "INSERT INTO gameaccounts (id, accountId) VALUES({0},{1})",
                             this.PersistentID, this.Owner.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
@@ -469,7 +499,7 @@ namespace Mooege.Core.MooNet.Accounts
                 // Remove from DB
                 if (!ExistsInDB()) return false;
 
-                var query = string.Format("DELETE FROM gameaccount WHERE id={0}", this.PersistentID);
+                var query = string.Format("DELETE FROM gameaccounts WHERE id={0}", this.PersistentID);
                 var cmd = new SQLiteCommand(query, DBManager.Connection);
                 cmd.ExecuteNonQuery();
                 return true;

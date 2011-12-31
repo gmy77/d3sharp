@@ -88,6 +88,7 @@ namespace Mooege.Core.MooNet.Accounts
                 return string.Format("An account already exists for email address {0}.", email);
 
             var account = AccountManager.CreateAccount(email, password, battleTagName, userLevel);
+            var gameAccount = GameAccountManager.CreateGameAccount(account);
             return string.Format("Created new account {0} [user-level: {1}] Full BattleTag: {2}.", account.Email, account.UserLevel, account.BattleTag);
         }
 
