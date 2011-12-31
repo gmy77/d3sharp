@@ -17,22 +17,24 @@
  */
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message.Definitions.ACD;
-using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Ticker;
-using Mooege.Net.GS.Message;
-using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Core.GS.Powers.Payloads;
 using Mooege.Core.GS.Actors.Movement;
+using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Players;
+using Mooege.Net.GS.Message.Definitions.Actor;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
 
+    //TODO: need to run up to monster, you try to attack from far away while zombies have a bigger range than you..
+    //TODO: Runes
     #region Bash
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.Bash)]
     public class BarbarianBash : Skill
@@ -63,6 +65,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 #endregion
 
+    //TODO: Runes
     #region LeapAttack
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.LeapAttack)]
     public class BarbarianLeap : Skill
@@ -105,6 +108,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 #endregion
 
+    //TODO: Runes
     #region WhirlWind
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FurySpenders.Whirlwind)]
     public class BarbarianWhirlwind : Skill
@@ -220,6 +224,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 #endregion
 
     //TODO: A,C
+    //Receive CallBack Exception..
     #region ThreateningShout
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FurySpenders.ThreateningShout)]
     public class ThreateningShout : Skill
@@ -227,7 +232,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Main()
         {
             UsePrimaryResource(20f);
-            User.PlayEffectGroup(RuneSelect(18705, 99810, 216339, 99798, 201534, 99821));
+            //User.PlayEffectGroup(RuneSelect(18705, 99810, 216339, 99798, 201534, 99821));
             //User.PlayEffectGroup(202891); //Yell Sound
             AttackPayload attack = new AttackPayload(this);
             attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(9));
@@ -237,7 +242,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 if (Rune_A > 0)
                 {
                     //Script(8) -> taunt duration
-                    //taunted to attack you... wut? guess more for multiple player...
+                    //taunted to attack you... guess more for multiple player...
                 }
                 if (Rune_B > 0)
                 {
@@ -745,6 +750,7 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 #endregion
 
+    //Complete, check it.
     #region GroundStomp
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.GroundStomp)]
     public class GroundStomp : Skill
@@ -1205,18 +1211,435 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 #endregion
 
-    //Incomplete, this will be a OnChanneled, with Walking Speed Multiplier of 5x.
+    //Incomplete.. Dashing Strike, turned into furious charge (Lots of work :D)
     #region FuriousCharge
     [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.FuriousCharge)]
     public class FuriousCharge : Skill
     {
         public override IEnumerable<TickTimer> Main()
         {
-            //GeneratePrimaryResource(ScriptFormula(15)); //onHit
+            Target = GetEnemiesInRadius(TargetPosition, 12f).GetClosestTo(TargetPosition);
+
+            if (Target != null)
+            {
+                // put dash destination just beyond target
+                TargetPosition = PowerMath.TranslateDirection2D(User.Position, Target.Position, Target.Position, 5f);
+            }
+            else
+            {
+                // if no target, always dash fixed amount
+                TargetPosition = PowerMath.TranslateDirection2D(User.Position, TargetPosition, TargetPosition, 0f);
+            }
+
+            var dashBuff = new DashMoverBuff(TargetPosition);
+            AddBuff(User, dashBuff);
+            yield return dashBuff.Timeout;
+
+            if (Target != null && Target.World != null) // target could've died or left world
+            {
+                User.TranslateFacing(Target.Position, true);
+                yield return WaitSeconds(0.1f);
+                User.PlayEffectGroup(166194);
+            }
+        }
+
+        [ImplementsPowerBuff(0)]
+        class DashMoverBuff : PowerBuff
+        {
+            private Vector3D _destination;
+            private ActorMover _mover;
+
+            public DashMoverBuff(Vector3D destination)
+            {
+                _destination = destination;
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+
+                // dash speed seems to always be actor speed * 10
+                float speed = User.Attributes[GameAttribute.Running_Rate_Total] * 5f;
+
+                User.TranslateFacing(_destination, true);
+                _mover = new ActorMover(User);
+                _mover.Move(_destination, speed, new NotifyActorMovementMessage
+                {
+                    TurnImmediately = true,
+                    AnimationTag = 69808, // dashing strike attack animation
+                });
+
+                // make sure buff timeout is big enough otherwise the client will sometimes ignore the visual effects.
+                TickTimer minDashWait = WaitSeconds(0.15f);
+                Timeout = minDashWait.TimeoutTick > _mover.ArrivalTime.TimeoutTick ? minDashWait : _mover.ArrivalTime;
+
+                User.Attributes.BroadcastChangedIfRevealed();
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+                User.Attributes.BroadcastChangedIfRevealed();
+                User.PlayEffectGroup(166193);
+                WeaponDamage(GetEnemiesInRadius(User.Position, 15f), ScriptFormula(14), DamageType.Physical);
+                Knockback(Target, ScriptFormula(5));
+
+            }
+
+            public override bool Update()
+            {
+                _mover.Update();
+                WeaponDamage(GetEnemiesInRadius(User.Position, 5f), ScriptFormula(16), DamageType.Physical);
+                Knockback(Target, ScriptFormula(2));
+                return base.Update();
+            }
+        }
+    }
+#endregion
+
+    //TODO: All Runes
+    #region Overpower
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.Situational.Overpower)]
+    public class Overpower : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            TickTimer Cooldown = WaitSeconds(ScriptFormula(5));
+
+            if (Rune_A > 0)
+            {
+                AddBuff(User, new DurationBuff());
+            }
+            if (Rune_E > 0)
+            {
+                AddBuff(User, new ReflectBuff());
+            }
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(7));
+            attack.AddWeaponDamage(ScriptFormula(7), DamageType.Physical);
+            attack.OnHit = HitPayload =>
+                {
+                    if (Rune_C > 0)
+                    {
+                        //Heal 18% of your maximum Life for every enemy hit.
+                    } 
+                    if (Rune_D > 0)
+                    {
+                        //Overpower generates 7 Fury for every enemy hit.
+                    }
+                    if (HitPayload.IsCriticalHit)
+                    {
+                        Cooldown = WaitSeconds(0f);
+                    }
+                };
+            attack.Apply();
+
+            if (Rune_B > 0)
+            {
+                //Throw up to SF(18) axes at nearby enemies which inflict SF(14) weapon damage each.
+                //search radius SF(15), proj height SF(16), proj speed SF(17), proj delay time SF(19)
+            }
+
+            StartCooldown(Cooldown);
+            yield break;
+        }
+        [ImplementsPowerBuff(0)]
+        class ReflectBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(5));
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                return true;
+            }
+
+            public override void OnPayload(Payload payload)
+            {
+                base.OnPayload(payload);
+
+                //reflect 45% of melee damage
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+            }
+        }
+        [ImplementsPowerBuff(1)]
+        class DurationBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(10));
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                //increase critical hit
+                //SF(9)
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+            }
+        }
+    }
+#endregion
+
+    //TODO: Rune_E -> this is going to be hard..
+    //Something wrong with using knockback.
+    #region SiesmicSlam
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.FurySpenders.SiesmicSlam)]
+    public class SiesmicSlam : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
             StartDefaultCooldown();
+            UsePrimaryResource(ScriptFormula(15));
+
+            var proj1 = new Projectile(this, 164708, User.Position);
+            proj1.Launch(TargetPosition, 1f);
+            foreach (Actor target in GetEnemiesInArcDirection(User.Position, TargetPosition, 45f, ScriptFormula(14)).Actors)
+            {
+                WeaponDamage(target, ScriptFormula(8), DamageType.Physical);
+                //Knockback(User.Position, target, ScriptFormula(0), ScriptFormula(1));
+
+                if (Rune_C > 0)
+                {
+                    if (Rand.NextDouble() < ScriptFormula(6))
+                    {
+                        AddBuff(target, new DebuffStunned(WaitSeconds(ScriptFormula(7))));
+                    }
+                }
+            }
+
+            yield return WaitSeconds(1f);
+
+            if (Rune_B > 0)
+            {
+                var aShockproj = new Projectile(this, 164788, User.Position);
+                aShockproj.Launch(TargetPosition, 1f);
+
+                foreach (Actor target in GetEnemiesInArcDirection(User.Position, TargetPosition, 45f, ScriptFormula(14)).Actors)
+                {
+                    WeaponDamage(target, ScriptFormula(3), DamageType.Physical);
+                }
+            }
+
             yield break;
         }
     }
 #endregion
-    //bash, leap attack, ancient spear, whirlwind, threateningshout, hammeroftheancients, battle rage, cleave, ignore pain, weapon throw, ground stomp, rend
+
+    //SuperEarthquake.ani.
+    //this is a dumpster fire.. (terrible, rewrite it)
+    #region Earthquake
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.Situational.Earthquake)]
+    public class Earthquake : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            StartCooldown(WaitSeconds(ScriptFormula(20)));
+            User.PlayEffectGroup(55689);
+            WeaponDamage(GetEnemiesInRadius(User.Position, ScriptFormula(0)), ScriptFormula(19), DamageType.Physical);
+            var Quake = SpawnEffect(168440, User.Position, 0, WaitSeconds(ScriptFormula(1)));
+            Quake.UpdateDelay = 0.5f;
+            Quake.OnUpdate = () =>
+                {
+                    AttackPayload attack = new AttackPayload(this);
+                    attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(0));
+                    attack.AddWeaponDamage(ScriptFormula(17), DamageType.Physical);
+                    attack.Apply();
+                };
+            //Secondary Tremor stuff..
+            yield break;
+        }
+    }
+#endregion    
+
+    //TODO: Rune_C and _E
+    #region Sprint
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.FurySpenders.Sprint)]
+    public class Sprint : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            UsePrimaryResource(20f);
+
+            AddBuff(User, new MovementBuff());
+
+            if (Rune_D > 0)
+            {
+                foreach (Actor ally in GetAlliesInRadius(User.Position, ScriptFormula(4)).Actors)
+                    AddBuff(ally, new MovementAlliesBuff());
+            }
+            yield break;
+        }
+        [ImplementsPowerBuff(0)]
+        class MovementBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(0));
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                new DodgeBuff();
+                User.Attributes[GameAttribute.Movement_Bonus_Run_Speed] += ScriptFormula(1);
+                User.Attributes.BroadcastChangedIfRevealed();
+                return true;
+            }
+
+            //Rune_C : Update -> tornadoes rage in the wake of the spring, each on inflicting 40% dmg.
+
+            //Rune_E : OnPayload? knockback and damage.
+
+            public override void Remove()
+            {
+                base.Remove();
+                User.Attributes[GameAttribute.Movement_Bonus_Run_Speed] -= ScriptFormula(1);
+                User.Attributes.BroadcastChangedIfRevealed();
+            }
+        }
+        [ImplementsPowerBuff(3)]
+        class MovementAlliesBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(0));
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                Target.Attributes[GameAttribute.Movement_Bonus_Run_Speed] += ScriptFormula(1);
+                Target.Attributes.BroadcastChangedIfRevealed();
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+                Target.Attributes[GameAttribute.Movement_Bonus_Run_Speed] -= ScriptFormula(1);
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
+        }
+        [ImplementsPowerBuff(4)]
+        class DodgeBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(0));
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                User.Attributes[GameAttribute.Dodge_Chance_Bonus] += ScriptFormula(2);
+                User.Attributes.BroadcastChangedIfRevealed();
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+                User.Attributes[GameAttribute.Dodge_Chance_Bonus] -= ScriptFormula(2);
+                User.Attributes.BroadcastChangedIfRevealed();
+            }
+        }
+    }
+#endregion
+
+    //TODO: Rune_C
+    #region WrathOfTheBerserker
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.Situational.WrathOfTheBerserker)]
+    public class WrathOfTheBerserker : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            AddBuff(User, new BerserkerBuff());
+            if (Rune_B > 0)
+            {
+                AttackPayload attack = new AttackPayload(this);
+                attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(20));
+                attack.AddWeaponDamage(ScriptFormula(17), DamageType.Physical);
+                attack.OnHit = HitPayload =>
+                    {
+                        Knockback(User.Position, HitPayload.Target, ScriptFormula(18), ScriptFormula(19));
+                    };
+            }
+            if (Rune_E > 0)
+            {
+                AttackPayload attack = new AttackPayload(this);
+                attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(15));
+                attack.OnDeath = HitPayload =>
+                {
+                    User.PlayEffectGroup(210319);
+                    WeaponDamage(HitPayload.Target, ScriptFormula(11), DamageType.Physical);
+                };
+            }
+
+            yield break;
+        }
+        [ImplementsPowerBuff(0)]
+        class BerserkerBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(6));
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                if (Rune_A > 0)
+                {
+                    User.Attributes[GameAttribute.Attack_Bonus_Percent] += ScriptFormula(8);
+                }
+                User.Attributes[GameAttribute.Crit_Damage_Percent] += (int)ScriptFormula(0);
+                User.Attributes[GameAttribute.Attacks_Per_Second_Bonus] += ScriptFormula(2);
+                User.Attributes[GameAttribute.Dodge_Chance_Bonus] += ScriptFormula(3);
+                User.Attributes[GameAttribute.Movement_Bonus_Run_Speed] += ScriptFormula(1);
+                User.Attributes.BroadcastChangedIfRevealed();
+                return true;
+            }
+
+            //Rune_D -> OnPayload? every _ fury gained adds 1 second to duration of effect.
+
+            public override void Remove()
+            {
+                base.Remove();
+                if (Rune_A > 0)
+                {
+                    User.Attributes[GameAttribute.Attack_Bonus_Percent] += ScriptFormula(8);
+                }
+                User.Attributes[GameAttribute.Crit_Damage_Percent] -= (int)ScriptFormula(0);
+                User.Attributes[GameAttribute.Attacks_Per_Second_Bonus] -= ScriptFormula(2);
+                User.Attributes[GameAttribute.Dodge_Chance_Bonus] -= ScriptFormula(3);
+                User.Attributes[GameAttribute.Movement_Bonus_Run_Speed] -= ScriptFormula(1);
+                User.Attributes.BroadcastChangedIfRevealed();
+            }
+        }
+    }
+#endregion
+
+            //hard mode = Call of the Ancients
+            //12 Passive Skills
 }
