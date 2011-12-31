@@ -289,10 +289,6 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            //this does NoRune and A's area of effect
-            float castAngle = MovementHelpers.GetFacingAngle(User.Position, TargetPosition);
-            SpawnEffect(RuneSelect(220632, 220559, 220562, 220565, 220569, 162839), User.Position, castAngle);
-
             if (Rune_B > 0)
             {
 
