@@ -22,8 +22,8 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
-    [Message(Opcodes.ACDTranslateNormalMessage, Consumers.Player)]
-    class ACDTranslateNormalMessage : GameMessage
+    [Message(Opcodes.ACDTranslateNormalMessage)]
+    public class ACDTranslateNormalMessage : GameMessage
     {
         public int ActorId;
         public Vector3D Position;   // New position of the Actor
@@ -33,6 +33,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int? Field5;
         public int? AnimationTag;   // Animation used while moving, if moving
         public int? Field7;
+
+        public ACDTranslateNormalMessage() : base(Opcodes.ACDTranslateNormalMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

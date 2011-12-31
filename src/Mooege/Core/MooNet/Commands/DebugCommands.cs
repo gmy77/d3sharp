@@ -44,7 +44,7 @@ namespace Mooege.Core.MooNet.Commands
 
             if(client==null && @params.Count() < 1)
                 return "Invalid arguments. Type 'help services client' to get help.";
-
+            var output = "";
             if (client == null)
             {
                 var email = @params[0];
@@ -53,15 +53,21 @@ namespace Mooege.Core.MooNet.Commands
                 if (account == null)
                     return string.Format("No account with email '{0}' exists.", email);
 
-                client = account.LoggedInClient;
-                if (client == null)
+                if (!account.IsOnline)
                     return string.Format("Account '{0}' is not logged in.", email);
+
+                var gameAccounts = GameAccountManager.GetGameAccountsForAccount(account);
+                foreach (var gameAccount in gameAccounts.Values)
+                {
+                    output += this.ClientServices(null, gameAccount.LoggedInClient);
+                }
             }
-
-            var output = string.Format("Imported service list for client: {0}\n", client.Account.Email);
-            output = client.Services.Aggregate(output, (current, pair) => 
-                current + string.Format("Id: 0x{0} Hash: 0x{1}\n", pair.Value.ToString("X2"), pair.Key.ToString("X8")));
-
+            else
+            {
+                output = string.Format("Imported service list for account: {0}\n", client.Account.Email);
+                output = client.Services.Aggregate(output, (current, pair) =>
+                    current + string.Format("Id: 0x{0} Hash: 0x{1}\n", pair.Value.ToString("X2"), pair.Key.ToString("X8")));
+            }
             return output;
         }
     }

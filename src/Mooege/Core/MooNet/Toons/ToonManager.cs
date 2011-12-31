@@ -42,7 +42,13 @@ namespace Mooege.Core.MooNet.Toons
         public static Account GetOwnerAccountByToonLowId(ulong id)
         {
             var toon = (from pair in Toons where pair.Value.PersistentID == id select pair.Value).FirstOrDefault();
-            return (toon != null) ? toon.Owner : null;
+            return (toon != null) ? toon.GameAccount.Owner : null;
+        }
+
+        public static GameAccount GetOwnerGameAccountByToonLowId(ulong id)
+        {
+            var toon = (from pair in Toons where pair.Value.PersistentID == id select pair.Value).FirstOrDefault();
+            return (toon != null) ? toon.GameAccount : null;
         }
 
         public static Toon GetToonByLowID(ulong id)
@@ -50,10 +56,15 @@ namespace Mooege.Core.MooNet.Toons
             return (from pair in Toons where pair.Value.PersistentID == id select pair.Value).FirstOrDefault();
         }
 
-        public static Dictionary<ulong, Toon> GetToonsForAccount(Account account)
+        public static Dictionary<ulong, Toon> GetToonsForGameAccount(GameAccount account)
         {
-            return Toons.Where(pair => pair.Value.Owner != null).Where(pair => pair.Value.Owner.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
+            return Toons.Where(pair => pair.Value.GameAccount != null).Where(pair => pair.Value.GameAccount.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
+
+        //public static Dictionary<ulong, Toon> GetToonsForAccount(Account account)
+        //{
+        //    return Toons.Where(pair => pair.Value.GameAccount.Owner != null).Where(pair => pair.Value.GameAccount.Owner.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
+        //}
 
         public static int TotalToons
         {

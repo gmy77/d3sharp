@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Games;
+using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
 
@@ -82,7 +83,7 @@ namespace Mooege.Core.MooNet.Services
                 .Build()).Build();
 
             var notificationPermission = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(this.Client.CurrentToon.BnetEntityID)
+                .SetAgentId(this.Client.CurrentGameAccount.BnetEntityId)
                 .SetStateChange(channelStatePermission)
                 .Build();
 
@@ -95,10 +96,14 @@ namespace Mooege.Core.MooNet.Services
             var clients = new List<MooNetClient>();
             foreach (var player in request.PlayerList)
             {
-                var toon = ToonManager.GetToonByLowID(player.Identity.AccountId.Low);
-                if (toon.Owner.LoggedInClient == null) continue;
-                clients.Add(toon.Owner.LoggedInClient);
-            }           
+                foreach (var gameAccount in GameAccountManager.GameAccountsList)
+                {
+                    if (player.Identity.GameAccountId.Low == gameAccount.BnetEntityId.Low)
+                    {
+                        clients.Add(gameAccount.LoggedInClient);
+                    }
+                }
+            }
 
             // send game found notification.
             var notificationBuilder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder()

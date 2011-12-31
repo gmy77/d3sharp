@@ -25,9 +25,9 @@ namespace Mooege.Core.MooNet.Web
 {
     [ServiceContract(Name = "Accounts")]
     public class AccountWebService : IWebService
-    {        
+    {
         [OperationContract]
-        public bool CreateAccount(string email, string password)
+        public bool CreateAccount(string email, string password, string battleTag)
         {
             if (string.IsNullOrEmpty(email))
                 throw new FaultException(new FaultReason("Email parameter can not be null or empty."));
@@ -35,13 +35,16 @@ namespace Mooege.Core.MooNet.Web
             if (string.IsNullOrEmpty(password))
                 throw new FaultException(new FaultReason("Password parameter can not be null or empty."));
 
+            if (string.IsNullOrEmpty(battleTag))
+                throw new FaultException(new FaultReason("BattleTag parameter can not be null or empty."));
+
             if (password.Length < 8 || password.Length > 16)
                 throw new FaultException(new FaultReason("Password should be a minimum of 8 and a maximum of 16 characters."));
 
             if (AccountManager.GetAccountByEmail(email.ToLower()) != null)
                 throw new FaultException(new FaultReason(string.Format("An account already exists for email address {0}.", email)));
 
-            var account = AccountManager.CreateAccount(email, password);
+            var account = AccountManager.CreateAccount(email, password, battleTag);
             return true;
         }
 
@@ -80,10 +83,10 @@ namespace Mooege.Core.MooNet.Web
             return AccountManager.TotalAccounts;
         }
 
-        [OperationContract]
-        public int TotalToons()
-        {
-            return AccountManager.AccountsList.Sum(account => account.Toons.Count);
-        }
+        //[OperationContract]
+        //public int TotalToons()
+        //{
+        //    return AccountManager.AccountsList.Sum(account => account.Toons.Count);
+        //}
     }
 }

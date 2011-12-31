@@ -60,17 +60,17 @@ namespace Mooege.Core.GS.Generators
 
             // Create a clusterID => Cluster Dictionary
             var clusters = new Dictionary<int, Mooege.Common.MPQ.FileFormats.SceneCluster>();
-            foreach (var cluster in worldData.ServerData.First().SceneClusterSet.SceneClusters)
+            foreach (var cluster in worldData.SceneClusterSet.SceneClusters)
                 clusters[cluster.ClusterId] = cluster;
 
             // Scenes are not aligned to (0, 0) but apparently need to be -farmy
-            float minX = worldData.ServerData.First().SceneParams.First().SceneChunks.Min(x => x.PRTransform.Vector3D.X);
-            float minY = worldData.ServerData.First().SceneParams.First().SceneChunks.Min(x => x.PRTransform.Vector3D.Y);
+            float minX = worldData.SceneParams.SceneChunks.Min(x => x.PRTransform.Vector3D.X);
+            float minY = worldData.SceneParams.SceneChunks.Min(x => x.PRTransform.Vector3D.Y);
 
             // Count all occurences of each cluster /fasbat
             var clusterCount = new Dictionary<int, int>();
 
-            foreach (var sceneChunk in worldData.ServerData.First().SceneParams.First().SceneChunks)
+            foreach (var sceneChunk in worldData.SceneParams.SceneChunks)
             {
                 var cID = sceneChunk.SceneSpecification.ClusterID;
                 if (cID != -1 && clusters.ContainsKey(cID)) // Check for wrong clusters /fasbat
@@ -108,7 +108,7 @@ namespace Mooege.Core.GS.Generators
                 }
             }
 
-            foreach (var sceneChunk in worldData.ServerData.First().SceneParams.First().SceneChunks)
+            foreach (var sceneChunk in worldData.SceneParams.SceneChunks)
             {
                 var position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
                 var scene = new Scene(world, position, sceneChunk.SNOHandle.Id, null)
@@ -228,7 +228,7 @@ namespace Mooege.Core.GS.Generators
                     }
 
                     // Load all spawns that are defined for that location group 
-                    foreach (GizmoLocSpawnEntry spawnEntry in levelArea.ServerData.First().LocSet.SpawnType[i].SpawnEntry)
+                    foreach (GizmoLocSpawnEntry spawnEntry in levelArea.LocSet.SpawnType[i].SpawnEntry)
                     {
                         // Get a random amount of spawns ...
                         int amount = RandomHelper.Next(spawnEntry.Max, spawnEntry.Max);

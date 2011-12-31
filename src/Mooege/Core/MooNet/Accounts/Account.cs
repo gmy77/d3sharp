@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using Mooege.Common.Storage;
+using Mooege.Common.Helpers.Hash;
 using Mooege.Core.Cryptography;
 using Mooege.Core.MooNet.Friends;
 using Mooege.Core.MooNet.Helpers;
@@ -32,102 +33,65 @@ namespace Mooege.Core.MooNet.Accounts
 {
     public class Account : PersistentRPCObject
     {
-        public bnet.protocol.EntityId BnetAccountID { get; private set; }
-        public bnet.protocol.EntityId BnetGameAccountID { get; private set; }
-        public D3.Account.BannerConfiguration BannerConfiguration { get; private set; }
         public D3.PartyMessage.ScreenStatus ScreenStatus { get; set; }
-        public List<bnet.protocol.achievements.AchievementUpdateRecord> Achievements { get; set; }
-        public List<bnet.protocol.achievements.CriteriaUpdateRecord> AchievementCriteria { get; set; }
+
+        //public MooNetClient LoggedInClient { get; set; }
+        public bool IsOnline 
+        { 
+            get 
+            {
+                //check if anygameAccounts are online
+                foreach (var gameAccount in GameAccounts)
+                {
+                    if (gameAccount.Value.IsOnline) return true;
+                }
+                return false;
+            } 
+        }
 
         public string Email { get; private set; } // I - Username
         public byte[] Salt { get; private set; }  // s- User's salt.
         public byte[] PasswordVerifier { get; private set; } // v - password verifier.
-        public UserLevels UserLevel { get; private set; } // user level for account.
-
-        public bool IsOnline { get { return this.LoggedInClient != null; } }
-
-        private static readonly D3.OnlineService.EntityId AccountHasNoToons =
-            D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).Build();
-
-        public D3.Account.Digest Digest
+        public string Name { get; private set; }
+        public int HashCode { get; private set; }
+        public string BattleTag
         {
             get
             {
-                var builder = D3.Account.Digest.CreateBuilder().SetVersion(100) // 7447=>99, 7728=> 100 /raist. 
-                    .SetBannerConfiguration(this.BannerConfiguration)
-                    .SetFlags(0);
-
-                D3.OnlineService.EntityId lastPlayedHeroId;
-                if(Toons.Count>0)
-                {
-                    lastPlayedHeroId = Toons.First().Value.D3EntityID; // we should actually hold player's last hero in database. /raist
-                    this.LoggedInClient.CurrentToon = Toons.First().Value; 
-                }
-                else
-                {
-                    lastPlayedHeroId = AccountHasNoToons;
-                }
-
-                builder.SetLastPlayedHeroId(lastPlayedHeroId);
-                return builder.Build();
-            }
-        }
-
-        private MooNetClient _loggedInClient;
-
-        public MooNetClient LoggedInClient
-        {
-            get
-            {
-                return this._loggedInClient;
+                return Name + "#" + HashCode.ToString("D4");
             }
             set
             {
-                this._loggedInClient = value;
-                
-                // notify friends.
-                if (FriendManager.Friends[this.BnetAccountID.Low].Count == 0) return; // if account has no friends just skip.
+                if (!value.Contains('#'))
+                    throw new Exception("BattleTag must contain '#'");
 
-                var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
-                var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
-                var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
-
-                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetAccountID).AddFieldOperation(operation).Build();
-                var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
-                var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
-
-                foreach (var friend in FriendManager.Friends[this.BnetAccountID.Low])
-                {
-                    var account = AccountManager.GetAccountByPersistentID(friend.Id.Low);
-                    if (account == null || account.LoggedInClient == null) return; // only send to friends that are online.
-
-                    // make the rpc call.
-                    account.LoggedInClient.MakeTargetedRPC(this, ()=> 
-                        bnet.protocol.channel.ChannelSubscriber.CreateStub(account.LoggedInClient).NotifyUpdateChannelState(null, notification,callback => { }));
-                }
+                var split = value.Split('#');
+                this.Name = split[0];
+                this.HashCode = Convert.ToInt32(split[1]);
             }
         }
+        public UserLevels UserLevel { get; private set; } // user level for account.
 
-        public Dictionary<ulong, Toon> Toons
+        public Dictionary<ulong, GameAccount> GameAccounts
         {
-            get { return ToonManager.GetToonsForAccount(this); }
+            get { return GameAccountManager.GetGameAccountsForAccount(this); }
         }
 
-        public Account(ulong persistentId, string email, byte[] salt, byte[] passwordVerifier, UserLevels userLevel) // Account with given persistent ID
+        public Account(ulong persistentId, string email, byte[] salt, byte[] passwordVerifier, string battleTagName, int hashCode, UserLevels userLevel) // Account with given persistent ID
             : base(persistentId)
         {
-            this.SetFields(email,salt, passwordVerifier, userLevel);
+            this.SetFields(email, salt, passwordVerifier, battleTagName, hashCode, userLevel);
         }
 
-        public Account(string email, string password, UserLevels userLevel) // Account with **newly generated** persistent ID
-            : base()
+        public Account(string email, string password, string battleTagName, int hashCode, UserLevels userLevel) // Account with **newly generated** persistent ID
+            : base(StringHashHelper.HashIdentity(battleTagName + "#" + hashCode.ToString("D4")))
         {
             if (password.Length > 16) password = password.Substring(0, 16); // make sure the password does not exceed 16 chars.
 
             var salt = SRP6a.GetRandomBytes(32);
             var passwordVerifier = SRP6a.CalculatePasswordVerifierForAccount(email, password, salt);
 
-            this.SetFields(email, salt, passwordVerifier, userLevel);
+            this.SetFields(email, salt, passwordVerifier, battleTagName, hashCode, userLevel);
         }
 
         private static ulong? _persistentIdCounter = null;
@@ -139,30 +103,17 @@ namespace Mooege.Core.MooNet.Accounts
             return (ulong)++_persistentIdCounter;
         }
 
-        private void SetFields(string email, byte[] salt, byte[] passwordVerifier, UserLevels userLevel)
+        private void SetFields(string email, byte[] salt, byte[] passwordVerifier, string battleTagName, int hashCode, UserLevels userLevel)
         {
             this.Email = email;
             this.Salt = salt;
             this.PasswordVerifier = passwordVerifier;
             this.UserLevel = userLevel;
 
-            this.BnetAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.PersistentID).Build();
-            this.BnetGameAccountID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(this.PersistentID).Build();
-            this.BannerConfiguration = D3.Account.BannerConfiguration.CreateBuilder()
-                .SetBannerShape(2952440006)
-                .SetSigilMain(976722430)
-                .SetSigilAccent(803826460)
-                .SetPatternColor(1797588777)
-                .SetBackgroundColor(1379006192)
-                .SetSigilColor(1797588777)
-                .SetSigilPlacement(3057352154)
-                .SetPattern(4173846786)
-                .SetUseSigilVariant(true)
-                .SetEpicBanner(0)
-                .Build();
+            this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.PersistentID).Build();
 
-            this.Achievements = new List<bnet.protocol.achievements.AchievementUpdateRecord>();
-            this.AchievementCriteria = new List<bnet.protocol.achievements.CriteriaUpdateRecord>();
+            this.Name = battleTagName;
+            this.HashCode = hashCode;
         }
 
         public bnet.protocol.presence.Field QueryField(bnet.protocol.presence.FieldKey queryKey)
@@ -171,17 +122,17 @@ namespace Mooege.Core.MooNet.Accounts
 
             switch ((FieldKeyHelper.Program)queryKey.Program)
             {
-                case FieldKeyHelper.Program.D3:
-                    if (queryKey.Group == 1 && queryKey.Field == 1) // Account's selected toon.
-                    {
-                        if(this.LoggedInClient!=null) // check if the account is online actually.
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LoggedInClient.CurrentToon.D3EntityID.ToByteString()).Build());
-                    }
-                    else
-                    {
-                        Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
-                    }
-                    break;
+                //case FieldKeyHelper.Program.D3:
+                //    if (queryKey.Group == 1 && queryKey.Field == 1) // Account's selected toon.
+                //    {
+                //        if (this.LoggedInClient != null) // check if the account is online actually.
+                //            field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LoggedInClient.CurrentToon.D3EntityID.ToByteString()).Build());
+                //    }
+                //    else
+                //    {
+                //        Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
+                //    }
+                //    break;
                 case FieldKeyHelper.Program.BNet:
                     Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
                     break;
@@ -191,52 +142,68 @@ namespace Mooege.Core.MooNet.Accounts
             return field.HasValue ? field.Build() : null;
         }
 
-        protected override void NotifySubscriptionAdded(MooNetClient client)
+//        protected override void NotifySubscriptionAdded(MooNetClient client)
+        public override List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications()
         {
-            var operations = new List<bnet.protocol.presence.FieldOperation>();
+            var operationList = new List<bnet.protocol.presence.FieldOperation>();
 
-            // Selected toon
-            if (this.LoggedInClient != null && this.Digest.LastPlayedHeroId != AccountHasNoToons)
-            {
-                var selectedToonKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 1, 0);
-                var selectedToonField = bnet.protocol.presence.Field.CreateBuilder().SetKey(selectedToonKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Digest.LastPlayedHeroId.ToByteString()).Build()).Build();
-                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(selectedToonField).Build());
-            }
+            //account
+            //D3,1,1,0 -> LastPlayedToon
+            //D3,1,1,0 -> SelectedGameAccount
+            //Bnet,1,1,0 -> RealId Name
+            //Bnet,1,2,0 -> true
+            //Bnet,1,4,index -> GameAccount EntityIds
+            //Bnet,1,5,0 -> BattleTag
 
-            // RealID name field - NOTE: Probably won't ever use this for its actual purpose, but showing the email in final might not be a good idea
-            var realNameKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet,1, 1, 0);
-            var realNameField = bnet.protocol.presence.Field.CreateBuilder().SetKey(realNameKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Email).Build()).Build();
-            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(realNameField).Build());
+            var gameAccount = GameAccountManager.GetGameAccountsForAccount(this).FirstOrDefault().Value;
+
+            //LastPlayedToon
+            var ToonKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 1, 0);
+            var ToonField = bnet.protocol.presence.Field.CreateBuilder().SetKey(ToonKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameAccount.lastPlayedHeroId.ToByteString()).Build()).Build();
+            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(ToonField).Build());
+
+            //SelectedGameAccount
+            var GameAccountKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 2, 0);
+            var GameAccountField = bnet.protocol.presence.Field.CreateBuilder().SetKey(GameAccountKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameAccount.D3GameAccountId.ToByteString()).Build()).Build();
+            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(GameAccountField).Build());
+
+            // RealID name field - NOTE: Using BattleTag here since we don't use ReadlID names
+            var realNameKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 1, 0);
+            var realNameField = bnet.protocol.presence.Field.CreateBuilder().SetKey(realNameKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.BattleTag).Build()).Build();
+            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(realNameField).Build());
 
             // Account online?
             var accountOnlineKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
-            var accountOnlineField = bnet.protocol.presence.Field.CreateBuilder().SetKey(accountOnlineKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
-            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(accountOnlineField).Build());
+            var accountOnlineField = bnet.protocol.presence.Field.CreateBuilder().SetKey(accountOnlineKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
+            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(accountOnlineField).Build());
 
-            // toon list
-            foreach(var pair in this.Toons)
+            // GameAccount List
+            foreach (var pair in this.GameAccounts.Values)
             {
-                var toonKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 4, 0);
-                var toonField = bnet.protocol.presence.Field.CreateBuilder().SetKey(toonKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(pair.Value.BnetEntityID.ToByteString()).Build()).Build();
-                operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(toonField).Build());
+                var gameAccountKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 4, pair.BnetEntityId.High);
+                var gameAccountField = bnet.protocol.presence.Field.CreateBuilder().SetKey(gameAccountKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetEntityidValue(pair.BnetEntityId).Build()).Build();
+                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(gameAccountField).Build());
             }
 
+            //BattleTag
             var tempNameKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 5, 0);
-            var tempNameField = bnet.protocol.presence.Field.CreateBuilder().SetKey(tempNameKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("NICKTEMPNAME").Build()).Build();
-            operations.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(tempNameField).Build());
+            var tempNameField = bnet.protocol.presence.Field.CreateBuilder().SetKey(tempNameKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.BattleTag).Build()).Build();
+            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(tempNameField).Build());
 
-            // Create a presence.ChannelState
-            var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetAccountID).AddRangeFieldOperation(operations).Build();
+            return operationList;
 
-            // Embed in channel.ChannelState
-            var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+            //// Create a presence.ChannelState
+            //var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityId).AddRangeFieldOperation(operations).Build();
 
-            // Put in addnotification message
-            var notification = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
+            //// Embed in channel.ChannelState
+            //var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
 
-            // Make the rpc call
-            client.MakeTargetedRPC(this, () =>
-                bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, notification.Build(), callback => { }));
+            //// Put in addnotification message
+            //var notification = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
+
+            //// Make the rpc call
+            //client.MakeTargetedRPC(this, () =>
+            //    bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, notification.Build(), callback => { }));
         }
 
         public bool VerifyPassword(string password)
@@ -255,15 +222,15 @@ namespace Mooege.Core.MooNet.Accounts
         {
             try
             {
-                var query = string.Format("INSERT INTO accounts (id, email, salt, passwordVerifier, userLevel) VALUES({0}, '{1}', @salt, @passwordVerifier, {2})",
-                        this.PersistentID, this.Email, (byte)this.UserLevel);
+                var query = string.Format("INSERT INTO accounts (id, email, salt, passwordVerifier, battletagname, hashcode, userLevel) VALUES({0}, '{1}', @salt, @passwordVerifier, '{2}', {3}, {4})",
+                        this.PersistentID, this.Email, this.Name, this.HashCode, (byte)this.UserLevel);
 
-                    using(var cmd = new SQLiteCommand(query, DBManager.Connection))
-                    {
-                        cmd.Parameters.Add("@salt", System.Data.DbType.Binary, 32).Value = this.Salt;
-                        cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
-                        cmd.ExecuteNonQuery();
-                    }                    
+                using (var cmd = new SQLiteCommand(query, DBManager.Connection))
+                {
+                    cmd.Parameters.Add("@salt", System.Data.DbType.Binary, 32).Value = this.Salt;
+                    cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
+                    cmd.ExecuteNonQuery();
+                }
             }
             catch (Exception e)
             {
@@ -277,12 +244,12 @@ namespace Mooege.Core.MooNet.Accounts
             try
             {
                 var query = string.Format("UPDATE accounts SET passwordVerifier=@passwordVerifier WHERE id={0}", this.PersistentID);
-                
+
                 using (var cmd = new SQLiteCommand(query, DBManager.Connection))
                 {
                     cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
                     cmd.ExecuteNonQuery();
-                }    
+                }
             }
             catch (Exception e)
             {
@@ -307,7 +274,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         public override string ToString()
         {
-            return String.Format("{{ Account: {0} [lowId: {1}] }}", this.Email, this.BnetAccountID.Low);
+            return String.Format("{{ Account: {0} [lowId: {1}] }}", this.Email, this.BnetEntityId.Low);
         }
 
         /// <summary>

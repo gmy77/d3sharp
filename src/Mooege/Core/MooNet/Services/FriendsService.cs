@@ -42,9 +42,11 @@ namespace Mooege.Core.MooNet.Services
             var builder = bnet.protocol.friends.SubscribeToFriendsResponse.CreateBuilder()
                 .SetMaxFriends(127)
                 .SetMaxReceivedInvitations(127)
-                .SetMaxSentInvitations(127);
+                .SetMaxSentInvitations(127)
+                .AddRole(bnet.protocol.Role.CreateBuilder().SetId(1).SetName("battle_tag_friend").Build())
+                .AddRole(bnet.protocol.Role.CreateBuilder().SetId(2).SetName("real_id_friend").Build());
 
-            foreach (var friend in FriendManager.Friends[this.Client.Account.BnetAccountID.Low]) // send friends list.
+            foreach (var friend in FriendManager.Friends[this.Client.Account.BnetEntityId.Low]) // send friends list.
             {
                 builder.AddFriends(friend);
             }
@@ -55,7 +57,7 @@ namespace Mooege.Core.MooNet.Services
         public override void SendInvitation(IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
-            var extensionBytes = request.UnknownFields.FieldDictionary[103].LengthDelimitedList[0].ToByteArray();
+            var extensionBytes = request.Params.UnknownFields.FieldDictionary[103].LengthDelimitedList[0].ToByteArray();
             var friendRequest = bnet.protocol.friends.FriendInvitationParams.ParseFrom(extensionBytes);
 
             if (friendRequest.TargetEmail.ToLower() == this.Client.Account.Email.ToLower()) return; // don't allow him to invite himself - and we should actually return an error!
@@ -69,7 +71,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetId(FriendManager.InvitationIdCounter++) // we may actually need to store invitation ids in database with the actual invitation there. /raist.                
                 .SetInviterIdentity(this.Client.GetIdentity(true, false, false))
                 .SetInviterName(this.Client.Account.Email) // we shoulde be instead using account owner's name here.
-                .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(inviteee.BnetAccountID))
+                .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(inviteee.BnetEntityId))
                 .SetInviteeName(inviteee.Email) // again we should be instead using invitee's name.
                 .SetInvitationMessage(request.Params.InvitationMessage)
                 .SetCreationTime(DateTime.Now.ToUnixTime())

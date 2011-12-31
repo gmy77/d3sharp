@@ -68,6 +68,11 @@ namespace Mooege.Net.MooNet
         public Account Account { get; set; }
 
         /// <summary>
+        /// Selected Game Account for logged in client.
+        /// </summary>
+        public GameAccount CurrentGameAccount { get; set; }
+
+        /// <summary>
         /// Selected toon for current account.
         /// </summary>
         public Toon CurrentToon { get; set; }
@@ -101,7 +106,7 @@ namespace Mooege.Net.MooNet
         /// Callback list for issued client RPCs.
         /// </summary>
         public readonly Dictionary<uint, RPCCallback> RPCCallbacks = new Dictionary<uint, RPCCallback>();
-        
+
         /// <summary>
         /// Object ID map with local object ID as key and remote object ID as value.
         /// </summary>
@@ -113,12 +118,12 @@ namespace Mooege.Net.MooNet
         private uint _tokenCounter = 0;
 
         public bool MOTDSent { get; private set; }
-        
+
         /// <summary>
         /// Listener Id for upcoming rpc.
         /// </summary>
         private ulong _listenerId; // last targeted rpc object.
-        
+
         public MooNetClient(IConnection connection)
         {
             this.Platform = ClientPlatform.Unknown;
@@ -137,10 +142,10 @@ namespace Mooege.Net.MooNet
         public bnet.protocol.Identity GetIdentity(bool acct, bool gameacct, bool toon)
         {
             var identityBuilder = bnet.protocol.Identity.CreateBuilder();
-            if (acct) identityBuilder.SetAccountId(this.Account.BnetAccountID);
-            if (gameacct) identityBuilder.SetGameAccountId(this.Account.BnetGameAccountID);
+            if (acct) identityBuilder.SetAccountId(this.Account.BnetEntityId);
+            if (gameacct) identityBuilder.SetGameAccountId(this.CurrentGameAccount.BnetEntityId);
             if (toon && this.CurrentToon != null)
-                identityBuilder.SetAccountId(this.CurrentToon.BnetEntityID);
+                Logger.Warn("DEPRECATED: GetIdentity called with toon.");
             return identityBuilder.Build();
         }
 
@@ -280,16 +285,16 @@ namespace Mooege.Net.MooNet
             var encryptRequest = bnet.protocol.connection.EncryptRequest.CreateBuilder().Build();
             this.MakeRPC(() => bnet.protocol.connection.ConnectionService.CreateStub(this).Encrypt(null, encryptRequest, callback => StartupTSLHandshake()));
         }
-        
+
         private void StartupTSLHandshake()
-        {            
+        {
             this.TLSStream = new SslStream(this.NetworkStream, false);
 
             try
             {
                 this.TLSStream.BeginAuthenticateAsServer(CertificateHelper.Certificate, true, null, SslProtocols.Tls, SslStrength.All, false, this.OnTSLAuthentication, this.TLSStream);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Logger.FatalException(e, "Certificate exception: ");
             }
@@ -301,7 +306,7 @@ namespace Mooege.Net.MooNet
             {
                 this.TLSStream.EndAuthenticateAsServer(result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Logger.FatalException(e, "OnTSLAuthentication() exception: ");
             }
@@ -321,7 +326,7 @@ namespace Mooege.Net.MooNet
                 Logger.Trace("Local certificate was issued to {0} by {1} and is valid from {2} until {3}.", this.TLSStream.LocalCertificate.Subject, this.TLSStream.LocalCertificate.Issuer, this.TLSStream.LocalCertificate.NotBefore, this.TLSStream.LocalCertificate.NotAfter);
 
             //if (this.TLSStream.RemoteCertificate != null) // throws exception too, should be fixed /raist.
-                // Logger.Warn("Remote certificate was issued to {0} by {1} and is valid from {2} until {3}.", this.TLSStream.RemoteCertificate.Subject, this.TLSStream.RemoteCertificate.Issuer, this.TLSStream.RemoteCertificate.NotBefore, this.TLSStream.RemoteCertificate.NotAfter);
+            // Logger.Warn("Remote certificate was issued to {0} by {1} and is valid from {2} until {3}.", this.TLSStream.RemoteCertificate.Subject, this.TLSStream.RemoteCertificate.Issuer, this.TLSStream.RemoteCertificate.NotBefore, this.TLSStream.RemoteCertificate.NotAfter);
         }
 
         #endregion
@@ -337,9 +342,9 @@ namespace Mooege.Net.MooNet
             if (text.Trim() == string.Empty) return;
 
             var notification = bnet.protocol.notification.Notification.CreateBuilder()
-                .SetTargetId(this.CurrentToon.BnetEntityID)
+                .SetTargetId(this.CurrentGameAccount.BnetEntityId)
                 .SetType("WHISPER")
-                .SetSenderId(this.CurrentToon.BnetEntityID)
+                .SetSenderId(this.CurrentGameAccount.BnetEntityId)
                 .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("whisper")
                 .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(text).Build()).Build()).Build();
 
@@ -349,7 +354,7 @@ namespace Mooege.Net.MooNet
 
         #endregion
 
-        #region current channel 
+        #region current channel
 
         private Channel _currentChannel;
         public Channel CurrentChannel
@@ -369,12 +374,12 @@ namespace Mooege.Net.MooNet
                     .SetMessageValue(this.CurrentChannel.D3EntityId.ToByteString()).Build()).Build();
 
                 var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
-                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.CurrentToon.BnetEntityID).AddFieldOperation(operation).Build();
+                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.CurrentGameAccount.BnetEntityId).AddFieldOperation(operation).Build();
 
-                this.SendStateChangeNotification(this.CurrentToon, state);
+                this.SendStateChangeNotification(this.CurrentGameAccount, state);
             }
         }
-      
+
         #endregion
 
         #region channel-state changes
@@ -384,7 +389,7 @@ namespace Mooege.Net.MooNet
             var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
             var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
 
-            this.MakeTargetedRPC(target, () => 
+            this.MakeTargetedRPC(target, () =>
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(this).NotifyUpdateChannelState(null, notification, callback => { }));
         }
 
@@ -410,7 +415,7 @@ namespace Mooege.Net.MooNet
 
         public override string ToString()
         {
-            return String.Format("{{ Client: {0} }}", this.Account==null ? "??" : this.Account.Email);
+            return String.Format("{{ Client: {0} }}", this.Account == null ? "??" : this.Account.Email);
         }
 
         /// <summary>
@@ -428,7 +433,7 @@ namespace Mooege.Net.MooNet
         /// Locale enum for clients.
         /// </summary>
         public enum ClientLocale
-        {            
+        {
             Unknown,
             Invalid,
             enUS

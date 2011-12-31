@@ -392,7 +392,7 @@ namespace Mooege.Core.GS.Map
                     SceneSNO = this.SceneSNO.Id,
                     Transform = this.Transform,
                     WorldID = this.World.DynamicID,
-                    MiniMapVisibility = this.MiniMapVisibility
+                    MiniMapVisibility = false //= this.MiniMapVisibility
                 };
             }
         }

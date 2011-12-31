@@ -45,6 +45,11 @@ namespace Mooege.Core.MooNet.Objects
         public ulong DynamicId { get; set; }
 
         /// <summary>
+        /// All RPCObjects have an EntityId which is embedded in presence.ChannelState
+        /// </summary>
+        public bnet.protocol.EntityId BnetEntityId;
+
+        /// <summary>
         /// List of clients that subscribed for notifications when this object updates its states.
         /// </summary>
         public List<MooNetClient> Subscribers { get; private set; }
@@ -91,12 +96,40 @@ namespace Mooege.Core.MooNet.Objects
             // like the object never existed in the first place
         }
 
+        public virtual List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications() 
+        {
+            return new List<bnet.protocol.presence.FieldOperation>();
+        }
+
         /// <summary>
         /// Notifies a specific subscriber about the object's present state.
         /// This methods should be actually implemented by deriving object classes.
         /// </summary>
         /// <param name="client">The subscriber.</param>
-        protected virtual void NotifySubscriptionAdded(MooNetClient client) { }
+        protected void NotifySubscriptionAdded(MooNetClient client)
+        {
+            var operations = GetSubscriptionNotifications();
+
+            // Create a presence.ChannelState
+            var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityId).AddRangeFieldOperation(operations).Build();
+
+            // Embed in channel.ChannelState
+            var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+
+            // Put in AddNotification message
+            var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
+
+            // Make the RPC call to all online game accounts
+            //TODO: Split notifications per game type
+            foreach (var gameClient in client.Account.GameAccounts)
+            {
+                if (gameClient.Value.IsOnline)
+                {
+                    gameClient.Value.LoggedInClient.MakeTargetedRPC(this, () =>
+                        bnet.protocol.channel.ChannelSubscriber.CreateStub(gameClient.Value.LoggedInClient).NotifyAdd(null, builder.Build(), callback => { }));
+                }
+            }
+        }
 
         // ** We're yet not sure about this, so commenting out **
         ///// <summary>

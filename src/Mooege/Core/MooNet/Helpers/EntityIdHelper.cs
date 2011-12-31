@@ -27,15 +27,15 @@ namespace Mooege.Core.MooNet.Helpers
         /// <returns><see cref="HighIdType"/></returns>
         public static HighIdType GetHighIdType(this bnet.protocol.EntityId id)
         {
-            switch (id.High)
+            switch (id.High >> 48)
             {
-                case 0x100000000000000:
+                case 0x0100:
                     return HighIdType.AccountId;
-                case 0x200000000000000:
+                case 0x0200:
                     return HighIdType.GameAccountId;
-                case 0x300000000000000:
+                case 0x0400:
                     return HighIdType.ToonId;
-                case 0x600000000000000:
+                case 0x0600:
                     return HighIdType.ChannelId;
             }
             return HighIdType.Unknown;
@@ -49,7 +49,7 @@ namespace Mooege.Core.MooNet.Helpers
             Unknown = 0x0,
             AccountId = 0x100000000000000,
             GameAccountId = 0x200000000000000,
-            ToonId = 0x300000000000000,
+            ToonId = 0x400000000000000,
             GameId = 0x600000000000000,
             ChannelId = 0x600000000000000
         }

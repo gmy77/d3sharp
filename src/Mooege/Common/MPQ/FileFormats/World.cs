@@ -33,11 +33,22 @@ namespace Mooege.Common.MPQ.FileFormats
     {
         public Header Header { get; private set; }
         public bool IsGenerated { get; private set; }
-        public List<WorldServerData> ServerData { get; private set; }
+        public int Int1 { get; private set; }
+        public int Int2 { get; private set; }
+
+        [PersistentProperty("DRLGParams")]
+        public List<DRLGParams> DRLGParams { get; private set; }
+        public SceneParams SceneParams { get; private set; }
         public List<int> MarkerSets = new List<int>();
         public Environment Environment { get; private set; }
-        public float F0 { get; private set; }
-        public int I0 { get; private set; }
+        public LabelRuleSet LabelRuleSet { get; private set; }
+        public SceneClusterSet SceneClusterSet { get; private set; }
+        public int[] SNONavMeshFunctions = new int[4];
+        public int Int4 { get; private set; }
+        public float Float0 { get; private set; }
+        public int Int5 { get; private set; }
+        public int SNOScript { get; private set; }
+        public int Int6 { get; private set; }
 
         public World(MpqFile file)
         {
@@ -46,58 +57,41 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Header = new Header(stream);
 
             this.IsGenerated = (stream.ReadValueS32() != 0);
+            this.Int1 = stream.ReadValueS32();
+            this.Int2 = stream.ReadValueS32();
 
-            stream.Position += 8;
-            this.ServerData = stream.ReadSerializedData<WorldServerData>();
+            //this.DRLGParams = stream.ReadSerializedData<DRLGParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/120) /raist
+            stream.Position += 8; // skips reading of DRLG Pointer
+            stream.Position += (2 * 4);
+            this.SceneParams = stream.ReadSerializedItem<SceneParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/24) /raist
 
+            stream.Position += (2 * 4);
             this.MarkerSets = stream.ReadSerializedInts();
+
             stream.Position += (14 * 4);
+            this.Environment = new Environment(stream);
 
-            this.Environment = new Environment(stream); //96 4 bytes, 8 floats, ++ more
-            F0 = stream.ReadValueF32(); //280
-            I0 = stream.ReadValueS32(); //284
-
-            stream.Close();
-        }
-    }
-
-    #region server-data
-    public class WorldServerData : ISerializableData
-    {
-        [PersistentProperty("DRLGParams")]
-        public List<DRLGParams> DRLGParams { get; private set; }
-        public List<SceneParams> SceneParams { get; private set; }
-        public LabelRuleSet LabelRuleSet { get; private set; }
-        public int Int0 { get; private set; }
-        public SceneClusterSet SceneClusterSet { get; private set; }
-        public int[] SNONavMeshFunctions { get; private set; }
-        public int SNOScript { get; private set; }
-        public int Int1 { get; private set; }
-
-        public void Read(MpqFileStream stream)
-        {
-            this.DRLGParams = stream.ReadSerializedData<DRLGParams>();
-            stream.Position += 8;
-            this.SceneParams = stream.ReadSerializedData<SceneParams>();
-            stream.Position += 8;
-
-            LabelRuleSet = new LabelRuleSet(stream); //32
-            this.Int0 = stream.ReadValueS32(); //56
             stream.Position += 4;
-            this.SceneClusterSet = new SceneClusterSet(stream); //64
+            LabelRuleSet = new LabelRuleSet(stream);
+            this.Int4 = stream.ReadValueS32();
 
-            SNONavMeshFunctions = new int[4]; //88
+            stream.Position += 4;
+            this.SceneClusterSet = new SceneClusterSet(stream);
+
             for (int i = 0; i < SNONavMeshFunctions.Length; i++)
             {
                 SNONavMeshFunctions[i] = stream.ReadValueS32();
             }
 
             stream.Position += 4;
-            SNOScript = stream.ReadValueS32(); //104
-            Int1 = stream.ReadValueS32(); //108
+            Float0 = stream.ReadValueF32();
+            Int5 = stream.ReadValueS32();
+            SNOScript = stream.ReadValueS32();
+            Int6 = stream.ReadValueS32();
+
+            stream.Close();
         }
     }
-    #endregion
 
     #region scene-params
 
@@ -492,7 +486,6 @@ namespace Mooege.Common.MPQ.FileFormats
             snoWeather = stream.ReadValueS32();
             snoIrradianceTex = stream.ReadValueS32();
             snoIrradianceTexDead = stream.ReadValueS32();
-            stream.Position += 4;
         }
     }
 

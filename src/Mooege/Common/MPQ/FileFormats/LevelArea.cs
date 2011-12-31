@@ -29,42 +29,32 @@ namespace Mooege.Common.MPQ.FileFormats
     public class LevelArea : FileFormat
     {
         public Header Header { get; private set; }
-        public int I0 { get; private set; }
-        public List<LevelAreaServerData> ServerData { get; private set; }
+        public int[] I0 { get; private set; }
+        public int I1 { get; private set; }
+        public int SNOLevelAreaOverrideForGizmoLocs { get; private set; }
+        public GizmoLocSet LocSet { get; private set; }
+        public int SpawnPopulationEntries { get; private set; }
 
         [PersistentProperty("SpawnPopulation")]
-        public List<LevelAreaSpawnPopulation> SpawnPopulations { get; private set; }
+        public List<LevelAreaSpawnPopulation> SpawnPopulation { get; private set; }
 
         public LevelArea(MpqFile file)
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-            this.I0 = stream.ReadValueS32();
-            this.ServerData = stream.ReadSerializedData<LevelAreaServerData>();
-            stream.Close();
-        }
-    }
-
-    public class LevelAreaServerData : ISerializableData
-    {
-        public int[] I0 { get; private set; }
-        public int SNOLevelAreaOverrideForGizmoLocs { get; private set; }
-        public GizmoLocSet LocSet { get; private set; }
-        public int I1 { get; private set; }
-        public List<LevelAreaSpawnPopulation> SpawnPopulations { get; private set; }
-
-        public void Read(MpqFileStream stream)
-        {
-            this.I0 = new int[4]; //0
+            this.I0 = new int[4];
             for (int i = 0; i < 4; i++)
                 this.I0[i] = stream.ReadValueS32();
-            this.SNOLevelAreaOverrideForGizmoLocs = stream.ReadValueS32(); //16
+            this.I1 = stream.ReadValueS32();
+            this.SNOLevelAreaOverrideForGizmoLocs = stream.ReadValueS32();
             stream.Position += 4;
-            this.LocSet = new GizmoLocSet(stream); //24
-            this.I1 = stream.ReadValueS32(); //9176
-            stream.Position += 4;
-            this.SpawnPopulations = stream.ReadSerializedData<LevelAreaSpawnPopulation>();
+            this.LocSet = new GizmoLocSet(stream);
+            this.SpawnPopulationEntries = stream.ReadValueS32();
             stream.Position += 12;
+
+            //mpq reading of spawn populations is disabled because its not working anymore. data is loaded from database instead
+            //this.SpawnPopulation = stream.ReadSerializedData<LevelAreaSpawnPopulation>();
+            stream.Close();
         }
     }
 
@@ -113,12 +103,17 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LevelAreaSpawnPopulation : ISerializableData
     {
-        [PersistentProperty("Description")] public string Description { get; private set; }
-        [PersistentProperty("I0")] public int I0 { get; private set; }
-        [PersistentProperty("I1", 4)] public int[] I1 { get; private set; }
+        [PersistentProperty("Description")]
+        public string Description { get; private set; }
+        [PersistentProperty("I0")]
+        public int I0 { get; private set; }
+        [PersistentProperty("I1", 4)]
+        public int[] I1 { get; private set; }
 
-        [PersistentProperty("SpawnGroupsCount")] public int SpawnGroupsCount { get; private set; }
-        [PersistentProperty("SpawnGroup")] public List<LevelAreaSpawnGroup> SpawnGroup { get; private set; }
+        [PersistentProperty("SpawnGroupsCount")]
+        public int SpawnGroupsCount { get; private set; }
+        [PersistentProperty("SpawnGroup")]
+        public List<LevelAreaSpawnGroup> SpawnGroup { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -135,14 +130,22 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LevelAreaSpawnGroup : ISerializableData
     {
-        [PersistentProperty("GroupType")] public SpawnGroupType GroupType { get; private set; }
-        [PersistentProperty("F0")] public float F0 { get; private set; }
-        [PersistentProperty("F1")] public float F1 { get; private set; }
-        [PersistentProperty("I0")] public int I0 { get; private set; }
-        [PersistentProperty("I1")] public int SpawnItemsCount { get; private set; }
-        [PersistentProperty("SpawnItems")] public List<LevelAreaSpawnItem> SpawnItems { get; private set; }
-        [PersistentProperty("I2")] public int I2 { get; private set; }
-        [PersistentProperty("I3")] public int I3 { get; private set; }
+        [PersistentProperty("GroupType")]
+        public SpawnGroupType GroupType { get; private set; }
+        [PersistentProperty("F0")]
+        public float F0 { get; private set; }
+        [PersistentProperty("F1")]
+        public float F1 { get; private set; }
+        [PersistentProperty("I0")]
+        public int I0 { get; private set; }
+        [PersistentProperty("I1")]
+        public int SpawnItemsCount { get; private set; }
+        [PersistentProperty("SpawnItems")]
+        public List<LevelAreaSpawnItem> SpawnItems { get; private set; }
+        [PersistentProperty("I2")]
+        public int I2 { get; private set; }
+        [PersistentProperty("I3")]
+        public int I3 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -166,12 +169,18 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LevelAreaSpawnItem : ISerializableData
     {
-        [PersistentProperty("SNOHandle")] public SNOHandle SNOHandle { get; private set; }
-        [PersistentProperty("SpawnType")] public SpawnType SpawnType { get; private set; }
-        [PersistentProperty("I0")] public int I0 { get; private set; }
-        [PersistentProperty("I1")] public int I1 { get; private set; }
-        [PersistentProperty("I2")] public int I2 { get; private set; }
-        [PersistentProperty("I3")] public int I3 { get; private set; }
+        [PersistentProperty("SNOHandle")]
+        public SNOHandle SNOHandle { get; private set; }
+        [PersistentProperty("SpawnType")]
+        public SpawnType SpawnType { get; private set; }
+        [PersistentProperty("I0")]
+        public int I0 { get; private set; }
+        [PersistentProperty("I1")]
+        public int I1 { get; private set; }
+        [PersistentProperty("I2")]
+        public int I2 { get; private set; }
+        [PersistentProperty("I3")]
+        public int I3 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
