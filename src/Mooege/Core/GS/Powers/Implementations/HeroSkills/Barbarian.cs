@@ -928,5 +928,295 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 #endregion
 
+    //TODO: Rune_E
+    #region Frenzy
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.Frenzy)]
+    public class Frenzy : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetBestMeleeEnemy();
+            attack.AddWeaponDamage(2f, DamageType.Physical);
+            attack.OnHit = hitPayload =>
+            {
+                AddBuff(User, new FrenzyBuff());
+                if (Rune_C > 0)
+                {
+                    if (!AddBuff(User, new ObsidianSpeedEffect()))
+                    {
+                        AddBuff(User, new ObsidianSpeedEffect());
+                    }
+                }
+                if (Rune_B > 0)
+                {
+                    if (Rand.NextDouble() < ScriptFormula(17))
+                    {
+                        Actor target = GetEnemiesInRadius(User.Position, 15f).GetClosestTo(User.Position);
+
+                        var proj = new Projectile(this, RuneSelect(6515, 130073, 215555, -1, 216040, 75650), User.Position);
+                        proj.Position.Z += 5f;  // fix height
+                        proj.OnCollision = (hit) =>
+                        {
+                            WeaponDamage(hit, ScriptFormula(18), DamageType.Physical);
+                        };
+                        proj.Launch(target.Position, 2f);
+                    }
+                }
+                if (Rune_D > 0)
+                {
+                    if (Rand.NextDouble() < 1)
+                    {
+                        hitPayload.Target.PlayEffectGroup(163470);
+                        AddBuff(hitPayload.Target, new DebuffStunned(WaitSeconds(ScriptFormula(0))));
+                    }
+                }
+            };
+            attack.OnDeath = DeathPayload =>
+                {
+                    //Rune_E -> heals.
+                };
+            attack.Apply();
+
+            yield break;
+        }
+        [ImplementsPowerBuff(0)]
+        class FrenzyBuff : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(5));
+                MaxStackCount = (int)ScriptFormula(3);
+            }
+
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                        _AddFrenzy();
+                return true;
+            }
+
+            public override bool Stack(Buff buff)
+            {
+                bool stacked = StackCount < MaxStackCount;
+
+                base.Stack(buff);
+
+                if (stacked)
+                    _AddFrenzy();
+
+                return true;
+            }
+
+            public override void Remove()
+            {
+                base.Remove();
+                if (Rune_A > 0)
+                {
+                    User.Attributes[GameAttribute.Attack_Bonus_Percent] -= StackCount * ScriptFormula(11);
+                }
+                User.Attributes[GameAttribute.Attacks_Per_Second_Bonus] -= StackCount * ScriptFormula(6);
+                User.Attributes.BroadcastChangedIfRevealed();
+
+            }
+
+            private void _AddFrenzy()
+            {
+                if (Rune_A > 0)
+                {
+                    User.Attributes[GameAttribute.Attack_Bonus_Percent] += ScriptFormula(11);
+                }
+                User.Attributes[GameAttribute.Attacks_Per_Second_Bonus] += ScriptFormula(6);
+                User.Attributes.BroadcastChangedIfRevealed();
+            }
+        }
+        //powerbuff(1) = Healing Over Time buff
+
+        [ImplementsPowerBuff(3)]
+        class ObsidianSpeedEffect : PowerBuff
+        {
+            public override void Init()
+            {
+                Timeout = WaitSeconds(ScriptFormula(5));
+            }
+            public override bool Apply()
+            {
+                if (!base.Apply())
+                    return false;
+                User.Attributes[GameAttribute.Movement_Bonus_Run_Speed] += ScriptFormula(8);
+                User.Attributes.BroadcastChangedIfRevealed();
+
+                return true;
+            }
+            public override void Remove()
+            {
+                base.Remove();
+                User.Attributes[GameAttribute.Movement_Bonus_Run_Speed] -= ScriptFormula(8);
+                User.Attributes.BroadcastChangedIfRevealed();
+
+            }
+        }
+    }
+#endregion
+
+    //Incomplete, very confusing how to active this with using everthing else and how to end it when pressed.
+    //Possibly wait to finish this when we get Passives activated.
+    #region Revenege
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.Situational.Revenge)]
+    public class Revenge : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            AttackPayload attack = new AttackPayload(this);
+            attack.Targets = GetBestMeleeEnemy();
+            attack.OnHit = hitPayload =>
+            {
+                if (Rand.NextDouble() < ScriptFormula(20))
+                {
+                    //Skill_Override? // Skill_Override_Ended //Skill_Override_Ended_Active
+                    User.Attributes[GameAttribute.Skill_Override_Active] = true;
+                }
+            };
+            yield break;
+        }
+    }
+#endregion
+
+    //Complete, just need to see which of the 4 powerpuffs use buff icons correctly.
+    //It actually seems that anything that gives ally's puffs, assigns the buff 
+    //as 0-You, 2-second person, 3-third, 4-last player.
+    #region WarCry
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.WarCry)]
+    public class WarCry : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            GeneratePrimaryResource(ScriptFormula(3));
+            StartDefaultCooldown();
+
+            AddBuff(User, new RevengeBuff());
+            foreach (Actor ally in GetAlliesInRadius(User.Position, ScriptFormula(11)).Actors)
+                AddBuff(User, new RevengeAllyBuff());
+            yield break;
+        }
+    }
+    //4 different powerbuffs, figure out which one is which.
+    [ImplementsPowerBuff(0)]
+    class RevengeBuff : PowerBuff
+    {
+        public override void Init()
+        {
+            Timeout = WaitSeconds(ScriptFormula(13));
+        }
+
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            if (Rune_B > 0)
+            {
+                User.Attributes[GameAttribute.Dodge_Chance_Bonus] += ScriptFormula(14);
+            }
+            if (Rune_C > 0)
+            {
+                User.Attributes[GameAttribute.Resistance_Percent] += ScriptFormula(4);
+            }
+            if (Rune_E > 0)
+            {
+                User.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus] += ScriptFormula(5);
+                User.Attributes[GameAttribute.Hitpoints_Regen_Per_Second] += ScriptFormula(6);
+            }
+            User.Attributes[GameAttribute.Defense_Bonus_Percent] += ScriptFormula(0);
+            User.Attributes.BroadcastChangedIfRevealed();
+
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            if (Rune_B > 0)
+            {
+                User.Attributes[GameAttribute.Dodge_Chance_Bonus] -= ScriptFormula(14);
+            }
+            if (Rune_C > 0)
+            {
+                User.Attributes[GameAttribute.Resistance_Percent] -= ScriptFormula(4);
+            }
+            if (Rune_E > 0)
+            {
+                User.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus] -= ScriptFormula(5);
+                User.Attributes[GameAttribute.Hitpoints_Regen_Per_Second] -= ScriptFormula(6);
+            }
+            User.Attributes[GameAttribute.Defense_Bonus_Percent] -= ScriptFormula(0);
+            User.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+    [ImplementsPowerBuff(2)]
+    class RevengeAllyBuff : PowerBuff
+    {
+        public override void Init()
+        {
+            Timeout = WaitSeconds(ScriptFormula(13));
+        }
+
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            if (Rune_B > 0)
+            {
+                Target.Attributes[GameAttribute.Dodge_Chance_Bonus] += ScriptFormula(14);
+            }
+            if (Rune_C > 0)
+            {
+                Target.Attributes[GameAttribute.Resistance_Percent] += ScriptFormula(4);
+            }
+            if (Rune_E > 0)
+            {
+                Target.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus] += ScriptFormula(5);
+                Target.Attributes[GameAttribute.Hitpoints_Regen_Per_Second] += ScriptFormula(6);
+            }
+            Target.Attributes[GameAttribute.Defense_Bonus_Percent] += ScriptFormula(0);
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            if (Rune_B > 0)
+            {
+                Target.Attributes[GameAttribute.Dodge_Chance_Bonus] -= ScriptFormula(14);
+            }
+            if (Rune_C > 0)
+            {
+                Target.Attributes[GameAttribute.Resistance_Percent] -= ScriptFormula(4);
+            }
+            if (Rune_E > 0)
+            {
+                Target.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus] -= ScriptFormula(5);
+                Target.Attributes[GameAttribute.Hitpoints_Regen_Per_Second] -= ScriptFormula(6);
+            }
+            Target.Attributes[GameAttribute.Defense_Bonus_Percent] -= ScriptFormula(0);
+            Target.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+#endregion
+
+    //Incomplete, this will be a OnChanneled, with Walking Speed Multiplier of 5x.
+    #region FuriousCharge
+    [ImplementsPowerSNO(Skills.Skills.Barbarian.FuryGenerators.FuriousCharge)]
+    public class FuriousCharge : Skill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            //GeneratePrimaryResource(ScriptFormula(15)); //onHit
+            StartDefaultCooldown();
+            yield break;
+        }
+    }
+#endregion
     //bash, leap attack, ancient spear, whirlwind, threateningshout, hammeroftheancients, battle rage, cleave, ignore pain, weapon throw, ground stomp, rend
 }
