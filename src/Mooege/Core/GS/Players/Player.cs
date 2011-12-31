@@ -647,8 +647,7 @@ namespace Mooege.Core.GS.Players
 
             var msg = new ACDTranslateNormalMessage
             {
-                Id = (int)Opcodes.ACDTranslateNormalMessage, // TODO: not sure if all ACDTranslateNormalMessage now use same Opcode
-                ActorId = message.Tick,
+                ActorId = (int)this.DynamicID,
                 Position = this.Position,
                 Angle = message.Angle,
                 TurnImmediately = false,

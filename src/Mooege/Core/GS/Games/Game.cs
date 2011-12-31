@@ -146,7 +146,7 @@ namespace Mooege.Core.GS.Games
             this.Players = new ConcurrentDictionary<GameClient, Player>();
             this._objects = new ConcurrentDictionary<uint, DynamicObject>();
             this._worlds = new ConcurrentDictionary<int, World>();
-            this.StartingWorldSNOId = 86856; // 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff. /komiga
+            this.StartingWorldSNOId = 71150; // FIXME: This must be set according to the game settings (start quest/act). Better yet, track the player's save point and toss this stuff. /komiga
             this.Quests = new QuestManager(this);
 
             this._tickWatch = new Stopwatch();

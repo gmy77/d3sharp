@@ -24,7 +24,7 @@ using Mooege.Net.GS.Message.Fields;
 namespace Mooege.Net.GS.Message.Definitions.ACD
 {
     [Message(Opcodes.ACDClientTranslateMessage, Consumers.Player)]
-    class ACDClientTranslateMessage : GameMessage
+    public class ACDClientTranslateMessage : GameMessage
     {
         public int Tick;
         public int Field1;
