@@ -37,7 +37,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetObjectId(channel.DynamicId)
                 .SetChannelId(channel.BnetEntityId);
 
-            Logger.Trace("CreateChannel() {0} for {1}", channel, Client.CurrentToon);
+            Logger.Trace("CreateChannel() {0} for {1}", channel, Client.CurrentGameAccount.CurrentToon);
 
             done(builder.Build());
             channel.SetOwner(Client); // Set the client that requested the creation of channel as the owner           
@@ -56,7 +56,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void GetChannelInfo(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.GetChannelInfoRequest request, System.Action<bnet.protocol.channel.GetChannelInfoResponse> done)
         {
-            Logger.Trace("GetChannelInfoRequest() to channel {0}:{1} by toon {2}", request.ChannelId.High, request.ChannelId.Low, Client.CurrentToon.Name);
+            Logger.Trace("GetChannelInfoRequest() to channel {0}:{1} by toon {2}", request.ChannelId.High, request.ChannelId.Low, Client.CurrentGameAccount.CurrentToon.Name);
 
             var builder = bnet.protocol.channel.GetChannelInfoResponse.CreateBuilder();
             var channel = ChannelManager.GetChannelByEntityId(request.ChannelId);

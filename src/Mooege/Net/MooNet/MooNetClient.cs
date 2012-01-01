@@ -73,11 +73,6 @@ namespace Mooege.Net.MooNet
         public GameAccount CurrentGameAccount { get; set; }
 
         /// <summary>
-        /// Selected toon for current account.
-        /// </summary>
-        public Toon CurrentToon { get; set; }
-
-        /// <summary>
         /// Client exported services dictionary.
         /// </summary>
         public Dictionary<uint, uint> Services { get; private set; }
@@ -144,7 +139,7 @@ namespace Mooege.Net.MooNet
             var identityBuilder = bnet.protocol.Identity.CreateBuilder();
             if (acct) identityBuilder.SetAccountId(this.Account.BnetEntityId);
             if (gameacct) identityBuilder.SetGameAccountId(this.CurrentGameAccount.BnetEntityId);
-            if (toon && this.CurrentToon != null)
+            if (toon && this.CurrentGameAccount.CurrentToon != null)
                 Logger.Warn("DEPRECATED: GetIdentity called with toon.");
             return identityBuilder.Build();
         }
@@ -356,6 +351,7 @@ namespace Mooege.Net.MooNet
 
         #region current channel
 
+        //TODO: Change to list, client can be in multiple channels now.
         private Channel _currentChannel;
         public Channel CurrentChannel
         {

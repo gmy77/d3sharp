@@ -46,7 +46,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void AcceptInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.AcceptInvitationRequest request, Action<bnet.protocol.channel_invitation.AcceptInvitationResponse> done)
         {
-            Logger.Trace("{0} accepted invitation.", this.Client.CurrentToon);
+            Logger.Trace("{0} accepted invitation.", this.Client.CurrentGameAccount.CurrentToon);
 
             var channel = this._invitationManager.HandleAccept(this.Client, request);
 
@@ -56,7 +56,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void DeclineInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("{0} declined invitation.", this.Client.CurrentToon);
+            Logger.Trace("{0} declined invitation.", this.Client.CurrentGameAccount.CurrentToon);
 
             var respone = bnet.protocol.NoData.CreateBuilder();
             done(respone.Build());
@@ -66,7 +66,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void RevokeInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.RevokeInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("{0} revoked invitation.", this.Client.CurrentToon);
+            Logger.Trace("{0} revoked invitation.", this.Client.CurrentGameAccount.CurrentToon);
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
@@ -79,7 +79,7 @@ namespace Mooege.Core.MooNet.Services
             var invitee = GameAccountManager.GetAccountByPersistentID(request.TargetId.Low);
             if (this.Client.CurrentChannel.HasMember(invitee)) return; // don't allow a second invitation if invitee is already a member of client's current channel.
 
-            Logger.Debug("{0} invited {1} to his channel.", Client.CurrentToon, invitee);
+            Logger.Debug("{0} invited {1} to his channel.", Client.CurrentGameAccount.CurrentToon, invitee);
 
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
             var extensionBytes = request.Params.UnknownFields.FieldDictionary[105].LengthDelimitedList[0].ToByteArray();

@@ -37,11 +37,6 @@ namespace Mooege.Core.MooNet.Toons
         public D3.OnlineService.EntityId D3EntityID { get; private set; }
 
         /// <summary>
-        /// Bnet EntityID encoded id.
-        /// </summary>
-        //public bnet.protocol.EntityId BnetEntityID { get; private set; }
-
-        /// <summary>
         /// Toon handle struct.
         /// </summary>
         public ToonHandleHelper ToonHandle { get; private set; }
@@ -54,17 +49,17 @@ namespace Mooege.Core.MooNet.Toons
         /// <summary>
         /// Toon's hash-code.
         /// </summary>
-        public int HashCode { get; set; }
+        //public int HashCode { get; set; }
 
         /// <summary>
         /// Toon's hash-code as string.
         /// </summary>
-        public string HashCodeString { get; private set; }
+        //public string HashCodeString { get; private set; }
 
         /// <summary>
         /// NameText as name#hashcode.
         /// </summary>
-        public D3.Hero.NameText NameText { get; private set; }
+        //public D3.Hero.NameText NameText { get; private set; }
 
         /// <summary>
         /// Toon's owner account.
@@ -126,7 +121,7 @@ namespace Mooege.Core.MooNet.Toons
             {
                 return D3.Hero.Digest.CreateBuilder().SetVersion(893)
                                 .SetHeroId(this.D3EntityID)
-                    //.SetHeroName(this.Name) //no longer used in 7728, uses D3.Hero.NameText query -Egris
+                                .SetHeroName(this.Name)
                                 .SetGbidClass((int)this.ClassID)
                                 .SetPlayerFlags((uint)this.Flags)
                                 .SetLevel(this.Level)
@@ -166,8 +161,8 @@ namespace Mooege.Core.MooNet.Toons
                 if (!this.GameAccount.IsOnline) return false;
                 else
                 {
-                    if (this.GameAccount.LoggedInClient.CurrentToon != null)
-                        return this.GameAccount.LoggedInClient.CurrentToon.D3EntityID == this.D3EntityID;
+                    if (this.GameAccount.CurrentToon != null)
+                        return this.GameAccount.CurrentToon.D3EntityID == this.D3EntityID;
                     else
                         return false;
                 }
@@ -242,9 +237,9 @@ namespace Mooege.Core.MooNet.Toons
             this.D3EntityID = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId + this.PersistentID).SetIdLow(this.PersistentID).Build();
 
             this.Name = name;
-            this.HashCode = hashCode;
-            this.HashCodeString = HashCode.ToString("D3");
-            this.NameText = D3.Hero.NameText.CreateBuilder().SetName(string.Format("{0}#{1}", this.Name, this.HashCodeString)).Build();
+            //this.HashCode = hashCode;
+            //this.HashCodeString = HashCode.ToString("D3");
+            //this.NameText = D3.Hero.NameText.CreateBuilder().SetName(string.Format("{0}#{1}", this.Name, this.HashCodeString)).Build();
             this.Class = @class;
             this.Flags = flags;
             this.Level = level;
@@ -305,8 +300,8 @@ namespace Mooege.Core.MooNet.Toons
                 {
                     var query =
                         string.Format(
-                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, accountId={5}, timePlayed={6} WHERE id={7}",
-                            Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.GameAccount.PersistentID, this.TimePlayed, this.PersistentID);
+                            "UPDATE toons SET name='{0}', class={1}, gender={2}, level={3}, accountId={4}, timePlayed={5} WHERE id={6}",
+                            Name, (byte)this.Class, (byte)this.Gender, this.Level, this.GameAccount.PersistentID, this.TimePlayed, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -315,8 +310,8 @@ namespace Mooege.Core.MooNet.Toons
                 {
                     var query =
                         string.Format(
-                            "INSERT INTO toons (id, name, hashCode, class, gender, level, timePlayed, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7})",
-                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.TimePlayed, this.GameAccount.PersistentID);
+                            "INSERT INTO toons (id, name, class, gender, level, timePlayed, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7})",
+                            this.PersistentID, this.Name, (byte)this.Class, (byte)this.Gender, this.Level, this.TimePlayed, this.GameAccount.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();

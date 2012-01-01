@@ -91,6 +91,14 @@ namespace Mooege.Core.MooNet.Services
                     var setToonSettings = SetToonSettings(D3.GameMessage.SetToonSettings.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(setToonSettings).Build());
                     break;
+                case 13: //D3.GameMessage.GetHeroItems
+                    var heroItems = GetHeroItems(D3.GameMessage.GetHeroItems.ParseFrom(request.GetAttribute(2).Value.MessageValue));
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(heroItems).Build());
+                    break;
+                case 14: //D3.GameMessage.GetAccountItems
+                    var accountItems = GetAccountItems(D3.GameMessage.GetAccountItems.ParseFrom(request.GetAttribute(2).Value.MessageValue));
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(accountItems).Build());
+                    break;
                 case 15: //D3.GameMessage.GetAccountProfile -> D3.Profile.AccountProfile
                     var getAccountProfile = GetAccountProfile(D3.GameMessage.GetAccountProfile.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(getAccountProfile).Build());
@@ -190,65 +198,16 @@ namespace Mooege.Core.MooNet.Services
 
         private ByteString SelectHero(D3.OnlineService.EntityId hero)
         {
-            this.Client.CurrentToon = ToonManager.GetToonByLowID(hero.IdLow);
+            this.Client.CurrentGameAccount.CurrentToon = ToonManager.GetToonByLowID(hero.IdLow);
 
-            Logger.Trace("SelectToon() {0}", this.Client.CurrentToon);
+            Logger.Trace("SelectToon() {0}", this.Client.CurrentGameAccount.CurrentToon);
 
-            if (this.Client.CurrentToon.D3EntityID != this.Client.CurrentGameAccount.lastPlayedHeroId)
+            if (this.Client.CurrentGameAccount.CurrentToon.D3EntityID != this.Client.CurrentGameAccount.lastPlayedHeroId)
             {
-                var operationList = new List<bnet.protocol.presence.FieldOperation>();
-
-                //LastPlayedToon
-                var ToonKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 1, 0);
-                var ToonField = bnet.protocol.presence.Field.CreateBuilder().SetKey(ToonKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Client.CurrentToon.D3EntityID.ToByteString()).Build()).Build();
-                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(ToonField).Build());
-
-                //ToonId
-                var fieldKey7 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 2, 2, 0);
-                var field7 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey7).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Client.CurrentToon.D3EntityID.ToByteString()).Build()).Build();
-                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field7).Build());
-
-                //Hero Class
-                var fieldKey8 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 1, 0);
-                var field8 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey8).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.Client.CurrentToon.ClassID).Build()).Build();
-                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field8).Build());
-
-                //Hero Level
-                var fieldKey9 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 2, 0);
-                var field9 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey9).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.Client.CurrentToon.Level).Build()).Build();
-                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field9).Build());
-
-                //D3.Hero.VisualEquipment
-                var fieldKey10 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 3, 0);
-                var field10 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey10).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Client.CurrentToon.Equipment.ToByteString()).Build()).Build();
-                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field10).Build());
-
-                //Hero Flags
-                var fieldKey11 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 4, 0);
-                var field11 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey11).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((int)(this.Client.CurrentToon.Flags | ToonFlags.AllUnknowns)).Build()).Build();
-                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field11).Build());
-
-                //Hero Name
-                var fieldKey12 = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 3, 5, 0);
-                var field12 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey12).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Client.CurrentToon.Name).Build()).Build();
-                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field12).Build());
-
-                // Create a presence.ChannelState
-                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.Client.CurrentGameAccount.BnetEntityId).AddRangeFieldOperation(operationList).Build();
-
-                // Embed in channel.ChannelState
-                var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
-
-                // Put in addnotification message
-                var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState);
-
-                // Make the rpc call
-                this.Client.MakeTargetedRPC(this.Client.CurrentGameAccount, () =>
-                    bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
+                this.Client.CurrentGameAccount.NotifyUpdate(this.Client);
+                this.Client.CurrentGameAccount.lastPlayedHeroId = this.Client.CurrentGameAccount.CurrentToon.D3EntityID;
             }
-
-            this.Client.CurrentGameAccount.lastPlayedHeroId = this.Client.CurrentToon.D3EntityID;
-            return this.Client.CurrentToon.D3EntityID.ToByteString();
+            return this.Client.CurrentGameAccount.CurrentToon.D3EntityID.ToByteString();
         }
 
         private bool SaveBanner(D3.GameMessage.SaveBannerConfiguration bannerConfig)
@@ -290,7 +249,7 @@ namespace Mooege.Core.MooNet.Services
                 return toon.Settings.ToByteString();
             }
             else
-                return this.Client.CurrentToon.Settings.ToByteString();
+                return this.Client.CurrentGameAccount.CurrentToon.Settings.ToByteString();
         }
 
         private ByteString SetToonSettings(D3.GameMessage.SetToonSettings settings)
@@ -300,6 +259,20 @@ namespace Mooege.Core.MooNet.Services
             var toon = ToonManager.GetToonByLowID(settings.HeroId.IdLow);
             toon.Settings = settings.Settings;
             return ByteString.Empty;
+        }
+
+        private ByteString GetHeroItems(D3.GameMessage.GetHeroItems request)
+        {
+            var itemList = D3.Items.ItemList.CreateBuilder();
+
+            return itemList.Build().ToByteString();
+        }
+
+        private ByteString GetAccountItems(D3.GameMessage.GetAccountItems request)
+        {
+            var itemList = D3.Items.ItemList.CreateBuilder();
+
+            return itemList.Build().ToByteString();
         }
 
         private ByteString GetAccountProfile(D3.GameMessage.GetAccountProfile profile)

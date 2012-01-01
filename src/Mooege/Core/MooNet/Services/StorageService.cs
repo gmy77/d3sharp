@@ -19,6 +19,7 @@
 using System.IO;
 using System.Collections.Generic;
 using Gibbed.IO;
+using Mooege.Common.Extensions;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
 using Google.ProtocolBuffers;
@@ -112,8 +113,10 @@ namespace Mooege.Core.MooNet.Services
 
                 if (operation.ColumnId.Hash.Equals(HeroDigestColumn))
                     data = toon.Digest.ToByteString();
-                else if (operation.ColumnId.Hash.Equals(HeroNameColumn))
-                    data = toon.NameText.ToByteString();
+                else
+                    Logger.Warn("Unknown ColumndId requested: {0}", operation.ColumnId.Hash.ToByteArray().HexDump());
+                //else if (operation.ColumnId.Hash.Equals(HeroNameColumn))
+                //    data = toon.NameText.ToByteString();
                                  
                 var operationResult = bnet.protocol.storage.OperationResult.CreateBuilder().SetTableId(operation.TableId);
                 operationResult.AddData(

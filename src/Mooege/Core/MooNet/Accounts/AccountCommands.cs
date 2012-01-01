@@ -42,7 +42,7 @@ namespace Mooege.Core.MooNet.Accounts
             return string.Format("Email: {0} User Level: {1}", account.Email, account.UserLevel);
         }
 
-        [Command("add", "Allows you to add a new user account.\nUsage: account add <email> <password> [userlevel]", Account.UserLevels.GM)]
+        [Command("add", "Allows you to add a new user account.\nUsage: account add <email> <password> <battletag> [userlevel]", Account.UserLevels.GM)]
         public string Add(string[] @params, MooNetClient invokerClient)
         {
             if (@params.Count() < 3)

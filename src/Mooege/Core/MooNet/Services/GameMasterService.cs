@@ -115,12 +115,12 @@ namespace Mooege.Core.MooNet.Services
             
             if(gameFound.Started)
             {
-                Logger.Warn("Client {0} joining game with FactoryID:{1}", this.Client.CurrentToon.Name, gameFound.FactoryID);
+                Logger.Warn("Client {0} joining game with FactoryID:{1}", this.Client.CurrentGameAccount.CurrentToon.Name, gameFound.FactoryID);
                 gameFound.JoinGame(clients, request.ObjectId);
             }
             else
             {
-                Logger.Warn("Client {0} creating new game", this.Client.CurrentToon.Name);
+                Logger.Warn("Client {0} creating new game", this.Client.CurrentGameAccount.CurrentToon.Name);
                 gameFound.StartGame(clients, request.ObjectId);
             }
         }
