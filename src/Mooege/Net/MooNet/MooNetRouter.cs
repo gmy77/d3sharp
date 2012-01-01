@@ -82,7 +82,7 @@ namespace Mooege.Net.MooNet
             var proto = service.GetRequestPrototype(method);
             var builder = proto.WeakCreateBuilderForType();
             var message = builder.WeakMergeFrom(CodedInputStream.CreateInstance(packet.GetPayload(stream))).WeakBuild(); //var message = packet.ReadMessage(proto.WeakToBuilder()); // this method doesn't seem to work with 7728. /raist.
-            Logger.LogIncoming(message);
+            Logger.LogIncoming(message, packet.Header);
 
             try
             {

@@ -158,9 +158,7 @@ namespace Mooege.Core.MooNet.Accounts
             var gameAccount = GameAccountManager.GetGameAccountsForAccount(this).FirstOrDefault().Value;
 
             //LastPlayedToon
-            var ToonKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 1, 0);
-            var ToonField = bnet.protocol.presence.Field.CreateBuilder().SetKey(ToonKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameAccount.lastPlayedHeroId.ToByteString()).Build()).Build();
-            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(ToonField).Build());
+            operationList.Add(gameAccount.GetLastPlayedHeroNotification());
 
             //SelectedGameAccount
             var GameAccountKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 2, 0);
@@ -191,19 +189,6 @@ namespace Mooege.Core.MooNet.Accounts
             operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(tempNameField).Build());
 
             return operationList;
-
-            //// Create a presence.ChannelState
-            //var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityId).AddRangeFieldOperation(operations).Build();
-
-            //// Embed in channel.ChannelState
-            //var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
-
-            //// Put in addnotification message
-            //var notification = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
-
-            //// Make the rpc call
-            //client.MakeTargetedRPC(this, () =>
-            //    bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, notification.Build(), callback => { }));
         }
 
         public bool VerifyPassword(string password)

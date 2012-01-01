@@ -82,9 +82,9 @@ namespace Mooege.Core.MooNet.Toons
             }
 
             Toons.Add(toon.PersistentID, toon);
-            toon.SaveToDB(); //possible concurrency problem? 2 toon created with same name at same time could introduce a race condition for the same hashcode(chance of 1 in (1000-amount of toons with that name))
+            toon.SaveToDB();
 
-            Logger.Trace("Character {0} with HashCode #{1} added to database", toon.Name, toon.HashCodeString);
+            Logger.Trace("Character {0} added to database", toon.Name);
 
             return true;
         }

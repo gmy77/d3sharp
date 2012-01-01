@@ -96,7 +96,22 @@ namespace Mooege.Core.MooNet.Objects
             // like the object never existed in the first place
         }
 
+        /// <summary>
+        /// Provide a list of new added notifications.
+        /// Once the notification system is smart enough to determine which value/property to update this would be eliminated and put under GetUpdateNotifications
+        /// </summary>
+        /// <returns></returns>
         public virtual List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications() 
+        {
+            return new List<bnet.protocol.presence.FieldOperation>();
+        }
+
+        /// <summary>
+        /// Provide a list of update notifications.
+        /// Once the notification system is smart enough to determine which value/property to update this would auto generate notifications
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<bnet.protocol.presence.FieldOperation> GetUpdateNotifications()
         {
             return new List<bnet.protocol.presence.FieldOperation>();
         }
@@ -109,7 +124,17 @@ namespace Mooege.Core.MooNet.Objects
         protected void NotifySubscriptionAdded(MooNetClient client)
         {
             var operations = GetSubscriptionNotifications();
+            MakeRPC(client, operations);
+        }
 
+        public void NotifyUpdate(MooNetClient client)
+        {
+            var operations = GetUpdateNotifications();
+            MakeRPC(client, operations);
+        }
+
+        protected void MakeRPC(MooNetClient client, List<bnet.protocol.presence.FieldOperation> operations)
+        {
             // Create a presence.ChannelState
             var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityId).AddRangeFieldOperation(operations).Build();
 
@@ -131,6 +156,7 @@ namespace Mooege.Core.MooNet.Objects
             }
         }
 
+        //This is done on a client by client mapping of notifications/variables per object that need to be updated
         // ** We're yet not sure about this, so commenting out **
         ///// <summary>
         ///// Notifies all subscribers with the object's current state.

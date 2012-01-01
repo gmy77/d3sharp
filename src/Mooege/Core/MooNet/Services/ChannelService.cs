@@ -54,7 +54,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SendMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SendMessageRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("{0} sent a message to channel {1}.", this.Client.CurrentToon, this.Client.CurrentChannel);
+            Logger.Trace("{0} sent a message to channel {1}.", this.Client.CurrentGameAccount.CurrentToon, this.Client.CurrentChannel);
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
@@ -181,6 +181,9 @@ namespace Mooege.Core.MooNet.Services
                 .SetAgentId(this.Client.CurrentGameAccount.BnetEntityId)
                 .SetStateChange(channelState)
                 .Build();
+
+            if (this.Client.CurrentChannel == null) //Client left channel already
+                return;
 
             // Send UpdateChannelStateNotification RPC call.
             this.Client.MakeTargetedRPC(this.Client.CurrentChannel, () =>

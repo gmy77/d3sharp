@@ -30,11 +30,6 @@ namespace Mooege.Core.MooNet.Channels
     public class Channel : RPCObject
     {
         /// <summary>
-        /// bnet.protocol.EntityId encoded channel Id.
-        /// </summary>
-        public bnet.protocol.EntityId BnetEntityId { get; protected set; }
-
-        /// <summary>
         /// D3.OnlineService.EntityId encoded channel Id.
         /// </summary>
         public D3.OnlineService.EntityId D3EntityId { get; protected set; }
@@ -226,7 +221,7 @@ namespace Mooege.Core.MooNet.Channels
 
         public void RemoveMember(MooNetClient client, RemoveReason reason, bool dissolving)
         {
-            if (client.CurrentToon == null)
+            if (client.CurrentGameAccount.CurrentToon == null)
             {
                 Logger.Warn("Could not remove toon-less client {0}", client.Connection.RemoteEndPoint.ToString());
                 return;
@@ -373,7 +368,7 @@ namespace Mooege.Core.MooNet.Channels
 
         public override string ToString()
         {
-            return String.Format("{{ Channel: [id: {0}] [owner: {1}] }}", this.DynamicId, this.Owner != null ? this.Owner.CurrentToon.ToString() : "N/A");
+            return String.Format("{{ Channel: [id: {0}] [owner: {1}] }}", this.DynamicId, this.Owner != null ? this.Owner.CurrentGameAccount.CurrentToon.ToString() : "N/A");
         }
     }
 }
