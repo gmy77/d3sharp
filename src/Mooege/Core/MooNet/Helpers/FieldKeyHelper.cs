@@ -26,10 +26,19 @@ namespace Mooege.Core.MooNet.Helpers
             D3 = 17459
         }
 
-        public static bnet.protocol.presence.FieldKey Create(Program program, uint group, uint field, ulong index)
+        public enum OriginatingClass : uint
+        {
+            Account = 1,
+            GameAccount = 2,
+            Hero = 3,
+            Channel = 4,
+            Unknown = 5
+        }
+
+        public static bnet.protocol.presence.FieldKey Create(Program program, OriginatingClass originatingClass, uint field, ulong index)
         {
             return
-                bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram((uint) program).SetGroup(group).SetField(
+                bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram((uint) program).SetGroup((uint) originatingClass).SetField(
                     field).SetIndex(index).Build();
         }
     } 

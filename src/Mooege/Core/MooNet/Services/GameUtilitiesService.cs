@@ -73,7 +73,7 @@ namespace Mooege.Core.MooNet.Services
                         .Build();
                     builder.AddAttribute(attrId);
                     if (changed)
-                        attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Client.CurrentGameAccount.BannerConfiguration.ToByteString()).Build());
+                        attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Client.Account.CurrentGameAccount.BannerConfiguration.ToByteString()).Build());
                     break;
                 case 8: //D3.GameMessage.GetGameAccountSettings? - Client expecting D3.Client.Preferences
                     var getAccountSettings = GetGameAccountSettings(D3.GameMessage.GetGameAccountSettings.ParseFrom(request.GetAttribute(2).Value.MessageValue));
@@ -172,13 +172,13 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("GetAccountDigest()");
 
-            return this.Client.CurrentGameAccount.Digest.ToByteString();
+            return this.Client.Account.CurrentGameAccount.Digest.ToByteString();
         }
 
         private ByteString CreateHero(D3.OnlineService.HeroCreateParams createPrams)
         {
             int hashCode = ToonManager.GetUnusedHashCodeForToonName(createPrams.Name);
-            var newToon = new Toon(createPrams.Name, hashCode, createPrams.GbidClass, createPrams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.CurrentGameAccount);
+            var newToon = new Toon(createPrams.Name, hashCode, createPrams.GbidClass, createPrams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account.CurrentGameAccount);
             if (ToonManager.SaveToon(newToon))
             {
                 Logger.Trace("CreateHero() {0}", newToon);
@@ -198,26 +198,26 @@ namespace Mooege.Core.MooNet.Services
 
         private ByteString SelectHero(D3.OnlineService.EntityId hero)
         {
-            this.Client.CurrentGameAccount.CurrentToon = ToonManager.GetToonByLowID(hero.IdLow);
+            this.Client.Account.CurrentGameAccount.CurrentToon = ToonManager.GetToonByLowID(hero.IdLow);
 
-            Logger.Trace("SelectToon() {0}", this.Client.CurrentGameAccount.CurrentToon);
+            Logger.Trace("SelectToon() {0}", this.Client.Account.CurrentGameAccount.CurrentToon);
 
-            if (this.Client.CurrentGameAccount.CurrentToon.D3EntityID != this.Client.CurrentGameAccount.lastPlayedHeroId)
+            if (this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID != this.Client.Account.CurrentGameAccount.lastPlayedHeroId)
             {
-                this.Client.CurrentGameAccount.NotifyUpdate(this.Client);
-                this.Client.CurrentGameAccount.lastPlayedHeroId = this.Client.CurrentGameAccount.CurrentToon.D3EntityID;
+                this.Client.Account.CurrentGameAccount.NotifyUpdate(this.Client);
+                this.Client.Account.CurrentGameAccount.lastPlayedHeroId = this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID;
             }
-            return this.Client.CurrentGameAccount.CurrentToon.D3EntityID.ToByteString();
+            return this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID.ToByteString();
         }
 
         private bool SaveBanner(D3.GameMessage.SaveBannerConfiguration bannerConfig)
         {
             Logger.Trace("SaveBannerConifuration()");
 
-            if (this.Client.CurrentGameAccount.BannerConfiguration == bannerConfig.Banner)
+            if (this.Client.Account.CurrentGameAccount.BannerConfiguration == bannerConfig.Banner)
                 return false;
             else
-                this.Client.CurrentGameAccount.BannerConfiguration = bannerConfig.Banner;
+                this.Client.Account.CurrentGameAccount.BannerConfiguration = bannerConfig.Banner;
             return true;
         }
 
@@ -235,7 +235,7 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("SetGameAccountSettings()");
 
-            this.Client.CurrentGameAccount.Settings = settings;
+            this.Client.Account.CurrentGameAccount.Settings = settings;
             return ByteString.Empty;
         }
 
@@ -249,7 +249,7 @@ namespace Mooege.Core.MooNet.Services
                 return toon.Settings.ToByteString();
             }
             else
-                return this.Client.CurrentGameAccount.CurrentToon.Settings.ToByteString();
+                return this.Client.Account.CurrentGameAccount.CurrentToon.Settings.ToByteString();
         }
 
         private ByteString SetToonSettings(D3.GameMessage.SetToonSettings settings)
@@ -263,15 +263,17 @@ namespace Mooege.Core.MooNet.Services
 
         private ByteString GetHeroItems(D3.GameMessage.GetHeroItems request)
         {
-            var itemList = D3.Items.ItemList.CreateBuilder();
+            Logger.Trace("GetHeroItems()");
 
+            var itemList = D3.Items.ItemList.CreateBuilder();
             return itemList.Build().ToByteString();
         }
 
         private ByteString GetAccountItems(D3.GameMessage.GetAccountItems request)
         {
-            var itemList = D3.Items.ItemList.CreateBuilder();
+            Logger.Trace("GetAccountItems()");
 
+            var itemList = D3.Items.ItemList.CreateBuilder();
             return itemList.Build().ToByteString();
         }
 

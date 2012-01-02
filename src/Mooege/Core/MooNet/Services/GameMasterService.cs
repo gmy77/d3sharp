@@ -83,7 +83,7 @@ namespace Mooege.Core.MooNet.Services
                 .Build()).Build();
 
             var notificationPermission = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(this.Client.CurrentGameAccount.BnetEntityId)
+                .SetAgentId(this.Client.Account.CurrentGameAccount.BnetEntityId)
                 .SetStateChange(channelStatePermission)
                 .Build();
 
@@ -115,12 +115,12 @@ namespace Mooege.Core.MooNet.Services
             
             if(gameFound.Started)
             {
-                Logger.Warn("Client {0} joining game with FactoryID:{1}", this.Client.CurrentGameAccount.CurrentToon.Name, gameFound.FactoryID);
+                Logger.Warn("Client {0} joining game with FactoryID:{1}", this.Client.Account.CurrentGameAccount.CurrentToon.Name, gameFound.FactoryID);
                 gameFound.JoinGame(clients, request.ObjectId);
             }
             else
             {
-                Logger.Warn("Client {0} creating new game", this.Client.CurrentGameAccount.CurrentToon.Name);
+                Logger.Warn("Client {0} creating new game", this.Client.Account.CurrentGameAccount.CurrentToon.Name);
                 gameFound.StartGame(clients, request.ObjectId);
             }
         }

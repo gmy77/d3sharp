@@ -221,7 +221,7 @@ namespace Mooege.Core.MooNet.Channels
 
         public void RemoveMember(MooNetClient client, RemoveReason reason, bool dissolving)
         {
-            if (client.CurrentGameAccount.CurrentToon == null)
+            if (client.Account.CurrentGameAccount.CurrentToon == null)
             {
                 Logger.Warn("Could not remove toon-less client {0}", client.Connection.RemoteEndPoint.ToString());
                 return;
@@ -266,7 +266,7 @@ namespace Mooege.Core.MooNet.Channels
         public void SendMessage(MooNetClient client, bnet.protocol.channel.Message message)
         {
             var notification =
-                bnet.protocol.channel.SendMessageNotification.CreateBuilder().SetAgentId(client.CurrentGameAccount.BnetEntityId)
+                bnet.protocol.channel.SendMessageNotification.CreateBuilder().SetAgentId(client.Account.CurrentGameAccount.BnetEntityId)
                     .SetMessage(message).SetRequiredPrivileges(0).Build();
 
 
@@ -368,7 +368,7 @@ namespace Mooege.Core.MooNet.Channels
 
         public override string ToString()
         {
-            return String.Format("{{ Channel: [id: {0}] [owner: {1}] }}", this.DynamicId, this.Owner != null ? this.Owner.CurrentGameAccount.CurrentToon.ToString() : "N/A");
+            return String.Format("{{ Channel: [id: {0}] [owner: {1}] }}", this.DynamicId, this.Owner != null ? this.Owner.Account.CurrentGameAccount.CurrentToon.ToString() : "N/A");
         }
     }
 }

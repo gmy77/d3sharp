@@ -68,8 +68,6 @@ namespace Mooege.Core.MooNet.Services
                     logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
                 }
 
-                    //.AddGameAccount(Client.Account.BnetEntityId);
-
                 done(logonResponseBuilder.Build());
 
                 this.Client.EnableEncryption();
@@ -96,10 +94,10 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SelectGameAccount(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.EntityId request, Action<bnet.protocol.NoData> done)
         {
-            this.Client.CurrentGameAccount = GameAccountManager.GetAccountByPersistentID(request.Low);
-            this.Client.CurrentGameAccount.LoggedInClient = this.Client;
+            this.Client.Account.CurrentGameAccount = GameAccountManager.GetAccountByPersistentID(request.Low);
+            this.Client.Account.CurrentGameAccount.LoggedInClient = this.Client;
 
-            Logger.Trace("SelectGameAccount(): {0}", this.Client.CurrentGameAccount);
+            Logger.Trace("SelectGameAccount(): {0}", this.Client.Account.CurrentGameAccount);
 
             done(bnet.protocol.NoData.CreateBuilder().Build());
 

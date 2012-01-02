@@ -57,7 +57,7 @@ namespace Mooege.Core.MooNet.Web
         [OperationContract]
         public List<string> OnlinePlayersList()
         {
-            return (from client in PlayerManager.OnlinePlayers where client.CurrentGameAccount.CurrentToon != null select string.Format("{0}", client.CurrentGameAccount.CurrentToon.Name)).ToList();
+            return (from client in PlayerManager.OnlinePlayers where client.Account.CurrentGameAccount.CurrentToon != null select string.Format("{0}", client.Account.CurrentGameAccount.CurrentToon.Name)).ToList();
         }
     }
 }

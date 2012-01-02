@@ -70,11 +70,43 @@ namespace Mooege.Core.MooNet.Accounts
                 this.HashCode = Convert.ToInt32(split[1]);
             }
         }
+
         public UserLevels UserLevel { get; private set; } // user level for account.
 
         public Dictionary<ulong, GameAccount> GameAccounts
         {
             get { return GameAccountManager.GetGameAccountsForAccount(this); }
+        }
+
+        public GameAccount CurrentGameAccount { get; set; }
+
+        public static readonly D3.OnlineService.EntityId AccountHasNoToons =
+            D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).Build();
+
+        private D3.OnlineService.EntityId _lastSelectedHero = AccountHasNoToons;
+        public D3.OnlineService.EntityId LastSelectedHero
+        {
+            get
+            {
+                return _lastSelectedHero;
+            }
+            set
+            {
+                _lastSelectedHero = value;
+            }
+        }
+
+        private D3.OnlineService.EntityId _lastSelectedGameAccount = AccountHasNoToons;
+        public D3.OnlineService.EntityId LastSelectedGameAccount
+        {
+            get
+            {
+                return _lastSelectedGameAccount;
+            }
+            set
+            {
+                _lastSelectedGameAccount = value;
+            }
         }
 
         public Account(ulong persistentId, string email, byte[] salt, byte[] passwordVerifier, string battleTagName, int hashCode, UserLevels userLevel) // Account with given persistent ID
@@ -142,54 +174,103 @@ namespace Mooege.Core.MooNet.Accounts
             return field.HasValue ? field.Build() : null;
         }
 
-//        protected override void NotifySubscriptionAdded(MooNetClient client)
+        #region Notifications
+
+        //account class generated
+        //D3, Account,1,0 -> D3.OnlineService.EntityId: Last Played Hero
+        //D3, Account,2,0 -> LastSelectedGameAccount
+        //Bnet, Account,1,0 -> RealId Name
+        //Bnet, Account,2,0 -> Account Online
+        //Bnet, Account,4,index -> GameAccount EntityIds
+        //Bnet, Account,5,0 -> BattleTag
+
         public override List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications()
         {
             var operationList = new List<bnet.protocol.presence.FieldOperation>();
 
-            //account
-            //D3,1,1,0 -> LastPlayedToon
-            //D3,1,1,0 -> SelectedGameAccount
-            //Bnet,1,1,0 -> RealId Name
-            //Bnet,1,2,0 -> true
-            //Bnet,1,4,index -> GameAccount EntityIds
-            //Bnet,1,5,0 -> BattleTag
-
-            var gameAccount = GameAccountManager.GetGameAccountsForAccount(this).FirstOrDefault().Value;
-
-            //LastPlayedToon
-            operationList.Add(gameAccount.GetLastPlayedHeroNotification());
-
-            //SelectedGameAccount
-            var GameAccountKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 1, 2, 0);
-            var GameAccountField = bnet.protocol.presence.Field.CreateBuilder().SetKey(GameAccountKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameAccount.D3GameAccountId.ToByteString()).Build()).Build();
-            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(GameAccountField).Build());
-
-            // RealID name field - NOTE: Using BattleTag here since we don't use ReadlID names
-            var realNameKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 1, 0);
-            var realNameField = bnet.protocol.presence.Field.CreateBuilder().SetKey(realNameKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.BattleTag).Build()).Build();
-            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(realNameField).Build());
-
-            // Account online?
-            var accountOnlineKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 2, 0);
-            var accountOnlineField = bnet.protocol.presence.Field.CreateBuilder().SetKey(accountOnlineKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(true).Build()).Build();
-            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(accountOnlineField).Build());
-
-            // GameAccount List
-            foreach (var pair in this.GameAccounts.Values)
-            {
-                var gameAccountKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 4, pair.BnetEntityId.High);
-                var gameAccountField = bnet.protocol.presence.Field.CreateBuilder().SetKey(gameAccountKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetEntityidValue(pair.BnetEntityId).Build()).Build();
-                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(gameAccountField).Build());
-            }
-
-            //BattleTag
-            var tempNameKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, 1, 5, 0);
-            var tempNameField = bnet.protocol.presence.Field.CreateBuilder().SetKey(tempNameKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.BattleTag).Build()).Build();
-            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(tempNameField).Build());
+            if (this.LastSelectedHero != AccountHasNoToons)
+                operationList.Add(GetCurrentlySelectedHeroNotification());
+            if (this.LastSelectedGameAccount != AccountHasNoToons)
+                operationList.Add(GetSelectedGameAccount());
+            operationList.Add(GetAccountIsOnlineNotification());
+            operationList.AddRange(GetGameAccountListNotification());
+            operationList.Add(GetAccountBattleTagNotification());
 
             return operationList;
         }
+
+        /// <summary>
+        /// D3, Account, 2, 0: Selected Game Account
+        /// </summary>
+        /// <returns></returns>
+        public bnet.protocol.presence.FieldOperation GetSelectedGameAccount()
+        {
+                var GameAccountKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Account, 2, 0);
+                var GameAccountField = bnet.protocol.presence.Field.CreateBuilder().SetKey(GameAccountKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.CurrentGameAccount.D3GameAccountId.ToByteString()).Build()).Build();
+                return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(GameAccountField).Build();
+        }
+
+        /// <summary>
+        /// BNet, Account, 1, 0: RealIDTag
+        /// </summary>
+        /// <returns></returns>
+        public bnet.protocol.presence.FieldOperation GetRealIDName()
+        {
+            var realNameKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 1, 0);
+            var realNameField = bnet.protocol.presence.Field.CreateBuilder().SetKey(realNameKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build()).Build();
+            return (bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(realNameField).Build());
+        }
+
+        /// <summary>
+        /// D3, Account, 1, 0: Currently Selected Hero
+        /// </summary>
+        /// <returns></returns>
+        public bnet.protocol.presence.FieldOperation GetCurrentlySelectedHeroNotification()
+        {
+            var ToonKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Account, 1, 0);
+            var ToonField = bnet.protocol.presence.Field.CreateBuilder().SetKey(ToonKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LastSelectedHero.ToByteString()).Build()).Build();
+            return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(ToonField).Build();
+        }
+
+        /// <summary>
+        /// BNet, Account, 2, 0: Account Online
+        /// </summary>
+        /// <returns></returns>
+        public bnet.protocol.presence.FieldOperation GetAccountIsOnlineNotification()
+        {
+            var accountOnlineKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 2, 0);
+            var accountOnlineField = bnet.protocol.presence.Field.CreateBuilder().SetKey(accountOnlineKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
+            return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(accountOnlineField).Build();
+        }
+
+        /// <summary>
+        /// BNet, Account, 5, 0: Account BattleTag
+        /// </summary>
+        /// <returns></returns>
+        public bnet.protocol.presence.FieldOperation GetAccountBattleTagNotification()
+        {
+            var tempNameKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 5, 0);
+            var tempNameField = bnet.protocol.presence.Field.CreateBuilder().SetKey(tempNameKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.BattleTag).Build()).Build();
+            return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(tempNameField).Build();
+        }
+
+        /// <summary>
+        /// BNet, Account, 4, index: Account GameAccountList
+        /// </summary>
+        /// <returns></returns>
+        public List<bnet.protocol.presence.FieldOperation> GetGameAccountListNotification()
+        {
+            var operationList = new List<bnet.protocol.presence.FieldOperation>();
+
+            foreach (var pair in this.GameAccounts.Values)
+            {
+                var gameAccountKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 4, pair.BnetEntityId.High);
+                var gameAccountField = bnet.protocol.presence.Field.CreateBuilder().SetKey(gameAccountKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetEntityidValue(pair.BnetEntityId).Build()).Build();
+                operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(gameAccountField).Build());
+            }
+            return operationList;
+        }
+        #endregion
 
         public bool VerifyPassword(string password)
         {

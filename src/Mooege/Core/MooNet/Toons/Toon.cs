@@ -268,6 +268,100 @@ namespace Mooege.Core.MooNet.Toons
             this.Level++;
         }
 
+        #region Notifications
+
+        //hero class generated
+        //D3,Hero,1,0 -> D3.Hero.GbidClass: Hero Class
+        //D3,Hero,2,0 -> D3.Hero.Level: Hero's current level
+        //D3,Hero,3,0 -> D3.Hero.VisualEquipment: VisualEquipment
+        //D3,Hero,4,0 -> D3.Hero.PlayerFlags: Hero's flags
+        //D3,Hero,5,0 -> ?D3.Hero.NameText: Hero's Name
+
+        public override List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications()
+        {
+            var operationList = new List<bnet.protocol.presence.FieldOperation>();
+            operationList.Add(this.GetHeroClassNotification());
+            operationList.Add(this.GetHeroLevelNotification());
+            operationList.Add(this.GetHeroVisualEquipmentNotification());
+            operationList.Add(this.GetHeroFlagsNotification());
+            operationList.Add(this.GetHeroNameNotification());
+
+            return operationList;
+        }
+
+        /// <summary>
+        /// Same like GetSubscriptionNotification until proper logic to send only needed notifications is done
+        /// </summary>
+        /// <returns></returns>
+        public override List<bnet.protocol.presence.FieldOperation> GetUpdateNotifications()
+        {
+            var operationList = new List<bnet.protocol.presence.FieldOperation>();
+            operationList.Add(this.GetHeroClassNotification());
+            operationList.Add(this.GetHeroLevelNotification());
+            operationList.Add(this.GetHeroVisualEquipmentNotification());
+            operationList.Add(this.GetHeroFlagsNotification());
+            operationList.Add(this.GetHeroNameNotification());
+
+            return operationList;
+        }
+
+        /// <summary>
+        /// D3, Hero, 1, 0: Hero Class
+        /// </summary>
+        /// <returns></returns>
+        public bnet.protocol.presence.FieldOperation GetHeroClassNotification()
+        {
+            var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 1, 0);
+            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.ClassID).Build()).Build();
+            return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+        }
+
+        /// <summary>
+        /// D3, Hero, 2, 0: Hero Level
+        /// </summary>
+        /// <returns></returns>
+        public bnet.protocol.presence.FieldOperation GetHeroLevelNotification()
+        {
+            var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 2, 0);
+            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.Level).Build()).Build();
+            return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+        }
+
+        /// <summary>
+        /// D3, Hero, 3, 0: Hero VisualEquipment
+        /// </summary>
+        /// <returns></returns>
+        public bnet.protocol.presence.FieldOperation GetHeroVisualEquipmentNotification()
+        {
+            var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 3, 0);
+            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Equipment.ToByteString()).Build()).Build();
+            return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+        }
+
+        /// <summary>
+        /// D3, Hero, 4, 0: Hero Flags
+        /// </summary>
+        /// <returns></returns>
+        public bnet.protocol.presence.FieldOperation GetHeroFlagsNotification()
+        {
+            var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 4, 0);
+            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((int)(this.Flags | ToonFlags.AllUnknowns)).Build()).Build();
+            return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+        }
+
+        /// <summary>
+        /// D3, Hero, 5, 0: Hero Name
+        /// </summary>
+        /// <returns></returns>
+        public bnet.protocol.presence.FieldOperation GetHeroNameNotification()
+        {
+            var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 5, 0);
+            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Name).Build()).Build();
+            return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+        }
+
+        #endregion
+
         private static ToonClass GetClassByID(int classId)
         {
             switch (classId)
