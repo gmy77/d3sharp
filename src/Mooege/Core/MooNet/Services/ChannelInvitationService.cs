@@ -46,7 +46,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void AcceptInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.AcceptInvitationRequest request, Action<bnet.protocol.channel_invitation.AcceptInvitationResponse> done)
         {
-            Logger.Trace("{0} accepted invitation.", this.Client.CurrentGameAccount.CurrentToon);
+            Logger.Trace("{0} accepted invitation.", this.Client.Account.CurrentGameAccount.CurrentToon);
 
             var channel = this._invitationManager.HandleAccept(this.Client, request);
 
@@ -56,7 +56,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void DeclineInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("{0} declined invitation.", this.Client.CurrentGameAccount.CurrentToon);
+            Logger.Trace("{0} declined invitation.", this.Client.Account.CurrentGameAccount.CurrentToon);
 
             var respone = bnet.protocol.NoData.CreateBuilder();
             done(respone.Build());
@@ -66,7 +66,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void RevokeInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.RevokeInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("{0} revoked invitation.", this.Client.CurrentGameAccount.CurrentToon);
+            Logger.Trace("{0} revoked invitation.", this.Client.Account.CurrentGameAccount.CurrentToon);
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
@@ -79,7 +79,7 @@ namespace Mooege.Core.MooNet.Services
             var invitee = GameAccountManager.GetAccountByPersistentID(request.TargetId.Low);
             if (this.Client.CurrentChannel.HasMember(invitee)) return; // don't allow a second invitation if invitee is already a member of client's current channel.
 
-            Logger.Debug("{0} invited {1} to his channel.", Client.CurrentGameAccount.CurrentToon, invitee);
+            Logger.Debug("{0} invited {1} to his channel.", Client.Account.CurrentGameAccount.CurrentToon, invitee);
 
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
             var extensionBytes = request.Params.UnknownFields.FieldDictionary[105].LengthDelimitedList[0].ToByteArray();
@@ -94,8 +94,8 @@ namespace Mooege.Core.MooNet.Services
             //Todo: Verify Inviter and Invitee names -Egris
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder();
             invitation.SetId(ChannelInvitationManager.InvitationIdCounter++)
-                .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(Client.CurrentGameAccount.BnetEntityId).Build())
-                .SetInviterName(Client.CurrentGameAccount.Owner.BattleTag)
+                .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(Client.Account.CurrentGameAccount.BnetEntityId).Build())
+                .SetInviterName(Client.Account.CurrentGameAccount.Owner.BattleTag)
                 .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(request.TargetId).Build())
                 .SetInviteeName(invitee.Owner.BattleTag)
                 .SetInvitationMessage(request.Params.InvitationMessage)
@@ -115,7 +115,7 @@ namespace Mooege.Core.MooNet.Services
             // send bnet.protocol.channel.UpdateChannelStateNotification to inviter - update him on invitation is sent.          
 
             var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(Client.CurrentGameAccount.BnetEntityId)
+                .SetAgentId(Client.Account.CurrentGameAccount.BnetEntityId)
                 .SetStateChange(bnet.protocol.channel.ChannelState.CreateBuilder().AddInvitation(invitation.Clone()));
 
             this.Client.MakeTargetedRPC(this.Client.CurrentChannel, () =>

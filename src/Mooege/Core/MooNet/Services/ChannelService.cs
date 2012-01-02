@@ -54,7 +54,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SendMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SendMessageRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("{0} sent a message to channel {1}.", this.Client.CurrentGameAccount.CurrentToon, this.Client.CurrentChannel);
+            Logger.Trace("{0} sent a message to channel {1}.", this.Client.Account.CurrentGameAccount.CurrentToon, this.Client.CurrentChannel);
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
@@ -178,7 +178,7 @@ namespace Mooege.Core.MooNet.Services
                 channelState.PrivacyLevel = request.StateChange.PrivacyLevel;
 
             var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(this.Client.CurrentGameAccount.BnetEntityId)
+                .SetAgentId(this.Client.Account.CurrentGameAccount.BnetEntityId)
                 .SetStateChange(channelState)
                 .Build();
 

@@ -42,16 +42,16 @@ namespace Mooege.Core.MooNet.Services
             foreach (var client in PlayerManager.OnlinePlayers)
             {
                 if (client == this.Client) continue; // Don't add the requester to the list                
-                if (client.CurrentGameAccount.CurrentToon == null) continue;
+                if (client.Account.CurrentGameAccount.CurrentToon == null) continue;
 
-                Logger.Debug("RecentPlayer => " + client.CurrentGameAccount.CurrentToon);
+                Logger.Debug("RecentPlayer => " + client.Account.CurrentGameAccount.CurrentToon);
                 var recentPlayer = bnet.protocol.user_manager.RecentPlayer.CreateBuilder()
-                    .SetEntity(client.CurrentGameAccount.Owner.BnetEntityId)
+                    .SetEntity(client.Account.CurrentGameAccount.Owner.BnetEntityId)
                     .SetProgramId("D3")
                     .AddAttributes(bnet.protocol.attribute.Attribute.CreateBuilder()
                         .SetName("GameAccountEntityId")
                         .SetValue(bnet.protocol.attribute.Variant.CreateBuilder()
-                            .SetMessageValue(client.CurrentGameAccount.BnetEntityId.ToByteString())
+                            .SetMessageValue(client.Account.CurrentGameAccount.BnetEntityId.ToByteString())
                             .Build())
                         .Build())
                     .SetId(i++)

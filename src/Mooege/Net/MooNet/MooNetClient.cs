@@ -70,7 +70,7 @@ namespace Mooege.Net.MooNet
         /// <summary>
         /// Selected Game Account for logged in client.
         /// </summary>
-        public GameAccount CurrentGameAccount { get; set; }
+        //public GameAccount CurrentGameAccount { get; set; }
 
         /// <summary>
         /// Client exported services dictionary.
@@ -138,8 +138,8 @@ namespace Mooege.Net.MooNet
         {
             var identityBuilder = bnet.protocol.Identity.CreateBuilder();
             if (acct) identityBuilder.SetAccountId(this.Account.BnetEntityId);
-            if (gameacct) identityBuilder.SetGameAccountId(this.CurrentGameAccount.BnetEntityId);
-            if (toon && this.CurrentGameAccount.CurrentToon != null)
+            if (gameacct) identityBuilder.SetGameAccountId(this.Account.CurrentGameAccount.BnetEntityId);
+            if (toon && this.Account.CurrentGameAccount.CurrentToon != null)
                 Logger.Warn("DEPRECATED: GetIdentity called with toon.");
             return identityBuilder.Build();
         }
@@ -337,9 +337,9 @@ namespace Mooege.Net.MooNet
             if (text.Trim() == string.Empty) return;
 
             var notification = bnet.protocol.notification.Notification.CreateBuilder()
-                .SetTargetId(this.CurrentGameAccount.BnetEntityId)
+                .SetTargetId(this.Account.CurrentGameAccount.BnetEntityId)
                 .SetType("WHISPER")
-                .SetSenderId(this.CurrentGameAccount.BnetEntityId)
+                .SetSenderId(this.Account.CurrentGameAccount.BnetEntityId)
                 .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("whisper")
                 .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(text).Build()).Build()).Build();
 
@@ -364,15 +364,15 @@ namespace Mooege.Net.MooNet
                 this._currentChannel = value;
                 if (value == null) return;
 
-                var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, 4, 1, 0);
+                var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Channel, 1, 0);
                 var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey)
                     .SetValue(bnet.protocol.attribute.Variant.CreateBuilder()
                     .SetMessageValue(this.CurrentChannel.D3EntityId.ToByteString()).Build()).Build();
 
                 var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
-                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.CurrentGameAccount.BnetEntityId).AddFieldOperation(operation).Build();
+                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.Account.CurrentGameAccount.BnetEntityId).AddFieldOperation(operation).Build();
 
-                this.SendStateChangeNotification(this.CurrentGameAccount, state);
+                this.SendStateChangeNotification(this.Account.CurrentGameAccount, state);
             }
         }
 

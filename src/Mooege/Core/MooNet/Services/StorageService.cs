@@ -103,13 +103,13 @@ namespace Mooege.Core.MooNet.Services
 
                 var toonId = stream.ReadValueU64(false);
 
-                if (!client.CurrentGameAccount.Toons.ContainsKey(toonId))
+                if (!client.Account.CurrentGameAccount.Toons.ContainsKey(toonId))
                 {
                     Logger.Error("Can't find the requested toon: {0}", toonId);
                     continue;
                 }
 
-                var toon = client.CurrentGameAccount.Toons[toonId];
+                var toon = client.Account.CurrentGameAccount.Toons[toonId];
 
                 if (operation.ColumnId.Hash.Equals(HeroDigestColumn))
                     data = toon.Digest.ToByteString();
@@ -176,7 +176,7 @@ namespace Mooege.Core.MooNet.Services
                         .SetColumnId(request.OperationsList[0].ColumnId)
                         .SetRowId(request.OperationsList[0].RowId)
                         .SetVersion(1)
-                        .SetData(client.CurrentGameAccount.Digest.ToByteString())
+                        .SetData(client.Account.CurrentGameAccount.Digest.ToByteString())
                         .Build());
                 results.Add(operationResult.Build());
             }

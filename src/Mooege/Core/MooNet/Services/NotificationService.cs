@@ -43,16 +43,16 @@ namespace Mooege.Core.MooNet.Services
                     // Client requires prior knowledge of sender and target (and even then it cannot whisper by using the /whisper command).
 
                     var targetAccount = GameAccountManager.GetAccountByPersistentID(request.TargetId.Low);
-                    Logger.Trace(string.Format("NotificationRequest.Whisper by {0} to {1}", this.Client.CurrentGameAccount, targetAccount));
+                    Logger.Trace(string.Format("NotificationRequest.Whisper by {0} to {1}", this.Client.Account.CurrentGameAccount, targetAccount));
 
                     if (targetAccount.LoggedInClient == null) return;
 
-                    if (targetAccount == this.Client.CurrentGameAccount) // check if whisper targets the account itself.
+                    if (targetAccount == this.Client.Account.CurrentGameAccount) // check if whisper targets the account itself.
                         CommandManager.TryParse(request.AttributeList[0].Value.StringValue, this.Client); // try parsing it as a command and respond it if so.
                     else
                     {
                         var notification = bnet.protocol.notification.Notification.CreateBuilder(request)
-                            .SetSenderId(this.Client.CurrentGameAccount.BnetEntityId)
+                            .SetSenderId(this.Client.Account.CurrentGameAccount.BnetEntityId)
                             .Build();
 
                         targetAccount.LoggedInClient.MakeRPC(() =>
