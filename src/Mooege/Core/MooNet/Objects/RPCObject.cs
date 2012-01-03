@@ -107,14 +107,9 @@ namespace Mooege.Core.MooNet.Objects
         }
 
         /// <summary>
-        /// Provide a list of update notifications.
-        /// Once the notification system is smart enough to determine which value/property to update this would auto generate notifications
+        /// Stores only changed Fields to send to clients
         /// </summary>
-        /// <returns></returns>
-        public virtual List<bnet.protocol.presence.FieldOperation> GetUpdateNotifications()
-        {
-            return new List<bnet.protocol.presence.FieldOperation>();
-        }
+        public Mooege.Core.MooNet.Helpers.FieldKeyHelper ChangedFields = new Mooege.Core.MooNet.Helpers.FieldKeyHelper();
 
         /// <summary>
         /// Notifies a specific subscriber about the object's present state.
@@ -129,7 +124,9 @@ namespace Mooege.Core.MooNet.Objects
 
         public void NotifyUpdate(MooNetClient client)
         {
-            var operations = GetUpdateNotifications();
+            //var operations = GetUpdateNotifications();
+            var operations = ChangedFields.GetChangedFieldList();
+            ChangedFields.ClearChanged();
             MakeRPC(client, operations);
         }
 

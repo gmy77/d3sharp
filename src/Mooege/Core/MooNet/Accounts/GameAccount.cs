@@ -52,6 +52,13 @@ namespace Mooege.Core.MooNet.Accounts
             {
                 this._currentToon = value;
                 this.Owner.LastSelectedHero = value.D3EntityID;
+                this.ChangedFields.SetFieldValue(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Account, 1, 0, this.GetHeroIdNotification());
+                this.ChangedFields.SetFieldValue(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.GameAccount, 2, 0, this.GetHeroIdNotification());
+                this.ChangedFields.SetFieldValue(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 1, 0, value.GetHeroClassNotification());
+                this.ChangedFields.SetFieldValue(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 2, 0, value.GetHeroLevelNotification());
+                this.ChangedFields.SetFieldValue(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 3, 0, value.GetHeroVisualEquipmentNotification());
+                this.ChangedFields.SetFieldValue(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 4, 0, value.GetHeroFlagsNotification());
+                this.ChangedFields.SetFieldValue(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 5, 0, value.GetHeroNameNotification());
             }
         }
 
@@ -160,6 +167,8 @@ namespace Mooege.Core.MooNet.Accounts
             set
             {
                 this._loggedInClient = value;
+                ChangedFields.SetFieldValue(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 1, 0, GetGameAccountStatusNotification());
+                ChangedFields.SetFieldValue(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 5, 0, GetGameAccountStatusIdNotification());
 
                 // notify friends.
                 if (FriendManager.Friends[this.Owner.BnetEntityId.Low].Count == 0) return; // if account has no friends just skip.
@@ -204,29 +213,6 @@ namespace Mooege.Core.MooNet.Accounts
 
         #region Notifications
 
-        /// <summary>
-        /// Notification when a new hero is selected or fields change.
-        /// TODO: Send only notifications that are needed
-        ///D3,Account,1,0 -> Last Played Hero
-        ///D3,GameAccount,2,0 -> ToonId
-        ///D3,Hero,1,0 -> D3.Hero.GbidClass: Hero Class
-        ///D3,Hero,2,0 -> D3.Hero.Level: Hero's current level
-        ///D3,Hero,3,0 -> D3.Hero.VisualEquipment: VisualEquipment
-        ///D3,Hero,4,0 -> D3.Hero.PlayerFlags: Hero's flags
-        ///D3,Hero,5,0 -> ?D3.Hero.NameText: Hero's Name
-        /// </summary>
-        public override List<bnet.protocol.presence.FieldOperation> GetUpdateNotifications()
-        {
-            var operationList = new List<bnet.protocol.presence.FieldOperation>();
-
-            operationList.Add(this.Owner.GetCurrentlySelectedHeroNotification());
-            operationList.Add(GetHeroIdNotification());
-            operationList.AddRange(this.CurrentToon.GetUpdateNotifications());
-
-            return operationList;
-        }
-
-
         public override List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications()
         {
             var operationList = new List<bnet.protocol.presence.FieldOperation>();
@@ -252,18 +238,9 @@ namespace Mooege.Core.MooNet.Accounts
                 operationList.AddRange(this.CurrentToon.GetSubscriptionNotifications());
             }
 
-            // GameAccountLoggedIn
-            var fieldKey1 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 1, 0);
-            var field1 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey1).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
-            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field1).Build());
-
+            operationList.Add(GetGameAccountStatusNotification());
             operationList.Add(GetProgramNotification());
-
-            // Unknown int 0 if GameAccount is not online
-            var fieldKey2 = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 5, 0);
-            var field2 = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey2).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.IsOnline == true ? 1324923597904795 : 0).Build()).Build();
-            operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field2).Build());
-
+            operationList.Add(GetGameAccountStatusIdNotification());
             operationList.Add(GetBattleTagNotification());
             operationList.Add(GetAccountNotification());
 
@@ -293,6 +270,17 @@ namespace Mooege.Core.MooNet.Accounts
         }
 
         /// <summary>
+        /// BNet, GameAccount, 1, 0: Game Account Logged in status
+        /// </summary>
+        /// <returns></returns>
+        public bnet.protocol.presence.FieldOperation GetGameAccountStatusNotification()
+        {
+            var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.GameAccount, 1, 0);
+            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.IsOnline).Build()).Build();
+            return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+        }
+
+        /// <summary>
         /// BNet, GameAccount, 4, 0: FourCC "D3"
         /// </summary>
         /// <returns></returns>
@@ -300,6 +288,17 @@ namespace Mooege.Core.MooNet.Accounts
         {
             var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 4, 0);
             var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build()).Build();
+            return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+        }
+
+        /// <summary>
+        /// BNet, GameAccount, 5, 0: Unknown int (0 if not logged in)
+        /// </summary>
+        /// <returns></returns>
+        public bnet.protocol.presence.FieldOperation GetGameAccountStatusIdNotification()
+        {
+            var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 5, 0);
+            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.IsOnline == true ? 1324923597904795 : 0).Build()).Build();
             return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
         }
 
@@ -355,8 +354,8 @@ namespace Mooege.Core.MooNet.Accounts
                         {
                             var entityId = D3.OnlineService.EntityId.ParseFrom(field.Value.MessageValue);
                             var channel = ChannelManager.GetChannelByEntityId(entityId);
-
                             this.LoggedInClient.CurrentChannel = channel;
+                            Logger.Trace("{0} set channel to {1}", this, channel);
                         }
                         else
                         {
@@ -382,6 +381,7 @@ namespace Mooege.Core.MooNet.Accounts
                     {
                         this.AwayStatus = (AwayStatusFlag)field.Value.IntValue;
                         returnField.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.AwayStatus).Build()).Build();
+                        Logger.Trace("{0} set AwayStatus to {1}.", this, this.AwayStatus);
                     }
                     else
                     {
@@ -405,16 +405,16 @@ namespace Mooege.Core.MooNet.Accounts
                 this.LoggedInClient.MakeTargetedRPC(this, () =>
                     bnet.protocol.channel.ChannelSubscriber.CreateStub(this.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
 
-                // Update all online friends
-                //foreach (var friend in FriendManager.Friends[this.BnetEntityId.Low])
-                //{
-                //    var gameAccount = GameAccountManager.GetAccountByPersistentID(friend.Id.Low);
-                //    if (gameAccount.IsOnline)
-                //    {
-                //        gameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
-                //            bnet.protocol.channel.ChannelSubscriber.CreateStub(gameAccount.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
-                //    }
-                //}
+                //Update all online friends
+                foreach (var friend in FriendManager.Friends[this.BnetEntityId.Low])
+                {
+                    var gameAccount = GameAccountManager.GetAccountByPersistentID(friend.Id.Low);
+                    if (gameAccount.IsOnline)
+                    {
+                        gameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                            bnet.protocol.channel.ChannelSubscriber.CreateStub(gameAccount.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
+                    }
+                }
             }
         }
 

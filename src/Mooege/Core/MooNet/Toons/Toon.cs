@@ -47,21 +47,6 @@ namespace Mooege.Core.MooNet.Toons
         public string Name { get; private set; }
 
         /// <summary>
-        /// Toon's hash-code.
-        /// </summary>
-        //public int HashCode { get; set; }
-
-        /// <summary>
-        /// Toon's hash-code as string.
-        /// </summary>
-        //public string HashCodeString { get; private set; }
-
-        /// <summary>
-        /// NameText as name#hashcode.
-        /// </summary>
-        //public D3.Hero.NameText NameText { get; private set; }
-
-        /// <summary>
         /// Toon's owner account.
         /// </summary>
         public GameAccount GameAccount { get; set; }
@@ -237,9 +222,6 @@ namespace Mooege.Core.MooNet.Toons
             this.D3EntityID = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId + this.PersistentID).SetIdLow(this.PersistentID).Build();
 
             this.Name = name;
-            //this.HashCode = hashCode;
-            //this.HashCodeString = HashCode.ToString("D3");
-            //this.NameText = D3.Hero.NameText.CreateBuilder().SetName(string.Format("{0}#{1}", this.Name, this.HashCodeString)).Build();
             this.Class = @class;
             this.Flags = flags;
             this.Level = level;
@@ -278,22 +260,6 @@ namespace Mooege.Core.MooNet.Toons
         //D3,Hero,5,0 -> ?D3.Hero.NameText: Hero's Name
 
         public override List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications()
-        {
-            var operationList = new List<bnet.protocol.presence.FieldOperation>();
-            operationList.Add(this.GetHeroClassNotification());
-            operationList.Add(this.GetHeroLevelNotification());
-            operationList.Add(this.GetHeroVisualEquipmentNotification());
-            operationList.Add(this.GetHeroFlagsNotification());
-            operationList.Add(this.GetHeroNameNotification());
-
-            return operationList;
-        }
-
-        /// <summary>
-        /// Same like GetSubscriptionNotification until proper logic to send only needed notifications is done
-        /// </summary>
-        /// <returns></returns>
-        public override List<bnet.protocol.presence.FieldOperation> GetUpdateNotifications()
         {
             var operationList = new List<bnet.protocol.presence.FieldOperation>();
             operationList.Add(this.GetHeroClassNotification());
@@ -395,7 +361,7 @@ namespace Mooege.Core.MooNet.Toons
                     var query =
                         string.Format(
                             "UPDATE toons SET name='{0}', class={1}, gender={2}, level={3}, accountId={4}, timePlayed={5} WHERE id={6}",
-                            Name, (byte)this.Class, (byte)this.Gender, this.Level, this.GameAccount.PersistentID, this.TimePlayed, this.PersistentID);
+                            this.Name, (byte)this.Class, (byte)this.Gender, this.Level, this.GameAccount.PersistentID, this.TimePlayed, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -404,7 +370,7 @@ namespace Mooege.Core.MooNet.Toons
                 {
                     var query =
                         string.Format(
-                            "INSERT INTO toons (id, name, class, gender, level, timePlayed, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7})",
+                            "INSERT INTO toons (id, name, class, gender, level, timePlayed, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6})",
                             this.PersistentID, this.Name, (byte)this.Class, (byte)this.Gender, this.Level, this.TimePlayed, this.GameAccount.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);

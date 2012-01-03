@@ -16,6 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
+using System.Linq;
+using bnet.protocol.presence;
+
 namespace Mooege.Core.MooNet.Helpers
 {
     public class FieldKeyHelper
@@ -35,11 +39,42 @@ namespace Mooege.Core.MooNet.Helpers
             Unknown = 5
         }
 
-        public static bnet.protocol.presence.FieldKey Create(Program program, OriginatingClass originatingClass, uint field, ulong index)
+        public static FieldKey Create(Program program, OriginatingClass originatingClass, uint field, ulong index)
         {
             return
-                bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram((uint) program).SetGroup((uint) originatingClass).SetField(
+                FieldKey.CreateBuilder().SetProgram((uint) program).SetGroup((uint) originatingClass).SetField(
                     field).SetIndex(index).Build();
         }
+
+
+        private HashSet<FieldKey> _changedFields = new HashSet<FieldKey>();
+        private Dictionary<FieldKey, FieldOperation> _FieldValues = new Dictionary<FieldKey, FieldOperation>();
+
+        public void SetFieldValue(FieldKey key, FieldOperation operation)
+        {
+            if (!_changedFields.Contains(key))
+                _changedFields.Add(key);
+
+            _FieldValues[key] = operation;
+        }
+
+        public void SetFieldValue(Program program, OriginatingClass originatingClass, uint field, ulong index, FieldOperation operation)
+        {
+            var key = Create(program, originatingClass, field, index);
+            this.SetFieldValue(key, operation);
+        }
+
+
+        public List<FieldOperation> GetChangedFieldList()
+        {
+            return new List<FieldOperation>(_FieldValues.Values);
+        }
+
+        public void ClearChanged()
+        {
+            this._changedFields.Clear();
+            this._FieldValues.Clear();
+        }
+
     } 
 }
