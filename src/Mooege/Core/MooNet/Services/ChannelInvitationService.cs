@@ -85,8 +85,11 @@ namespace Mooege.Core.MooNet.Services
             var extensionBytes = request.Params.UnknownFields.FieldDictionary[105].LengthDelimitedList[0].ToByteArray();
             var channelInvitationInfo = bnet.protocol.channel_invitation.ChannelInvitationParams.ParseFrom(extensionBytes);
 
-            var channelInvitation = bnet.protocol.channel_invitation.ChannelInvitationParams.CreateBuilder()
-                .SetChannelId(channelInvitationInfo.ChannelId)
+            var channelDescription = bnet.protocol.channel.ChannelDescription.CreateBuilder()
+                .SetChannelId(channelInvitationInfo.ChannelId);
+
+            var channelInvitation = bnet.protocol.channel_invitation.ChannelInvitation.CreateBuilder()
+                .SetChannelDescription(channelDescription)
                 .SetReserved(channelInvitationInfo.Reserved)
                 .SetServiceType(channelInvitationInfo.ServiceType)
                 .SetRejoin(false).Build();
@@ -101,7 +104,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetInvitationMessage(request.Params.InvitationMessage)
                 .SetCreationTime(DateTime.Now.ToExtendedEpoch())
                 .SetExpirationTime(DateTime.Now.ToUnixTime() + request.Params.ExpirationTime)
-                .SetExtension(bnet.protocol.channel_invitation.ChannelInvitationParams.ChannelParams, channelInvitation);
+                .SetExtension(bnet.protocol.channel_invitation.ChannelInvitation.ChannelInvitationProp, channelInvitation);
 
             // oh blizz, cmon. your buggy client even doesn't care this message at all but waits the UpdateChannelStateNotification with embedded invitation proto to show "invitation sent message".
             // ADVICE TO POTENTIAL BLIZZ-WORKER READING THIS;

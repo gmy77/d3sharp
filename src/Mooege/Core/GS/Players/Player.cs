@@ -1161,7 +1161,7 @@ namespace Mooege.Core.GS.Players
         {
             var playerBanner = D3.GameMessage.PlayerBanner.CreateBuilder()
                 .SetPlayerIndex((uint)this.PlayerIndex)
-                .SetBanner(this.Toon.GameAccount.BannerConfiguration)
+                .SetBanner(this.Toon.GameAccount.BannerConfigurationField.Value)
                 .Build();
 
             return new PlayerBannerMessage() { PlayerBanner = playerBanner };

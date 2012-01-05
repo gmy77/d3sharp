@@ -290,6 +290,7 @@
     <Compile Include="Core\MooNet\Channels\ChannelInvitationManager.cs" />
     <Compile Include="Core\MooNet\Friends\FriendManager.cs" />
     <Compile Include="Core\MooNet\Objects\PersistentRPCObject.cs" />
+    <Compile Include="Core\MooNet\Objects\PresenceField.cs" />
     <Compile Include="Core\MooNet\Online\PlayerManager.cs" />
     <Compile Include="Core\MooNet\Services\AchievementService.cs" />
     <Compile Include="Core\MooNet\Services\AuthenticationService.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="Core\MooNet\Services\IServerService.cs" />
     <Compile Include="Core\MooNet\Services\NotificationService.cs" />
     <Compile Include="Core\MooNet\Services\PresenceService.cs" />
+    <Compile Include="Core\MooNet\Services\ReportService.cs" />
     <Compile Include="Core\MooNet\Services\SearchService.cs" />
     <Compile Include="Core\MooNet\Services\Service.cs" />
     <Compile Include="Core\MooNet\Services\StorageService.cs" />

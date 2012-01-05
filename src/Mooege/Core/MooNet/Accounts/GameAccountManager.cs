@@ -56,6 +56,19 @@ namespace Mooege.Core.MooNet.Accounts
             return GameAccounts.Where(account => account.Value.PersistentID == persistentId).Select(account => account.Value).FirstOrDefault();
         }
 
+        public static ulong GetNextAvailablePersistentId()
+        {
+            var cmd = new SQLiteCommand("SELECT max(id) from gameaccounts", DBManager.Connection);
+            try
+            {
+                return Convert.ToUInt64(cmd.ExecuteScalar());
+            }
+            catch (InvalidCastException)
+            {
+                return 0;
+            }
+        }
+
         static GameAccountManager()
         {
             LoadGameAccounts();

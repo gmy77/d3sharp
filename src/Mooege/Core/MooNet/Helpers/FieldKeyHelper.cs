@@ -16,6 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
+using System.Linq;
+using bnet.protocol.presence;
+using Mooege.Core.MooNet.Objects;
+using Google.ProtocolBuffers;
+
 namespace Mooege.Core.MooNet.Helpers
 {
     public class FieldKeyHelper
@@ -23,7 +29,9 @@ namespace Mooege.Core.MooNet.Helpers
         public enum Program : uint
         {
             BNet = 16974,
-            D3 = 17459
+            D3 = 17459,
+            S2 = 21298,
+            WoW = 5730135
         }
 
         public enum OriginatingClass : uint
@@ -35,11 +43,64 @@ namespace Mooege.Core.MooNet.Helpers
             Unknown = 5
         }
 
-        public static bnet.protocol.presence.FieldKey Create(Program program, OriginatingClass originatingClass, uint field, ulong index)
+        public static FieldKey Create(Program program, OriginatingClass originatingClass, uint field, ulong index)
         {
             return
-                bnet.protocol.presence.FieldKey.CreateBuilder().SetProgram((uint) program).SetGroup((uint) originatingClass).SetField(
+                FieldKey.CreateBuilder().SetProgram((uint) program).SetGroup((uint) originatingClass).SetField(
                     field).SetIndex(index).Build();
         }
+
+
+        private HashSet<FieldKey> _changedFields = new HashSet<FieldKey>();
+        private Dictionary<FieldKey, FieldOperation> _FieldValues = new Dictionary<FieldKey, FieldOperation>();
+
+        public void SetFieldValue(FieldKey key, FieldOperation operation)
+        {
+            if (!_changedFields.Contains(key))
+                _changedFields.Add(key);
+
+            _FieldValues[key] = operation;
+        }
+
+        //TODO: Use covariance and refactor this
+        public void SetPresenceFieldValue(IPresenceField field)
+        {
+            if (field != null)
+            {
+                SetFieldValue(field.GetFieldKey(), field.GetFieldOperation());
+            }
+        }
+
+        //TODO: Use covariance and refactor this
+        public void SetIntPresenceFieldValue(IntPresenceField field)
+        {
+            if (field != null)
+            {
+                var key = Create(field.Program, field.OriginatingClass, field.FieldNumber, field.Index);
+                this.SetFieldValue(key, field.GetFieldOperation());
+            }
+        }
+
+        //TODO: Use covariance and refactor this
+        public void SetStringPresenceFieldValue(StringPresenceField field)
+        {
+            if (field != null)
+            {
+                var key = Create(field.Program, field.OriginatingClass, field.FieldNumber, field.Index);
+                this.SetFieldValue(key, field.GetFieldOperation());
+            }
+        }
+
+        public List<FieldOperation> GetChangedFieldList()
+        {
+            return new List<FieldOperation>(_FieldValues.Values);
+        }
+
+        public void ClearChanged()
+        {
+            this._changedFields.Clear();
+            this._FieldValues.Clear();
+        }
+
     } 
 }
