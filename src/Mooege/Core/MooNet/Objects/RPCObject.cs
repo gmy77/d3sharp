@@ -122,13 +122,7 @@ namespace Mooege.Core.MooNet.Objects
             MakeRPC(client, operations);
         }
 
-        public void NotifyUpdate(MooNetClient client)
-        {
-            //var operations = GetUpdateNotifications();
-            var operations = ChangedFields.GetChangedFieldList();
-            ChangedFields.ClearChanged();
-            MakeRPC(client, operations);
-        }
+        public virtual void NotifyUpdate() {}
 
         protected void MakeRPC(MooNetClient client, List<bnet.protocol.presence.FieldOperation> operations)
         {

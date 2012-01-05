@@ -111,7 +111,7 @@ namespace Mooege.Core.MooNet.Services
 
                     if (!attribute.HasValue || attribute.Value.MessageValue.IsEmpty) //Sometimes not present -Egris
                     {
-                        var newScreen = this.Client.Account.ScreenStatus;
+                        var newScreen = this.Client.Account.CurrentGameAccount.ScreenStatus;
 
                         var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                             .SetName("D3.Party.ScreenStatus")
@@ -121,7 +121,7 @@ namespace Mooege.Core.MooNet.Services
                     else
                     {
                         var oldScreen = D3.PartyMessage.ScreenStatus.ParseFrom(attribute.Value.MessageValue);
-                        this.Client.Account.ScreenStatus = oldScreen;
+                        this.Client.Account.CurrentGameAccount.ScreenStatus = oldScreen;
 
                         // TODO: save screen status for use with friends -Egris
                         var attr = bnet.protocol.attribute.Attribute.CreateBuilder()

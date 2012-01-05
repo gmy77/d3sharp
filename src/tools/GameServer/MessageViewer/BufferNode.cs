@@ -218,29 +218,30 @@ namespace GameMessageViewer
                                         continue;
                                 }
 
-                                if (message is NotifyActorMovementMessage)
+                                if (message is ACDTranslateNormalMessage)
                                 {
-                                    actorMap[(uint)(message as NotifyActorMovementMessage).ActorId].Nodes.Add(node.Clone());
+                                    actorMap[(uint)(message as ACDTranslateNormalMessage).ActorId].Nodes.Add(node.Clone());
                                     continue;
                                 }
-                                if (message is PlayerMovementMessage)
+                                if (message is ACDClientTranslateMessage)
                                 {
                                     // If the client sends a PlayerMoveMessage, but the actor is not yet in the
                                     // actor list, its due to a broken cap that starts too late...add the node for speed (and grouping)
-                                    if (!actorMap.ContainsKey((uint)(message as PlayerMovementMessage).ActorId))
+                                    // ACDClientTranslateMessage does not contain ActorId, we'll just make one up for now
+                                    if (!actorMap.ContainsKey(0x1F1F1F1F))
                                     {
-                                        String hex = (message as PlayerMovementMessage).ActorId.ToString("X8");
+                                        String hex = 0x1F1F1F1F.ToString("X8");
 
                                         if (!actors.ContainsKey(hex))
                                         {
                                             TreeNode actorNode = new TreeNode(hex + " Capper");
-                                            actorMap.Add((uint)(message as PlayerMovementMessage).ActorId, actorNode);
+                                            actorMap.Add(0x1F1F1F1F, actorNode);
                                             actorNode.Tag = hex;
                                             actors.Add(hex, actorNode);
                                         }
                                     }
 
-                                    actorMap[(uint)(message as PlayerMovementMessage).ActorId].Nodes.Add(node.Clone());
+                                    actorMap[0x1F1F1F1F].Nodes.Add(node.Clone());
                                     continue;
                                 }
 

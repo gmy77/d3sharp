@@ -19,6 +19,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using bnet.protocol.presence;
+using Mooege.Core.MooNet.Objects;
+using Google.ProtocolBuffers;
 
 namespace Mooege.Core.MooNet.Helpers
 {
@@ -27,7 +29,9 @@ namespace Mooege.Core.MooNet.Helpers
         public enum Program : uint
         {
             BNet = 16974,
-            D3 = 17459
+            D3 = 17459,
+            S2 = 21298,
+            WoW = 5730135
         }
 
         public enum OriginatingClass : uint
@@ -58,12 +62,34 @@ namespace Mooege.Core.MooNet.Helpers
             _FieldValues[key] = operation;
         }
 
-        public void SetFieldValue(Program program, OriginatingClass originatingClass, uint field, ulong index, FieldOperation operation)
+        //TODO: Use covariance and refactor this
+        public void SetPresenceFieldValue(IPresenceField field)
         {
-            var key = Create(program, originatingClass, field, index);
-            this.SetFieldValue(key, operation);
+            if (field != null)
+            {
+                SetFieldValue(field.GetFieldKey(), field.GetFieldOperation());
+            }
         }
 
+        //TODO: Use covariance and refactor this
+        public void SetIntPresenceFieldValue(IntPresenceField field)
+        {
+            if (field != null)
+            {
+                var key = Create(field.Program, field.OriginatingClass, field.FieldNumber, field.Index);
+                this.SetFieldValue(key, field.GetFieldOperation());
+            }
+        }
+
+        //TODO: Use covariance and refactor this
+        public void SetStringPresenceFieldValue(StringPresenceField field)
+        {
+            if (field != null)
+            {
+                var key = Create(field.Program, field.OriginatingClass, field.FieldNumber, field.Index);
+                this.SetFieldValue(key, field.GetFieldOperation());
+            }
+        }
 
         public List<FieldOperation> GetChangedFieldList()
         {

@@ -66,14 +66,12 @@ namespace Mooege.Core.MooNet.Services
                     //attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(selectToon).Build());
                     break;
                 case 5: //D3.GameMessages.SaveBannerConfiguration -> return MessageId with no Message
-                    var changed = SaveBanner(D3.GameMessage.SaveBannerConfiguration.ParseFrom(request.GetAttribute(2).Value.MessageValue));
+                    SaveBanner(D3.GameMessage.SaveBannerConfiguration.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     var attrId = bnet.protocol.attribute.Attribute.CreateBuilder()
                         .SetName("CustomMessageId")
                         .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(5).Build())
                         .Build();
                     builder.AddAttribute(attrId);
-                    if (changed)
-                        attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.Client.Account.CurrentGameAccount.BannerConfiguration.ToByteString()).Build());
                     break;
                 case 8: //D3.GameMessage.GetGameAccountSettings? - Client expecting D3.Client.Preferences
                     var getAccountSettings = GetGameAccountSettings(D3.GameMessage.GetGameAccountSettings.ParseFrom(request.GetAttribute(2).Value.MessageValue));
@@ -177,8 +175,7 @@ namespace Mooege.Core.MooNet.Services
 
         private ByteString CreateHero(D3.OnlineService.HeroCreateParams createPrams)
         {
-            int hashCode = ToonManager.GetUnusedHashCodeForToonName(createPrams.Name);
-            var newToon = new Toon(createPrams.Name, hashCode, createPrams.GbidClass, createPrams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account.CurrentGameAccount);
+            var newToon = new Toon(createPrams.Name, createPrams.GbidClass, createPrams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account.CurrentGameAccount);
             if (ToonManager.SaveToon(newToon))
             {
                 Logger.Trace("CreateHero() {0}", newToon);
@@ -204,7 +201,7 @@ namespace Mooege.Core.MooNet.Services
 
             if (this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID != this.Client.Account.CurrentGameAccount.lastPlayedHeroId)
             {
-                this.Client.Account.CurrentGameAccount.NotifyUpdate(this.Client);
+                this.Client.Account.CurrentGameAccount.NotifyUpdate();
                 this.Client.Account.CurrentGameAccount.lastPlayedHeroId = this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID;
             }
             return this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID.ToByteString();
@@ -214,10 +211,13 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("SaveBannerConifuration()");
 
-            if (this.Client.Account.CurrentGameAccount.BannerConfiguration == bannerConfig.Banner)
+            if (this.Client.Account.CurrentGameAccount.BannerConfigurationField.Value == bannerConfig.Banner)
                 return false;
             else
+            {
                 this.Client.Account.CurrentGameAccount.BannerConfiguration = bannerConfig.Banner;
+                this.Client.Account.CurrentGameAccount.NotifyUpdate();
+            }
             return true;
         }
 
@@ -290,10 +290,21 @@ namespace Mooege.Core.MooNet.Services
             Logger.Trace("GetHeroProfiles()");
 
             var profileList = D3.Profile.HeroProfileList.CreateBuilder();
-            foreach (var hero in profiles.HeroIdsList)
+            if (profiles.HeroIdsCount > 0)
             {
-                var toon = ToonManager.GetToonByLowID(hero.IdLow);
-                profileList.AddHeros(toon.Profile);
+                foreach (var hero in profiles.HeroIdsList)
+                {
+                    var toon = ToonManager.GetToonByLowID(hero.IdLow);
+                    profileList.AddHeros(toon.Profile);
+                }
+            }
+            else
+            {
+                var heroList = GameAccountManager.GetAccountByPersistentID(profiles.AccountId.IdLow).Toons;
+                foreach (var hero in heroList.Values)
+                {
+                    profileList.AddHeros(hero.Profile);
+                }
             }
 
             return profileList.Build().ToByteString();
