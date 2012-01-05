@@ -20,22 +20,36 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Conversation
 {
-    [Message(Opcodes.AdvanceConvMessage)]
+    /// <summary>
+    /// Client -> Server
+    /// 
+    /// Sent by the client to request stopping playback of the current line
+    /// and continue with the next line of the conversation
+    /// (Player closes the conversation dialog window)
+    /// </summary>
+    [Message(Opcodes.AdvanceConvMessage, Consumers.Conversations)]
     class AdvanceConvMessage : GameMessage
     {
-        public int Field0;
-        public int Field1;
+        /// <summary>
+        /// SNO of the conversation
+        /// </summary>
+        public int SNOConversation;
+
+        /// <summary>
+        /// Identifier of the PlayLineParams as used in PlayConvLineMessage to start the conversation
+        /// </summary>
+        public int PlayLineParamsId;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            SNOConversation = buffer.ReadInt(32);
+            PlayLineParamsId = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, SNOConversation);
+            buffer.WriteInt(32, PlayLineParamsId);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -44,8 +58,8 @@ namespace Mooege.Net.GS.Message.Definitions.Conversation
             b.AppendLine("AdvanceConvMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("SNOConversation: 0x" + SNOConversation.ToString("X8") + " (" + SNOConversation + ")");
+            b.Append(' ', pad); b.AppendLine("PlayLineParamsId: 0x" + PlayLineParamsId.ToString("X8") + " (" + PlayLineParamsId + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

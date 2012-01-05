@@ -71,7 +71,28 @@ namespace Mooege.Core.GS.Games
 
             return "Invalid arguments. Type 'help tp' to get help.";
         }
+    }    
+
+    [CommandGroup("allskills", "Activates all skills.")]
+    public class AllSkillsCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string Portal(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            invokerClient.InGameClient.Player.EnableCauldronOfJordan();
+            invokerClient.InGameClient.Player.EnableCubeOfNephalem();
+            invokerClient.InGameClient.Player.EnableStoneOfRecall();
+
+            return string.Format("Done");
+        }
     }
+
 
     [CommandGroup("town", "Transfers your character back to town.")]
     public class TownCommand : CommandGroup

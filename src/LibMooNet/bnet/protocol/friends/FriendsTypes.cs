@@ -16,6 +16,7 @@ namespace bnet.protocol.friends {
     #region Extension registration
     public static void RegisterAllExtensions(pb::ExtensionRegistry registry) {
       registry.Add(global::bnet.protocol.friends.FriendInvitation.FriendInvitationProp);
+      registry.Add(global::bnet.protocol.friends.FriendInvitationParams.FriendParams);
     }
     #endregion
     #region Static variables
@@ -23,6 +24,8 @@ namespace bnet.protocol.friends {
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.Friend, global::bnet.protocol.friends.Friend.Builder> internal__static_bnet_protocol_friends_Friend__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_friends_FriendInvitation__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.FriendInvitation, global::bnet.protocol.friends.FriendInvitation.Builder> internal__static_bnet_protocol_friends_FriendInvitation__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_friends_FriendInvitationParams__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.FriendInvitationParams, global::bnet.protocol.friends.FriendInvitationParams.Builder> internal__static_bnet_protocol_friends_FriendInvitationParams__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -32,34 +35,44 @@ namespace bnet.protocol.friends {
     
     static FriendsTypes() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "Ci5zZXJ2aWNlL2ZyaWVuZHMvZGVmaW5pdGlvbi9mcmllbmRzX3R5cGVzLnBy" + 
-          "b3RvEhVibmV0LnByb3RvY29sLmZyaWVuZHMaHGxpYi9wcm90b2NvbC9hdHRy" + 
-          "aWJ1dGUucHJvdG8aGWxpYi9wcm90b2NvbC9lbnRpdHkucHJvdG8aHWxpYi9w" + 
-          "cm90b2NvbC9pbnZpdGF0aW9uLnByb3RvImQKBkZyaWVuZBIjCgJpZBgBIAIo" + 
-          "CzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSNQoJYXR0cmlidXRlGAIgAygL" + 
-          "MiIuYm5ldC5wcm90b2NvbC5hdHRyaWJ1dGUuQXR0cmlidXRlIpsBChBGcmll" + 
-          "bmRJbnZpdGF0aW9uEh0KDmZpcnN0X3JlY2VpdmVkGAEgASgIOgVmYWxzZTJo" + 
-          "ChFmcmllbmRfaW52aXRhdGlvbhIkLmJuZXQucHJvdG9jb2wuaW52aXRhdGlv" + 
-          "bi5JbnZpdGF0aW9uGGcgASgLMicuYm5ldC5wcm90b2NvbC5mcmllbmRzLkZy" + 
-          "aWVuZEludml0YXRpb24=");
+          "ChhibmV0L2ZyaWVuZHNfdHlwZXMucHJvdG8SFWJuZXQucHJvdG9jb2wuZnJp" + 
+          "ZW5kcxoUYm5ldC9hdHRyaWJ1dGUucHJvdG8aEWJuZXQvZW50aXR5LnByb3Rv" + 
+          "GhtibmV0L2ludml0YXRpb25fdHlwZXMucHJvdG8ijQEKBkZyaWVuZBIjCgJp" + 
+          "ZBgBIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSNQoJYXR0cmlidXRl" + 
+          "GAIgAygLMiIuYm5ldC5wcm90b2NvbC5hdHRyaWJ1dGUuQXR0cmlidXRlEhAK" + 
+          "BHJvbGUYAyADKA1CAhABEhUKCnByaXZpbGVnZXMYBCABKAQ6ATAirQEKEEZy" + 
+          "aWVuZEludml0YXRpb24SHQoOZmlyc3RfcmVjZWl2ZWQYASABKAg6BWZhbHNl" + 
+          "EhAKBHJvbGUYAiADKA1CAhABMmgKEWZyaWVuZF9pbnZpdGF0aW9uEiQuYm5l" + 
+          "dC5wcm90b2NvbC5pbnZpdGF0aW9uLkludml0YXRpb24YZyABKAsyJy5ibmV0" + 
+          "LnByb3RvY29sLmZyaWVuZHMuRnJpZW5kSW52aXRhdGlvbiLlAQoWRnJpZW5k" + 
+          "SW52aXRhdGlvblBhcmFtcxIUCgx0YXJnZXRfZW1haWwYASABKAkSGQoRdGFy" + 
+          "Z2V0X2JhdHRsZV90YWcYAiABKAkSFgoOZGlzcGxheV9zdHJpbmcYAyABKAkS" + 
+          "EAoEcm9sZRgEIAMoDUICEAEycAoNZnJpZW5kX3BhcmFtcxIqLmJuZXQucHJv" + 
+          "dG9jb2wuaW52aXRhdGlvbi5JbnZpdGF0aW9uUGFyYW1zGGcgASgLMi0uYm5l" + 
+          "dC5wcm90b2NvbC5mcmllbmRzLkZyaWVuZEludml0YXRpb25QYXJhbXM=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_friends_Friend__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_friends_Friend__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.Friend, global::bnet.protocol.friends.Friend.Builder>(internal__static_bnet_protocol_friends_Friend__Descriptor,
-                new string[] { "Id", "Attribute", });
+                new string[] { "Id", "Attribute", "Role", "Privileges", });
         internal__static_bnet_protocol_friends_FriendInvitation__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_friends_FriendInvitation__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.FriendInvitation, global::bnet.protocol.friends.FriendInvitation.Builder>(internal__static_bnet_protocol_friends_FriendInvitation__Descriptor,
-                new string[] { "FirstReceived", });
+                new string[] { "FirstReceived", "Role", });
         global::bnet.protocol.friends.FriendInvitation.FriendInvitationProp = pb::GeneratedSingleExtension<global::bnet.protocol.friends.FriendInvitation>.CreateInstance(global::bnet.protocol.friends.FriendInvitation.Descriptor.Extensions[0]);
+        internal__static_bnet_protocol_friends_FriendInvitationParams__Descriptor = Descriptor.MessageTypes[2];
+        internal__static_bnet_protocol_friends_FriendInvitationParams__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.FriendInvitationParams, global::bnet.protocol.friends.FriendInvitationParams.Builder>(internal__static_bnet_protocol_friends_FriendInvitationParams__Descriptor,
+                new string[] { "TargetEmail", "TargetBattleTag", "DisplayString", "Role", });
+        global::bnet.protocol.friends.FriendInvitationParams.FriendParams = pb::GeneratedSingleExtension<global::bnet.protocol.friends.FriendInvitationParams>.CreateInstance(global::bnet.protocol.friends.FriendInvitationParams.Descriptor.Extensions[0]);
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
           new pbd::FileDescriptor[] {
           global::bnet.protocol.attribute.Proto.Attribute.Descriptor, 
           global::bnet.protocol.Entity.Descriptor, 
-          global::bnet.protocol.invitation.Proto.Invitation.Descriptor, 
+          global::bnet.protocol.invitation.InvitationTypes.Descriptor, 
           }, assigner);
     }
     #endregion
@@ -72,8 +85,8 @@ namespace bnet.protocol.friends {
   public sealed partial class Friend : pb::GeneratedMessage<Friend, Friend.Builder> {
     private Friend() { }
     private static readonly Friend defaultInstance = new Friend().MakeReadOnly();
-    private static readonly string[] _friendFieldNames = new string[] { "attribute", "id" };
-    private static readonly uint[] _friendFieldTags = new uint[] { 18, 10 };
+    private static readonly string[] _friendFieldNames = new string[] { "attribute", "id", "privileges", "role" };
+    private static readonly uint[] _friendFieldTags = new uint[] { 18, 10, 32, 26 };
     public static Friend DefaultInstance {
       get { return defaultInstance; }
     }
@@ -116,6 +129,29 @@ namespace bnet.protocol.friends {
       return attribute_[index];
     }
     
+    public const int RoleFieldNumber = 3;
+    private int roleMemoizedSerializedSize;
+    private pbc::PopsicleList<uint> role_ = new pbc::PopsicleList<uint>();
+    public scg::IList<uint> RoleList {
+      get { return pbc::Lists.AsReadOnly(role_); }
+    }
+    public int RoleCount {
+      get { return role_.Count; }
+    }
+    public uint GetRole(int index) {
+      return role_[index];
+    }
+    
+    public const int PrivilegesFieldNumber = 4;
+    private bool hasPrivileges;
+    private ulong privileges_;
+    public bool HasPrivileges {
+      get { return hasPrivileges; }
+    }
+    public ulong Privileges {
+      get { return privileges_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasId) return false;
@@ -136,6 +172,12 @@ namespace bnet.protocol.friends {
       if (attribute_.Count > 0) {
         output.WriteMessageArray(2, field_names[0], attribute_);
       }
+      if (role_.Count > 0) {
+        output.WritePackedUInt32Array(3, field_names[3], roleMemoizedSerializedSize, role_);
+      }
+      if (hasPrivileges) {
+        output.WriteUInt64(4, field_names[2], Privileges);
+      }
       UnknownFields.WriteTo(output);
     }
     
@@ -151,6 +193,20 @@ namespace bnet.protocol.friends {
         }
         foreach (global::bnet.protocol.attribute.Attribute element in AttributeList) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, element);
+        }
+        {
+          int dataSize = 0;
+          foreach (uint element in RoleList) {
+            dataSize += pb::CodedOutputStream.ComputeUInt32SizeNoTag(element);
+          }
+          size += dataSize;
+          if (role_.Count != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32SizeNoTag(dataSize);
+          }
+          roleMemoizedSerializedSize = dataSize;
+        }
+        if (hasPrivileges) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(4, Privileges);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -190,6 +246,7 @@ namespace bnet.protocol.friends {
     }
     private Friend MakeReadOnly() {
       attribute_.MakeReadOnly();
+      role_.MakeReadOnly();
       return this;
     }
     
@@ -285,6 +342,12 @@ namespace bnet.protocol.friends {
         if (other.attribute_.Count != 0) {
           result.attribute_.Add(other.attribute_);
         }
+        if (other.role_.Count != 0) {
+          result.role_.Add(other.role_);
+        }
+        if (other.HasPrivileges) {
+          Privileges = other.Privileges;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -339,6 +402,15 @@ namespace bnet.protocol.friends {
             }
             case 18: {
               input.ReadMessageArray(tag, field_name, result.attribute_, global::bnet.protocol.attribute.Attribute.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 26:
+            case 24: {
+              input.ReadUInt32Array(tag, field_name, result.role_);
+              break;
+            }
+            case 32: {
+              result.hasPrivileges = input.ReadUInt64(ref result.privileges_);
               break;
             }
           }
@@ -434,6 +506,56 @@ namespace bnet.protocol.friends {
         result.attribute_.Clear();
         return this;
       }
+      
+      public pbc::IPopsicleList<uint> RoleList {
+        get { return PrepareBuilder().role_; }
+      }
+      public int RoleCount {
+        get { return result.RoleCount; }
+      }
+      public uint GetRole(int index) {
+        return result.GetRole(index);
+      }
+      public Builder SetRole(int index, uint value) {
+        PrepareBuilder();
+        result.role_[index] = value;
+        return this;
+      }
+      public Builder AddRole(uint value) {
+        PrepareBuilder();
+        result.role_.Add(value);
+        return this;
+      }
+      public Builder AddRangeRole(scg::IEnumerable<uint> values) {
+        PrepareBuilder();
+        result.role_.Add(values);
+        return this;
+      }
+      public Builder ClearRole() {
+        PrepareBuilder();
+        result.role_.Clear();
+        return this;
+      }
+      
+      public bool HasPrivileges {
+        get { return result.hasPrivileges; }
+      }
+      public ulong Privileges {
+        get { return result.Privileges; }
+        set { SetPrivileges(value); }
+      }
+      public Builder SetPrivileges(ulong value) {
+        PrepareBuilder();
+        result.hasPrivileges = true;
+        result.privileges_ = value;
+        return this;
+      }
+      public Builder ClearPrivileges() {
+        PrepareBuilder();
+        result.hasPrivileges = false;
+        result.privileges_ = 0UL;
+        return this;
+      }
     }
     static Friend() {
       object.ReferenceEquals(global::bnet.protocol.friends.FriendsTypes.Descriptor, null);
@@ -446,8 +568,8 @@ namespace bnet.protocol.friends {
   public sealed partial class FriendInvitation : pb::GeneratedMessage<FriendInvitation, FriendInvitation.Builder> {
     private FriendInvitation() { }
     private static readonly FriendInvitation defaultInstance = new FriendInvitation().MakeReadOnly();
-    private static readonly string[] _friendInvitationFieldNames = new string[] { "first_received" };
-    private static readonly uint[] _friendInvitationFieldTags = new uint[] { 8 };
+    private static readonly string[] _friendInvitationFieldNames = new string[] { "first_received", "role" };
+    private static readonly uint[] _friendInvitationFieldTags = new uint[] { 8, 18 };
     public static FriendInvitation DefaultInstance {
       get { return defaultInstance; }
     }
@@ -480,6 +602,19 @@ namespace bnet.protocol.friends {
       get { return firstReceived_; }
     }
     
+    public const int RoleFieldNumber = 2;
+    private int roleMemoizedSerializedSize;
+    private pbc::PopsicleList<uint> role_ = new pbc::PopsicleList<uint>();
+    public scg::IList<uint> RoleList {
+      get { return pbc::Lists.AsReadOnly(role_); }
+    }
+    public int RoleCount {
+      get { return role_.Count; }
+    }
+    public uint GetRole(int index) {
+      return role_[index];
+    }
+    
     public override bool IsInitialized {
       get {
         return true;
@@ -491,6 +626,9 @@ namespace bnet.protocol.friends {
       string[] field_names = _friendInvitationFieldNames;
       if (hasFirstReceived) {
         output.WriteBool(1, field_names[0], FirstReceived);
+      }
+      if (role_.Count > 0) {
+        output.WritePackedUInt32Array(2, field_names[1], roleMemoizedSerializedSize, role_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -504,6 +642,17 @@ namespace bnet.protocol.friends {
         size = 0;
         if (hasFirstReceived) {
           size += pb::CodedOutputStream.ComputeBoolSize(1, FirstReceived);
+        }
+        {
+          int dataSize = 0;
+          foreach (uint element in RoleList) {
+            dataSize += pb::CodedOutputStream.ComputeUInt32SizeNoTag(element);
+          }
+          size += dataSize;
+          if (role_.Count != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32SizeNoTag(dataSize);
+          }
+          roleMemoizedSerializedSize = dataSize;
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -542,6 +691,7 @@ namespace bnet.protocol.friends {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private FriendInvitation MakeReadOnly() {
+      role_.MakeReadOnly();
       return this;
     }
     
@@ -634,6 +784,9 @@ namespace bnet.protocol.friends {
         if (other.HasFirstReceived) {
           FirstReceived = other.FirstReceived;
         }
+        if (other.role_.Count != 0) {
+          result.role_.Add(other.role_);
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -681,6 +834,11 @@ namespace bnet.protocol.friends {
               result.hasFirstReceived = input.ReadBool(ref result.firstReceived_);
               break;
             }
+            case 18:
+            case 16: {
+              input.ReadUInt32Array(tag, field_name, result.role_);
+              break;
+            }
           }
         }
         
@@ -710,8 +868,469 @@ namespace bnet.protocol.friends {
         result.firstReceived_ = false;
         return this;
       }
+      
+      public pbc::IPopsicleList<uint> RoleList {
+        get { return PrepareBuilder().role_; }
+      }
+      public int RoleCount {
+        get { return result.RoleCount; }
+      }
+      public uint GetRole(int index) {
+        return result.GetRole(index);
+      }
+      public Builder SetRole(int index, uint value) {
+        PrepareBuilder();
+        result.role_[index] = value;
+        return this;
+      }
+      public Builder AddRole(uint value) {
+        PrepareBuilder();
+        result.role_.Add(value);
+        return this;
+      }
+      public Builder AddRangeRole(scg::IEnumerable<uint> values) {
+        PrepareBuilder();
+        result.role_.Add(values);
+        return this;
+      }
+      public Builder ClearRole() {
+        PrepareBuilder();
+        result.role_.Clear();
+        return this;
+      }
     }
     static FriendInvitation() {
+      object.ReferenceEquals(global::bnet.protocol.friends.FriendsTypes.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class FriendInvitationParams : pb::GeneratedMessage<FriendInvitationParams, FriendInvitationParams.Builder> {
+    private FriendInvitationParams() { }
+    private static readonly FriendInvitationParams defaultInstance = new FriendInvitationParams().MakeReadOnly();
+    private static readonly string[] _friendInvitationParamsFieldNames = new string[] { "display_string", "role", "target_battle_tag", "target_email" };
+    private static readonly uint[] _friendInvitationParamsFieldTags = new uint[] { 26, 34, 18, 10 };
+    public static FriendInvitationParams DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override FriendInvitationParams DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override FriendInvitationParams ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.friends.FriendsTypes.internal__static_bnet_protocol_friends_FriendInvitationParams__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<FriendInvitationParams, FriendInvitationParams.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.friends.FriendsTypes.internal__static_bnet_protocol_friends_FriendInvitationParams__FieldAccessorTable; }
+    }
+    
+    public const int FriendParamsFieldNumber = 103;
+    public static pb::GeneratedExtensionBase<global::bnet.protocol.friends.FriendInvitationParams> FriendParams;
+    public const int TargetEmailFieldNumber = 1;
+    private bool hasTargetEmail;
+    private string targetEmail_ = "";
+    public bool HasTargetEmail {
+      get { return hasTargetEmail; }
+    }
+    public string TargetEmail {
+      get { return targetEmail_; }
+    }
+    
+    public const int TargetBattleTagFieldNumber = 2;
+    private bool hasTargetBattleTag;
+    private string targetBattleTag_ = "";
+    public bool HasTargetBattleTag {
+      get { return hasTargetBattleTag; }
+    }
+    public string TargetBattleTag {
+      get { return targetBattleTag_; }
+    }
+    
+    public const int DisplayStringFieldNumber = 3;
+    private bool hasDisplayString;
+    private string displayString_ = "";
+    public bool HasDisplayString {
+      get { return hasDisplayString; }
+    }
+    public string DisplayString {
+      get { return displayString_; }
+    }
+    
+    public const int RoleFieldNumber = 4;
+    private int roleMemoizedSerializedSize;
+    private pbc::PopsicleList<uint> role_ = new pbc::PopsicleList<uint>();
+    public scg::IList<uint> RoleList {
+      get { return pbc::Lists.AsReadOnly(role_); }
+    }
+    public int RoleCount {
+      get { return role_.Count; }
+    }
+    public uint GetRole(int index) {
+      return role_[index];
+    }
+    
+    public override bool IsInitialized {
+      get {
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _friendInvitationParamsFieldNames;
+      if (hasTargetEmail) {
+        output.WriteString(1, field_names[3], TargetEmail);
+      }
+      if (hasTargetBattleTag) {
+        output.WriteString(2, field_names[2], TargetBattleTag);
+      }
+      if (hasDisplayString) {
+        output.WriteString(3, field_names[0], DisplayString);
+      }
+      if (role_.Count > 0) {
+        output.WritePackedUInt32Array(4, field_names[1], roleMemoizedSerializedSize, role_);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasTargetEmail) {
+          size += pb::CodedOutputStream.ComputeStringSize(1, TargetEmail);
+        }
+        if (hasTargetBattleTag) {
+          size += pb::CodedOutputStream.ComputeStringSize(2, TargetBattleTag);
+        }
+        if (hasDisplayString) {
+          size += pb::CodedOutputStream.ComputeStringSize(3, DisplayString);
+        }
+        {
+          int dataSize = 0;
+          foreach (uint element in RoleList) {
+            dataSize += pb::CodedOutputStream.ComputeUInt32SizeNoTag(element);
+          }
+          size += dataSize;
+          if (role_.Count != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32SizeNoTag(dataSize);
+          }
+          roleMemoizedSerializedSize = dataSize;
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static FriendInvitationParams ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static FriendInvitationParams ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static FriendInvitationParams ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static FriendInvitationParams ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static FriendInvitationParams ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static FriendInvitationParams ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static FriendInvitationParams ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static FriendInvitationParams ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static FriendInvitationParams ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static FriendInvitationParams ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private FriendInvitationParams MakeReadOnly() {
+      role_.MakeReadOnly();
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(FriendInvitationParams prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<FriendInvitationParams, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(FriendInvitationParams cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private FriendInvitationParams result;
+      
+      private FriendInvitationParams PrepareBuilder() {
+        if (resultIsReadOnly) {
+          FriendInvitationParams original = result;
+          result = new FriendInvitationParams();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override FriendInvitationParams MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.friends.FriendInvitationParams.Descriptor; }
+      }
+      
+      public override FriendInvitationParams DefaultInstanceForType {
+        get { return global::bnet.protocol.friends.FriendInvitationParams.DefaultInstance; }
+      }
+      
+      public override FriendInvitationParams BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is FriendInvitationParams) {
+          return MergeFrom((FriendInvitationParams) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(FriendInvitationParams other) {
+        if (other == global::bnet.protocol.friends.FriendInvitationParams.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasTargetEmail) {
+          TargetEmail = other.TargetEmail;
+        }
+        if (other.HasTargetBattleTag) {
+          TargetBattleTag = other.TargetBattleTag;
+        }
+        if (other.HasDisplayString) {
+          DisplayString = other.DisplayString;
+        }
+        if (other.role_.Count != 0) {
+          result.role_.Add(other.role_);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_friendInvitationParamsFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _friendInvitationParamsFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              result.hasTargetEmail = input.ReadString(ref result.targetEmail_);
+              break;
+            }
+            case 18: {
+              result.hasTargetBattleTag = input.ReadString(ref result.targetBattleTag_);
+              break;
+            }
+            case 26: {
+              result.hasDisplayString = input.ReadString(ref result.displayString_);
+              break;
+            }
+            case 34:
+            case 32: {
+              input.ReadUInt32Array(tag, field_name, result.role_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasTargetEmail {
+        get { return result.hasTargetEmail; }
+      }
+      public string TargetEmail {
+        get { return result.TargetEmail; }
+        set { SetTargetEmail(value); }
+      }
+      public Builder SetTargetEmail(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasTargetEmail = true;
+        result.targetEmail_ = value;
+        return this;
+      }
+      public Builder ClearTargetEmail() {
+        PrepareBuilder();
+        result.hasTargetEmail = false;
+        result.targetEmail_ = "";
+        return this;
+      }
+      
+      public bool HasTargetBattleTag {
+        get { return result.hasTargetBattleTag; }
+      }
+      public string TargetBattleTag {
+        get { return result.TargetBattleTag; }
+        set { SetTargetBattleTag(value); }
+      }
+      public Builder SetTargetBattleTag(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasTargetBattleTag = true;
+        result.targetBattleTag_ = value;
+        return this;
+      }
+      public Builder ClearTargetBattleTag() {
+        PrepareBuilder();
+        result.hasTargetBattleTag = false;
+        result.targetBattleTag_ = "";
+        return this;
+      }
+      
+      public bool HasDisplayString {
+        get { return result.hasDisplayString; }
+      }
+      public string DisplayString {
+        get { return result.DisplayString; }
+        set { SetDisplayString(value); }
+      }
+      public Builder SetDisplayString(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasDisplayString = true;
+        result.displayString_ = value;
+        return this;
+      }
+      public Builder ClearDisplayString() {
+        PrepareBuilder();
+        result.hasDisplayString = false;
+        result.displayString_ = "";
+        return this;
+      }
+      
+      public pbc::IPopsicleList<uint> RoleList {
+        get { return PrepareBuilder().role_; }
+      }
+      public int RoleCount {
+        get { return result.RoleCount; }
+      }
+      public uint GetRole(int index) {
+        return result.GetRole(index);
+      }
+      public Builder SetRole(int index, uint value) {
+        PrepareBuilder();
+        result.role_[index] = value;
+        return this;
+      }
+      public Builder AddRole(uint value) {
+        PrepareBuilder();
+        result.role_.Add(value);
+        return this;
+      }
+      public Builder AddRangeRole(scg::IEnumerable<uint> values) {
+        PrepareBuilder();
+        result.role_.Add(values);
+        return this;
+      }
+      public Builder ClearRole() {
+        PrepareBuilder();
+        result.role_.Clear();
+        return this;
+      }
+    }
+    static FriendInvitationParams() {
       object.ReferenceEquals(global::bnet.protocol.friends.FriendsTypes.Descriptor, null);
     }
   }

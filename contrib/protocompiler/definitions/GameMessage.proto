@@ -20,7 +20,8 @@ message ClientToonSettings
 
 message HeroDigestListRequest
 {
-    repeated .D3.OnlineService.EntityId toon_id = 1;
+    required .D3.OnlineService.EntityId account_id = 1;
+    repeated .D3.OnlineService.EntityId toon_id = 2;
 }
 
 message HeroDigestResponse
@@ -88,9 +89,120 @@ message TutorialMessage
     optional string ui_anchor_name = 2;
 }
 
+message TutorialState
+{
+    required bytes seen_tutorials = 1;
+}
+
 message SetAchievementShowcase
 {
     required uint64 achievement_id = 1;
     required uint32 slot = 2;
+}
+
+message DeleteHero
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required .D3.OnlineService.EntityId hero_id = 2;
+}
+
+message UndeleteHero
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required .D3.OnlineService.EntityId hero_id = 2;
+}
+
+message ForceRenameHero
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required .D3.OnlineService.EntityId hero_id = 2;
+}
+
+message FetchHeros
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+}
+
+message FetchInventory
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required .D3.OnlineService.EntityId hero_id = 2;
+}
+
+message RenameHero
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required .D3.OnlineService.EntityId hero_id = 2;
+    required string new_name = 3;
+}
+
+message GetGameAccountSettings
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+}
+
+message SetGameAccountSettings
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required .D3.Client.GameAccountSettings settings = 2;
+}
+
+message GetToonSettings
+{
+    required .D3.OnlineService.EntityId hero_id = 1;
+}
+
+message SetToonSettings
+{
+    required .D3.OnlineService.EntityId hero_id = 1;
+    required .D3.Client.ToonSettings settings = 2;
+}
+
+message GetAccountDigest
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+}
+
+message GetHeroItems
+{
+    required .D3.OnlineService.EntityId hero_id = 1;
+}
+
+message GetAccountItems
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+}
+
+message GetAccountProfile
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+}
+
+message GetHeroProfiles
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    repeated .D3.OnlineService.EntityId hero_ids = 2;
+}
+
+message GetAccountPrefs
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+}
+
+message SetAccountPrefs
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required .D3.Client.Preferences prefs = 2;
+}
+
+message GetHeroDigest
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required .D3.OnlineService.EntityId hero_id = 2;
+}
+
+message GetHeroIds
+{
+    required .D3.OnlineService.EntityId account_id = 1;
 }
 

@@ -83,7 +83,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public string Name { get; private set; } // 128
         public TagMap TagMap { get; private set; }
         public int I11 { get; private set; }
-        public MonsterMinionSpawnGroup MonsterMinionSpawngroup { get; private set; }
+        public List<MonsterMinionSpawnGroup> MonsterMinionSpawngroup { get; private set; }
 
         public Monster(MpqFile file)
         {
@@ -191,7 +191,7 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += (2 * 4);
             this.I11 = stream.ReadValueS32();
             stream.Position += (3 * 4);
-            this.MonsterMinionSpawngroup = stream.ReadSerializedItem<MonsterMinionSpawnGroup>();
+            this.MonsterMinionSpawngroup = stream.ReadSerializedData<MonsterMinionSpawnGroup>();
             this.Name = stream.ReadString(128, true);
             stream.Close();
         }
@@ -205,6 +205,7 @@ namespace Mooege.Common.MPQ.FileFormats
             {
                 this.F0 = stream.ReadValueF32();
                 this.I1 = stream.ReadValueS32();
+                stream.Position += 8;
                 SpawnItems = stream.ReadSerializedData<MonsterMinionSpawnItem>();
             }
         }

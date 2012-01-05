@@ -21,10 +21,11 @@ using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.Extensions;
-using Mooege.Common.Helpers.Hash;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Common.Helpers;
+using Mooege.Common.Helpers.Hash;
+using Mooege.Common.Storage;
 
 namespace Mooege.Common.MPQ.FileFormats
 {
@@ -46,24 +47,42 @@ namespace Mooege.Common.MPQ.FileFormats
         public List<MonsterLevelTable> MonsterLevel { get; private set; }
         public List<AffixTable> Affixes { get; private set; }
         public List<HeroTable> Heros { get; private set; }
-        public List<MovementStyleTable> MovementStyles { get; private set; }
+
+        [PersistentProperty("MovementStyles")]
+        public List<MovementStyle> MovementStyles { get; private set; }
         public List<LabelGBIDTable> Labels { get; private set; }
-        public List<LootDistTable> LootDistribution { get; private set; }
+
+        [PersistentProperty("LootDistribution")]
+        public List<LootDistributionTableEntry> LootDistribution { get; private set; }
         public List<RareItemNamesTable> RareItemNames { get; private set; }
         public List<MonsterAffixesTable> MonsterAffixes { get; private set; }
         public List<MonsterNamesTable> RareMonsterNames { get; private set; }
         public List<SocketedEffectTable> SocketedEffects { get; private set; }
         public List<ItemEnhancementTable> ItemEnhancement { get; private set; }
-        public List<ItemDropTable> ItemDrop { get; private set; }
-        public List<ItemLevelModTable> ItemLevelMod { get; private set; }
-        public List<QualityClassTable> QualityClass { get; private set; }
+
+        [PersistentProperty("ItemDropTable")]
+        public List<ItemDropTableEntry> ItemDropTable { get; private set; }
+
+        [PersistentProperty("ItemLevelModifiers")]
+        public List<ItemLevelModifier> ItemLevelModifiers { get; private set; }
+        
+        [PersistentProperty("QualityClasses")]
+        public List<QualityClass> QualityClasses { get; private set; }
         public List<HirelingTable> Hirelings { get; private set; }
         public List<SetItemBonusTable> SetItemBonus { get; private set; }
-        public List<EliteModTable> EliteModifiers { get; private set; }
-        public List<ItemTierTable> ItemTiers { get; private set; }
+
+        [PersistentProperty("EliteModifiers")]
+        public List<EliteModifier> EliteModifiers { get; private set; }
+
+        [PersistentProperty("ItemTiers")]
+        public List<ItemTier> ItemTiers { get; private set; }
         public List<PowerFormulaTable> PowerFormula { get; private set; }
         public List<RecipeTable> Recipes { get; private set; }
+
+        [PersistentProperty("ScriptedAchievementEvents")]
         public List<ScriptedAchievementEventsTable> ScriptedAchievementEvents { get; private set; }
+
+        public GameBalance() { }
 
         public GameBalance(MpqFile file)
         {
@@ -88,11 +107,11 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += 8;
             this.Heros = stream.ReadSerializedData<HeroTable>(); //632
             stream.Position += 8;
-            this.MovementStyles = stream.ReadSerializedData<MovementStyleTable>(); //648
+            this.MovementStyles = stream.ReadSerializedData<MovementStyle>(); //648
             stream.Position += 8;
             this.Labels = stream.ReadSerializedData<LabelGBIDTable>(); //664
             stream.Position += 8;
-            this.LootDistribution = stream.ReadSerializedData<LootDistTable>(); //680
+            this.LootDistribution = stream.ReadSerializedData<LootDistributionTableEntry>(); //680
             stream.Position += 8;
             this.RareItemNames = stream.ReadSerializedData<RareItemNamesTable>(); //696
             stream.Position += 8;
@@ -104,19 +123,19 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += 8;
             this.ItemEnhancement = stream.ReadSerializedData<ItemEnhancementTable>(); //760
             stream.Position += 8;
-            this.ItemDrop = stream.ReadSerializedData<ItemDropTable>(); //776
+            this.ItemDropTable = stream.ReadSerializedData<ItemDropTableEntry>(); //776
             stream.Position += 8;
-            this.ItemLevelMod = stream.ReadSerializedData<ItemLevelModTable>(); //792
+            this.ItemLevelModifiers = stream.ReadSerializedData<ItemLevelModifier>(); //792
             stream.Position += 8;
-            this.QualityClass = stream.ReadSerializedData<QualityClassTable>(); //808
+            this.QualityClasses = stream.ReadSerializedData<QualityClass>(); //808
             stream.Position += 8;
             this.Hirelings = stream.ReadSerializedData<HirelingTable>(); //824
             stream.Position += 8;
             this.SetItemBonus = stream.ReadSerializedData<SetItemBonusTable>(); //840
             stream.Position += 8;
-            this.EliteModifiers = stream.ReadSerializedData<EliteModTable>(); //856
+            this.EliteModifiers = stream.ReadSerializedData<EliteModifier>(); //856
             stream.Position += 8;
-            this.ItemTiers = stream.ReadSerializedData<ItemTierTable>(); //872
+            this.ItemTiers = stream.ReadSerializedData<ItemTier>(); //872
             stream.Position += 8;
             this.PowerFormula = stream.ReadSerializedData<PowerFormulaTable>(); //888
             stream.Position += 8;
@@ -253,7 +272,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int I2 { get; private set; }
         public int RandomPropertiesCount { get; private set; }
         public int MaxSockets { get; private set; }
-        public int I5 { get; private set; }
+        public int MaxStackAmount { get; private set; }
         public int BaseGoldValue { get; private set; }
         public int I7 { get; private set; }
         public int RequiredLevel { get; private set; }
@@ -307,7 +326,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.I2 = stream.ReadValueS32(); //284
             this.RandomPropertiesCount = stream.ReadValueS32(); //288
             this.MaxSockets = stream.ReadValueS32(); //292
-            this.I5 = stream.ReadValueS32(); //296
+            this.MaxStackAmount = stream.ReadValueS32(); //296
             this.BaseGoldValue = stream.ReadValueS32(); //300
             this.I7 = stream.ReadValueS32(); //304
             this.RequiredLevel = stream.ReadValueS32(); //308
@@ -823,40 +842,103 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    public class MovementStyleTable : ISerializableData //0 byte file
+    public class MovementStyle : ISerializableData //0 byte file
     {
         //Total Length: 384
+        [PersistentPropertyAttribute("Name")]
         public string Name { get; private set; }
+
+        [PersistentPropertyAttribute("I0")]
         public int I0 { get; private set; }
+
+        [PersistentPropertyAttribute("I1")]
         public int I1 { get; private set; }
+
+        [PersistentPropertyAttribute("I2")]
         public int I2 { get; private set; }
+
+        [PersistentPropertyAttribute("I3")]
         public int I3 { get; private set; }
+
+        [PersistentPropertyAttribute("I4")]
         public int I4 { get; private set; }
+
+        [PersistentPropertyAttribute("I5")]
         public int I5 { get; private set; }
+
+        [PersistentPropertyAttribute("I6")]
         public int I6 { get; private set; }
+
+        [PersistentPropertyAttribute("I7")]
         public int I7 { get; private set; }
+
+        [PersistentPropertyAttribute("F0")]
         public float F0 { get; private set; }
+
+        [PersistentPropertyAttribute("F1")]
         public float F1 { get; private set; }
+
+        [PersistentPropertyAttribute("F2")]
         public float F2 { get; private set; }
+
+        [PersistentPropertyAttribute("F3")]
         public float F3 { get; private set; }
+
+        [PersistentPropertyAttribute("F4")]
         public float F4 { get; private set; }
+
+        [PersistentPropertyAttribute("F5")]
         public float F5 { get; private set; }
+
+        [PersistentPropertyAttribute("F6")]
         public float F6 { get; private set; }
+
+        [PersistentPropertyAttribute("F7")]
         public float F7 { get; private set; }
+
+        [PersistentPropertyAttribute("F8")]
         public float F8 { get; private set; }
+
+        [PersistentPropertyAttribute("F9")]
         public float F9 { get; private set; }
+
+        [PersistentPropertyAttribute("F10")]
         public float F10 { get; private set; }
+
+        [PersistentPropertyAttribute("F11")]
         public float F11 { get; private set; }
+
+        [PersistentPropertyAttribute("F12")]
         public float F12 { get; private set; }
+
+        [PersistentPropertyAttribute("F13")]
         public float F13 { get; private set; }
+
+        [PersistentPropertyAttribute("F14")]
         public float F14 { get; private set; }
+
+        [PersistentPropertyAttribute("F15")]
         public float F15 { get; private set; }
+
+        [PersistentPropertyAttribute("F16")]
         public float F16 { get; private set; }
+
+        [PersistentPropertyAttribute("F17")]
         public float F17 { get; private set; }
+
+        [PersistentPropertyAttribute("F18")]
         public float F18 { get; private set; }
+
+        [PersistentPropertyAttribute("F19")]
         public float F19 { get; private set; }
+
+        [PersistentPropertyAttribute("F20")]
         public float F20 { get; private set; }
+
+        [PersistentPropertyAttribute("F21")]
         public float F21 { get; private set; }
+
+        [PersistentPropertyAttribute("SNOPowerToBreakObjects")]
         public int SNOPowerToBreakObjects { get; private set; }
 
         public void Read(MpqFileStream stream)
@@ -1034,31 +1116,76 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    public class LootDistTable : ISerializableData //0 byte file
+    public class LootDistributionTableEntry : ISerializableData //0 byte file
     {
         //Total Length: 92
+        [PersistentPropertyAttribute("I0")]
         public int I0 { get; private set; }
+
+        [PersistentPropertyAttribute("I1")]
         public int I1 { get; private set; }
+
+        [PersistentPropertyAttribute("I2")]
         public int I2 { get; private set; }
+
+        [PersistentPropertyAttribute("I3")]
         public int I3 { get; private set; }
+
+        [PersistentPropertyAttribute("I4")]
         public int I4 { get; private set; }
+
+        [PersistentPropertyAttribute("I5")]
         public int I5 { get; private set; }
+
+        [PersistentPropertyAttribute("I6")]
         public int I6 { get; private set; }
+
+        [PersistentPropertyAttribute("I7")]
         public int I7 { get; private set; }
+
+        [PersistentPropertyAttribute("I8")]
         public int I8 { get; private set; }
+
+        [PersistentPropertyAttribute("I9")]
         public int I9 { get; private set; }
+
+        [PersistentPropertyAttribute("F0")]
         public float F0 { get; private set; }
+
+        [PersistentPropertyAttribute("F1")]
         public float F1 { get; private set; }
+
+        [PersistentPropertyAttribute("F2")]
         public float F2 { get; private set; }
+
+        [PersistentPropertyAttribute("F3")]
         public float F3 { get; private set; }
+
+        [PersistentPropertyAttribute("F4")]
         public float F4 { get; private set; }
+
+        [PersistentPropertyAttribute("F5")]
         public float F5 { get; private set; }
+
+        [PersistentPropertyAttribute("F6")]
         public float F6 { get; private set; }
+
+        [PersistentPropertyAttribute("F7")]
         public float F7 { get; private set; }
+
+        [PersistentPropertyAttribute("F8")]
         public float F8 { get; private set; }
+
+        [PersistentPropertyAttribute("F9")]
         public float F9 { get; private set; }
+
+        [PersistentPropertyAttribute("F10")]
         public float F10 { get; private set; }
+
+        [PersistentPropertyAttribute("I10")]
         public int I10 { get; private set; }
+
+        [PersistentPropertyAttribute("I11")]
         public int I11 { get; private set; }
 
         public void Read(MpqFileStream stream)
@@ -1259,10 +1386,13 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    public class ItemDropTable : ISerializableData //0 byte file
+    public class ItemDropTableEntry : ISerializableData //0 byte file
     {
         //Total Length: 1140
+        [PersistentProperty("Name")]
         public string Name { get; private set; }
+
+        [PersistentProperty("I0", 220)]
         public int[] I0 { get; private set; }
 
         public void Read(MpqFileStream stream)
@@ -1275,31 +1405,76 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    public class ItemLevelModTable : ISerializableData //0 byte file
+    public class ItemLevelModifier : ISerializableData //0 byte file
     {
         //Total Length: 92
+        [PersistentPropertyAttribute("I0")]
         public int I0 { get; private set; }
+
+        [PersistentPropertyAttribute("F0")]
         public float F0 { get; private set; }
+
+        [PersistentPropertyAttribute("F1")]
         public float F1 { get; private set; }
+
+        [PersistentPropertyAttribute("F2")]
         public float F2 { get; private set; }
+
+        [PersistentPropertyAttribute("F3")]
         public float F3 { get; private set; }
+
+        [PersistentPropertyAttribute("F4")]
         public float F4 { get; private set; }
+
+        [PersistentPropertyAttribute("F5")]
         public float F5 { get; private set; }
+
+        [PersistentPropertyAttribute("F6")]
         public float F6 { get; private set; }
+
+        [PersistentPropertyAttribute("F7")]
         public float F7 { get; private set; }
+
+        [PersistentPropertyAttribute("F8")]
         public float F8 { get; private set; }
+
+        [PersistentPropertyAttribute("F9")]
         public float F9 { get; private set; }
+
+        [PersistentPropertyAttribute("F10")]
         public float F10 { get; private set; }
+
+        [PersistentPropertyAttribute("I1")]
         public int I1 { get; private set; }
+
+        [PersistentPropertyAttribute("I2")]
         public int I2 { get; private set; }
+
+        [PersistentPropertyAttribute("I3")]
         public int I3 { get; private set; }
+
+        [PersistentPropertyAttribute("I4")]
         public int I4 { get; private set; }
+
+        [PersistentPropertyAttribute("I5")]
         public int I5 { get; private set; }
+
+        [PersistentPropertyAttribute("I6")]
         public int I6 { get; private set; }
+
+        [PersistentPropertyAttribute("I7")]
         public int I7 { get; private set; }
+
+        [PersistentPropertyAttribute("I8")]
         public int I8 { get; private set; }
+
+        [PersistentPropertyAttribute("I9")]
         public int I9 { get; private set; }
+
+        [PersistentPropertyAttribute("I10")]
         public int I10 { get; private set; }
+
+        [PersistentPropertyAttribute("I11")]
         public int I11 { get; private set; }
 
         public void Read(MpqFileStream stream)
@@ -1330,18 +1505,22 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    public class QualityClassTable : ISerializableData //0 byte file
+    public class QualityClass : ISerializableData //0 byte file
     {
         //Total Length: 352
+        [PersistentProperty("Name")]
         public string Name { get; private set; }
+
+        [PersistentProperty("F0", 22)]
         public float[] F0 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             stream.Position += 4;
             this.Name = stream.ReadString(256, true);
-            this.F0 = new float[23];
-            for (int i = 0; i < 23; i++)
+            stream.Position += 4;
+            this.F0 = new float[22];
+            for (int i = 0; i < 22; i++)
                 this.F0[i] = stream.ReadValueF32();
         }
     }
@@ -1404,30 +1583,74 @@ namespace Mooege.Common.MPQ.FileFormats
 
     }
 
-    public class EliteModTable : ISerializableData //0 byte file
+    public class EliteModifier : ISerializableData //0 byte file
     {
         //Total Length: 344
+
+        [PersistentProperty("Name")]
         public string Name { get; private set; }
+
+        [PersistentProperty("F0")]
         public float F0 { get; private set; }
+
+        [PersistentProperty("Time0")]
         public int Time0 { get; private set; }
+
+        [PersistentProperty("F1")]
         public float F1 { get; private set; }
+
+        [PersistentProperty("Time1")]
         public int Time1 { get; private set; }
+
+        [PersistentProperty("F2")]
         public float F2 { get; private set; }
+
+        [PersistentProperty("Time2")]
         public int Time2 { get; private set; }
+
+        [PersistentProperty("F3")]
         public float F3 { get; private set; }
+
+        [PersistentProperty("Time3")]
         public int Time3 { get; private set; }
+
+        [PersistentProperty("F4")]
         public float F4 { get; private set; }
+
+        [PersistentProperty("Time4")]
         public int Time4 { get; private set; }
+
+        [PersistentProperty("F5")]
         public float F5 { get; private set; }
+
+        [PersistentProperty("Time5")]
         public int Time5 { get; private set; }
+
+        [PersistentProperty("F6")]
         public float F6 { get; private set; }
+
+        [PersistentProperty("Time6")]
         public int Time6 { get; private set; }
+
+        [PersistentProperty("F7")]
         public float F7 { get; private set; }
+
+        [PersistentProperty("F8")]
         public float F8 { get; private set; }
+
+        [PersistentProperty("Time7")]
         public int Time7 { get; private set; }
+
+        [PersistentProperty("F9")]
         public float F9 { get; private set; }
+
+        [PersistentProperty("F10")]
         public float F10 { get; private set; }
+
+        [PersistentProperty("F11")]
         public float F11 { get; private set; }
+
+        [PersistentProperty("F12")]
         public float F12 { get; private set; }
 
         public void Read(MpqFileStream stream)
@@ -1458,15 +1681,29 @@ namespace Mooege.Common.MPQ.FileFormats
         }
     }
 
-    public class ItemTierTable : ISerializableData //0 byte file
+    public class ItemTier : ISerializableData //0 byte file
     {
         //Total Length: 32
+
+        [PersistentPropertyAttribute("Head")]
         public int Head { get; private set; }
+
+        [PersistentPropertyAttribute("Torso")]
         public int Torso { get; private set; }
+
+        [PersistentPropertyAttribute("Feet")]
         public int Feet { get; private set; }
+
+        [PersistentPropertyAttribute("Hands")]
         public int Hands { get; private set; }
+
+        [PersistentPropertyAttribute("Shoulders")]
         public int Shoulders { get; private set; }
+
+        [PersistentPropertyAttribute("Bracers")]
         public int Bracers { get; private set; }
+
+        [PersistentPropertyAttribute("Belt")]
         public int Belt { get; private set; }
 
         public void Read(MpqFileStream stream)
@@ -1535,6 +1772,7 @@ namespace Mooege.Common.MPQ.FileFormats
     public class ScriptedAchievementEventsTable : ISerializableData //0 byte file
     {
         //Total Length: 260
+        [PersistentPropertyAttribute("Name")]
         public string Name { get; private set; }
 
         public void Read(MpqFileStream stream)

@@ -30,12 +30,11 @@ namespace bnet.protocol.chat {
     
     static ChatTypes() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "CihzZXJ2aWNlL2NoYXQvZGVmaW5pdGlvbi9jaGF0X3R5cGVzLnByb3RvEhJi" + 
-          "bmV0LnByb3RvY29sLmNoYXQaLnNlcnZpY2UvY2hhbm5lbC9kZWZpbml0aW9u" + 
-          "L2NoYW5uZWxfdHlwZXMucHJvdG8ilgEKDENoYW5uZWxTdGF0ZRIQCghpZGVu" + 
-          "dGl0eRgBIAEoCRIPCgdwcm9ncmFtGAIgASgHEg4KBmxvY2FsZRgDIAEoBzJT" + 
-          "CgRjaGF0EiMuYm5ldC5wcm90b2NvbC5jaGFubmVsLkNoYW5uZWxTdGF0ZRhk" + 
-          "IAEoCzIgLmJuZXQucHJvdG9jb2wuY2hhdC5DaGFubmVsU3RhdGU=");
+          "ChVibmV0L2NoYXRfdHlwZXMucHJvdG8SEmJuZXQucHJvdG9jb2wuY2hhdBoY" + 
+          "Ym5ldC9jaGFubmVsX3R5cGVzLnByb3RvIpYBCgxDaGFubmVsU3RhdGUSEAoI" + 
+          "aWRlbnRpdHkYASABKAkSDwoHcHJvZ3JhbRgCIAEoBxIOCgZsb2NhbGUYAyAB" + 
+          "KAcyUwoEY2hhdBIjLmJuZXQucHJvdG9jb2wuY2hhbm5lbC5DaGFubmVsU3Rh" + 
+          "dGUYZCABKAsyIC5ibmV0LnByb3RvY29sLmNoYXQuQ2hhbm5lbFN0YXRl");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_chat_ChannelState__Descriptor = Descriptor.MessageTypes[0];

@@ -54,10 +54,10 @@ namespace Mooege.Core.MooNet.Services
         {
             var snapshot = bnet.protocol.achievements.Snapshot.CreateBuilder();
 
-            foreach (var achievement in this.Client.Account.Achievements)
+            foreach (var achievement in this.Client.Account.CurrentGameAccount.Achievements)
                 snapshot.AddAchievementSnapshot(achievement);
 
-            foreach (var criteria in this.Client.Account.AchievementCriteria)
+            foreach (var criteria in this.Client.Account.CurrentGameAccount.AchievementCriteria)
                 snapshot.AddCriteriaSnapshot(criteria);
 
             var response = bnet.protocol.achievements.RequestSnapshotResponse.CreateBuilder().SetSnapshot(snapshot);

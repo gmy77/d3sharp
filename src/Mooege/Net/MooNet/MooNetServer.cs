@@ -44,7 +44,7 @@ namespace Mooege.Net.MooNet
             var client = ((MooNetClient) e.Connection.Client);
 
             Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
-            if (client.Account != null) client.Account.LoggedInClient = null;
+            if (client.Account != null) client.Account.CurrentGameAccount.LoggedInClient = null;
             PlayerManager.PlayerDisconnected((MooNetClient)e.Connection.Client);
         }
         

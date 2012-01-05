@@ -73,7 +73,7 @@ namespace Mooege.Core.GS.Map
         /// <summary>
         /// Visibility in MiniMap.
         /// </summary>
-        public SceneMiniMapVisibility MiniMapVisibility { get; set; }
+        public bool MiniMapVisibility { get; set; }
 
         /// <summary>
         /// Scene Specification.
@@ -91,7 +91,7 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         public PRTransform Transform
         {
-            get { return new PRTransform { Quaternion = new Quaternion { W = this.FacingAngle, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationW, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
         /// <summary>
@@ -224,11 +224,21 @@ namespace Mooege.Core.GS.Map
                         case Mooege.Common.MPQ.FileFormats.MarkerType.Light:
                         case Mooege.Common.MPQ.FileFormats.MarkerType.Particle:
                         case Mooege.Common.MPQ.FileFormats.MarkerType.SubScenePosition:
-                            // nothing to do for these here
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.AudioVolume:
+                            // nothing to do for these here, client load them on its own
+                            break;
+
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.Script:
+                            Logger.Warn("Ignoring marker {0} in {1} ({2}) because scripts are not handled yet", marker.Name, markerSetData.FileName, markerSetData.Header.SNOId);
+                            break;
+
+                        case Mooege.Common.MPQ.FileFormats.MarkerType.Event:
+                            Logger.Warn("Ignoring marker {0} in {1} ({2}) because events are not handled yet", marker.Name, markerSetData.FileName, markerSetData.Header.SNOId);
                             break;
 
                         case Mooege.Common.MPQ.FileFormats.MarkerType.MinimapMarker:
-                            // TODO Load minimap markers here
+                            Logger.Warn("Ignoring marker {0} in {1} ({2}) because minimap marker are not handled yet", marker.Name, markerSetData.FileName, markerSetData.Header.SNOId);
+
                             break;
 
                         case Mooege.Common.MPQ.FileFormats.MarkerType.Actor:
@@ -237,7 +247,7 @@ namespace Mooege.Core.GS.Map
                             if (actor == null) continue;
 
                             var position = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
-                            actor.FacingAngle = marker.PRTransform.Quaternion.W;
+                            actor.RotationW = marker.PRTransform.Quaternion.W;
                             actor.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
                             actor.EnterWorld(position);
@@ -251,7 +261,7 @@ namespace Mooege.Core.GS.Map
                             if (actor2 == null) continue;
 
                             var position2 = marker.PRTransform.Vector3D + this.Position; // calculate the position for the actor.
-                            actor2.FacingAngle = marker.PRTransform.Quaternion.W;
+                            actor2.RotationW = marker.PRTransform.Quaternion.W;
                             actor2.RotationAxis = marker.PRTransform.Quaternion.Vector3D;
 
                             actor2.EnterWorld(position2);
@@ -382,7 +392,7 @@ namespace Mooege.Core.GS.Map
                     SceneSNO = this.SceneSNO.Id,
                     Transform = this.Transform,
                     WorldID = this.World.DynamicID,
-                    MiniMapVisibility = this.MiniMapVisibility
+                    MiniMapVisibility = false //= this.MiniMapVisibility
                 };
             }
         }

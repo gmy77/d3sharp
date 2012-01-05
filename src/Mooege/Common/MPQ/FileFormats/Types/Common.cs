@@ -21,6 +21,7 @@ using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Common.Types.SNO;
 using System.Text;
+using Mooege.Common.Storage;
 
 namespace Mooege.Common.MPQ.FileFormats.Types
 {
@@ -48,16 +49,37 @@ namespace Mooege.Common.MPQ.FileFormats.Types
 
     public class ScriptFormula
     {
+        [PersistentProperty("I0")]
         public int I0 { get; private set; }
+
+        [PersistentProperty("I1")]
         public int I1 { get; private set; }
+
+        [PersistentProperty("I2")]
         public int I2 { get; private set; }
+
+        [PersistentProperty("I3")]
         public int I3 { get; private set; }
+
+        [PersistentProperty("I4")]
         public int I4 { get; private set; }
+
+        [PersistentProperty("NameSize")]
         public int NameSize { get; private set; }
+
+        [PersistentProperty("I5")]
         public int I5 { get; private set; }
+
+        [PersistentProperty("OpcodeSize")]
         public int OpcodeSize { get; private set; }
+
+        [PersistentProperty("OpCodeName")]
         public string OpCodeName { get; private set; }
+
+        [PersistentProperty("OpCodeArray", -1)]
         public byte[] OpCodeArray { get; private set; }
+
+        public ScriptFormula() { }
 
         public ScriptFormula(MpqFileStream stream)
         {
@@ -70,8 +92,8 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             this.I5 = stream.ReadValueS32();
             this.OpcodeSize = stream.ReadValueS32();
             this.OpCodeName = stream.ReadStringZ(Encoding.ASCII);
- 
-            switch(NameSize % 4)
+
+            switch (NameSize % 4)
             {
                 case 0:
                     break;
@@ -237,10 +259,19 @@ namespace Mooege.Common.MPQ.FileFormats.Types
 
     public class ItemSpecifierData
     {
+        [PersistentProperty("ItemGBId")]
         public int ItemGBId { get; private set; }
+
+        [PersistentProperty("I0")]
         public int I0 { get; private set; }
-        public int[] GBIdAffixes = new int[3];
+
+        [PersistentProperty("GBIdAffixes", 3)]
+        public int[] GBIdAffixes { get; private set; }
+
+        [PersistentProperty("I1")]
         public int I1 { get; private set; }
+
+        [PersistentProperty("I2")]
         public int I2 { get; private set; }
 
         public ItemSpecifierData() { }
@@ -249,6 +280,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
         {
             ItemGBId = stream.ReadValueS32();
             I0 = stream.ReadValueS32();
+            GBIdAffixes = new int[3];
             for (int i = 0; i < GBIdAffixes.Length; i++)
             {
                 GBIdAffixes[i] = stream.ReadValueS32();

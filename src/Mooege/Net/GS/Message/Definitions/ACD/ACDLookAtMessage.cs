@@ -26,6 +26,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int Field0;
         public int Field1;
 
+        public ACDLookAtMessage() : base(Opcodes.ACDLookAtMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);

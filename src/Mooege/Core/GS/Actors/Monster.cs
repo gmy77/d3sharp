@@ -150,10 +150,10 @@ namespace Mooege.Core.GS.Actors
                 {
                     new PlayAnimationMessageSpec()
                     {
-                        Field0 = 0x2,
-                        Field1 = AnimationSet.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
-                        Field2 = 0x0,
-                        Field3 = 1f
+                        Duration = 0x2,
+                        AnimationSNO = AnimationSet.GetRandomDeath(),//killAni[RandomHelper.Next(killAni.Length)],
+                        PermutationIndex = 0x0,
+                        Speed = 0.1f
                     }
                 }
             }, this);

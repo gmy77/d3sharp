@@ -24,7 +24,6 @@ using Mooege.Common.MPQ;
 using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Map;
-using Mooege.Core.GS.Markers;
 using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Common.Logging;
@@ -98,6 +97,9 @@ namespace Mooege.Core.GS.Actors
                                 return new Shrine(world, snoId, tags);
                             case GizmoGroup.Healthwell:
                                 return new Healthwell(world, snoId, tags);
+                            case GizmoGroup.StartLocations:
+                                return new StartingPoint(world, snoId, tags);
+
 
                             case GizmoGroup.ActChangeTempObject:
                             case GizmoGroup.Banner:
@@ -116,11 +118,10 @@ namespace Mooege.Core.GS.Actors
                             case GizmoGroup.ServerProp:
                             case GizmoGroup.Sign:
                             case GizmoGroup.Spawner:
-                            case GizmoGroup.StartLocations:
                             case GizmoGroup.TownPortal:
                             case GizmoGroup.Trigger:
                             case GizmoGroup.WeirdGroup57:
-                                Logger.Info("GizmoGroup {0} has no proper implementation, using default gizmo instead", actorData.TagMap[ActorKeys.GizmoGroup]);
+                                //Logger.Info("GizmoGroup {0} has no proper implementation, using default gizmo instead", actorData.TagMap[ActorKeys.GizmoGroup]);
                                 return CreateGizmo(world, snoId, tags);
 
                             default:

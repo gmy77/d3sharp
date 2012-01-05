@@ -88,7 +88,7 @@ namespace Mooege.Core.GS.Actors
         /// </summary>
         public virtual PRTransform Transform
         {
-            get { return new PRTransform { Quaternion = new Quaternion { W = this.FacingAngle, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
+            get { return new PRTransform { Quaternion = new Quaternion { W = this.RotationW, Vector3D = this.RotationAxis }, Vector3D = this.Position }; }
         }
 
         /// <summary>
@@ -285,7 +285,7 @@ namespace Mooege.Core.GS.Actors
         public void ChangeWorld(World world, StartingPoint startingPoint)
         {
             this.RotationAxis = startingPoint.RotationAxis;
-            this.FacingAngle = startingPoint.FacingAngle;
+            this.RotationW = startingPoint.RotationW;
 
             this.ChangeWorld(world, startingPoint.Position);
         }
@@ -615,14 +615,14 @@ namespace Mooege.Core.GS.Actors
 
         public void Move(Vector3D point, float facingAngle)
         {
-            this.FacingAngle = facingAngle;
+            this.SetFacingRotation(facingAngle);
 
-            var movementMessage = new NotifyActorMovementMessage
+            var movementMessage = new ACDTranslateNormalMessage
             {
                 ActorId = (int)this.DynamicID,
                 Position = point,
                 Angle = facingAngle,
-                Field3 = false,
+                TurnImmediately = false,
                 Speed = this.WalkSpeed,
                 Field5 = 0,
                 AnimationTag = this.AnimationSet == null ? 0 : this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk)

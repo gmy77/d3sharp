@@ -36,8 +36,6 @@ namespace Mooege.Net.GS.Message.Fields
         // MaxLength = 3
         public int /* sno */[] snoTraits;
         public SavePointData SavePointData;
-        // MaxLength = 64
-        public int /* sno */[] m_SeenTutorials;
 
         public void Parse(GameBitBuffer buffer)
         {
@@ -66,8 +64,6 @@ namespace Mooege.Net.GS.Message.Fields
             for (int i = 0; i < snoTraits.Length; i++) snoTraits[i] = buffer.ReadInt(32);
             SavePointData = new SavePointData();
             SavePointData.Parse(buffer);
-            m_SeenTutorials = new int /* sno */[64];
-            for (int i = 0; i < m_SeenTutorials.Length; i++) m_SeenTutorials[i] = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
@@ -88,7 +84,6 @@ namespace Mooege.Net.GS.Message.Fields
             for (int i = 0; i < snoActiveSkills.Length; i++) buffer.WriteInt(32, snoActiveSkills[i]);
             for (int i = 0; i < snoTraits.Length; i++) buffer.WriteInt(32, snoTraits[i]);
             SavePointData.Encode(buffer);
-            for (int i = 0; i < m_SeenTutorials.Length; i++) buffer.WriteInt(32, m_SeenTutorials[i]);
         }
 
         public void AsText(StringBuilder b, int pad)
@@ -163,20 +158,6 @@ namespace Mooege.Net.GS.Message.Fields
             b.AppendLine();
             SavePointData.AsText(b, pad);
             b.Append(' ', pad);
-            b.AppendLine("m_SeenTutorials:");
-            b.Append(' ', pad);
-            b.AppendLine("{");
-            for (int i = 0; i < m_SeenTutorials.Length;)
-            {
-                b.Append(' ', pad + 1);
-                for (int j = 0; j < 8 && i < m_SeenTutorials.Length; j++, i++)
-                {
-                    b.Append("0x" + m_SeenTutorials[i].ToString("X8") + ", ");
-                }
-                b.AppendLine();
-            }
-            b.Append(' ', pad);
-            b.AppendLine("}");
             b.AppendLine();
             b.Append(' ', --pad);
             b.AppendLine("}");

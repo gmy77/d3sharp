@@ -47,9 +47,10 @@ namespace Mooege.Core.MooNet.Accounts
             return Accounts.ContainsKey(email) ? Accounts[email] : null;
         }
 
-        public static Account CreateAccount(string email, string password, Account.UserLevels userLevel = Account.UserLevels.User)
+        public static Account CreateAccount(string email, string password, string battleTag, Account.UserLevels userLevel = Account.UserLevels.User)
         {
-            var account = new Account(email, password, userLevel);
+            var hashCode = AccountManager.GetUnusedHashCodeForBattleTag(battleTag);
+            var account = new Account(email, password, battleTag, hashCode, userLevel);
             Accounts.Add(email, account);
             account.SaveToDB();
 
@@ -72,7 +73,7 @@ namespace Mooege.Core.MooNet.Accounts
                 var cmd = new SQLiteCommand(query, DBManager.Connection);
                 cmd.ExecuteNonQuery();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Logger.ErrorException(e, "DeleteAccount()");
                 return false;
@@ -103,11 +104,32 @@ namespace Mooege.Core.MooNet.Accounts
                 var passwordVerifier = new byte[128];
                 readBytes = reader.GetBytes(3, 0, passwordVerifier, 0, 128);
 
-                var userLevel = (byte) reader.GetByte(4);
+                var battleTagName = reader.GetString(4);
 
-                var account = new Account(accountId, email, salt, passwordVerifier, (Account.UserLevels)userLevel);
+                var hashCode = reader.GetInt32(5);
+
+                var userLevel = reader.GetByte(6);
+
+                var account = new Account(accountId, email, salt, passwordVerifier, battleTagName, hashCode, (Account.UserLevels)userLevel);
                 Accounts.Add(email, account);
             }
+        }
+
+        public static int GetUnusedHashCodeForBattleTag(string name)
+        {
+            var query = string.Format("SELECT hashCode from accounts WHERE battletagname='{0}'", name);
+            Logger.Trace(query);
+            var cmd = new SQLiteCommand(query, DBManager.Connection);
+            var reader = cmd.ExecuteReader();
+            if (!reader.HasRows) return GenerateHashCodeNotInList(null);
+
+            var codes = new HashSet<int>();
+            while (reader.Read())
+            {
+                var hashCode = reader.GetInt32(0);
+                codes.Add(hashCode);
+            }
+            return GenerateHashCodeNotInList(codes);
         }
 
         public static ulong GetNextAvailablePersistentId()
@@ -121,6 +143,20 @@ namespace Mooege.Core.MooNet.Accounts
             {
                 return 0;
             }
-        }       
+        }
+
+        private static int GenerateHashCodeNotInList(HashSet<int> codes)
+        {
+            Random rnd = new Random();
+            if (codes == null) return rnd.Next(1, 1000);
+
+            int hashCode;
+            do
+            {
+                hashCode = rnd.Next(1, 1000);
+            } while (codes.Contains(hashCode));
+            return hashCode;
+        }
+
     }
 }

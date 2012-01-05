@@ -227,7 +227,13 @@ namespace Mooege.Core.GS.Map
             player.InGameClient.SendMessage(new RevealWorldMessage() // Reveal world to player
             {
                 WorldID = this.DynamicID,
-                WorldSNO = this.WorldSNO.Id
+                WorldSNO = this.WorldSNO.Id,
+                Field2 = 540,
+                Field3 = -600,
+                Field4 = 60,
+                Field5 = 60,
+                Field6 = 3300,
+                Field7 = 5040
             });
 
             player.InGameClient.SendMessage(new EnterWorldMessage()
@@ -292,8 +298,9 @@ namespace Mooege.Core.GS.Map
                     actor.Unreveal(player);
                 }
             }
-            
-            this.RemoveActor(actor);
+
+            if (this.HasActor(actor.DynamicID))
+                this.RemoveActor(actor);
 
             if (!(actor is Player)) return; // if the leaving actors is a player, unreveal the actors revealed to him contained in the world.
             var revealedObjects = (actor as Player).RevealedObjects.Values.ToList(); // list of revealed actors.

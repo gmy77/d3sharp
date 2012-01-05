@@ -33,6 +33,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int Field5;
         public DPathSinData Field6;
 
+        public ACDTranslateDetPathSpiralMessage() : base(Opcodes.ACDTranslateDetPathSpiralMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);

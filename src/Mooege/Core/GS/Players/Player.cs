@@ -50,6 +50,7 @@ using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
 using System;
 using Mooege.Common.Helpers;
+using Mooege.Net.GS.Message.Definitions.ACD;
 
 namespace Mooege.Core.GS.Players
 {
@@ -187,7 +188,7 @@ namespace Mooege.Core.GS.Players
 
             this.Field2 = 0x00000009;
             this.Scale = this.ModelScale;
-            this.FacingAngle = 0.05940768f;
+            this.RotationW = 0.05940768f;
             this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
             this.Field7 = -1;
             this.NameSNOId = -1;
@@ -472,13 +473,26 @@ namespace Mooege.Core.GS.Players
             else if (message is AssignPassiveSkillMessage) OnAssignPassiveSkill(client, (AssignPassiveSkillMessage)message);
             else if (message is PlayerChangeHotbarButtonMessage) OnPlayerChangeHotbarButtonMessage(client, (PlayerChangeHotbarButtonMessage)message);
             else if (message is TargetMessage) OnObjectTargeted(client, (TargetMessage)message);
-            else if (message is PlayerMovementMessage) OnPlayerMovement(client, (PlayerMovementMessage)message);
+            else if (message is ACDClientTranslateMessage) OnPlayerMovement(client, (ACDClientTranslateMessage)message);
             else if (message is TryWaypointMessage) OnTryWaypoint(client, (TryWaypointMessage)message);
             else if (message is RequestBuyItemMessage) OnRequestBuyItem(client, (RequestBuyItemMessage)message);
             else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
             else if (message is HirelingDismissMessage) OnHirelingDismiss();
             else if (message is SocketSpellMessage) OnSocketSpell(client, (SocketSpellMessage)message);
+            else if (message is PlayerTranslateFacingMessage) OnTranslateFacing(client, (PlayerTranslateFacingMessage)message);
             else return;
+        }
+
+        private void OnTranslateFacing(GameClient client, PlayerTranslateFacingMessage message)
+        {
+            this.SetFacingRotation(message.Angle);
+
+            World.BroadcastExclusive(new ACDTranslateFacingMessage
+            {
+                ActorId = this.DynamicID,
+                Angle = message.Angle,
+                TurnImmediately = message.TurnImmediately
+            }, this);
         }
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
@@ -622,26 +636,23 @@ namespace Mooege.Core.GS.Players
             this.ExpBonusData.Check(2);
         }
 
-        private void OnPlayerMovement(GameClient client, PlayerMovementMessage message)
+        private void OnPlayerMovement(GameClient client, ACDClientTranslateMessage message)
         {
             // here we should also be checking the position and see if it's valid. If not we should be resetting player to a good position with ACDWorldPositionMessage
             // so we can have a basic precaution for hacks & exploits /raist.
-
             if (message.Position != null)
                 this.Position = message.Position;
 
-            if (message.Angle != null)
-                this.FacingAngle = message.Angle.Value;
+            this.SetFacingRotation(message.Angle);
 
-
-            var msg = new NotifyActorMovementMessage
+            var msg = new ACDTranslateNormalMessage
             {
-                ActorId = message.ActorId,
+                ActorId = (int)this.DynamicID,
                 Position = this.Position,
                 Angle = message.Angle,
-                Field3 = false,
+                TurnImmediately = false,
                 Speed = message.Speed,
-                Field5 = message.Field5,
+                //Field5 = message.Field5,  // TODO: don't even know what this is, might be message.Field6 now?
                 AnimationTag = message.AnimationTag
             };
 
@@ -1061,7 +1072,6 @@ namespace Mooege.Core.GS.Players
                 snoActiveSkills = this.SkillSet.ActiveSkills,
                 snoTraits = this.SkillSet.PassiveSkills,
                 SavePointData = new SavePointData { snoWorld = -1, SavepointId = -1, },
-                m_SeenTutorials = this.SeenTutorials,
             };
         }
 
@@ -1151,7 +1161,7 @@ namespace Mooege.Core.GS.Players
         {
             var playerBanner = D3.GameMessage.PlayerBanner.CreateBuilder()
                 .SetPlayerIndex((uint)this.PlayerIndex)
-                .SetBanner(this.Toon.Owner.BannerConfiguration)
+                .SetBanner(this.Toon.GameAccount.BannerConfiguration)
                 .Build();
 
             return new PlayerBannerMessage() { PlayerBanner = playerBanner };
@@ -1575,5 +1585,29 @@ namespace Mooege.Core.GS.Players
         }
 
         #endregion
+
+        #region StoneOfRecall, CubeOfNephalem, CauldonOfJourdan
+
+        public void EnableStoneOfRecall()
+        {
+            Attributes[GameAttribute.Skill, 0x0002EC66] = 1;
+            Attributes[GameAttribute.Skill_Total, 0x0002EC66] = 1;
+            Attributes.SendChangedMessage(this.InGameClient);
+        }
+
+        public void EnableCauldronOfJordan()
+        {         
+            Attributes[GameAttribute.ItemMeltUnlocked] = true;
+            Attributes.SendChangedMessage(this.InGameClient);
+        }
+
+        public void EnableCubeOfNephalem()
+        {
+            Attributes[GameAttribute.SalvageUnlocked] = true;
+            Attributes.SendChangedMessage(this.InGameClient);
+        }
+
+        #endregion
+
     }
 }

@@ -49,7 +49,7 @@ namespace Mooege.Core.GS.Generators
             var worldData = (Mooege.Common.MPQ.FileFormats.World)worldAsset.Data;
 
 
-            if (worldData.SceneParams.SceneChunks.Count == 0)
+            if (worldData.IsGenerated)
             {
                 Logger.Error("World {0} [{1}] is a dynamic world! Can't generate dynamic worlds yet!", worldAsset.Name, worldAsset.SNOId);
                 return null;
@@ -113,8 +113,8 @@ namespace Mooege.Core.GS.Generators
                 var position = sceneChunk.PRTransform.Vector3D - new Vector3D(minX, minY, 0);
                 var scene = new Scene(world, position, sceneChunk.SNOHandle.Id, null)
                 {
-                    MiniMapVisibility = SceneMiniMapVisibility.Revealed,                    
-                    FacingAngle = sceneChunk.PRTransform.Quaternion.W,
+                    MiniMapVisibility = true,
+                    RotationW = sceneChunk.PRTransform.Quaternion.W,
                     RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                     SceneGroupSNO = -1
                 };
@@ -152,8 +152,8 @@ namespace Mooege.Core.GS.Generators
                             var subScenePosition = scene.Position + pos;
                             var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
                             {
-                                MiniMapVisibility = SceneMiniMapVisibility.Revealed,
-                                FacingAngle = sceneChunk.PRTransform.Quaternion.W,
+                                MiniMapVisibility = true,
+                                RotationW = sceneChunk.PRTransform.Quaternion.W,
                                 RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                                 Specification = sceneChunk.SceneSpecification
                             };
@@ -376,7 +376,7 @@ namespace Mooege.Core.GS.Generators
                 return;
             }
 
-            actor.FacingAngle = location.Quaternion.W;
+            actor.RotationW = location.Quaternion.W;
             actor.RotationAxis = location.Quaternion.Vector3D;
             actor.EnterWorld(location.Vector3D);
         }
@@ -394,7 +394,7 @@ namespace Mooege.Core.GS.Generators
             {
                 var mpqMarkerSet = MPQStorage.Data.Assets[SNOGroup.MarkerSet][markerSet].Data as Mooege.Common.MPQ.FileFormats.MarkerSet;
                 foreach (var marker in mpqMarkerSet.Markers)
-                    if (marker.Type == Mooege.Common.MPQ.FileFormats.MarkerType.SubScenePosition)      // TODO Make this an enum value /farmy
+                    if (marker.Type == Mooege.Common.MPQ.FileFormats.MarkerType.SubScenePosition)
                         return marker.PRTransform.Vector3D;
             }
 

@@ -25,9 +25,9 @@ using Mooege.Net.MooNet;
 namespace Mooege.Core.MooNet.Accounts
 {
     [CommandGroup("account", "Provides account managment commands.")]
-    public class AccountCommands: CommandGroup
+    public class AccountCommands : CommandGroup
     {
-        [Command("show","Shows information about given account\nUsage: account show <email>", Account.UserLevels.GM)]
+        [Command("show", "Shows information about given account\nUsage: account show <email>", Account.UserLevels.GM)]
         public string Show(string[] @params, MooNetClient invokerClient)
         {
             if (@params.Count() < 1)
@@ -42,19 +42,20 @@ namespace Mooege.Core.MooNet.Accounts
             return string.Format("Email: {0} User Level: {1}", account.Email, account.UserLevel);
         }
 
-        [Command("add", "Allows you to add a new user account.\nUsage: account add <email> <password> [userlevel]", Account.UserLevels.GM)]
+        [Command("add", "Allows you to add a new user account.\nUsage: account add <email> <password> <battletag> [userlevel]", Account.UserLevels.GM)]
         public string Add(string[] @params, MooNetClient invokerClient)
         {
-            if (@params.Count() < 2)
+            if (@params.Count() < 3)
                 return "Invalid arguments. Type 'help account add' to get help.";
 
             var email = @params[0];
             var password = @params[1];
+            var battleTagName = @params[2];
             var userLevel = Account.UserLevels.User;
 
-            if (@params.Count() == 3)
+            if (@params.Count() == 4)
             {
-                var level = @params[2].ToLower();
+                var level = @params[3].ToLower();
                 switch (level)
                 {
                     case "owner":
@@ -77,31 +78,36 @@ namespace Mooege.Core.MooNet.Accounts
             if (!email.Contains('@'))
                 return string.Format("'{0}' is not a valid email address.", email);
 
+            if (battleTagName.Contains('#'))
+                return "BattleTag must not contain '#' or HashCode.";
+
             if (password.Length < 8 || password.Length > 16)
                 return "Password should be a minimum of 8 and a maximum of 16 characters.";
 
             if (AccountManager.GetAccountByEmail(email) != null)
                 return string.Format("An account already exists for email address {0}.", email);
 
-            var account = AccountManager.CreateAccount(email, password, userLevel);
-            return string.Format("Created new account {0} [user-level: {1}].", account.Email, account.UserLevel);
+            var account = AccountManager.CreateAccount(email, password, battleTagName, userLevel);
+            var gameAccount = GameAccountManager.CreateGameAccount(account);
+            return string.Format("Created new account {0} [user-level: {1}] Full BattleTag: {2}.", account.Email, account.UserLevel, account.BattleTag);
         }
 
         [Command("delete", "Allows you to delete an existing account.\nUsage: account delete <email>", Account.UserLevels.GM)]
         public string Delete(string[] @params, MooNetClient invokerClient)
         {
-            if(@params.Count()==0)
+            if (@params.Count() == 0)
                 return "Invalid arguments. Type 'help account delete' to get help.";
 
             var account = AccountManager.GetAccountByEmail(@params[0]);
 
             if (account == null)
-                  return string.Format("No account with email '{0}' exists.", @params);
+                return string.Format("No account with email '{0}' exists.", @params);
 
-            //Delete toons of the account.
-            foreach (var toon in ToonManager.GetToonsForAccount(account).Values)
+            //Delete game accounts for account
+            //which in turn will delete toons for each game account
+            foreach (var gameAccount in GameAccountManager.GetGameAccountsForAccount(account).Values)
             {
-                ToonManager.DeleteToon(toon);
+                GameAccountManager.DeleteGameAccount(gameAccount);
             }
 
             AccountManager.DeleteAccount(account);
@@ -113,14 +119,14 @@ namespace Mooege.Core.MooNet.Accounts
         public string SetPassword(string[] @params, MooNetClient invokerClient)
         {
             if (@params.Count() < 2)
-              return "Invalid arguments. Type 'help account setpassword' to get help.";
+                return "Invalid arguments. Type 'help account setpassword' to get help.";
 
             var email = @params[0];
             var password = @params[1];
 
             var account = AccountManager.GetAccountByEmail(email);
 
-             if (account == null)
+            if (account == null)
                 return string.Format("No account with email '{0}' exists.", email);
 
             if (password.Length < 8 || password.Length > 16)

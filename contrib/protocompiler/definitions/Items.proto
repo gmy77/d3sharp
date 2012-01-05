@@ -16,19 +16,20 @@ message Generator
     required uint32 seed = 1 [default = 0];
     required .D3.GameBalance.Handle gb_handle = 2;
     repeated sfixed32 base_affixes = 3;
-    required .D3.Items.RareItemName rare_item_name = 4;
-    required sfixed32 enchant_affix = 5 [default = -1];
-    required sfixed32 socket_affix = 6 [default = -1];
+    optional .D3.Items.RareItemName rare_item_name = 4;
+    optional sfixed32 enchant_affix = 5 [default = -1];
+    optional sfixed32 socket_affix = 6 [default = -1];
     required uint32 flags = 7 [default = 0];
     required uint32 durability = 8;
     required uint64 stack_size = 9;
-    required uint32 dye_type = 10;
-    required sint32 item_quality_level = 11;
-    required sint32 item_binding_level = 12;
-    required uint32 max_durability = 13;
+    optional uint32 dye_type = 10 [default = 0];
+    optional sint32 item_quality_level = 11 [default = 1];
+    optional sint32 item_binding_level = 12 [default = 0];
+    optional uint32 max_durability = 13 [default = 0];
     repeated .D3.Items.EmbeddedGenerator contents = 14;
     optional sfixed32 attuned_skill = 15 [default = -1];
     optional uint64 item_unlock_timestamp = 16 [default = 0];
+    optional uint32 enchant_range_val = 17 [default = 0];
 }
 
 message EmbeddedGenerator

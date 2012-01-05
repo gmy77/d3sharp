@@ -233,7 +233,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             hireling.Attributes[GameAttribute.Pet_Type] = 0;
             hireling.Attributes[GameAttribute.Pet_Owner] = player.PlayerIndex;
 
-            hireling.FacingAngle = this.FacingAngle;
+            hireling.RotationW = this.RotationW;
             hireling.RotationAxis = this.RotationAxis;
 
             hireling.EnterWorld(this.Position);
@@ -271,7 +271,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             hireling.Attributes[GameAttribute.Pet_Type] = 22;
             hireling.Attributes[GameAttribute.Pet_Owner] = player.PlayerIndex;
 
-            hireling.FacingAngle = this.FacingAngle;
+            hireling.RotationW = this.RotationW;
             hireling.RotationAxis = this.RotationAxis;
 
             hireling.EnterWorld(this.Position);
@@ -285,7 +285,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             {
                 var original = CreateHireling(originalWorld, mainSNO, this.Tags);
                 original.SetUpAttributes(player);
-                original.FacingAngle = this.originalPRT.Quaternion.W;
+                original.RotationW = this.originalPRT.Quaternion.W;
                 original.RotationAxis = this.originalPRT.Quaternion.Vector3D;
                 original.EnterWorld(this.originalPRT.Vector3D);
             }

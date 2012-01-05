@@ -63,20 +63,20 @@
         public string Field0 { get { return _Field0; } set { if(value != null && value.Length > 49) throw new ArgumentOutOfRangeException(); _Field0 = value; } }
         public int Field1;
         int _Field2;
-        public int Field2 { get { return _Field2; } set { if(value < 0 || value > 0x1FFFFFFF) throw new ArgumentOutOfRangeException(); _Field2 = value; } }
+        public int Field2 { get { return _Field2; } set { if(value < 0 || value > 0x3FFFFFFF) throw new ArgumentOutOfRangeException(); _Field2 = value; } }
 
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadCharArray(49);
             Field1 = buffer.ReadInt(32);
-            Field2 = buffer.ReadInt(29);
+            Field2 = buffer.ReadInt(30);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteCharArray(49, Field0);
             buffer.WriteInt(32, Field1);
-            buffer.WriteInt(29, Field2);
+            buffer.WriteInt(30, Field2);
         }
 
     }
@@ -623,9 +623,9 @@
         public int Field5;
         public int Field6;
         public int Field7;
-        public int Field8;
-        public int Field9;
         public int snoSpeakerActor;
+        public int Field9;
+        public int Field10;
         public string _Field11;
         public string Field11 { get { return _Field11; } set { if(value != null && value.Length > 49) throw new ArgumentOutOfRangeException(); _Field11 = value; } }
         public int Field12;
@@ -644,9 +644,9 @@
             Field5 = buffer.ReadInt(32);
             Field6 = buffer.ReadInt(32);
             Field7 = buffer.ReadInt(32);
-            Field8 = buffer.ReadInt(32);
-            Field9 = buffer.ReadInt(32);
             snoSpeakerActor = buffer.ReadInt(32);
+            Field9 = buffer.ReadInt(32);
+            Field10 = buffer.ReadInt(32);
             Field11 = buffer.ReadCharArray(49);
             Field12 = buffer.ReadInt(32);
             Field13 = buffer.ReadInt(32);
@@ -665,9 +665,9 @@
             buffer.WriteInt(32, Field5);
             buffer.WriteInt(32, Field6);
             buffer.WriteInt(32, Field7);
-            buffer.WriteInt(32, Field8);
-            buffer.WriteInt(32, Field9);
             buffer.WriteInt(32, snoSpeakerActor);
+            buffer.WriteInt(32, Field9);
+            buffer.WriteInt(32, Field10);
             buffer.WriteCharArray(49, Field11);
             buffer.WriteInt(32, Field12);
             buffer.WriteInt(32, Field13);
@@ -774,6 +774,43 @@
             buffer.WriteInt(32, snoWorld);
             buffer.WriteInt(32, Field1);
             buffer.WriteInt(32, snoDestLevelArea);
+        }
+
+    }
+
+    public class ACDClientTranslateMessage : GameMessage
+    {
+        public int Field0;
+        int _Field1;
+        public int Field1 { get { return _Field1; } set { if(value < 0 || value > 12) throw new ArgumentOutOfRangeException(); _Field1 = value; } }
+        public Vector3D Field2;
+        public float Field3;
+        public float Field4;
+        public int Field5;
+        int _Field6;
+        public int Field6 { get { return _Field6; } set { if(value < -1 || value > 0xFFFFF) throw new ArgumentOutOfRangeException(); _Field6 = value; } }
+
+        public override void Parse(GameBitBuffer buffer)
+        {
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadInt(4);
+            Field2 = new Vector3D();
+            Field2.Parse(buffer);
+            Field3 = buffer.ReadFloat32();
+            Field4 = buffer.ReadFloat32();
+            Field5 = buffer.ReadInt(32);
+            Field6 = buffer.ReadInt(21) + (-1);
+        }
+
+        public override void Encode(GameBitBuffer buffer)
+        {
+            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(4, Field1);
+            Field2.Encode(buffer);
+            buffer.WriteFloat32(Field3);
+            buffer.WriteFloat32(Field4);
+            buffer.WriteInt(32, Field5);
+            buffer.WriteInt(21, Field6 - (-1));
         }
 
     }
@@ -1316,55 +1353,55 @@
         }
 
         public void ParseValue(GameBitBuffer buffer)
-        {
-            switch (Field1.EncodingType)
-            {
-                case GameAttributeEncoding.Int:
-                    Int = buffer.ReadInt(Field1.BitCount);
-                    break;
-                case GameAttributeEncoding.IntMinMax:
-                    Int = buffer.ReadInt(Field1.BitCount) + Field1.Min;
-                    break;
-                case GameAttributeEncoding.Float16:
-                    Float = buffer.ReadFloat16();
-                    break;
-                case GameAttributeEncoding.Float16Or32:
-                    Float = buffer.ReadBool() ? buffer.ReadFloat16() : buffer.ReadFloat32();
-                    break;
-                default:
-                    throw new Exception("bad voodoo");
-            }
-        }
+{
+    switch (Field1.EncodingType)
+    {
+        case GameAttributeEncoding.Int:
+            Int = buffer.ReadInt(Field1.BitCount);
+            break;
+        case GameAttributeEncoding.IntMinMax:
+            Int = buffer.ReadInt(Field1.BitCount) + Field1.Min;
+            break;
+        case GameAttributeEncoding.Float16:
+            Float = buffer.ReadFloat16();
+            break;
+        case GameAttributeEncoding.Float16Or32:
+            Float = buffer.ReadBool() ? buffer.ReadFloat16() : buffer.ReadFloat32();
+            break;
+        default:
+            throw new Exception("bad voodoo");
+    }
+}
 
         public void EncodeValue(GameBitBuffer buffer)
-        {
-            switch (Field1.EncodingType)
+{
+    switch (Field1.EncodingType)
+    {
+        case GameAttributeEncoding.Int:
+            buffer.WriteInt(Field1.BitCount, Int);
+            break;
+        case GameAttributeEncoding.IntMinMax:
+            buffer.WriteInt(Field1.BitCount, Int - Field1.Min);
+            break;
+        case GameAttributeEncoding.Float16:
+            buffer.WriteFloat16(Float);
+            break;
+        case GameAttributeEncoding.Float16Or32:
+            if (Float >= 65536.0f || -65536.0f >= Float)
             {
-                case GameAttributeEncoding.Int:
-                    buffer.WriteInt(Field1.BitCount, Int);
-                    break;
-                case GameAttributeEncoding.IntMinMax:
-                    buffer.WriteInt(Field1.BitCount, Int - Field1.Min);
-                    break;
-                case GameAttributeEncoding.Float16:
-                    buffer.WriteFloat16(Float);
-                    break;
-                case GameAttributeEncoding.Float16Or32:
-                    if (Float >= 65536.0f || -65536.0f >= Float)
-                    {
-                        buffer.WriteBool(false);
-                        buffer.WriteFloat32(Float);
-                    }
-                    else
-                    {
-                        buffer.WriteBool(true);
-                        buffer.WriteFloat16(Float);
-                    }
-                    break;
-                default:
-                    throw new Exception("bad voodoo");
+                buffer.WriteBool(false);
+                buffer.WriteFloat32(Float);
             }
-        }
+            else
+            {
+                buffer.WriteBool(true);
+                buffer.WriteFloat16(Float);
+            }
+            break;
+        default:
+            throw new Exception("bad voodoo");
+    }
+}
     }
 
     public class AttributeSetValueMessage : GameMessage
@@ -1981,15 +2018,15 @@
         public int Field0;
         public WorldPlace Field1;
         public int Field2;
+        public int Field3;
         public int m_snoStringList;
-        public int Field4;
-        public float Field5;
-        public float Field6;
-        public float Field7;
-        public int Field8;
-        public bool Field9;
-        public bool Field10;
-        public bool Field11;
+        public int Field5;
+        public bool Field6;
+        public bool Field7;
+        public bool Field8;
+        public float Field9;
+        public float Field10;
+        public float Field11;
         public int Field12;
 
         public override void Parse(GameBitBuffer buffer)
@@ -1998,15 +2035,15 @@
             Field1 = new WorldPlace();
             Field1.Parse(buffer);
             Field2 = buffer.ReadInt(32);
+            Field3 = buffer.ReadInt(32);
             m_snoStringList = buffer.ReadInt(32);
-            Field4 = buffer.ReadInt(32);
-            Field5 = buffer.ReadFloat32();
-            Field6 = buffer.ReadFloat32();
-            Field7 = buffer.ReadFloat32();
-            Field8 = buffer.ReadInt(32);
-            Field9 = buffer.ReadBool();
-            Field10 = buffer.ReadBool();
-            Field11 = buffer.ReadBool();
+            Field5 = buffer.ReadInt(32);
+            Field6 = buffer.ReadBool();
+            Field7 = buffer.ReadBool();
+            Field8 = buffer.ReadBool();
+            Field9 = buffer.ReadFloat32();
+            Field10 = buffer.ReadFloat32();
+            Field11 = buffer.ReadFloat32();
             Field12 = buffer.ReadInt(32);
         }
 
@@ -2015,15 +2052,15 @@
             buffer.WriteInt(32, Field0);
             Field1.Encode(buffer);
             buffer.WriteInt(32, Field2);
+            buffer.WriteInt(32, Field3);
             buffer.WriteInt(32, m_snoStringList);
-            buffer.WriteInt(32, Field4);
-            buffer.WriteFloat32(Field5);
-            buffer.WriteFloat32(Field6);
-            buffer.WriteFloat32(Field7);
-            buffer.WriteInt(32, Field8);
-            buffer.WriteBool(Field9);
-            buffer.WriteBool(Field10);
-            buffer.WriteBool(Field11);
+            buffer.WriteInt(32, Field5);
+            buffer.WriteBool(Field6);
+            buffer.WriteBool(Field7);
+            buffer.WriteBool(Field8);
+            buffer.WriteFloat32(Field9);
+            buffer.WriteFloat32(Field10);
+            buffer.WriteFloat32(Field11);
             buffer.WriteInt(32, Field12);
         }
 
@@ -2148,12 +2185,14 @@
         public int Field0;
         public int Field1;
         public int Field2;
+        public bool Field3;
 
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
             Field1 = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(32);
+            Field3 = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -2161,25 +2200,29 @@
             buffer.WriteInt(32, Field0);
             buffer.WriteInt(32, Field1);
             buffer.WriteInt(32, Field2);
+            buffer.WriteBool(Field3);
         }
 
     }
 
     public class WeatherOverrideMessage : GameMessage
     {
-        public float Field0;
+        public int snoWorld;
         public float Field1;
+        public float Field2;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadFloat32();
+            snoWorld = buffer.ReadInt(32);
             Field1 = buffer.ReadFloat32();
+            Field2 = buffer.ReadFloat32();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteFloat32(Field0);
+            buffer.WriteInt(32, snoWorld);
             buffer.WriteFloat32(Field1);
+            buffer.WriteFloat32(Field2);
         }
 
     }
@@ -2452,8 +2495,7 @@
         public int snoScene;
         public PRTransform Field2;
         public int Field3;
-        int _Field4;
-        public int Field4 { get { return _Field4; } set { if(value < 0 || value > 7) throw new ArgumentOutOfRangeException(); _Field4 = value; } }
+        public bool Field4;
 
         public override void Parse(GameBitBuffer buffer)
         {
@@ -2462,7 +2504,7 @@
             Field2 = new PRTransform();
             Field2.Parse(buffer);
             Field3 = buffer.ReadInt(32);
-            Field4 = buffer.ReadInt(3);
+            Field4 = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -2471,7 +2513,7 @@
             buffer.WriteInt(32, snoScene);
             Field2.Encode(buffer);
             buffer.WriteInt(32, Field3);
-            buffer.WriteInt(3, Field4);
+            buffer.WriteBool(Field4);
         }
 
     }
@@ -2499,20 +2541,20 @@
 
     public class Quaternion
     {
-        public float Field0;
-        public Vector3D Field1;
+        public Vector3D Field0;
+        public float Field1;
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadFloat32();
-            Field1 = new Vector3D();
-            Field1.Parse(buffer);
+            Field0 = new Vector3D();
+            Field0.Parse(buffer);
+            Field1 = buffer.ReadFloat32();
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteFloat32(Field0);
-            Field1.Encode(buffer);
+            Field0.Encode(buffer);
+            buffer.WriteFloat32(Field1);
         }
 
     }
@@ -3237,17 +3279,17 @@
 
     public class TryConsoleCommand : GameMessage
     {
-        public string _Field0;
-        public string Field0 { get { return _Field0; } set { if(value != null && value.Length > 512) throw new ArgumentOutOfRangeException(); _Field0 = value; } }
-        int _Field1;
-        public int Field1 { get { return _Field1; } set { if(value < -1 || value > 7) throw new ArgumentOutOfRangeException(); _Field1 = value; } }
+        int _Field0;
+        public int Field0 { get { return _Field0; } set { if(value < -1 || value > 7) throw new ArgumentOutOfRangeException(); _Field0 = value; } }
+        public string _Field1;
+        public string Field1 { get { return _Field1; } set { if(value != null && value.Length > 512) throw new ArgumentOutOfRangeException(); _Field1 = value; } }
         public WorldPlace Field2;
         public int Field3;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadCharArray(512);
-            Field1 = buffer.ReadInt(4) + (-1);
+            Field0 = buffer.ReadInt(4) + (-1);
+            Field1 = buffer.ReadCharArray(512);
             Field2 = new WorldPlace();
             Field2.Parse(buffer);
             Field3 = buffer.ReadInt(32);
@@ -3255,8 +3297,8 @@
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteCharArray(512, Field0);
-            buffer.WriteInt(4, Field1 - (-1));
+            buffer.WriteInt(4, Field0 - (-1));
+            buffer.WriteCharArray(512, Field1);
             Field2.Encode(buffer);
             buffer.WriteInt(32, Field3);
         }
@@ -3749,17 +3791,35 @@
     {
         public int Field0;
         public int Field1;
+        public int Field2;
+        public int Field3;
+        public int Field4;
+        public int Field5;
+        public int Field6;
+        public int Field7;
 
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
             Field1 = buffer.ReadInt(32);
+            Field2 = buffer.ReadInt(32);
+            Field3 = buffer.ReadInt(32);
+            Field4 = buffer.ReadInt(32);
+            Field5 = buffer.ReadInt(32);
+            Field6 = buffer.ReadInt(32);
+            Field7 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, Field0);
             buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, Field2);
+            buffer.WriteInt(32, Field3);
+            buffer.WriteInt(32, Field4);
+            buffer.WriteInt(32, Field5);
+            buffer.WriteInt(32, Field6);
+            buffer.WriteInt(32, Field7);
         }
 
     }
@@ -4404,7 +4464,7 @@
         public int Field1;
         public int Field2;
         int _Field3;
-        public int Field3 { get { return _Field3; } set { if(value < 0 || value > 0x1FFFFFFF) throw new ArgumentOutOfRangeException(); _Field3 = value; } }
+        public int Field3 { get { return _Field3; } set { if(value < 0 || value > 0x3FFFFFFF) throw new ArgumentOutOfRangeException(); _Field3 = value; } }
         public PlayerSavedData Field4;
         public int Field5;
         PlayerQuestRewardHistoryEntry[] _tQuestRewardHistory;
@@ -4415,7 +4475,7 @@
             Field0 = buffer.ReadInt(32);
             Field1 = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(32);
-            Field3 = buffer.ReadInt(29);
+            Field3 = buffer.ReadInt(30);
             Field4 = new PlayerSavedData();
             Field4.Parse(buffer);
             Field5 = buffer.ReadInt(32);
@@ -4432,7 +4492,7 @@
             buffer.WriteInt(32, Field0);
             buffer.WriteInt(32, Field1);
             buffer.WriteInt(32, Field2);
-            buffer.WriteInt(29, Field3);
+            buffer.WriteInt(30, Field3);
             Field4.Encode(buffer);
             buffer.WriteInt(32, Field5);
             buffer.WriteInt(7, _tQuestRewardHistory.Length);
@@ -4457,8 +4517,6 @@
         int[] _snoTraits;
         public int[] snoTraits { get { return _snoTraits; } set { if(value != null && value.Length != 3) throw new ArgumentOutOfRangeException(); _snoTraits = value; } }
         public SavePointData Field9;
-        int[] _m_SeenTutorials;
-        public int[] m_SeenTutorials { get { return _m_SeenTutorials; } set { if(value != null && value.Length != 64) throw new ArgumentOutOfRangeException(); _m_SeenTutorials = value; } }
 
         public void Parse(GameBitBuffer buffer)
         {
@@ -4487,8 +4545,6 @@
             for(int i = 0;i < _snoTraits.Length;i++) _snoTraits[i] = buffer.ReadInt(32);
             Field9 = new SavePointData();
             Field9.Parse(buffer);
-            m_SeenTutorials = new int[64];
-            for(int i = 0;i < _m_SeenTutorials.Length;i++) _m_SeenTutorials[i] = buffer.ReadInt(32);
         }
 
         public void Encode(GameBitBuffer buffer)
@@ -4503,7 +4559,6 @@
             for(int i = 0;i < _snoActiveSkills.Length;i++) buffer.WriteInt(32, _snoActiveSkills[i]);
             for(int i = 0;i < _snoTraits.Length;i++) buffer.WriteInt(32, _snoTraits[i]);
             Field9.Encode(buffer);
-            for(int i = 0;i < _m_SeenTutorials.Length;i++) buffer.WriteInt(32, _m_SeenTutorials[i]);
         }
 
     }

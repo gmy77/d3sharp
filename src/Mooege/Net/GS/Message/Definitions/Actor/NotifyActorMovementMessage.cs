@@ -31,7 +31,7 @@ namespace Mooege.Net.GS.Message.Definitions.Actor
         public int ActorId;
         public Vector3D Position;           // New position of the Actor
         public float? Angle;    // Angle between actors X axis and world x axis in radians
-        public bool? Field3;                // maybe immediatly rotating like in TranslateFacing? - farmy
+        public bool? TurnImmediately;                // maybe immediatly rotating like in TranslateFacing? - farmy
         public float? Speed;                // Speed of the actor while moving, if moving. In game units / tick
         public int? Field5;
         public int? AnimationTag;           // Animation used while moving, if moving
@@ -53,7 +53,7 @@ namespace Mooege.Net.GS.Message.Definitions.Actor
             }
             if (buffer.ReadBool())
             {
-                Field3 = buffer.ReadBool();
+                TurnImmediately = buffer.ReadBool();
             }
             if (buffer.ReadBool())
             {
@@ -86,10 +86,10 @@ namespace Mooege.Net.GS.Message.Definitions.Actor
             {
                 buffer.WriteFloat32(Angle.Value);
             }
-            buffer.WriteBool(Field3.HasValue);
-            if (Field3.HasValue)
+            buffer.WriteBool(TurnImmediately.HasValue);
+            if (TurnImmediately.HasValue)
             {
-                buffer.WriteBool(Field3.Value);
+                buffer.WriteBool(TurnImmediately.Value);
             }
             buffer.WriteBool(Speed.HasValue);
             if (Speed.HasValue)
@@ -128,9 +128,9 @@ namespace Mooege.Net.GS.Message.Definitions.Actor
             {
                 b.Append(' ', pad); b.AppendLine("Angle.Value: " + Angle.Value.ToString("G"));
             }
-            if (Field3.HasValue)
+            if (TurnImmediately.HasValue)
             {
-                b.Append(' ', pad); b.AppendLine("Field3.Value: " + (Field3.Value ? "true" : "false"));
+                b.Append(' ', pad); b.AppendLine("Field3.Value: " + (TurnImmediately.Value ? "true" : "false"));
             }
             if (Speed.HasValue)
             {
