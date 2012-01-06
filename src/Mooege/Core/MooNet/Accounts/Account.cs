@@ -243,7 +243,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             var operations = ChangedFields.GetChangedFieldList();
             ChangedFields.ClearChanged();
-            base.MakeRPC(this.CurrentGameAccount.LoggedInClient, operations);
+            base.UpdateSubscribers(this.Subscribers, operations);
         }
 
         //account class generated
