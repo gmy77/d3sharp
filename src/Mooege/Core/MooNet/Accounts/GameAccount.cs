@@ -56,7 +56,7 @@ namespace Mooege.Core.MooNet.Accounts
             = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 7, 0);
 
         public BoolPresenceField GameAccountStatusField
-            = new BoolPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 1, 0);
+            = new BoolPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 1, 0, false);
 
         public IntPresenceField GameAccountStatusIdField
             = new IntPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 5, 0);
@@ -370,44 +370,7 @@ namespace Mooege.Core.MooNet.Accounts
             if (returnField.HasValue)
             {
                 operation.SetField(returnField);
-                // Create a presence.ChannelState
-                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityId).AddFieldOperation(operation).Build();
-
-                // Embed in channel.ChannelState
-                var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
-
-                // Put in addnotification message
-                var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState);
-
-                // Make the rpc call
-                this.LoggedInClient.MakeTargetedRPC(this, () =>
-                    bnet.protocol.channel.ChannelSubscriber.CreateStub(this.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
-
-                //Update all online friends
-                //foreach (var friend in FriendManager.Friends[this.BnetEntityId.Low])
-                //{
-                //    var gameAccount = GameAccountManager.GetAccountByPersistentID(friend.Id.Low);
-                //    if (gameAccount.IsOnline)
-                //    {
-                //        gameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
-                //            bnet.protocol.channel.ChannelSubscriber.CreateStub(gameAccount.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
-                //    }
-                //}
-
-                //Update everyone subscribed
-                foreach (var subscriber in this.Subscribers)
-                {
-                    var gameAccount = subscriber.Account.CurrentGameAccount;
-                    if (gameAccount.IsOnline) //This should never be false, subscribers should be unsubscribed if disconnected
-                    {
-                        gameAccount.LoggedInClient.MakeTargetedRPC(this, () =>
-                            bnet.protocol.channel.ChannelSubscriber.CreateStub(gameAccount.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
-                    }
-                    else
-                    {
-                        Logger.Warn("Subscriber: {0} not online.", subscriber.Account);
-                    }
-                }
+                this.UpdateSubscribers(this.Subscribers, new List<bnet.protocol.presence.FieldOperation>() { operation.Build() });
             }
         }
 
