@@ -227,36 +227,18 @@ namespace Mooege.Core.MooNet.Accounts
             set
             {
                 this._loggedInClient = value;
+
+                this.GameAccountStatusField.Value = this.IsOnline;
+                this.GameAccountStatusIdField.Value = (int)(this.IsOnline == true ? 1324923597904795 : 0);
+
                 ChangedFields.SetPresenceFieldValue(this.GameAccountStatusField);
                 ChangedFields.SetPresenceFieldValue(this.GameAccountStatusIdField);
 
-                // notify friends.
-                if (FriendManager.Friends[this.Owner.BnetEntityId.Low].Count == 0) return; // if account has no friends just skip.
-
                 //TODO: Remove this set once delegate for set is added to presence field
-                this.Owner.AccountOnlineField.Value = true;
+                this.Owner.AccountOnlineField.Value = this.Owner.IsOnline;
                 var operation = this.Owner.AccountOnlineField.GetFieldOperation();
-
-                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.Owner.BnetEntityId).AddFieldOperation(operation).Build();
-                var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
-                var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState).Build();
-
-                foreach (var friend in FriendManager.Friends[this.Owner.BnetEntityId.Low])
-                {
-                    var account = AccountManager.GetAccountByPersistentID(friend.Id.Low);
-                    if (account == null || !account.IsOnline) return; // only send to friends that are online.
-
-                    // make the rpc call.
-                    var d3GameAccounts = GameAccountManager.GetGameAccountsForAccountProgram(account, FieldKeyHelper.Program.D3);
-                    foreach (var d3GameAccount in d3GameAccounts.Values)
-                    {
-                        if (d3GameAccount.IsOnline)
-                        {
-                            d3GameAccount.LoggedInClient.MakeTargetedRPC(this.Owner, () =>
-                                bnet.protocol.channel.ChannelSubscriber.CreateStub(d3GameAccount.LoggedInClient).NotifyUpdateChannelState(null, notification, callback => { }));
-                        }
-                    }
-                }
+                this.NotifyUpdate();
+                this.UpdateSubscribers(this.Subscribers, new List<bnet.protocol.presence.FieldOperation>() { operation });
             }
         }
 
@@ -279,31 +261,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             var operations = ChangedFields.GetChangedFieldList();
             ChangedFields.ClearChanged();
-            base.MakeRPC(this.LoggedInClient, operations);
-
-            //Update everyone subscribed
-            foreach (var subscriber in this.Subscribers)
-            {
-                var gameAccount = subscriber.Account.CurrentGameAccount;
-                if (gameAccount.IsOnline) //This should never be false, subscribers should be unsubscribed if disconnected
-                {
-                    var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityId).AddRangeFieldOperation(operations).Build();
-
-                    // Embed in channel.ChannelState
-                    var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
-
-                    // Put in addnotification message
-                    var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState);
-
-                    gameAccount.LoggedInClient.MakeTargetedRPC(this, () =>
-                        bnet.protocol.channel.ChannelSubscriber.CreateStub(gameAccount.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
-                }
-                else
-                {
-                    Logger.Warn("Subscriber: {0} not online.", subscriber.Account);
-                }
-            }
-
+            base.UpdateSubscribers(this.Subscribers, operations);
         }
 
         public override List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications()
