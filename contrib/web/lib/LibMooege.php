@@ -228,7 +228,7 @@ class LibMooege
             return false;
         
         try {
-            $response=$this->accounts->CreateAccount(array('email' => $email, 'password' => $password));
+            $response=$this->accounts->CreateAccount(array('email' => $email, 'password' => $password, 'battleTag' => $battleTag));
         }
         catch(Exception $e) {
             return false;
