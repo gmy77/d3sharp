@@ -58,8 +58,8 @@ namespace Mooege.Core.MooNet.Objects
 
     public class BoolPresenceField : PresenceField<bool>, IPresenceField
     {
-        public BoolPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index)
-            : base(Program, OriginatingClass, FieldNumber, Index)
+        public BoolPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index, bool defaultValue = default(bool))
+            : base(Program, OriginatingClass, FieldNumber, Index, defaultValue)
         {
         }
 
@@ -78,10 +78,10 @@ namespace Mooege.Core.MooNet.Objects
         }
     }
 
-    public class UintPresenceField : PresenceField<uint>, IPresenceField
+    public class UintPresenceField : PresenceField<ulong>, IPresenceField
     {
-        public UintPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index)
-            : base(Program, OriginatingClass, FieldNumber, Index)
+        public UintPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index, ulong defaultValue = default(ulong))
+            : base(Program, OriginatingClass, FieldNumber, Index, defaultValue)
         {
         }
 
@@ -100,10 +100,10 @@ namespace Mooege.Core.MooNet.Objects
         }
     }
 
-    public class IntPresenceField : PresenceField<int>, IPresenceField
+    public class IntPresenceField : PresenceField<long>, IPresenceField
     {
-        public IntPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index)
-            : base(Program, OriginatingClass, FieldNumber, Index)
+        public IntPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index, long defaultValue = default(long))
+            : base(Program, OriginatingClass, FieldNumber, Index, defaultValue)
         {
         }
 
@@ -124,8 +124,8 @@ namespace Mooege.Core.MooNet.Objects
 
     public class FourCCPresenceField : PresenceField<String>, IPresenceField
     {
-        public FourCCPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index)
-            : base(Program, OriginatingClass, FieldNumber, Index)
+        public FourCCPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index, string defaultValue = default(string))
+            : base(Program, OriginatingClass, FieldNumber, Index, defaultValue)
         {
         }
 
@@ -146,8 +146,8 @@ namespace Mooege.Core.MooNet.Objects
 
     public class StringPresenceField : PresenceField<String>, IPresenceField
     {
-        public StringPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index)
-            :base(Program, OriginatingClass, FieldNumber, Index)
+        public StringPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index, string defaultValue = default(string))
+            :base(Program, OriginatingClass, FieldNumber, Index, defaultValue)
         {
         }
 
@@ -168,8 +168,8 @@ namespace Mooege.Core.MooNet.Objects
 
     public class ByteStringPresenceField<T> : PresenceField<T>, IPresenceField where T : IMessageLite<T> //Used IMessageLite to get ToByteString(), might need refactoring later
     {
-        public ByteStringPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index)
-            :base(Program, OriginatingClass, FieldNumber, Index)
+        public ByteStringPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index, T defaultValue = default(T))
+            :base(Program, OriginatingClass, FieldNumber, Index, defaultValue)
         {
         }
 
@@ -197,9 +197,9 @@ namespace Mooege.Core.MooNet.Objects
         public uint FieldNumber { get; private set; }
         public uint Index { get; private set; }
 
-        public PresenceField(FieldKeyHelper.Program program, FieldKeyHelper.OriginatingClass originatingClass , uint fieldNumber, uint index)
+        public PresenceField(FieldKeyHelper.Program program, FieldKeyHelper.OriginatingClass originatingClass , uint fieldNumber, uint index, T defaultValue)
         {
-            Value = default(T);
+            Value = defaultValue;
             FieldNumber = fieldNumber;
             Index = index;
             Program = program;
