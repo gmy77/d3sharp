@@ -30,12 +30,17 @@ if(array_key_exists('email', $_REQUEST))
 if(array_key_exists('password', $_REQUEST))
     $password=$_REQUEST['password'];
 
+if(array_key_exists('battleTag', $_REQUEST))
+    $battleTag=$_REQUEST['battleTag'];
+
 if(empty($email) || empty($password)) // if email or password is empty.
     print_account_form(); // print the login form.
-else 
-    create_account($email, $password); // try loging using given credentals.
+else if(empty($battleTag))
+    print_account_form();
+else
+    create_account($email, $password, $battleTag); // try loging using given credentals.
 
-function create_account($email, $password)
+function create_account($email, $password, $battleTag)
 {
     $mooege=new LibMooege("http://localhost", 9000); // change this line to match your configuration.
     

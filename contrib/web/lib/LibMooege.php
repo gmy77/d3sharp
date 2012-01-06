@@ -222,7 +222,7 @@ class LibMooege
      * @param type $password
      * @return type bool
      */
-    public function CreateAccount($email, $password)
+    public function CreateAccount($email, $password, $battleTag)
     {
         if(!$this->connected)
             return false;
