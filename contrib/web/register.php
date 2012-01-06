@@ -47,7 +47,7 @@ function create_account($email, $password)
     if($exists)
         die("An account already exists for email address: $email!");
     
-    $created=$mooege->CreateAccount($email,$password);
+    $created=$mooege->CreateAccount($email,$password,$battleTag);
     
     if($created)
         echo "Account created successfully!";
@@ -66,6 +66,7 @@ function print_account_form() { ?>
     <form method="POST" action="register.php">
         E-mail:&nbsp&nbsp&nbsp&nbsp&nbsp <input type="text" name="email" size="16" value=""/><br />
         Password: <input type="password" name="password" size="16" /><br />
+		BattleTag: <input type="text" name="battleTag" size="16" /><br />
         <div align="center">
             <p><input type="submit" value="Create" /></p>
         </div>
