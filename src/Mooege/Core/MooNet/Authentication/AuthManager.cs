@@ -87,9 +87,9 @@ namespace Mooege.Core.MooNet.Authentication
                     bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => { }));
 
                 client.Account = AccountManager.GetAccountByEmail(srp6.Account.Email);
-                if (client.Account.LoggedInClient != null)
-                    client.Account.LoggedInClient.Connection.Disconnect();
-                client.Account.LoggedInClient = client;
+                //if (client.Account.LoggedInClient != null)
+                //    client.Account.LoggedInClient.Connection.Disconnect();
+                //client.Account.LoggedInClient = client;
             }
             else // authentication failed because of invalid credentals.
             {

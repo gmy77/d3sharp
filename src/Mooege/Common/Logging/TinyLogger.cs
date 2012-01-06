@@ -22,6 +22,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Mooege.Common.Extensions;
 using Mooege.Net.GS.Message;
 
@@ -118,8 +119,20 @@ namespace Mooege.Common.Logging
         public void Fatal(string message, params object[] args) { Log(Level.Fatal, message, args); }
 
         // moonet packet loggers
-        public void LogIncoming(Google.ProtocolBuffers.IMessage msg) { Log(Level.Dump, "[I] " + msg.AsText(), null); }
-        public void LogOutgoing(Google.ProtocolBuffers.IMessage msg) { Log(Level.Dump, "[O] " + msg.AsText(), null); }
+        public void LogIncoming(Google.ProtocolBuffers.IMessage msg, bnet.protocol.Header header) { Log(Level.Dump, ShortHeader(header) + "[I] " + msg.AsText(), null); }
+        public void LogOutgoing(Google.ProtocolBuffers.IMessage msg, bnet.protocol.Header header) { Log(Level.Dump, ShortHeader(header) + "[O] " + msg.AsText(), null); }
+        private StringBuilder ShortHeader(bnet.protocol.Header header)
+        {
+            var result = new StringBuilder("service_id: " + header.ServiceId);
+            result.Append(header.HasMethodId ? " method_id: " + header.MethodId.ToString() : "");
+            result.Append(header.HasToken ? " token: " + header.Token.ToString() : "");
+            result.Append(header.HasObjectId ? " object_id: " + header.ObjectId.ToString() : "");
+            result.Append(header.HasSize ? " size: " + header.Size.ToString() : "");
+            result.Append(header.HasStatus ? " status: " + header.Status.ToString() : "");
+            result.AppendLine();
+            return result;
+        }
+
 
         // ingame packet loggers
         public void LogIncoming(GameMessage msg) { Log(Level.Dump, "[I] " + msg.AsText(), null); }

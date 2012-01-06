@@ -51,6 +51,7 @@ namespace Mooege.Core.MooNet.Services
             var builder = bnet.protocol.toon.external.SelectToonResponse.CreateBuilder();
             var toon = ToonManager.GetToonByLowID(request.Toon.Low);
             this.Client.CurrentToon = toon;
+            this.Client.Account.LastPlayedHeroId = toon.D3EntityID;
             done(builder.Build());
 
             Logger.Trace("SelectToon() {0}", toon);
@@ -65,6 +66,7 @@ namespace Mooege.Core.MooNet.Services
             var toon = new Toon(request.Name, hashCode, heroCreateParams.GbidClass, heroCreateParams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 30, Client.Account);
             if (ToonManager.SaveToon(toon))
                 builder.SetToken((uint)toon.BnetEntityID.Low);
+            Client.Account.LastPlayedHeroId = toon.D3EntityID;
             done(builder.Build());
 
             var notification = bnet.protocol.toon.external.ToonCreatedNotification.CreateBuilder()

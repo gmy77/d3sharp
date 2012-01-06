@@ -29,6 +29,7 @@ using Mooege.Core.GS.Players;
 using Mooege.Core.GS.Ticker;
 using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Core.GS.Powers.Payloads;
+using Mooege.Net.GS.Message.Definitions.ACD;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -457,7 +458,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
                 Target.TranslateFacing(_destination, true);
                 _mover = new ActorMover(Target);
-                _mover.Move(_destination, speed, new NotifyActorMovementMessage
+                _mover.Move(_destination, speed, new ACDTranslateNormalMessage
                 {
                     TurnImmediately = true,
                     Field5 = 0x9206, // alt: 0x920e, not sure what this param is for.

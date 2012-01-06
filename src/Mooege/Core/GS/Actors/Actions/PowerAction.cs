@@ -26,6 +26,7 @@ using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Core.GS.Actors.Movement;
 using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Net.GS.Message.Definitions.ACD;
 
 namespace Mooege.Core.GS.Actors.Actions
 {
@@ -110,7 +111,7 @@ namespace Mooege.Core.GS.Actors.Actions
 
                         this.Owner.TranslateFacing(_target.Position, false);
 
-                        _ownerMover.Move(movePos, this.Owner.WalkSpeed, new Net.GS.Message.Definitions.Actor.NotifyActorMovementMessage
+                        _ownerMover.Move(movePos, this.Owner.WalkSpeed, new ACDTranslateNormalMessage
                         {
                             TurnImmediately = false,
                             AnimationTag = this.Owner.AnimationSet == null ? 0 : this.Owner.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk)

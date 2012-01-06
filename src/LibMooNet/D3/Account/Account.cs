@@ -53,7 +53,7 @@ namespace D3.Account {
           "ASgLMhIuRDMuSXRlbXMuSXRlbUxpc3QSNwobaGFyZGNvcmVfc2hhcmVkX3Nh" + 
           "dmVkX2l0ZW1zGAUgASgLMhIuRDMuSXRlbXMuSXRlbUxpc3QSPQoSY3JhZnRl" + 
           "cl9zYXZlZF9kYXRhGAYgASgLMiEuRDMuSXRlbUNyYWZ0aW5nLkNyYWZ0ZXJT" + 
-          "YXZlZERhdGESFgoOc2Vlbl90dXRvcmlhbHMYByADKA8SJgoebnVtX3ZvdGVf" + 
+          "YXZlZERhdGESFgoOc2Vlbl90dXRvcmlhbHMYByABKAwSJgoebnVtX3ZvdGVf" + 
           "a2lja3NfcGFydGljaXBhdGVkX2luGAggASgQEiAKGG51bV92b3RlX2tpY2tz" + 
           "X2luaXRpYXRlZBgJIAEoEBIgChhudW1fcHVibGljX2dhbWVzX25vX2tpY2sY" + 
           "CiABKBASGQoRdGltZXNfdm90ZV9raWNrZWQYCyABKBASKwoHZ29sZF9pZBgM" + 
@@ -1236,7 +1236,7 @@ namespace D3.Account {
     private SavedDefinition() { }
     private static readonly SavedDefinition defaultInstance = new SavedDefinition().MakeReadOnly();
     private static readonly string[] _savedDefinitionFieldNames = new string[] { "crafter_saved_data", "digest", "gold_id", "hardcore_shared_saved_items", "normal_shared_saved_items", "num_public_games_no_kick", "num_vote_kicks_initiated", "num_vote_kicks_participated_in", "saved_attributes", "seen_tutorials", "times_vote_kicked", "version" };
-    private static readonly uint[] _savedDefinitionFieldTags = new uint[] { 50, 18, 98, 42, 34, 81, 73, 65, 26, 61, 89, 8 };
+    private static readonly uint[] _savedDefinitionFieldTags = new uint[] { 50, 18, 98, 42, 34, 81, 73, 65, 26, 58, 89, 8 };
     public static SavedDefinition DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1318,15 +1318,13 @@ namespace D3.Account {
     }
     
     public const int SeenTutorialsFieldNumber = 7;
-    private pbc::PopsicleList<int> seenTutorials_ = new pbc::PopsicleList<int>();
-    public scg::IList<int> SeenTutorialsList {
-      get { return pbc::Lists.AsReadOnly(seenTutorials_); }
+    private bool hasSeenTutorials;
+    private pb::ByteString seenTutorials_ = pb::ByteString.Empty;
+    public bool HasSeenTutorials {
+      get { return hasSeenTutorials; }
     }
-    public int SeenTutorialsCount {
-      get { return seenTutorials_.Count; }
-    }
-    public int GetSeenTutorials(int index) {
-      return seenTutorials_[index];
+    public pb::ByteString SeenTutorials {
+      get { return seenTutorials_; }
     }
     
     public const int NumVoteKicksParticipatedInFieldNumber = 8;
@@ -1424,8 +1422,8 @@ namespace D3.Account {
       if (hasCrafterSavedData) {
         output.WriteMessage(6, field_names[0], CrafterSavedData);
       }
-      if (seenTutorials_.Count > 0) {
-        output.WriteSFixed32Array(7, field_names[9], seenTutorials_);
+      if (hasSeenTutorials) {
+        output.WriteBytes(7, field_names[9], SeenTutorials);
       }
       if (hasNumVoteKicksParticipatedIn) {
         output.WriteSFixed64(8, field_names[7], NumVoteKicksParticipatedIn);
@@ -1470,11 +1468,8 @@ namespace D3.Account {
         if (hasCrafterSavedData) {
           size += pb::CodedOutputStream.ComputeMessageSize(6, CrafterSavedData);
         }
-        {
-          int dataSize = 0;
-          dataSize = 4 * seenTutorials_.Count;
-          size += dataSize;
-          size += 1 * seenTutorials_.Count;
+        if (hasSeenTutorials) {
+          size += pb::CodedOutputStream.ComputeBytesSize(7, SeenTutorials);
         }
         if (hasNumVoteKicksParticipatedIn) {
           size += pb::CodedOutputStream.ComputeSFixed64Size(8, NumVoteKicksParticipatedIn);
@@ -1528,7 +1523,6 @@ namespace D3.Account {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private SavedDefinition MakeReadOnly() {
-      seenTutorials_.MakeReadOnly();
       return this;
     }
     
@@ -1636,8 +1630,8 @@ namespace D3.Account {
         if (other.HasCrafterSavedData) {
           MergeCrafterSavedData(other.CrafterSavedData);
         }
-        if (other.seenTutorials_.Count != 0) {
-          result.seenTutorials_.Add(other.seenTutorials_);
+        if (other.HasSeenTutorials) {
+          SeenTutorials = other.SeenTutorials;
         }
         if (other.HasNumVoteKicksParticipatedIn) {
           NumVoteKicksParticipatedIn = other.NumVoteKicksParticipatedIn;
@@ -1746,9 +1740,8 @@ namespace D3.Account {
               CrafterSavedData = subBuilder.BuildPartial();
               break;
             }
-            case 58:
-            case 61: {
-              input.ReadSFixed32Array(tag, field_name, result.seenTutorials_);
+            case 58: {
+              result.hasSeenTutorials = input.ReadBytes(ref result.seenTutorials_);
               break;
             }
             case 65: {
@@ -2006,33 +1999,24 @@ namespace D3.Account {
         return this;
       }
       
-      public pbc::IPopsicleList<int> SeenTutorialsList {
-        get { return PrepareBuilder().seenTutorials_; }
+      public bool HasSeenTutorials {
+        get { return result.hasSeenTutorials; }
       }
-      public int SeenTutorialsCount {
-        get { return result.SeenTutorialsCount; }
+      public pb::ByteString SeenTutorials {
+        get { return result.SeenTutorials; }
+        set { SetSeenTutorials(value); }
       }
-      public int GetSeenTutorials(int index) {
-        return result.GetSeenTutorials(index);
-      }
-      public Builder SetSeenTutorials(int index, int value) {
+      public Builder SetSeenTutorials(pb::ByteString value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.seenTutorials_[index] = value;
-        return this;
-      }
-      public Builder AddSeenTutorials(int value) {
-        PrepareBuilder();
-        result.seenTutorials_.Add(value);
-        return this;
-      }
-      public Builder AddRangeSeenTutorials(scg::IEnumerable<int> values) {
-        PrepareBuilder();
-        result.seenTutorials_.Add(values);
+        result.hasSeenTutorials = true;
+        result.seenTutorials_ = value;
         return this;
       }
       public Builder ClearSeenTutorials() {
         PrepareBuilder();
-        result.seenTutorials_.Clear();
+        result.hasSeenTutorials = false;
+        result.seenTutorials_ = pb::ByteString.Empty;
         return this;
       }
       

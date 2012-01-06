@@ -39,35 +39,34 @@ namespace bnet.protocol.channel {
     
     static ChannelTypes() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "Ci5zZXJ2aWNlL2NoYW5uZWwvZGVmaW5pdGlvbi9jaGFubmVsX3R5cGVzLnBy" + 
-          "b3RvEhVibmV0LnByb3RvY29sLmNoYW5uZWwaHGxpYi9wcm90b2NvbC9hdHRy" + 
-          "aWJ1dGUucHJvdG8aGWxpYi9wcm90b2NvbC9lbnRpdHkucHJvdG8aHWxpYi9w" + 
-          "cm90b2NvbC9pbnZpdGF0aW9uLnByb3RvIlUKB01lc3NhZ2USNQoJYXR0cmli" + 
-          "dXRlGAEgAygLMiIuYm5ldC5wcm90b2NvbC5hdHRyaWJ1dGUuQXR0cmlidXRl" + 
-          "EgwKBHJvbGUYAiABKA0qBQhkEJFOIpUBChJDaGFubmVsRGVzY3JpcHRpb24S" + 
-          "KwoKY2hhbm5lbF9pZBgBIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQS" + 
-          "FwoPY3VycmVudF9tZW1iZXJzGAIgASgNEjIKBXN0YXRlGAMgASgLMiMuYm5l" + 
-          "dC5wcm90b2NvbC5jaGFubmVsLkNoYW5uZWxTdGF0ZSoFCGQQkU4igwEKC0No" + 
-          "YW5uZWxJbmZvEj4KC2Rlc2NyaXB0aW9uGAEgAigLMikuYm5ldC5wcm90b2Nv" + 
-          "bC5jaGFubmVsLkNoYW5uZWxEZXNjcmlwdGlvbhItCgZtZW1iZXIYAiADKAsy" + 
-          "HS5ibmV0LnByb3RvY29sLmNoYW5uZWwuTWVtYmVyKgUIZBCRTiKeBAoMQ2hh" + 
-          "bm5lbFN0YXRlEhMKC21heF9tZW1iZXJzGAEgASgNEhMKC21pbl9tZW1iZXJz" + 
-          "GAIgASgNEjUKCWF0dHJpYnV0ZRgDIAMoCzIiLmJuZXQucHJvdG9jb2wuYXR0" + 
-          "cmlidXRlLkF0dHJpYnV0ZRI4CgppbnZpdGF0aW9uGAQgAygLMiQuYm5ldC5w" + 
-          "cm90b2NvbC5pbnZpdGF0aW9uLkludml0YXRpb24SFwoPbWF4X2ludml0YXRp" + 
-          "b25zGAUgASgNEg4KBnJlYXNvbhgGIAEoDRJbCg1wcml2YWN5X2xldmVsGAcg" + 
-          "ASgOMjAuYm5ldC5wcm90b2NvbC5jaGFubmVsLkNoYW5uZWxTdGF0ZS5Qcml2" + 
-          "YWN5TGV2ZWw6ElBSSVZBQ1lfTEVWRUxfT1BFThIOCgZwdWJsaWMYCCABKAgS" + 
-          "DAoEbmFtZRgJIAEoCRIVCg1kZWxlZ2F0ZV9uYW1lGAogASgJEh0KDGNoYW5u" + 
-          "ZWxfdHlwZRgLIAEoCToHZGVmYXVsdCKRAQoMUHJpdmFjeUxldmVsEhYKElBS" + 
-          "SVZBQ1lfTEVWRUxfT1BFThABEiwKKFBSSVZBQ1lfTEVWRUxfT1BFTl9JTlZJ" + 
-          "VEFUSU9OX0FORF9GUklFTkQQAhIhCh1QUklWQUNZX0xFVkVMX09QRU5fSU5W" + 
-          "SVRBVElPThADEhgKFFBSSVZBQ1lfTEVWRUxfQ0xPU0VEEAQqBQhkEJFOInQK" + 
-          "C01lbWJlclN0YXRlEjUKCWF0dHJpYnV0ZRgBIAMoCzIiLmJuZXQucHJvdG9j" + 
-          "b2wuYXR0cmlidXRlLkF0dHJpYnV0ZRIQCgRyb2xlGAIgAygNQgIQARIVCgpw" + 
-          "cml2aWxlZ2VzGAMgASgEOgEwKgUIZBCRTiJmCgZNZW1iZXISKQoIaWRlbnRp" + 
-          "dHkYASACKAsyFy5ibmV0LnByb3RvY29sLklkZW50aXR5EjEKBXN0YXRlGAIg" + 
-          "AigLMiIuYm5ldC5wcm90b2NvbC5jaGFubmVsLk1lbWJlclN0YXRl");
+          "ChhibmV0L2NoYW5uZWxfdHlwZXMucHJvdG8SFWJuZXQucHJvdG9jb2wuY2hh" + 
+          "bm5lbBoUYm5ldC9hdHRyaWJ1dGUucHJvdG8aEWJuZXQvZW50aXR5LnByb3Rv" + 
+          "GhtibmV0L2ludml0YXRpb25fdHlwZXMucHJvdG8iVQoHTWVzc2FnZRI1Cglh" + 
+          "dHRyaWJ1dGUYASADKAsyIi5ibmV0LnByb3RvY29sLmF0dHJpYnV0ZS5BdHRy" + 
+          "aWJ1dGUSDAoEcm9sZRgCIAEoDSoFCGQQkU4ilQEKEkNoYW5uZWxEZXNjcmlw" + 
+          "dGlvbhIrCgpjaGFubmVsX2lkGAEgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRp" + 
+          "dHlJZBIXCg9jdXJyZW50X21lbWJlcnMYAiABKA0SMgoFc3RhdGUYAyABKAsy" + 
+          "Iy5ibmV0LnByb3RvY29sLmNoYW5uZWwuQ2hhbm5lbFN0YXRlKgUIZBCRTiKD" + 
+          "AQoLQ2hhbm5lbEluZm8SPgoLZGVzY3JpcHRpb24YASACKAsyKS5ibmV0LnBy" + 
+          "b3RvY29sLmNoYW5uZWwuQ2hhbm5lbERlc2NyaXB0aW9uEi0KBm1lbWJlchgC" + 
+          "IAMoCzIdLmJuZXQucHJvdG9jb2wuY2hhbm5lbC5NZW1iZXIqBQhkEJFOIp4E" + 
+          "CgxDaGFubmVsU3RhdGUSEwoLbWF4X21lbWJlcnMYASABKA0SEwoLbWluX21l" + 
+          "bWJlcnMYAiABKA0SNQoJYXR0cmlidXRlGAMgAygLMiIuYm5ldC5wcm90b2Nv" + 
+          "bC5hdHRyaWJ1dGUuQXR0cmlidXRlEjgKCmludml0YXRpb24YBCADKAsyJC5i" + 
+          "bmV0LnByb3RvY29sLmludml0YXRpb24uSW52aXRhdGlvbhIXCg9tYXhfaW52" + 
+          "aXRhdGlvbnMYBSABKA0SDgoGcmVhc29uGAYgASgNElsKDXByaXZhY3lfbGV2" + 
+          "ZWwYByABKA4yMC5ibmV0LnByb3RvY29sLmNoYW5uZWwuQ2hhbm5lbFN0YXRl" + 
+          "LlByaXZhY3lMZXZlbDoSUFJJVkFDWV9MRVZFTF9PUEVOEg4KBnB1YmxpYxgI" + 
+          "IAEoCBIMCgRuYW1lGAkgASgJEhUKDWRlbGVnYXRlX25hbWUYCiABKAkSHQoM" + 
+          "Y2hhbm5lbF90eXBlGAsgASgJOgdkZWZhdWx0IpEBCgxQcml2YWN5TGV2ZWwS" + 
+          "FgoSUFJJVkFDWV9MRVZFTF9PUEVOEAESLAooUFJJVkFDWV9MRVZFTF9PUEVO" + 
+          "X0lOVklUQVRJT05fQU5EX0ZSSUVORBACEiEKHVBSSVZBQ1lfTEVWRUxfT1BF" + 
+          "Tl9JTlZJVEFUSU9OEAMSGAoUUFJJVkFDWV9MRVZFTF9DTE9TRUQQBCoFCGQQ" + 
+          "kU4idAoLTWVtYmVyU3RhdGUSNQoJYXR0cmlidXRlGAEgAygLMiIuYm5ldC5w" + 
+          "cm90b2NvbC5hdHRyaWJ1dGUuQXR0cmlidXRlEhAKBHJvbGUYAiADKA1CAhAB" + 
+          "EhUKCnByaXZpbGVnZXMYAyABKAQ6ATAqBQhkEJFOImYKBk1lbWJlchIpCghp" + 
+          "ZGVudGl0eRgBIAIoCzIXLmJuZXQucHJvdG9jb2wuSWRlbnRpdHkSMQoFc3Rh" + 
+          "dGUYAiACKAsyIi5ibmV0LnByb3RvY29sLmNoYW5uZWwuTWVtYmVyU3RhdGU=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_channel_Message__Descriptor = Descriptor.MessageTypes[0];
@@ -100,7 +99,7 @@ namespace bnet.protocol.channel {
           new pbd::FileDescriptor[] {
           global::bnet.protocol.attribute.Proto.Attribute.Descriptor, 
           global::bnet.protocol.Entity.Descriptor, 
-          global::bnet.protocol.invitation.Proto.Invitation.Descriptor, 
+          global::bnet.protocol.invitation.InvitationTypes.Descriptor, 
           }, assigner);
     }
     #endregion

@@ -40,7 +40,7 @@ message SavedDefinition
     optional .D3.Items.ItemList normal_shared_saved_items = 4;
     optional .D3.Items.ItemList hardcore_shared_saved_items = 5;
     optional .D3.ItemCrafting.CrafterSavedData crafter_saved_data = 6;
-    repeated sfixed32 seen_tutorials = 7;
+    optional bytes seen_tutorials = 7;
     optional sfixed64 num_vote_kicks_participated_in = 8;
     optional sfixed64 num_vote_kicks_initiated = 9;
     optional sfixed64 num_public_games_no_kick = 10;

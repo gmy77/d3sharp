@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Games;
+using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
 
@@ -82,7 +83,7 @@ namespace Mooege.Core.MooNet.Services
                 .Build()).Build();
 
             var notificationPermission = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(this.Client.CurrentToon.BnetEntityID)
+                .SetAgentId(this.Client.Account.CurrentGameAccount.BnetEntityId)
                 .SetStateChange(channelStatePermission)
                 .Build();
 
@@ -95,10 +96,14 @@ namespace Mooege.Core.MooNet.Services
             var clients = new List<MooNetClient>();
             foreach (var player in request.PlayerList)
             {
-                var toon = ToonManager.GetToonByLowID(player.ToonId.Low);
-                if (toon.Owner.LoggedInClient == null) continue;
-                clients.Add(toon.Owner.LoggedInClient);
-            }           
+                foreach (var gameAccount in GameAccountManager.GameAccountsList)
+                {
+                    if (player.Identity.GameAccountId.Low == gameAccount.BnetEntityId.Low)
+                    {
+                        clients.Add(gameAccount.LoggedInClient);
+                    }
+                }
+            }
 
             // send game found notification.
             var notificationBuilder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder()
@@ -110,12 +115,12 @@ namespace Mooege.Core.MooNet.Services
             
             if(gameFound.Started)
             {
-                Logger.Warn("Client {0} joining game with FactoryID:{1}", this.Client.CurrentToon.Name, gameFound.FactoryID);
+                Logger.Warn("Client {0} joining game with FactoryID:{1}", this.Client.Account.CurrentGameAccount.CurrentToon.Name, gameFound.FactoryID);
                 gameFound.JoinGame(clients, request.ObjectId);
             }
             else
             {
-                Logger.Warn("Client {0} creating new game", this.Client.CurrentToon.Name);
+                Logger.Warn("Client {0} creating new game", this.Client.Account.CurrentGameAccount.CurrentToon.Name);
                 gameFound.StartGame(clients, request.ObjectId);
             }
         }

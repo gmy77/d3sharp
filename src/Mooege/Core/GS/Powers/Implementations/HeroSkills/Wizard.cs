@@ -441,15 +441,11 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
 
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.ShockPulse)]
-    public class WizardShockPulse : PowerScript
+    public class WizardShockPulse : Skill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
-            User.PlayEffectGroup(0x0001061B); // cast effect
-
-            for (int n = 0; n < 3; ++n)
-                _SpawnBolt();
-
+            // _SpawnBolt() not working right in 8101, also can cause client to crash!
             yield break;
         }
 

@@ -45,6 +45,11 @@ namespace Mooege.Core.MooNet.Objects
         public ulong DynamicId { get; set; }
 
         /// <summary>
+        /// All RPCObjects have an EntityId which is embedded in presence.ChannelState
+        /// </summary>
+        public bnet.protocol.EntityId BnetEntityId;
+
+        /// <summary>
         /// List of clients that subscribed for notifications when this object updates its states.
         /// </summary>
         public List<MooNetClient> Subscribers { get; private set; }
@@ -70,7 +75,9 @@ namespace Mooege.Core.MooNet.Objects
             client.MapLocalObjectID(this.DynamicId, remoteObjectId);
             this.Subscribers.Add(client);
             // Since the client wasn't previously subscribed, it should not be aware of the object's state -- let's notify it
-            this.NotifySubscriptionAdded(client);
+            foreach (var subscriber in this.Subscribers)
+                this.NotifySubscriptionAdded(subscriber);
+            //this.NotifySubscriptionAdded(client);
         }
 
         /// <summary>
@@ -89,15 +96,93 @@ namespace Mooege.Core.MooNet.Objects
             this.Subscribers.Remove(client);
             // We don't need to do a notify nor respond to the client with anything since the client will ultimately act
             // like the object never existed in the first place
+
+            foreach (var subscriber in this.Subscribers)
+                this.NotifySubscriptionAdded(subscriber);
         }
+
+        /// <summary>
+        /// Provide a list of new added notifications.
+        /// Once the notification system is smart enough to determine which value/property to update this would be eliminated and put under GetUpdateNotifications
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications() 
+        {
+            return new List<bnet.protocol.presence.FieldOperation>();
+        }
+
+        /// <summary>
+        /// Stores only changed Fields to send to clients
+        /// </summary>
+        public Mooege.Core.MooNet.Helpers.FieldKeyHelper ChangedFields = new Mooege.Core.MooNet.Helpers.FieldKeyHelper();
 
         /// <summary>
         /// Notifies a specific subscriber about the object's present state.
         /// This methods should be actually implemented by deriving object classes.
         /// </summary>
         /// <param name="client">The subscriber.</param>
-        protected virtual void NotifySubscriptionAdded(MooNetClient client) { }
+        protected void NotifySubscriptionAdded(MooNetClient client)
+        {
+            var operations = GetSubscriptionNotifications();
+            MakeRPC(client, operations);
+        }
 
+        public virtual void NotifyUpdate() {}
+
+        public void UpdateSubscribers(List<MooNetClient> subscribers, List<bnet.protocol.presence.FieldOperation> operations)
+        {
+            var disconnected = new List<MooNetClient>();
+            foreach (var subscriber in this.Subscribers)
+            {
+                var gameAccount = subscriber.Account.CurrentGameAccount;
+                if (gameAccount.IsOnline) //This should never be false, subscribers should be unsubscribed if disconnected
+                {
+                    var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityId).AddRangeFieldOperation(operations).Build();
+
+                    // Embed in channel.ChannelState
+                    var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+
+                    // Put in addnotification message
+                    var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState);
+
+                    gameAccount.LoggedInClient.MakeTargetedRPC(this, () =>
+                        bnet.protocol.channel.ChannelSubscriber.CreateStub(gameAccount.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
+                }
+                else
+                {
+                    disconnected.Add(subscriber);
+                    Logger.Warn("Subscriber: {0} not online.", subscriber.Account);
+                }
+            }
+
+            foreach (var subscriber in disconnected)
+                this.Subscribers.Remove(subscriber);
+        }
+
+        protected void MakeRPC(MooNetClient client, List<bnet.protocol.presence.FieldOperation> operations)
+        {
+            // Create a presence.ChannelState
+            var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityId).AddRangeFieldOperation(operations).Build();
+
+            // Embed in channel.ChannelState
+            var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+
+            // Put in AddNotification message
+            var builder = bnet.protocol.channel.AddNotification.CreateBuilder().SetChannelState(channelState);
+
+            // Make the RPC call to all online game accounts
+            //TODO: Split notifications per game type
+            foreach (var gameClient in client.Account.GameAccounts)
+            {
+                if (gameClient.Value.IsOnline)
+                {
+                    gameClient.Value.LoggedInClient.MakeTargetedRPC(this, () =>
+                        bnet.protocol.channel.ChannelSubscriber.CreateStub(gameClient.Value.LoggedInClient).NotifyAdd(null, builder.Build(), callback => { }));
+                }
+            }
+        }
+
+        //This is done on a client by client mapping of notifications/variables per object that need to be updated
         // ** We're yet not sure about this, so commenting out **
         ///// <summary>
         ///// Notifies all subscribers with the object's current state.

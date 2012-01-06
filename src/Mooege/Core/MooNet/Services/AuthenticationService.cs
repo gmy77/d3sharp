@@ -24,6 +24,7 @@ using Mooege.Common.Versions;
 using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
+using Mooege.Core.MooNet.Accounts;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -59,10 +60,13 @@ namespace Mooege.Core.MooNet.Services
                 }
 
                 Logger.Info("User {0} authenticated successfuly.", request.Email);
-                var logonResponseBuilder = bnet.protocol.authentication.LogonResponse.
-                    CreateBuilder()
-                    .SetAccount(Client.Account.BnetAccountID)
-                    .SetGameAccount(Client.Account.BnetGameAccountID);
+                var logonResponseBuilder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
+                    .SetAccount(this.Client.Account.BnetEntityId);
+
+                foreach (var gameAccount in this.Client.Account.GameAccounts.Values)
+                {
+                    logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
+                }
 
                 done(logonResponseBuilder.Build());
 
@@ -86,6 +90,17 @@ namespace Mooege.Core.MooNet.Services
 
             if(request.ModuleId==0 && command==2)
                 AuthManager.HandleAuthResponse(this.Client, request.ModuleId, moduleMessage);
+        }
+
+        public override void SelectGameAccount(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.EntityId request, Action<bnet.protocol.NoData> done)
+        {
+            this.Client.Account.CurrentGameAccount = GameAccountManager.GetAccountByPersistentID(request.Low);
+            this.Client.Account.CurrentGameAccount.LoggedInClient = this.Client;
+
+            Logger.Trace("SelectGameAccount(): {0}", this.Client.Account.CurrentGameAccount);
+
+            done(bnet.protocol.NoData.CreateBuilder().Build());
+
         }
     }
 }

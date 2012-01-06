@@ -22,17 +22,13 @@ using System.Linq;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Core.MooNet.Toons;
+using Mooege.Core.MooNet.Accounts;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Channels
 {
     public class Channel : RPCObject
     {
-        /// <summary>
-        /// bnet.protocol.EntityId encoded channel Id.
-        /// </summary>
-        public bnet.protocol.EntityId BnetEntityId { get; protected set; }
-
         /// <summary>
         /// D3.OnlineService.EntityId encoded channel Id.
         /// </summary>
@@ -90,16 +86,16 @@ namespace Mooege.Core.MooNet.Channels
             // We'll just let the caller do that for us.
         }
 
-        #region common methods 
+        #region common methods
 
         public bool HasUser(MooNetClient client)
         {
             return this.Members.Any(pair => pair.Key == client);
         }
 
-        public bool HasToon(Toon toon) // checks if given toon is already channels member
+        public bool HasMember(GameAccount gameAccount) //check if a given game account is already channels member
         {
-            return this.Members.Any(pair => pair.Value.Identity.ToonId.Low == toon.BnetEntityID.Low);
+            return this.Members.Any(pair => pair.Value.Identity.AccountId.Low == gameAccount.BnetEntityId.Low);
         }
 
         public Member GetMember(MooNetClient client)
@@ -154,7 +150,7 @@ namespace Mooege.Core.MooNet.Channels
                 return;
             }
 
-            var identity = client.GetIdentity(false, false, true);
+            var identity = client.GetIdentity(false, true, false);
 
             bool isOwner = client == this.Owner;
             var addedMember = new Member(identity, (isOwner) ? Member.Privilege.UnkCreator : Member.Privilege.UnkMember);
@@ -214,7 +210,7 @@ namespace Mooege.Core.MooNet.Channels
 
         public void RemoveMemberByID(bnet.protocol.EntityId memberId, RemoveReason reason)
         {
-            var client = this.Members.FirstOrDefault(pair => pair.Value.Identity.ToonId == memberId).Key;
+            var client = this.Members.FirstOrDefault(pair => pair.Value.Identity.AccountId == memberId).Key;
             RemoveMember(client, reason, false);
         }
 
@@ -225,7 +221,7 @@ namespace Mooege.Core.MooNet.Channels
 
         public void RemoveMember(MooNetClient client, RemoveReason reason, bool dissolving)
         {
-            if (client.CurrentToon == null)
+            if (client.Account.CurrentGameAccount.CurrentToon == null)
             {
                 Logger.Warn("Could not remove toon-less client {0}", client.Connection.RemoteEndPoint.ToString());
                 return;
@@ -239,7 +235,7 @@ namespace Mooege.Core.MooNet.Channels
             {
                 Logger.Warn("Client {0} is being removed from a channel that is not its current one..", client.Connection.RemoteEndPoint.ToString());
             }
-            var memberId = this.Members[client].Identity.ToonId;
+            var memberId = this.Members[client].Identity.GameAccountId;
             var message = bnet.protocol.channel.RemoveNotification.CreateBuilder()
                 .SetMemberId(memberId)
                 .SetReason((uint)reason)
@@ -270,9 +266,9 @@ namespace Mooege.Core.MooNet.Channels
         public void SendMessage(MooNetClient client, bnet.protocol.channel.Message message)
         {
             var notification =
-                bnet.protocol.channel.SendMessageNotification.CreateBuilder().SetAgentId(client.CurrentToon.BnetEntityID)
+                bnet.protocol.channel.SendMessageNotification.CreateBuilder().SetAgentId(client.Account.CurrentGameAccount.BnetEntityId)
                     .SetMessage(message).SetRequiredPrivileges(0).Build();
-                    
+
 
             foreach (var pair in this.Members) // send to all members of channel even to the actual one that sent the message else he'll not see his own message.
             {
@@ -282,7 +278,7 @@ namespace Mooege.Core.MooNet.Channels
         }
 
         #endregion
-        
+
         #region channel state messages
 
         /// <summary>
@@ -335,11 +331,11 @@ namespace Mooege.Core.MooNet.Channels
 
                 return builder.Build();
             }
-        }     
+        }
 
         #endregion
 
-        #region remove-reason helpers 
+        #region remove-reason helpers
 
         // Reasons the client tries to remove a member - // TODO: Need more data to complete this        
         public enum RemoveRequestReason : uint
@@ -372,7 +368,7 @@ namespace Mooege.Core.MooNet.Channels
 
         public override string ToString()
         {
-            return String.Format("{{ Channel: [id: {0}] [owner: {1}] }}", this.DynamicId, this.Owner!=null? this.Owner.CurrentToon.ToString() : "N/A");
+            return String.Format("{{ Channel: [id: {0}] [owner: {1}] }}", this.DynamicId, this.Owner != null ? this.Owner.Account.CurrentGameAccount.CurrentToon.ToString() : "N/A");
         }
     }
 }

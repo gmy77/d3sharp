@@ -36,7 +36,7 @@ namespace Mooege.Common.MPQ
         public Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>> Assets = new Dictionary<SNOGroup, ConcurrentDictionary<int, Asset>>();
         public readonly Dictionary<SNOGroup, Type> Parsers = new Dictionary<SNOGroup, Type>();
         private readonly List<Task> _tasks = new List<Task>();
-        private static readonly SNOGroup[] PatchExceptions = new[] { SNOGroup.TimedEvent, SNOGroup.Script, SNOGroup.AiBehavior, SNOGroup.AiState, SNOGroup.Conductor, SNOGroup.FlagSet, SNOGroup.Code };
+        private static readonly SNOGroup[] PatchExceptions = new[] { SNOGroup.TimedEvent, SNOGroup.Script, SNOGroup.AiBehavior, SNOGroup.AiState, SNOGroup.Conductor, SNOGroup.FlagSet, SNOGroup.Code, SNOGroup.Worlds, SNOGroup.LevelArea };
 
         public Data()
             : base(VersionInfo.MPQ.RequiredPatchVersion, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
@@ -180,7 +180,16 @@ namespace Mooege.Common.MPQ
                 if (Storage.Config.Instance.EnableTasks)
                     this._tasks.Add(new Task(() => asset.RunParser()));
                 else
-                    asset.RunParser();
+                {
+                    try
+                    {
+                        asset.RunParser();
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error("Error parsing {0}.\nMessage: {1}\n InnerException:{2}\nStack Trace:{3}", asset.FileName, e.Message, e.InnerException.Message, e.StackTrace);
+                    }
+                }
             }
         }
 
@@ -193,6 +202,19 @@ namespace Mooege.Common.MPQ
         private MpqFile GetFile(string fileName, bool startSearchingFromBaseMPQ = false)
         {
             MpqFile file = null;
+
+            if (fileName.Contains(".wrl") || fileName.Contains(".lvl"))
+            {
+                var i = 0;
+                foreach (MpqArchive archive in this.FileSystem.Archives)
+                {
+                    if (i++ < 2) continue;
+
+                    file = archive.FindFile(fileName);
+                    if (file != null)
+                        return file;
+                }
+            }
 
             if (!startSearchingFromBaseMPQ)
                 file = this.FileSystem.FindFile(fileName);

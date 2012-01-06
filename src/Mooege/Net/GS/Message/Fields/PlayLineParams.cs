@@ -112,9 +112,9 @@ namespace Mooege.Net.GS.Message.Fields
             Speaker = (Speaker)buffer.ReadInt(32);
             Field5 = buffer.ReadInt(32);
             TextClass = (Class)buffer.ReadInt(32);
+            SNOSpeakerActor = buffer.ReadInt(32);
             Gender = (VoiceGender)buffer.ReadInt(32);
             AudioClass = (Class)buffer.ReadInt(32);
-            SNOSpeakerActor = buffer.ReadInt(32);
             Name = buffer.ReadCharArray(49);
             Field11 = buffer.ReadInt(32);
             AnimationTag = buffer.ReadInt(32);
@@ -133,9 +133,9 @@ namespace Mooege.Net.GS.Message.Fields
             buffer.WriteInt(32, (int)Speaker);
             buffer.WriteInt(32, Field5);
             buffer.WriteInt(32, (int)TextClass);
+            buffer.WriteInt(32, SNOSpeakerActor);
             buffer.WriteInt(32, (int)Gender);
             buffer.WriteInt(32, (int)AudioClass);
-            buffer.WriteInt(32, SNOSpeakerActor);
             buffer.WriteCharArray(49, Name);
             buffer.WriteInt(32, Field11);
             buffer.WriteInt(32, AnimationTag);
@@ -167,11 +167,11 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("TextClass: 0x" + ((int)TextClass).ToString("X8") + " (" + TextClass + ")");
             b.Append(' ', pad);
+            b.AppendLine("snoSpeakerActor: 0x" + SNOSpeakerActor.ToString("X8"));
+            b.Append(' ', pad);
             b.AppendLine("Gender: 0x" + ((int)Gender).ToString("X8") + " (" + Gender + ")");
             b.Append(' ', pad);
             b.AppendLine("AudioClass: 0x" + ((int)AudioClass).ToString("X8") + " (" + AudioClass + ")");
-            b.Append(' ', pad);
-            b.AppendLine("snoSpeakerActor: 0x" + SNOSpeakerActor.ToString("X8"));
             b.Append(' ', pad);
             b.AppendLine("Name: \"" + Name + "\"");
             b.Append(' ', pad);

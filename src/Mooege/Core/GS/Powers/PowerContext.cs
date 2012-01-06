@@ -34,6 +34,7 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Powers.Payloads;
 using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Core.GS.Actors.Movement;
+using Mooege.Net.GS.Message.Definitions.ACD;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -267,7 +268,7 @@ namespace Mooege.Core.GS.Powers
 
             if (actor.World == null) return;
 
-            actor.World.BroadcastIfRevealed(new NotifyActorMovementMessage
+            actor.World.BroadcastIfRevealed(new ACDTranslateNormalMessage
             {
                 ActorId = (int)actor.DynamicID,
                 Position = destination,

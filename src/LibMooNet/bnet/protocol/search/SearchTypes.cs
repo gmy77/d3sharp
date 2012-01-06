@@ -33,19 +33,18 @@ namespace bnet.protocol.search {
     
     static SearchTypes() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "CixzZXJ2aWNlL3NlYXJjaC9kZWZpbml0aW9uL3NlYXJjaF90eXBlcy5wcm90" + 
-          "bxIUYm5ldC5wcm90b2NvbC5zZWFyY2giKQoJU3RhdGlzdGljEg0KAmlkGAEg" + 
-          "ASgEOgEwEg0KBXZhbHVlGAIgAigFItMCCgZGaWx0ZXISMgoJc3RhdGlzdGlj" + 
-          "GAEgAigLMh8uYm5ldC5wcm90b2NvbC5zZWFyY2guU3RhdGlzdGljEjkKCWNv" + 
-          "bXBhcmFuZBgCIAIoDjImLmJuZXQucHJvdG9jb2wuc2VhcmNoLkZpbHRlci5D" + 
-          "b21wYXJhbmQSRwoOc29ydF9kaXJlY3Rpb24YAyABKA4yKi5ibmV0LnByb3Rv" + 
-          "Y29sLnNlYXJjaC5GaWx0ZXIuU29ydERpcmVjdGlvbjoDQVNDIm0KCUNvbXBh" + 
-          "cmFuZBIKCgZFUVVBTFMQABINCglMRVNTX1RIQU4QARIXChNMRVNTX1RIQU5f" + 
-          "T1JfRVFVQUxTEAISEAoMR1JFQVRFUl9USEFOEAMSGgoWR1JFQVRFUl9USEFO" + 
-          "X09SX0VRVUFMUxAEIiIKDVNvcnREaXJlY3Rpb24SBwoDQVNDEAASCAoEREVT" + 
-          "QxABIlcKBk9iamVjdBIKCgJpZBgBIAIoDBIMCgRkYXRhGAIgASgMEjMKCnN0" + 
-          "YXRpc3RpY3MYAyADKAsyHy5ibmV0LnByb3RvY29sLnNlYXJjaC5TdGF0aXN0" + 
-          "aWM=");
+          "ChdibmV0L3NlYXJjaF90eXBlcy5wcm90bxIUYm5ldC5wcm90b2NvbC5zZWFy" + 
+          "Y2giKQoJU3RhdGlzdGljEg0KAmlkGAEgASgEOgEwEg0KBXZhbHVlGAIgAigF" + 
+          "ItMCCgZGaWx0ZXISMgoJc3RhdGlzdGljGAEgAigLMh8uYm5ldC5wcm90b2Nv" + 
+          "bC5zZWFyY2guU3RhdGlzdGljEjkKCWNvbXBhcmFuZBgCIAIoDjImLmJuZXQu" + 
+          "cHJvdG9jb2wuc2VhcmNoLkZpbHRlci5Db21wYXJhbmQSRwoOc29ydF9kaXJl" + 
+          "Y3Rpb24YAyABKA4yKi5ibmV0LnByb3RvY29sLnNlYXJjaC5GaWx0ZXIuU29y" + 
+          "dERpcmVjdGlvbjoDQVNDIm0KCUNvbXBhcmFuZBIKCgZFUVVBTFMQABINCglM" + 
+          "RVNTX1RIQU4QARIXChNMRVNTX1RIQU5fT1JfRVFVQUxTEAISEAoMR1JFQVRF" + 
+          "Ul9USEFOEAMSGgoWR1JFQVRFUl9USEFOX09SX0VRVUFMUxAEIiIKDVNvcnRE" + 
+          "aXJlY3Rpb24SBwoDQVNDEAASCAoEREVTQxABIlcKBk9iamVjdBIKCgJpZBgB" + 
+          "IAIoDBIMCgRkYXRhGAIgASgMEjMKCnN0YXRpc3RpY3MYAyADKAsyHy5ibmV0" + 
+          "LnByb3RvY29sLnNlYXJjaC5TdGF0aXN0aWM=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_search_Statistic__Descriptor = Descriptor.MessageTypes[0];

@@ -55,13 +55,13 @@ namespace Mooege.Core.GS.Powers
             this.Target = target;
         }
 
-        public void Move(Vector3D destination, float speed, NotifyActorMovementMessage baseMessage = null)
+        public void Move(Vector3D destination, float speed, ACDTranslateNormalMessage baseMessage = null)
         {
             _SetupMove(destination, speed);
             _moveCommand = MoveCommandType.Normal;
 
             if (baseMessage == null)
-                baseMessage = new NotifyActorMovementMessage();
+                baseMessage = new ACDTranslateNormalMessage();
 
             baseMessage.ActorId = (int)this.Target.DynamicID;
             baseMessage.Position = destination;

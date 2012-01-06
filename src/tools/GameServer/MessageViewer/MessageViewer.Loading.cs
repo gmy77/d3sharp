@@ -86,7 +86,7 @@ namespace GameMessageViewer
         /// </summary>
         public string GetVersion(string stream)
         {
-            string[] versions = new string[] { "0.4.0.7865", "0.3.1.7779", "0.3.0.7484", "0.3.0.7333" };
+            string[] versions = new string[] { "0.5.1.8101", "0.4.0.7865", "0.3.1.7779", "0.3.0.7484", "0.3.0.7333" };
 
 
             foreach (string version in versions)

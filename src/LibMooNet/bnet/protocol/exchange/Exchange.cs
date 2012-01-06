@@ -35,13 +35,13 @@ namespace bnet.protocol.exchange {
     
     static Exchange() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "ChtsaWIvcHJvdG9jb2wvZXhjaGFuZ2UucHJvdG8SFmJuZXQucHJvdG9jb2wu" + 
-          "ZXhjaGFuZ2UiKAoLUGFydGl0aW9uSWQSDAoEaGlnaBgBIAIoBhILCgNsb3cY" + 
-          "AiACKAYiPAoIQmxvYkZyb20SDgoGc291cmNlGAEgAigHEgwKBGRhdGEYAiAC" + 
-          "KAwSEgoKZXh0cmFfZGF0YRgDIAEoDCI8CgpCbG9iT2ZUeXBlEgwKBHR5cGUY" + 
-          "ASACKAkSDAoEZGF0YRgCIAEoDBISCgpleHRyYV9kYXRhGAMgASgMIjwKDkJs" + 
-          "b2JGcm9tT2ZUeXBlEg4KBnNvdXJjZRgBIAIoBxIMCgR0eXBlGAIgAigJEgwK" + 
-          "BGRhdGEYAyACKAxCA4ABAA==");
+          "ChNibmV0L2V4Y2hhbmdlLnByb3RvEhZibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
+          "IigKC1BhcnRpdGlvbklkEgwKBGhpZ2gYASACKAYSCwoDbG93GAIgAigGIjwK" + 
+          "CEJsb2JGcm9tEg4KBnNvdXJjZRgBIAIoBxIMCgRkYXRhGAIgAigMEhIKCmV4" + 
+          "dHJhX2RhdGEYAyABKAwiPAoKQmxvYk9mVHlwZRIMCgR0eXBlGAEgAigJEgwK" + 
+          "BGRhdGEYAiABKAwSEgoKZXh0cmFfZGF0YRgDIAEoDCI8Cg5CbG9iRnJvbU9m" + 
+          "VHlwZRIOCgZzb3VyY2UYASACKAcSDAoEdHlwZRgCIAIoCRIMCgRkYXRhGAMg" + 
+          "AigMQgOAAQA=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_PartitionId__Descriptor = Descriptor.MessageTypes[0];

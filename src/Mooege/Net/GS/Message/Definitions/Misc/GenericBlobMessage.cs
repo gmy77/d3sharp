@@ -21,8 +21,8 @@ using System.Text;
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
     [Message(new[] {
-        Opcodes.GenericBlobMessage1, Opcodes.GenericBlobMessage2, Opcodes.GenericBlobMessage3, Opcodes.GenericBlobMessage4, Opcodes.GenericBlobMessage5
-    })]
+        Opcodes.GenericBlobMessage1, Opcodes.GenericBlobMessage2, Opcodes.GenericBlobMessage3, Opcodes.GenericBlobMessage4, Opcodes.GenericBlobMessage5,
+        Opcodes.GenericBlobMessage15 })]
     public class GenericBlobMessage : GameMessage
     {
         public byte[] Data;
