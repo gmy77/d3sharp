@@ -32,7 +32,7 @@ namespace Mooege.Core.GS.Powers
     {
         // main handler called to generate effects for skill
         public abstract IEnumerable<TickTimer> Main();
-                
+
         public sealed override IEnumerable<TickTimer> Run()
         {
             // play starting animation and effects
@@ -54,7 +54,7 @@ namespace Mooege.Core.GS.Powers
         {
             get
             {
-                return User is Player && (User as Player).Toon.Gender == 1;  // 1 = female
+                return User is Player && (User as Player).Toon.Gender == 2;  // 2 = female
             }
         }
 
