@@ -115,12 +115,13 @@ namespace Mooege.Common.Versions
             // unchecked((int)0x9E121BBD)   // 7728
             // 0x21EEE08D                   // 7446
 
-            public const string VersionString = "0.5.1.8101";
+            //This is the server version sent in VersionsMessage
+            public const string VersionString = "0.5.1.8115";
 
-            // 0.5.1.8101 // 8101 patch 9
+            // 0.5.1.8115 // 8101 patch 9
             // 0.5.0.8059 // 8059 patch 8
             // 0.3.1.7779 // 7728
-            // 0.3.0.7484 // 7447    
+            // 0.3.0.7484 // 7447
             // 0.3.0.7333 // beta patch-3
         }
     }

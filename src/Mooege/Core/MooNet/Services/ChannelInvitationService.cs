@@ -46,7 +46,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void AcceptInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.AcceptInvitationRequest request, Action<bnet.protocol.channel_invitation.AcceptInvitationResponse> done)
         {
-            Logger.Trace("{0} accepted invitation.", this.Client.Account.CurrentGameAccount.CurrentToon);
+            Logger.Trace("{0} accepted invitation id {1}.", this.Client.Account.CurrentGameAccount.CurrentToon, request.InvitationId);
 
             var channel = this._invitationManager.HandleAccept(this.Client, request);
 

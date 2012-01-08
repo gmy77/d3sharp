@@ -185,9 +185,15 @@ namespace Mooege.Core.MooNet.Services
             if (this.Client.CurrentChannel == null) //Client left channel already
                 return;
 
+            //Notify all Channel members
+            foreach (var member in this.Client.CurrentChannel.Members.Keys)
+            {
+                member.MakeTargetedRPC(this.Client.CurrentChannel, () =>
+                    bnet.protocol.channel.ChannelSubscriber.CreateStub(member).NotifyUpdateChannelState(null, notification, callback => { }));
+            }
             // Send UpdateChannelStateNotification RPC call.
-            this.Client.MakeTargetedRPC(this.Client.CurrentChannel, () =>
-                bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notification, callback => { }));
+            //this.Client.MakeTargetedRPC(this.Client.CurrentChannel, () =>
+            //    bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notification, callback => { }));
         }
 
         public override void UpdateMemberState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateMemberStateRequest request, System.Action<bnet.protocol.NoData> done)

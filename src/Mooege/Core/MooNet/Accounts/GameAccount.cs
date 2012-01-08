@@ -44,7 +44,7 @@ namespace Mooege.Core.MooNet.Accounts
             = new ByteStringPresenceField<D3.OnlineService.EntityId>(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.GameAccount, 2, 0);
 
         public IntPresenceField ScreenStatusField
-            = new IntPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 3, 0);
+            = new IntPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Channel, 2, 0);
 
         public FourCCPresenceField ProgramField
             = new FourCCPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 4, 0);
@@ -172,29 +172,26 @@ namespace Mooege.Core.MooNet.Accounts
             return (ulong)++_persistentIdCounter;
         }
 
+        /// <summary>
+        /// Existing GameAccount
+        /// </summary>
+        /// <param name="persistentId"></param>
+        /// <param name="accountId"></param>
         public GameAccount(ulong persistentId, ulong accountId)
             : base(persistentId)
         {
             this.SetField(AccountManager.GetAccountByPersistentID(accountId));
         }
 
+        /// <summary>
+        /// New GameAccount
+        /// </summary>
+        /// <param name="account"></param>
         public GameAccount(Account account)
             : base(account.BnetEntityId.Low)
         {
             this.SetField(account);
-        }
 
-        private void SetField(Account owner)
-        {
-            this.Owner = owner;
-            var bnetGameAccountHigh = ((ulong)EntityIdHelper.HighIdType.GameAccountId) + (0x6200004433);
-            this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh(bnetGameAccountHigh).SetLow(this.PersistentID).Build();
-            this.D3GameAccountId = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(bnetGameAccountHigh).SetIdLow(this.PersistentID).Build();
-
-            //TODO: Now hardcode all game account notifications to D3
-            this.ProgramField.Value = "D3";
-            this.AccountField.Value = Owner.BnetEntityId.Low.ToString() + "#1";
-            this.BattleTagField.Value = this.Owner.BattleTag;
             this.BannerConfiguration =
                 D3.Account.BannerConfiguration.CreateBuilder()
                 .SetBannerShape(2952440006)
@@ -208,6 +205,19 @@ namespace Mooege.Core.MooNet.Accounts
                 .SetUseSigilVariant(true)
                 .SetEpicBanner(0)
                 .Build();
+        }
+
+        private void SetField(Account owner)
+        {
+            this.Owner = owner;
+            var bnetGameAccountHigh = ((ulong)EntityIdHelper.HighIdType.GameAccountId) + (0x6200004433);
+            this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh(bnetGameAccountHigh).SetLow(this.PersistentID).Build();
+            this.D3GameAccountId = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(bnetGameAccountHigh).SetIdLow(this.PersistentID).Build();
+
+            //TODO: Now hardcode all game account notifications to D3
+            this.ProgramField.Value = "D3";
+            this.AccountField.Value = Owner.BnetEntityId.Low.ToString() + "#1";
+            this.BattleTagField.Value = this.Owner.BattleTag;
 
             this.Achievements = new List<bnet.protocol.achievements.AchievementUpdateRecord>();
             this.AchievementCriteria = new List<bnet.protocol.achievements.CriteriaUpdateRecord>();
@@ -344,6 +354,8 @@ namespace Mooege.Core.MooNet.Accounts
                     {
                         //catch to stop Logger.Warn spam on client start and exit
                         // should D3.4.2 int64 Current screen (0=in-menus, 1=in-menus, 3=in-menus); see ScreenStatus sent to ChannelService.UpdateChannelState call /raist
+                        this.ScreenStatus = D3.PartyMessage.ScreenStatus.CreateBuilder().SetScreen((int)field.Value.IntValue).SetStatus(0).Build();
+                        Logger.Trace("{0} set current screen to {1}.", this, field.Value.IntValue);
                     }
                     else if (field.Key.Group == 4 && field.Key.Field == 3)
                     {
@@ -429,7 +441,7 @@ namespace Mooege.Core.MooNet.Accounts
                     }
                     else if (queryKey.Group == 4 && queryKey.Field == 2) // Current screen (all known values are just "in-menu"; also see ScreenStatuses sent in ChannelService.UpdateChannelState)
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.ScreenStatus.Screen).Build());
                     }
                     else
                     {
@@ -468,21 +480,27 @@ namespace Mooege.Core.MooNet.Accounts
                 {
                     var query =
                         string.Format(
-                            "UPDATE gameaccounts SET accountId={0} WHERE id={1}",
+                            "UPDATE gameaccounts SET accountId={0}, banner=@banner WHERE id={1}",
                             this.Owner.PersistentID, this.PersistentID);
 
-                    var cmd = new SQLiteCommand(query, DBManager.Connection);
-                    cmd.ExecuteNonQuery();
+                    using (var cmd = new SQLiteCommand(query, DBManager.Connection))
+                    {
+                        cmd.Parameters.Add("@banner", System.Data.DbType.Binary).Value = this.BannerConfiguration.ToByteArray();
+                        cmd.ExecuteNonQuery();
+                    }
                 }
                 else
                 {
                     var query =
                         string.Format(
-                            "INSERT INTO gameaccounts (id, accountId) VALUES({0},{1})",
+                            "INSERT INTO gameaccounts (id, accountId, banner) VALUES({0},{1}, @banner)",
                             this.PersistentID, this.Owner.PersistentID);
 
-                    var cmd = new SQLiteCommand(query, DBManager.Connection);
-                    cmd.ExecuteNonQuery();
+                    using (var cmd = new SQLiteCommand(query, DBManager.Connection))
+                    {
+                        cmd.Parameters.Add("@banner", System.Data.DbType.Binary).Value = this.BannerConfiguration.ToByteArray();
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
             catch (Exception e)

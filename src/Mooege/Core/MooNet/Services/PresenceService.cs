@@ -107,14 +107,17 @@ namespace Mooege.Core.MooNet.Services
                 case EntityIdHelper.HighIdType.AccountId:
                     var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
                     Logger.Trace("Update() {0} {1} - {2} Operations", this.Client, account, request.FieldOperationCount);
+                    Logger.Warn("No AccountManager updater.");
                     break;
                 case EntityIdHelper.HighIdType.GameAccountId:
                     var gameaccount = GameAccountManager.GetAccountByPersistentID(request.EntityId.Low);
-                    Logger.Trace("Update() {0} {1} - {2} Operations", this.Client, gameaccount, request.FieldOperationCount);
+                    var trace = string.Format("Update() {0} {1} - {2} Operations", this.Client, gameaccount, request.FieldOperationCount);
                     foreach (var fieldOp in request.FieldOperationList)
                     {
+                        trace += string.Format("\t{0}, {1}, {2}", (FieldKeyHelper.Program)fieldOp.Field.Key.Program, (FieldKeyHelper.OriginatingClass)fieldOp.Field.Key.Group, fieldOp.Field.Key.Field);
                         gameaccount.Update(fieldOp);
                     }
+                    Logger.Trace(trace);
                     break;
                 default:
                     Logger.Warn("Recieved an unhandled Presence.Update request with type {0} (0x{1})", request.EntityId.GetHighIdType(), request.EntityId.High.ToString("X16"));
@@ -133,9 +136,9 @@ namespace Mooege.Core.MooNet.Services
             {
                 case EntityIdHelper.HighIdType.AccountId:
                     var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
-                    Logger.Trace("Query() {0} {1}", this.Client, account);
                     foreach (var key in request.KeyList)
                     {
+                        Logger.Trace("Query() {0} {1} - {2}, {3}, {4}", this.Client, account, (FieldKeyHelper.Program)key.Program, (FieldKeyHelper.OriginatingClass)key.Group, key.Field);
                         var field = account.QueryField(key);
                         if (field != null) builder.AddField(field);
                     }
@@ -143,9 +146,9 @@ namespace Mooege.Core.MooNet.Services
 
                 case EntityIdHelper.HighIdType.GameAccountId:
                     var gameaccount = GameAccountManager.GetAccountByPersistentID(request.EntityId.Low);
-                    Logger.Trace("Query() {0} {1}", this.Client, gameaccount);
                     foreach (var key in request.KeyList)
                     {
+                        Logger.Trace("Query() {0} {1} - {2}, {3}, {4}", this.Client, gameaccount, (FieldKeyHelper.Program)key.Program, (FieldKeyHelper.OriginatingClass)key.Group, key.Field);
                         var field = gameaccount.QueryField(key);
                         if (field != null) builder.AddField(field);
                     }
