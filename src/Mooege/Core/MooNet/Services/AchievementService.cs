@@ -72,8 +72,8 @@ namespace Mooege.Core.MooNet.Services
         public override void Initialize(IRpcController controller, bnet.protocol.achievements.InitializeRequest request, Action<bnet.protocol.achievements.InitializeResponse> done)
         {
             var contentHandle = bnet.protocol.ContentHandle.CreateBuilder()
-                .SetRegion(0x00005553)
-                .SetUsage(0x61636876)
+                .SetRegion(0x00005553) //US
+                .SetUsage(0x61636876) //achv
                 .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.Achievements.AchievementFileHash.ToByteArray()));
             var reponse = bnet.protocol.achievements.InitializeResponse.CreateBuilder().SetContentHandle(contentHandle);
 
