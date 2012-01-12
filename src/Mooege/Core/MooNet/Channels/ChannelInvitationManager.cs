@@ -59,16 +59,20 @@ namespace Mooege.Core.MooNet.Channels
 
             channel.Join(client, request.ObjectId); // add invitee to channel -- so inviter and other members will also be notified too.
 
-            var notification = bnet.protocol.channel_invitation.InvitationRemovedNotification.CreateBuilder().SetInvitation(invitation).SetReason((uint)InvitationRemoveReason.Accepted);
+            var notification = bnet.protocol.channel_invitation.InvitationRemovedNotification.CreateBuilder().SetInvitation(invitation.ToBuilder()).SetReason((uint)InvitationRemoveReason.Accepted);
             //Leaving a party sends AcceptInvitation with the original invitation id commenting this out
             //to prevent null exception until we figure out what it's trying to do -Egris
-            //this._onGoingInvitations.Remove(invitation.Id);
+            this._onGoingInvitations.Remove(invitation.Id);
 
             var invitee = GameAccountManager.GetAccountByPersistentID(invitation.InviteeIdentity.AccountId.Low);
+            var inviter = GameAccountManager.GetAccountByPersistentID(invitation.InviterIdentity.AccountId.Low);
 
             // notify invitee and let him remove the handled invitation.
-            client.MakeTargetedRPC(invitee, () =>
-                bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(client).NotifyReceivedInvitationRemoved(null, notification.Build(), callback => { }));
+            //client.MakeTargetedRPC(invitee.LoggedInClient.PartyChannel, () =>
+            //    bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(client).NotifyReceivedInvitationRemoved(null, notification.Build(), callback => { }));
+
+            inviter.LoggedInClient.MakeTargetedRPC(inviter.LoggedInClient.PartyChannel, () =>
+                bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(inviter.LoggedInClient).NotifyReceivedInvitationRemoved(null, notification.Build(), callback => { }));
 
             return channel;
         }
@@ -90,14 +94,19 @@ namespace Mooege.Core.MooNet.Channels
             this._onGoingInvitations.Remove(invitation.Id);
 
             // notify invoker about the decline.
-            inviter.LoggedInClient.MakeTargetedRPC(inviter.LoggedInClient.CurrentChannel, () =>
+            inviter.LoggedInClient.MakeTargetedRPC(inviter.LoggedInClient.PartyChannel, () =>
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(inviter.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
+
+            //inviter.LoggedInClient.MakeTargetedRPC(inviter.LoggedInClient.CurrentChannel, () =>
+            //    bnet.protocol.channel.ChannelSubscriber.CreateStub(inviter.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
         }
 
         public void Revoke(MooNetClient client, bnet.protocol.channel_invitation.RevokeInvitationRequest request)
         {
             if (!this._onGoingInvitations.ContainsKey(request.InvitationId)) return;
             var invitation = this._onGoingInvitations[request.InvitationId];
+
+            var channel = ChannelManager.GetChannelByEntityId(request.ChannelId);
 
             //notify inviter about revoke
             var updateChannelNotification =
@@ -109,7 +118,7 @@ namespace Mooege.Core.MooNet.Channels
 
             this._onGoingInvitations.Remove(request.InvitationId);
 
-            client.MakeTargetedRPC(client.CurrentChannel, () =>
+            client.MakeTargetedRPC(channel, () =>
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, updateChannelNotification.Build(), callback => { }));
 
             //notify invitee about revoke

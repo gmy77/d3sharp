@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using Google.ProtocolBuffers;
@@ -352,6 +353,9 @@ namespace Mooege.Net.MooNet
         #region current channel
 
         //TODO: Change to list, client can be in multiple channels now.
+        public Channel PartyChannel; //Used for all non game related messages
+        public Channel GameChannel; //Used for all game related messages
+
         private Channel _currentChannel;
         public Channel CurrentChannel
         {
@@ -361,20 +365,36 @@ namespace Mooege.Net.MooNet
             }
             set
             {
-                this._currentChannel = value;
+                if (value == null)
+                {
+                    this.Channels.Remove(this._currentChannel.DynamicId);
+                    Logger.Trace("Client removed from CurrentChannel: {0}, setting new CurrentChannel to {1}", this._currentChannel, this.Channels.FirstOrDefault().Value);
+                    this._currentChannel = Channels.FirstOrDefault().Value;
+                }
+                else if (!Channels.ContainsKey(value.DynamicId))
+                {
+                    this.Channels.Add(value.DynamicId, value);
+                    this._currentChannel = value;
+                }
+                else
+                    this._currentChannel = value;
+
                 if (value == null) return;
 
                 var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Channel, 1, 0);
-                var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey)
-                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder()
-                    .SetMessageValue(this.CurrentChannel.D3EntityId.ToByteString()).Build()).Build();
+                var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey);
 
-                var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
+                if (this._currentChannel != null)
+                    field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.CurrentChannel.D3EntityId.ToByteString()).Build());
+
+                var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field.Build()).Build();
                 var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.Account.CurrentGameAccount.BnetEntityId).AddFieldOperation(operation).Build();
 
                 this.SendStateChangeNotification(this.Account.CurrentGameAccount, state);
             }
         }
+
+        public Dictionary<ulong, Channel> Channels = new Dictionary<ulong, Channel>();
 
         #endregion
 

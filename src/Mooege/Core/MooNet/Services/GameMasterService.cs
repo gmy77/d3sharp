@@ -36,7 +36,14 @@ namespace Mooege.Core.MooNet.Services
 
         public override void JoinGame(IRpcController controller, bnet.protocol.game_master.JoinGameRequest request, Action<bnet.protocol.game_master.JoinGameResponse> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("Client {0} attempted to join game {1}.", this.Client, request.GameHandle.GameId.Low);
+            //var game = GameFactoryManager.FindGameByEntityId(request.GameHandle.GameId);
+
+            var builder = bnet.protocol.game_master.JoinGameResponse.CreateBuilder();
+                //.AddConnectInfo(game.GetConnectionInfoForClient(this.Client));
+
+            done(builder.Build());
+            //throw new NotImplementedException();
         }
 
         public override void ListFactories(IRpcController controller, bnet.protocol.game_master.ListFactoriesRequest request, Action<bnet.protocol.game_master.ListFactoriesResponse> done)

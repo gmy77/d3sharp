@@ -77,7 +77,7 @@ namespace Mooege.Core.MooNet.Services
         public override void SendInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.invitation.SendInvitationResponse> done)
         {
             var invitee = GameAccountManager.GetAccountByPersistentID(request.TargetId.Low);
-            if (this.Client.CurrentChannel.HasMember(invitee)) return; // don't allow a second invitation if invitee is already a member of client's current channel.
+            //if (this.Client.CurrentChannel.HasMember(invitee)) return; // don't allow a second invitation if invitee is already a member of client's current channel.
 
             Logger.Debug("{0} invited {1} to his channel.", Client.Account.CurrentGameAccount.CurrentToon, invitee);
 
@@ -110,8 +110,11 @@ namespace Mooege.Core.MooNet.Services
             // ADVICE TO POTENTIAL BLIZZ-WORKER READING THIS;
             // change rpc SendInvitation(.bnet.protocol.invitation.SendInvitationRequest) returns (.bnet.protocol.invitation.SendInvitationResponse); to rpc SendInvitation(.bnet.protocol.invitation.SendInvitationRequest) returns (.bnet.protocol.NoData);
 
-            var builder = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder()
-                .SetInvitation(invitation.Clone()); // clone it because we need that invitation as un-builded below.
+            var builder = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder();
+            var channel = ChannelManager.GetChannelByEntityId(channelInvitationInfo.ChannelId);
+
+            if (!channel.HasMember(invitee))
+                builder.SetInvitation(invitation.Clone()); // clone it because we need that invitation as un-builded below.
 
             done(builder.Build());
 
@@ -121,7 +124,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetAgentId(Client.Account.CurrentGameAccount.BnetEntityId)
                 .SetStateChange(bnet.protocol.channel.ChannelState.CreateBuilder().AddInvitation(invitation.Clone()));
 
-            this.Client.MakeTargetedRPC(this.Client.CurrentChannel, () =>
+            this.Client.MakeTargetedRPC(channel, () =>
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(Client).NotifyUpdateChannelState(controller, notification.Build(), callback => { }));
 
             // notify the invitee on invitation.
