@@ -78,7 +78,7 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        private D3.PartyMessage.ScreenStatus _screenstatus = D3.PartyMessage.ScreenStatus.CreateBuilder().Build();
+        private D3.PartyMessage.ScreenStatus _screenstatus = D3.PartyMessage.ScreenStatus.CreateBuilder().SetScreen(0).SetStatus(0).Build();
         public D3.PartyMessage.ScreenStatus ScreenStatus
         {
             get
