@@ -22,6 +22,7 @@ using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
+using Mooege.Core.MooNet.Accounts;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -45,16 +46,19 @@ namespace Mooege.Core.MooNet.Services
         public override void RemoveMember(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.RemoveMemberRequest request, System.Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("RemoveMember()");
+            var channel = ChannelManager.GetChannelByDynamicId(LastCallHeader.ObjectId);
+            var gameAccount = GameAccountManager.GetAccountByPersistentID(request.MemberId.Low);
 
-            // TODO: we should be actually checking for which member has to be removed. /raist.            
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
-            this.Client.CurrentChannel.RemoveMember(this.Client, Channel.GetRemoveReasonForRequest((Channel.RemoveRequestReason)request.Reason));
+
+            channel.RemoveMember(gameAccount.LoggedInClient, Channel.GetRemoveReasonForRequest((Channel.RemoveRequestReason)request.Reason));
         }
 
         public override void SendMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SendMessageRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("{0} sent a message to channel {1}.", this.Client.Account.CurrentGameAccount.CurrentToon, this.Client.CurrentChannel);
+            var channel = ChannelManager.GetChannelByDynamicId(this.LastCallHeader.ObjectId);
+            Logger.Trace("{0} sent a message to channel {1}.", this.Client.Account.CurrentGameAccount.CurrentToon, channel);
 
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
@@ -65,7 +69,6 @@ namespace Mooege.Core.MooNet.Services
             if (request.Message.AttributeCount == 0 || !request.Message.AttributeList.First().HasValue)
                 return; // check if it has attributes.
 
-            var channel = ChannelManager.GetChannelByDynamicId(this.LastCallHeader.ObjectId);
             var parsedAsCommand = CommandManager.TryParse(request.Message.AttributeList[0].Value.StringValue, this.Client); // try parsing the message as a command
 
             if (!parsedAsCommand)
@@ -79,7 +82,8 @@ namespace Mooege.Core.MooNet.Services
 
         public override void UpdateChannelState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateChannelStateRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("UpdateChannelState()");
+            var channel = ChannelManager.GetChannelByDynamicId(this.LastCallHeader.ObjectId);
+            Logger.Trace("UpdateChannelState(): {0}", channel.ToString());
 
             // TODO: Should be actually applying changes on channel. /raist.
             var channelState = bnet.protocol.channel.ChannelState.CreateBuilder();
@@ -92,10 +96,15 @@ namespace Mooege.Core.MooNet.Services
                     {
                         var gameCreateParams = D3.OnlineService.GameCreateParams.ParseFrom(attribute.Value.MessageValue);
 
+                        if (channel.Attributes.ContainsKey(attribute.Name))
+                            channel.Attributes[attribute.Name] = attribute;
+                        else
+                            channel.Attributes.Add(attribute.Name, attribute);
                         var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                             .SetName("D3.Party.GameCreateParams")
                             .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameCreateParams.ToByteString()).Build());
                         channelState.AddAttribute(attr);
+                        Logger.Trace("D3.Party.GameCreateParams: {0}", gameCreateParams.ToString());
                     }
                 }
                 else if (attribute.Name == "D3.Party.SearchForPublicGame.Params")
@@ -111,12 +120,11 @@ namespace Mooege.Core.MooNet.Services
 
                     if (!attribute.HasValue || attribute.Value.MessageValue.IsEmpty) //Sometimes not present -Egris
                     {
-                        var newScreen = this.Client.Account.CurrentGameAccount.ScreenStatus;
-
                         var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                             .SetName("D3.Party.ScreenStatus")
-                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(newScreen.ToByteString()));
+                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder());
                         channelState.AddAttribute(attr);
+                        Logger.Trace("D3.Party.ScreenStatus = null");
                     }
                     else
                     {
@@ -141,6 +149,7 @@ namespace Mooege.Core.MooNet.Services
                         .SetName("D3.Party.JoinPermissionPreviousToLock")
                         .SetValue(joinPermission);
                     channelState.AddAttribute(attr);
+                    Logger.Trace("D3.Party.JoinPermissionPreviousToLock = {0}", joinPermission.IntValue);
                 }
                 else if (attribute.Name == "D3.Party.LockReasons")
                 {
@@ -152,6 +161,7 @@ namespace Mooege.Core.MooNet.Services
                         .SetName("D3.Party.LockReasons")
                         .SetValue(lockReason);
                     channelState.AddAttribute(attr);
+                    Logger.Trace("D3.Party.LockReasons = {0}", lockReason.IntValue);
                 }
                 else if (attribute.Name == "D3.Party.GameId")
                 {
@@ -162,7 +172,10 @@ namespace Mooege.Core.MooNet.Services
                             .SetName("D3.Party.GameId")
                             .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(gameId.ToByteString()).Build());
                         channelState.AddAttribute(attr);
+                        Logger.Trace("D3.Party.GameId = {0}", gameId.IdLow);
                     }
+                    else
+                        Logger.Trace("D3.Party.GameId = null");
 
                 }
                 else
@@ -182,18 +195,12 @@ namespace Mooege.Core.MooNet.Services
                 .SetStateChange(channelState)
                 .Build();
 
-            if (this.Client.CurrentChannel == null) //Client left channel already
-                return;
-
             //Notify all Channel members
-            foreach (var member in this.Client.CurrentChannel.Members.Keys)
+            foreach (var member in channel.Members.Keys)
             {
-                member.MakeTargetedRPC(this.Client.CurrentChannel, () =>
+                member.MakeTargetedRPC(channel, () =>
                     bnet.protocol.channel.ChannelSubscriber.CreateStub(member).NotifyUpdateChannelState(null, notification, callback => { }));
             }
-            // Send UpdateChannelStateNotification RPC call.
-            //this.Client.MakeTargetedRPC(this.Client.CurrentChannel, () =>
-            //    bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notification, callback => { }));
         }
 
         public override void UpdateMemberState(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.UpdateMemberStateRequest request, System.Action<bnet.protocol.NoData> done)

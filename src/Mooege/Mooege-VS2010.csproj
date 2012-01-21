@@ -266,6 +266,7 @@
     <Compile Include="Core\MooNet\Authentication\Config.cs" />
     <Compile Include="Core\MooNet\Authentication\VersionChecker.cs" />
     <Compile Include="Core\MooNet\Channels\Channel.cs" />
+    <Compile Include="Core\MooNet\Channels\ChannelCommands.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelManager.cs" />
     <Compile Include="Core\MooNet\Channels\Member.cs" />
     <Compile Include="Common\Config\Config.cs" />

@@ -80,6 +80,7 @@ namespace Mooege.Core.MooNet.Services
                                                                                                     // also he shouldn't be allowed to invite his current friends - put that check too!. /raist
             var inviteee = AccountManager.GetAccountByEmail(friendRequest.TargetEmail);
             if (inviteee == null) return; // we need send an error response here /raist.
+            //Header.Status(4) = account does not exist
 
             Logger.Trace("{0} sent {1} friend invitation.", this.Client.Account, inviteee);
 
