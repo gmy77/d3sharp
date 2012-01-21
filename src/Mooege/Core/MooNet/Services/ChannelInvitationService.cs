@@ -46,12 +46,14 @@ namespace Mooege.Core.MooNet.Services
 
         public override void AcceptInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.AcceptInvitationRequest request, Action<bnet.protocol.channel_invitation.AcceptInvitationResponse> done)
         {
-            Logger.Trace("{0} accepted invitation id {1}.", this.Client.Account.CurrentGameAccount.CurrentToon, request.InvitationId);
+            var channel = ChannelManager.GetChannelByEntityId(this._invitationManager.GetInvitationById(request.InvitationId).GetExtension(bnet.protocol.channel_invitation.ChannelInvitation.ChannelInvitationProp).ChannelDescription.ChannelId);
 
-            var channel = this._invitationManager.HandleAccept(this.Client, request);
+            Logger.Trace("{0} accepted invitation id {1} to channel {2}.", this.Client.Account.CurrentGameAccount.CurrentToon, request.InvitationId, channel);
 
             var response = bnet.protocol.channel_invitation.AcceptInvitationResponse.CreateBuilder().SetObjectId(channel.DynamicId).Build();
             done(response);
+
+            this._invitationManager.HandleAccept(this.Client, request);
         }
 
         public override void DeclineInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
@@ -94,7 +96,6 @@ namespace Mooege.Core.MooNet.Services
                 .SetServiceType(channelInvitationInfo.ServiceType)
                 .SetRejoin(false).Build();
 
-            //Todo: Verify Inviter and Invitee names -Egris
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder();
             invitation.SetId(ChannelInvitationManager.InvitationIdCounter++)
                 .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(Client.Account.CurrentGameAccount.BnetEntityId).Build())
@@ -112,6 +113,7 @@ namespace Mooege.Core.MooNet.Services
 
             var builder = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder();
             var channel = ChannelManager.GetChannelByEntityId(channelInvitationInfo.ChannelId);
+            channel.AddInvitation(invitation.Build());
 
             if (!channel.HasMember(invitee))
                 builder.SetInvitation(invitation.Clone()); // clone it because we need that invitation as un-builded below.

@@ -78,7 +78,7 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        private D3.PartyMessage.ScreenStatus _screenstatus;
+        private D3.PartyMessage.ScreenStatus _screenstatus = D3.PartyMessage.ScreenStatus.CreateBuilder().Build();
         public D3.PartyMessage.ScreenStatus ScreenStatus
         {
             get
@@ -324,6 +324,9 @@ namespace Mooege.Core.MooNet.Accounts
                 case bnet.protocol.presence.FieldOperation.Types.OperationType.CLEAR:
                     DoClear(operation.Field);
                     break;
+                default:
+                    Logger.Warn("No operation type.");
+                    break;
             }
         }
 
@@ -342,23 +345,36 @@ namespace Mooege.Core.MooNet.Accounts
                         {
                             var entityId = D3.OnlineService.EntityId.ParseFrom(field.Value.MessageValue);
                             var channel = ChannelManager.GetChannelByEntityId(entityId);
-                            this.LoggedInClient.CurrentChannel = channel;
-                            Logger.Trace("{0} set channel to {1}", this, channel);
+                            if (this.LoggedInClient.CurrentChannel != channel)
+                            {
+                                this.LoggedInClient.CurrentChannel = channel;
+                                returnField.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(channel.BnetEntityId.ToByteString()).Build());
+                                Logger.Trace("{0} set channel to {1}", this, channel);
+                            }
                         }
                         else
                         {
-                            Logger.Warn("Emtpy-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
+                            if (this.LoggedInClient.CurrentChannel != null)
+                            {
+                                returnField.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(Google.ProtocolBuffers.ByteString.Empty).Build());
+                                Logger.Warn("Emtpy-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
+                            }
                         }
                     }
                     else if (field.Key.Group == 4 && field.Key.Field == 2)
                     {
                         //catch to stop Logger.Warn spam on client start and exit
                         // should D3.4.2 int64 Current screen (0=in-menus, 1=in-menus, 3=in-menus); see ScreenStatus sent to ChannelService.UpdateChannelState call /raist
-                        this.ScreenStatus = D3.PartyMessage.ScreenStatus.CreateBuilder().SetScreen((int)field.Value.IntValue).SetStatus(0).Build();
-                        Logger.Trace("{0} set current screen to {1}.", this, field.Value.IntValue);
+                        if (this.ScreenStatus.Screen != field.Value.IntValue)
+                        {
+                            this.ScreenStatus = D3.PartyMessage.ScreenStatus.CreateBuilder().SetScreen((int)field.Value.IntValue).SetStatus(0).Build();
+                            returnField.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(field.Value.IntValue).Build());
+                            Logger.Trace("{0} set current screen to {1}.", this, field.Value.IntValue);
+                        }
                     }
                     else if (field.Key.Group == 4 && field.Key.Field == 3)
                     {
+                        returnField.SetValue(field.Value);
                         //Looks to be the ToonFlags of the party leader/inviter when it is an int, OR the message set in an open to friends game when it is a string /dustinconrad
                     }
                     else
@@ -370,7 +386,7 @@ namespace Mooege.Core.MooNet.Accounts
                     if (field.Key.Group == 2 && field.Key.Field == 3) // Away status
                     {
                         this.AwayStatus = (AwayStatusFlag)field.Value.IntValue;
-                        returnField.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.AwayStatus).Build()).Build();
+                        returnField.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.AwayStatus).Build());
                         Logger.Trace("{0} set AwayStatus to {1}.", this, this.AwayStatus);
                     }
                     else
@@ -379,6 +395,8 @@ namespace Mooege.Core.MooNet.Accounts
                     }
                     break;
             }
+
+            //We only update subscribers on fields that actually change values.
             if (returnField.HasValue)
             {
                 operation.SetField(returnField);

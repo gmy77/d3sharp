@@ -37,6 +37,14 @@ namespace Mooege.Core.MooNet.Channels
             this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ChannelId).SetLow(1).Build();
         }
 
+        public bnet.protocol.invitation.Invitation GetInvitationById(ulong Id)
+        {
+            if (!this._onGoingInvitations.ContainsKey(Id))
+                return null;
+            else
+                return this._onGoingInvitations[Id];
+        }
+
         public void HandleInvitation(MooNetClient client, bnet.protocol.invitation.Invitation invitation)
         {
             var invitee = this.Subscribers.FirstOrDefault(subscriber => subscriber.Account.CurrentGameAccount.BnetEntityId.Low == invitation.InviteeIdentity.AccountId.Low);
@@ -57,22 +65,27 @@ namespace Mooege.Core.MooNet.Channels
             var invitation = this._onGoingInvitations[request.InvitationId];
             var channel = ChannelManager.GetChannelByEntityId(invitation.GetExtension(bnet.protocol.channel_invitation.ChannelInvitation.ChannelInvitationProp).ChannelDescription.ChannelId);
 
-            channel.Join(client, request.ObjectId); // add invitee to channel -- so inviter and other members will also be notified too.
-
             var notification = bnet.protocol.channel_invitation.InvitationRemovedNotification.CreateBuilder().SetInvitation(invitation.ToBuilder()).SetReason((uint)InvitationRemoveReason.Accepted);
-            //Leaving a party sends AcceptInvitation with the original invitation id commenting this out
-            //to prevent null exception until we figure out what it's trying to do -Egris
             this._onGoingInvitations.Remove(invitation.Id);
 
-            var invitee = GameAccountManager.GetAccountByPersistentID(invitation.InviteeIdentity.AccountId.Low);
+            // notify invitee and let him remove the handled invitation.
+            client.MakeTargetedRPC(this, () =>
+                bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(client).NotifyReceivedInvitationRemoved(null, notification.Build(), callback => { }));
+
+            channel.Join(client, request.ObjectId); // add invitee to channel -- so inviter and other members will also be notified too.
+
             var inviter = GameAccountManager.GetAccountByPersistentID(invitation.InviterIdentity.AccountId.Low);
 
-            // notify invitee and let him remove the handled invitation.
-            //client.MakeTargetedRPC(invitee.LoggedInClient.PartyChannel, () =>
-            //    bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(client).NotifyReceivedInvitationRemoved(null, notification.Build(), callback => { }));
+            var stateNotification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
+                .SetAgentId(bnet.protocol.EntityId.CreateBuilder().SetHigh(0).SetLow(0).Build())
+                .SetStateChange(bnet.protocol.channel.ChannelState.CreateBuilder().AddRangeInvitation(channel.Invitations.Values).SetReason(0).Build())
+                .Build();
 
-            inviter.LoggedInClient.MakeTargetedRPC(inviter.LoggedInClient.PartyChannel, () =>
-                bnet.protocol.channel_invitation.ChannelInvitationNotify.CreateStub(inviter.LoggedInClient).NotifyReceivedInvitationRemoved(null, notification.Build(), callback => { }));
+            foreach (var member in channel.Members.Keys)
+            {
+                member.MakeTargetedRPC(channel, () =>
+                    bnet.protocol.channel.ChannelSubscriber.CreateStub(member).NotifyUpdateChannelState(null, stateNotification, callback => { }));
+            }
 
             return channel;
         }

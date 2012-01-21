@@ -52,11 +52,36 @@ namespace Mooege.Core.MooNet.Channels
             //    (current, pair) => current + string.Format("Id: {0} \tOwner: {1}\n", pair.Value.DynamicId, pair.Value.Owner));
         }
 
+        [Command("state", "Show state of channel.\nUsage: channels state <channelId>", Account.UserLevels.Owner)]
+        public string ChannelState(string[] @params, MooNetClient invokerClient)
+        {
+            if (@params.Count() < 1)
+                return "Invalid arguments. Type 'help channels state' to get help.";
+
+            UInt64 dynamicId;
+
+            if (!UInt64.TryParse(@params[0], out dynamicId))
+                return "Invalid arguments. Type 'help channels state' to get help.";
+
+            var channel = ChannelManager.GetChannelByDynamicId(dynamicId);
+
+            if (channel == null)
+                return "Invalid Channel Id.\nType 'channels list' to get a list of active channels.";
+
+            return channel.State.ToString();
+        }
+
+        [Command("list", "Shows list of active channels.\nUsage: channels list", Account.UserLevels.Owner)]
+        public string ChannelList(string[] @params, MooNetClient invokerClient)
+        {
+            return ChannelManager.Channels.Keys.ToString();
+        }
+
+
         [Command("client", "Shows active channels for client.\nUsage: channels client [email]")]
         public string ClientChannels(string[] @params, MooNetClient invokerClient)
         {
             var client = invokerClient;
-
 
             if (client == null && @params.Count() < 1)
                 return "Invalid arguments. Type 'help channels client' to get help.";

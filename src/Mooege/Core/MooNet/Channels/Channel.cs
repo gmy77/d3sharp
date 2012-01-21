@@ -61,6 +61,8 @@ namespace Mooege.Core.MooNet.Channels
         /// </summary>
         public readonly Dictionary<MooNetClient, Member> Members = new Dictionary<MooNetClient, Member>();
 
+        public readonly Dictionary<ulong, bnet.protocol.invitation.Invitation> Invitations = new Dictionary<ulong, bnet.protocol.invitation.Invitation>();
+
         /// <summary>
         /// Channel owner.
         /// </summary>
@@ -157,16 +159,16 @@ namespace Mooege.Core.MooNet.Channels
             var identity = client.GetIdentity(false, true, false);
 
             bool isOwner = client == this.Owner;
-            var addedMember = new Member(identity, (isOwner) ? Member.Privilege.UnkCreator : Member.Privilege.UnkMember);
+            var addedMember = new Member(identity, (isOwner) ? Member.Privilege.UnkCreator : Member.Privilege.UnkJoinedMember);
 
-            if (this.Members.Count > 0)
-            {
-                addedMember.AddRoles((isOwner) ? Member.Role.PartyLeader : Member.Role.PartyMember, Member.Role.ChannelMember);
-            }
-            else
-            {
+            //if (this.Members.Count > 0)
+            //{
+            //    addedMember.AddRoles((isOwner) ? Member.Role.PartyLeader : Member.Role.PartyMember, Member.Role.ChannelMember);
+            //}
+            //else
+            //{
                 addedMember.AddRole((isOwner) ? Member.Role.ChannelCreator : Member.Role.ChannelMember);
-            }
+            //}
 
             // This needs to be here so that the foreach below will also send to the client that was just added
             this.Members.Add(client, addedMember);
@@ -175,6 +177,8 @@ namespace Mooege.Core.MooNet.Channels
             var channelState = this.State.ToBuilder();
             if (this.Attributes.Count > 0)
                 channelState.AddRangeAttribute(this.Attributes.Values);
+            if (this.Invitations.Count > 0)
+                channelState.AddRangeInvitation(this.Invitations.Values);
             // added member should recieve a NotifyAdd.
             var addNotification = bnet.protocol.channel.AddNotification.CreateBuilder()
                 .SetChannelState(channelState.Build())
@@ -183,6 +187,19 @@ namespace Mooege.Core.MooNet.Channels
 
             client.MakeTargetedRPC(this, () =>
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyAdd(null, addNotification, callback => { }));
+
+            //send bnet,2,7 target = addedmember.gameaccount
+            //this always follows channel.AddNotification
+            var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.GameAccount, 2, 7);
+            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey);
+            field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(client.Account.BnetEntityId.Low.ToString() + "#1").Build());
+            var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field.Build()).Build();
+            var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(client.Account.CurrentGameAccount.BnetEntityId).AddFieldOperation(operation).Build();
+            var channelStatePresense = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+            var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelStatePresense).Build();
+            client.MakeTargetedRPC(client.Account.CurrentGameAccount, () =>
+                bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notification, callback => { }));
+
 
             if (this.IsGameChannel)
             {
@@ -239,9 +256,9 @@ namespace Mooege.Core.MooNet.Channels
 
         public void RemoveMember(MooNetClient client, RemoveReason reason, bool dissolving)
         {
-            if (client.Account.CurrentGameAccount.CurrentToon == null)
+            if (client.Account.CurrentGameAccount == null)
             {
-                Logger.Warn("Could not remove toon-less client {0} from channel {1}.", client.Connection.RemoteEndPoint.ToString(), this.ToString());
+                Logger.Warn("Could not remove client {0} from channel {1}.", client.Connection.RemoteEndPoint.ToString(), this.ToString());
                 return;
             }
             else if (!HasUser(client))
@@ -259,6 +276,7 @@ namespace Mooege.Core.MooNet.Channels
             //}
             var memberId = this.Members[client].Identity.GameAccountId;
             var message = bnet.protocol.channel.RemoveNotification.CreateBuilder()
+                .SetAgentId(memberId)  //is this channel owner, member being removed or the one requesting removal of member? -Egris
                 .SetMemberId(memberId)
                 .SetReason((uint)reason)
                 .Build();
@@ -290,6 +308,26 @@ namespace Mooege.Core.MooNet.Channels
 
             if (this.Members.Count == 0 && !dissolving)
                 Dissolve();
+        }
+
+        #endregion
+
+        #region invitation functionality
+        public void AddInvitation(bnet.protocol.invitation.Invitation invitation)
+        {
+            this.Invitations.Add(invitation.Id, invitation);
+        }
+
+        public void RemoveInvitation(bnet.protocol.invitation.Invitation invitation)
+        {
+            if (this.Invitations.ContainsKey(invitation.Id))
+            {
+                this.Invitations.Remove(invitation.Id);
+            }
+            else
+            {
+                Logger.Warn("Tried to removed unmapped invitation {0} from channel {1}.", invitation.Id, this);
+            }
         }
 
         #endregion

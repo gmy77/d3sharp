@@ -378,19 +378,6 @@ namespace Mooege.Net.MooNet
                 }
                 else
                     this._currentChannel = value;
-
-                if (value == null) return;
-
-                var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Channel, 1, 0);
-                var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey);
-
-                if (this._currentChannel != null)
-                    field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.CurrentChannel.D3EntityId.ToByteString()).Build());
-
-                var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field.Build()).Build();
-                var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.Account.CurrentGameAccount.BnetEntityId).AddFieldOperation(operation).Build();
-
-                this.SendStateChangeNotification(this.Account.CurrentGameAccount, state);
             }
         }
 

@@ -22,6 +22,7 @@ using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
+using Mooege.Core.MooNet.Accounts;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -46,11 +47,12 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("RemoveMember()");
             var channel = ChannelManager.GetChannelByDynamicId(LastCallHeader.ObjectId);
-            channel.RemoveMember(this.Client, Channel.GetRemoveReasonForRequest((Channel.RemoveRequestReason)request.Reason));
+            var gameAccount = GameAccountManager.GetAccountByPersistentID(request.MemberId.Low);
 
-            // TODO: we should be actually checking for which member has to be removed. /raist.            
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
+
+            channel.RemoveMember(gameAccount.LoggedInClient, Channel.GetRemoveReasonForRequest((Channel.RemoveRequestReason)request.Reason));
         }
 
         public override void SendMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.SendMessageRequest request, System.Action<bnet.protocol.NoData> done)
@@ -118,11 +120,9 @@ namespace Mooege.Core.MooNet.Services
 
                     if (!attribute.HasValue || attribute.Value.MessageValue.IsEmpty) //Sometimes not present -Egris
                     {
-                        var newScreen = this.Client.Account.CurrentGameAccount.ScreenStatus;
-
                         var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
                             .SetName("D3.Party.ScreenStatus")
-                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(newScreen.ToByteString()));
+                            .SetValue(bnet.protocol.attribute.Variant.CreateBuilder());
                         channelState.AddAttribute(attr);
                         Logger.Trace("D3.Party.ScreenStatus = null");
                     }
