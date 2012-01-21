@@ -26,12 +26,14 @@ namespace Mooege.Net.GS.Message.Definitions.Waypoint
         public int Field0;
         public int Field1;
         public int /* sno */ Field2;
+        public bool Field3;
 
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
             Field1 = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(32);
+            Field3 = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -39,6 +41,7 @@ namespace Mooege.Net.GS.Message.Definitions.Waypoint
             buffer.WriteInt(32, Field0);
             buffer.WriteInt(32, Field1);
             buffer.WriteInt(32, Field2);
+            buffer.WriteBool(Field3);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -50,6 +53,7 @@ namespace Mooege.Net.GS.Message.Definitions.Waypoint
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Field3: " + (Field3 ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

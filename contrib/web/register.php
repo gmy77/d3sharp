@@ -30,12 +30,17 @@ if(array_key_exists('email', $_REQUEST))
 if(array_key_exists('password', $_REQUEST))
     $password=$_REQUEST['password'];
 
+if(array_key_exists('battleTag', $_REQUEST))
+    $battleTag=$_REQUEST['battleTag'];
+
 if(empty($email) || empty($password)) // if email or password is empty.
     print_account_form(); // print the login form.
-else 
-    create_account($email, $password); // try loging using given credentals.
+else if(empty($battleTag))
+    print_account_form();
+else
+    create_account($email, $password, $battleTag); // try loging using given credentals.
 
-function create_account($email, $password)
+function create_account($email, $password, $battleTag)
 {
     $mooege=new LibMooege("http://localhost", 9000); // change this line to match your configuration.
     
@@ -47,7 +52,7 @@ function create_account($email, $password)
     if($exists)
         die("An account already exists for email address: $email!");
     
-    $created=$mooege->CreateAccount($email,$password);
+    $created=$mooege->CreateAccount($email,$password,$battleTag);
     
     if($created)
         echo "Account created successfully!";
@@ -66,6 +71,7 @@ function print_account_form() { ?>
     <form method="POST" action="register.php">
         E-mail:&nbsp&nbsp&nbsp&nbsp&nbsp <input type="text" name="email" size="16" value=""/><br />
         Password: <input type="password" name="password" size="16" /><br />
+		BattleTag: <input type="text" name="battleTag" size="16" /><br />
         <div align="center">
             <p><input type="submit" value="Create" /></p>
         </div>

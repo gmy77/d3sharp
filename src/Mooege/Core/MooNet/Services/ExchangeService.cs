@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Linq;
 using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
@@ -37,17 +38,41 @@ namespace Mooege.Core.MooNet.Services
             var builder = bnet.protocol.exchange.GetConfigurationResponse.CreateBuilder()
                 .AddConfigs(bnet.protocol.exchange.SpecialistConfig.CreateBuilder()
                     .SetSpecialist(1)
-                    .AddAuctionDurations(720)
-                    .AddAuctionDurations(1440)
+                    //.AddAuctionDurations(720)
+                    //.AddAuctionDurations(1440)
                     .AddAuctionDurations(2880)
                     .AddAuctionStartDelays(5)
                     .SetAntiSnipingExtensionDelay(1)
+                    .SetMaxItemsAmount(1)
+                    .SetStartingUnitPriceRule(2)
+                    .SetReservedUnitPriceRule(1)
+                    .SetTradeNowUnitPriceRule(1)
+                    .SetCurrentUnitPriceRule(2)
+                    .SetMaximumUnitPriceRule(2)
                     .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
-                        .SetCurrency("D3_GOLD")
+                        .SetCurrency("PTR")
                         .SetTickSize(1)
-                        .SetMinUnitPrice(5)
+                        .SetMinUnitPrice(100)
                         .SetMaxUnitPrice(4294967295)
-                        .SetMaxTotalPrice(4294967295)));
+                        .SetMaxTotalPrice(281474976710655).Build()))
+                .AddConfigs(bnet.protocol.exchange.SpecialistConfig.CreateBuilder()
+                    .SetSpecialist(2)
+                    .AddAuctionDurations(2880)
+                    .AddAuctionStartDelays(0)
+                    .SetAntiSnipingExtensionDelay(0)
+                    .SetMaxItemsAmount(4294967295)
+                    .SetStartingUnitPriceRule(1)
+                    .SetReservedUnitPriceRule(2)
+                    .SetTradeNowUnitPriceRule(0)
+                    .SetCurrentUnitPriceRule(0)
+                    .SetMaximumUnitPriceRule(2)
+                    .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
+                        .SetCurrency("PTR")
+                        .SetTickSize(1)
+                        .SetMinUnitPrice(100)
+                        .SetMaxUnitPrice(4294967295)
+                        .SetMaxTotalPrice(281474976710655).Build()));
+
             done(builder.Build());
         }
 
@@ -142,7 +167,33 @@ namespace Mooege.Core.MooNet.Services
 
         public override void GetPaymentMethods(IRpcController controller, bnet.protocol.exchange_object_provider.GetPaymentMethodsRequest request, Action<bnet.protocol.exchange_object_provider.GetPaymentMethodsResponse> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("GetPaymentMethods()");
+
+            var builder = bnet.protocol.exchange_object_provider.GetPaymentMethodsResponse.CreateBuilder();
+            var data = new byte[] { 0x6A, 0x04, 0x65, 0x6E, 0x55, 0x53, 0x7A, 0x0A, 0x42, 0x61, 0x74, 0x74, 0x6C, 0x65, 0x43, 0x6F, 0x69, 0x6E };
+            //j\004enUSz\nBattleCoin
+            //data is added to the end of extensionData
+            var extensionData = bnet.protocol.exchange.Extension.CreateBuilder()
+                .SetPartitionId(bnet.protocol.exchange.PartitionId.ParseFrom(this.Client.Account.BnetEntityId.ToByteArray()))
+                .SetOrderBookId(1)
+                .SetOrderId(3)
+                .SetFilledAmount(0)
+                .SetOrderStatus((int)this.Client.Account.BnetEntityId.Low)
+                .SetAuthorizedTime(0)
+                .Build();
+
+            var method = bnet.protocol.exchange_object_provider.PaymentMethod.CreateBuilder()
+                .SetAccount(bnet.protocol.exchange.BlobFrom.CreateBuilder()
+                    .SetSource(1161969996)
+                    .SetData(ByteString.CopyFrom(extensionData.ToByteArray().Concat(data).ToArray())))
+                .SetDescription("BattleCoin")
+                .SetAmount(100000)
+                .SetCashInOutMask(3)
+                .SetCountryId(0)
+                .Build();
+            builder.AddMethods(method);
+
+            done(builder.Build());
         }
 
         public override void ClaimBidItem(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<bnet.protocol.NoData> done)

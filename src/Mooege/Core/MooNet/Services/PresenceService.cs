@@ -29,7 +29,7 @@ using Mooege.Net.MooNet;
 namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0xb, serviceName: "bnet.protocol.presence.PresenceService")]
-    public class PresenceService : bnet.protocol.presence.PresenceService,IServerService
+    public class PresenceService : bnet.protocol.presence.PresenceService, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
@@ -47,16 +47,16 @@ namespace Mooege.Core.MooNet.Services
                         account.AddSubscriber(this.Client, request.ObjectId);
                     }
                     break;
-                case EntityIdHelper.HighIdType.ToonId:
-                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);                    
-                    if (toon != null) 
+                case EntityIdHelper.HighIdType.GameAccountId:
+                    var gameaccount = GameAccountManager.GetAccountByPersistentID(request.EntityId.Low);
+                    if (gameaccount != null)
                     {
-                        Logger.Trace("Subscribe() {0} {1}", this.Client, toon);
-                        toon.AddSubscriber(this.Client, request.ObjectId); // The client will send us a Subscribe with ToonId of 0 the first time it tries to create a toon with a name that already exists. Let's handle that here.
+                        Logger.Trace("Subscribe() {0} {1}", this.Client, gameaccount);
+                        gameaccount.AddSubscriber(this.Client, request.ObjectId);
                     }
                     break;
                 default:
-                    Logger.Warn("Recieved an unhandled Presence.Subscribe request with type {0}", request.EntityId.GetHighIdType());
+                    Logger.Warn("Recieved an unhandled Presence.Subscribe request with type {0} (0x{1})", request.EntityId.GetHighIdType(), request.EntityId.High.ToString("X16"));
                     break;
             }
 
@@ -66,8 +66,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void Unsubscribe(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UnsubscribeRequest request, System.Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("Unsubscribe()");
-            
+
             switch (request.EntityId.GetHighIdType())
             {
                 case EntityIdHelper.HighIdType.AccountId:
@@ -79,25 +78,25 @@ namespace Mooege.Core.MooNet.Services
                         Logger.Trace("Unsubscribe() {0} {1}", this.Client, account);
                     }
                     break;
-                case EntityIdHelper.HighIdType.ToonId:
-                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
-                    if (toon != null)
+                case EntityIdHelper.HighIdType.GameAccountId:
+                    var gameaccount = GameAccountManager.GetAccountByPersistentID(request.EntityId.Low);
+                    if (gameaccount != null)
                     {
-                        toon.RemoveSubscriber(this.Client);
-                        Logger.Trace("Unsubscribe() {0} {1}", this.Client, toon);
+                        gameaccount.RemoveSubscriber(this.Client);
+                        Logger.Trace("Unsubscribe() {0} {1}", this.Client, gameaccount);
                     }
                     break;
                 default:
-                    Logger.Warn("Recieved an unhandled Presence.Unsubscribe request with type {0}", request.EntityId.GetHighIdType());
+                    Logger.Warn("Recieved an unhandled Presence.Unsubscribe request with type {0} (0x{1})", request.EntityId.GetHighIdType(), request.EntityId.High.ToString("X16"));
                     break;
             }
-            
+
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
 
         public override void Update(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UpdateRequest request, System.Action<bnet.protocol.NoData> done)
-        {            
+        {
             //Logger.Warn("request:\n{0}", request.ToString());
             // This "UpdateRequest" is not, as it may seem, a request to update the client on the state of an object,
             // but instead the *client* requesting to change fields on an object that it has subscribed to.
@@ -107,18 +106,21 @@ namespace Mooege.Core.MooNet.Services
             {
                 case EntityIdHelper.HighIdType.AccountId:
                     var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
-                    Logger.Trace("Update() {0} {1}", this.Client, account);
+                    Logger.Trace("Update() {0} {1} - {2} Operations", this.Client, account, request.FieldOperationCount);
+                    Logger.Warn("No AccountManager updater.");
                     break;
-                case EntityIdHelper.HighIdType.ToonId:
-                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
-                    Logger.Trace("Update() {0} {1}", this.Client, toon);
-                    foreach(var fieldOp in request.FieldOperationList)
+                case EntityIdHelper.HighIdType.GameAccountId:
+                    var gameaccount = GameAccountManager.GetAccountByPersistentID(request.EntityId.Low);
+                    var trace = string.Format("Update() {0} {1} - {2} Operations", this.Client, gameaccount, request.FieldOperationCount);
+                    foreach (var fieldOp in request.FieldOperationList)
                     {
-                        toon.Update(fieldOp);
+                        trace += string.Format("\t{0}, {1}, {2}", (FieldKeyHelper.Program)fieldOp.Field.Key.Program, (FieldKeyHelper.OriginatingClass)fieldOp.Field.Key.Group, fieldOp.Field.Key.Field);
+                        gameaccount.Update(fieldOp);
                     }
+                    Logger.Trace(trace);
                     break;
                 default:
-                    Logger.Warn("Recieved an unhandled Presence.Update request with type {0}", request.EntityId.GetHighIdType());
+                    Logger.Warn("Recieved an unhandled Presence.Update request with type {0} (0x{1})", request.EntityId.GetHighIdType(), request.EntityId.High.ToString("X16"));
                     break;
             }
 
@@ -127,30 +129,32 @@ namespace Mooege.Core.MooNet.Services
         }
 
         public override void Query(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.QueryRequest request, Action<bnet.protocol.presence.QueryResponse> done)
-        {            
+        {
             var builder = bnet.protocol.presence.QueryResponse.CreateBuilder();
 
             switch (request.EntityId.GetHighIdType())
             {
                 case EntityIdHelper.HighIdType.AccountId:
                     var account = AccountManager.GetAccountByPersistentID(request.EntityId.Low);
-                    Logger.Trace("Query() {0} {1}", this.Client, account);
-                    foreach(var key in request.KeyList)
+                    foreach (var key in request.KeyList)
                     {
+                        Logger.Trace("Query() {0} {1} - {2}, {3}, {4}", this.Client, account, (FieldKeyHelper.Program)key.Program, (FieldKeyHelper.OriginatingClass)key.Group, key.Field);
                         var field = account.QueryField(key);
                         if (field != null) builder.AddField(field);
                     }
-
                     break;
-                case EntityIdHelper.HighIdType.ToonId:
-                    var toon = ToonManager.GetToonByLowID(request.EntityId.Low);
-                    Logger.Trace("Query() {0} {1}", this.Client, toon);                    
+
+                case EntityIdHelper.HighIdType.GameAccountId:
+                    var gameaccount = GameAccountManager.GetAccountByPersistentID(request.EntityId.Low);
                     foreach (var key in request.KeyList)
                     {
-                        var field = toon.QueryField(key);
+                        Logger.Trace("Query() {0} {1} - {2}, {3}, {4}", this.Client, gameaccount, (FieldKeyHelper.Program)key.Program, (FieldKeyHelper.OriginatingClass)key.Group, key.Field);
+                        var field = gameaccount.QueryField(key);
                         if (field != null) builder.AddField(field);
                     }
-
+                    break;
+                default:
+                    Logger.Warn("Recieved an unhandled Presence.Query request with type {0} (0x{1})", request.EntityId.GetHighIdType(), request.EntityId.High.ToString("X16"));
                     break;
             }
 

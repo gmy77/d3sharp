@@ -121,7 +121,7 @@ namespace Mooege.Core.GS.Actors
                             case GizmoGroup.TownPortal:
                             case GizmoGroup.Trigger:
                             case GizmoGroup.WeirdGroup57:
-                                Logger.Info("GizmoGroup {0} has no proper implementation, using default gizmo instead", actorData.TagMap[ActorKeys.GizmoGroup]);
+                                //Logger.Info("GizmoGroup {0} has no proper implementation, using default gizmo instead", actorData.TagMap[ActorKeys.GizmoGroup]);
                                 return CreateGizmo(world, snoId, tags);
 
                             default:

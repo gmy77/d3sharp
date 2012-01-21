@@ -44,20 +44,33 @@ namespace Mooege.Core.MooNet.Friends
 
         static FriendManager()
         {
+            // TODO: Find correct bnet EntityId
+            _instance.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.Unknown).SetLow(1).Build();
             LoadFriendships();
         }
 
         public static void HandleInvitation(MooNetClient client, bnet.protocol.invitation.Invitation invitation)
         {
-            var invitee = Instance.Subscribers.FirstOrDefault(subscriber => subscriber.Account.BnetAccountID.Low == invitation.InviteeIdentity.AccountId.Low);
+            var invitee = AccountManager.GetAccountByPersistentID(invitation.InviteeIdentity.AccountId.Low);
+            //var invitee = Instance.Subscribers.FirstOrDefault(subscriber => subscriber.Account.BnetEntityId.Low == invitation.InviteeIdentity.AccountId.Low);
             if (invitee == null) return; // if we can't find invite just return - though we should actually check for it until expiration time and store this in database.
+
+            //Check for duplicate invites
+            foreach (var oldInvite in OnGoingInvitations.Values)
+            {
+                if ((oldInvite.InviteeIdentity.AccountId == invitation.InviteeIdentity.AccountId) && (oldInvite.InviterIdentity.AccountId == invitation.InviterIdentity.AccountId))
+                    return;
+            }
 
             OnGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.
 
-            var notification = bnet.protocol.friends.InvitationAddedNotification.CreateBuilder().SetInvitation(invitation);
+            if (invitee.IsOnline)
+            {
+                var notification = bnet.protocol.friends.InvitationNotification.CreateBuilder().SetInvitation(invitation);
 
-            invitee.MakeTargetedRPC(FriendManager.Instance, () =>
-                bnet.protocol.friends.FriendsNotify.CreateStub(invitee).NotifyReceivedInvitationAdded(null, notification.Build(), callback => { }));
+                invitee.CurrentGameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                    bnet.protocol.friends.FriendsNotify.CreateStub(invitee.CurrentGameAccount.LoggedInClient).NotifyReceivedInvitationAdded(null, notification.Build(), callback => { }));
+            }
         }
 
         public static void HandleAccept(MooNetClient client, bnet.protocol.invitation.GenericRequest request)
@@ -70,37 +83,50 @@ namespace Mooege.Core.MooNet.Friends
             var inviteeAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(invitation.InviteeIdentity.AccountId).Build();
             var inviterAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(invitation.InviterIdentity.AccountId).Build();
 
-            var notificationToInviter = bnet.protocol.friends.InvitationRemovedNotification.CreateBuilder()
+            var notificationToInviter = bnet.protocol.friends.InvitationNotification.CreateBuilder()
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Accepted) // success?
-                .SetAddedFriend(inviteeAsFriend).Build();
+                .Build();
 
-            inviter.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
-                bnet.protocol.friends.FriendsNotify.CreateStub(inviter.LoggedInClient).NotifyReceivedInvitationRemoved(null, notificationToInviter,callback => { }));
-            
-            var notificationToInvitee = bnet.protocol.friends.InvitationRemovedNotification.CreateBuilder()
+            var notificationToInvitee = bnet.protocol.friends.InvitationNotification.CreateBuilder()
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Accepted) // success?
-                .SetAddedFriend(inviterAsFriend).Build();
+                .Build();
 
-            invitee.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
-                bnet.protocol.friends.FriendsNotify.CreateStub(invitee.LoggedInClient).NotifyReceivedInvitationRemoved(null, notificationToInvitee,callback => { }));
-
-            Friends.Add(invitee.BnetAccountID.Low, inviterAsFriend);
-            Friends.Add(inviter.BnetAccountID.Low, inviteeAsFriend);
+            Friends.Add(invitee.BnetEntityId.Low, inviterAsFriend);
+            Friends.Add(inviter.BnetEntityId.Low, inviteeAsFriend);
             AddFriendshipToDB(inviter,invitee);
 
-            // send friend added notification to inviter
+            // send friend added notifications
             var friendAddedNotificationToInviter = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviteeAsFriend).Build();
-
-            inviter.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
-                bnet.protocol.friends.FriendsNotify.CreateStub(inviter.LoggedInClient).NotifyFriendAdded(null, friendAddedNotificationToInviter, callback => { }));
-
-            // send friend added notification to invitee 
             var friendAddedNotificationToInvitee = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviterAsFriend).Build();
 
-            invitee.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
-                bnet.protocol.friends.FriendsNotify.CreateStub(invitee.LoggedInClient).NotifyFriendAdded(null, friendAddedNotificationToInvitee, callback => { }));
+            var inviterGameAccounts = GameAccountManager.GetGameAccountsForAccount(inviter).Values;
+            var inviteeGameAccounts = GameAccountManager.GetGameAccountsForAccount(invitee).Values;
+
+            foreach (var inviterGameAccount in inviterGameAccounts)
+            {
+                if (inviterGameAccount.IsOnline)
+                {
+                    inviterGameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                        bnet.protocol.friends.FriendsNotify.CreateStub(inviterGameAccount.LoggedInClient).NotifyReceivedInvitationRemoved(null, notificationToInviter, callback => { }));
+
+                    inviterGameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                        bnet.protocol.friends.FriendsNotify.CreateStub(inviterGameAccount.LoggedInClient).NotifyFriendAdded(null, friendAddedNotificationToInviter, callback => { }));
+                }
+            }
+
+            foreach (var inviteeGameAccount in inviteeGameAccounts)
+            {
+                if (inviteeGameAccount.IsOnline)
+                {
+                    inviteeGameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                        bnet.protocol.friends.FriendsNotify.CreateStub(inviteeGameAccount.LoggedInClient).NotifyFriendAdded(null, friendAddedNotificationToInvitee, callback => { }));
+
+                    inviteeGameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                        bnet.protocol.friends.FriendsNotify.CreateStub(inviteeGameAccount.LoggedInClient).NotifyReceivedInvitationRemoved(null, notificationToInvitee, callback => { }));
+                }
+            }
         }
 
         public static void HandleDecline(MooNetClient client, bnet.protocol.invitation.GenericRequest request)
@@ -111,15 +137,30 @@ namespace Mooege.Core.MooNet.Friends
             var inviter = AccountManager.GetAccountByPersistentID(invitation.InviterIdentity.AccountId.Low);
             var invitee = AccountManager.GetAccountByPersistentID(invitation.InviteeIdentity.AccountId.Low);
 
-            var declinedNotification = bnet.protocol.friends.InvitationRemovedNotification.CreateBuilder()
+            var declinedNotification = bnet.protocol.friends.InvitationNotification.CreateBuilder()
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Declined).Build();
 
-            inviter.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
-                bnet.protocol.friends.FriendsNotify.CreateStub(inviter.LoggedInClient).NotifyReceivedInvitationRemoved(null, declinedNotification, callback => { }));
+            var inviterGameAccounts = GameAccountManager.GetGameAccountsForAccount(inviter).Values;
+            var inviteeGameAccounts = GameAccountManager.GetGameAccountsForAccount(invitee).Values;
 
-            invitee.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
-                bnet.protocol.friends.FriendsNotify.CreateStub(invitee.LoggedInClient).NotifyReceivedInvitationRemoved(null, declinedNotification, callback => { }));
+            foreach (var inviterGameAccount in inviterGameAccounts)
+            {
+                if (inviterGameAccount.IsOnline)
+                {
+                    inviterGameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                        bnet.protocol.friends.FriendsNotify.CreateStub(inviterGameAccount.LoggedInClient).NotifyReceivedInvitationRemoved(null, declinedNotification, callback => { }));
+                }
+            }
+
+            foreach (var inviteeGameAccount in inviteeGameAccounts)
+            {
+                if (inviteeGameAccount.IsOnline)
+                {
+                    inviteeGameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                        bnet.protocol.friends.FriendsNotify.CreateStub(inviteeGameAccount.LoggedInClient).NotifyReceivedInvitationRemoved(null, declinedNotification, callback => { }));
+                }
+            }
         }
 
         public static void HandleRemove(MooNetClient client, bnet.protocol.friends.GenericFriendRequest request)
@@ -127,24 +168,30 @@ namespace Mooege.Core.MooNet.Friends
             var removee = AccountManager.GetAccountByPersistentID(request.TargetId.Low);
             var remover = client.Account;
 
-            var removeeAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(removee.BnetAccountID).Build();
-            var removerAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(remover.BnetAccountID).Build();
+            var removeeAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(removee.BnetEntityId).Build();
+            var removerAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(remover.BnetEntityId).Build();
 
-            var removed = Friends.Remove(remover.BnetAccountID.Low, removeeAsFriend);
-            if (!removed) Logger.Warn("No friendship mapping between {0} and {1}", remover.BnetAccountID.Low, removeeAsFriend);
-            removed = Friends.Remove(removee.BnetAccountID.Low, removerAsFriend);
-            if (!removed) Logger.Warn("No friendship mapping between {0} and {1}", removee.BnetAccountID.Low, removerAsFriend);
+            var removed = Friends.Remove(remover.BnetEntityId.Low, removeeAsFriend);
+            if (!removed) Logger.Warn("No friendship mapping between {0} and {1}", remover.BnetEntityId.Low, removeeAsFriend);
+            removed = Friends.Remove(removee.BnetEntityId.Low, removerAsFriend);
+            if (!removed) Logger.Warn("No friendship mapping between {0} and {1}", removee.BnetEntityId.Low, removerAsFriend);
             RemoveFriendshipFromDB(remover, removee);
 
             var notifyRemover = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(removeeAsFriend).Build();
+
             client.MakeTargetedRPC(FriendManager.Instance, () =>
                 bnet.protocol.friends.FriendsNotify.CreateStub(client).NotifyFriendRemoved(null, notifyRemover, callback => { }));
 
-            if (removee.IsOnline)
+
+            var removeeGameAccounts = GameAccountManager.GetGameAccountsForAccount(removee).Values;
+            foreach (var removeeGameAccount in removeeGameAccounts)
             {
-                var notifyRemovee = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(removerAsFriend).Build();
-                removee.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
-                    bnet.protocol.friends.FriendsNotify.CreateStub(removee.LoggedInClient).NotifyFriendRemoved(null, notifyRemovee, callback => { }));
+                if (removeeGameAccount.IsOnline)
+                {
+                    var notifyRemovee = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(removerAsFriend).Build();
+                    removeeGameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                        bnet.protocol.friends.FriendsNotify.CreateStub(removeeGameAccount.LoggedInClient).NotifyFriendRemoved(null, notifyRemovee, callback => { }));
+                }
             }
         }
 
@@ -152,7 +199,7 @@ namespace Mooege.Core.MooNet.Friends
         {
             try
             {
-                var query = string.Format("INSERT INTO friends (accountId, friendId) VALUES({0},{1}); INSERT INTO friends (accountId, friendId) VALUES({2},{3});", inviter.BnetAccountID.Low, invitee.BnetAccountID.Low, invitee.BnetAccountID.Low, inviter.BnetAccountID.Low);
+                var query = string.Format("INSERT INTO friends (accountId, friendId) VALUES({0},{1}); INSERT INTO friends (accountId, friendId) VALUES({2},{3});", inviter.BnetEntityId.Low, invitee.BnetEntityId.Low, invitee.BnetEntityId.Low, inviter.BnetEntityId.Low);
 
                 var cmd = new SQLiteCommand(query, DBManager.Connection);
                 cmd.ExecuteNonQuery();
@@ -167,7 +214,7 @@ namespace Mooege.Core.MooNet.Friends
         {
             try
             {
-                var query = string.Format("DELETE FROM friends WHERE accountId = {0} AND friendId = {1}; DELETE FROM friends WHERE accountId = {1} AND friendId = {0};", remover.BnetAccountID.Low, removee.BnetAccountID.Low);
+                var query = string.Format("DELETE FROM friends WHERE accountId = {0} AND friendId = {1}; DELETE FROM friends WHERE accountId = {1} AND friendId = {0};", remover.BnetEntityId.Low, removee.BnetEntityId.Low);
 
                 var cmd = new SQLiteCommand(query, DBManager.Connection);
                 cmd.ExecuteNonQuery();

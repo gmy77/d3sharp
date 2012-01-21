@@ -56,9 +56,10 @@ namespace D3.OnlineService {
           "ZWF0aW9uX2ZsYWdzGAIgAigNOgEwEjAKBGNvb3AYAyABKAsyIi5EMy5Pbmxp" + 
           "bmVTZXJ2aWNlLkNvb3BDcmVhdGVQYXJhbXMSLgoDcHZwGAQgASgLMiEuRDMu" + 
           "T25saW5lU2VydmljZS5QdlBDcmVhdGVQYXJhbXMSDAoEbmFtZRgFIAEoCRIY" + 
-          "Cgppc19wcml2YXRlGAYgAigIOgR0cnVlImAKEEhlcm9DcmVhdGVQYXJhbXMS" + 
-          "FgoKZ2JpZF9jbGFzcxgBIAIoDzoCLTESGgoLaXNfaGFyZGNvcmUYAiACKAg6" + 
-          "BWZhbHNlEhgKCWlzX2ZlbWFsZRgDIAIoCDoFZmFsc2U=");
+          "Cgppc19wcml2YXRlGAYgAigIOgR0cnVlIm4KEEhlcm9DcmVhdGVQYXJhbXMS" + 
+          "DAoEbmFtZRgBIAIoCRIWCgpnYmlkX2NsYXNzGAIgAigPOgItMRIaCgtpc19o" + 
+          "YXJkY29yZRgDIAIoCDoFZmFsc2USGAoJaXNfZmVtYWxlGAQgAigIOgVmYWxz" + 
+          "ZQ==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_OnlineService_EntityId__Descriptor = Descriptor.MessageTypes[0];
@@ -88,7 +89,7 @@ namespace D3.OnlineService {
         internal__static_D3_OnlineService_HeroCreateParams__Descriptor = Descriptor.MessageTypes[6];
         internal__static_D3_OnlineService_HeroCreateParams__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.OnlineService.HeroCreateParams, global::D3.OnlineService.HeroCreateParams.Builder>(internal__static_D3_OnlineService_HeroCreateParams__Descriptor,
-                new string[] { "GbidClass", "IsHardcore", "IsFemale", });
+                new string[] { "Name", "GbidClass", "IsHardcore", "IsFemale", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -2496,8 +2497,8 @@ namespace D3.OnlineService {
   public sealed partial class HeroCreateParams : pb::GeneratedMessage<HeroCreateParams, HeroCreateParams.Builder> {
     private HeroCreateParams() { }
     private static readonly HeroCreateParams defaultInstance = new HeroCreateParams().MakeReadOnly();
-    private static readonly string[] _heroCreateParamsFieldNames = new string[] { "gbid_class", "is_female", "is_hardcore" };
-    private static readonly uint[] _heroCreateParamsFieldTags = new uint[] { 13, 24, 16 };
+    private static readonly string[] _heroCreateParamsFieldNames = new string[] { "gbid_class", "is_female", "is_hardcore", "name" };
+    private static readonly uint[] _heroCreateParamsFieldTags = new uint[] { 21, 32, 24, 10 };
     public static HeroCreateParams DefaultInstance {
       get { return defaultInstance; }
     }
@@ -2518,7 +2519,17 @@ namespace D3.OnlineService {
       get { return global::D3.OnlineService.OnlineService.internal__static_D3_OnlineService_HeroCreateParams__FieldAccessorTable; }
     }
     
-    public const int GbidClassFieldNumber = 1;
+    public const int NameFieldNumber = 1;
+    private bool hasName;
+    private string name_ = "";
+    public bool HasName {
+      get { return hasName; }
+    }
+    public string Name {
+      get { return name_; }
+    }
+    
+    public const int GbidClassFieldNumber = 2;
     private bool hasGbidClass;
     private int gbidClass_ = -1;
     public bool HasGbidClass {
@@ -2528,7 +2539,7 @@ namespace D3.OnlineService {
       get { return gbidClass_; }
     }
     
-    public const int IsHardcoreFieldNumber = 2;
+    public const int IsHardcoreFieldNumber = 3;
     private bool hasIsHardcore;
     private bool isHardcore_;
     public bool HasIsHardcore {
@@ -2538,7 +2549,7 @@ namespace D3.OnlineService {
       get { return isHardcore_; }
     }
     
-    public const int IsFemaleFieldNumber = 3;
+    public const int IsFemaleFieldNumber = 4;
     private bool hasIsFemale;
     private bool isFemale_;
     public bool HasIsFemale {
@@ -2550,6 +2561,7 @@ namespace D3.OnlineService {
     
     public override bool IsInitialized {
       get {
+        if (!hasName) return false;
         if (!hasGbidClass) return false;
         if (!hasIsHardcore) return false;
         if (!hasIsFemale) return false;
@@ -2560,14 +2572,17 @@ namespace D3.OnlineService {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _heroCreateParamsFieldNames;
+      if (hasName) {
+        output.WriteString(1, field_names[3], Name);
+      }
       if (hasGbidClass) {
-        output.WriteSFixed32(1, field_names[0], GbidClass);
+        output.WriteSFixed32(2, field_names[0], GbidClass);
       }
       if (hasIsHardcore) {
-        output.WriteBool(2, field_names[2], IsHardcore);
+        output.WriteBool(3, field_names[2], IsHardcore);
       }
       if (hasIsFemale) {
-        output.WriteBool(3, field_names[1], IsFemale);
+        output.WriteBool(4, field_names[1], IsFemale);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2579,14 +2594,17 @@ namespace D3.OnlineService {
         if (size != -1) return size;
         
         size = 0;
+        if (hasName) {
+          size += pb::CodedOutputStream.ComputeStringSize(1, Name);
+        }
         if (hasGbidClass) {
-          size += pb::CodedOutputStream.ComputeSFixed32Size(1, GbidClass);
+          size += pb::CodedOutputStream.ComputeSFixed32Size(2, GbidClass);
         }
         if (hasIsHardcore) {
-          size += pb::CodedOutputStream.ComputeBoolSize(2, IsHardcore);
+          size += pb::CodedOutputStream.ComputeBoolSize(3, IsHardcore);
         }
         if (hasIsFemale) {
-          size += pb::CodedOutputStream.ComputeBoolSize(3, IsFemale);
+          size += pb::CodedOutputStream.ComputeBoolSize(4, IsFemale);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2714,6 +2732,9 @@ namespace D3.OnlineService {
       public override Builder MergeFrom(HeroCreateParams other) {
         if (other == global::D3.OnlineService.HeroCreateParams.DefaultInstance) return this;
         PrepareBuilder();
+        if (other.HasName) {
+          Name = other.Name;
+        }
         if (other.HasGbidClass) {
           GbidClass = other.GbidClass;
         }
@@ -2766,15 +2787,19 @@ namespace D3.OnlineService {
               ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
               break;
             }
-            case 13: {
+            case 10: {
+              result.hasName = input.ReadString(ref result.name_);
+              break;
+            }
+            case 21: {
               result.hasGbidClass = input.ReadSFixed32(ref result.gbidClass_);
               break;
             }
-            case 16: {
+            case 24: {
               result.hasIsHardcore = input.ReadBool(ref result.isHardcore_);
               break;
             }
-            case 24: {
+            case 32: {
               result.hasIsFemale = input.ReadBool(ref result.isFemale_);
               break;
             }
@@ -2787,6 +2812,27 @@ namespace D3.OnlineService {
         return this;
       }
       
+      
+      public bool HasName {
+        get { return result.hasName; }
+      }
+      public string Name {
+        get { return result.Name; }
+        set { SetName(value); }
+      }
+      public Builder SetName(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasName = true;
+        result.name_ = value;
+        return this;
+      }
+      public Builder ClearName() {
+        PrepareBuilder();
+        result.hasName = false;
+        result.name_ = "";
+        return this;
+      }
       
       public bool HasGbidClass {
         get { return result.hasGbidClass; }

@@ -258,6 +258,8 @@
     <Compile Include="Core\MooNet\Accounts\AccountManager.cs" />
     <Compile Include="Core\GS\Actors\Actor.cs" />
     <Compile Include="Core\Cryptography\ARC4.cs" />
+    <Compile Include="Core\MooNet\Accounts\GameAccount.cs" />
+    <Compile Include="Core\MooNet\Accounts\GameAccountManager.cs" />
     <Compile Include="Core\MooNet\Achievement\AchievementManager.cs" />
     <Compile Include="Core\MooNet\Authentication\AuthManager.cs" />
     <Compile Include="Core\Cryptography\SRP6a.cs" />
@@ -288,6 +290,7 @@
     <Compile Include="Core\MooNet\Channels\ChannelInvitationManager.cs" />
     <Compile Include="Core\MooNet\Friends\FriendManager.cs" />
     <Compile Include="Core\MooNet\Objects\PersistentRPCObject.cs" />
+    <Compile Include="Core\MooNet\Objects\PresenceField.cs" />
     <Compile Include="Core\MooNet\Online\PlayerManager.cs" />
     <Compile Include="Core\MooNet\Services\AchievementService.cs" />
     <Compile Include="Core\MooNet\Services\AuthenticationService.cs" />
@@ -296,17 +299,16 @@
     <Compile Include="Core\MooNet\Services\ChannelOwnerService.cs" />
     <Compile Include="Core\MooNet\Services\ChannelService.cs" />
     <Compile Include="Core\MooNet\Services\ExchangeService.cs" />
-    <Compile Include="Core\MooNet\Services\FollowersService.cs" />
     <Compile Include="Core\MooNet\Services\FriendsService.cs" />
     <Compile Include="Core\MooNet\Services\GameMasterService.cs" />
     <Compile Include="Core\MooNet\Services\GameUtilitiesService.cs" />
     <Compile Include="Core\MooNet\Services\IServerService.cs" />
     <Compile Include="Core\MooNet\Services\NotificationService.cs" />
     <Compile Include="Core\MooNet\Services\PresenceService.cs" />
+    <Compile Include="Core\MooNet\Services\ReportService.cs" />
     <Compile Include="Core\MooNet\Services\SearchService.cs" />
     <Compile Include="Core\MooNet\Services\Service.cs" />
     <Compile Include="Core\MooNet\Services\StorageService.cs" />
-    <Compile Include="Core\MooNet\Services\ToonExternalService.cs" />
     <Compile Include="Core\MooNet\Services\UserManagerService.cs" />
     <Compile Include="Core\GS\Skills\SkillSet.cs" />
     <Compile Include="Core\GS\Skills\Skills.cs" />
@@ -317,9 +319,10 @@
     <Compile Include="Common\Logging\LogConfig.cs" />
     <Compile Include="Core\MooNet\Web\AccountWebService.cs" />
     <Compile Include="Core\Web\CoreWebService.cs" />
+    <Compile Include="Net\GS\Message\Definitions\ACD\ACDClientTranslateMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDCreateActorMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDDestroyActorMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Actor\NotifyActorMovementMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateNormalMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Animation\LoopingAnimationPowerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\ArtisanWindowClosedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Artisan\MysticDataInitialMessage.cs" />
@@ -349,7 +352,6 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\VoteKickMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCSelectConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Pet\PetDetachMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Player\PlayerMovementMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\RequestUseCauldronOfJordanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\RequestUseNephalemCubeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
@@ -673,6 +675,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Core\GS\Map\Debug\WorldVisualizer.resx">
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

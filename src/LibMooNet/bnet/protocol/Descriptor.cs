@@ -29,8 +29,8 @@ namespace bnet.protocol {
     
     static Descriptor() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "Ch1saWIvcHJvdG9jb2wvZGVzY3JpcHRvci5wcm90bxINYm5ldC5wcm90b2Nv" + 
-          "bCIbCgRQYXRoEhMKB29yZGluYWwYASADKA1CAhAB");
+          "ChVibmV0L2Rlc2NyaXB0b3IucHJvdG8SDWJuZXQucHJvdG9jb2wiGwoEUGF0" + 
+          "aBITCgdvcmRpbmFsGAEgAygNQgIQAQ==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_Path__Descriptor = DescriptorProp.MessageTypes[0];

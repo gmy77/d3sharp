@@ -31,10 +31,10 @@ namespace bnet.protocol.profanity {
     
     static Profanity() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "Ch1saWIvcHJvZmFuaXR5L3Byb2Zhbml0eS5wcm90bxIXYm5ldC5wcm90b2Nv" + 
-          "bC5wcm9mYW5pdHkiKQoKV29yZEZpbHRlchIMCgR0eXBlGAEgAigJEg0KBXJl" + 
-          "Z2V4GAIgAigJIkMKC1dvcmRGaWx0ZXJzEjQKB2ZpbHRlcnMYASADKAsyIy5i" + 
-          "bmV0LnByb3RvY29sLnByb2Zhbml0eS5Xb3JkRmlsdGVy");
+          "ChRibmV0L3Byb2Zhbml0eS5wcm90bxIXYm5ldC5wcm90b2NvbC5wcm9mYW5p" + 
+          "dHkiKQoKV29yZEZpbHRlchIMCgR0eXBlGAEgAigJEg0KBXJlZ2V4GAIgAigJ" + 
+          "IkMKC1dvcmRGaWx0ZXJzEjQKB2ZpbHRlcnMYASADKAsyIy5ibmV0LnByb3Rv" + 
+          "Y29sLnByb2Zhbml0eS5Xb3JkRmlsdGVy");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_profanity_WordFilter__Descriptor = Descriptor.MessageTypes[0];

@@ -97,7 +97,9 @@ namespace Mooege.Core.MooNet.Services
 
         public override void RequestDisconnect(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.connection.DisconnectRequest request, Action<bnet.protocol.NO_RESPONSE> done)
         {
-            throw new NotImplementedException();
-        }        
+            Logger.Trace("RequestDisconnect()");
+            this.Client.Account.CurrentGameAccount.SaveToDB();
+            this.Client.Account.CurrentGameAccount.LoggedInClient.Connection.Disconnect();
+        }
     }
 }

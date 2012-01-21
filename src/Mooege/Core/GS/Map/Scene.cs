@@ -73,7 +73,7 @@ namespace Mooege.Core.GS.Map
         /// <summary>
         /// Visibility in MiniMap.
         /// </summary>
-        public SceneMiniMapVisibility MiniMapVisibility { get; set; }
+        public bool MiniMapVisibility { get; set; }
 
         /// <summary>
         /// Scene Specification.
@@ -392,7 +392,7 @@ namespace Mooege.Core.GS.Map
                     SceneSNO = this.SceneSNO.Id,
                     Transform = this.Transform,
                     WorldID = this.World.DynamicID,
-                    MiniMapVisibility = this.MiniMapVisibility
+                    MiniMapVisibility = false //= this.MiniMapVisibility
                 };
             }
         }

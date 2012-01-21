@@ -15,15 +15,15 @@ namespace bnet.protocol.channel_invitation {
   
     #region Extension registration
     public static void RegisterAllExtensions(pb::ExtensionRegistry registry) {
-      registry.Add(global::bnet.protocol.channel_invitation.Invitation.ChannelInvitation);
-      registry.Add(global::bnet.protocol.channel_invitation.SendInvitationRequest.ChannelInvitation);
+      registry.Add(global::bnet.protocol.channel_invitation.ChannelInvitation.ChannelInvitationProp);
+      registry.Add(global::bnet.protocol.channel_invitation.ChannelInvitationParams.ChannelParams);
     }
     #endregion
     #region Static variables
-    internal static pbd::MessageDescriptor internal__static_bnet_protocol_channel_invitation_Invitation__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.Invitation, global::bnet.protocol.channel_invitation.Invitation.Builder> internal__static_bnet_protocol_channel_invitation_Invitation__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_bnet_protocol_channel_invitation_SendInvitationRequest__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.SendInvitationRequest, global::bnet.protocol.channel_invitation.SendInvitationRequest.Builder> internal__static_bnet_protocol_channel_invitation_SendInvitationRequest__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_channel_invitation_ChannelInvitation__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.ChannelInvitation, global::bnet.protocol.channel_invitation.ChannelInvitation.Builder> internal__static_bnet_protocol_channel_invitation_ChannelInvitation__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_channel_invitation_ChannelInvitationParams__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.ChannelInvitationParams, global::bnet.protocol.channel_invitation.ChannelInvitationParams.Builder> internal__static_bnet_protocol_channel_invitation_ChannelInvitationParams__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_channel_invitation_InvitationCollection__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.InvitationCollection, global::bnet.protocol.channel_invitation.InvitationCollection.Builder> internal__static_bnet_protocol_channel_invitation_InvitationCollection__FieldAccessorTable;
     #endregion
@@ -35,39 +35,37 @@ namespace bnet.protocol.channel_invitation {
     
     static ChannelInvitationTypes() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "CkRzZXJ2aWNlL2NoYW5uZWxfaW52aXRhdGlvbi9kZWZpbml0aW9uL2NoYW5u" + 
-          "ZWxfaW52aXRhdGlvbl90eXBlcy5wcm90bxIgYm5ldC5wcm90b2NvbC5jaGFu" + 
-          "bmVsX2ludml0YXRpb24aHWxpYi9wcm90b2NvbC9pbnZpdGF0aW9uLnByb3Rv" + 
-          "GhlsaWIvcHJvdG9jb2wvZW50aXR5LnByb3RvGi5zZXJ2aWNlL2NoYW5uZWwv" + 
-          "ZGVmaW5pdGlvbi9jaGFubmVsX3R5cGVzLnByb3RvIooCCgpJbnZpdGF0aW9u" + 
-          "EkYKE2NoYW5uZWxfZGVzY3JpcHRpb24YASACKAsyKS5ibmV0LnByb3RvY29s" + 
-          "LmNoYW5uZWwuQ2hhbm5lbERlc2NyaXB0aW9uEhcKCHJlc2VydmVkGAIgASgI" + 
-          "OgVmYWxzZRIVCgZyZWpvaW4YAyABKAg6BWZhbHNlEhQKDHNlcnZpY2VfdHlw" + 
-          "ZRgEIAIoDTJuChJjaGFubmVsX2ludml0YXRpb24SJC5ibmV0LnByb3RvY29s" + 
-          "Lmludml0YXRpb24uSW52aXRhdGlvbhhpIAEoCzIsLmJuZXQucHJvdG9jb2wu" + 
-          "Y2hhbm5lbF9pbnZpdGF0aW9uLkludml0YXRpb24igwIKFVNlbmRJbnZpdGF0" + 
-          "aW9uUmVxdWVzdBIrCgpjaGFubmVsX2lkGAEgAigLMhcuYm5ldC5wcm90b2Nv" + 
-          "bC5FbnRpdHlJZBIQCghyZXNlcnZlZBgCIAEoCBIOCgZyZWpvaW4YAyABKAgS" + 
-          "FAoMc2VydmljZV90eXBlGAQgAigNMoQBChJjaGFubmVsX2ludml0YXRpb24S" + 
-          "Ly5ibmV0LnByb3RvY29sLmludml0YXRpb24uU2VuZEludml0YXRpb25SZXF1" + 
-          "ZXN0GGkgASgLMjcuYm5ldC5wcm90b2NvbC5jaGFubmVsX2ludml0YXRpb24u" + 
-          "U2VuZEludml0YXRpb25SZXF1ZXN0IqQBChRJbnZpdGF0aW9uQ29sbGVjdGlv" + 
-          "bhIUCgxzZXJ2aWNlX3R5cGUYASABKA0SIAoYbWF4X3JlY2VpdmVkX2ludml0" + 
-          "YXRpb25zGAIgASgNEhEKCW9iamVjdF9pZBgDIAEoBBJBChNyZWNlaXZlZF9p" + 
-          "bnZpdGF0aW9uGAQgAygLMiQuYm5ldC5wcm90b2NvbC5pbnZpdGF0aW9uLklu" + 
-          "dml0YXRpb24=");
+          "CiNibmV0L2NoYW5uZWxfaW52aXRhdGlvbl90eXBlcy5wcm90bxIgYm5ldC5w" + 
+          "cm90b2NvbC5jaGFubmVsX2ludml0YXRpb24aG2JuZXQvaW52aXRhdGlvbl90" + 
+          "eXBlcy5wcm90bxoRYm5ldC9lbnRpdHkucHJvdG8aGGJuZXQvY2hhbm5lbF90" + 
+          "eXBlcy5wcm90byKYAgoRQ2hhbm5lbEludml0YXRpb24SRgoTY2hhbm5lbF9k" + 
+          "ZXNjcmlwdGlvbhgBIAIoCzIpLmJuZXQucHJvdG9jb2wuY2hhbm5lbC5DaGFu" + 
+          "bmVsRGVzY3JpcHRpb24SFwoIcmVzZXJ2ZWQYAiABKAg6BWZhbHNlEhUKBnJl" + 
+          "am9pbhgDIAEoCDoFZmFsc2USFAoMc2VydmljZV90eXBlGAQgAigNMnUKEmNo" + 
+          "YW5uZWxfaW52aXRhdGlvbhIkLmJuZXQucHJvdG9jb2wuaW52aXRhdGlvbi5J" + 
+          "bnZpdGF0aW9uGGkgASgLMjMuYm5ldC5wcm90b2NvbC5jaGFubmVsX2ludml0" + 
+          "YXRpb24uQ2hhbm5lbEludml0YXRpb24i/QEKF0NoYW5uZWxJbnZpdGF0aW9u" + 
+          "UGFyYW1zEisKCmNoYW5uZWxfaWQYASACKAsyFy5ibmV0LnByb3RvY29sLkVu" + 
+          "dGl0eUlkEhAKCHJlc2VydmVkGAIgASgIEg4KBnJlam9pbhgDIAEoCBIUCgxz" + 
+          "ZXJ2aWNlX3R5cGUYBCACKA0yfQoOY2hhbm5lbF9wYXJhbXMSKi5ibmV0LnBy" + 
+          "b3RvY29sLmludml0YXRpb24uSW52aXRhdGlvblBhcmFtcxhpIAEoCzI5LmJu" + 
+          "ZXQucHJvdG9jb2wuY2hhbm5lbF9pbnZpdGF0aW9uLkNoYW5uZWxJbnZpdGF0" + 
+          "aW9uUGFyYW1zIqQBChRJbnZpdGF0aW9uQ29sbGVjdGlvbhIUCgxzZXJ2aWNl" + 
+          "X3R5cGUYASABKA0SIAoYbWF4X3JlY2VpdmVkX2ludml0YXRpb25zGAIgASgN" + 
+          "EhEKCW9iamVjdF9pZBgDIAEoBBJBChNyZWNlaXZlZF9pbnZpdGF0aW9uGAQg" + 
+          "AygLMiQuYm5ldC5wcm90b2NvbC5pbnZpdGF0aW9uLkludml0YXRpb24=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
-        internal__static_bnet_protocol_channel_invitation_Invitation__Descriptor = Descriptor.MessageTypes[0];
-        internal__static_bnet_protocol_channel_invitation_Invitation__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.Invitation, global::bnet.protocol.channel_invitation.Invitation.Builder>(internal__static_bnet_protocol_channel_invitation_Invitation__Descriptor,
+        internal__static_bnet_protocol_channel_invitation_ChannelInvitation__Descriptor = Descriptor.MessageTypes[0];
+        internal__static_bnet_protocol_channel_invitation_ChannelInvitation__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.ChannelInvitation, global::bnet.protocol.channel_invitation.ChannelInvitation.Builder>(internal__static_bnet_protocol_channel_invitation_ChannelInvitation__Descriptor,
                 new string[] { "ChannelDescription", "Reserved", "Rejoin", "ServiceType", });
-        global::bnet.protocol.channel_invitation.Invitation.ChannelInvitation = pb::GeneratedSingleExtension<global::bnet.protocol.channel_invitation.Invitation>.CreateInstance(global::bnet.protocol.channel_invitation.Invitation.Descriptor.Extensions[0]);
-        internal__static_bnet_protocol_channel_invitation_SendInvitationRequest__Descriptor = Descriptor.MessageTypes[1];
-        internal__static_bnet_protocol_channel_invitation_SendInvitationRequest__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.SendInvitationRequest, global::bnet.protocol.channel_invitation.SendInvitationRequest.Builder>(internal__static_bnet_protocol_channel_invitation_SendInvitationRequest__Descriptor,
+        global::bnet.protocol.channel_invitation.ChannelInvitation.ChannelInvitationProp = pb::GeneratedSingleExtension<global::bnet.protocol.channel_invitation.ChannelInvitation>.CreateInstance(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor.Extensions[0]);
+        internal__static_bnet_protocol_channel_invitation_ChannelInvitationParams__Descriptor = Descriptor.MessageTypes[1];
+        internal__static_bnet_protocol_channel_invitation_ChannelInvitationParams__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.ChannelInvitationParams, global::bnet.protocol.channel_invitation.ChannelInvitationParams.Builder>(internal__static_bnet_protocol_channel_invitation_ChannelInvitationParams__Descriptor,
                 new string[] { "ChannelId", "Reserved", "Rejoin", "ServiceType", });
-        global::bnet.protocol.channel_invitation.SendInvitationRequest.ChannelInvitation = pb::GeneratedSingleExtension<global::bnet.protocol.channel_invitation.SendInvitationRequest>.CreateInstance(global::bnet.protocol.channel_invitation.SendInvitationRequest.Descriptor.Extensions[0]);
+        global::bnet.protocol.channel_invitation.ChannelInvitationParams.ChannelParams = pb::GeneratedSingleExtension<global::bnet.protocol.channel_invitation.ChannelInvitationParams>.CreateInstance(global::bnet.protocol.channel_invitation.ChannelInvitationParams.Descriptor.Extensions[0]);
         internal__static_bnet_protocol_channel_invitation_InvitationCollection__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_channel_invitation_InvitationCollection__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.InvitationCollection, global::bnet.protocol.channel_invitation.InvitationCollection.Builder>(internal__static_bnet_protocol_channel_invitation_InvitationCollection__Descriptor,
@@ -76,7 +74,7 @@ namespace bnet.protocol.channel_invitation {
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
           new pbd::FileDescriptor[] {
-          global::bnet.protocol.invitation.Proto.Invitation.Descriptor, 
+          global::bnet.protocol.invitation.InvitationTypes.Descriptor, 
           global::bnet.protocol.Entity.Descriptor, 
           global::bnet.protocol.channel.ChannelTypes.Descriptor, 
           }, assigner);
@@ -88,33 +86,33 @@ namespace bnet.protocol.channel_invitation {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class Invitation : pb::GeneratedMessage<Invitation, Invitation.Builder> {
-    private Invitation() { }
-    private static readonly Invitation defaultInstance = new Invitation().MakeReadOnly();
-    private static readonly string[] _invitationFieldNames = new string[] { "channel_description", "rejoin", "reserved", "service_type" };
-    private static readonly uint[] _invitationFieldTags = new uint[] { 10, 24, 16, 32 };
-    public static Invitation DefaultInstance {
+  public sealed partial class ChannelInvitation : pb::GeneratedMessage<ChannelInvitation, ChannelInvitation.Builder> {
+    private ChannelInvitation() { }
+    private static readonly ChannelInvitation defaultInstance = new ChannelInvitation().MakeReadOnly();
+    private static readonly string[] _channelInvitationFieldNames = new string[] { "channel_description", "rejoin", "reserved", "service_type" };
+    private static readonly uint[] _channelInvitationFieldTags = new uint[] { 10, 24, 16, 32 };
+    public static ChannelInvitation DefaultInstance {
       get { return defaultInstance; }
     }
     
-    public override Invitation DefaultInstanceForType {
+    public override ChannelInvitation DefaultInstanceForType {
       get { return DefaultInstance; }
     }
     
-    protected override Invitation ThisMessage {
+    protected override ChannelInvitation ThisMessage {
       get { return this; }
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.ChannelInvitationTypes.internal__static_bnet_protocol_channel_invitation_Invitation__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitationTypes.internal__static_bnet_protocol_channel_invitation_ChannelInvitation__Descriptor; }
     }
     
-    protected override pb::FieldAccess.FieldAccessorTable<Invitation, Invitation.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.ChannelInvitationTypes.internal__static_bnet_protocol_channel_invitation_Invitation__FieldAccessorTable; }
+    protected override pb::FieldAccess.FieldAccessorTable<ChannelInvitation, ChannelInvitation.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitationTypes.internal__static_bnet_protocol_channel_invitation_ChannelInvitation__FieldAccessorTable; }
     }
     
     public const int ChannelInvitationFieldNumber = 105;
-    public static pb::GeneratedExtensionBase<global::bnet.protocol.channel_invitation.Invitation> ChannelInvitation;
+    public static pb::GeneratedExtensionBase<global::bnet.protocol.channel_invitation.ChannelInvitation> ChannelInvitationProp;
     public const int ChannelDescriptionFieldNumber = 1;
     private bool hasChannelDescription;
     private global::bnet.protocol.channel.ChannelDescription channelDescription_;
@@ -166,7 +164,7 @@ namespace bnet.protocol.channel_invitation {
     
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
-      string[] field_names = _invitationFieldNames;
+      string[] field_names = _channelInvitationFieldNames;
       if (hasChannelDescription) {
         output.WriteMessage(1, field_names[0], ChannelDescription);
       }
@@ -207,51 +205,51 @@ namespace bnet.protocol.channel_invitation {
       }
     }
     
-    public static Invitation ParseFrom(pb::ByteString data) {
+    public static ChannelInvitation ParseFrom(pb::ByteString data) {
       return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
     }
-    public static Invitation ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+    public static ChannelInvitation ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
     }
-    public static Invitation ParseFrom(byte[] data) {
+    public static ChannelInvitation ParseFrom(byte[] data) {
       return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
     }
-    public static Invitation ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+    public static ChannelInvitation ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
     }
-    public static Invitation ParseFrom(global::System.IO.Stream input) {
+    public static ChannelInvitation ParseFrom(global::System.IO.Stream input) {
       return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
     }
-    public static Invitation ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+    public static ChannelInvitation ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
-    public static Invitation ParseDelimitedFrom(global::System.IO.Stream input) {
+    public static ChannelInvitation ParseDelimitedFrom(global::System.IO.Stream input) {
       return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
     }
-    public static Invitation ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+    public static ChannelInvitation ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
       return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
     }
-    public static Invitation ParseFrom(pb::ICodedInputStream input) {
+    public static ChannelInvitation ParseFrom(pb::ICodedInputStream input) {
       return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
     }
-    public static Invitation ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+    public static ChannelInvitation ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
-    private Invitation MakeReadOnly() {
+    private ChannelInvitation MakeReadOnly() {
       return this;
     }
     
     public static Builder CreateBuilder() { return new Builder(); }
     public override Builder ToBuilder() { return CreateBuilder(this); }
     public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(Invitation prototype) {
+    public static Builder CreateBuilder(ChannelInvitation prototype) {
       return new Builder(prototype);
     }
     
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<Invitation, Builder> {
+    public sealed partial class Builder : pb::GeneratedBuilder<ChannelInvitation, Builder> {
       protected override Builder ThisBuilder {
         get { return this; }
       }
@@ -259,18 +257,18 @@ namespace bnet.protocol.channel_invitation {
         result = DefaultInstance;
         resultIsReadOnly = true;
       }
-      internal Builder(Invitation cloneFrom) {
+      internal Builder(ChannelInvitation cloneFrom) {
         result = cloneFrom;
         resultIsReadOnly = true;
       }
       
       private bool resultIsReadOnly;
-      private Invitation result;
+      private ChannelInvitation result;
       
-      private Invitation PrepareBuilder() {
+      private ChannelInvitation PrepareBuilder() {
         if (resultIsReadOnly) {
-          Invitation original = result;
-          result = new Invitation();
+          ChannelInvitation original = result;
+          result = new ChannelInvitation();
           resultIsReadOnly = false;
           MergeFrom(original);
         }
@@ -281,7 +279,7 @@ namespace bnet.protocol.channel_invitation {
         get { return result.IsInitialized; }
       }
       
-      protected override Invitation MessageBeingBuilt {
+      protected override ChannelInvitation MessageBeingBuilt {
         get { return PrepareBuilder(); }
       }
       
@@ -300,14 +298,14 @@ namespace bnet.protocol.channel_invitation {
       }
       
       public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::bnet.protocol.channel_invitation.Invitation.Descriptor; }
+        get { return global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor; }
       }
       
-      public override Invitation DefaultInstanceForType {
-        get { return global::bnet.protocol.channel_invitation.Invitation.DefaultInstance; }
+      public override ChannelInvitation DefaultInstanceForType {
+        get { return global::bnet.protocol.channel_invitation.ChannelInvitation.DefaultInstance; }
       }
       
-      public override Invitation BuildPartial() {
+      public override ChannelInvitation BuildPartial() {
         if (resultIsReadOnly) {
           return result;
         }
@@ -316,16 +314,16 @@ namespace bnet.protocol.channel_invitation {
       }
       
       public override Builder MergeFrom(pb::IMessage other) {
-        if (other is Invitation) {
-          return MergeFrom((Invitation) other);
+        if (other is ChannelInvitation) {
+          return MergeFrom((ChannelInvitation) other);
         } else {
           base.MergeFrom(other);
           return this;
         }
       }
       
-      public override Builder MergeFrom(Invitation other) {
-        if (other == global::bnet.protocol.channel_invitation.Invitation.DefaultInstance) return this;
+      public override Builder MergeFrom(ChannelInvitation other) {
+        if (other == global::bnet.protocol.channel_invitation.ChannelInvitation.DefaultInstance) return this;
         PrepareBuilder();
         if (other.HasChannelDescription) {
           MergeChannelDescription(other.ChannelDescription);
@@ -354,9 +352,9 @@ namespace bnet.protocol.channel_invitation {
         string field_name;
         while (input.ReadTag(out tag, out field_name)) {
           if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_invitationFieldNames, field_name, global::System.StringComparer.Ordinal);
+            int field_ordinal = global::System.Array.BinarySearch(_channelInvitationFieldNames, field_name, global::System.StringComparer.Ordinal);
             if(field_ordinal >= 0)
-              tag = _invitationFieldTags[field_ordinal];
+              tag = _channelInvitationFieldTags[field_ordinal];
             else {
               if (unknownFields == null) {
                 unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
@@ -513,7 +511,7 @@ namespace bnet.protocol.channel_invitation {
         return this;
       }
     }
-    static Invitation() {
+    static ChannelInvitation() {
       object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitationTypes.Descriptor, null);
     }
   }
@@ -521,33 +519,33 @@ namespace bnet.protocol.channel_invitation {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class SendInvitationRequest : pb::GeneratedMessage<SendInvitationRequest, SendInvitationRequest.Builder> {
-    private SendInvitationRequest() { }
-    private static readonly SendInvitationRequest defaultInstance = new SendInvitationRequest().MakeReadOnly();
-    private static readonly string[] _sendInvitationRequestFieldNames = new string[] { "channel_id", "rejoin", "reserved", "service_type" };
-    private static readonly uint[] _sendInvitationRequestFieldTags = new uint[] { 10, 24, 16, 32 };
-    public static SendInvitationRequest DefaultInstance {
+  public sealed partial class ChannelInvitationParams : pb::GeneratedMessage<ChannelInvitationParams, ChannelInvitationParams.Builder> {
+    private ChannelInvitationParams() { }
+    private static readonly ChannelInvitationParams defaultInstance = new ChannelInvitationParams().MakeReadOnly();
+    private static readonly string[] _channelInvitationParamsFieldNames = new string[] { "channel_id", "rejoin", "reserved", "service_type" };
+    private static readonly uint[] _channelInvitationParamsFieldTags = new uint[] { 10, 24, 16, 32 };
+    public static ChannelInvitationParams DefaultInstance {
       get { return defaultInstance; }
     }
     
-    public override SendInvitationRequest DefaultInstanceForType {
+    public override ChannelInvitationParams DefaultInstanceForType {
       get { return DefaultInstance; }
     }
     
-    protected override SendInvitationRequest ThisMessage {
+    protected override ChannelInvitationParams ThisMessage {
       get { return this; }
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.channel_invitation.ChannelInvitationTypes.internal__static_bnet_protocol_channel_invitation_SendInvitationRequest__Descriptor; }
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitationTypes.internal__static_bnet_protocol_channel_invitation_ChannelInvitationParams__Descriptor; }
     }
     
-    protected override pb::FieldAccess.FieldAccessorTable<SendInvitationRequest, SendInvitationRequest.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.channel_invitation.ChannelInvitationTypes.internal__static_bnet_protocol_channel_invitation_SendInvitationRequest__FieldAccessorTable; }
+    protected override pb::FieldAccess.FieldAccessorTable<ChannelInvitationParams, ChannelInvitationParams.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.channel_invitation.ChannelInvitationTypes.internal__static_bnet_protocol_channel_invitation_ChannelInvitationParams__FieldAccessorTable; }
     }
     
-    public const int ChannelInvitationFieldNumber = 105;
-    public static pb::GeneratedExtensionBase<global::bnet.protocol.channel_invitation.SendInvitationRequest> ChannelInvitation;
+    public const int ChannelParamsFieldNumber = 105;
+    public static pb::GeneratedExtensionBase<global::bnet.protocol.channel_invitation.ChannelInvitationParams> ChannelParams;
     public const int ChannelIdFieldNumber = 1;
     private bool hasChannelId;
     private global::bnet.protocol.EntityId channelId_;
@@ -599,7 +597,7 @@ namespace bnet.protocol.channel_invitation {
     
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
-      string[] field_names = _sendInvitationRequestFieldNames;
+      string[] field_names = _channelInvitationParamsFieldNames;
       if (hasChannelId) {
         output.WriteMessage(1, field_names[0], ChannelId);
       }
@@ -640,51 +638,51 @@ namespace bnet.protocol.channel_invitation {
       }
     }
     
-    public static SendInvitationRequest ParseFrom(pb::ByteString data) {
+    public static ChannelInvitationParams ParseFrom(pb::ByteString data) {
       return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
     }
-    public static SendInvitationRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+    public static ChannelInvitationParams ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
     }
-    public static SendInvitationRequest ParseFrom(byte[] data) {
+    public static ChannelInvitationParams ParseFrom(byte[] data) {
       return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
     }
-    public static SendInvitationRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+    public static ChannelInvitationParams ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
     }
-    public static SendInvitationRequest ParseFrom(global::System.IO.Stream input) {
+    public static ChannelInvitationParams ParseFrom(global::System.IO.Stream input) {
       return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
     }
-    public static SendInvitationRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+    public static ChannelInvitationParams ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
-    public static SendInvitationRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+    public static ChannelInvitationParams ParseDelimitedFrom(global::System.IO.Stream input) {
       return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
     }
-    public static SendInvitationRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+    public static ChannelInvitationParams ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
       return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
     }
-    public static SendInvitationRequest ParseFrom(pb::ICodedInputStream input) {
+    public static ChannelInvitationParams ParseFrom(pb::ICodedInputStream input) {
       return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
     }
-    public static SendInvitationRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+    public static ChannelInvitationParams ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
-    private SendInvitationRequest MakeReadOnly() {
+    private ChannelInvitationParams MakeReadOnly() {
       return this;
     }
     
     public static Builder CreateBuilder() { return new Builder(); }
     public override Builder ToBuilder() { return CreateBuilder(this); }
     public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(SendInvitationRequest prototype) {
+    public static Builder CreateBuilder(ChannelInvitationParams prototype) {
       return new Builder(prototype);
     }
     
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<SendInvitationRequest, Builder> {
+    public sealed partial class Builder : pb::GeneratedBuilder<ChannelInvitationParams, Builder> {
       protected override Builder ThisBuilder {
         get { return this; }
       }
@@ -692,18 +690,18 @@ namespace bnet.protocol.channel_invitation {
         result = DefaultInstance;
         resultIsReadOnly = true;
       }
-      internal Builder(SendInvitationRequest cloneFrom) {
+      internal Builder(ChannelInvitationParams cloneFrom) {
         result = cloneFrom;
         resultIsReadOnly = true;
       }
       
       private bool resultIsReadOnly;
-      private SendInvitationRequest result;
+      private ChannelInvitationParams result;
       
-      private SendInvitationRequest PrepareBuilder() {
+      private ChannelInvitationParams PrepareBuilder() {
         if (resultIsReadOnly) {
-          SendInvitationRequest original = result;
-          result = new SendInvitationRequest();
+          ChannelInvitationParams original = result;
+          result = new ChannelInvitationParams();
           resultIsReadOnly = false;
           MergeFrom(original);
         }
@@ -714,7 +712,7 @@ namespace bnet.protocol.channel_invitation {
         get { return result.IsInitialized; }
       }
       
-      protected override SendInvitationRequest MessageBeingBuilt {
+      protected override ChannelInvitationParams MessageBeingBuilt {
         get { return PrepareBuilder(); }
       }
       
@@ -733,14 +731,14 @@ namespace bnet.protocol.channel_invitation {
       }
       
       public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::bnet.protocol.channel_invitation.SendInvitationRequest.Descriptor; }
+        get { return global::bnet.protocol.channel_invitation.ChannelInvitationParams.Descriptor; }
       }
       
-      public override SendInvitationRequest DefaultInstanceForType {
-        get { return global::bnet.protocol.channel_invitation.SendInvitationRequest.DefaultInstance; }
+      public override ChannelInvitationParams DefaultInstanceForType {
+        get { return global::bnet.protocol.channel_invitation.ChannelInvitationParams.DefaultInstance; }
       }
       
-      public override SendInvitationRequest BuildPartial() {
+      public override ChannelInvitationParams BuildPartial() {
         if (resultIsReadOnly) {
           return result;
         }
@@ -749,16 +747,16 @@ namespace bnet.protocol.channel_invitation {
       }
       
       public override Builder MergeFrom(pb::IMessage other) {
-        if (other is SendInvitationRequest) {
-          return MergeFrom((SendInvitationRequest) other);
+        if (other is ChannelInvitationParams) {
+          return MergeFrom((ChannelInvitationParams) other);
         } else {
           base.MergeFrom(other);
           return this;
         }
       }
       
-      public override Builder MergeFrom(SendInvitationRequest other) {
-        if (other == global::bnet.protocol.channel_invitation.SendInvitationRequest.DefaultInstance) return this;
+      public override Builder MergeFrom(ChannelInvitationParams other) {
+        if (other == global::bnet.protocol.channel_invitation.ChannelInvitationParams.DefaultInstance) return this;
         PrepareBuilder();
         if (other.HasChannelId) {
           MergeChannelId(other.ChannelId);
@@ -787,9 +785,9 @@ namespace bnet.protocol.channel_invitation {
         string field_name;
         while (input.ReadTag(out tag, out field_name)) {
           if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_sendInvitationRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            int field_ordinal = global::System.Array.BinarySearch(_channelInvitationParamsFieldNames, field_name, global::System.StringComparer.Ordinal);
             if(field_ordinal >= 0)
-              tag = _sendInvitationRequestFieldTags[field_ordinal];
+              tag = _channelInvitationParamsFieldTags[field_ordinal];
             else {
               if (unknownFields == null) {
                 unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
@@ -946,7 +944,7 @@ namespace bnet.protocol.channel_invitation {
         return this;
       }
     }
-    static SendInvitationRequest() {
+    static ChannelInvitationParams() {
       object.ReferenceEquals(global::bnet.protocol.channel_invitation.ChannelInvitationTypes.Descriptor, null);
     }
   }

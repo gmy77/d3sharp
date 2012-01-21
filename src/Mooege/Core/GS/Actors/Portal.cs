@@ -107,14 +107,14 @@ namespace Mooege.Core.GS.Actors
                 Field2 = MinimapIcon, //   0x00018FB0,  /* Marker_DungeonEntrance.tex */          // TODO Dont mark all portals as dungeon entrances... some may be exits too (although d3 does not necesarrily use the correct markers). Also i have found no hacky way to determine whether a portal is entrance or exit - farmy
                 m_snoStringList = 0x0000CB2E, /* LevelAreaNames.stl */          // TODO Dont use hardcoded numbers
 
-                Field4 = StringHashHelper.HashNormal(markerName),
+                Field3 = StringHashHelper.HashNormal(markerName),
+                Field9 = 0,
+                Field10 = 0,
+                Field11 = 0,
                 Field5 = 0,
-                Field6 = 0,
-                Field7 = 0,
-                Field8 = 0,
-                Field9 = true,
-                Field10 = false,
-                Field11 = true,
+                Field6 = true,
+                Field7 = false,
+                Field8 = true,
                 Field12 = 0
             });
 

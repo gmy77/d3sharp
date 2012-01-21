@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "0.7931.*";
+            public const string Version = "1.8101.*";
         }
 
         /// <summary>
@@ -47,10 +47,12 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 7931;
+            public const int RequiredClientVersion = 8101;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
+                {"Aurora f506438e8d_public", 8101},
+                {"Aurora fbb3e7d1b4_public", 8059},
                 {"Aurora 04768e5dce_public", 7931},
                 {"Aurora 0ee3b2e0e2_public", 7841}, 
                 {"Aurora b4367eba86_public", 7728}
@@ -70,7 +72,8 @@ namespace Mooege.Common.Versions
                 /// <summary>
                 /// AchievementFile hash.
                 /// </summary>
-                public static string AchievementFileHash = "ef29e59b9394e7c6f694afbb92b70a74c4fd4c96961a8ec490e770371b72e6ab";
+                //public static string AchievementFileHash = "ef29e59b9394e7c6f694afbb92b70a74c4fd4c96961a8ec490e770371b72e6ab";
+                public static string AchievementFileHash = "0b61aeee74bba6ba02b93c9e15089404daf5d3cd1c7e631d7c108685894b3feb"; //8101
 
                 /// <summary>
                 /// AchievementFile filename.
@@ -93,7 +96,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 7931;
+            public const int RequiredPatchVersion = 8101;
         }
 
         /// <summary>
@@ -104,17 +107,21 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Ingame protocol hash.
             /// </summary>
-            public const int ProtocolHash = unchecked((int)0x208CA037);
+            public const int ProtocolHash = unchecked((int)0xBA957E6B);
 
+            // 0xBA957E6B                   // 8059, 8101
             // unchecked((int)0x208CA037)   // 7931
             // unchecked((int)0x208CA037)   // 7841
             // unchecked((int)0x9E121BBD)   // 7728
             // 0x21EEE08D                   // 7446
 
-            public const string VersionString = "0.4.1.7931";
+            //This is the server version sent in VersionsMessage
+            public const string VersionString = "0.5.1.8115";
 
+            // 0.5.1.8115 // 8101 patch 9
+            // 0.5.0.8059 // 8059 patch 8
             // 0.3.1.7779 // 7728
-            // 0.3.0.7484 // 7447    
+            // 0.3.0.7484 // 7447
             // 0.3.0.7333 // beta patch-3
         }
     }
