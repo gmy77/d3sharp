@@ -111,7 +111,7 @@ namespace Mooege.Core.MooNet.Toons
             while (reader.Read())
             {
                 var databaseId = (ulong)reader.GetInt64(0);
-                var toon = new Toon(databaseId, reader.GetString(1), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5),(uint)reader.GetInt32(7));
+                var toon = new Toon(databaseId, reader.GetString(1), reader.GetInt32(6), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5), (uint)reader.GetInt32(7));
                 Toons.Add(databaseId, toon);
             }
         }
