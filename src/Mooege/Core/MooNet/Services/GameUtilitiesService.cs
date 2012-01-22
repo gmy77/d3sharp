@@ -175,7 +175,8 @@ namespace Mooege.Core.MooNet.Services
 
         private ByteString CreateHero(D3.OnlineService.HeroCreateParams createPrams)
         {
-            var newToon = new Toon(createPrams.Name, createPrams.GbidClass, createPrams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account.CurrentGameAccount);
+            int hashCode = ToonManager.GetUnusedHashCodeForToonName(createPrams.Name);
+            var newToon = new Toon(createPrams.Name, hashCode, createPrams.GbidClass, createPrams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account.CurrentGameAccount);
             if (ToonManager.SaveToon(newToon))
             {
                 Logger.Trace("CreateHero() {0}", newToon);
