@@ -305,6 +305,7 @@
     <Compile Include="Core\MooNet\Services\NotificationService.cs" />
     <Compile Include="Core\MooNet\Services\PresenceService.cs" />
     <Compile Include="Core\MooNet\Services\ReportService.cs" />
+    <Compile Include="Core\MooNet\Services\ResourceService.cs" />
     <Compile Include="Core\MooNet\Services\SearchService.cs" />
     <Compile Include="Core\MooNet\Services\ServerPoolService.cs" />
     <Compile Include="Core\MooNet\Services\Service.cs" />

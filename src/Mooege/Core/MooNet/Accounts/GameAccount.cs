@@ -204,16 +204,15 @@ namespace Mooege.Core.MooNet.Accounts
 
             this.BannerConfiguration =
                 D3.Account.BannerConfiguration.CreateBuilder()
-                .SetBannerShape(2952440006)
-                .SetSigilMain(976722430)
-                .SetSigilAccent(803826460)
+                .SetBannerShape(189701627)
+                .SetSigilMain(1494901005)
+                .SetSigilAccent(3399297034)
                 .SetPatternColor(1797588777)
-                .SetBackgroundColor(1379006192)
-                .SetSigilColor(1797588777)
-                .SetSigilPlacement(3057352154)
+                .SetBackgroundColor(1797588777)
+                .SetSigilColor(2045456409)
+                .SetSigilPlacement(1015980604)
                 .SetPattern(4173846786)
                 .SetUseSigilVariant(true)
-                .SetEpicBanner(0)
                 .Build();
         }
 

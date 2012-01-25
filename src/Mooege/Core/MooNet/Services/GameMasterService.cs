@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Games;
+using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
@@ -113,13 +114,18 @@ namespace Mooege.Core.MooNet.Services
             }
 
             // send game found notification.
-            var notificationBuilder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder()
-                .SetRequestId(gameFound.RequestId)
-                .SetGameHandle(gameFound.GameHandle);
+            var notification = bnet.protocol.notification.Notification.CreateBuilder()
+                .SetSenderId(bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(0).Build())
+                .SetTargetId(this.Client.Account.CurrentGameAccount.BnetEntityId)
+                .SetType("MM_START");
+            var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                .SetName("game_request_id")
+                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetUintValue(gameFound.RequestId).Build());
+            notification.AddAttribute(attr);
 
-            this.Client.MakeRPCWithListenerId(request.FactoryObjectId, () =>
-                bnet.protocol.game_master.GameFactorySubscriber.CreateStub(this.Client).NotifyGameFound(null, notificationBuilder.Build(), callback => { }));
-            
+            this.Client.MakeRPC(() =>
+                bnet.protocol.notification.NotificationListener.CreateStub(this.Client).OnNotificationReceived(null, notification.Build(), callback => { }));
+
             if(gameFound.Started)
             {
                 Logger.Warn("Client {0} joining game with FactoryID:{1}", this.Client.Account.CurrentGameAccount.CurrentToon.Name, gameFound.FactoryID);

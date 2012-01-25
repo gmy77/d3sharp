@@ -21,27 +21,24 @@ using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
 using bnet.protocol;
-using bnet.protocol.server_pool;
+using bnet.protocol.resources;
 
 namespace Mooege.Core.MooNet.Services
 {
-    [Service(serviceID: 0xf, serviceName: "bnet.protocol.server_pool.ServerPoolService")]
-    class ServerPoolService : bnet.protocol.server_pool.ServerPoolService, IServerService
+    [Service(serviceID: 0xd, serviceName: "bnet.protocol.resources.Resources")]
+    public class ResourceService : bnet.protocol.resources.Resources, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
 
-        public override void GetPoolState(IRpcController controller, PoolStateRequest request, Action<PoolStateResponse> done)
+        public override void GetContentHandle(IRpcController controller, ContentHandleRequest request, Action<ContentHandle> done)
         {
-            Logger.Trace("GetPoolState()");
-            var pid = bnet.protocol.ProcessId.CreateBuilder().SetEpoch(26990464).SetLabel(17459).Build();
-            var si = bnet.protocol.server_pool.ServerInfo.CreateBuilder().SetProgramId(17459).SetHost(pid).Build();
-            var builder = PoolStateResponse.CreateBuilder().AddInfo(si);
+            Logger.Trace("GetContentHandle()");
+            //Beta this returns status 4, no payload
 
             throw new NotImplementedException();
 
-            //done(builder.Build());
         }
     }
 }
