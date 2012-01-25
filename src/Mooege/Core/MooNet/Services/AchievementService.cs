@@ -41,12 +41,8 @@ namespace Mooege.Core.MooNet.Services
         public override void RegisterWithService(IRpcController controller, bnet.protocol.achievements.RegisterWithServiceRequest request, Action<bnet.protocol.achievements.RegisterWithServiceResponse> done)
         {
             // This should register client with achievement notifier service. -Egris
-            var response = bnet.protocol.achievements.RegisterWithServiceResponse.CreateBuilder()
-                .SetMaxRecordsPerUpdate(1)
-                .SetMaxCriteriaPerRecord(2)
-                .SetMaxAchievementsPerRecord(1)
-                .SetMaxRegistrations(16)
-                .SetFlushFrequency(180);
+            var response = bnet.protocol.achievements.RegisterWithServiceResponse.CreateBuilder();
+
             done(response.Build());
         }
 
@@ -80,5 +76,9 @@ namespace Mooege.Core.MooNet.Services
             done(reponse.Build());
         }
 
+        public override void ValidateStaticData(IRpcController controller, bnet.protocol.achievements.ValidateStaticDataRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

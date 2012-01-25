@@ -55,6 +55,7 @@ message MemberState
     repeated .bnet.protocol.attribute.Attribute attribute = 1;
     repeated uint32 role = 2 [packed=true];
     optional uint64 privileges = 3 [default = 0];
+    optional .bnet.protocol.AccountInfo info = 4;
     extensions 100 to 10000;
 }
 

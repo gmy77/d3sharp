@@ -118,7 +118,7 @@ namespace Mooege.Core.MooNet.Games
             foreach (GameFactory game in GameCreators.Values)
             {   
                 //FIXME: don't currently track max players allowed in a game, hardcoded 4 /dustinconrad
-                if (game.InGame != null && !game.GameCreateParams.IsPrivate && game.InGame.Players.Count < 4)
+                if (game.InGame != null && game.InGame.Players.Count < 4)
                 {
                     if (matchOp(version == game.Version, difficulty == game.GameCreateParams.Coop.DifficultyLevel, currentQuest == game.GameCreateParams.Coop.SnoQuest))
                     {
@@ -170,7 +170,7 @@ namespace Mooege.Core.MooNet.Games
             int players = 0;
             foreach(GameFactory game in GameCreators.Values)
             {
-                if (game.InGame != null && !game.GameCreateParams.IsPrivate)
+                if (game.InGame != null)
                 {
                     if (matchOp(version == game.Version, difficulty == game.GameCreateParams.Coop.DifficultyLevel, currentQuest == game.GameCreateParams.Coop.SnoQuest))
                     {

@@ -117,7 +117,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             this.Attributes[GameAttribute.Get_Hit_Damage] = 20;
             this.Attributes[GameAttribute.Get_Hit_Recovery] = 3.051758E-05f;
             this.Attributes[GameAttribute.Get_Hit_Max] = 3.051758E-05f;
-            this.Attributes[GameAttribute.Dodge_Rating_Total] = 3.051758E-05f;
             this.Attributes[GameAttribute.Block_Amount_Item_Delta] = 4;
             this.Attributes[GameAttribute.Block_Amount_Item_Min] = 6;
             this.Attributes[GameAttribute.Block_Amount_Total_Min] = 6;

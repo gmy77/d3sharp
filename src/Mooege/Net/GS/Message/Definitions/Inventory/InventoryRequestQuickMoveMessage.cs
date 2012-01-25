@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,32 +17,48 @@
  */
 
 using System.Text;
+using Mooege.Net.GS.Message.Fields;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
-    [Message(new[] { Opcodes.IntDataMessage1, Opcodes.IntDataMessage2, Opcodes.IntDataMessage3, Opcodes.IntDataMessage4, Opcodes.IntDataMessage5,
-                    Opcodes.IntDataMessage6, Opcodes.IntDataMessage7, Opcodes.IntDataMessage8, Opcodes.IntDataMessage9 })]
-    public class IntDataMessage : GameMessage
+    [Message(Opcodes.InventoryRequestQuickMoveMessage, Consumers.Inventory)]
+    public class InventoryRequestQuickMoveMessage : GameMessage
     {
         public int Field0;
+        public int Field1;
+        public int Field2;
+        public int Field3;
+        public int Field4;
 
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadInt(32);
+            Field2 = buffer.ReadInt(5) + (-1);
+            Field3 = buffer.ReadInt(32);
+            Field4 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(5, Field2 - (-1));
+            buffer.WriteInt(32, Field3);
+            buffer.WriteInt(32, Field4);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("IntDataMessage:");
+            b.AppendLine("InventoryRequestQuickMoveMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
+            b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
+            b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

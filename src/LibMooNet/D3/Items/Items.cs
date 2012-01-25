@@ -49,38 +49,37 @@ namespace D3.Items {
           "bmVTZXJ2aWNlLnByb3RvIp4BCgxSYXJlSXRlbU5hbWUSIgoTaXRlbV9uYW1l" + 
           "X2lzX3ByZWZpeBgBIAIoCDoFZmFsc2USIQoVc25vX2FmZml4X3N0cmluZ19s" + 
           "aXN0GAIgAigPOgItMRIjChdhZmZpeF9zdHJpbmdfbGlzdF9pbmRleBgDIAIo" + 
-          "EToCLTESIgoWaXRlbV9zdHJpbmdfbGlzdF9pbmRleBgEIAIoEToCLTEi9AMK" + 
+          "EToCLTESIgoWaXRlbV9zdHJpbmdfbGlzdF9pbmRleBgEIAIoEToCLTEi2gMK" + 
           "CUdlbmVyYXRvchIPCgRzZWVkGAEgAigNOgEwEikKCWdiX2hhbmRsZRgCIAIo" + 
           "CzIWLkQzLkdhbWVCYWxhbmNlLkhhbmRsZRIUCgxiYXNlX2FmZml4ZXMYAyAD" + 
           "KA8SLgoOcmFyZV9pdGVtX25hbWUYBCABKAsyFi5EMy5JdGVtcy5SYXJlSXRl" + 
-          "bU5hbWUSGQoNZW5jaGFudF9hZmZpeBgFIAEoDzoCLTESGAoMc29ja2V0X2Fm" + 
-          "Zml4GAYgASgPOgItMRIQCgVmbGFncxgHIAIoDToBMBISCgpkdXJhYmlsaXR5" + 
-          "GAggAigNEhIKCnN0YWNrX3NpemUYCSACKAQSEwoIZHllX3R5cGUYCiABKA06" + 
-          "ATASHQoSaXRlbV9xdWFsaXR5X2xldmVsGAsgASgROgExEh0KEml0ZW1fYmlu" + 
-          "ZGluZ19sZXZlbBgMIAEoEToBMBIZCg5tYXhfZHVyYWJpbGl0eRgNIAEoDToB" + 
-          "MBItCghjb250ZW50cxgOIAMoCzIbLkQzLkl0ZW1zLkVtYmVkZGVkR2VuZXJh" + 
-          "dG9yEhkKDWF0dHVuZWRfc2tpbGwYDyABKA86Ai0xEiAKFWl0ZW1fdW5sb2Nr" + 
-          "X3RpbWVzdGFtcBgQIAEoBDoBMBIcChFlbmNoYW50X3JhbmdlX3ZhbBgRIAEo" + 
-          "DToBMCJhChFFbWJlZGRlZEdlbmVyYXRvchIkCgJpZBgBIAIoCzIYLkQzLk9u" + 
-          "bGluZVNlcnZpY2UuSXRlbUlkEiYKCWdlbmVyYXRvchgCIAIoCzITLkQzLkl0" + 
-          "ZW1zLkdlbmVyYXRvciKaAgoJU2F2ZWRJdGVtEiQKAmlkGAEgAigLMhguRDMu" + 
-          "T25saW5lU2VydmljZS5JdGVtSWQSMwoPb3duZXJfZW50aXR5X2lkGAIgASgL" + 
-          "MhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIrCglzb2NrZXRfaWQYAyAB" + 
-          "KAsyGC5EMy5PbmxpbmVTZXJ2aWNlLkl0ZW1JZBIWCg5oaXJlbGluZ19jbGFz" + 
-          "cxgEIAIoERIRCglpdGVtX3Nsb3QYBSACKBESFAoMc3F1YXJlX2luZGV4GAYg" + 
-          "AigREhwKEXVzZWRfc29ja2V0X2NvdW50GAcgAigNOgEwEiYKCWdlbmVyYXRv" + 
-          "chgIIAEoCzITLkQzLkl0ZW1zLkdlbmVyYXRvciJzChJBdWN0aW9uQWNjb3Vu" + 
-          "dEluZm8SLgoKYWNjb3VudF9pZBgBIAIoCzIaLkQzLk9ubGluZVNlcnZpY2Uu" + 
-          "RW50aXR5SWQSLQoJZXNjcm93X2lkGAIgAigLMhouRDMuT25saW5lU2Vydmlj" + 
-          "ZS5FbnRpdHlJZCJbCgtBdWN0aW9uSXRlbRIkCgJpZBgBIAIoCzIYLkQzLk9u" + 
-          "bGluZVNlcnZpY2UuSXRlbUlkEiYKCWdlbmVyYXRvchgCIAIoCzITLkQzLkl0" + 
-          "ZW1zLkdlbmVyYXRvciJXCgtBdWN0aW9uSW5mbxIkCgJpZBgBIAIoCzIYLkQz" + 
-          "Lk9ubGluZVNlcnZpY2UuSXRlbUlkEiIKBW93bmVyGAIgASgLMhMuRDMuSXRl" + 
-          "bXMuT3duZXJzaGlwIi4KCEl0ZW1MaXN0EiIKBWl0ZW1zGAEgAygLMhMuRDMu" + 
-          "SXRlbXMuU2F2ZWRJdGVtIoQBCglPd25lcnNoaXASMwoPb3duZXJfZW50aXR5" + 
-          "X2lkGAEgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBITCgtkZWxl" + 
-          "dGVfdGltZRgCIAEoEhItCgllc2Nyb3dfaWQYAyABKAsyGi5EMy5PbmxpbmVT" + 
-          "ZXJ2aWNlLkVudGl0eUlk");
+          "bU5hbWUSGQoNZW5jaGFudF9hZmZpeBgFIAEoDzoCLTESEAoFZmxhZ3MYByAC" + 
+          "KA06ATASEgoKZHVyYWJpbGl0eRgIIAIoDRISCgpzdGFja19zaXplGAkgAigE" + 
+          "EhMKCGR5ZV90eXBlGAogASgNOgEwEh0KEml0ZW1fcXVhbGl0eV9sZXZlbBgL" + 
+          "IAEoEToBMRIdChJpdGVtX2JpbmRpbmdfbGV2ZWwYDCABKBE6ATASGQoObWF4" + 
+          "X2R1cmFiaWxpdHkYDSABKA06ATASLQoIY29udGVudHMYDiADKAsyGy5EMy5J" + 
+          "dGVtcy5FbWJlZGRlZEdlbmVyYXRvchIZCg1hdHR1bmVkX3NraWxsGA8gASgP" + 
+          "OgItMRIgChVpdGVtX3VubG9ja190aW1lc3RhbXAYECABKAQ6ATASHAoRZW5j" + 
+          "aGFudF9yYW5nZV92YWwYESABKA06ATAiYQoRRW1iZWRkZWRHZW5lcmF0b3IS" + 
+          "JAoCaWQYASACKAsyGC5EMy5PbmxpbmVTZXJ2aWNlLkl0ZW1JZBImCglnZW5l" + 
+          "cmF0b3IYAiACKAsyEy5EMy5JdGVtcy5HZW5lcmF0b3IimgIKCVNhdmVkSXRl" + 
+          "bRIkCgJpZBgBIAIoCzIYLkQzLk9ubGluZVNlcnZpY2UuSXRlbUlkEjMKD293" + 
+          "bmVyX2VudGl0eV9pZBgCIAEoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5" + 
+          "SWQSKwoJc29ja2V0X2lkGAMgASgLMhguRDMuT25saW5lU2VydmljZS5JdGVt" + 
+          "SWQSFgoOaGlyZWxpbmdfY2xhc3MYBCACKBESEQoJaXRlbV9zbG90GAUgAigR" + 
+          "EhQKDHNxdWFyZV9pbmRleBgGIAIoERIcChF1c2VkX3NvY2tldF9jb3VudBgH" + 
+          "IAIoDToBMBImCglnZW5lcmF0b3IYCCABKAsyEy5EMy5JdGVtcy5HZW5lcmF0" + 
+          "b3IicwoSQXVjdGlvbkFjY291bnRJbmZvEi4KCmFjY291bnRfaWQYASACKAsy" + 
+          "Gi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkEi0KCWVzY3Jvd19pZBgCIAIo" + 
+          "CzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQiWwoLQXVjdGlvbkl0ZW0S" + 
+          "JAoCaWQYASACKAsyGC5EMy5PbmxpbmVTZXJ2aWNlLkl0ZW1JZBImCglnZW5l" + 
+          "cmF0b3IYAiACKAsyEy5EMy5JdGVtcy5HZW5lcmF0b3IiVwoLQXVjdGlvbklu" + 
+          "Zm8SJAoCaWQYASACKAsyGC5EMy5PbmxpbmVTZXJ2aWNlLkl0ZW1JZBIiCgVv" + 
+          "d25lchgCIAEoCzITLkQzLkl0ZW1zLk93bmVyc2hpcCIuCghJdGVtTGlzdBIi" + 
+          "CgVpdGVtcxgBIAMoCzITLkQzLkl0ZW1zLlNhdmVkSXRlbSKEAQoJT3duZXJz" + 
+          "aGlwEjMKD293bmVyX2VudGl0eV9pZBgBIAIoCzIaLkQzLk9ubGluZVNlcnZp" + 
+          "Y2UuRW50aXR5SWQSEwoLZGVsZXRlX3RpbWUYAiABKBISLQoJZXNjcm93X2lk" + 
+          "GAMgASgLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZA==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Items_RareItemName__Descriptor = Descriptor.MessageTypes[0];
@@ -90,7 +89,7 @@ namespace D3.Items {
         internal__static_D3_Items_Generator__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_Items_Generator__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.Generator, global::D3.Items.Generator.Builder>(internal__static_D3_Items_Generator__Descriptor,
-                new string[] { "Seed", "GbHandle", "BaseAffixes", "RareItemName", "EnchantAffix", "SocketAffix", "Flags", "Durability", "StackSize", "DyeType", "ItemQualityLevel", "ItemBindingLevel", "MaxDurability", "Contents", "AttunedSkill", "ItemUnlockTimestamp", "EnchantRangeVal", });
+                new string[] { "Seed", "GbHandle", "BaseAffixes", "RareItemName", "EnchantAffix", "Flags", "Durability", "StackSize", "DyeType", "ItemQualityLevel", "ItemBindingLevel", "MaxDurability", "Contents", "AttunedSkill", "ItemUnlockTimestamp", "EnchantRangeVal", });
         internal__static_D3_Items_EmbeddedGenerator__Descriptor = Descriptor.MessageTypes[2];
         internal__static_D3_Items_EmbeddedGenerator__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.EmbeddedGenerator, global::D3.Items.EmbeddedGenerator.Builder>(internal__static_D3_Items_EmbeddedGenerator__Descriptor,
@@ -544,8 +543,8 @@ namespace D3.Items {
   public sealed partial class Generator : pb::GeneratedMessage<Generator, Generator.Builder> {
     private Generator() { }
     private static readonly Generator defaultInstance = new Generator().MakeReadOnly();
-    private static readonly string[] _generatorFieldNames = new string[] { "attuned_skill", "base_affixes", "contents", "durability", "dye_type", "enchant_affix", "enchant_range_val", "flags", "gb_handle", "item_binding_level", "item_quality_level", "item_unlock_timestamp", "max_durability", "rare_item_name", "seed", "socket_affix", "stack_size" };
-    private static readonly uint[] _generatorFieldTags = new uint[] { 125, 29, 114, 64, 80, 45, 136, 56, 18, 96, 88, 128, 104, 34, 8, 53, 72 };
+    private static readonly string[] _generatorFieldNames = new string[] { "attuned_skill", "base_affixes", "contents", "durability", "dye_type", "enchant_affix", "enchant_range_val", "flags", "gb_handle", "item_binding_level", "item_quality_level", "item_unlock_timestamp", "max_durability", "rare_item_name", "seed", "stack_size" };
+    private static readonly uint[] _generatorFieldTags = new uint[] { 125, 29, 114, 64, 80, 45, 136, 56, 18, 96, 88, 128, 104, 34, 8, 72 };
     public static Generator DefaultInstance {
       get { return defaultInstance; }
     }
@@ -616,16 +615,6 @@ namespace D3.Items {
     }
     public int EnchantAffix {
       get { return enchantAffix_; }
-    }
-    
-    public const int SocketAffixFieldNumber = 6;
-    private bool hasSocketAffix;
-    private int socketAffix_ = -1;
-    public bool HasSocketAffix {
-      get { return hasSocketAffix; }
-    }
-    public int SocketAffix {
-      get { return socketAffix_; }
     }
     
     public const int FlagsFieldNumber = 7;
@@ -776,9 +765,6 @@ namespace D3.Items {
       if (hasEnchantAffix) {
         output.WriteSFixed32(5, field_names[5], EnchantAffix);
       }
-      if (hasSocketAffix) {
-        output.WriteSFixed32(6, field_names[15], SocketAffix);
-      }
       if (hasFlags) {
         output.WriteUInt32(7, field_names[7], Flags);
       }
@@ -786,7 +772,7 @@ namespace D3.Items {
         output.WriteUInt32(8, field_names[3], Durability);
       }
       if (hasStackSize) {
-        output.WriteUInt64(9, field_names[16], StackSize);
+        output.WriteUInt64(9, field_names[15], StackSize);
       }
       if (hasDyeType) {
         output.WriteUInt32(10, field_names[4], DyeType);
@@ -839,9 +825,6 @@ namespace D3.Items {
         }
         if (hasEnchantAffix) {
           size += pb::CodedOutputStream.ComputeSFixed32Size(5, EnchantAffix);
-        }
-        if (hasSocketAffix) {
-          size += pb::CodedOutputStream.ComputeSFixed32Size(6, SocketAffix);
         }
         if (hasFlags) {
           size += pb::CodedOutputStream.ComputeUInt32Size(7, Flags);
@@ -1019,9 +1002,6 @@ namespace D3.Items {
         if (other.HasEnchantAffix) {
           EnchantAffix = other.EnchantAffix;
         }
-        if (other.HasSocketAffix) {
-          SocketAffix = other.SocketAffix;
-        }
         if (other.HasFlags) {
           Flags = other.Flags;
         }
@@ -1127,10 +1107,6 @@ namespace D3.Items {
             }
             case 45: {
               result.hasEnchantAffix = input.ReadSFixed32(ref result.enchantAffix_);
-              break;
-            }
-            case 53: {
-              result.hasSocketAffix = input.ReadSFixed32(ref result.socketAffix_);
               break;
             }
             case 56: {
@@ -1334,26 +1310,6 @@ namespace D3.Items {
         PrepareBuilder();
         result.hasEnchantAffix = false;
         result.enchantAffix_ = -1;
-        return this;
-      }
-      
-      public bool HasSocketAffix {
-        get { return result.hasSocketAffix; }
-      }
-      public int SocketAffix {
-        get { return result.SocketAffix; }
-        set { SetSocketAffix(value); }
-      }
-      public Builder SetSocketAffix(int value) {
-        PrepareBuilder();
-        result.hasSocketAffix = true;
-        result.socketAffix_ = value;
-        return this;
-      }
-      public Builder ClearSocketAffix() {
-        PrepareBuilder();
-        result.hasSocketAffix = false;
-        result.socketAffix_ = -1;
         return this;
       }
       

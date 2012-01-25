@@ -46,6 +46,7 @@ namespace Mooege.Net.GS.Message.Fields
         public int Field1;          // have not seen != 0
         public bool Field2;         // have not seen true
         public bool Field3;
+        public bool Field4;
 
         /// <summary>
         /// Identifier of the line (within the conversation) to play
@@ -108,6 +109,7 @@ namespace Mooege.Net.GS.Message.Fields
             Field1 = buffer.ReadInt(32);
             Field2 = buffer.ReadBool();
             Field3 = buffer.ReadBool();
+            Field4 = buffer.ReadBool();
             LineID = buffer.ReadInt(32);
             Speaker = (Speaker)buffer.ReadInt(32);
             Field5 = buffer.ReadInt(32);
@@ -129,6 +131,7 @@ namespace Mooege.Net.GS.Message.Fields
             buffer.WriteInt(32, Field1);
             buffer.WriteBool(Field2);
             buffer.WriteBool(Field3);
+            buffer.WriteBool(Field4);
             buffer.WriteInt(32, LineID);
             buffer.WriteInt(32, (int)Speaker);
             buffer.WriteInt(32, Field5);
@@ -158,6 +161,8 @@ namespace Mooege.Net.GS.Message.Fields
             b.AppendLine("Field2: " + (Field2 ? "true" : "false"));
             b.Append(' ', pad);
             b.AppendLine("Field3: " + (Field3 ? "true" : "false"));
+            b.Append(' ', pad);
+            b.AppendLine("Field4: " + (Field4 ? "true" : "false"));
             b.Append(' ', pad);
             b.AppendLine("LineID: 0x" + LineID.ToString("X8") + " (" + LineID + ")");
             b.Append(' ', pad);

@@ -52,6 +52,7 @@ namespace Mooege.Core.MooNet.Services
                     .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
                         .SetCurrency("PTR")
                         .SetTickSize(1)
+                        .SetMinTotalPrice(100)
                         .SetMinUnitPrice(100)
                         .SetMaxUnitPrice(4294967295)
                         .SetMaxTotalPrice(281474976710655).Build()))
@@ -70,6 +71,7 @@ namespace Mooege.Core.MooNet.Services
                         .SetCurrency("PTR")
                         .SetTickSize(1)
                         .SetMinUnitPrice(100)
+                        .SetMinTotalPrice(100)
                         .SetMaxUnitPrice(4294967295)
                         .SetMaxTotalPrice(281474976710655).Build()));
 
@@ -189,7 +191,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetDescription("BattleCoin")
                 .SetAmount(100000)
                 .SetCashInOutMask(3)
-                .SetCountryId(0)
+                .SetWalletId(0)
                 .Build();
             builder.AddMethods(method);
 
@@ -262,6 +264,36 @@ namespace Mooege.Core.MooNet.Services
         }
 
         public override void GetOrderBookStatistics(IRpcController controller, bnet.protocol.exchange.GetOrderBookStatisticsRequest request, Action<bnet.protocol.exchange.GetOrderBookStatisticsResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ReportRefund(IRpcController controller, bnet.protocol.exchange_object_provider.ReportRefundRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void RefundBid(IRpcController controller, bnet.protocol.exchange.RefundRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void CreateCSTrade(IRpcController controller, bnet.protocol.exchange.CreateCSTradeRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void GetBidDetails(IRpcController controller, bnet.protocol.exchange.GetBidDetailsRequest request, Action<bnet.protocol.exchange.GetBidDetailsResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void GetOfferDetails(IRpcController controller, bnet.protocol.exchange.GetOfferDetailsRequest request, Action<bnet.protocol.exchange.GetOfferDetailsResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void GetSystemTime(IRpcController controller, bnet.protocol.NoData request, Action<bnet.protocol.exchange.GetSystemTimeResponse> done)
         {
             throw new NotImplementedException();
         }

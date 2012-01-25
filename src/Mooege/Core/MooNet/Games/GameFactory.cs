@@ -162,7 +162,7 @@ namespace Mooege.Core.MooNet.Games
             var notificationBuilder = bnet.protocol.notification.Notification.CreateBuilder()
                 .SetSenderId(bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(0).Build())
                 .SetTargetId(client.Account.CurrentGameAccount.BnetEntityId)
-                .SetType("GAME_CONNECTION_INFO")
+                .SetType("GAME_ENTRY")
                 .AddAttribute(connectionInfoAttribute)
                 .AddAttribute(gameHandleAttribute)
                 .AddAttribute(requestIdAttribute)

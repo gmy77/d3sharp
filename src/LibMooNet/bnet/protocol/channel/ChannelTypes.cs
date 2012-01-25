@@ -62,11 +62,12 @@ namespace bnet.protocol.channel {
           "FgoSUFJJVkFDWV9MRVZFTF9PUEVOEAESLAooUFJJVkFDWV9MRVZFTF9PUEVO" + 
           "X0lOVklUQVRJT05fQU5EX0ZSSUVORBACEiEKHVBSSVZBQ1lfTEVWRUxfT1BF" + 
           "Tl9JTlZJVEFUSU9OEAMSGAoUUFJJVkFDWV9MRVZFTF9DTE9TRUQQBCoFCGQQ" + 
-          "kU4idAoLTWVtYmVyU3RhdGUSNQoJYXR0cmlidXRlGAEgAygLMiIuYm5ldC5w" + 
-          "cm90b2NvbC5hdHRyaWJ1dGUuQXR0cmlidXRlEhAKBHJvbGUYAiADKA1CAhAB" + 
-          "EhUKCnByaXZpbGVnZXMYAyABKAQ6ATAqBQhkEJFOImYKBk1lbWJlchIpCghp" + 
-          "ZGVudGl0eRgBIAIoCzIXLmJuZXQucHJvdG9jb2wuSWRlbnRpdHkSMQoFc3Rh" + 
-          "dGUYAiACKAsyIi5ibmV0LnByb3RvY29sLmNoYW5uZWwuTWVtYmVyU3RhdGU=");
+          "kU4ingEKC01lbWJlclN0YXRlEjUKCWF0dHJpYnV0ZRgBIAMoCzIiLmJuZXQu" + 
+          "cHJvdG9jb2wuYXR0cmlidXRlLkF0dHJpYnV0ZRIQCgRyb2xlGAIgAygNQgIQ" + 
+          "ARIVCgpwcml2aWxlZ2VzGAMgASgEOgEwEigKBGluZm8YBCABKAsyGi5ibmV0" + 
+          "LnByb3RvY29sLkFjY291bnRJbmZvKgUIZBCRTiJmCgZNZW1iZXISKQoIaWRl" + 
+          "bnRpdHkYASACKAsyFy5ibmV0LnByb3RvY29sLklkZW50aXR5EjEKBXN0YXRl" + 
+          "GAIgAigLMiIuYm5ldC5wcm90b2NvbC5jaGFubmVsLk1lbWJlclN0YXRl");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_channel_Message__Descriptor = Descriptor.MessageTypes[0];
@@ -88,7 +89,7 @@ namespace bnet.protocol.channel {
         internal__static_bnet_protocol_channel_MemberState__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_channel_MemberState__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.MemberState, global::bnet.protocol.channel.MemberState.Builder>(internal__static_bnet_protocol_channel_MemberState__Descriptor,
-                new string[] { "Attribute", "Role", "Privileges", });
+                new string[] { "Attribute", "Role", "Privileges", "Info", });
         internal__static_bnet_protocol_channel_Member__Descriptor = Descriptor.MessageTypes[5];
         internal__static_bnet_protocol_channel_Member__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.Member, global::bnet.protocol.channel.Member.Builder>(internal__static_bnet_protocol_channel_Member__Descriptor,
@@ -2060,8 +2061,8 @@ namespace bnet.protocol.channel {
   public sealed partial class MemberState : pb::ExtendableMessage<MemberState, MemberState.Builder> {
     private MemberState() { }
     private static readonly MemberState defaultInstance = new MemberState().MakeReadOnly();
-    private static readonly string[] _memberStateFieldNames = new string[] { "attribute", "privileges", "role" };
-    private static readonly uint[] _memberStateFieldTags = new uint[] { 10, 24, 18 };
+    private static readonly string[] _memberStateFieldNames = new string[] { "attribute", "info", "privileges", "role" };
+    private static readonly uint[] _memberStateFieldTags = new uint[] { 10, 34, 24, 18 };
     public static MemberState DefaultInstance {
       get { return defaultInstance; }
     }
@@ -2117,6 +2118,16 @@ namespace bnet.protocol.channel {
       get { return privileges_; }
     }
     
+    public const int InfoFieldNumber = 4;
+    private bool hasInfo;
+    private global::bnet.protocol.AccountInfo info_;
+    public bool HasInfo {
+      get { return hasInfo; }
+    }
+    public global::bnet.protocol.AccountInfo Info {
+      get { return info_ ?? global::bnet.protocol.AccountInfo.DefaultInstance; }
+    }
+    
     public override bool IsInitialized {
       get {
         foreach (global::bnet.protocol.attribute.Attribute element in AttributeList) {
@@ -2135,10 +2146,13 @@ namespace bnet.protocol.channel {
         output.WriteMessageArray(1, field_names[0], attribute_);
       }
       if (role_.Count > 0) {
-        output.WritePackedUInt32Array(2, field_names[2], roleMemoizedSerializedSize, role_);
+        output.WritePackedUInt32Array(2, field_names[3], roleMemoizedSerializedSize, role_);
       }
       if (hasPrivileges) {
-        output.WriteUInt64(3, field_names[1], Privileges);
+        output.WriteUInt64(3, field_names[2], Privileges);
+      }
+      if (hasInfo) {
+        output.WriteMessage(4, field_names[1], Info);
       }
       extensionWriter.WriteUntil(10001, output);
       UnknownFields.WriteTo(output);
@@ -2167,6 +2181,9 @@ namespace bnet.protocol.channel {
         }
         if (hasPrivileges) {
           size += pb::CodedOutputStream.ComputeUInt64Size(3, Privileges);
+        }
+        if (hasInfo) {
+          size += pb::CodedOutputStream.ComputeMessageSize(4, Info);
         }
         size += ExtensionsSerializedSize;
         size += UnknownFields.SerializedSize;
@@ -2306,6 +2323,9 @@ namespace bnet.protocol.channel {
         if (other.HasPrivileges) {
           Privileges = other.Privileges;
         }
+        if (other.HasInfo) {
+          MergeInfo(other.Info);
+        }
           this.MergeExtensionFields(other);
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -2361,6 +2381,15 @@ namespace bnet.protocol.channel {
             }
             case 24: {
               result.hasPrivileges = input.ReadUInt64(ref result.privileges_);
+              break;
+            }
+            case 34: {
+              global::bnet.protocol.AccountInfo.Builder subBuilder = global::bnet.protocol.AccountInfo.CreateBuilder();
+              if (result.hasInfo) {
+                subBuilder.MergeFrom(Info);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              Info = subBuilder.BuildPartial();
               break;
             }
           }
@@ -2464,6 +2493,46 @@ namespace bnet.protocol.channel {
         PrepareBuilder();
         result.hasPrivileges = false;
         result.privileges_ = 0UL;
+        return this;
+      }
+      
+      public bool HasInfo {
+       get { return result.hasInfo; }
+      }
+      public global::bnet.protocol.AccountInfo Info {
+        get { return result.Info; }
+        set { SetInfo(value); }
+      }
+      public Builder SetInfo(global::bnet.protocol.AccountInfo value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasInfo = true;
+        result.info_ = value;
+        return this;
+      }
+      public Builder SetInfo(global::bnet.protocol.AccountInfo.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasInfo = true;
+        result.info_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeInfo(global::bnet.protocol.AccountInfo value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasInfo &&
+            result.info_ != global::bnet.protocol.AccountInfo.DefaultInstance) {
+            result.info_ = global::bnet.protocol.AccountInfo.CreateBuilder(result.info_).MergeFrom(value).BuildPartial();
+        } else {
+          result.info_ = value;
+        }
+        result.hasInfo = true;
+        return this;
+      }
+      public Builder ClearInfo() {
+        PrepareBuilder();
+        result.hasInfo = false;
+        result.info_ = null;
         return this;
       }
     }

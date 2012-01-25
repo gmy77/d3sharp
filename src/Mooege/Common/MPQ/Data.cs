@@ -208,7 +208,7 @@ namespace Mooege.Common.MPQ
                 var i = 0;
                 foreach (MpqArchive archive in this.FileSystem.Archives)
                 {
-                    if (i++ < 2) continue;
+                    if (i++ < 3) continue;
 
                     file = archive.FindFile(fileName);
                     if (file != null)

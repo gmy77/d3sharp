@@ -33,7 +33,7 @@ namespace Mooege.Core.MooNet.Helpers
                     return HighIdType.AccountId;
                 case 0x0200:
                     return HighIdType.GameAccountId;
-                case 0x0400:
+                case 0x0000:
                     return HighIdType.ToonId;
                 case 0x0600:
                     return HighIdType.ChannelId;
@@ -49,7 +49,7 @@ namespace Mooege.Core.MooNet.Helpers
             Unknown = 0x0,
             AccountId = 0x100000000000000,
             GameAccountId = 0x200000000000000,
-            ToonId = 0x400000000000000,
+            ToonId = 0x000000000000000,
             GameId = 0x600000000000000,
             ChannelId = 0x600000000000000
         }

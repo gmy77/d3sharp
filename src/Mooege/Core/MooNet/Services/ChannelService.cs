@@ -115,8 +115,8 @@ namespace Mooege.Core.MooNet.Services
                 }
                 else if (attribute.Name == "D3.Party.ScreenStatus")
                 {
-                    if (!this.Client.MOTDSent)
-                        this.Client.SendMOTD(); // send the MOTD to client if we haven't yet so.
+                    //if (!this.Client.MOTDSent)
+                    //    this.Client.SendMOTD(); // send the MOTD to client if we haven't yet so.
 
                     if (!attribute.HasValue || attribute.Value.MessageValue.IsEmpty) //Sometimes not present -Egris
                     {

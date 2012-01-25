@@ -19,6 +19,8 @@ namespace bnet.protocol.presence {
     }
     #endregion
     #region Static variables
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_presence_RichPresence__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.RichPresence, global::bnet.protocol.presence.RichPresence.Builder> internal__static_bnet_protocol_presence_RichPresence__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_presence_FieldKey__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.FieldKey, global::bnet.protocol.presence.FieldKey.Builder> internal__static_bnet_protocol_presence_FieldKey__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_presence_Field__Descriptor;
@@ -38,36 +40,41 @@ namespace bnet.protocol.presence {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           "ChlibmV0L3ByZXNlbmNlX3R5cGVzLnByb3RvEhZibmV0LnByb3RvY29sLnBy" + 
           "ZXNlbmNlGhRibmV0L2F0dHJpYnV0ZS5wcm90bxoRYm5ldC9lbnRpdHkucHJv" + 
-          "dG8aGGJuZXQvY2hhbm5lbF90eXBlcy5wcm90byJLCghGaWVsZEtleRIPCgdw" + 
-          "cm9ncmFtGAEgAigNEg0KBWdyb3VwGAIgAigNEg0KBWZpZWxkGAMgAigNEhAK" + 
-          "BWluZGV4GAQgASgEOgEwImcKBUZpZWxkEi0KA2tleRgBIAIoCzIgLmJuZXQu" + 
-          "cHJvdG9jb2wucHJlc2VuY2UuRmllbGRLZXkSLwoFdmFsdWUYAiACKAsyIC5i" + 
-          "bmV0LnByb3RvY29sLmF0dHJpYnV0ZS5WYXJpYW50IrEBCg5GaWVsZE9wZXJh" + 
-          "dGlvbhIsCgVmaWVsZBgBIAIoCzIdLmJuZXQucHJvdG9jb2wucHJlc2VuY2Uu" + 
-          "RmllbGQSTAoJb3BlcmF0aW9uGAIgASgOMjQuYm5ldC5wcm90b2NvbC5wcmVz" + 
-          "ZW5jZS5GaWVsZE9wZXJhdGlvbi5PcGVyYXRpb25UeXBlOgNTRVQiIwoNT3Bl" + 
-          "cmF0aW9uVHlwZRIHCgNTRVQQABIJCgVDTEVBUhABIvABCgxDaGFubmVsU3Rh" + 
-          "dGUSKgoJZW50aXR5X2lkGAEgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJ" + 
-          "ZBI/Cg9maWVsZF9vcGVyYXRpb24YAiADKAsyJi5ibmV0LnByb3RvY29sLnBy" + 
-          "ZXNlbmNlLkZpZWxkT3BlcmF0aW9uEhYKB2hlYWxpbmcYAyABKAg6BWZhbHNl" + 
-          "MlsKCHByZXNlbmNlEiMuYm5ldC5wcm90b2NvbC5jaGFubmVsLkNoYW5uZWxT" + 
-          "dGF0ZRhlIAEoCzIkLmJuZXQucHJvdG9jb2wucHJlc2VuY2UuQ2hhbm5lbFN0" + 
-          "YXRl");
+          "dG8aGGJuZXQvY2hhbm5lbF90eXBlcy5wcm90byJECgxSaWNoUHJlc2VuY2US" + 
+          "EgoKcHJvZ3JhbV9pZBgBIAIoBxIRCglzdHJlYW1faWQYAiACKAcSDQoFaW5k" + 
+          "ZXgYAyACKA0iSwoIRmllbGRLZXkSDwoHcHJvZ3JhbRgBIAIoDRINCgVncm91" + 
+          "cBgCIAIoDRINCgVmaWVsZBgDIAIoDRIQCgVpbmRleBgEIAEoBDoBMCJnCgVG" + 
+          "aWVsZBItCgNrZXkYASACKAsyIC5ibmV0LnByb3RvY29sLnByZXNlbmNlLkZp" + 
+          "ZWxkS2V5Ei8KBXZhbHVlGAIgAigLMiAuYm5ldC5wcm90b2NvbC5hdHRyaWJ1" + 
+          "dGUuVmFyaWFudCKxAQoORmllbGRPcGVyYXRpb24SLAoFZmllbGQYASACKAsy" + 
+          "HS5ibmV0LnByb3RvY29sLnByZXNlbmNlLkZpZWxkEkwKCW9wZXJhdGlvbhgC" + 
+          "IAEoDjI0LmJuZXQucHJvdG9jb2wucHJlc2VuY2UuRmllbGRPcGVyYXRpb24u" + 
+          "T3BlcmF0aW9uVHlwZToDU0VUIiMKDU9wZXJhdGlvblR5cGUSBwoDU0VUEAAS" + 
+          "CQoFQ0xFQVIQASLwAQoMQ2hhbm5lbFN0YXRlEioKCWVudGl0eV9pZBgBIAEo" + 
+          "CzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSPwoPZmllbGRfb3BlcmF0aW9u" + 
+          "GAIgAygLMiYuYm5ldC5wcm90b2NvbC5wcmVzZW5jZS5GaWVsZE9wZXJhdGlv" + 
+          "bhIWCgdoZWFsaW5nGAMgASgIOgVmYWxzZTJbCghwcmVzZW5jZRIjLmJuZXQu" + 
+          "cHJvdG9jb2wuY2hhbm5lbC5DaGFubmVsU3RhdGUYZSABKAsyJC5ibmV0LnBy" + 
+          "b3RvY29sLnByZXNlbmNlLkNoYW5uZWxTdGF0ZQ==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
-        internal__static_bnet_protocol_presence_FieldKey__Descriptor = Descriptor.MessageTypes[0];
+        internal__static_bnet_protocol_presence_RichPresence__Descriptor = Descriptor.MessageTypes[0];
+        internal__static_bnet_protocol_presence_RichPresence__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.RichPresence, global::bnet.protocol.presence.RichPresence.Builder>(internal__static_bnet_protocol_presence_RichPresence__Descriptor,
+                new string[] { "ProgramId", "StreamId", "Index", });
+        internal__static_bnet_protocol_presence_FieldKey__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_presence_FieldKey__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.FieldKey, global::bnet.protocol.presence.FieldKey.Builder>(internal__static_bnet_protocol_presence_FieldKey__Descriptor,
                 new string[] { "Program", "Group", "Field", "Index", });
-        internal__static_bnet_protocol_presence_Field__Descriptor = Descriptor.MessageTypes[1];
+        internal__static_bnet_protocol_presence_Field__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_presence_Field__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.Field, global::bnet.protocol.presence.Field.Builder>(internal__static_bnet_protocol_presence_Field__Descriptor,
                 new string[] { "Key", "Value", });
-        internal__static_bnet_protocol_presence_FieldOperation__Descriptor = Descriptor.MessageTypes[2];
+        internal__static_bnet_protocol_presence_FieldOperation__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_presence_FieldOperation__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.FieldOperation, global::bnet.protocol.presence.FieldOperation.Builder>(internal__static_bnet_protocol_presence_FieldOperation__Descriptor,
                 new string[] { "Field", "Operation", });
-        internal__static_bnet_protocol_presence_ChannelState__Descriptor = Descriptor.MessageTypes[3];
+        internal__static_bnet_protocol_presence_ChannelState__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_presence_ChannelState__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.ChannelState, global::bnet.protocol.presence.ChannelState.Builder>(internal__static_bnet_protocol_presence_ChannelState__Descriptor,
                 new string[] { "EntityId", "FieldOperation", "Healing", });
@@ -85,6 +92,369 @@ namespace bnet.protocol.presence {
     
   }
   #region Messages
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class RichPresence : pb::GeneratedMessage<RichPresence, RichPresence.Builder> {
+    private RichPresence() { }
+    private static readonly RichPresence defaultInstance = new RichPresence().MakeReadOnly();
+    private static readonly string[] _richPresenceFieldNames = new string[] { "index", "program_id", "stream_id" };
+    private static readonly uint[] _richPresenceFieldTags = new uint[] { 24, 13, 21 };
+    public static RichPresence DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override RichPresence DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override RichPresence ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.presence.PresenceTypes.internal__static_bnet_protocol_presence_RichPresence__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<RichPresence, RichPresence.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.presence.PresenceTypes.internal__static_bnet_protocol_presence_RichPresence__FieldAccessorTable; }
+    }
+    
+    public const int ProgramIdFieldNumber = 1;
+    private bool hasProgramId;
+    private uint programId_;
+    public bool HasProgramId {
+      get { return hasProgramId; }
+    }
+    public uint ProgramId {
+      get { return programId_; }
+    }
+    
+    public const int StreamIdFieldNumber = 2;
+    private bool hasStreamId;
+    private uint streamId_;
+    public bool HasStreamId {
+      get { return hasStreamId; }
+    }
+    public uint StreamId {
+      get { return streamId_; }
+    }
+    
+    public const int IndexFieldNumber = 3;
+    private bool hasIndex;
+    private uint index_;
+    public bool HasIndex {
+      get { return hasIndex; }
+    }
+    public uint Index {
+      get { return index_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasProgramId) return false;
+        if (!hasStreamId) return false;
+        if (!hasIndex) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _richPresenceFieldNames;
+      if (hasProgramId) {
+        output.WriteFixed32(1, field_names[1], ProgramId);
+      }
+      if (hasStreamId) {
+        output.WriteFixed32(2, field_names[2], StreamId);
+      }
+      if (hasIndex) {
+        output.WriteUInt32(3, field_names[0], Index);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasProgramId) {
+          size += pb::CodedOutputStream.ComputeFixed32Size(1, ProgramId);
+        }
+        if (hasStreamId) {
+          size += pb::CodedOutputStream.ComputeFixed32Size(2, StreamId);
+        }
+        if (hasIndex) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(3, Index);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static RichPresence ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static RichPresence ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static RichPresence ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static RichPresence ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static RichPresence ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static RichPresence ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static RichPresence ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static RichPresence ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static RichPresence ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static RichPresence ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private RichPresence MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(RichPresence prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<RichPresence, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(RichPresence cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private RichPresence result;
+      
+      private RichPresence PrepareBuilder() {
+        if (resultIsReadOnly) {
+          RichPresence original = result;
+          result = new RichPresence();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override RichPresence MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.presence.RichPresence.Descriptor; }
+      }
+      
+      public override RichPresence DefaultInstanceForType {
+        get { return global::bnet.protocol.presence.RichPresence.DefaultInstance; }
+      }
+      
+      public override RichPresence BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is RichPresence) {
+          return MergeFrom((RichPresence) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(RichPresence other) {
+        if (other == global::bnet.protocol.presence.RichPresence.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasProgramId) {
+          ProgramId = other.ProgramId;
+        }
+        if (other.HasStreamId) {
+          StreamId = other.StreamId;
+        }
+        if (other.HasIndex) {
+          Index = other.Index;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_richPresenceFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _richPresenceFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 13: {
+              result.hasProgramId = input.ReadFixed32(ref result.programId_);
+              break;
+            }
+            case 21: {
+              result.hasStreamId = input.ReadFixed32(ref result.streamId_);
+              break;
+            }
+            case 24: {
+              result.hasIndex = input.ReadUInt32(ref result.index_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasProgramId {
+        get { return result.hasProgramId; }
+      }
+      public uint ProgramId {
+        get { return result.ProgramId; }
+        set { SetProgramId(value); }
+      }
+      public Builder SetProgramId(uint value) {
+        PrepareBuilder();
+        result.hasProgramId = true;
+        result.programId_ = value;
+        return this;
+      }
+      public Builder ClearProgramId() {
+        PrepareBuilder();
+        result.hasProgramId = false;
+        result.programId_ = 0;
+        return this;
+      }
+      
+      public bool HasStreamId {
+        get { return result.hasStreamId; }
+      }
+      public uint StreamId {
+        get { return result.StreamId; }
+        set { SetStreamId(value); }
+      }
+      public Builder SetStreamId(uint value) {
+        PrepareBuilder();
+        result.hasStreamId = true;
+        result.streamId_ = value;
+        return this;
+      }
+      public Builder ClearStreamId() {
+        PrepareBuilder();
+        result.hasStreamId = false;
+        result.streamId_ = 0;
+        return this;
+      }
+      
+      public bool HasIndex {
+        get { return result.hasIndex; }
+      }
+      public uint Index {
+        get { return result.Index; }
+        set { SetIndex(value); }
+      }
+      public Builder SetIndex(uint value) {
+        PrepareBuilder();
+        result.hasIndex = true;
+        result.index_ = value;
+        return this;
+      }
+      public Builder ClearIndex() {
+        PrepareBuilder();
+        result.hasIndex = false;
+        result.index_ = 0;
+        return this;
+      }
+    }
+    static RichPresence() {
+      object.ReferenceEquals(global::bnet.protocol.presence.PresenceTypes.Descriptor, null);
+    }
+  }
+  
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]

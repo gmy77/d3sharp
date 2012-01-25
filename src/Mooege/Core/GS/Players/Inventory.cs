@@ -411,8 +411,6 @@ namespace Mooege.Core.GS.Players
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
             else if (message is RequestBuySharedStashSlotsMessage) OnBuySharedStashSlots(message as RequestBuySharedStashSlotsMessage);
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
-            else if (message is RequestUseCauldronOfJordanMessage) OnUseCauldronOfJordanMessage(message as RequestUseCauldronOfJordanMessage);
-            else if (message is RequestUseNephalemCubeMessage) OnUseNephalmCubeMessage(message as RequestUseNephalemCubeMessage);
             else return;
         }
 
@@ -573,19 +571,6 @@ namespace Mooege.Core.GS.Players
             _owner.Attributes[GameAttribute.Rune_D, powerSNOId] = 0;
             _owner.Attributes[GameAttribute.Rune_E, powerSNOId] = 0;
             return rune;
-        }
-
-
-		private void OnUseNephalmCubeMessage(RequestUseNephalemCubeMessage requestUseNephalemCubeMessage)
-        {
-            Item salvageItem = GetItem(requestUseNephalemCubeMessage.ActorID);
-            NephalemCube.OnUse(_owner, salvageItem);
-        }
-
-        private void OnUseCauldronOfJordanMessage(RequestUseCauldronOfJordanMessage requestUseCauldronOfJordanMessage)
-        {
-            Item sellItem = GetItem(requestUseCauldronOfJordanMessage.ActorID);
-            CauldronOfJordan.OnUse(_owner, sellItem);
         }
 
 

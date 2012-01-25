@@ -117,8 +117,18 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        public D3.GameMessage.SetGameAccountSettings Settings { get; set; }
-
+        private D3.Client.GameAccountSettings _settings = D3.Client.GameAccountSettings.CreateBuilder().Build();
+        public D3.Client.GameAccountSettings Settings
+        {
+            get
+            {
+                return this._settings;
+            }
+            set
+            {
+                this._settings = value;
+            }
+        }
         /// <summary>
         /// Away status
         /// </summary>
@@ -194,16 +204,15 @@ namespace Mooege.Core.MooNet.Accounts
 
             this.BannerConfiguration =
                 D3.Account.BannerConfiguration.CreateBuilder()
-                .SetBannerShape(2952440006)
-                .SetSigilMain(976722430)
-                .SetSigilAccent(803826460)
+                .SetBannerShape(189701627)
+                .SetSigilMain(1494901005)
+                .SetSigilAccent(3399297034)
                 .SetPatternColor(1797588777)
-                .SetBackgroundColor(1379006192)
-                .SetSigilColor(1797588777)
-                .SetSigilPlacement(3057352154)
+                .SetBackgroundColor(1797588777)
+                .SetSigilColor(2045456409)
+                .SetSigilPlacement(1015980604)
                 .SetPattern(4173846786)
                 .SetUseSigilVariant(true)
-                .SetEpicBanner(0)
                 .Build();
         }
 
@@ -256,7 +265,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             get
             {
-                var builder = D3.Account.Digest.CreateBuilder().SetVersion(102) // 7447=>99, 7728=> 100, 8801=>102
+                var builder = D3.Account.Digest.CreateBuilder().SetVersion(105) // 7447=>99, 7728=> 100, 8801=>102, 8296=>105
                     .SetBannerConfiguration(this.BannerConfigurationField.Value)
                     .SetFlags(0)
                     .SetLastPlayedHeroId(lastPlayedHeroId);
