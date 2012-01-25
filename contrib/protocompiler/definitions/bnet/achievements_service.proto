@@ -47,12 +47,7 @@ message RegisterWithServiceRequest
 
 message RegisterWithServiceResponse
 {
-    optional uint32 max_records_per_update = 1 [default = 0];
-    optional uint32 max_criteria_per_record = 2 [default = 0];
-    optional uint32 max_achievements_per_record = 3 [default = 0];
-    optional uint32 max_registrations = 4 [default = 0];
-    optional uint64 flush_frequency = 5 [default = 0];
-    optional .bnet.protocol.achievements.Snapshot snapshot = 6;
+    optional .bnet.protocol.achievements.Snapshot snapshot = 1;
 }
 
 message UnregisterFromServiceRequest
@@ -80,18 +75,60 @@ message RequestSnapshotResponse
 
 message InitializeRequest
 {
-    optional fixed32 program_id = 1;
+    optional fixed32 program_id = 1 [default = 0];
 }
 
 message InitializeResponse
 {
     required .bnet.protocol.ContentHandle content_handle = 1;
+    optional uint32 max_records_per_update = 2 [default = 0];
+    optional uint32 max_criteria_per_record = 3 [default = 0];
+    optional uint32 max_achievements_per_record = 4 [default = 0];
+    optional uint32 max_registrations = 5 [default = 0];
+    optional uint64 flush_frequency = 6 [default = 0];
+}
+
+message StaticDataHash
+{
+    required fixed32 program_id = 1;
+    required string hash = 2;
+}
+
+message ValidateStaticDataRequest
+{
+    repeated .bnet.protocol.achievements.StaticDataHash static_data_hash = 1;
 }
 
 message SnapshotUpdateNotification
 {
     required .bnet.protocol.EntityId target_id = 1;
     required .bnet.protocol.achievements.Snapshot snapshot = 2;
+}
+
+message AchievementStats
+{
+    required uint64 id = 1;
+    required uint64 count = 2;
+}
+
+message GetAchievementStatsRequest
+{
+    required fixed32 program_id = 1;
+}
+
+message GetAchievementStatsResponse
+{
+    repeated .bnet.protocol.achievements.AchievementStats stats = 1;
+}
+
+message GetCriteriaStatsRequest
+{
+    required fixed32 program_id = 1;
+}
+
+message GetCriteriaStatsResponse
+{
+    repeated .bnet.protocol.achievements.AchievementStats stats = 1;
 }
 
 service AchievementsService
@@ -116,6 +153,10 @@ service AchievementsService
     {
         option (method_id) = 5;
     }
+    rpc ValidateStaticData(.bnet.protocol.achievements.ValidateStaticDataRequest) returns(.bnet.protocol.NoData)
+    {
+        option (method_id) = 6;
+    }
 }
 
 service AchievementsNotify
@@ -123,6 +164,18 @@ service AchievementsNotify
     rpc NotifySnapshotUpdate(.bnet.protocol.achievements.SnapshotUpdateNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
         option (method_id) = 1;
+    }
+}
+
+service AchievementsUtils
+{
+    rpc GetAchievementStats(.bnet.protocol.achievements.GetAchievementStatsRequest) returns(.bnet.protocol.achievements.GetAchievementStatsResponse)
+    {
+        option (method_id) = 1;
+    }
+    rpc GetCriteriaStats(.bnet.protocol.achievements.GetCriteriaStatsRequest) returns(.bnet.protocol.achievements.GetCriteriaStatsResponse)
+    {
+        option (method_id) = 2;
     }
 }
 

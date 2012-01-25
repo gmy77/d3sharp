@@ -18,7 +18,6 @@ message Generator
     repeated sfixed32 base_affixes = 3;
     optional .D3.Items.RareItemName rare_item_name = 4;
     optional sfixed32 enchant_affix = 5 [default = -1];
-    optional sfixed32 socket_affix = 6 [default = -1];
     required uint32 flags = 7 [default = 0];
     required uint32 durability = 8;
     required uint64 stack_size = 9;

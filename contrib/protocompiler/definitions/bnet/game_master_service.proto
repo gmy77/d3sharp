@@ -17,7 +17,9 @@ message JoinGameRequest
 
 message JoinGameResponse
 {
-    repeated .bnet.protocol.game_master.ConnectInfo connect_info = 1;
+    optional fixed64 request_id = 1;
+    optional bool queued = 2 [default = false];
+    repeated .bnet.protocol.game_master.ConnectInfo connect_info = 3;
 }
 
 message ListFactoriesRequest
@@ -38,19 +40,21 @@ message FindGameRequest
     repeated .bnet.protocol.game_master.Player player = 1;
     optional fixed64 factory_id = 2;
     optional .bnet.protocol.game_master.GameProperties properties = 3;
-    required uint64 object_id = 4;
+    optional uint64 factory_object_id = 4;
+    optional fixed64 request_id = 5;
 }
 
 message FindGameResponse
 {
-    optional uint64 request_id = 1;
+    optional fixed64 request_id = 1;
     optional fixed64 factory_id = 2;
+    optional bool queued = 3 [default = false];
 }
 
-message CancelFindGameRequest
+message CancelGameRequest
 {
-    required fixed64 factory_id = 1;
-    required uint64 request_id = 2;
+    required fixed64 request_id = 1;
+    optional fixed64 factory_id = 2;
 }
 
 message GameEndedNotification
@@ -149,7 +153,7 @@ message FactoryUpdateNotification
 
 message GameFoundNotification
 {
-    required uint64 request_id = 1;
+    required fixed64 request_id = 1;
     optional uint32 error_code = 2 [default = 0];
     optional .bnet.protocol.game_master.GameHandle game_handle = 3;
     repeated .bnet.protocol.game_master.ConnectInfo connect_info = 4;
@@ -169,7 +173,7 @@ service GameMaster
     {
         option (method_id) = 3;
     }
-    rpc CancelFindGame(.bnet.protocol.game_master.CancelFindGameRequest) returns(.bnet.protocol.NoData)
+    rpc CancelGame(.bnet.protocol.game_master.CancelGameRequest) returns(.bnet.protocol.NoData)
     {
         option (method_id) = 4;
     }

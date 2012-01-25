@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.8101.*";
+            public const string Version = "1.8296.*";
         }
 
         /// <summary>
@@ -47,10 +47,11 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 8101;
+            public const int RequiredClientVersion = 8296;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
+                {"Aurora 9e9ccb8fdf_public", 8296},
                 {"Aurora f506438e8d_public", 8101},
                 {"Aurora fbb3e7d1b4_public", 8059},
                 {"Aurora 04768e5dce_public", 7931},
@@ -96,7 +97,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 8101;
+            public const int RequiredPatchVersion = 8296;
         }
 
         /// <summary>
@@ -107,8 +108,9 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Ingame protocol hash.
             /// </summary>
-            public const int ProtocolHash = unchecked((int)0xBA957E6B);
+            public const int ProtocolHash = 0x1A64B41;
 
+            // 0x01A64B41                   // 8296
             // 0xBA957E6B                   // 8059, 8101
             // unchecked((int)0x208CA037)   // 7931
             // unchecked((int)0x208CA037)   // 7841
@@ -116,8 +118,9 @@ namespace Mooege.Common.Versions
             // 0x21EEE08D                   // 7446
 
             //This is the server version sent in VersionsMessage
-            public const string VersionString = "0.5.1.8115";
+            public const string VersionString = "0.6.0.8318";
 
+            // 0.
             // 0.5.1.8115 // 8101 patch 9
             // 0.5.0.8059 // 8059 patch 8
             // 0.3.1.7779 // 7728

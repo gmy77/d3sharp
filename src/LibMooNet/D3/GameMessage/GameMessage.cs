@@ -48,8 +48,6 @@ namespace D3.GameMessage {
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.TutorialMessage, global::D3.GameMessage.TutorialMessage.Builder> internal__static_D3_GameMessage_TutorialMessage__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_GameMessage_TutorialState__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.TutorialState, global::D3.GameMessage.TutorialState.Builder> internal__static_D3_GameMessage_TutorialState__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_D3_GameMessage_SetAchievementShowcase__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.SetAchievementShowcase, global::D3.GameMessage.SetAchievementShowcase.Builder> internal__static_D3_GameMessage_SetAchievementShowcase__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_GameMessage_DeleteHero__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.DeleteHero, global::D3.GameMessage.DeleteHero.Builder> internal__static_D3_GameMessage_DeleteHero__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_GameMessage_UndeleteHero__Descriptor;
@@ -129,46 +127,45 @@ namespace D3.GameMessage {
           "bG9jYWxlGAEgAigNEiEKBWl0ZW1zGAIgAigLMhIuRDMuSXRlbXMuSXRlbUxp" + 
           "c3QiPwoPVHV0b3JpYWxNZXNzYWdlEhQKDHR1dG9yaWFsX3NubxgBIAIoDRIW" + 
           "Cg51aV9hbmNob3JfbmFtZRgCIAEoCSInCg1UdXRvcmlhbFN0YXRlEhYKDnNl" + 
-          "ZW5fdHV0b3JpYWxzGAEgAigMIj4KFlNldEFjaGlldmVtZW50U2hvd2Nhc2US" + 
-          "FgoOYWNoaWV2ZW1lbnRfaWQYASACKAQSDAoEc2xvdBgCIAIoDSJpCgpEZWxl" + 
+          "ZW5fdHV0b3JpYWxzGAEgAigMImkKCkRlbGV0ZUhlcm8SLgoKYWNjb3VudF9p" + 
+          "ZBgBIAIoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQSKwoHaGVyb19p" + 
+          "ZBgCIAIoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQiawoMVW5kZWxl" + 
           "dGVIZXJvEi4KCmFjY291bnRfaWQYASACKAsyGi5EMy5PbmxpbmVTZXJ2aWNl" + 
           "LkVudGl0eUlkEisKB2hlcm9faWQYAiACKAsyGi5EMy5PbmxpbmVTZXJ2aWNl" + 
-          "LkVudGl0eUlkImsKDFVuZGVsZXRlSGVybxIuCgphY2NvdW50X2lkGAEgAigL" + 
-          "MhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIrCgdoZXJvX2lkGAIgAigL" + 
-          "MhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZCJuCg9Gb3JjZVJlbmFtZUhl" + 
-          "cm8SLgoKYWNjb3VudF9pZBgBIAIoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50" + 
-          "aXR5SWQSKwoHaGVyb19pZBgCIAIoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50" + 
-          "aXR5SWQiPAoKRmV0Y2hIZXJvcxIuCgphY2NvdW50X2lkGAEgAigLMhouRDMu" + 
-          "T25saW5lU2VydmljZS5FbnRpdHlJZCJtCg5GZXRjaEludmVudG9yeRIuCgph" + 
-          "Y2NvdW50X2lkGAEgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIr" + 
-          "CgdoZXJvX2lkGAIgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZCJ7" + 
-          "CgpSZW5hbWVIZXJvEi4KCmFjY291bnRfaWQYASACKAsyGi5EMy5PbmxpbmVT" + 
-          "ZXJ2aWNlLkVudGl0eUlkEisKB2hlcm9faWQYAiACKAsyGi5EMy5PbmxpbmVT" + 
-          "ZXJ2aWNlLkVudGl0eUlkEhAKCG5ld19uYW1lGAMgAigJIkgKFkdldEdhbWVB" + 
-          "Y2NvdW50U2V0dGluZ3MSLgoKYWNjb3VudF9pZBgBIAIoCzIaLkQzLk9ubGlu" + 
-          "ZVNlcnZpY2UuRW50aXR5SWQiegoWU2V0R2FtZUFjY291bnRTZXR0aW5ncxIu" + 
+          "LkVudGl0eUlkIm4KD0ZvcmNlUmVuYW1lSGVybxIuCgphY2NvdW50X2lkGAEg" + 
+          "AigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIrCgdoZXJvX2lkGAIg" + 
+          "AigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZCI8CgpGZXRjaEhlcm9z" + 
+          "Ei4KCmFjY291bnRfaWQYASACKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0" + 
+          "eUlkIm0KDkZldGNoSW52ZW50b3J5Ei4KCmFjY291bnRfaWQYASACKAsyGi5E" + 
+          "My5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkEisKB2hlcm9faWQYAiACKAsyGi5E" + 
+          "My5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkInsKClJlbmFtZUhlcm8SLgoKYWNj" + 
+          "b3VudF9pZBgBIAIoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQSKwoH" + 
+          "aGVyb19pZBgCIAIoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQSEAoI" + 
+          "bmV3X25hbWUYAyACKAkiSAoWR2V0R2FtZUFjY291bnRTZXR0aW5ncxIuCgph" + 
+          "Y2NvdW50X2lkGAEgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZCJ6" + 
+          "ChZTZXRHYW1lQWNjb3VudFNldHRpbmdzEi4KCmFjY291bnRfaWQYASACKAsy" + 
+          "Gi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkEjAKCHNldHRpbmdzGAIgAigL" + 
+          "Mh4uRDMuQ2xpZW50LkdhbWVBY2NvdW50U2V0dGluZ3MiPgoPR2V0VG9vblNl" + 
+          "dHRpbmdzEisKB2hlcm9faWQYASACKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVu" + 
+          "dGl0eUlkImkKD1NldFRvb25TZXR0aW5ncxIrCgdoZXJvX2lkGAEgAigLMhou" + 
+          "RDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIpCghzZXR0aW5ncxgCIAIoCzIX" + 
+          "LkQzLkNsaWVudC5Ub29uU2V0dGluZ3MiQgoQR2V0QWNjb3VudERpZ2VzdBIu" + 
           "CgphY2NvdW50X2lkGAEgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJ" + 
-          "ZBIwCghzZXR0aW5ncxgCIAIoCzIeLkQzLkNsaWVudC5HYW1lQWNjb3VudFNl" + 
-          "dHRpbmdzIj4KD0dldFRvb25TZXR0aW5ncxIrCgdoZXJvX2lkGAEgAigLMhou" + 
-          "RDMuT25saW5lU2VydmljZS5FbnRpdHlJZCJpCg9TZXRUb29uU2V0dGluZ3MS" + 
-          "KwoHaGVyb19pZBgBIAIoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQS" + 
-          "KQoIc2V0dGluZ3MYAiACKAsyFy5EMy5DbGllbnQuVG9vblNldHRpbmdzIkIK" + 
-          "EEdldEFjY291bnREaWdlc3QSLgoKYWNjb3VudF9pZBgBIAIoCzIaLkQzLk9u" + 
-          "bGluZVNlcnZpY2UuRW50aXR5SWQiOwoMR2V0SGVyb0l0ZW1zEisKB2hlcm9f" + 
-          "aWQYASACKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkIkEKD0dldEFj" + 
-          "Y291bnRJdGVtcxIuCgphY2NvdW50X2lkGAEgAigLMhouRDMuT25saW5lU2Vy" + 
-          "dmljZS5FbnRpdHlJZCJDChFHZXRBY2NvdW50UHJvZmlsZRIuCgphY2NvdW50" + 
-          "X2lkGAEgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZCJvCg9HZXRI" + 
-          "ZXJvUHJvZmlsZXMSLgoKYWNjb3VudF9pZBgBIAIoCzIaLkQzLk9ubGluZVNl" + 
-          "cnZpY2UuRW50aXR5SWQSLAoIaGVyb19pZHMYAiADKAsyGi5EMy5PbmxpbmVT" + 
-          "ZXJ2aWNlLkVudGl0eUlkIkEKD0dldEFjY291bnRQcmVmcxIuCgphY2NvdW50" + 
-          "X2lkGAEgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZCJoCg9TZXRB" + 
-          "Y2NvdW50UHJlZnMSLgoKYWNjb3VudF9pZBgBIAIoCzIaLkQzLk9ubGluZVNl" + 
-          "cnZpY2UuRW50aXR5SWQSJQoFcHJlZnMYAiACKAsyFi5EMy5DbGllbnQuUHJl" + 
-          "ZmVyZW5jZXMibAoNR2V0SGVyb0RpZ2VzdBIuCgphY2NvdW50X2lkGAEgAigL" + 
-          "MhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIrCgdoZXJvX2lkGAIgAigL" + 
-          "MhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZCI8CgpHZXRIZXJvSWRzEi4K" + 
-          "CmFjY291bnRfaWQYASACKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlk");
+          "ZCI7CgxHZXRIZXJvSXRlbXMSKwoHaGVyb19pZBgBIAIoCzIaLkQzLk9ubGlu" + 
+          "ZVNlcnZpY2UuRW50aXR5SWQiQQoPR2V0QWNjb3VudEl0ZW1zEi4KCmFjY291" + 
+          "bnRfaWQYASACKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkIkMKEUdl" + 
+          "dEFjY291bnRQcm9maWxlEi4KCmFjY291bnRfaWQYASACKAsyGi5EMy5Pbmxp" + 
+          "bmVTZXJ2aWNlLkVudGl0eUlkIm8KD0dldEhlcm9Qcm9maWxlcxIuCgphY2Nv" + 
+          "dW50X2lkGAEgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIsCgho" + 
+          "ZXJvX2lkcxgCIAMoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQiQQoP" + 
+          "R2V0QWNjb3VudFByZWZzEi4KCmFjY291bnRfaWQYASACKAsyGi5EMy5Pbmxp" + 
+          "bmVTZXJ2aWNlLkVudGl0eUlkImgKD1NldEFjY291bnRQcmVmcxIuCgphY2Nv" + 
+          "dW50X2lkGAEgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIlCgVw" + 
+          "cmVmcxgCIAIoCzIWLkQzLkNsaWVudC5QcmVmZXJlbmNlcyJsCg1HZXRIZXJv" + 
+          "RGlnZXN0Ei4KCmFjY291bnRfaWQYASACKAsyGi5EMy5PbmxpbmVTZXJ2aWNl" + 
+          "LkVudGl0eUlkEisKB2hlcm9faWQYAiACKAsyGi5EMy5PbmxpbmVTZXJ2aWNl" + 
+          "LkVudGl0eUlkIjwKCkdldEhlcm9JZHMSLgoKYWNjb3VudF9pZBgBIAIoCzIa" + 
+          "LkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQ=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_GameMessage_HeroDigestList__Descriptor = Descriptor.MessageTypes[0];
@@ -231,83 +228,79 @@ namespace D3.GameMessage {
         internal__static_D3_GameMessage_TutorialState__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.TutorialState, global::D3.GameMessage.TutorialState.Builder>(internal__static_D3_GameMessage_TutorialState__Descriptor,
                 new string[] { "SeenTutorials", });
-        internal__static_D3_GameMessage_SetAchievementShowcase__Descriptor = Descriptor.MessageTypes[15];
-        internal__static_D3_GameMessage_SetAchievementShowcase__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.SetAchievementShowcase, global::D3.GameMessage.SetAchievementShowcase.Builder>(internal__static_D3_GameMessage_SetAchievementShowcase__Descriptor,
-                new string[] { "AchievementId", "Slot", });
-        internal__static_D3_GameMessage_DeleteHero__Descriptor = Descriptor.MessageTypes[16];
+        internal__static_D3_GameMessage_DeleteHero__Descriptor = Descriptor.MessageTypes[15];
         internal__static_D3_GameMessage_DeleteHero__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.DeleteHero, global::D3.GameMessage.DeleteHero.Builder>(internal__static_D3_GameMessage_DeleteHero__Descriptor,
                 new string[] { "AccountId", "HeroId", });
-        internal__static_D3_GameMessage_UndeleteHero__Descriptor = Descriptor.MessageTypes[17];
+        internal__static_D3_GameMessage_UndeleteHero__Descriptor = Descriptor.MessageTypes[16];
         internal__static_D3_GameMessage_UndeleteHero__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.UndeleteHero, global::D3.GameMessage.UndeleteHero.Builder>(internal__static_D3_GameMessage_UndeleteHero__Descriptor,
                 new string[] { "AccountId", "HeroId", });
-        internal__static_D3_GameMessage_ForceRenameHero__Descriptor = Descriptor.MessageTypes[18];
+        internal__static_D3_GameMessage_ForceRenameHero__Descriptor = Descriptor.MessageTypes[17];
         internal__static_D3_GameMessage_ForceRenameHero__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.ForceRenameHero, global::D3.GameMessage.ForceRenameHero.Builder>(internal__static_D3_GameMessage_ForceRenameHero__Descriptor,
                 new string[] { "AccountId", "HeroId", });
-        internal__static_D3_GameMessage_FetchHeros__Descriptor = Descriptor.MessageTypes[19];
+        internal__static_D3_GameMessage_FetchHeros__Descriptor = Descriptor.MessageTypes[18];
         internal__static_D3_GameMessage_FetchHeros__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.FetchHeros, global::D3.GameMessage.FetchHeros.Builder>(internal__static_D3_GameMessage_FetchHeros__Descriptor,
                 new string[] { "AccountId", });
-        internal__static_D3_GameMessage_FetchInventory__Descriptor = Descriptor.MessageTypes[20];
+        internal__static_D3_GameMessage_FetchInventory__Descriptor = Descriptor.MessageTypes[19];
         internal__static_D3_GameMessage_FetchInventory__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.FetchInventory, global::D3.GameMessage.FetchInventory.Builder>(internal__static_D3_GameMessage_FetchInventory__Descriptor,
                 new string[] { "AccountId", "HeroId", });
-        internal__static_D3_GameMessage_RenameHero__Descriptor = Descriptor.MessageTypes[21];
+        internal__static_D3_GameMessage_RenameHero__Descriptor = Descriptor.MessageTypes[20];
         internal__static_D3_GameMessage_RenameHero__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.RenameHero, global::D3.GameMessage.RenameHero.Builder>(internal__static_D3_GameMessage_RenameHero__Descriptor,
                 new string[] { "AccountId", "HeroId", "NewName", });
-        internal__static_D3_GameMessage_GetGameAccountSettings__Descriptor = Descriptor.MessageTypes[22];
+        internal__static_D3_GameMessage_GetGameAccountSettings__Descriptor = Descriptor.MessageTypes[21];
         internal__static_D3_GameMessage_GetGameAccountSettings__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.GetGameAccountSettings, global::D3.GameMessage.GetGameAccountSettings.Builder>(internal__static_D3_GameMessage_GetGameAccountSettings__Descriptor,
                 new string[] { "AccountId", });
-        internal__static_D3_GameMessage_SetGameAccountSettings__Descriptor = Descriptor.MessageTypes[23];
+        internal__static_D3_GameMessage_SetGameAccountSettings__Descriptor = Descriptor.MessageTypes[22];
         internal__static_D3_GameMessage_SetGameAccountSettings__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.SetGameAccountSettings, global::D3.GameMessage.SetGameAccountSettings.Builder>(internal__static_D3_GameMessage_SetGameAccountSettings__Descriptor,
                 new string[] { "AccountId", "Settings", });
-        internal__static_D3_GameMessage_GetToonSettings__Descriptor = Descriptor.MessageTypes[24];
+        internal__static_D3_GameMessage_GetToonSettings__Descriptor = Descriptor.MessageTypes[23];
         internal__static_D3_GameMessage_GetToonSettings__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.GetToonSettings, global::D3.GameMessage.GetToonSettings.Builder>(internal__static_D3_GameMessage_GetToonSettings__Descriptor,
                 new string[] { "HeroId", });
-        internal__static_D3_GameMessage_SetToonSettings__Descriptor = Descriptor.MessageTypes[25];
+        internal__static_D3_GameMessage_SetToonSettings__Descriptor = Descriptor.MessageTypes[24];
         internal__static_D3_GameMessage_SetToonSettings__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.SetToonSettings, global::D3.GameMessage.SetToonSettings.Builder>(internal__static_D3_GameMessage_SetToonSettings__Descriptor,
                 new string[] { "HeroId", "Settings", });
-        internal__static_D3_GameMessage_GetAccountDigest__Descriptor = Descriptor.MessageTypes[26];
+        internal__static_D3_GameMessage_GetAccountDigest__Descriptor = Descriptor.MessageTypes[25];
         internal__static_D3_GameMessage_GetAccountDigest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.GetAccountDigest, global::D3.GameMessage.GetAccountDigest.Builder>(internal__static_D3_GameMessage_GetAccountDigest__Descriptor,
                 new string[] { "AccountId", });
-        internal__static_D3_GameMessage_GetHeroItems__Descriptor = Descriptor.MessageTypes[27];
+        internal__static_D3_GameMessage_GetHeroItems__Descriptor = Descriptor.MessageTypes[26];
         internal__static_D3_GameMessage_GetHeroItems__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.GetHeroItems, global::D3.GameMessage.GetHeroItems.Builder>(internal__static_D3_GameMessage_GetHeroItems__Descriptor,
                 new string[] { "HeroId", });
-        internal__static_D3_GameMessage_GetAccountItems__Descriptor = Descriptor.MessageTypes[28];
+        internal__static_D3_GameMessage_GetAccountItems__Descriptor = Descriptor.MessageTypes[27];
         internal__static_D3_GameMessage_GetAccountItems__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.GetAccountItems, global::D3.GameMessage.GetAccountItems.Builder>(internal__static_D3_GameMessage_GetAccountItems__Descriptor,
                 new string[] { "AccountId", });
-        internal__static_D3_GameMessage_GetAccountProfile__Descriptor = Descriptor.MessageTypes[29];
+        internal__static_D3_GameMessage_GetAccountProfile__Descriptor = Descriptor.MessageTypes[28];
         internal__static_D3_GameMessage_GetAccountProfile__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.GetAccountProfile, global::D3.GameMessage.GetAccountProfile.Builder>(internal__static_D3_GameMessage_GetAccountProfile__Descriptor,
                 new string[] { "AccountId", });
-        internal__static_D3_GameMessage_GetHeroProfiles__Descriptor = Descriptor.MessageTypes[30];
+        internal__static_D3_GameMessage_GetHeroProfiles__Descriptor = Descriptor.MessageTypes[29];
         internal__static_D3_GameMessage_GetHeroProfiles__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.GetHeroProfiles, global::D3.GameMessage.GetHeroProfiles.Builder>(internal__static_D3_GameMessage_GetHeroProfiles__Descriptor,
                 new string[] { "AccountId", "HeroIds", });
-        internal__static_D3_GameMessage_GetAccountPrefs__Descriptor = Descriptor.MessageTypes[31];
+        internal__static_D3_GameMessage_GetAccountPrefs__Descriptor = Descriptor.MessageTypes[30];
         internal__static_D3_GameMessage_GetAccountPrefs__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.GetAccountPrefs, global::D3.GameMessage.GetAccountPrefs.Builder>(internal__static_D3_GameMessage_GetAccountPrefs__Descriptor,
                 new string[] { "AccountId", });
-        internal__static_D3_GameMessage_SetAccountPrefs__Descriptor = Descriptor.MessageTypes[32];
+        internal__static_D3_GameMessage_SetAccountPrefs__Descriptor = Descriptor.MessageTypes[31];
         internal__static_D3_GameMessage_SetAccountPrefs__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.SetAccountPrefs, global::D3.GameMessage.SetAccountPrefs.Builder>(internal__static_D3_GameMessage_SetAccountPrefs__Descriptor,
                 new string[] { "AccountId", "Prefs", });
-        internal__static_D3_GameMessage_GetHeroDigest__Descriptor = Descriptor.MessageTypes[33];
+        internal__static_D3_GameMessage_GetHeroDigest__Descriptor = Descriptor.MessageTypes[32];
         internal__static_D3_GameMessage_GetHeroDigest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.GetHeroDigest, global::D3.GameMessage.GetHeroDigest.Builder>(internal__static_D3_GameMessage_GetHeroDigest__Descriptor,
                 new string[] { "AccountId", "HeroId", });
-        internal__static_D3_GameMessage_GetHeroIds__Descriptor = Descriptor.MessageTypes[34];
+        internal__static_D3_GameMessage_GetHeroIds__Descriptor = Descriptor.MessageTypes[33];
         internal__static_D3_GameMessage_GetHeroIds__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.GameMessage.GetHeroIds, global::D3.GameMessage.GetHeroIds.Builder>(internal__static_D3_GameMessage_GetHeroIds__Descriptor,
                 new string[] { "AccountId", });
@@ -5501,325 +5494,6 @@ namespace D3.GameMessage {
       }
     }
     static TutorialState() {
-      object.ReferenceEquals(global::D3.GameMessage.GameMessage.Descriptor, null);
-    }
-  }
-  
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class SetAchievementShowcase : pb::GeneratedMessage<SetAchievementShowcase, SetAchievementShowcase.Builder> {
-    private SetAchievementShowcase() { }
-    private static readonly SetAchievementShowcase defaultInstance = new SetAchievementShowcase().MakeReadOnly();
-    private static readonly string[] _setAchievementShowcaseFieldNames = new string[] { "achievement_id", "slot" };
-    private static readonly uint[] _setAchievementShowcaseFieldTags = new uint[] { 8, 16 };
-    public static SetAchievementShowcase DefaultInstance {
-      get { return defaultInstance; }
-    }
-    
-    public override SetAchievementShowcase DefaultInstanceForType {
-      get { return DefaultInstance; }
-    }
-    
-    protected override SetAchievementShowcase ThisMessage {
-      get { return this; }
-    }
-    
-    public static pbd::MessageDescriptor Descriptor {
-      get { return global::D3.GameMessage.GameMessage.internal__static_D3_GameMessage_SetAchievementShowcase__Descriptor; }
-    }
-    
-    protected override pb::FieldAccess.FieldAccessorTable<SetAchievementShowcase, SetAchievementShowcase.Builder> InternalFieldAccessors {
-      get { return global::D3.GameMessage.GameMessage.internal__static_D3_GameMessage_SetAchievementShowcase__FieldAccessorTable; }
-    }
-    
-    public const int AchievementIdFieldNumber = 1;
-    private bool hasAchievementId;
-    private ulong achievementId_;
-    public bool HasAchievementId {
-      get { return hasAchievementId; }
-    }
-    public ulong AchievementId {
-      get { return achievementId_; }
-    }
-    
-    public const int SlotFieldNumber = 2;
-    private bool hasSlot;
-    private uint slot_;
-    public bool HasSlot {
-      get { return hasSlot; }
-    }
-    public uint Slot {
-      get { return slot_; }
-    }
-    
-    public override bool IsInitialized {
-      get {
-        if (!hasAchievementId) return false;
-        if (!hasSlot) return false;
-        return true;
-      }
-    }
-    
-    public override void WriteTo(pb::ICodedOutputStream output) {
-      int size = SerializedSize;
-      string[] field_names = _setAchievementShowcaseFieldNames;
-      if (hasAchievementId) {
-        output.WriteUInt64(1, field_names[0], AchievementId);
-      }
-      if (hasSlot) {
-        output.WriteUInt32(2, field_names[1], Slot);
-      }
-      UnknownFields.WriteTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public override int SerializedSize {
-      get {
-        int size = memoizedSerializedSize;
-        if (size != -1) return size;
-        
-        size = 0;
-        if (hasAchievementId) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(1, AchievementId);
-        }
-        if (hasSlot) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(2, Slot);
-        }
-        size += UnknownFields.SerializedSize;
-        memoizedSerializedSize = size;
-        return size;
-      }
-    }
-    
-    public static SetAchievementShowcase ParseFrom(pb::ByteString data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static SetAchievementShowcase ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static SetAchievementShowcase ParseFrom(byte[] data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static SetAchievementShowcase ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static SetAchievementShowcase ParseFrom(global::System.IO.Stream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static SetAchievementShowcase ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    public static SetAchievementShowcase ParseDelimitedFrom(global::System.IO.Stream input) {
-      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
-    }
-    public static SetAchievementShowcase ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
-    }
-    public static SetAchievementShowcase ParseFrom(pb::ICodedInputStream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static SetAchievementShowcase ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    private SetAchievementShowcase MakeReadOnly() {
-      return this;
-    }
-    
-    public static Builder CreateBuilder() { return new Builder(); }
-    public override Builder ToBuilder() { return CreateBuilder(this); }
-    public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(SetAchievementShowcase prototype) {
-      return new Builder(prototype);
-    }
-    
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<SetAchievementShowcase, Builder> {
-      protected override Builder ThisBuilder {
-        get { return this; }
-      }
-      public Builder() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-      }
-      internal Builder(SetAchievementShowcase cloneFrom) {
-        result = cloneFrom;
-        resultIsReadOnly = true;
-      }
-      
-      private bool resultIsReadOnly;
-      private SetAchievementShowcase result;
-      
-      private SetAchievementShowcase PrepareBuilder() {
-        if (resultIsReadOnly) {
-          SetAchievementShowcase original = result;
-          result = new SetAchievementShowcase();
-          resultIsReadOnly = false;
-          MergeFrom(original);
-        }
-        return result;
-      }
-      
-      public override bool IsInitialized {
-        get { return result.IsInitialized; }
-      }
-      
-      protected override SetAchievementShowcase MessageBeingBuilt {
-        get { return PrepareBuilder(); }
-      }
-      
-      public override Builder Clear() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-        return this;
-      }
-      
-      public override Builder Clone() {
-        if (resultIsReadOnly) {
-          return new Builder(result);
-        } else {
-          return new Builder().MergeFrom(result);
-        }
-      }
-      
-      public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::D3.GameMessage.SetAchievementShowcase.Descriptor; }
-      }
-      
-      public override SetAchievementShowcase DefaultInstanceForType {
-        get { return global::D3.GameMessage.SetAchievementShowcase.DefaultInstance; }
-      }
-      
-      public override SetAchievementShowcase BuildPartial() {
-        if (resultIsReadOnly) {
-          return result;
-        }
-        resultIsReadOnly = true;
-        return result.MakeReadOnly();
-      }
-      
-      public override Builder MergeFrom(pb::IMessage other) {
-        if (other is SetAchievementShowcase) {
-          return MergeFrom((SetAchievementShowcase) other);
-        } else {
-          base.MergeFrom(other);
-          return this;
-        }
-      }
-      
-      public override Builder MergeFrom(SetAchievementShowcase other) {
-        if (other == global::D3.GameMessage.SetAchievementShowcase.DefaultInstance) return this;
-        PrepareBuilder();
-        if (other.HasAchievementId) {
-          AchievementId = other.AchievementId;
-        }
-        if (other.HasSlot) {
-          Slot = other.Slot;
-        }
-        this.MergeUnknownFields(other.UnknownFields);
-        return this;
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input) {
-        return MergeFrom(input, pb::ExtensionRegistry.Empty);
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-        PrepareBuilder();
-        pb::UnknownFieldSet.Builder unknownFields = null;
-        uint tag;
-        string field_name;
-        while (input.ReadTag(out tag, out field_name)) {
-          if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_setAchievementShowcaseFieldNames, field_name, global::System.StringComparer.Ordinal);
-            if(field_ordinal >= 0)
-              tag = _setAchievementShowcaseFieldTags[field_ordinal];
-            else {
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              continue;
-            }
-          }
-          switch (tag) {
-            case 0: {
-              throw pb::InvalidProtocolBufferException.InvalidTag();
-            }
-            default: {
-              if (pb::WireFormat.IsEndGroupTag(tag)) {
-                if (unknownFields != null) {
-                  this.UnknownFields = unknownFields.Build();
-                }
-                return this;
-              }
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              break;
-            }
-            case 8: {
-              result.hasAchievementId = input.ReadUInt64(ref result.achievementId_);
-              break;
-            }
-            case 16: {
-              result.hasSlot = input.ReadUInt32(ref result.slot_);
-              break;
-            }
-          }
-        }
-        
-        if (unknownFields != null) {
-          this.UnknownFields = unknownFields.Build();
-        }
-        return this;
-      }
-      
-      
-      public bool HasAchievementId {
-        get { return result.hasAchievementId; }
-      }
-      public ulong AchievementId {
-        get { return result.AchievementId; }
-        set { SetAchievementId(value); }
-      }
-      public Builder SetAchievementId(ulong value) {
-        PrepareBuilder();
-        result.hasAchievementId = true;
-        result.achievementId_ = value;
-        return this;
-      }
-      public Builder ClearAchievementId() {
-        PrepareBuilder();
-        result.hasAchievementId = false;
-        result.achievementId_ = 0UL;
-        return this;
-      }
-      
-      public bool HasSlot {
-        get { return result.hasSlot; }
-      }
-      public uint Slot {
-        get { return result.Slot; }
-        set { SetSlot(value); }
-      }
-      public Builder SetSlot(uint value) {
-        PrepareBuilder();
-        result.hasSlot = true;
-        result.slot_ = value;
-        return this;
-      }
-      public Builder ClearSlot() {
-        PrepareBuilder();
-        result.hasSlot = false;
-        result.slot_ = 0;
-        return this;
-      }
-    }
-    static SetAchievementShowcase() {
       object.ReferenceEquals(global::D3.GameMessage.GameMessage.Descriptor, null);
     }
   }

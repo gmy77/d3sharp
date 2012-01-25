@@ -117,8 +117,18 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        public D3.GameMessage.SetGameAccountSettings Settings { get; set; }
-
+        private D3.Client.GameAccountSettings _settings = D3.Client.GameAccountSettings.CreateBuilder().Build();
+        public D3.Client.GameAccountSettings Settings
+        {
+            get
+            {
+                return this._settings;
+            }
+            set
+            {
+                this._settings = value;
+            }
+        }
         /// <summary>
         /// Away status
         /// </summary>
@@ -256,7 +266,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             get
             {
-                var builder = D3.Account.Digest.CreateBuilder().SetVersion(102) // 7447=>99, 7728=> 100, 8801=>102
+                var builder = D3.Account.Digest.CreateBuilder().SetVersion(105) // 7447=>99, 7728=> 100, 8801=>102, 8296=>105
                     .SetBannerConfiguration(this.BannerConfigurationField.Value)
                     .SetFlags(0)
                     .SetLastPlayedHeroId(lastPlayedHeroId);

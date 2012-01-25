@@ -11,7 +11,7 @@ message AddMemberRequest
 {
     optional .bnet.protocol.EntityId agent_id = 1;
     required .bnet.protocol.Identity member_identity = 2;
-    required .bnet.protocol.channel.MemberState state = 3;
+    required .bnet.protocol.channel.MemberState member_state = 3;
     required uint64 object_id = 4;
 }
 

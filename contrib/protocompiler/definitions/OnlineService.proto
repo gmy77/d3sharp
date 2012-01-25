@@ -42,7 +42,6 @@ message GameCreateParams
     optional .D3.OnlineService.CoopCreateParams coop = 3;
     optional .D3.OnlineService.PvPCreateParams pvp = 4;
     optional string name = 5;
-    required bool is_private = 6 [default = true];
 }
 
 message HeroCreateParams

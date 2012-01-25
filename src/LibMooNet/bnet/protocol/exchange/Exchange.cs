@@ -26,6 +26,10 @@ namespace bnet.protocol.exchange {
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BlobOfType, global::bnet.protocol.exchange.BlobOfType.Builder> internal__static_bnet_protocol_exchange_BlobOfType__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_BlobFromOfType__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BlobFromOfType, global::bnet.protocol.exchange.BlobFromOfType.Builder> internal__static_bnet_protocol_exchange_BlobFromOfType__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_ActionErrorDetail__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.ActionErrorDetail, global::bnet.protocol.exchange.ActionErrorDetail.Builder> internal__static_bnet_protocol_exchange_ActionErrorDetail__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_BillingAddress__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BillingAddress, global::bnet.protocol.exchange.BillingAddress.Builder> internal__static_bnet_protocol_exchange_BillingAddress__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -41,7 +45,10 @@ namespace bnet.protocol.exchange {
           "dHJhX2RhdGEYAyABKAwiPAoKQmxvYk9mVHlwZRIMCgR0eXBlGAEgAigJEgwK" + 
           "BGRhdGEYAiABKAwSEgoKZXh0cmFfZGF0YRgDIAEoDCI8Cg5CbG9iRnJvbU9m" + 
           "VHlwZRIOCgZzb3VyY2UYASACKAcSDAoEdHlwZRgCIAIoCRIMCgRkYXRhGAMg" + 
-          "AigMQgOAAQA=");
+          "AigMIkEKEUFjdGlvbkVycm9yRGV0YWlsEhIKCmVycm9yX2NvZGUYASACKA0S" + 
+          "GAoQZXh0cmFfZXJyb3JfY29kZRgCIAEoDSJWCg5CaWxsaW5nQWRkcmVzcxIS" + 
+          "Cgpjb3VudHJ5X2lkGAEgAigFEgwKBGNpdHkYAiACKAkSDQoFc3RhdGUYAyAB" + 
+          "KAkSEwoLcG9zdGFsX2NvZGUYBCABKAlCA4ABAA==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_PartitionId__Descriptor = Descriptor.MessageTypes[0];
@@ -60,6 +67,14 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_BlobFromOfType__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BlobFromOfType, global::bnet.protocol.exchange.BlobFromOfType.Builder>(internal__static_bnet_protocol_exchange_BlobFromOfType__Descriptor,
                 new string[] { "Source", "Type", "Data", });
+        internal__static_bnet_protocol_exchange_ActionErrorDetail__Descriptor = Descriptor.MessageTypes[4];
+        internal__static_bnet_protocol_exchange_ActionErrorDetail__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.ActionErrorDetail, global::bnet.protocol.exchange.ActionErrorDetail.Builder>(internal__static_bnet_protocol_exchange_ActionErrorDetail__Descriptor,
+                new string[] { "ErrorCode", "ExtraErrorCode", });
+        internal__static_bnet_protocol_exchange_BillingAddress__Descriptor = Descriptor.MessageTypes[5];
+        internal__static_bnet_protocol_exchange_BillingAddress__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BillingAddress, global::bnet.protocol.exchange.BillingAddress.Builder>(internal__static_bnet_protocol_exchange_BillingAddress__Descriptor,
+                new string[] { "CountryId", "City", "State", "PostalCode", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -1478,6 +1493,732 @@ namespace bnet.protocol.exchange {
       }
     }
     static BlobFromOfType() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.Exchange.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class ActionErrorDetail : pb::GeneratedMessage<ActionErrorDetail, ActionErrorDetail.Builder> {
+    private ActionErrorDetail() { }
+    private static readonly ActionErrorDetail defaultInstance = new ActionErrorDetail().MakeReadOnly();
+    private static readonly string[] _actionErrorDetailFieldNames = new string[] { "error_code", "extra_error_code" };
+    private static readonly uint[] _actionErrorDetailFieldTags = new uint[] { 8, 16 };
+    public static ActionErrorDetail DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override ActionErrorDetail DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override ActionErrorDetail ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.Exchange.internal__static_bnet_protocol_exchange_ActionErrorDetail__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<ActionErrorDetail, ActionErrorDetail.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Exchange.internal__static_bnet_protocol_exchange_ActionErrorDetail__FieldAccessorTable; }
+    }
+    
+    public const int ErrorCodeFieldNumber = 1;
+    private bool hasErrorCode;
+    private uint errorCode_;
+    public bool HasErrorCode {
+      get { return hasErrorCode; }
+    }
+    public uint ErrorCode {
+      get { return errorCode_; }
+    }
+    
+    public const int ExtraErrorCodeFieldNumber = 2;
+    private bool hasExtraErrorCode;
+    private uint extraErrorCode_;
+    public bool HasExtraErrorCode {
+      get { return hasExtraErrorCode; }
+    }
+    public uint ExtraErrorCode {
+      get { return extraErrorCode_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasErrorCode) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _actionErrorDetailFieldNames;
+      if (hasErrorCode) {
+        output.WriteUInt32(1, field_names[0], ErrorCode);
+      }
+      if (hasExtraErrorCode) {
+        output.WriteUInt32(2, field_names[1], ExtraErrorCode);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasErrorCode) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, ErrorCode);
+        }
+        if (hasExtraErrorCode) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, ExtraErrorCode);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static ActionErrorDetail ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static ActionErrorDetail ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static ActionErrorDetail ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static ActionErrorDetail ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static ActionErrorDetail ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static ActionErrorDetail ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static ActionErrorDetail ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static ActionErrorDetail ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static ActionErrorDetail ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static ActionErrorDetail ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private ActionErrorDetail MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(ActionErrorDetail prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<ActionErrorDetail, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(ActionErrorDetail cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private ActionErrorDetail result;
+      
+      private ActionErrorDetail PrepareBuilder() {
+        if (resultIsReadOnly) {
+          ActionErrorDetail original = result;
+          result = new ActionErrorDetail();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override ActionErrorDetail MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.ActionErrorDetail.Descriptor; }
+      }
+      
+      public override ActionErrorDetail DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.ActionErrorDetail.DefaultInstance; }
+      }
+      
+      public override ActionErrorDetail BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is ActionErrorDetail) {
+          return MergeFrom((ActionErrorDetail) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(ActionErrorDetail other) {
+        if (other == global::bnet.protocol.exchange.ActionErrorDetail.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasErrorCode) {
+          ErrorCode = other.ErrorCode;
+        }
+        if (other.HasExtraErrorCode) {
+          ExtraErrorCode = other.ExtraErrorCode;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_actionErrorDetailFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _actionErrorDetailFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasErrorCode = input.ReadUInt32(ref result.errorCode_);
+              break;
+            }
+            case 16: {
+              result.hasExtraErrorCode = input.ReadUInt32(ref result.extraErrorCode_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasErrorCode {
+        get { return result.hasErrorCode; }
+      }
+      public uint ErrorCode {
+        get { return result.ErrorCode; }
+        set { SetErrorCode(value); }
+      }
+      public Builder SetErrorCode(uint value) {
+        PrepareBuilder();
+        result.hasErrorCode = true;
+        result.errorCode_ = value;
+        return this;
+      }
+      public Builder ClearErrorCode() {
+        PrepareBuilder();
+        result.hasErrorCode = false;
+        result.errorCode_ = 0;
+        return this;
+      }
+      
+      public bool HasExtraErrorCode {
+        get { return result.hasExtraErrorCode; }
+      }
+      public uint ExtraErrorCode {
+        get { return result.ExtraErrorCode; }
+        set { SetExtraErrorCode(value); }
+      }
+      public Builder SetExtraErrorCode(uint value) {
+        PrepareBuilder();
+        result.hasExtraErrorCode = true;
+        result.extraErrorCode_ = value;
+        return this;
+      }
+      public Builder ClearExtraErrorCode() {
+        PrepareBuilder();
+        result.hasExtraErrorCode = false;
+        result.extraErrorCode_ = 0;
+        return this;
+      }
+    }
+    static ActionErrorDetail() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.Exchange.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class BillingAddress : pb::GeneratedMessage<BillingAddress, BillingAddress.Builder> {
+    private BillingAddress() { }
+    private static readonly BillingAddress defaultInstance = new BillingAddress().MakeReadOnly();
+    private static readonly string[] _billingAddressFieldNames = new string[] { "city", "country_id", "postal_code", "state" };
+    private static readonly uint[] _billingAddressFieldTags = new uint[] { 18, 8, 34, 26 };
+    public static BillingAddress DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override BillingAddress DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override BillingAddress ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.Exchange.internal__static_bnet_protocol_exchange_BillingAddress__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<BillingAddress, BillingAddress.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Exchange.internal__static_bnet_protocol_exchange_BillingAddress__FieldAccessorTable; }
+    }
+    
+    public const int CountryIdFieldNumber = 1;
+    private bool hasCountryId;
+    private int countryId_;
+    public bool HasCountryId {
+      get { return hasCountryId; }
+    }
+    public int CountryId {
+      get { return countryId_; }
+    }
+    
+    public const int CityFieldNumber = 2;
+    private bool hasCity;
+    private string city_ = "";
+    public bool HasCity {
+      get { return hasCity; }
+    }
+    public string City {
+      get { return city_; }
+    }
+    
+    public const int StateFieldNumber = 3;
+    private bool hasState;
+    private string state_ = "";
+    public bool HasState {
+      get { return hasState; }
+    }
+    public string State {
+      get { return state_; }
+    }
+    
+    public const int PostalCodeFieldNumber = 4;
+    private bool hasPostalCode;
+    private string postalCode_ = "";
+    public bool HasPostalCode {
+      get { return hasPostalCode; }
+    }
+    public string PostalCode {
+      get { return postalCode_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasCountryId) return false;
+        if (!hasCity) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _billingAddressFieldNames;
+      if (hasCountryId) {
+        output.WriteInt32(1, field_names[1], CountryId);
+      }
+      if (hasCity) {
+        output.WriteString(2, field_names[0], City);
+      }
+      if (hasState) {
+        output.WriteString(3, field_names[3], State);
+      }
+      if (hasPostalCode) {
+        output.WriteString(4, field_names[2], PostalCode);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasCountryId) {
+          size += pb::CodedOutputStream.ComputeInt32Size(1, CountryId);
+        }
+        if (hasCity) {
+          size += pb::CodedOutputStream.ComputeStringSize(2, City);
+        }
+        if (hasState) {
+          size += pb::CodedOutputStream.ComputeStringSize(3, State);
+        }
+        if (hasPostalCode) {
+          size += pb::CodedOutputStream.ComputeStringSize(4, PostalCode);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static BillingAddress ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static BillingAddress ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static BillingAddress ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static BillingAddress ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static BillingAddress ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static BillingAddress ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static BillingAddress ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static BillingAddress ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static BillingAddress ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static BillingAddress ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private BillingAddress MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(BillingAddress prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<BillingAddress, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(BillingAddress cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private BillingAddress result;
+      
+      private BillingAddress PrepareBuilder() {
+        if (resultIsReadOnly) {
+          BillingAddress original = result;
+          result = new BillingAddress();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override BillingAddress MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.BillingAddress.Descriptor; }
+      }
+      
+      public override BillingAddress DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.BillingAddress.DefaultInstance; }
+      }
+      
+      public override BillingAddress BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is BillingAddress) {
+          return MergeFrom((BillingAddress) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(BillingAddress other) {
+        if (other == global::bnet.protocol.exchange.BillingAddress.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasCountryId) {
+          CountryId = other.CountryId;
+        }
+        if (other.HasCity) {
+          City = other.City;
+        }
+        if (other.HasState) {
+          State = other.State;
+        }
+        if (other.HasPostalCode) {
+          PostalCode = other.PostalCode;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_billingAddressFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _billingAddressFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasCountryId = input.ReadInt32(ref result.countryId_);
+              break;
+            }
+            case 18: {
+              result.hasCity = input.ReadString(ref result.city_);
+              break;
+            }
+            case 26: {
+              result.hasState = input.ReadString(ref result.state_);
+              break;
+            }
+            case 34: {
+              result.hasPostalCode = input.ReadString(ref result.postalCode_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasCountryId {
+        get { return result.hasCountryId; }
+      }
+      public int CountryId {
+        get { return result.CountryId; }
+        set { SetCountryId(value); }
+      }
+      public Builder SetCountryId(int value) {
+        PrepareBuilder();
+        result.hasCountryId = true;
+        result.countryId_ = value;
+        return this;
+      }
+      public Builder ClearCountryId() {
+        PrepareBuilder();
+        result.hasCountryId = false;
+        result.countryId_ = 0;
+        return this;
+      }
+      
+      public bool HasCity {
+        get { return result.hasCity; }
+      }
+      public string City {
+        get { return result.City; }
+        set { SetCity(value); }
+      }
+      public Builder SetCity(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasCity = true;
+        result.city_ = value;
+        return this;
+      }
+      public Builder ClearCity() {
+        PrepareBuilder();
+        result.hasCity = false;
+        result.city_ = "";
+        return this;
+      }
+      
+      public bool HasState {
+        get { return result.hasState; }
+      }
+      public string State {
+        get { return result.State; }
+        set { SetState(value); }
+      }
+      public Builder SetState(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasState = true;
+        result.state_ = value;
+        return this;
+      }
+      public Builder ClearState() {
+        PrepareBuilder();
+        result.hasState = false;
+        result.state_ = "";
+        return this;
+      }
+      
+      public bool HasPostalCode {
+        get { return result.hasPostalCode; }
+      }
+      public string PostalCode {
+        get { return result.PostalCode; }
+        set { SetPostalCode(value); }
+      }
+      public Builder SetPostalCode(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasPostalCode = true;
+        result.postalCode_ = value;
+        return this;
+      }
+      public Builder ClearPostalCode() {
+        PrepareBuilder();
+        result.hasPostalCode = false;
+        result.postalCode_ = "";
+        return this;
+      }
+    }
+    static BillingAddress() {
       object.ReferenceEquals(global::bnet.protocol.exchange.Exchange.Descriptor, null);
     }
   }
