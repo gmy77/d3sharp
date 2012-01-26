@@ -336,9 +336,9 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
 
             //Resource
-            this.Attributes[GameAttribute.Resource_Cur, this.ResourceID] = 200;
-            this.Attributes[GameAttribute.Resource_Max, this.ResourceID] = 200;
-            this.Attributes[GameAttribute.Resource_Max_Total, this.ResourceID] = 200;
+            this.Attributes[GameAttribute.Resource_Cur, this.ResourceID] = 200f;
+            this.Attributes[GameAttribute.Resource_Max, this.ResourceID] = 200f;
+            this.Attributes[GameAttribute.Resource_Max_Total, this.ResourceID] = 200f;
             this.Attributes[GameAttribute.Resource_Effective_Max, this.ResourceID] = 200f;
             this.Attributes[GameAttribute.Resource_Regen_Total, this.ResourceID] = 3.051758E-05f;
             this.Attributes[GameAttribute.Resource_Type_Primary] = this.ResourceID;

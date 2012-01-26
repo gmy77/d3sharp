@@ -141,10 +141,10 @@ namespace Mooege.Net.GS.Message
         public static readonly GameAttributeF Hitpoints_Healed_Target = new GameAttributeF(114, 0, -1, 0, 0, "", "", "Hitpoints_Healed_Target", GameAttributeEncoding.Float16Or32, 1, 0, 0, 0);
         public static readonly GameAttributeI Resource_Type_Primary = new GameAttributeI(115, -1, -1, 3, 1, "", "", "Resource_Type_Primary", GameAttributeEncoding.IntMinMax, 1, -1, 7, 4);
         public static readonly GameAttributeI Resource_Type_Secondary = new GameAttributeI(116, -1, -1, 3, 1, "", "", "Resource_Type_Secondary", GameAttributeEncoding.IntMinMax, 1, -1, 7, 4);
-        public static readonly GameAttributeI Resource_Cur = new GameAttributeI(117, 0, 10, 0, 0, "", "Max(Resource_Cur.Agg, 0)", "Resource_Cur", GameAttributeEncoding.Int, 1, 0, 0, 32);
+        public static readonly GameAttributeF Resource_Cur = new GameAttributeF(117, 0, 10, 0, 0, "", "Max(Resource_Cur.Agg, 0)", "Resource_Cur", GameAttributeEncoding.Float32, 1, 0, 0, 32);
         public static readonly GameAttributeF Resource_Max = new GameAttributeF(118, 0, 10, 0, 0, "", "", "Resource_Max", GameAttributeEncoding.Float16Or32, 1, 0, 0, 0);
         public static readonly GameAttributeF Resource_Max_Bonus = new GameAttributeF(119, 0, 10, 0, 0, "", "", "Resource_Max_Bonus", GameAttributeEncoding.Float16Or32, 9, 0, 0, 0);
-        public static readonly GameAttributeI Resource_Max_Total = new GameAttributeI(120, 0, 10, 0, 0, "", "Max((Resource_Max + ((Level#NONE - 1) * Resource_Factor_Level) + Resource_Max_Bonus) * (Resource_Max_Percent_Bonus + 1), 0)", "Resource_Max_Total", GameAttributeEncoding.Int, 9, 0, 0, 32);
+        public static readonly GameAttributeF Resource_Max_Total = new GameAttributeF(120, 0, 10, 0, 0, "", "Max((Resource_Max + ((Level#NONE - 1) * Resource_Factor_Level) + Resource_Max_Bonus) * (Resource_Max_Percent_Bonus + 1), 0)", "Resource_Max_Total", GameAttributeEncoding.Float32, 9, 0, 0, 32);
         public static readonly GameAttributeF Resource_Factor_Level = new GameAttributeF(121, 0, 10, 0, 0, "", "", "Resource_Factor_Level", GameAttributeEncoding.Float16Or32, 1, 0, 0, 0);
         public static readonly GameAttributeF Resource_Granted = new GameAttributeF(122, 0, 10, 0, 0, "", "", "Resource_Granted", GameAttributeEncoding.Float16Or32, 9, 0, 0, 0);
         public static readonly GameAttributeI Resource_Granted_Duration = new GameAttributeI(123, 0, 10, 0, 1, "", "", "Resource_Granted_Duration", GameAttributeEncoding.IntMinMax, 9, 0, 16777215, 24);
