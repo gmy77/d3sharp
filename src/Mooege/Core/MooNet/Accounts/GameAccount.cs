@@ -55,6 +55,9 @@ namespace Mooege.Core.MooNet.Accounts
         public StringPresenceField AccountField
             = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 7, 0);
 
+        public ByteStringPresenceField<bnet.protocol.EntityId> OwnerIdField
+            = new ByteStringPresenceField<bnet.protocol.EntityId>(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 8, 0);
+
         public BoolPresenceField GameAccountStatusField
             = new BoolPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 1, 0, false);
 
@@ -219,6 +222,7 @@ namespace Mooege.Core.MooNet.Accounts
         private void SetField(Account owner)
         {
             this.Owner = owner;
+            this.OwnerIdField.Value = owner.BnetEntityId;
             var bnetGameAccountHigh = ((ulong)EntityIdHelper.HighIdType.GameAccountId) + (0x6200004433);
             this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh(bnetGameAccountHigh).SetLow(this.PersistentID).Build();
             this.D3GameAccountId = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(bnetGameAccountHigh).SetIdLow(this.PersistentID).Build();
@@ -299,11 +303,14 @@ namespace Mooege.Core.MooNet.Accounts
             //D3,Hero,3,0 -> D3.Hero.VisualEquipment
             //D3,Hero,4,0 -> Hero's flags
             //D3,Hero,5,0 -> Hero Name
+            //D3,Hero,6,0 -> Unk Int64 (0)
+            //D3,Hero,7,0 -> Unk Int64 (0)
             //Bnet,GameAccount,1,0 -> GameAccount Online
             //Bnet,GameAccount,4,0 -> FourCC = "D3"
             //Bnet,GameAccount,5,0 -> Unk Int (0 if GameAccount is Offline)
             //Bnet,GameAccount,6,0 -> BattleTag
             //Bnet,GameAccount,7,0 -> Account.Low + "#1"
+            //Bnet,GameAccount,8,0 -> Account.EntityId
 
             operationList.Add(BannerConfigurationField.GetFieldOperation());
             if (this.lastPlayedHeroId != AccountHasNoToons)
@@ -317,6 +324,7 @@ namespace Mooege.Core.MooNet.Accounts
             operationList.Add(this.GameAccountStatusIdField.GetFieldOperation());
             operationList.Add(this.BattleTagField.GetFieldOperation());
             operationList.Add(this.AccountField.GetFieldOperation());
+            operationList.Add(this.OwnerIdField.GetFieldOperation());
 
             return operationList;
         }
@@ -385,6 +393,11 @@ namespace Mooege.Core.MooNet.Accounts
                     {
                         returnField.SetValue(field.Value);
                         //Looks to be the ToonFlags of the party leader/inviter when it is an int, OR the message set in an open to friends game when it is a string /dustinconrad
+                    }
+                    else if (field.Key.Group == 4 && field.Key.Field == 4)
+                    {
+                        returnField.SetValue(field.Value);
+                        //this is some unknown bool
                     }
                     else
                     {
