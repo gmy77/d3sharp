@@ -182,10 +182,8 @@
     <Compile Include="Core\GS\Items\HandledItem.cs" />
     <Compile Include="Core\GS\Items\HandledType.cs" />
     <Compile Include="Core\GS\Items\Implementations\Book.cs" />
-    <Compile Include="Core\GS\Items\Implementations\CauldronOfJordan.cs" />
     <Compile Include="Core\GS\Items\Implementations\Dye.cs" />
     <Compile Include="Core\GS\Items\Implementations\HealthPotion.cs" />
-    <Compile Include="Core\GS\Items\Implementations\NephalemCube.cs" />
     <Compile Include="Core\GS\Items\Implementations\Potion.cs" />
     <Compile Include="Core\GS\Items\Implementations\SpellRune.cs" />
     <Compile Include="Core\GS\Items\Implementations\StoneOfRecall.cs" />
@@ -266,6 +264,7 @@
     <Compile Include="Core\MooNet\Authentication\Config.cs" />
     <Compile Include="Core\MooNet\Authentication\VersionChecker.cs" />
     <Compile Include="Core\MooNet\Channels\Channel.cs" />
+    <Compile Include="Core\MooNet\Channels\ChannelCommands.cs" />
     <Compile Include="Core\MooNet\Channels\ChannelManager.cs" />
     <Compile Include="Core\MooNet\Channels\Member.cs" />
     <Compile Include="Common\Config\Config.cs" />
@@ -306,7 +305,9 @@
     <Compile Include="Core\MooNet\Services\NotificationService.cs" />
     <Compile Include="Core\MooNet\Services\PresenceService.cs" />
     <Compile Include="Core\MooNet\Services\ReportService.cs" />
+    <Compile Include="Core\MooNet\Services\ResourceService.cs" />
     <Compile Include="Core\MooNet\Services\SearchService.cs" />
+    <Compile Include="Core\MooNet\Services\ServerPoolService.cs" />
     <Compile Include="Core\MooNet\Services\Service.cs" />
     <Compile Include="Core\MooNet\Services\StorageService.cs" />
     <Compile Include="Core\MooNet\Services\UserManagerService.cs" />
@@ -339,6 +340,7 @@
     <Compile Include="Net\GS\Message\Definitions\Conversation\FinishConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\RequestCloseConversationWindowMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\UpdateConvAutoAdvanceMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryRequestQuickMoveMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\ShrineActivatedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\NephalemAltarWindowClosedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBannerMessage.cs" />
@@ -352,7 +354,6 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\VoteKickMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\NPC\NPCSelectConversationMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Pet\PetDetachMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Inventory\RequestUseCauldronOfJordanMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\RequestUseNephalemCubeMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryDropItemMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\RequestUsePowerMessage.cs" />

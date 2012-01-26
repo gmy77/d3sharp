@@ -47,6 +47,12 @@ namespace Mooege.Core.MooNet.Toons
         public StringPresenceField HeroNameField
             = new StringPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 5, 0);
 
+        public IntPresenceField Field6
+            = new IntPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 6, 0, 0);
+
+        public IntPresenceField Field7
+            = new IntPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 7, 0, 0);
+
         /// <summary>
         /// D3 EntityID encoded id.
         /// </summary>
@@ -360,6 +366,8 @@ namespace Mooege.Core.MooNet.Toons
         //D3,Hero,3,0 -> D3.Hero.VisualEquipment: VisualEquipment
         //D3,Hero,4,0 -> D3.Hero.PlayerFlags: Hero's flags
         //D3,Hero,5,0 -> ?D3.Hero.NameText: Hero's Name
+        //D3,Hero,6,0 -> Unk Int64 (0)
+        //D3,Hero,7,0 -> Unk Int64 (0)
 
         public override List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications()
         {
@@ -369,6 +377,8 @@ namespace Mooege.Core.MooNet.Toons
             operationList.Add(this.HeroVisualEquipmentField.GetFieldOperation());
             operationList.Add(this.HeroFlagsField.GetFieldOperation());
             operationList.Add(this.HeroNameField.GetFieldOperation());
+            operationList.Add(this.Field6.GetFieldOperation());
+            operationList.Add(this.Field7.GetFieldOperation());
 
             return operationList;
         }
