@@ -41,7 +41,16 @@ namespace Mooege.Core.MooNet.Services
         public override void RegisterWithService(IRpcController controller, bnet.protocol.achievements.RegisterWithServiceRequest request, Action<bnet.protocol.achievements.RegisterWithServiceResponse> done)
         {
             // This should register client with achievement notifier service. -Egris
-            var response = bnet.protocol.achievements.RegisterWithServiceResponse.CreateBuilder();
+            var snapshot = bnet.protocol.achievements.Snapshot.CreateBuilder();
+
+            foreach (var achievement in this.Client.Account.CurrentGameAccount.Achievements)
+                snapshot.AddAchievementSnapshot(achievement);
+
+            foreach (var criteria in this.Client.Account.CurrentGameAccount.AchievementCriteria)
+                snapshot.AddCriteriaSnapshot(criteria);
+
+            var response = bnet.protocol.achievements.RegisterWithServiceResponse.CreateBuilder()
+                .SetSnapshot(snapshot);
 
             done(response.Build());
         }

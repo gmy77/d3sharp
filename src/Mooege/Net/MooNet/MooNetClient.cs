@@ -341,6 +341,7 @@ namespace Mooege.Net.MooNet
                 .SetTargetId(this.Account.CurrentGameAccount.BnetEntityId)
                 .SetType("WHISPER")
                 .SetSenderId(this.Account.CurrentGameAccount.BnetEntityId)
+                .SetSenderAccountId(this.Account.BnetEntityId)
                 .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder().SetName("whisper")
                 .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(text).Build()).Build()).Build();
 
