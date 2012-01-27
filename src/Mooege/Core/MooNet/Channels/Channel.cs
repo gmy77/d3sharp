@@ -190,7 +190,7 @@ namespace Mooege.Core.MooNet.Channels
 
             //send bnet,2,7 target = addedmember.gameaccount
             //this always follows channel.AddNotification
-            var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.GameAccount, 2, 7);
+            var fieldKey = FieldKeyHelper.Create(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.GameAccount, 7, 0);
             var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey);
             field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(client.Account.BnetEntityId.Low.ToString() + "#1").Build());
             var operation = bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field.Build()).Build();

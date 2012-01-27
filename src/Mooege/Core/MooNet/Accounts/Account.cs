@@ -217,19 +217,31 @@ namespace Mooege.Core.MooNet.Accounts
 
             switch ((FieldKeyHelper.Program)queryKey.Program)
             {
-                //case FieldKeyHelper.Program.D3:
-                //    if (queryKey.Group == 1 && queryKey.Field == 1) // Account's selected toon.
-                //    {
-                //        if (this.LoggedInClient != null) // check if the account is online actually.
-                //            field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LoggedInClient.CurrentToon.D3EntityID.ToByteString()).Build());
-                //    }
-                //    else
-                //    {
-                //        Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
-                //    }
-                //    break;
+                case FieldKeyHelper.Program.D3:
+                    if (queryKey.Group == 1 && queryKey.Field == 1) // Account's last selected toon.
+                    {
+                        if (this.IsOnline) // check if the account is online actually.
+                            field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LastSelectedHero.ToByteString()).Build());
+                    }
+                    else if (queryKey.Group == 1 && queryKey.Field == 2) // Account's last selected Game Account
+                    {
+                        if (this.IsOnline) // check if the account is online actually.
+                            field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LastSelectedGameAccount.ToByteString()).Build());
+                    }
+                    else
+                    {
+                        Logger.Warn("Account Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
+                    }
+                    break;
                 case FieldKeyHelper.Program.BNet:
-                    Logger.Warn("Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
+                    if (queryKey.Group == 1 && queryKey.Field == 5) // Account's battleTag
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.BattleTag).Build());
+                    }
+                    else
+                    {
+                        Logger.Warn("Account Unknown query-key: {0}, {1}, {2}", queryKey.Program, queryKey.Group, queryKey.Field);
+                    }
                     break;
             }
 
