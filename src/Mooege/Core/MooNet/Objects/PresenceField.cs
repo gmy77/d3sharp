@@ -183,7 +183,11 @@ namespace Mooege.Core.MooNet.Objects
         public bnet.protocol.presence.FieldOperation GetFieldOperation()
         {
             var fieldKey = FieldKeyHelper.Create(Program, OriginatingClass, FieldNumber, Index);
-            var field = bnet.protocol.presence.Field.CreateBuilder().SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(Value.ToByteString()).Build()).Build();
+            var field = bnet.protocol.presence.Field.CreateBuilder();
+            if (Value == null)
+                field.SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(ByteString.Empty).Build()).Build();
+            else
+                field.SetKey(fieldKey).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(Value.ToByteString()).Build()).Build();
             return bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(field).Build();
         }
     }

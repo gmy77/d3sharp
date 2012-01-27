@@ -78,17 +78,6 @@ namespace Mooege.Core.MooNet.Channels
             }
         }
 
-        public Member(bnet.protocol.Identity identity, Privilege privs)
-        {
-            this.Identity = identity;
-            this.Privileges = privs;
-            this.Roles = new List<Role>();
-            this.Info = bnet.protocol.AccountInfo.CreateBuilder()
-                .SetAccountStatus(bnet.protocol.AccountInfo.Types.AccountStatus.TRIAL)
-                .SetCountryId(21843)
-                .Build();
-        }
-
         public Member(bnet.protocol.Identity identity, Privilege privs, params Role[] roles)
         {
             this.Identity = identity;
