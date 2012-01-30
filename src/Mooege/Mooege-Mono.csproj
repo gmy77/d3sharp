@@ -61,9 +61,6 @@
     <Reference Include="CrystalMpq">
       <HintPath>..\..\dep\crystalmpq\CrystalMpq.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalMpq.Utility">
-      <HintPath>..\..\dep\crystalmpq\CrystalMpq.Utility.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\dep\sharpziplib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
