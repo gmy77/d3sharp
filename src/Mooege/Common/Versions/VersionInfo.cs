@@ -51,7 +51,7 @@ namespace Mooege.Common.Versions
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
-                {"Aurora 9e9ccb8fdf_public", 8296},
+                {"Aurora 9e9ccb8fdf_public", 8350},
                 {"Aurora f506438e8d_public", 8101},
                 {"Aurora fbb3e7d1b4_public", 8059},
                 {"Aurora 04768e5dce_public", 7931},
@@ -111,7 +111,7 @@ namespace Mooege.Common.Versions
             /// </summary>
             public const int ProtocolHash = 0x1A64B41;
 
-            // 0x01A64B41                   // 8296
+            // 0x01A64B41                   // 8296, 8350
             // 0xBA957E6B                   // 8059, 8101
             // unchecked((int)0x208CA037)   // 7931
             // unchecked((int)0x208CA037)   // 7841
