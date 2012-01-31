@@ -78,6 +78,10 @@ message Extension
     optional uint64 money_to_claim = 12;
     optional uint64 items_to_claim = 13;
     optional bool risk_delayed = 14 [default = false];
+    optional uint32 fail_order_action = 15;
+    optional uint32 fail_object_type = 16;
+    optional uint32 fail_error_code = 17;
+    optional uint32 fail_extra_error_code = 18;
 }
 
 message Offer
@@ -153,7 +157,7 @@ message QueryOrderFilter
     optional uint32 specialist = 2;
     optional uint32 order_type = 3;
     optional uint32 claimable = 4 [default = 0];
-    required uint32 order_status_mask = 5;
+    optional uint32 order_status_mask = 5;
     optional bool rollup = 6 [default = false];
     required .bnet.protocol.exchange.QueryFilterByCreatedTime time_filter = 7;
 }
@@ -172,7 +176,8 @@ message CurrencyConfig
     required uint64 tick_size = 2;
     required uint64 min_unit_price = 3;
     required uint64 max_unit_price = 4;
-    required uint64 max_total_price = 7;
+    required uint64 min_total_price = 5;
+    required uint64 max_total_price = 6;
 }
 
 message SpecialistConfig
@@ -188,14 +193,6 @@ message SpecialistConfig
     required int32 current_unit_price_rule = 9;
     required int32 maximum_unit_price_rule = 10;
     repeated .bnet.protocol.exchange.CurrencyConfig currency_config = 11;
-}
-
-message BillingAddress
-{
-    required int32 country_id = 1;
-    required string city = 2;
-    optional string state = 3;
-    optional string postal_code = 4;
 }
 
 message FeeEstimationData

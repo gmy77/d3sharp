@@ -136,7 +136,7 @@ namespace Mooege.Core.MooNet.Accounts
             return string.Format("Updated password for account {0}.", email);
         }
 
-        [Command("setuserlevel", "Allows you to set a new user level for account\nUsage: account setuserlevel <email> <user level>", Account.UserLevels.GM)]
+        [Command("setuserlevel", "Allows you to set a new user level for account\nUsage: account setuserlevel <email> <user level>.\nAvailable user levels: owner, admin, gm, user.", Account.UserLevels.GM)]
         public string SetLevel(string[] @params, MooNetClient invokerClient)
         {
             if (@params.Count() < 2)

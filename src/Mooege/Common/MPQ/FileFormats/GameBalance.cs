@@ -249,14 +249,13 @@ namespace Mooege.Common.MPQ.FileFormats
         PlayerLeftFinger = 11,
         PlayerRightFinger = 12,
         PlayerNeck = 13,
-        PlayerTalisman = 14,
-        Merchant = 20,
-        PetRightHand = 23,
-        PetLeftHand = 24,
-        PetSpecial = 25,
-        PetLeftFinger = 28,
-        PetRightFinger = 27,
-        PetNeck = 26,
+        Merchant = 19,
+        PetRightHand = 22,
+        PetLeftHand = 23,
+        PetSpecial = 24,
+        PetNeck = 25,
+        PetRightFinger = 26,
+        PetLeftFinger = 27,
     }
 
     public class ItemTable : ISerializableData
@@ -707,6 +706,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int SNOSKillKit3 { get; private set; }
         public Resource PrimaryResource { get; private set; }
         public Resource SecondaryResource { get; private set; }
+        public Attribute CoreAttribute { get; private set; }
         public float F0 { get; private set; }
         public int I1 { get; private set; }
         public float HitpointsMax { get; private set; }
@@ -768,66 +768,67 @@ namespace Mooege.Common.MPQ.FileFormats
             this.SNOSKillKit3 = stream.ReadValueS32();
             this.PrimaryResource = (Resource)stream.ReadValueS32();
             this.SecondaryResource = (Resource)stream.ReadValueS32();
-            this.F0 = stream.ReadValueF32(); //308
-            this.I1 = stream.ReadValueS32(); //312
+            this.CoreAttribute = (Attribute)stream.ReadValueS32();
+            this.F0 = stream.ReadValueF32(); //312
+            this.I1 = stream.ReadValueS32(); //316
             stream.Position += 16;
-            this.HitpointsMax = stream.ReadValueF32(); //332
-            this.HitpointsFactorLevel = stream.ReadValueF32(); //336
+            this.HitpointsMax = stream.ReadValueF32(); //336
+            this.HitpointsFactorLevel = stream.ReadValueF32(); //340
             stream.Position += 8;
-            this.F3 = stream.ReadValueF32(); //348
-            this.ResourceMax = stream.ReadValueF32(); //352
-            this.ResourceFactorLevel = stream.ReadValueF32(); //356
-            this.ResourceRegenPerSecond = stream.ReadValueF32(); //360
+            this.F3 = stream.ReadValueF32(); //352
+            this.ResourceMax = stream.ReadValueF32(); //356
+            this.ResourceFactorLevel = stream.ReadValueF32(); //360
+            this.ResourceRegenPerSecond = stream.ReadValueF32(); //364
             stream.Position += 4;
-            this.F7 = stream.ReadValueF32(); //368
-            this.F8 = stream.ReadValueF32(); //372
-            this.F9 = stream.ReadValueF32(); //376
+            this.F7 = stream.ReadValueF32(); //372
+            this.F8 = stream.ReadValueF32(); //376
+            this.F9 = stream.ReadValueF32(); //380
             stream.Position += 24;
-            this.F10 = stream.ReadValueF32(); //404
+            this.F10 = stream.ReadValueF32(); //408
             stream.Position += 72;
-            this.F11 = stream.ReadValueF32(); //480
-            this.CritPercentCap = stream.ReadValueF32(); //484
-            this.F13 = stream.ReadValueF32(); //488
+            this.F11 = stream.ReadValueF32(); //484
+            this.CritPercentCap = stream.ReadValueF32(); //488
+            this.F13 = stream.ReadValueF32(); //492
             stream.Position += 4;
-            this.F14 = stream.ReadValueF32(); //496
+            this.F14 = stream.ReadValueF32(); //500
             stream.Position += 32;
-            this.WalkingRate = stream.ReadValueF32(); //532
-            this.RunningRate = stream.ReadValueF32(); //536
+            this.WalkingRate = stream.ReadValueF32(); //536
+            this.RunningRate = stream.ReadValueF32(); //540
             stream.Position += 4;
-            this.F17 = stream.ReadValueF32(); //544
+            this.F17 = stream.ReadValueF32(); //548
             stream.Position += 32;
-            this.F18 = stream.ReadValueF32(); //580
-            this.F19 = stream.ReadValueF32(); //584
-            this.F20 = stream.ReadValueF32(); //588
-            this.F21 = stream.ReadValueF32(); //592
-            this.F22 = stream.ReadValueF32(); //596
-            this.F23 = stream.ReadValueF32(); //600
+            this.F18 = stream.ReadValueF32(); //584
+            this.F19 = stream.ReadValueF32(); //588
+            this.F20 = stream.ReadValueF32(); //592
+            this.F21 = stream.ReadValueF32(); //596
+            this.F22 = stream.ReadValueF32(); //600
+            this.F23 = stream.ReadValueF32(); //604
             stream.Position += 4;
-            this.F24 = stream.ReadValueF32(); //608
-            this.F25 = stream.ReadValueF32(); //612
+            this.F24 = stream.ReadValueF32(); //612
+            this.F25 = stream.ReadValueF32(); //616
             stream.Position += 60;
-            this.F26 = stream.ReadValueF32(); //676
+            this.F26 = stream.ReadValueF32(); //680
             stream.Position += 8;
-            this.F27 = stream.ReadValueF32(); //688
-            this.F28 = stream.ReadValueF32(); //692
-            this.F29 = stream.ReadValueF32(); //696
-            this.F30 = stream.ReadValueF32(); //700
+            this.F27 = stream.ReadValueF32(); //692
+            this.F28 = stream.ReadValueF32(); //696
+            this.F29 = stream.ReadValueF32(); //700
+            this.F30 = stream.ReadValueF32(); //704
             stream.Position += 12;
-            this.F31 = stream.ReadValueF32(); //716
-            this.F32 = stream.ReadValueF32(); //720
-            this.F33 = stream.ReadValueF32(); //724
+            this.F31 = stream.ReadValueF32(); //720
+            this.F32 = stream.ReadValueF32(); //724
+            this.F33 = stream.ReadValueF32(); //728
             stream.Position += 40;
-            this.F34 = stream.ReadValueF32(); //768
+            this.F34 = stream.ReadValueF32(); //772
             stream.Position += 24;
-            this.Attack = stream.ReadValueF32(); //796
-            this.Precision = stream.ReadValueF32(); //800
-            this.Vitality = stream.ReadValueF32(); //804
-            this.Defense = stream.ReadValueF32(); //808
+            this.Attack = stream.ReadValueF32(); //800
+            this.Precision = stream.ReadValueF32(); //804
+            this.Vitality = stream.ReadValueF32(); //808
+            this.Defense = stream.ReadValueF32(); //812
             stream.Position += 40;
-            this.GetHitMaxBase = stream.ReadValueF32(); //852
-            this.GetHitMaxPerLevel = stream.ReadValueF32(); //856
-            this.GetHitRecoveryBase = stream.ReadValueF32(); //860
-            this.GetHitRecoveryPerLevel = stream.ReadValueF32(); //864
+            this.GetHitMaxBase = stream.ReadValueF32(); //856
+            this.GetHitMaxPerLevel = stream.ReadValueF32(); //860
+            this.GetHitRecoveryBase = stream.ReadValueF32(); //864
+            this.GetHitRecoveryPerLevel = stream.ReadValueF32(); //866
         }
 
         public enum Resource : int
@@ -839,6 +840,14 @@ namespace Mooege.Common.MPQ.FileFormats
             Power,
             Hatred,
             Discipline,
+        }
+
+        public enum Attribute : int
+        {
+            None = -1,
+            Strength,
+            Dexterity,
+            Intelligence,
         }
     }
 

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Games;
+using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
@@ -36,7 +37,14 @@ namespace Mooege.Core.MooNet.Services
 
         public override void JoinGame(IRpcController controller, bnet.protocol.game_master.JoinGameRequest request, Action<bnet.protocol.game_master.JoinGameResponse> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("Client {0} attempted to join game {1}.", this.Client, request.GameHandle.GameId.Low);
+            //var game = GameFactoryManager.FindGameByEntityId(request.GameHandle.GameId);
+
+            var builder = bnet.protocol.game_master.JoinGameResponse.CreateBuilder();
+                //.AddConnectInfo(game.GetConnectionInfoForClient(this.Client));
+
+            done(builder.Build());
+            //throw new NotImplementedException();
         }
 
         public override void ListFactories(IRpcController controller, bnet.protocol.game_master.ListFactoriesRequest request, Action<bnet.protocol.game_master.ListFactoriesResponse> done)
@@ -49,7 +57,7 @@ namespace Mooege.Core.MooNet.Services
                     bnet.protocol.attribute.Attribute.CreateBuilder().SetName("min_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2)).Build(),
                     bnet.protocol.attribute.Attribute.CreateBuilder().SetName("max_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(4)).Build(),
                     bnet.protocol.attribute.Attribute.CreateBuilder().SetName("num_teams").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("0.3.1")).Build() //This should be a static string so all versions are the same -Egris
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("0.6.0")).Build() //This should be a static string so all versions are the same -Egris
                 };
 
             description.AddRangeAttribute(attributes);
@@ -106,26 +114,31 @@ namespace Mooege.Core.MooNet.Services
             }
 
             // send game found notification.
-            var notificationBuilder = bnet.protocol.game_master.GameFoundNotification.CreateBuilder()
-                .SetRequestId(gameFound.RequestId)
-                .SetGameHandle(gameFound.GameHandle);
+            var notification = bnet.protocol.notification.Notification.CreateBuilder()
+                .SetSenderId(bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(0).Build())
+                .SetTargetId(this.Client.Account.CurrentGameAccount.BnetEntityId)
+                .SetType("MM_START");
+            var attr = bnet.protocol.attribute.Attribute.CreateBuilder()
+                .SetName("game_request_id")
+                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetUintValue(gameFound.RequestId).Build());
+            notification.AddAttribute(attr);
 
-            this.Client.MakeRPCWithListenerId(request.ObjectId, () =>
-                bnet.protocol.game_master.GameFactorySubscriber.CreateStub(this.Client).NotifyGameFound(null, notificationBuilder.Build(), callback => { }));
-            
+            this.Client.MakeRPC(() =>
+                bnet.protocol.notification.NotificationListener.CreateStub(this.Client).OnNotificationReceived(null, notification.Build(), callback => { }));
+
             if(gameFound.Started)
             {
                 Logger.Warn("Client {0} joining game with FactoryID:{1}", this.Client.Account.CurrentGameAccount.CurrentToon.Name, gameFound.FactoryID);
-                gameFound.JoinGame(clients, request.ObjectId);
+                gameFound.JoinGame(clients, request.FactoryObjectId);
             }
             else
             {
                 Logger.Warn("Client {0} creating new game", this.Client.Account.CurrentGameAccount.CurrentToon.Name);
-                gameFound.StartGame(clients, request.ObjectId);
+                gameFound.StartGame(clients, request.FactoryObjectId);
             }
         }
 
-        public override void CancelFindGame(IRpcController controller, bnet.protocol.game_master.CancelFindGameRequest request, Action<bnet.protocol.NoData> done)
+        public override void CancelGame(IRpcController controller, bnet.protocol.game_master.CancelGameRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }

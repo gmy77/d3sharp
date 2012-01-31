@@ -28,12 +28,12 @@ namespace Mooege.Core.MooNet.Channels
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        private readonly static Dictionary<ulong, Channel> Channels =
+        public readonly static Dictionary<ulong, Channel> Channels =
             new Dictionary<ulong, Channel>();
 
         public static Channel CreateNewChannel(MooNetClient client, ulong remoteObjectId)
         {
-            var channel = new Channel(client, remoteObjectId);
+            var channel = new Channel(client, false, remoteObjectId);
             Channels.Add(channel.DynamicId, channel);
             return channel;
         }

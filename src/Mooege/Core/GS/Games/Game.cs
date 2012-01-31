@@ -249,7 +249,7 @@ namespace Mooege.Core.GS.Games
                 this.SendNewPlayerMessage(joinedPlayer, pair.Value);
             }
 
-            // notify other players about or new player too.
+            // notify other players about our new player too.
             foreach (var pair in this.Players.Where(pair => pair.Value != joinedPlayer))
             {
                 this.SendNewPlayerMessage(pair.Value, joinedPlayer);

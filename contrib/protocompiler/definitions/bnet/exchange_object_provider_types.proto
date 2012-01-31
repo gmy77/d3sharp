@@ -13,6 +13,7 @@ message ReportAuthorizeRequest
     optional .bnet.protocol.exchange.BlobFromOfType auth_handle = 4;
     optional bool defer_delivery = 5;
     required .bnet.protocol.EntityId bnet_account_id = 6;
+    optional .bnet.protocol.exchange.ActionErrorDetail error_detail = 7;
 }
 
 message ReportSettleRequest
@@ -21,6 +22,7 @@ message ReportSettleRequest
     required .bnet.protocol.exchange.PartitionId token = 2;
     required uint64 result = 3;
     optional .bnet.protocol.exchange.BlobFrom notification_extra_info = 4;
+    optional .bnet.protocol.exchange.ActionErrorDetail error_detail = 5;
 }
 
 message ReportCancelRequest
@@ -29,6 +31,16 @@ message ReportCancelRequest
     required .bnet.protocol.exchange.PartitionId token = 2;
     required uint64 result = 3;
     optional .bnet.protocol.exchange.BlobFrom notification_extra_info = 4;
+    optional .bnet.protocol.exchange.ActionErrorDetail error_detail = 5;
+}
+
+message ReportRefundRequest
+{
+    required .bnet.protocol.exchange.PartitionId partition_id = 1;
+    required .bnet.protocol.exchange.PartitionId token = 2;
+    required uint64 result = 3;
+    optional .bnet.protocol.exchange.BlobFrom notification_extra_info = 4;
+    optional .bnet.protocol.exchange.ActionErrorDetail error_detail = 5;
 }
 
 message GetPaymentMethodsRequest
@@ -47,10 +59,8 @@ message PaymentMethod
     optional string description = 2;
     optional uint64 amount = 3;
     optional uint32 cash_in_out_mask = 4 [default = 3];
-    optional uint32 country_id = 5;
-    optional string state = 6;
-    optional string city = 7;
-    optional string postal_code = 8;
+    optional .bnet.protocol.exchange.BillingAddress billing_address = 5;
+    required uint64 wallet_id = 6;
 }
 
 message GetPaymentMethodsResponse

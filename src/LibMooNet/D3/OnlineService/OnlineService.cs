@@ -52,14 +52,13 @@ namespace D3.OnlineService {
           "Gi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkEh4KD29wZW5fdG9fZnJpZW5k" + 
           "cxgGIAIoCDoFZmFsc2USHwoXb3Blbl90b19mcmllbmRzX21lc3NhZ2UYByAB" + 
           "KAkiKAoPUHZQQ3JlYXRlUGFyYW1zEhUKCXNub193b3JsZBgBIAIoDzoCLTEi" + 
-          "ygEKEEdhbWVDcmVhdGVQYXJhbXMSEQoJZ2FtZV90eXBlGAEgAigREhkKDmNy" + 
+          "sAEKEEdhbWVDcmVhdGVQYXJhbXMSEQoJZ2FtZV90eXBlGAEgAigREhkKDmNy" + 
           "ZWF0aW9uX2ZsYWdzGAIgAigNOgEwEjAKBGNvb3AYAyABKAsyIi5EMy5Pbmxp" + 
           "bmVTZXJ2aWNlLkNvb3BDcmVhdGVQYXJhbXMSLgoDcHZwGAQgASgLMiEuRDMu" + 
-          "T25saW5lU2VydmljZS5QdlBDcmVhdGVQYXJhbXMSDAoEbmFtZRgFIAEoCRIY" + 
-          "Cgppc19wcml2YXRlGAYgAigIOgR0cnVlIm4KEEhlcm9DcmVhdGVQYXJhbXMS" + 
-          "DAoEbmFtZRgBIAIoCRIWCgpnYmlkX2NsYXNzGAIgAigPOgItMRIaCgtpc19o" + 
-          "YXJkY29yZRgDIAIoCDoFZmFsc2USGAoJaXNfZmVtYWxlGAQgAigIOgVmYWxz" + 
-          "ZQ==");
+          "T25saW5lU2VydmljZS5QdlBDcmVhdGVQYXJhbXMSDAoEbmFtZRgFIAEoCSJu" + 
+          "ChBIZXJvQ3JlYXRlUGFyYW1zEgwKBG5hbWUYASACKAkSFgoKZ2JpZF9jbGFz" + 
+          "cxgCIAIoDzoCLTESGgoLaXNfaGFyZGNvcmUYAyACKAg6BWZhbHNlEhgKCWlz" + 
+          "X2ZlbWFsZRgEIAIoCDoFZmFsc2U=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_OnlineService_EntityId__Descriptor = Descriptor.MessageTypes[0];
@@ -85,7 +84,7 @@ namespace D3.OnlineService {
         internal__static_D3_OnlineService_GameCreateParams__Descriptor = Descriptor.MessageTypes[5];
         internal__static_D3_OnlineService_GameCreateParams__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.OnlineService.GameCreateParams, global::D3.OnlineService.GameCreateParams.Builder>(internal__static_D3_OnlineService_GameCreateParams__Descriptor,
-                new string[] { "GameType", "CreationFlags", "Coop", "Pvp", "Name", "IsPrivate", });
+                new string[] { "GameType", "CreationFlags", "Coop", "Pvp", "Name", });
         internal__static_D3_OnlineService_HeroCreateParams__Descriptor = Descriptor.MessageTypes[6];
         internal__static_D3_OnlineService_HeroCreateParams__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.OnlineService.HeroCreateParams, global::D3.OnlineService.HeroCreateParams.Builder>(internal__static_D3_OnlineService_HeroCreateParams__Descriptor,
@@ -1948,8 +1947,8 @@ namespace D3.OnlineService {
   public sealed partial class GameCreateParams : pb::GeneratedMessage<GameCreateParams, GameCreateParams.Builder> {
     private GameCreateParams() { }
     private static readonly GameCreateParams defaultInstance = new GameCreateParams().MakeReadOnly();
-    private static readonly string[] _gameCreateParamsFieldNames = new string[] { "coop", "creation_flags", "game_type", "is_private", "name", "pvp" };
-    private static readonly uint[] _gameCreateParamsFieldTags = new uint[] { 26, 16, 8, 48, 42, 34 };
+    private static readonly string[] _gameCreateParamsFieldNames = new string[] { "coop", "creation_flags", "game_type", "name", "pvp" };
+    private static readonly uint[] _gameCreateParamsFieldTags = new uint[] { 26, 16, 8, 42, 34 };
     public static GameCreateParams DefaultInstance {
       get { return defaultInstance; }
     }
@@ -2020,21 +2019,10 @@ namespace D3.OnlineService {
       get { return name_; }
     }
     
-    public const int IsPrivateFieldNumber = 6;
-    private bool hasIsPrivate;
-    private bool isPrivate_ = true;
-    public bool HasIsPrivate {
-      get { return hasIsPrivate; }
-    }
-    public bool IsPrivate {
-      get { return isPrivate_; }
-    }
-    
     public override bool IsInitialized {
       get {
         if (!hasGameType) return false;
         if (!hasCreationFlags) return false;
-        if (!hasIsPrivate) return false;
         if (HasCoop) {
           if (!Coop.IsInitialized) return false;
         }
@@ -2058,13 +2046,10 @@ namespace D3.OnlineService {
         output.WriteMessage(3, field_names[0], Coop);
       }
       if (hasPvp) {
-        output.WriteMessage(4, field_names[5], Pvp);
+        output.WriteMessage(4, field_names[4], Pvp);
       }
       if (hasName) {
-        output.WriteString(5, field_names[4], Name);
-      }
-      if (hasIsPrivate) {
-        output.WriteBool(6, field_names[3], IsPrivate);
+        output.WriteString(5, field_names[3], Name);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2090,9 +2075,6 @@ namespace D3.OnlineService {
         }
         if (hasName) {
           size += pb::CodedOutputStream.ComputeStringSize(5, Name);
-        }
-        if (hasIsPrivate) {
-          size += pb::CodedOutputStream.ComputeBoolSize(6, IsPrivate);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2235,9 +2217,6 @@ namespace D3.OnlineService {
         if (other.HasName) {
           Name = other.Name;
         }
-        if (other.HasIsPrivate) {
-          IsPrivate = other.IsPrivate;
-        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -2309,10 +2288,6 @@ namespace D3.OnlineService {
             }
             case 42: {
               result.hasName = input.ReadString(ref result.name_);
-              break;
-            }
-            case 48: {
-              result.hasIsPrivate = input.ReadBool(ref result.isPrivate_);
               break;
             }
           }
@@ -2463,26 +2438,6 @@ namespace D3.OnlineService {
         PrepareBuilder();
         result.hasName = false;
         result.name_ = "";
-        return this;
-      }
-      
-      public bool HasIsPrivate {
-        get { return result.hasIsPrivate; }
-      }
-      public bool IsPrivate {
-        get { return result.IsPrivate; }
-        set { SetIsPrivate(value); }
-      }
-      public Builder SetIsPrivate(bool value) {
-        PrepareBuilder();
-        result.hasIsPrivate = true;
-        result.isPrivate_ = value;
-        return this;
-      }
-      public Builder ClearIsPrivate() {
-        PrepareBuilder();
-        result.hasIsPrivate = false;
-        result.isPrivate_ = true;
         return this;
       }
     }

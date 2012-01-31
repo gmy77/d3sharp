@@ -40,8 +40,6 @@ namespace Mooege.Common.MPQ.FileFormats
         public int I7 { get; private set; }
         public int I8 { get; private set; }
         public int I9 { get; private set; }
-        public int I10 { get; private set; }
-        public int I11 { get; private set; }
         public int SNOCurrentWorld { get; private set; }
         public int SNOCurrentLevelArea { get; private set; }
         public int SNOQuestRange { get; private set; }
@@ -75,13 +73,11 @@ namespace Mooege.Common.MPQ.FileFormats
                 this.ItemCondition[i] = new ItemSubcondition(stream);
             this.I4 = stream.ReadValueS32(); //176
             this.I5 = stream.ReadValueS32();
+            stream.Position += 4;
             this.I6 = stream.ReadValueS32();
             this.I7 = stream.ReadValueS32();
-            stream.Position += 4;
             this.I8 = stream.ReadValueS32();
             this.I9 = stream.ReadValueS32();
-            this.I10 = stream.ReadValueS32();
-            this.I11 = stream.ReadValueS32();
             this.SNOCurrentWorld = stream.ReadValueS32();
             this.SNOCurrentLevelArea = stream.ReadValueS32();
             this.SNOQuestRange = stream.ReadValueS32();

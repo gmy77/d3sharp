@@ -49,6 +49,7 @@ namespace Mooege.Core.MooNet.Channels
         public bnet.protocol.Identity Identity { get; set; }
         public Privilege Privileges { get; set; }
         public List<Role> Roles { get; private set; }
+        public bnet.protocol.AccountInfo Info { get; private set; }
 
         public bnet.protocol.channel.MemberState BnetMemberState
         {
@@ -61,6 +62,7 @@ namespace Mooege.Core.MooNet.Channels
                 {
                     builder.AddRole((uint)role);
                 }
+                builder.SetInfo(this.Info);
                 return builder.Build();
             }
         }
@@ -76,19 +78,16 @@ namespace Mooege.Core.MooNet.Channels
             }
         }
 
-        public Member(bnet.protocol.Identity identity, Privilege privs)
-        {
-            this.Identity = identity;
-            this.Privileges = privs;
-            this.Roles = new List<Role>();
-        }
-
         public Member(bnet.protocol.Identity identity, Privilege privs, params Role[] roles)
         {
             this.Identity = identity;
             this.Privileges = privs;
             this.Roles = new List<Role>();
             AddRoles(roles);
+            this.Info = bnet.protocol.AccountInfo.CreateBuilder()
+                .SetAccountStatus(bnet.protocol.AccountInfo.Types.AccountStatus.TRIAL)
+                .SetCountryId(21843)
+                .Build();
         }
 
         public void AddRoles(params Role[] roles)

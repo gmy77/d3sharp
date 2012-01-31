@@ -85,8 +85,6 @@ namespace Mooege.Core.GS.Games
             if (invokerClient.InGameClient == null)
                 return "You can only invoke this command while ingame.";
 
-            invokerClient.InGameClient.Player.EnableCauldronOfJordan();
-            invokerClient.InGameClient.Player.EnableCubeOfNephalem();
             invokerClient.InGameClient.Player.EnableStoneOfRecall();
 
             return string.Format("Done");

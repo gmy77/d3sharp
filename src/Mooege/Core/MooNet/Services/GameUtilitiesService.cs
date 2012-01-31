@@ -73,39 +73,41 @@ namespace Mooege.Core.MooNet.Services
                         .Build();
                     builder.AddAttribute(attrId);
                     break;
-                case 8: //D3.GameMessage.GetGameAccountSettings? - Client expecting D3.Client.Preferences
-                    var getAccountSettings = GetGameAccountSettings(D3.GameMessage.GetGameAccountSettings.ParseFrom(request.GetAttribute(2).Value.MessageValue));
-                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(getAccountSettings).Build());
+                case 7: // Client doesn't care what you send here
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(ByteString.Empty).Build());
                     break;
-                case 9: //D3.GameMessage.SetGameAccountSettings ->
+                case 8: //D3.GameMessage.SetGameAccountSettings ->
                     var setAccountSettings = SetGameAccountSettings(D3.GameMessage.SetGameAccountSettings.ParseFrom(request.GetAttribute(2).Value.MessageValue));
-                    //attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(setAccountSettings).Build());
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(setAccountSettings).Build());
                     break;
-                case 10: //D3.GameMessage.GetToonSettings? -> D3.Client.ToonSettings
+                case 9: //D3.GameMessage.GetToonSettings? -> D3.Client.ToonSettings
                     var getToonSettings = GetToonSettings(D3.GameMessage.GetToonSettings.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(getToonSettings).Build());
                     break;
-                case 11: //D3.GameMessage.SetToonSettings?
+                case 10: //D3.GameMessage.SetToonSettings?
                     var setToonSettings = SetToonSettings(D3.GameMessage.SetToonSettings.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(setToonSettings).Build());
                     break;
-                case 13: //D3.GameMessage.GetHeroItems
+                case 12: //D3.GameMessage.GetHeroItems
                     var heroItems = GetHeroItems(D3.GameMessage.GetHeroItems.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(heroItems).Build());
                     break;
-                case 14: //D3.GameMessage.GetAccountItems
+                case 13: //D3.GameMessage.GetAccountItems
                     var accountItems = GetAccountItems(D3.GameMessage.GetAccountItems.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(accountItems).Build());
                     break;
-                case 15: //D3.GameMessage.GetAccountProfile -> D3.Profile.AccountProfile
+                case 14: //D3.GameMessage.GetAccountProfile -> D3.Profile.AccountProfile
                     var getAccountProfile = GetAccountProfile(D3.GameMessage.GetAccountProfile.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(getAccountProfile).Build());
                     break;
-                case 16: //D3.GameMessage.GetHeroProfiles -> D3.Profile.HeroProfileList
+                case 15: //D3.GameMessage.GetHeroProfiles -> D3.Profile.HeroProfileList
                     var getHeroProfiles = GetHeroProfiles(D3.GameMessage.GetHeroProfiles.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(getHeroProfiles).Build());
                     break;
-                case 20: //D3.GameMessage.GetHeroIds -> D3.Hero.HeroList
+                case 16: //? - Client expecting D3.Client.Preferences
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(D3.Client.Preferences.CreateBuilder().SetVersion(105).Build().ToByteString()).Build());
+                    break;
+                case 19: //D3.GameMessage.GetHeroIds -> D3.Hero.HeroList
                     var HeroList = GetHeroList(D3.GameMessage.GetHeroIds.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(HeroList).Build());
                     break;
@@ -175,7 +177,8 @@ namespace Mooege.Core.MooNet.Services
 
         private ByteString CreateHero(D3.OnlineService.HeroCreateParams createPrams)
         {
-            var newToon = new Toon(createPrams.Name, createPrams.GbidClass, createPrams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 30, Client.Account.CurrentGameAccount);
+            int hashCode = ToonManager.GetUnusedHashCodeForToonName(createPrams.Name);
+            var newToon = new Toon(createPrams.Name, hashCode, createPrams.GbidClass, createPrams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 30, Client.Account.CurrentGameAccount);
             if (ToonManager.SaveToon(newToon))
             {
                 Logger.Trace("CreateHero() {0}", newToon);
@@ -225,17 +228,17 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("GetGameAccountSettings()");
 
-            //var gameAccount = GameAccountManager.GetAccountByPersistentID(settings.AccountId.IdLow);
-            //return gameAccount.Settings.ToByteString();
-            var pref = D3.Client.Preferences.CreateBuilder().SetVersion(102).Build(); //hack since client is expecting this atm -Egris
-            return pref.ToByteString();
+            var gameAccount = GameAccountManager.GetAccountByPersistentID(settings.AccountId.IdLow);
+            return gameAccount.Settings.ToByteString();
+            //var pref = D3.Client.Preferences.CreateBuilder().SetVersion(105).Build(); //hack since client is expecting this atm -Egris
+            //return pref.ToByteString();
         }
 
         private ByteString SetGameAccountSettings(D3.GameMessage.SetGameAccountSettings settings)
         {
             Logger.Trace("SetGameAccountSettings()");
 
-            this.Client.Account.CurrentGameAccount.Settings = settings;
+            this.Client.Account.CurrentGameAccount.Settings = settings.Settings;
             return ByteString.Empty;
         }
 
@@ -315,7 +318,6 @@ namespace Mooege.Core.MooNet.Services
             Logger.Trace("GetHeroList()");
 
             var HeroList = D3.Hero.HeroList.CreateBuilder();
-
             var gameAccount = GameAccountManager.GetAccountByPersistentID(heroIds.AccountId.IdLow);
             foreach (var toon in gameAccount.Toons.Values)
             {

@@ -363,7 +363,11 @@ namespace Mooege.Core.GS.Map
                 specification.SNOCombatMusic = World.Environment.snoCombatMusic;
                 specification.SNOAmbient = World.Environment.snoAmbient;
                 specification.SNOReverb = World.Environment.snoReverb;
-                specification.SNOWeather = World.Environment.snoWeather;
+                //specification.SNOWeather = World.Environment.snoWeather;
+                //World data is being read from olders mpq patch files and reading the wrong
+                //weather.  forcing new weather from town to all scenes for now
+                //since it's much more pleasing on the eyes than the blue haze
+                specification.SNOWeather = 0x00013220;
 
                 return new RevealSceneMessage
                 {

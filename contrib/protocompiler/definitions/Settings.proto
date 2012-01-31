@@ -11,6 +11,7 @@ message ActionBinding
     required uint32 key_modifier_flags_1 = 2 [default = 0];
     required int32 key_2 = 3 [default = -1];
     required uint32 key_modifier_flags_2 = 4 [default = 0];
+    optional uint32 input_button = 5;
 }
 
 message GameAccountSettings
@@ -18,7 +19,7 @@ message GameAccountSettings
     optional int32 use_last_hero = 1 [default = 0];
     optional int32 show_offline_toast = 2 [default = 0];
     optional string rmt_last_used_currency = 3;
-    optional int32 coop_last_create_game_privacy = 4 [default = 0];
+    optional int32 coop_last_create_game_privacy = 4 [default = 1];
 }
 
 message Preferences
@@ -37,7 +38,6 @@ message Preferences
         AUTO_EQUIP_ITEMS = 12;
         SHOW_TUTORIALS = 13;
         SHOW_BREAD_CRUMB = 14;
-        USE_CMD_INSTEAD_OF_CTRL = 16;
         DISABLE_OS_SHORTCUTS = 17;
         SHOW_HEAL_NUMBERS = 18;
         SHOW_PLAYER_NAMES = 19;
@@ -48,7 +48,6 @@ message Preferences
     optional uint32 flags = 2 [default = 0];
     optional uint32 items_on_ground_setting = 6 [default = 0];
     optional .D3.Client.ActionBinding action_binding_inventory = 10;
-    optional .D3.Client.ActionBinding action_binding_hero = 11;
     optional .D3.Client.ActionBinding action_binding_hireling = 12;
     optional .D3.Client.ActionBinding action_binding_skills = 13;
     optional .D3.Client.ActionBinding action_binding_quests = 14;
@@ -105,5 +104,7 @@ message Preferences
     optional .D3.Client.ActionBinding action_binding_systemscreenshot = 67;
     optional .D3.Client.ActionBinding action_binding_stoneofrecall = 68;
     optional .D3.Client.ActionBinding action_binding_bannerscreen = 69;
+    optional .D3.Client.ActionBinding action_binding_lmb = 70;
+    optional .D3.Client.ActionBinding action_binding_rmb = 71;
 }
 

@@ -137,6 +137,8 @@ namespace Mooege
             if(Net.WebServices.Config.Instance.Enabled)
                 StartWebServices();
 
+           Logger.Info("Type '!commands' for a list of available commands");
+
             while (true)
             {
                 var line = Console.ReadLine();

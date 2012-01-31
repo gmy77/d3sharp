@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Linq;
 using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
@@ -51,11 +52,12 @@ namespace Mooege.Core.MooNet.Services
                     .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
                         .SetCurrency("PTR")
                         .SetTickSize(1)
+                        .SetMinTotalPrice(100)
                         .SetMinUnitPrice(100)
                         .SetMaxUnitPrice(4294967295)
-                        .SetMaxTotalPrice(281474976710655)))
+                        .SetMaxTotalPrice(281474976710655).Build()))
                 .AddConfigs(bnet.protocol.exchange.SpecialistConfig.CreateBuilder()
-                    .SetSpecialist(1)
+                    .SetSpecialist(2)
                     .AddAuctionDurations(2880)
                     .AddAuctionStartDelays(0)
                     .SetAntiSnipingExtensionDelay(0)
@@ -69,8 +71,9 @@ namespace Mooege.Core.MooNet.Services
                         .SetCurrency("PTR")
                         .SetTickSize(1)
                         .SetMinUnitPrice(100)
+                        .SetMinTotalPrice(100)
                         .SetMaxUnitPrice(4294967295)
-                        .SetMaxTotalPrice(281474976710655)));
+                        .SetMaxTotalPrice(281474976710655).Build()));
 
             done(builder.Build());
         }
@@ -166,7 +169,33 @@ namespace Mooege.Core.MooNet.Services
 
         public override void GetPaymentMethods(IRpcController controller, bnet.protocol.exchange_object_provider.GetPaymentMethodsRequest request, Action<bnet.protocol.exchange_object_provider.GetPaymentMethodsResponse> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("GetPaymentMethods()");
+
+            var builder = bnet.protocol.exchange_object_provider.GetPaymentMethodsResponse.CreateBuilder();
+            var data = new byte[] { 0x6A, 0x04, 0x65, 0x6E, 0x55, 0x53, 0x7A, 0x0A, 0x42, 0x61, 0x74, 0x74, 0x6C, 0x65, 0x43, 0x6F, 0x69, 0x6E };
+            //j\004enUSz\nBattleCoin
+            //data is added to the end of extensionData
+            var extensionData = bnet.protocol.exchange.Extension.CreateBuilder()
+                .SetPartitionId(bnet.protocol.exchange.PartitionId.ParseFrom(this.Client.Account.BnetEntityId.ToByteArray()))
+                .SetOrderBookId(1)
+                .SetOrderId(3)
+                .SetFilledAmount(0)
+                .SetOrderStatus((int)this.Client.Account.BnetEntityId.Low)
+                .SetAuthorizedTime(0)
+                .Build();
+
+            var method = bnet.protocol.exchange_object_provider.PaymentMethod.CreateBuilder()
+                .SetAccount(bnet.protocol.exchange.BlobFrom.CreateBuilder()
+                    .SetSource(1161969996)
+                    .SetData(ByteString.CopyFrom(extensionData.ToByteArray().Concat(data).ToArray())))
+                .SetDescription("BattleCoin")
+                .SetAmount(100000)
+                .SetCashInOutMask(3)
+                .SetWalletId(0)
+                .Build();
+            builder.AddMethods(method);
+
+            done(builder.Build());
         }
 
         public override void ClaimBidItem(IRpcController controller, bnet.protocol.exchange.ClaimRequest request, Action<bnet.protocol.NoData> done)
@@ -235,6 +264,36 @@ namespace Mooege.Core.MooNet.Services
         }
 
         public override void GetOrderBookStatistics(IRpcController controller, bnet.protocol.exchange.GetOrderBookStatisticsRequest request, Action<bnet.protocol.exchange.GetOrderBookStatisticsResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ReportRefund(IRpcController controller, bnet.protocol.exchange_object_provider.ReportRefundRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void RefundBid(IRpcController controller, bnet.protocol.exchange.RefundRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void CreateCSTrade(IRpcController controller, bnet.protocol.exchange.CreateCSTradeRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void GetBidDetails(IRpcController controller, bnet.protocol.exchange.GetBidDetailsRequest request, Action<bnet.protocol.exchange.GetBidDetailsResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void GetOfferDetails(IRpcController controller, bnet.protocol.exchange.GetOfferDetailsRequest request, Action<bnet.protocol.exchange.GetOfferDetailsResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void GetSystemTime(IRpcController controller, bnet.protocol.NoData request, Action<bnet.protocol.exchange.GetSystemTimeResponse> done)
         {
             throw new NotImplementedException();
         }

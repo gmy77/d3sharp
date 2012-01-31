@@ -40,6 +40,9 @@ message HeroProfile
     optional uint32 attack = 8;
     optional uint32 precision = 9;
     optional uint32 defense = 10;
+    optional uint32 strength = 31;
+    optional uint32 dexterity = 32;
+    optional uint32 intelligence = 33;
     optional uint32 vitality = 11;
     optional uint32 armor = 12;
     optional float dps = 13;
@@ -84,8 +87,8 @@ message AccountProfile
     optional .D3.Profile.ClassInfo class_monk = 13;
     optional .D3.Profile.ClassInfo class_witchdoctor = 14;
     optional .D3.Profile.ClassInfo class_wizard = 15;
-    optional uint64 achievement_showcase_0 = 16;
-    optional uint64 achievement_showcase_1 = 17;
-    optional uint64 achievement_showcase_2 = 18;
+    optional uint64 deprecated_achievement_showcase_0 = 16;
+    optional uint64 deprecated_achievement_showcase_1 = 17;
+    optional uint64 deprecated_achievement_showcase_2 = 18;
 }
 

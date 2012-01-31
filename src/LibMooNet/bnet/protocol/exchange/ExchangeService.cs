@@ -72,6 +72,8 @@ namespace bnet.protocol.exchange {
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.ClaimRequest, global::bnet.protocol.exchange.ClaimRequest.Builder> internal__static_bnet_protocol_exchange_ClaimRequest__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_CancelRequest__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CancelRequest, global::bnet.protocol.exchange.CancelRequest.Builder> internal__static_bnet_protocol_exchange_CancelRequest__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_RefundRequest__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.RefundRequest, global::bnet.protocol.exchange.RefundRequest.Builder> internal__static_bnet_protocol_exchange_RefundRequest__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_GetConfigurationRequest__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetConfigurationRequest, global::bnet.protocol.exchange.GetConfigurationRequest.Builder> internal__static_bnet_protocol_exchange_GetConfigurationRequest__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_GetConfigurationResponse__Descriptor;
@@ -100,6 +102,18 @@ namespace bnet.protocol.exchange {
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetOrderBookStatisticsRequest, global::bnet.protocol.exchange.GetOrderBookStatisticsRequest.Builder> internal__static_bnet_protocol_exchange_GetOrderBookStatisticsRequest__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_GetOrderBookStatisticsResponse__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetOrderBookStatisticsResponse, global::bnet.protocol.exchange.GetOrderBookStatisticsResponse.Builder> internal__static_bnet_protocol_exchange_GetOrderBookStatisticsResponse__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_GetBidDetailsRequest__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetBidDetailsRequest, global::bnet.protocol.exchange.GetBidDetailsRequest.Builder> internal__static_bnet_protocol_exchange_GetBidDetailsRequest__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_GetBidDetailsResponse__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetBidDetailsResponse, global::bnet.protocol.exchange.GetBidDetailsResponse.Builder> internal__static_bnet_protocol_exchange_GetBidDetailsResponse__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_GetOfferDetailsRequest__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetOfferDetailsRequest, global::bnet.protocol.exchange.GetOfferDetailsRequest.Builder> internal__static_bnet_protocol_exchange_GetOfferDetailsRequest__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_GetOfferDetailsResponse__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetOfferDetailsResponse, global::bnet.protocol.exchange.GetOfferDetailsResponse.Builder> internal__static_bnet_protocol_exchange_GetOfferDetailsResponse__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_GetSystemTimeResponse__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetSystemTimeResponse, global::bnet.protocol.exchange.GetSystemTimeResponse.Builder> internal__static_bnet_protocol_exchange_GetSystemTimeResponse__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_CreateCSTradeRequest__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CreateCSTradeRequest, global::bnet.protocol.exchange.CreateCSTradeRequest.Builder> internal__static_bnet_protocol_exchange_CreateCSTradeRequest__FieldAccessorTable;
       #endregion
       #region Descriptor
       public static pbd::FileDescriptor Descriptor {
@@ -191,150 +205,184 @@ namespace bnet.protocol.exchange {
             "dGl0eUlkIpsBCg1DYW5jZWxSZXF1ZXN0EjkKDHBhcnRpdGlvbl9pZBgBIAIo" + 
             "CzIjLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQSEAoIb3Jk" + 
             "ZXJfaWQYAiACKAQSDgoGcmVhc29uGAMgASgNEi0KDGJuZXRfYWNjb3VudBgE" + 
-            "IAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQiKgoXR2V0Q29uZmlndXJh" + 
-            "dGlvblJlcXVlc3QSDwoHcHJvZ3JhbRgBIAIoByJVChhHZXRDb25maWd1cmF0" + 
-            "aW9uUmVzcG9uc2USOQoHY29uZmlncxgBIAMoCzIoLmJuZXQucHJvdG9jb2wu" + 
-            "ZXhjaGFuZ2UuU3BlY2lhbGlzdENvbmZpZyKSAQocR2V0T2ZmZXJGZWVFc3Rp" + 
-            "bWF0aW9uUmVxdWVzdBI5CgxwYXJ0aXRpb25faWQYASACKAsyIy5ibmV0LnBy" + 
-            "b3RvY29sLmV4Y2hhbmdlLlBhcnRpdGlvbklkEjcKBGRhdGEYAiACKAsyKS5i" + 
-            "bmV0LnByb3RvY29sLmV4Y2hhbmdlLkZlZUVzdGltYXRpb25EYXRhIpABChpH" + 
-            "ZXRCaWRGZWVFc3RpbWF0aW9uUmVxdWVzdBI5CgxwYXJ0aXRpb25faWQYASAC" + 
-            "KAsyIy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBhcnRpdGlvbklkEjcKBGRh" + 
-            "dGEYAiACKAsyKS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkZlZUVzdGltYXRp" + 
-            "b25EYXRhImYKGEdldEZlZUVzdGltYXRpb25SZXNwb25zZRISCgpmZWVfYW1v" + 
-            "dW50GAEgAigEEjYKC2ZlZV9kZXRhaWxzGAIgAygLMiEuYm5ldC5wcm90b2Nv" + 
-            "bC5leGNoYW5nZS5GZWVEZXRhaWwifQocT3JkZXJCb29rTm90aWZpY2F0aW9u" + 
-            "UmVxdWVzdBJECg1ub3RpZmljYXRpb25zGAEgAygLMi0uYm5ldC5wcm90b2Nv" + 
-            "bC5leGNoYW5nZS5PcmRlckJvb2tOb3RpZmljYXRpb24SFwoPYm9vdF9zdHJh" + 
-            "cF9sYXN0GAIgASgIIpUBChhPZmZlck5vdGlmaWNhdGlvblJlcXVlc3QSNAoF" + 
-            "b2ZmZXIYASACKAsyJS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLk9mZmVyRXh0" + 
-            "ZW5kZWQSDQoFZXZlbnQYAiACKA0SNAoKZXh0cmFfaW5mbxgDIAEoCzIgLmJu" + 
-            "ZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmxvYkZyb20ijwEKFkJpZE5vdGlmaWNh" + 
-            "dGlvblJlcXVlc3QSMAoDYmlkGAEgAigLMiMuYm5ldC5wcm90b2NvbC5leGNo" + 
-            "YW5nZS5CaWRFeHRlbmRlZBINCgVldmVudBgCIAIoDRI0CgpleHRyYV9pbmZv" + 
-            "GAMgASgLMiAuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5CbG9iRnJvbSLJAQoi" + 
-            "UXVlcnlPcmRlcnNCeUFjY291bnRGb3JJdGVtUmVxdWVzdBI6ChBhY2NvdW50" + 
-            "X2Zvcl9pdGVtGAEgAigLMiAuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5CbG9i" + 
-            "RnJvbRItCgxibmV0X2FjY291bnQYAiABKAsyFy5ibmV0LnByb3RvY29sLkVu" + 
-            "dGl0eUlkEjgKBmZpbHRlchgDIAIoCzIoLmJuZXQucHJvdG9jb2wuZXhjaGFu" + 
-            "Z2UuUXVlcnlPcmRlckZpbHRlciJxCiNRdWVyeU9yZGVyc0J5QWNjb3VudEZv" + 
-            "ckl0ZW1SZXNwb25zZRI1CgZvcmRlcnMYASADKAsyJS5ibmV0LnByb3RvY29s" + 
-            "LmV4Y2hhbmdlLk9yZGVyRXh0ZW5kZWQSEwoLdG90YWxfY291bnQYAiACKA0i" + 
-            "kgEKFEdldEZlZURldGFpbHNSZXF1ZXN0EjkKDHBhcnRpdGlvbl9pZBgBIAIo" + 
-            "CzIjLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQSEAoIb3Jk" + 
-            "ZXJfaWQYAiACKAQSLQoMYm5ldF9hY2NvdW50GAMgASgLMhcuYm5ldC5wcm90" + 
-            "b2NvbC5FbnRpdHlJZCKOAQoVR2V0RmVlRGV0YWlsc1Jlc3BvbnNlEjkKDmZl" + 
-            "ZV9kZXRhaWxzX2luGAEgAygLMiEuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5G" + 
-            "ZWVEZXRhaWwSOgoPZmVlX2RldGFpbHNfb3V0GAIgAygLMiEuYm5ldC5wcm90" + 
-            "b2NvbC5leGNoYW5nZS5GZWVEZXRhaWwiqAEKHUdldE9yZGVyQm9va1N0YXRp" + 
-            "c3RpY3NSZXF1ZXN0EjkKDHBhcnRpdGlvbl9pZBgBIAIoCzIjLmJuZXQucHJv" + 
-            "dG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQSEgoKb3JkZXJfdHlwZRgCIAIo" + 
-            "DRIQCghxdWFudGl0eRgDIAIoBBITCgtsYXN0X3RyYWRlcxgEIAIoDRIRCgls" + 
-            "YXN0X2RheXMYBSACKA0ilAEKHkdldE9yZGVyQm9va1N0YXRpc3RpY3NSZXNw" + 
-            "b25zZRI6Cg1wcmljZV9kZXRhaWxzGAEgAygLMiMuYm5ldC5wcm90b2NvbC5l" + 
-            "eGNoYW5nZS5QcmljZURldGFpbBIbChNsYXN0X3RyYWRlc19hdmVyYWdlGAIg" + 
-            "AigEEhkKEWxhc3RfZGF5c19hdmVyYWdlGAMgAigEMrggCg9FeGNoYW5nZVNl" + 
-            "cnZpY2USeAoPQ3JlYXRlT3JkZXJCb29rEi4uYm5ldC5wcm90b2NvbC5leGNo" + 
-            "YW5nZS5DcmVhdGVPcmRlckJvb2tSZXF1ZXN0Gi8uYm5ldC5wcm90b2NvbC5l" + 
-            "eGNoYW5nZS5DcmVhdGVPcmRlckJvb2tSZXNwb25zZSIEgLUYARKKAQoVUGxh" + 
-            "Y2VPZmZlck9uT3JkZXJCb29rEjQuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5Q" + 
-            "bGFjZU9mZmVyT25PcmRlckJvb2tSZXF1ZXN0GjUuYm5ldC5wcm90b2NvbC5l" + 
-            "eGNoYW5nZS5QbGFjZU9mZmVyT25PcmRlckJvb2tSZXNwb25zZSIEgLUYAhKu" + 
-            "AQohUGxhY2VPZmZlckNyZWF0ZU9yZGVyQm9va0lmTmVlZGVkEkAuYm5ldC5w" + 
-            "cm90b2NvbC5leGNoYW5nZS5QbGFjZU9mZmVyQ3JlYXRlT3JkZXJCb29rSWZO" + 
-            "ZWVkZWRSZXF1ZXN0GkEuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5QbGFjZU9m" + 
-            "ZmVyQ3JlYXRlT3JkZXJCb29rSWZOZWVkZWRSZXNwb25zZSIEgLUYAxKEAQoT" + 
-            "UGxhY2VCaWRPbk9yZGVyQm9vaxIyLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
-            "UGxhY2VCaWRPbk9yZGVyQm9va1JlcXVlc3QaMy5ibmV0LnByb3RvY29sLmV4" + 
-            "Y2hhbmdlLlBsYWNlQmlkT25PcmRlckJvb2tSZXNwb25zZSIEgLUYBBKoAQof" + 
-            "UGxhY2VCaWRDcmVhdGVPcmRlckJvb2tJZk5lZWRlZBI+LmJuZXQucHJvdG9j" + 
-            "b2wuZXhjaGFuZ2UuUGxhY2VCaWRDcmVhdGVPcmRlckJvb2tJZk5lZWRlZFJl" + 
-            "cXVlc3QaPy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBsYWNlQmlkQ3JlYXRl" + 
-            "T3JkZXJCb29rSWZOZWVkZWRSZXNwb25zZSIEgLUYBRKNAQoWUXVlcnlPZmZl" + 
-            "cnNCeU9yZGVyQm9vaxI1LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUXVlcnlP" + 
-            "ZmZlcnNCeU9yZGVyQm9va1JlcXVlc3QaNi5ibmV0LnByb3RvY29sLmV4Y2hh" + 
-            "bmdlLlF1ZXJ5T2ZmZXJzQnlPcmRlckJvb2tSZXNwb25zZSIEgLUYBhKHAQoU" + 
-            "UXVlcnlCaWRzQnlPcmRlckJvb2sSMy5ibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
-            "LlF1ZXJ5Qmlkc0J5T3JkZXJCb29rUmVxdWVzdBo0LmJuZXQucHJvdG9jb2wu" + 
-            "ZXhjaGFuZ2UuUXVlcnlCaWRzQnlPcmRlckJvb2tSZXNwb25zZSIEgLUYBxKc" + 
-            "AQobUXVlcnlPZmZlcnNCeUFjY291bnRGb3JJdGVtEjouYm5ldC5wcm90b2Nv" + 
-            "bC5leGNoYW5nZS5RdWVyeU9mZmVyc0J5QWNjb3VudEZvckl0ZW1SZXF1ZXN0" + 
-            "GjsuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5RdWVyeU9mZmVyc0J5QWNjb3Vu" + 
-            "dEZvckl0ZW1SZXNwb25zZSIEgLUYCBKWAQoZUXVlcnlCaWRzQnlBY2NvdW50" + 
-            "Rm9ySXRlbRI4LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUXVlcnlCaWRzQnlB" + 
-            "Y2NvdW50Rm9ySXRlbVJlcXVlc3QaOS5ibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
-            "LlF1ZXJ5Qmlkc0J5QWNjb3VudEZvckl0ZW1SZXNwb25zZSIEgLUYCRKNAQoW" + 
-            "UXVlcnlPcmRlckJvb2tzU3VtbWFyeRI1LmJuZXQucHJvdG9jb2wuZXhjaGFu" + 
-            "Z2UuUXVlcnlPcmRlckJvb2tzU3VtbWFyeVJlcXVlc3QaNi5ibmV0LnByb3Rv" + 
-            "Y29sLmV4Y2hhbmdlLlF1ZXJ5T3JkZXJCb29rc1N1bW1hcnlSZXNwb25zZSIE" + 
-            "gLUYCxJuCg9SZXBvcnRBdXRob3JpemUSPi5ibmV0LnByb3RvY29sLmV4Y2hh" + 
-            "bmdlX29iamVjdF9wcm92aWRlci5SZXBvcnRBdXRob3JpemVSZXF1ZXN0GhUu" + 
-            "Ym5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GA0SaAoMUmVwb3J0U2V0dGxlEjsu" + 
-            "Ym5ldC5wcm90b2NvbC5leGNoYW5nZV9vYmplY3RfcHJvdmlkZXIuUmVwb3J0" + 
-            "U2V0dGxlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgOEmgK" + 
-            "DFJlcG9ydENhbmNlbBI7LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Vfb2JqZWN0" + 
-            "X3Byb3ZpZGVyLlJlcG9ydENhbmNlbFJlcXVlc3QaFS5ibmV0LnByb3RvY29s" + 
-            "Lk5vRGF0YSIEgLUYDxJ8Ch5TdWJzY3JpYmVPcmRlckJvb2tTdGF0dXNDaGFu" + 
-            "Z2USPS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlN1YnNjcmliZU9yZGVyQm9v" + 
-            "a1N0YXR1c0NoYW5nZVJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIE" + 
-            "gLUYEBKAAQogVW5zdWJzY3JpYmVPcmRlckJvb2tTdGF0dXNDaGFuZ2USPy5i" + 
-            "bmV0LnByb3RvY29sLmV4Y2hhbmdlLlVuc3Vic2NyaWJlT3JkZXJCb29rU3Rh" + 
-            "dHVzQ2hhbmdlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgR" + 
-            "EnQKGlN1YnNjcmliZU9yZGVyU3RhdHVzQ2hhbmdlEjkuYm5ldC5wcm90b2Nv" + 
-            "bC5leGNoYW5nZS5TdWJzY3JpYmVPcmRlclN0YXR1c0NoYW5nZVJlcXVlc3Qa" + 
-            "FS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYEhJ4ChxVbnN1YnNjcmliZU9y" + 
-            "ZGVyU3RhdHVzQ2hhbmdlEjsuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5VbnN1" + 
-            "YnNjcmliZU9yZGVyU3RhdHVzQ2hhbmdlUmVxdWVzdBoVLmJuZXQucHJvdG9j" + 
-            "b2wuTm9EYXRhIgSAtRgTEp4BChFHZXRQYXltZW50TWV0aG9kcxJALmJuZXQu" + 
-            "cHJvdG9jb2wuZXhjaGFuZ2Vfb2JqZWN0X3Byb3ZpZGVyLkdldFBheW1lbnRN" + 
-            "ZXRob2RzUmVxdWVzdBpBLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Vfb2JqZWN0" + 
-            "X3Byb3ZpZGVyLkdldFBheW1lbnRNZXRob2RzUmVzcG9uc2UiBIC1GBQSUQoM" + 
-            "Q2xhaW1CaWRJdGVtEiQuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5DbGFpbVJl" + 
-            "cXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYFRJSCg1DbGFpbUJp" + 
-            "ZE1vbmV5EiQuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5DbGFpbVJlcXVlc3Qa" + 
-            "FS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYFhJTCg5DbGFpbU9mZmVySXRl" + 
-            "bRIkLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQ2xhaW1SZXF1ZXN0GhUuYm5l" + 
-            "dC5wcm90b2NvbC5Ob0RhdGEiBIC1GBcSVAoPQ2xhaW1PZmZlck1vbmV5EiQu" + 
+            "IAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQiggEKDVJlZnVuZFJlcXVl" + 
+            "c3QSOQoMcGFydGl0aW9uX2lkGAEgAigLMiMuYm5ldC5wcm90b2NvbC5leGNo" + 
+            "YW5nZS5QYXJ0aXRpb25JZBIQCghvcmRlcl9pZBgCIAIoBBIQCghjc19ub3Rl" + 
+            "cxgDIAIoCRISCgpjc191c2VyX2lkGAQgAigEIioKF0dldENvbmZpZ3VyYXRp" + 
+            "b25SZXF1ZXN0Eg8KB3Byb2dyYW0YASACKAciVQoYR2V0Q29uZmlndXJhdGlv" + 
+            "blJlc3BvbnNlEjkKB2NvbmZpZ3MYASADKAsyKC5ibmV0LnByb3RvY29sLmV4" + 
+            "Y2hhbmdlLlNwZWNpYWxpc3RDb25maWcikgEKHEdldE9mZmVyRmVlRXN0aW1h" + 
+            "dGlvblJlcXVlc3QSOQoMcGFydGl0aW9uX2lkGAEgAigLMiMuYm5ldC5wcm90" + 
+            "b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25JZBI3CgRkYXRhGAIgAigLMikuYm5l" + 
+            "dC5wcm90b2NvbC5leGNoYW5nZS5GZWVFc3RpbWF0aW9uRGF0YSKQAQoaR2V0" + 
+            "QmlkRmVlRXN0aW1hdGlvblJlcXVlc3QSOQoMcGFydGl0aW9uX2lkGAEgAigL" + 
+            "MiMuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25JZBI3CgRkYXRh" + 
+            "GAIgAigLMikuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5GZWVFc3RpbWF0aW9u" + 
+            "RGF0YSJmChhHZXRGZWVFc3RpbWF0aW9uUmVzcG9uc2USEgoKZmVlX2Ftb3Vu" + 
+            "dBgBIAIoBBI2CgtmZWVfZGV0YWlscxgCIAMoCzIhLmJuZXQucHJvdG9jb2wu" + 
+            "ZXhjaGFuZ2UuRmVlRGV0YWlsIn0KHE9yZGVyQm9va05vdGlmaWNhdGlvblJl" + 
+            "cXVlc3QSRAoNbm90aWZpY2F0aW9ucxgBIAMoCzItLmJuZXQucHJvdG9jb2wu" + 
+            "ZXhjaGFuZ2UuT3JkZXJCb29rTm90aWZpY2F0aW9uEhcKD2Jvb3Rfc3RyYXBf" + 
+            "bGFzdBgCIAEoCCKVAQoYT2ZmZXJOb3RpZmljYXRpb25SZXF1ZXN0EjQKBW9m" + 
+            "ZmVyGAEgAigLMiUuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5PZmZlckV4dGVu" + 
+            "ZGVkEg0KBWV2ZW50GAIgAigNEjQKCmV4dHJhX2luZm8YAyABKAsyIC5ibmV0" + 
+            "LnByb3RvY29sLmV4Y2hhbmdlLkJsb2JGcm9tIo8BChZCaWROb3RpZmljYXRp" + 
+            "b25SZXF1ZXN0EjAKA2JpZBgBIAIoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFu" + 
+            "Z2UuQmlkRXh0ZW5kZWQSDQoFZXZlbnQYAiACKA0SNAoKZXh0cmFfaW5mbxgD" + 
+            "IAEoCzIgLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmxvYkZyb20iyQEKIlF1" + 
+            "ZXJ5T3JkZXJzQnlBY2NvdW50Rm9ySXRlbVJlcXVlc3QSOgoQYWNjb3VudF9m" + 
+            "b3JfaXRlbRgBIAIoCzIgLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmxvYkZy" + 
+            "b20SLQoMYm5ldF9hY2NvdW50GAIgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRp" + 
+            "dHlJZBI4CgZmaWx0ZXIYAyACKAsyKC5ibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
+            "LlF1ZXJ5T3JkZXJGaWx0ZXIicQojUXVlcnlPcmRlcnNCeUFjY291bnRGb3JJ" + 
+            "dGVtUmVzcG9uc2USNQoGb3JkZXJzGAEgAygLMiUuYm5ldC5wcm90b2NvbC5l" + 
+            "eGNoYW5nZS5PcmRlckV4dGVuZGVkEhMKC3RvdGFsX2NvdW50GAIgAigNIpIB" + 
+            "ChRHZXRGZWVEZXRhaWxzUmVxdWVzdBI5CgxwYXJ0aXRpb25faWQYASACKAsy" + 
+            "Iy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBhcnRpdGlvbklkEhAKCG9yZGVy" + 
+            "X2lkGAIgAigEEi0KDGJuZXRfYWNjb3VudBgDIAEoCzIXLmJuZXQucHJvdG9j" + 
+            "b2wuRW50aXR5SWQijgEKFUdldEZlZURldGFpbHNSZXNwb25zZRI5Cg5mZWVf" + 
+            "ZGV0YWlsc19pbhgBIAMoCzIhLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuRmVl" + 
+            "RGV0YWlsEjoKD2ZlZV9kZXRhaWxzX291dBgCIAMoCzIhLmJuZXQucHJvdG9j" + 
+            "b2wuZXhjaGFuZ2UuRmVlRGV0YWlsIqgBCh1HZXRPcmRlckJvb2tTdGF0aXN0" + 
+            "aWNzUmVxdWVzdBI5CgxwYXJ0aXRpb25faWQYASACKAsyIy5ibmV0LnByb3Rv" + 
+            "Y29sLmV4Y2hhbmdlLlBhcnRpdGlvbklkEhIKCm9yZGVyX3R5cGUYAiACKA0S" + 
+            "EAoIcXVhbnRpdHkYAyACKAQSEwoLbGFzdF90cmFkZXMYBCACKA0SEQoJbGFz" + 
+            "dF9kYXlzGAUgAigNIpQBCh5HZXRPcmRlckJvb2tTdGF0aXN0aWNzUmVzcG9u" + 
+            "c2USOgoNcHJpY2VfZGV0YWlscxgBIAMoCzIjLmJuZXQucHJvdG9jb2wuZXhj" + 
+            "aGFuZ2UuUHJpY2VEZXRhaWwSGwoTbGFzdF90cmFkZXNfYXZlcmFnZRgCIAIo" + 
+            "BBIZChFsYXN0X2RheXNfYXZlcmFnZRgDIAIoBCJjChRHZXRCaWREZXRhaWxz" + 
+            "UmVxdWVzdBIQCghvcmRlcl9pZBgBIAIoBBI5CgxwYXJ0aXRpb25faWQYAiAC" + 
+            "KAsyIy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBhcnRpdGlvbklkIksKFUdl" + 
+            "dEJpZERldGFpbHNSZXNwb25zZRIyCgNiaWQYASACKAsyJS5ibmV0LnByb3Rv" + 
+            "Y29sLmV4Y2hhbmdlLk9yZGVyRXh0ZW5kZWQiZQoWR2V0T2ZmZXJEZXRhaWxz" + 
+            "UmVxdWVzdBIQCghvcmRlcl9pZBgBIAIoBBI5CgxwYXJ0aXRpb25faWQYAiAC" + 
+            "KAsyIy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBhcnRpdGlvbklkIk8KF0dl" + 
+            "dE9mZmVyRGV0YWlsc1Jlc3BvbnNlEjQKBW9mZmVyGAEgAigLMiUuYm5ldC5w" + 
+            "cm90b2NvbC5leGNoYW5nZS5PcmRlckV4dGVuZGVkIiUKFUdldFN5c3RlbVRp" + 
+            "bWVSZXNwb25zZRIMCgR0aW1lGAEgAigEIpQDChRDcmVhdGVDU1RyYWRlUmVx" + 
+            "dWVzdBI5CgxwYXJ0aXRpb25faWQYASACKAsyIy5ibmV0LnByb3RvY29sLmV4" + 
+            "Y2hhbmdlLlBhcnRpdGlvbklkEjIKBm9iamVjdBgCIAIoCzIiLmJuZXQucHJv" + 
+            "dG9jb2wuZXhjaGFuZ2UuQmxvYk9mVHlwZRIPCgdwcm9ncmFtGAMgAigHEhUK" + 
+            "DWNvbXBhdGliaWxpdHkYBCACKA0SFQoNYWxsb3dlZF9yZWFsbRgFIAIoDRIO" + 
+            "CgZhbW91bnQYBiACKA0SLQoMYm5ldF9hY2NvdW50GAcgAigLMhcuYm5ldC5w" + 
+            "cm90b2NvbC5FbnRpdHlJZBItCgxnYW1lX2FjY291bnQYCCABKAsyFy5ibmV0" + 
+            "LnByb3RvY29sLkVudGl0eUlkEjoKEGFjY291bnRfZm9yX2l0ZW0YCSACKAsy" + 
+            "IC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkJsb2JGcm9tEhAKCGNzX25vdGVz" + 
+            "GAogAigJEhIKCmNzX3VzZXJfaWQYCyACKAQymiUKD0V4Y2hhbmdlU2Vydmlj" + 
+            "ZRJ4Cg9DcmVhdGVPcmRlckJvb2sSLi5ibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
+            "LkNyZWF0ZU9yZGVyQm9va1JlcXVlc3QaLy5ibmV0LnByb3RvY29sLmV4Y2hh" + 
+            "bmdlLkNyZWF0ZU9yZGVyQm9va1Jlc3BvbnNlIgSAtRgBEooBChVQbGFjZU9m" + 
+            "ZmVyT25PcmRlckJvb2sSNC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBsYWNl" + 
+            "T2ZmZXJPbk9yZGVyQm9va1JlcXVlc3QaNS5ibmV0LnByb3RvY29sLmV4Y2hh" + 
+            "bmdlLlBsYWNlT2ZmZXJPbk9yZGVyQm9va1Jlc3BvbnNlIgSAtRgCEq4BCiFQ" + 
+            "bGFjZU9mZmVyQ3JlYXRlT3JkZXJCb29rSWZOZWVkZWQSQC5ibmV0LnByb3Rv" + 
+            "Y29sLmV4Y2hhbmdlLlBsYWNlT2ZmZXJDcmVhdGVPcmRlckJvb2tJZk5lZWRl" + 
+            "ZFJlcXVlc3QaQS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBsYWNlT2ZmZXJD" + 
+            "cmVhdGVPcmRlckJvb2tJZk5lZWRlZFJlc3BvbnNlIgSAtRgDEoQBChNQbGFj" + 
+            "ZUJpZE9uT3JkZXJCb29rEjIuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5QbGFj" + 
+            "ZUJpZE9uT3JkZXJCb29rUmVxdWVzdBozLmJuZXQucHJvdG9jb2wuZXhjaGFu" + 
+            "Z2UuUGxhY2VCaWRPbk9yZGVyQm9va1Jlc3BvbnNlIgSAtRgEEqgBCh9QbGFj" + 
+            "ZUJpZENyZWF0ZU9yZGVyQm9va0lmTmVlZGVkEj4uYm5ldC5wcm90b2NvbC5l" + 
+            "eGNoYW5nZS5QbGFjZUJpZENyZWF0ZU9yZGVyQm9va0lmTmVlZGVkUmVxdWVz" + 
+            "dBo/LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGxhY2VCaWRDcmVhdGVPcmRl" + 
+            "ckJvb2tJZk5lZWRlZFJlc3BvbnNlIgSAtRgFEo0BChZRdWVyeU9mZmVyc0J5" + 
+            "T3JkZXJCb29rEjUuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5RdWVyeU9mZmVy" + 
+            "c0J5T3JkZXJCb29rUmVxdWVzdBo2LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
+            "UXVlcnlPZmZlcnNCeU9yZGVyQm9va1Jlc3BvbnNlIgSAtRgGEocBChRRdWVy" + 
+            "eUJpZHNCeU9yZGVyQm9vaxIzLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUXVl" + 
+            "cnlCaWRzQnlPcmRlckJvb2tSZXF1ZXN0GjQuYm5ldC5wcm90b2NvbC5leGNo" + 
+            "YW5nZS5RdWVyeUJpZHNCeU9yZGVyQm9va1Jlc3BvbnNlIgSAtRgHEpwBChtR" + 
+            "dWVyeU9mZmVyc0J5QWNjb3VudEZvckl0ZW0SOi5ibmV0LnByb3RvY29sLmV4" + 
+            "Y2hhbmdlLlF1ZXJ5T2ZmZXJzQnlBY2NvdW50Rm9ySXRlbVJlcXVlc3QaOy5i" + 
+            "bmV0LnByb3RvY29sLmV4Y2hhbmdlLlF1ZXJ5T2ZmZXJzQnlBY2NvdW50Rm9y" + 
+            "SXRlbVJlc3BvbnNlIgSAtRgIEpYBChlRdWVyeUJpZHNCeUFjY291bnRGb3JJ" + 
+            "dGVtEjguYm5ldC5wcm90b2NvbC5leGNoYW5nZS5RdWVyeUJpZHNCeUFjY291" + 
+            "bnRGb3JJdGVtUmVxdWVzdBo5LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUXVl" + 
+            "cnlCaWRzQnlBY2NvdW50Rm9ySXRlbVJlc3BvbnNlIgSAtRgJEo0BChZRdWVy" + 
+            "eU9yZGVyQm9va3NTdW1tYXJ5EjUuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5R" + 
+            "dWVyeU9yZGVyQm9va3NTdW1tYXJ5UmVxdWVzdBo2LmJuZXQucHJvdG9jb2wu" + 
+            "ZXhjaGFuZ2UuUXVlcnlPcmRlckJvb2tzU3VtbWFyeVJlc3BvbnNlIgSAtRgL" + 
+            "Em4KD1JlcG9ydEF1dGhvcml6ZRI+LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Vf" + 
+            "b2JqZWN0X3Byb3ZpZGVyLlJlcG9ydEF1dGhvcml6ZVJlcXVlc3QaFS5ibmV0" + 
+            "LnByb3RvY29sLk5vRGF0YSIEgLUYDRJoCgxSZXBvcnRTZXR0bGUSOy5ibmV0" + 
+            "LnByb3RvY29sLmV4Y2hhbmdlX29iamVjdF9wcm92aWRlci5SZXBvcnRTZXR0" + 
+            "bGVSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GA4SaAoMUmVw" + 
+            "b3J0Q2FuY2VsEjsuYm5ldC5wcm90b2NvbC5leGNoYW5nZV9vYmplY3RfcHJv" + 
+            "dmlkZXIuUmVwb3J0Q2FuY2VsUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9E" + 
+            "YXRhIgSAtRgPEnwKHlN1YnNjcmliZU9yZGVyQm9va1N0YXR1c0NoYW5nZRI9" + 
+            "LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuU3Vic2NyaWJlT3JkZXJCb29rU3Rh" + 
+            "dHVzQ2hhbmdlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgQ" + 
+            "EoABCiBVbnN1YnNjcmliZU9yZGVyQm9va1N0YXR1c0NoYW5nZRI/LmJuZXQu" + 
+            "cHJvdG9jb2wuZXhjaGFuZ2UuVW5zdWJzY3JpYmVPcmRlckJvb2tTdGF0dXND" + 
+            "aGFuZ2VSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GBESdAoa" + 
+            "U3Vic2NyaWJlT3JkZXJTdGF0dXNDaGFuZ2USOS5ibmV0LnByb3RvY29sLmV4" + 
+            "Y2hhbmdlLlN1YnNjcmliZU9yZGVyU3RhdHVzQ2hhbmdlUmVxdWVzdBoVLmJu" + 
+            "ZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgSEngKHFVuc3Vic2NyaWJlT3JkZXJT" + 
+            "dGF0dXNDaGFuZ2USOy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlVuc3Vic2Ny" + 
+            "aWJlT3JkZXJTdGF0dXNDaGFuZ2VSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5O" + 
+            "b0RhdGEiBIC1GBMSngEKEUdldFBheW1lbnRNZXRob2RzEkAuYm5ldC5wcm90" + 
+            "b2NvbC5leGNoYW5nZV9vYmplY3RfcHJvdmlkZXIuR2V0UGF5bWVudE1ldGhv" + 
+            "ZHNSZXF1ZXN0GkEuYm5ldC5wcm90b2NvbC5leGNoYW5nZV9vYmplY3RfcHJv" + 
+            "dmlkZXIuR2V0UGF5bWVudE1ldGhvZHNSZXNwb25zZSIEgLUYFBJRCgxDbGFp" + 
+            "bUJpZEl0ZW0SJC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkNsYWltUmVxdWVz" + 
+            "dBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgVElIKDUNsYWltQmlkTW9u" + 
+            "ZXkSJC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkNsYWltUmVxdWVzdBoVLmJu" + 
+            "ZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgWElMKDkNsYWltT2ZmZXJJdGVtEiQu" + 
             "Ym5ldC5wcm90b2NvbC5leGNoYW5nZS5DbGFpbVJlcXVlc3QaFS5ibmV0LnBy" + 
-            "b3RvY29sLk5vRGF0YSIEgLUYGBJPCglDYW5jZWxCaWQSJS5ibmV0LnByb3Rv" + 
-            "Y29sLmV4Y2hhbmdlLkNhbmNlbFJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5v" + 
-            "RGF0YSIEgLUYGRJRCgtDYW5jZWxPZmZlchIlLmJuZXQucHJvdG9jb2wuZXhj" + 
-            "aGFuZ2UuQ2FuY2VsUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSA" + 
-            "tRgaEnsKEEdldENvbmZpZ3VyYXRpb24SLy5ibmV0LnByb3RvY29sLmV4Y2hh" + 
-            "bmdlLkdldENvbmZpZ3VyYXRpb25SZXF1ZXN0GjAuYm5ldC5wcm90b2NvbC5l" + 
-            "eGNoYW5nZS5HZXRDb25maWd1cmF0aW9uUmVzcG9uc2UiBIC1GBsSgQEKE0dl" + 
-            "dEJpZEZlZUVzdGltYXRpb24SMi5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkdl" + 
-            "dEJpZEZlZUVzdGltYXRpb25SZXF1ZXN0GjAuYm5ldC5wcm90b2NvbC5leGNo" + 
-            "YW5nZS5HZXRGZWVFc3RpbWF0aW9uUmVzcG9uc2UiBIC1GBwShQEKFUdldE9m" + 
-            "ZmVyRmVlRXN0aW1hdGlvbhI0LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuR2V0" + 
-            "T2ZmZXJGZWVFc3RpbWF0aW9uUmVxdWVzdBowLmJuZXQucHJvdG9jb2wuZXhj" + 
-            "aGFuZ2UuR2V0RmVlRXN0aW1hdGlvblJlc3BvbnNlIgSAtRgdEpwBChtRdWVy" + 
-            "eU9yZGVyc0J5QWNjb3VudEZvckl0ZW0SOi5ibmV0LnByb3RvY29sLmV4Y2hh" + 
-            "bmdlLlF1ZXJ5T3JkZXJzQnlBY2NvdW50Rm9ySXRlbVJlcXVlc3QaOy5ibmV0" + 
-            "LnByb3RvY29sLmV4Y2hhbmdlLlF1ZXJ5T3JkZXJzQnlBY2NvdW50Rm9ySXRl" + 
-            "bVJlc3BvbnNlIgSAtRgeEnkKGlJlcG9ydEF1dGhvcml6ZVJpc2tWZXJkaWN0" + 
-            "Ej4uYm5ldC5wcm90b2NvbC5leGNoYW5nZV9yaXNrLlJlcG9ydEF1dGhvcml6" + 
-            "ZVJpc2tWZXJkaWN0UmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSA" + 
-            "tRgfEnMKF1JlcG9ydFNldHRsZVJpc2tWZXJkaWN0EjsuYm5ldC5wcm90b2Nv" + 
-            "bC5leGNoYW5nZV9yaXNrLlJlcG9ydFNldHRsZVJpc2tWZXJkaWN0UmVxdWVz" + 
-            "dBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRggEnEKFkRlbGF5U2V0dGxl" + 
-            "Umlza1ZlcmRpY3QSOi5ibmV0LnByb3RvY29sLmV4Y2hhbmdlX3Jpc2suRGVs" + 
-            "YXlTZXR0bGVSaXNrVmVyZGljdFJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5v" + 
-            "RGF0YSIEgLUYIRJyCg1HZXRGZWVEZXRhaWxzEiwuYm5ldC5wcm90b2NvbC5l" + 
-            "eGNoYW5nZS5HZXRGZWVEZXRhaWxzUmVxdWVzdBotLmJuZXQucHJvdG9jb2wu" + 
-            "ZXhjaGFuZ2UuR2V0RmVlRGV0YWlsc1Jlc3BvbnNlIgSAtRgiEo0BChZHZXRP" + 
-            "cmRlckJvb2tTdGF0aXN0aWNzEjUuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5H" + 
-            "ZXRPcmRlckJvb2tTdGF0aXN0aWNzUmVxdWVzdBo2LmJuZXQucHJvdG9jb2wu" + 
-            "ZXhjaGFuZ2UuR2V0T3JkZXJCb29rU3RhdGlzdGljc1Jlc3BvbnNlIgSAtRgj" + 
-            "MuECCg5FeGNoYW5nZU5vdGlmeRJ1ChtOb3RpZnlPcmRlckJvb2tTdGF0dXND" + 
-            "aGFuZ2USNC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLk9yZGVyQm9va05vdGlm" + 
-            "aWNhdGlvblJlcXVlc3QaGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSA" + 
-            "tRgBEm0KF05vdGlmeU9mZmVyU3RhdHVzQ2hhbmdlEjAuYm5ldC5wcm90b2Nv" + 
-            "bC5leGNoYW5nZS5PZmZlck5vdGlmaWNhdGlvblJlcXVlc3QaGi5ibmV0LnBy" + 
-            "b3RvY29sLk5PX1JFU1BPTlNFIgSAtRgCEmkKFU5vdGlmeUJpZFN0YXR1c0No" + 
-            "YW5nZRIuLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmlkTm90aWZpY2F0aW9u" + 
-            "UmVxdWVzdBoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GANCA4AB" + 
-            "AA==");
+            "b3RvY29sLk5vRGF0YSIEgLUYFxJUCg9DbGFpbU9mZmVyTW9uZXkSJC5ibmV0" + 
+            "LnByb3RvY29sLmV4Y2hhbmdlLkNsYWltUmVxdWVzdBoVLmJuZXQucHJvdG9j" + 
+            "b2wuTm9EYXRhIgSAtRgYEk8KCUNhbmNlbEJpZBIlLmJuZXQucHJvdG9jb2wu" + 
+            "ZXhjaGFuZ2UuQ2FuY2VsUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRh" + 
+            "IgSAtRgZElEKC0NhbmNlbE9mZmVyEiUuYm5ldC5wcm90b2NvbC5leGNoYW5n" + 
+            "ZS5DYW5jZWxSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GBoS" + 
+            "ewoQR2V0Q29uZmlndXJhdGlvbhIvLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
+            "R2V0Q29uZmlndXJhdGlvblJlcXVlc3QaMC5ibmV0LnByb3RvY29sLmV4Y2hh" + 
+            "bmdlLkdldENvbmZpZ3VyYXRpb25SZXNwb25zZSIEgLUYGxKBAQoTR2V0Qmlk" + 
+            "RmVlRXN0aW1hdGlvbhIyLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuR2V0Qmlk" + 
+            "RmVlRXN0aW1hdGlvblJlcXVlc3QaMC5ibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
+            "LkdldEZlZUVzdGltYXRpb25SZXNwb25zZSIEgLUYHBKFAQoVR2V0T2ZmZXJG" + 
+            "ZWVFc3RpbWF0aW9uEjQuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5HZXRPZmZl" + 
+            "ckZlZUVzdGltYXRpb25SZXF1ZXN0GjAuYm5ldC5wcm90b2NvbC5leGNoYW5n" + 
+            "ZS5HZXRGZWVFc3RpbWF0aW9uUmVzcG9uc2UiBIC1GB0SnAEKG1F1ZXJ5T3Jk" + 
+            "ZXJzQnlBY2NvdW50Rm9ySXRlbRI6LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
+            "UXVlcnlPcmRlcnNCeUFjY291bnRGb3JJdGVtUmVxdWVzdBo7LmJuZXQucHJv" + 
+            "dG9jb2wuZXhjaGFuZ2UuUXVlcnlPcmRlcnNCeUFjY291bnRGb3JJdGVtUmVz" + 
+            "cG9uc2UiBIC1GB4SeQoaUmVwb3J0QXV0aG9yaXplUmlza1ZlcmRpY3QSPi5i" + 
+            "bmV0LnByb3RvY29sLmV4Y2hhbmdlX3Jpc2suUmVwb3J0QXV0aG9yaXplUmlz" + 
+            "a1ZlcmRpY3RSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GB8S" + 
+            "cwoXUmVwb3J0U2V0dGxlUmlza1ZlcmRpY3QSOy5ibmV0LnByb3RvY29sLmV4" + 
+            "Y2hhbmdlX3Jpc2suUmVwb3J0U2V0dGxlUmlza1ZlcmRpY3RSZXF1ZXN0GhUu" + 
+            "Ym5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GCAScQoWRGVsYXlTZXR0bGVSaXNr" + 
+            "VmVyZGljdBI6LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Vfcmlzay5EZWxheVNl" + 
+            "dHRsZVJpc2tWZXJkaWN0UmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRh" + 
+            "IgSAtRghEnIKDUdldEZlZURldGFpbHMSLC5ibmV0LnByb3RvY29sLmV4Y2hh" + 
+            "bmdlLkdldEZlZURldGFpbHNSZXF1ZXN0Gi0uYm5ldC5wcm90b2NvbC5leGNo" + 
+            "YW5nZS5HZXRGZWVEZXRhaWxzUmVzcG9uc2UiBIC1GCISjQEKFkdldE9yZGVy" + 
+            "Qm9va1N0YXRpc3RpY3MSNS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkdldE9y" + 
+            "ZGVyQm9va1N0YXRpc3RpY3NSZXF1ZXN0GjYuYm5ldC5wcm90b2NvbC5leGNo" + 
+            "YW5nZS5HZXRPcmRlckJvb2tTdGF0aXN0aWNzUmVzcG9uc2UiBIC1GCMScgoN" + 
+            "R2V0QmlkRGV0YWlscxIsLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuR2V0Qmlk" + 
+            "RGV0YWlsc1JlcXVlc3QaLS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkdldEJp" + 
+            "ZERldGFpbHNSZXNwb25zZSIEgLUYJBJ4Cg9HZXRPZmZlckRldGFpbHMSLi5i" + 
+            "bmV0LnByb3RvY29sLmV4Y2hhbmdlLkdldE9mZmVyRGV0YWlsc1JlcXVlc3Qa" + 
+            "Ly5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkdldE9mZmVyRGV0YWlsc1Jlc3Bv" + 
+            "bnNlIgSAtRglElsKDUdldFN5c3RlbVRpbWUSFS5ibmV0LnByb3RvY29sLk5v" + 
+            "RGF0YRotLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuR2V0U3lzdGVtVGltZVJl" + 
+            "c3BvbnNlIgSAtRgmEloKDUNyZWF0ZUNTVHJhZGUSLC5ibmV0LnByb3RvY29s" + 
+            "LmV4Y2hhbmdlLkNyZWF0ZUNTVHJhZGVSZXF1ZXN0GhUuYm5ldC5wcm90b2Nv" + 
+            "bC5Ob0RhdGEiBIC1GCcSTwoJUmVmdW5kQmlkEiUuYm5ldC5wcm90b2NvbC5l" + 
+            "eGNoYW5nZS5SZWZ1bmRSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEi" + 
+            "BIC1GCgSaAoMUmVwb3J0UmVmdW5kEjsuYm5ldC5wcm90b2NvbC5leGNoYW5n" + 
+            "ZV9vYmplY3RfcHJvdmlkZXIuUmVwb3J0UmVmdW5kUmVxdWVzdBoVLmJuZXQu" + 
+            "cHJvdG9jb2wuTm9EYXRhIgSAtRgpMuECCg5FeGNoYW5nZU5vdGlmeRJ1ChtO" + 
+            "b3RpZnlPcmRlckJvb2tTdGF0dXNDaGFuZ2USNC5ibmV0LnByb3RvY29sLmV4" + 
+            "Y2hhbmdlLk9yZGVyQm9va05vdGlmaWNhdGlvblJlcXVlc3QaGi5ibmV0LnBy" + 
+            "b3RvY29sLk5PX1JFU1BPTlNFIgSAtRgBEm0KF05vdGlmeU9mZmVyU3RhdHVz" + 
+            "Q2hhbmdlEjAuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5PZmZlck5vdGlmaWNh" + 
+            "dGlvblJlcXVlc3QaGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgC" + 
+            "EmkKFU5vdGlmeUJpZFN0YXR1c0NoYW5nZRIuLmJuZXQucHJvdG9jb2wuZXhj" + 
+            "aGFuZ2UuQmlkTm90aWZpY2F0aW9uUmVxdWVzdBoaLmJuZXQucHJvdG9jb2wu" + 
+            "Tk9fUkVTUE9OU0UiBIC1GANCA4ABAA==");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_exchange_CreateOrderBookRequest__Descriptor = Descriptor.MessageTypes[0];
@@ -441,62 +489,90 @@ namespace bnet.protocol.exchange {
           internal__static_bnet_protocol_exchange_CancelRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CancelRequest, global::bnet.protocol.exchange.CancelRequest.Builder>(internal__static_bnet_protocol_exchange_CancelRequest__Descriptor,
                   new string[] { "PartitionId", "OrderId", "Reason", "BnetAccount", });
-          internal__static_bnet_protocol_exchange_GetConfigurationRequest__Descriptor = Descriptor.MessageTypes[26];
+          internal__static_bnet_protocol_exchange_RefundRequest__Descriptor = Descriptor.MessageTypes[26];
+          internal__static_bnet_protocol_exchange_RefundRequest__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.RefundRequest, global::bnet.protocol.exchange.RefundRequest.Builder>(internal__static_bnet_protocol_exchange_RefundRequest__Descriptor,
+                  new string[] { "PartitionId", "OrderId", "CsNotes", "CsUserId", });
+          internal__static_bnet_protocol_exchange_GetConfigurationRequest__Descriptor = Descriptor.MessageTypes[27];
           internal__static_bnet_protocol_exchange_GetConfigurationRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetConfigurationRequest, global::bnet.protocol.exchange.GetConfigurationRequest.Builder>(internal__static_bnet_protocol_exchange_GetConfigurationRequest__Descriptor,
                   new string[] { "Program", });
-          internal__static_bnet_protocol_exchange_GetConfigurationResponse__Descriptor = Descriptor.MessageTypes[27];
+          internal__static_bnet_protocol_exchange_GetConfigurationResponse__Descriptor = Descriptor.MessageTypes[28];
           internal__static_bnet_protocol_exchange_GetConfigurationResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetConfigurationResponse, global::bnet.protocol.exchange.GetConfigurationResponse.Builder>(internal__static_bnet_protocol_exchange_GetConfigurationResponse__Descriptor,
                   new string[] { "Configs", });
-          internal__static_bnet_protocol_exchange_GetOfferFeeEstimationRequest__Descriptor = Descriptor.MessageTypes[28];
+          internal__static_bnet_protocol_exchange_GetOfferFeeEstimationRequest__Descriptor = Descriptor.MessageTypes[29];
           internal__static_bnet_protocol_exchange_GetOfferFeeEstimationRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetOfferFeeEstimationRequest, global::bnet.protocol.exchange.GetOfferFeeEstimationRequest.Builder>(internal__static_bnet_protocol_exchange_GetOfferFeeEstimationRequest__Descriptor,
                   new string[] { "PartitionId", "Data", });
-          internal__static_bnet_protocol_exchange_GetBidFeeEstimationRequest__Descriptor = Descriptor.MessageTypes[29];
+          internal__static_bnet_protocol_exchange_GetBidFeeEstimationRequest__Descriptor = Descriptor.MessageTypes[30];
           internal__static_bnet_protocol_exchange_GetBidFeeEstimationRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetBidFeeEstimationRequest, global::bnet.protocol.exchange.GetBidFeeEstimationRequest.Builder>(internal__static_bnet_protocol_exchange_GetBidFeeEstimationRequest__Descriptor,
                   new string[] { "PartitionId", "Data", });
-          internal__static_bnet_protocol_exchange_GetFeeEstimationResponse__Descriptor = Descriptor.MessageTypes[30];
+          internal__static_bnet_protocol_exchange_GetFeeEstimationResponse__Descriptor = Descriptor.MessageTypes[31];
           internal__static_bnet_protocol_exchange_GetFeeEstimationResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetFeeEstimationResponse, global::bnet.protocol.exchange.GetFeeEstimationResponse.Builder>(internal__static_bnet_protocol_exchange_GetFeeEstimationResponse__Descriptor,
                   new string[] { "FeeAmount", "FeeDetails", });
-          internal__static_bnet_protocol_exchange_OrderBookNotificationRequest__Descriptor = Descriptor.MessageTypes[31];
+          internal__static_bnet_protocol_exchange_OrderBookNotificationRequest__Descriptor = Descriptor.MessageTypes[32];
           internal__static_bnet_protocol_exchange_OrderBookNotificationRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.OrderBookNotificationRequest, global::bnet.protocol.exchange.OrderBookNotificationRequest.Builder>(internal__static_bnet_protocol_exchange_OrderBookNotificationRequest__Descriptor,
                   new string[] { "Notifications", "BootStrapLast", });
-          internal__static_bnet_protocol_exchange_OfferNotificationRequest__Descriptor = Descriptor.MessageTypes[32];
+          internal__static_bnet_protocol_exchange_OfferNotificationRequest__Descriptor = Descriptor.MessageTypes[33];
           internal__static_bnet_protocol_exchange_OfferNotificationRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.OfferNotificationRequest, global::bnet.protocol.exchange.OfferNotificationRequest.Builder>(internal__static_bnet_protocol_exchange_OfferNotificationRequest__Descriptor,
                   new string[] { "Offer", "Event", "ExtraInfo", });
-          internal__static_bnet_protocol_exchange_BidNotificationRequest__Descriptor = Descriptor.MessageTypes[33];
+          internal__static_bnet_protocol_exchange_BidNotificationRequest__Descriptor = Descriptor.MessageTypes[34];
           internal__static_bnet_protocol_exchange_BidNotificationRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BidNotificationRequest, global::bnet.protocol.exchange.BidNotificationRequest.Builder>(internal__static_bnet_protocol_exchange_BidNotificationRequest__Descriptor,
                   new string[] { "Bid", "Event", "ExtraInfo", });
-          internal__static_bnet_protocol_exchange_QueryOrdersByAccountForItemRequest__Descriptor = Descriptor.MessageTypes[34];
+          internal__static_bnet_protocol_exchange_QueryOrdersByAccountForItemRequest__Descriptor = Descriptor.MessageTypes[35];
           internal__static_bnet_protocol_exchange_QueryOrdersByAccountForItemRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.QueryOrdersByAccountForItemRequest, global::bnet.protocol.exchange.QueryOrdersByAccountForItemRequest.Builder>(internal__static_bnet_protocol_exchange_QueryOrdersByAccountForItemRequest__Descriptor,
                   new string[] { "AccountForItem", "BnetAccount", "Filter", });
-          internal__static_bnet_protocol_exchange_QueryOrdersByAccountForItemResponse__Descriptor = Descriptor.MessageTypes[35];
+          internal__static_bnet_protocol_exchange_QueryOrdersByAccountForItemResponse__Descriptor = Descriptor.MessageTypes[36];
           internal__static_bnet_protocol_exchange_QueryOrdersByAccountForItemResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.QueryOrdersByAccountForItemResponse, global::bnet.protocol.exchange.QueryOrdersByAccountForItemResponse.Builder>(internal__static_bnet_protocol_exchange_QueryOrdersByAccountForItemResponse__Descriptor,
                   new string[] { "Orders", "TotalCount", });
-          internal__static_bnet_protocol_exchange_GetFeeDetailsRequest__Descriptor = Descriptor.MessageTypes[36];
+          internal__static_bnet_protocol_exchange_GetFeeDetailsRequest__Descriptor = Descriptor.MessageTypes[37];
           internal__static_bnet_protocol_exchange_GetFeeDetailsRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetFeeDetailsRequest, global::bnet.protocol.exchange.GetFeeDetailsRequest.Builder>(internal__static_bnet_protocol_exchange_GetFeeDetailsRequest__Descriptor,
                   new string[] { "PartitionId", "OrderId", "BnetAccount", });
-          internal__static_bnet_protocol_exchange_GetFeeDetailsResponse__Descriptor = Descriptor.MessageTypes[37];
+          internal__static_bnet_protocol_exchange_GetFeeDetailsResponse__Descriptor = Descriptor.MessageTypes[38];
           internal__static_bnet_protocol_exchange_GetFeeDetailsResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetFeeDetailsResponse, global::bnet.protocol.exchange.GetFeeDetailsResponse.Builder>(internal__static_bnet_protocol_exchange_GetFeeDetailsResponse__Descriptor,
                   new string[] { "FeeDetailsIn", "FeeDetailsOut", });
-          internal__static_bnet_protocol_exchange_GetOrderBookStatisticsRequest__Descriptor = Descriptor.MessageTypes[38];
+          internal__static_bnet_protocol_exchange_GetOrderBookStatisticsRequest__Descriptor = Descriptor.MessageTypes[39];
           internal__static_bnet_protocol_exchange_GetOrderBookStatisticsRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetOrderBookStatisticsRequest, global::bnet.protocol.exchange.GetOrderBookStatisticsRequest.Builder>(internal__static_bnet_protocol_exchange_GetOrderBookStatisticsRequest__Descriptor,
                   new string[] { "PartitionId", "OrderType", "Quantity", "LastTrades", "LastDays", });
-          internal__static_bnet_protocol_exchange_GetOrderBookStatisticsResponse__Descriptor = Descriptor.MessageTypes[39];
+          internal__static_bnet_protocol_exchange_GetOrderBookStatisticsResponse__Descriptor = Descriptor.MessageTypes[40];
           internal__static_bnet_protocol_exchange_GetOrderBookStatisticsResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetOrderBookStatisticsResponse, global::bnet.protocol.exchange.GetOrderBookStatisticsResponse.Builder>(internal__static_bnet_protocol_exchange_GetOrderBookStatisticsResponse__Descriptor,
                   new string[] { "PriceDetails", "LastTradesAverage", "LastDaysAverage", });
+          internal__static_bnet_protocol_exchange_GetBidDetailsRequest__Descriptor = Descriptor.MessageTypes[41];
+          internal__static_bnet_protocol_exchange_GetBidDetailsRequest__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetBidDetailsRequest, global::bnet.protocol.exchange.GetBidDetailsRequest.Builder>(internal__static_bnet_protocol_exchange_GetBidDetailsRequest__Descriptor,
+                  new string[] { "OrderId", "PartitionId", });
+          internal__static_bnet_protocol_exchange_GetBidDetailsResponse__Descriptor = Descriptor.MessageTypes[42];
+          internal__static_bnet_protocol_exchange_GetBidDetailsResponse__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetBidDetailsResponse, global::bnet.protocol.exchange.GetBidDetailsResponse.Builder>(internal__static_bnet_protocol_exchange_GetBidDetailsResponse__Descriptor,
+                  new string[] { "Bid", });
+          internal__static_bnet_protocol_exchange_GetOfferDetailsRequest__Descriptor = Descriptor.MessageTypes[43];
+          internal__static_bnet_protocol_exchange_GetOfferDetailsRequest__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetOfferDetailsRequest, global::bnet.protocol.exchange.GetOfferDetailsRequest.Builder>(internal__static_bnet_protocol_exchange_GetOfferDetailsRequest__Descriptor,
+                  new string[] { "OrderId", "PartitionId", });
+          internal__static_bnet_protocol_exchange_GetOfferDetailsResponse__Descriptor = Descriptor.MessageTypes[44];
+          internal__static_bnet_protocol_exchange_GetOfferDetailsResponse__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetOfferDetailsResponse, global::bnet.protocol.exchange.GetOfferDetailsResponse.Builder>(internal__static_bnet_protocol_exchange_GetOfferDetailsResponse__Descriptor,
+                  new string[] { "Offer", });
+          internal__static_bnet_protocol_exchange_GetSystemTimeResponse__Descriptor = Descriptor.MessageTypes[45];
+          internal__static_bnet_protocol_exchange_GetSystemTimeResponse__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetSystemTimeResponse, global::bnet.protocol.exchange.GetSystemTimeResponse.Builder>(internal__static_bnet_protocol_exchange_GetSystemTimeResponse__Descriptor,
+                  new string[] { "Time", });
+          internal__static_bnet_protocol_exchange_CreateCSTradeRequest__Descriptor = Descriptor.MessageTypes[46];
+          internal__static_bnet_protocol_exchange_CreateCSTradeRequest__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CreateCSTradeRequest, global::bnet.protocol.exchange.CreateCSTradeRequest.Builder>(internal__static_bnet_protocol_exchange_CreateCSTradeRequest__Descriptor,
+                  new string[] { "PartitionId", "Object", "Program", "Compatibility", "AllowedRealm", "Amount", "BnetAccount", "GameAccount", "AccountForItem", "CsNotes", "CsUserId", });
           pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
           RegisterAllExtensions(registry);
           global::bnet.protocol.Rpc.RegisterAllExtensions(registry);
@@ -10291,6 +10367,440 @@ namespace bnet.protocol.exchange {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class RefundRequest : pb::GeneratedMessage<RefundRequest, RefundRequest.Builder> {
+    private RefundRequest() { }
+    private static readonly RefundRequest defaultInstance = new RefundRequest().MakeReadOnly();
+    private static readonly string[] _refundRequestFieldNames = new string[] { "cs_notes", "cs_user_id", "order_id", "partition_id" };
+    private static readonly uint[] _refundRequestFieldTags = new uint[] { 26, 32, 16, 10 };
+    public static RefundRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override RefundRequest DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override RefundRequest ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_RefundRequest__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<RefundRequest, RefundRequest.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_RefundRequest__FieldAccessorTable; }
+    }
+    
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
+    }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    }
+    
+    public const int OrderIdFieldNumber = 2;
+    private bool hasOrderId;
+    private ulong orderId_;
+    public bool HasOrderId {
+      get { return hasOrderId; }
+    }
+    public ulong OrderId {
+      get { return orderId_; }
+    }
+    
+    public const int CsNotesFieldNumber = 3;
+    private bool hasCsNotes;
+    private string csNotes_ = "";
+    public bool HasCsNotes {
+      get { return hasCsNotes; }
+    }
+    public string CsNotes {
+      get { return csNotes_; }
+    }
+    
+    public const int CsUserIdFieldNumber = 4;
+    private bool hasCsUserId;
+    private ulong csUserId_;
+    public bool HasCsUserId {
+      get { return hasCsUserId; }
+    }
+    public ulong CsUserId {
+      get { return csUserId_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasPartitionId) return false;
+        if (!hasOrderId) return false;
+        if (!hasCsNotes) return false;
+        if (!hasCsUserId) return false;
+        if (!PartitionId.IsInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _refundRequestFieldNames;
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[3], PartitionId);
+      }
+      if (hasOrderId) {
+        output.WriteUInt64(2, field_names[2], OrderId);
+      }
+      if (hasCsNotes) {
+        output.WriteString(3, field_names[0], CsNotes);
+      }
+      if (hasCsUserId) {
+        output.WriteUInt64(4, field_names[1], CsUserId);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
+        }
+        if (hasOrderId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, OrderId);
+        }
+        if (hasCsNotes) {
+          size += pb::CodedOutputStream.ComputeStringSize(3, CsNotes);
+        }
+        if (hasCsUserId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(4, CsUserId);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static RefundRequest ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static RefundRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static RefundRequest ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static RefundRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static RefundRequest ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static RefundRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static RefundRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static RefundRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static RefundRequest ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static RefundRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private RefundRequest MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(RefundRequest prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<RefundRequest, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(RefundRequest cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private RefundRequest result;
+      
+      private RefundRequest PrepareBuilder() {
+        if (resultIsReadOnly) {
+          RefundRequest original = result;
+          result = new RefundRequest();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override RefundRequest MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.RefundRequest.Descriptor; }
+      }
+      
+      public override RefundRequest DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.RefundRequest.DefaultInstance; }
+      }
+      
+      public override RefundRequest BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is RefundRequest) {
+          return MergeFrom((RefundRequest) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(RefundRequest other) {
+        if (other == global::bnet.protocol.exchange.RefundRequest.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
+        }
+        if (other.HasOrderId) {
+          OrderId = other.OrderId;
+        }
+        if (other.HasCsNotes) {
+          CsNotes = other.CsNotes;
+        }
+        if (other.HasCsUserId) {
+          CsUserId = other.CsUserId;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_refundRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _refundRequestFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              PartitionId = subBuilder.BuildPartial();
+              break;
+            }
+            case 16: {
+              result.hasOrderId = input.ReadUInt64(ref result.orderId_);
+              break;
+            }
+            case 26: {
+              result.hasCsNotes = input.ReadString(ref result.csNotes_);
+              break;
+            }
+            case 32: {
+              result.hasCsUserId = input.ReadUInt64(ref result.csUserId_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
+      }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
+      }
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
+        return this;
+      }
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.partitionId_ = value;
+        }
+        result.hasPartitionId = true;
+        return this;
+      }
+      public Builder ClearPartitionId() {
+        PrepareBuilder();
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
+        return this;
+      }
+      
+      public bool HasOrderId {
+        get { return result.hasOrderId; }
+      }
+      public ulong OrderId {
+        get { return result.OrderId; }
+        set { SetOrderId(value); }
+      }
+      public Builder SetOrderId(ulong value) {
+        PrepareBuilder();
+        result.hasOrderId = true;
+        result.orderId_ = value;
+        return this;
+      }
+      public Builder ClearOrderId() {
+        PrepareBuilder();
+        result.hasOrderId = false;
+        result.orderId_ = 0UL;
+        return this;
+      }
+      
+      public bool HasCsNotes {
+        get { return result.hasCsNotes; }
+      }
+      public string CsNotes {
+        get { return result.CsNotes; }
+        set { SetCsNotes(value); }
+      }
+      public Builder SetCsNotes(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasCsNotes = true;
+        result.csNotes_ = value;
+        return this;
+      }
+      public Builder ClearCsNotes() {
+        PrepareBuilder();
+        result.hasCsNotes = false;
+        result.csNotes_ = "";
+        return this;
+      }
+      
+      public bool HasCsUserId {
+        get { return result.hasCsUserId; }
+      }
+      public ulong CsUserId {
+        get { return result.CsUserId; }
+        set { SetCsUserId(value); }
+      }
+      public Builder SetCsUserId(ulong value) {
+        PrepareBuilder();
+        result.hasCsUserId = true;
+        result.csUserId_ = value;
+        return this;
+      }
+      public Builder ClearCsUserId() {
+        PrepareBuilder();
+        result.hasCsUserId = false;
+        result.csUserId_ = 0UL;
+        return this;
+      }
+    }
+    static RefundRequest() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.Proto.ExchangeService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
   public sealed partial class GetConfigurationRequest : pb::GeneratedMessage<GetConfigurationRequest, GetConfigurationRequest.Builder> {
     private GetConfigurationRequest() { }
     private static readonly GetConfigurationRequest defaultInstance = new GetConfigurationRequest().MakeReadOnly();
@@ -15588,6 +16098,2420 @@ namespace bnet.protocol.exchange {
     }
   }
   
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class GetBidDetailsRequest : pb::GeneratedMessage<GetBidDetailsRequest, GetBidDetailsRequest.Builder> {
+    private GetBidDetailsRequest() { }
+    private static readonly GetBidDetailsRequest defaultInstance = new GetBidDetailsRequest().MakeReadOnly();
+    private static readonly string[] _getBidDetailsRequestFieldNames = new string[] { "order_id", "partition_id" };
+    private static readonly uint[] _getBidDetailsRequestFieldTags = new uint[] { 8, 18 };
+    public static GetBidDetailsRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override GetBidDetailsRequest DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override GetBidDetailsRequest ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_GetBidDetailsRequest__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<GetBidDetailsRequest, GetBidDetailsRequest.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_GetBidDetailsRequest__FieldAccessorTable; }
+    }
+    
+    public const int OrderIdFieldNumber = 1;
+    private bool hasOrderId;
+    private ulong orderId_;
+    public bool HasOrderId {
+      get { return hasOrderId; }
+    }
+    public ulong OrderId {
+      get { return orderId_; }
+    }
+    
+    public const int PartitionIdFieldNumber = 2;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
+    }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasOrderId) return false;
+        if (!hasPartitionId) return false;
+        if (!PartitionId.IsInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _getBidDetailsRequestFieldNames;
+      if (hasOrderId) {
+        output.WriteUInt64(1, field_names[0], OrderId);
+      }
+      if (hasPartitionId) {
+        output.WriteMessage(2, field_names[1], PartitionId);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasOrderId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(1, OrderId);
+        }
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, PartitionId);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static GetBidDetailsRequest ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GetBidDetailsRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GetBidDetailsRequest ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GetBidDetailsRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GetBidDetailsRequest ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GetBidDetailsRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static GetBidDetailsRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static GetBidDetailsRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static GetBidDetailsRequest ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GetBidDetailsRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private GetBidDetailsRequest MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(GetBidDetailsRequest prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<GetBidDetailsRequest, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(GetBidDetailsRequest cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private GetBidDetailsRequest result;
+      
+      private GetBidDetailsRequest PrepareBuilder() {
+        if (resultIsReadOnly) {
+          GetBidDetailsRequest original = result;
+          result = new GetBidDetailsRequest();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override GetBidDetailsRequest MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.GetBidDetailsRequest.Descriptor; }
+      }
+      
+      public override GetBidDetailsRequest DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.GetBidDetailsRequest.DefaultInstance; }
+      }
+      
+      public override GetBidDetailsRequest BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is GetBidDetailsRequest) {
+          return MergeFrom((GetBidDetailsRequest) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(GetBidDetailsRequest other) {
+        if (other == global::bnet.protocol.exchange.GetBidDetailsRequest.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasOrderId) {
+          OrderId = other.OrderId;
+        }
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_getBidDetailsRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _getBidDetailsRequestFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasOrderId = input.ReadUInt64(ref result.orderId_);
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              PartitionId = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasOrderId {
+        get { return result.hasOrderId; }
+      }
+      public ulong OrderId {
+        get { return result.OrderId; }
+        set { SetOrderId(value); }
+      }
+      public Builder SetOrderId(ulong value) {
+        PrepareBuilder();
+        result.hasOrderId = true;
+        result.orderId_ = value;
+        return this;
+      }
+      public Builder ClearOrderId() {
+        PrepareBuilder();
+        result.hasOrderId = false;
+        result.orderId_ = 0UL;
+        return this;
+      }
+      
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
+      }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
+      }
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
+        return this;
+      }
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.partitionId_ = value;
+        }
+        result.hasPartitionId = true;
+        return this;
+      }
+      public Builder ClearPartitionId() {
+        PrepareBuilder();
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
+        return this;
+      }
+    }
+    static GetBidDetailsRequest() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.Proto.ExchangeService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class GetBidDetailsResponse : pb::GeneratedMessage<GetBidDetailsResponse, GetBidDetailsResponse.Builder> {
+    private GetBidDetailsResponse() { }
+    private static readonly GetBidDetailsResponse defaultInstance = new GetBidDetailsResponse().MakeReadOnly();
+    private static readonly string[] _getBidDetailsResponseFieldNames = new string[] { "bid" };
+    private static readonly uint[] _getBidDetailsResponseFieldTags = new uint[] { 10 };
+    public static GetBidDetailsResponse DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override GetBidDetailsResponse DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override GetBidDetailsResponse ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_GetBidDetailsResponse__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<GetBidDetailsResponse, GetBidDetailsResponse.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_GetBidDetailsResponse__FieldAccessorTable; }
+    }
+    
+    public const int BidFieldNumber = 1;
+    private bool hasBid;
+    private global::bnet.protocol.exchange.OrderExtended bid_;
+    public bool HasBid {
+      get { return hasBid; }
+    }
+    public global::bnet.protocol.exchange.OrderExtended Bid {
+      get { return bid_ ?? global::bnet.protocol.exchange.OrderExtended.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasBid) return false;
+        if (!Bid.IsInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _getBidDetailsResponseFieldNames;
+      if (hasBid) {
+        output.WriteMessage(1, field_names[0], Bid);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasBid) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, Bid);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static GetBidDetailsResponse ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GetBidDetailsResponse ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GetBidDetailsResponse ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GetBidDetailsResponse ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GetBidDetailsResponse ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GetBidDetailsResponse ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static GetBidDetailsResponse ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static GetBidDetailsResponse ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static GetBidDetailsResponse ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GetBidDetailsResponse ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private GetBidDetailsResponse MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(GetBidDetailsResponse prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<GetBidDetailsResponse, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(GetBidDetailsResponse cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private GetBidDetailsResponse result;
+      
+      private GetBidDetailsResponse PrepareBuilder() {
+        if (resultIsReadOnly) {
+          GetBidDetailsResponse original = result;
+          result = new GetBidDetailsResponse();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override GetBidDetailsResponse MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.GetBidDetailsResponse.Descriptor; }
+      }
+      
+      public override GetBidDetailsResponse DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.GetBidDetailsResponse.DefaultInstance; }
+      }
+      
+      public override GetBidDetailsResponse BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is GetBidDetailsResponse) {
+          return MergeFrom((GetBidDetailsResponse) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(GetBidDetailsResponse other) {
+        if (other == global::bnet.protocol.exchange.GetBidDetailsResponse.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasBid) {
+          MergeBid(other.Bid);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_getBidDetailsResponseFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _getBidDetailsResponseFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::bnet.protocol.exchange.OrderExtended.Builder subBuilder = global::bnet.protocol.exchange.OrderExtended.CreateBuilder();
+              if (result.hasBid) {
+                subBuilder.MergeFrom(Bid);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              Bid = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasBid {
+       get { return result.hasBid; }
+      }
+      public global::bnet.protocol.exchange.OrderExtended Bid {
+        get { return result.Bid; }
+        set { SetBid(value); }
+      }
+      public Builder SetBid(global::bnet.protocol.exchange.OrderExtended value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasBid = true;
+        result.bid_ = value;
+        return this;
+      }
+      public Builder SetBid(global::bnet.protocol.exchange.OrderExtended.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasBid = true;
+        result.bid_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeBid(global::bnet.protocol.exchange.OrderExtended value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasBid &&
+            result.bid_ != global::bnet.protocol.exchange.OrderExtended.DefaultInstance) {
+            result.bid_ = global::bnet.protocol.exchange.OrderExtended.CreateBuilder(result.bid_).MergeFrom(value).BuildPartial();
+        } else {
+          result.bid_ = value;
+        }
+        result.hasBid = true;
+        return this;
+      }
+      public Builder ClearBid() {
+        PrepareBuilder();
+        result.hasBid = false;
+        result.bid_ = null;
+        return this;
+      }
+    }
+    static GetBidDetailsResponse() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.Proto.ExchangeService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class GetOfferDetailsRequest : pb::GeneratedMessage<GetOfferDetailsRequest, GetOfferDetailsRequest.Builder> {
+    private GetOfferDetailsRequest() { }
+    private static readonly GetOfferDetailsRequest defaultInstance = new GetOfferDetailsRequest().MakeReadOnly();
+    private static readonly string[] _getOfferDetailsRequestFieldNames = new string[] { "order_id", "partition_id" };
+    private static readonly uint[] _getOfferDetailsRequestFieldTags = new uint[] { 8, 18 };
+    public static GetOfferDetailsRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override GetOfferDetailsRequest DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override GetOfferDetailsRequest ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_GetOfferDetailsRequest__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<GetOfferDetailsRequest, GetOfferDetailsRequest.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_GetOfferDetailsRequest__FieldAccessorTable; }
+    }
+    
+    public const int OrderIdFieldNumber = 1;
+    private bool hasOrderId;
+    private ulong orderId_;
+    public bool HasOrderId {
+      get { return hasOrderId; }
+    }
+    public ulong OrderId {
+      get { return orderId_; }
+    }
+    
+    public const int PartitionIdFieldNumber = 2;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
+    }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasOrderId) return false;
+        if (!hasPartitionId) return false;
+        if (!PartitionId.IsInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _getOfferDetailsRequestFieldNames;
+      if (hasOrderId) {
+        output.WriteUInt64(1, field_names[0], OrderId);
+      }
+      if (hasPartitionId) {
+        output.WriteMessage(2, field_names[1], PartitionId);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasOrderId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(1, OrderId);
+        }
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, PartitionId);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static GetOfferDetailsRequest ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GetOfferDetailsRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GetOfferDetailsRequest ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GetOfferDetailsRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GetOfferDetailsRequest ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GetOfferDetailsRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static GetOfferDetailsRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static GetOfferDetailsRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static GetOfferDetailsRequest ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GetOfferDetailsRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private GetOfferDetailsRequest MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(GetOfferDetailsRequest prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<GetOfferDetailsRequest, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(GetOfferDetailsRequest cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private GetOfferDetailsRequest result;
+      
+      private GetOfferDetailsRequest PrepareBuilder() {
+        if (resultIsReadOnly) {
+          GetOfferDetailsRequest original = result;
+          result = new GetOfferDetailsRequest();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override GetOfferDetailsRequest MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.GetOfferDetailsRequest.Descriptor; }
+      }
+      
+      public override GetOfferDetailsRequest DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.GetOfferDetailsRequest.DefaultInstance; }
+      }
+      
+      public override GetOfferDetailsRequest BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is GetOfferDetailsRequest) {
+          return MergeFrom((GetOfferDetailsRequest) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(GetOfferDetailsRequest other) {
+        if (other == global::bnet.protocol.exchange.GetOfferDetailsRequest.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasOrderId) {
+          OrderId = other.OrderId;
+        }
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_getOfferDetailsRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _getOfferDetailsRequestFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasOrderId = input.ReadUInt64(ref result.orderId_);
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              PartitionId = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasOrderId {
+        get { return result.hasOrderId; }
+      }
+      public ulong OrderId {
+        get { return result.OrderId; }
+        set { SetOrderId(value); }
+      }
+      public Builder SetOrderId(ulong value) {
+        PrepareBuilder();
+        result.hasOrderId = true;
+        result.orderId_ = value;
+        return this;
+      }
+      public Builder ClearOrderId() {
+        PrepareBuilder();
+        result.hasOrderId = false;
+        result.orderId_ = 0UL;
+        return this;
+      }
+      
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
+      }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
+      }
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
+        return this;
+      }
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.partitionId_ = value;
+        }
+        result.hasPartitionId = true;
+        return this;
+      }
+      public Builder ClearPartitionId() {
+        PrepareBuilder();
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
+        return this;
+      }
+    }
+    static GetOfferDetailsRequest() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.Proto.ExchangeService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class GetOfferDetailsResponse : pb::GeneratedMessage<GetOfferDetailsResponse, GetOfferDetailsResponse.Builder> {
+    private GetOfferDetailsResponse() { }
+    private static readonly GetOfferDetailsResponse defaultInstance = new GetOfferDetailsResponse().MakeReadOnly();
+    private static readonly string[] _getOfferDetailsResponseFieldNames = new string[] { "offer" };
+    private static readonly uint[] _getOfferDetailsResponseFieldTags = new uint[] { 10 };
+    public static GetOfferDetailsResponse DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override GetOfferDetailsResponse DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override GetOfferDetailsResponse ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_GetOfferDetailsResponse__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<GetOfferDetailsResponse, GetOfferDetailsResponse.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_GetOfferDetailsResponse__FieldAccessorTable; }
+    }
+    
+    public const int OfferFieldNumber = 1;
+    private bool hasOffer;
+    private global::bnet.protocol.exchange.OrderExtended offer_;
+    public bool HasOffer {
+      get { return hasOffer; }
+    }
+    public global::bnet.protocol.exchange.OrderExtended Offer {
+      get { return offer_ ?? global::bnet.protocol.exchange.OrderExtended.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasOffer) return false;
+        if (!Offer.IsInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _getOfferDetailsResponseFieldNames;
+      if (hasOffer) {
+        output.WriteMessage(1, field_names[0], Offer);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasOffer) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, Offer);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static GetOfferDetailsResponse ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GetOfferDetailsResponse ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GetOfferDetailsResponse ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GetOfferDetailsResponse ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GetOfferDetailsResponse ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GetOfferDetailsResponse ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static GetOfferDetailsResponse ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static GetOfferDetailsResponse ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static GetOfferDetailsResponse ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GetOfferDetailsResponse ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private GetOfferDetailsResponse MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(GetOfferDetailsResponse prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<GetOfferDetailsResponse, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(GetOfferDetailsResponse cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private GetOfferDetailsResponse result;
+      
+      private GetOfferDetailsResponse PrepareBuilder() {
+        if (resultIsReadOnly) {
+          GetOfferDetailsResponse original = result;
+          result = new GetOfferDetailsResponse();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override GetOfferDetailsResponse MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.GetOfferDetailsResponse.Descriptor; }
+      }
+      
+      public override GetOfferDetailsResponse DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.GetOfferDetailsResponse.DefaultInstance; }
+      }
+      
+      public override GetOfferDetailsResponse BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is GetOfferDetailsResponse) {
+          return MergeFrom((GetOfferDetailsResponse) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(GetOfferDetailsResponse other) {
+        if (other == global::bnet.protocol.exchange.GetOfferDetailsResponse.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasOffer) {
+          MergeOffer(other.Offer);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_getOfferDetailsResponseFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _getOfferDetailsResponseFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::bnet.protocol.exchange.OrderExtended.Builder subBuilder = global::bnet.protocol.exchange.OrderExtended.CreateBuilder();
+              if (result.hasOffer) {
+                subBuilder.MergeFrom(Offer);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              Offer = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasOffer {
+       get { return result.hasOffer; }
+      }
+      public global::bnet.protocol.exchange.OrderExtended Offer {
+        get { return result.Offer; }
+        set { SetOffer(value); }
+      }
+      public Builder SetOffer(global::bnet.protocol.exchange.OrderExtended value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasOffer = true;
+        result.offer_ = value;
+        return this;
+      }
+      public Builder SetOffer(global::bnet.protocol.exchange.OrderExtended.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasOffer = true;
+        result.offer_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeOffer(global::bnet.protocol.exchange.OrderExtended value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasOffer &&
+            result.offer_ != global::bnet.protocol.exchange.OrderExtended.DefaultInstance) {
+            result.offer_ = global::bnet.protocol.exchange.OrderExtended.CreateBuilder(result.offer_).MergeFrom(value).BuildPartial();
+        } else {
+          result.offer_ = value;
+        }
+        result.hasOffer = true;
+        return this;
+      }
+      public Builder ClearOffer() {
+        PrepareBuilder();
+        result.hasOffer = false;
+        result.offer_ = null;
+        return this;
+      }
+    }
+    static GetOfferDetailsResponse() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.Proto.ExchangeService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class GetSystemTimeResponse : pb::GeneratedMessage<GetSystemTimeResponse, GetSystemTimeResponse.Builder> {
+    private GetSystemTimeResponse() { }
+    private static readonly GetSystemTimeResponse defaultInstance = new GetSystemTimeResponse().MakeReadOnly();
+    private static readonly string[] _getSystemTimeResponseFieldNames = new string[] { "time" };
+    private static readonly uint[] _getSystemTimeResponseFieldTags = new uint[] { 8 };
+    public static GetSystemTimeResponse DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override GetSystemTimeResponse DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override GetSystemTimeResponse ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_GetSystemTimeResponse__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<GetSystemTimeResponse, GetSystemTimeResponse.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_GetSystemTimeResponse__FieldAccessorTable; }
+    }
+    
+    public const int TimeFieldNumber = 1;
+    private bool hasTime;
+    private ulong time_;
+    public bool HasTime {
+      get { return hasTime; }
+    }
+    public ulong Time {
+      get { return time_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasTime) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _getSystemTimeResponseFieldNames;
+      if (hasTime) {
+        output.WriteUInt64(1, field_names[0], Time);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasTime) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(1, Time);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static GetSystemTimeResponse ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GetSystemTimeResponse ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GetSystemTimeResponse ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GetSystemTimeResponse ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GetSystemTimeResponse ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GetSystemTimeResponse ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static GetSystemTimeResponse ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static GetSystemTimeResponse ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static GetSystemTimeResponse ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GetSystemTimeResponse ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private GetSystemTimeResponse MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(GetSystemTimeResponse prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<GetSystemTimeResponse, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(GetSystemTimeResponse cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private GetSystemTimeResponse result;
+      
+      private GetSystemTimeResponse PrepareBuilder() {
+        if (resultIsReadOnly) {
+          GetSystemTimeResponse original = result;
+          result = new GetSystemTimeResponse();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override GetSystemTimeResponse MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.GetSystemTimeResponse.Descriptor; }
+      }
+      
+      public override GetSystemTimeResponse DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.GetSystemTimeResponse.DefaultInstance; }
+      }
+      
+      public override GetSystemTimeResponse BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is GetSystemTimeResponse) {
+          return MergeFrom((GetSystemTimeResponse) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(GetSystemTimeResponse other) {
+        if (other == global::bnet.protocol.exchange.GetSystemTimeResponse.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasTime) {
+          Time = other.Time;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_getSystemTimeResponseFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _getSystemTimeResponseFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasTime = input.ReadUInt64(ref result.time_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasTime {
+        get { return result.hasTime; }
+      }
+      public ulong Time {
+        get { return result.Time; }
+        set { SetTime(value); }
+      }
+      public Builder SetTime(ulong value) {
+        PrepareBuilder();
+        result.hasTime = true;
+        result.time_ = value;
+        return this;
+      }
+      public Builder ClearTime() {
+        PrepareBuilder();
+        result.hasTime = false;
+        result.time_ = 0UL;
+        return this;
+      }
+    }
+    static GetSystemTimeResponse() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.Proto.ExchangeService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class CreateCSTradeRequest : pb::GeneratedMessage<CreateCSTradeRequest, CreateCSTradeRequest.Builder> {
+    private CreateCSTradeRequest() { }
+    private static readonly CreateCSTradeRequest defaultInstance = new CreateCSTradeRequest().MakeReadOnly();
+    private static readonly string[] _createCSTradeRequestFieldNames = new string[] { "account_for_item", "allowed_realm", "amount", "bnet_account", "compatibility", "cs_notes", "cs_user_id", "game_account", "object", "partition_id", "program" };
+    private static readonly uint[] _createCSTradeRequestFieldTags = new uint[] { 74, 40, 48, 58, 32, 82, 88, 66, 18, 10, 29 };
+    public static CreateCSTradeRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override CreateCSTradeRequest DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override CreateCSTradeRequest ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_CreateCSTradeRequest__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<CreateCSTradeRequest, CreateCSTradeRequest.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_CreateCSTradeRequest__FieldAccessorTable; }
+    }
+    
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
+    }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    }
+    
+    public const int ObjectFieldNumber = 2;
+    private bool hasObject;
+    private global::bnet.protocol.exchange.BlobOfType object_;
+    public bool HasObject {
+      get { return hasObject; }
+    }
+    public global::bnet.protocol.exchange.BlobOfType Object {
+      get { return object_ ?? global::bnet.protocol.exchange.BlobOfType.DefaultInstance; }
+    }
+    
+    public const int ProgramFieldNumber = 3;
+    private bool hasProgram;
+    private uint program_;
+    public bool HasProgram {
+      get { return hasProgram; }
+    }
+    public uint Program {
+      get { return program_; }
+    }
+    
+    public const int CompatibilityFieldNumber = 4;
+    private bool hasCompatibility;
+    private uint compatibility_;
+    public bool HasCompatibility {
+      get { return hasCompatibility; }
+    }
+    public uint Compatibility {
+      get { return compatibility_; }
+    }
+    
+    public const int AllowedRealmFieldNumber = 5;
+    private bool hasAllowedRealm;
+    private uint allowedRealm_;
+    public bool HasAllowedRealm {
+      get { return hasAllowedRealm; }
+    }
+    public uint AllowedRealm {
+      get { return allowedRealm_; }
+    }
+    
+    public const int AmountFieldNumber = 6;
+    private bool hasAmount;
+    private uint amount_;
+    public bool HasAmount {
+      get { return hasAmount; }
+    }
+    public uint Amount {
+      get { return amount_; }
+    }
+    
+    public const int BnetAccountFieldNumber = 7;
+    private bool hasBnetAccount;
+    private global::bnet.protocol.EntityId bnetAccount_;
+    public bool HasBnetAccount {
+      get { return hasBnetAccount; }
+    }
+    public global::bnet.protocol.EntityId BnetAccount {
+      get { return bnetAccount_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int GameAccountFieldNumber = 8;
+    private bool hasGameAccount;
+    private global::bnet.protocol.EntityId gameAccount_;
+    public bool HasGameAccount {
+      get { return hasGameAccount; }
+    }
+    public global::bnet.protocol.EntityId GameAccount {
+      get { return gameAccount_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int AccountForItemFieldNumber = 9;
+    private bool hasAccountForItem;
+    private global::bnet.protocol.exchange.BlobFrom accountForItem_;
+    public bool HasAccountForItem {
+      get { return hasAccountForItem; }
+    }
+    public global::bnet.protocol.exchange.BlobFrom AccountForItem {
+      get { return accountForItem_ ?? global::bnet.protocol.exchange.BlobFrom.DefaultInstance; }
+    }
+    
+    public const int CsNotesFieldNumber = 10;
+    private bool hasCsNotes;
+    private string csNotes_ = "";
+    public bool HasCsNotes {
+      get { return hasCsNotes; }
+    }
+    public string CsNotes {
+      get { return csNotes_; }
+    }
+    
+    public const int CsUserIdFieldNumber = 11;
+    private bool hasCsUserId;
+    private ulong csUserId_;
+    public bool HasCsUserId {
+      get { return hasCsUserId; }
+    }
+    public ulong CsUserId {
+      get { return csUserId_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasPartitionId) return false;
+        if (!hasObject) return false;
+        if (!hasProgram) return false;
+        if (!hasCompatibility) return false;
+        if (!hasAllowedRealm) return false;
+        if (!hasAmount) return false;
+        if (!hasBnetAccount) return false;
+        if (!hasAccountForItem) return false;
+        if (!hasCsNotes) return false;
+        if (!hasCsUserId) return false;
+        if (!PartitionId.IsInitialized) return false;
+        if (!Object.IsInitialized) return false;
+        if (!BnetAccount.IsInitialized) return false;
+        if (HasGameAccount) {
+          if (!GameAccount.IsInitialized) return false;
+        }
+        if (!AccountForItem.IsInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _createCSTradeRequestFieldNames;
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[9], PartitionId);
+      }
+      if (hasObject) {
+        output.WriteMessage(2, field_names[8], Object);
+      }
+      if (hasProgram) {
+        output.WriteFixed32(3, field_names[10], Program);
+      }
+      if (hasCompatibility) {
+        output.WriteUInt32(4, field_names[4], Compatibility);
+      }
+      if (hasAllowedRealm) {
+        output.WriteUInt32(5, field_names[1], AllowedRealm);
+      }
+      if (hasAmount) {
+        output.WriteUInt32(6, field_names[2], Amount);
+      }
+      if (hasBnetAccount) {
+        output.WriteMessage(7, field_names[3], BnetAccount);
+      }
+      if (hasGameAccount) {
+        output.WriteMessage(8, field_names[7], GameAccount);
+      }
+      if (hasAccountForItem) {
+        output.WriteMessage(9, field_names[0], AccountForItem);
+      }
+      if (hasCsNotes) {
+        output.WriteString(10, field_names[5], CsNotes);
+      }
+      if (hasCsUserId) {
+        output.WriteUInt64(11, field_names[6], CsUserId);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
+        }
+        if (hasObject) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, Object);
+        }
+        if (hasProgram) {
+          size += pb::CodedOutputStream.ComputeFixed32Size(3, Program);
+        }
+        if (hasCompatibility) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(4, Compatibility);
+        }
+        if (hasAllowedRealm) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(5, AllowedRealm);
+        }
+        if (hasAmount) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(6, Amount);
+        }
+        if (hasBnetAccount) {
+          size += pb::CodedOutputStream.ComputeMessageSize(7, BnetAccount);
+        }
+        if (hasGameAccount) {
+          size += pb::CodedOutputStream.ComputeMessageSize(8, GameAccount);
+        }
+        if (hasAccountForItem) {
+          size += pb::CodedOutputStream.ComputeMessageSize(9, AccountForItem);
+        }
+        if (hasCsNotes) {
+          size += pb::CodedOutputStream.ComputeStringSize(10, CsNotes);
+        }
+        if (hasCsUserId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(11, CsUserId);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static CreateCSTradeRequest ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static CreateCSTradeRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static CreateCSTradeRequest ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static CreateCSTradeRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static CreateCSTradeRequest ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static CreateCSTradeRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static CreateCSTradeRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static CreateCSTradeRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static CreateCSTradeRequest ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static CreateCSTradeRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private CreateCSTradeRequest MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(CreateCSTradeRequest prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<CreateCSTradeRequest, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(CreateCSTradeRequest cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private CreateCSTradeRequest result;
+      
+      private CreateCSTradeRequest PrepareBuilder() {
+        if (resultIsReadOnly) {
+          CreateCSTradeRequest original = result;
+          result = new CreateCSTradeRequest();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override CreateCSTradeRequest MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.CreateCSTradeRequest.Descriptor; }
+      }
+      
+      public override CreateCSTradeRequest DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.CreateCSTradeRequest.DefaultInstance; }
+      }
+      
+      public override CreateCSTradeRequest BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is CreateCSTradeRequest) {
+          return MergeFrom((CreateCSTradeRequest) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(CreateCSTradeRequest other) {
+        if (other == global::bnet.protocol.exchange.CreateCSTradeRequest.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
+        }
+        if (other.HasObject) {
+          MergeObject(other.Object);
+        }
+        if (other.HasProgram) {
+          Program = other.Program;
+        }
+        if (other.HasCompatibility) {
+          Compatibility = other.Compatibility;
+        }
+        if (other.HasAllowedRealm) {
+          AllowedRealm = other.AllowedRealm;
+        }
+        if (other.HasAmount) {
+          Amount = other.Amount;
+        }
+        if (other.HasBnetAccount) {
+          MergeBnetAccount(other.BnetAccount);
+        }
+        if (other.HasGameAccount) {
+          MergeGameAccount(other.GameAccount);
+        }
+        if (other.HasAccountForItem) {
+          MergeAccountForItem(other.AccountForItem);
+        }
+        if (other.HasCsNotes) {
+          CsNotes = other.CsNotes;
+        }
+        if (other.HasCsUserId) {
+          CsUserId = other.CsUserId;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_createCSTradeRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _createCSTradeRequestFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              PartitionId = subBuilder.BuildPartial();
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.exchange.BlobOfType.Builder subBuilder = global::bnet.protocol.exchange.BlobOfType.CreateBuilder();
+              if (result.hasObject) {
+                subBuilder.MergeFrom(Object);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              Object = subBuilder.BuildPartial();
+              break;
+            }
+            case 29: {
+              result.hasProgram = input.ReadFixed32(ref result.program_);
+              break;
+            }
+            case 32: {
+              result.hasCompatibility = input.ReadUInt32(ref result.compatibility_);
+              break;
+            }
+            case 40: {
+              result.hasAllowedRealm = input.ReadUInt32(ref result.allowedRealm_);
+              break;
+            }
+            case 48: {
+              result.hasAmount = input.ReadUInt32(ref result.amount_);
+              break;
+            }
+            case 58: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasBnetAccount) {
+                subBuilder.MergeFrom(BnetAccount);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              BnetAccount = subBuilder.BuildPartial();
+              break;
+            }
+            case 66: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasGameAccount) {
+                subBuilder.MergeFrom(GameAccount);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              GameAccount = subBuilder.BuildPartial();
+              break;
+            }
+            case 74: {
+              global::bnet.protocol.exchange.BlobFrom.Builder subBuilder = global::bnet.protocol.exchange.BlobFrom.CreateBuilder();
+              if (result.hasAccountForItem) {
+                subBuilder.MergeFrom(AccountForItem);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              AccountForItem = subBuilder.BuildPartial();
+              break;
+            }
+            case 82: {
+              result.hasCsNotes = input.ReadString(ref result.csNotes_);
+              break;
+            }
+            case 88: {
+              result.hasCsUserId = input.ReadUInt64(ref result.csUserId_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
+      }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
+      }
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
+        return this;
+      }
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.partitionId_ = value;
+        }
+        result.hasPartitionId = true;
+        return this;
+      }
+      public Builder ClearPartitionId() {
+        PrepareBuilder();
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
+        return this;
+      }
+      
+      public bool HasObject {
+       get { return result.hasObject; }
+      }
+      public global::bnet.protocol.exchange.BlobOfType Object {
+        get { return result.Object; }
+        set { SetObject(value); }
+      }
+      public Builder SetObject(global::bnet.protocol.exchange.BlobOfType value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasObject = true;
+        result.object_ = value;
+        return this;
+      }
+      public Builder SetObject(global::bnet.protocol.exchange.BlobOfType.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasObject = true;
+        result.object_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeObject(global::bnet.protocol.exchange.BlobOfType value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasObject &&
+            result.object_ != global::bnet.protocol.exchange.BlobOfType.DefaultInstance) {
+            result.object_ = global::bnet.protocol.exchange.BlobOfType.CreateBuilder(result.object_).MergeFrom(value).BuildPartial();
+        } else {
+          result.object_ = value;
+        }
+        result.hasObject = true;
+        return this;
+      }
+      public Builder ClearObject() {
+        PrepareBuilder();
+        result.hasObject = false;
+        result.object_ = null;
+        return this;
+      }
+      
+      public bool HasProgram {
+        get { return result.hasProgram; }
+      }
+      public uint Program {
+        get { return result.Program; }
+        set { SetProgram(value); }
+      }
+      public Builder SetProgram(uint value) {
+        PrepareBuilder();
+        result.hasProgram = true;
+        result.program_ = value;
+        return this;
+      }
+      public Builder ClearProgram() {
+        PrepareBuilder();
+        result.hasProgram = false;
+        result.program_ = 0;
+        return this;
+      }
+      
+      public bool HasCompatibility {
+        get { return result.hasCompatibility; }
+      }
+      public uint Compatibility {
+        get { return result.Compatibility; }
+        set { SetCompatibility(value); }
+      }
+      public Builder SetCompatibility(uint value) {
+        PrepareBuilder();
+        result.hasCompatibility = true;
+        result.compatibility_ = value;
+        return this;
+      }
+      public Builder ClearCompatibility() {
+        PrepareBuilder();
+        result.hasCompatibility = false;
+        result.compatibility_ = 0;
+        return this;
+      }
+      
+      public bool HasAllowedRealm {
+        get { return result.hasAllowedRealm; }
+      }
+      public uint AllowedRealm {
+        get { return result.AllowedRealm; }
+        set { SetAllowedRealm(value); }
+      }
+      public Builder SetAllowedRealm(uint value) {
+        PrepareBuilder();
+        result.hasAllowedRealm = true;
+        result.allowedRealm_ = value;
+        return this;
+      }
+      public Builder ClearAllowedRealm() {
+        PrepareBuilder();
+        result.hasAllowedRealm = false;
+        result.allowedRealm_ = 0;
+        return this;
+      }
+      
+      public bool HasAmount {
+        get { return result.hasAmount; }
+      }
+      public uint Amount {
+        get { return result.Amount; }
+        set { SetAmount(value); }
+      }
+      public Builder SetAmount(uint value) {
+        PrepareBuilder();
+        result.hasAmount = true;
+        result.amount_ = value;
+        return this;
+      }
+      public Builder ClearAmount() {
+        PrepareBuilder();
+        result.hasAmount = false;
+        result.amount_ = 0;
+        return this;
+      }
+      
+      public bool HasBnetAccount {
+       get { return result.hasBnetAccount; }
+      }
+      public global::bnet.protocol.EntityId BnetAccount {
+        get { return result.BnetAccount; }
+        set { SetBnetAccount(value); }
+      }
+      public Builder SetBnetAccount(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasBnetAccount = true;
+        result.bnetAccount_ = value;
+        return this;
+      }
+      public Builder SetBnetAccount(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasBnetAccount = true;
+        result.bnetAccount_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeBnetAccount(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasBnetAccount &&
+            result.bnetAccount_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.bnetAccount_ = global::bnet.protocol.EntityId.CreateBuilder(result.bnetAccount_).MergeFrom(value).BuildPartial();
+        } else {
+          result.bnetAccount_ = value;
+        }
+        result.hasBnetAccount = true;
+        return this;
+      }
+      public Builder ClearBnetAccount() {
+        PrepareBuilder();
+        result.hasBnetAccount = false;
+        result.bnetAccount_ = null;
+        return this;
+      }
+      
+      public bool HasGameAccount {
+       get { return result.hasGameAccount; }
+      }
+      public global::bnet.protocol.EntityId GameAccount {
+        get { return result.GameAccount; }
+        set { SetGameAccount(value); }
+      }
+      public Builder SetGameAccount(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasGameAccount = true;
+        result.gameAccount_ = value;
+        return this;
+      }
+      public Builder SetGameAccount(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasGameAccount = true;
+        result.gameAccount_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeGameAccount(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasGameAccount &&
+            result.gameAccount_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.gameAccount_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccount_).MergeFrom(value).BuildPartial();
+        } else {
+          result.gameAccount_ = value;
+        }
+        result.hasGameAccount = true;
+        return this;
+      }
+      public Builder ClearGameAccount() {
+        PrepareBuilder();
+        result.hasGameAccount = false;
+        result.gameAccount_ = null;
+        return this;
+      }
+      
+      public bool HasAccountForItem {
+       get { return result.hasAccountForItem; }
+      }
+      public global::bnet.protocol.exchange.BlobFrom AccountForItem {
+        get { return result.AccountForItem; }
+        set { SetAccountForItem(value); }
+      }
+      public Builder SetAccountForItem(global::bnet.protocol.exchange.BlobFrom value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasAccountForItem = true;
+        result.accountForItem_ = value;
+        return this;
+      }
+      public Builder SetAccountForItem(global::bnet.protocol.exchange.BlobFrom.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasAccountForItem = true;
+        result.accountForItem_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeAccountForItem(global::bnet.protocol.exchange.BlobFrom value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasAccountForItem &&
+            result.accountForItem_ != global::bnet.protocol.exchange.BlobFrom.DefaultInstance) {
+            result.accountForItem_ = global::bnet.protocol.exchange.BlobFrom.CreateBuilder(result.accountForItem_).MergeFrom(value).BuildPartial();
+        } else {
+          result.accountForItem_ = value;
+        }
+        result.hasAccountForItem = true;
+        return this;
+      }
+      public Builder ClearAccountForItem() {
+        PrepareBuilder();
+        result.hasAccountForItem = false;
+        result.accountForItem_ = null;
+        return this;
+      }
+      
+      public bool HasCsNotes {
+        get { return result.hasCsNotes; }
+      }
+      public string CsNotes {
+        get { return result.CsNotes; }
+        set { SetCsNotes(value); }
+      }
+      public Builder SetCsNotes(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasCsNotes = true;
+        result.csNotes_ = value;
+        return this;
+      }
+      public Builder ClearCsNotes() {
+        PrepareBuilder();
+        result.hasCsNotes = false;
+        result.csNotes_ = "";
+        return this;
+      }
+      
+      public bool HasCsUserId {
+        get { return result.hasCsUserId; }
+      }
+      public ulong CsUserId {
+        get { return result.CsUserId; }
+        set { SetCsUserId(value); }
+      }
+      public Builder SetCsUserId(ulong value) {
+        PrepareBuilder();
+        result.hasCsUserId = true;
+        result.csUserId_ = value;
+        return this;
+      }
+      public Builder ClearCsUserId() {
+        PrepareBuilder();
+        result.hasCsUserId = false;
+        result.csUserId_ = 0UL;
+        return this;
+      }
+    }
+    static CreateCSTradeRequest() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.Proto.ExchangeService.Descriptor, null);
+    }
+  }
+  
   #endregion
   
   #region Services
@@ -15727,6 +18651,30 @@ namespace bnet.protocol.exchange {
         pb::IRpcController controller,
         global::bnet.protocol.exchange.GetOrderBookStatisticsRequest request,
         global::System.Action<global::bnet.protocol.exchange.GetOrderBookStatisticsResponse> done);
+    public abstract void GetBidDetails(
+        pb::IRpcController controller,
+        global::bnet.protocol.exchange.GetBidDetailsRequest request,
+        global::System.Action<global::bnet.protocol.exchange.GetBidDetailsResponse> done);
+    public abstract void GetOfferDetails(
+        pb::IRpcController controller,
+        global::bnet.protocol.exchange.GetOfferDetailsRequest request,
+        global::System.Action<global::bnet.protocol.exchange.GetOfferDetailsResponse> done);
+    public abstract void GetSystemTime(
+        pb::IRpcController controller,
+        global::bnet.protocol.NoData request,
+        global::System.Action<global::bnet.protocol.exchange.GetSystemTimeResponse> done);
+    public abstract void CreateCSTrade(
+        pb::IRpcController controller,
+        global::bnet.protocol.exchange.CreateCSTradeRequest request,
+        global::System.Action<global::bnet.protocol.NoData> done);
+    public abstract void RefundBid(
+        pb::IRpcController controller,
+        global::bnet.protocol.exchange.RefundRequest request,
+        global::System.Action<global::bnet.protocol.NoData> done);
+    public abstract void ReportRefund(
+        pb::IRpcController controller,
+        global::bnet.protocol.exchange_object_provider.ReportRefundRequest request,
+        global::System.Action<global::bnet.protocol.NoData> done);
     
     public static pbd::ServiceDescriptor Descriptor {
       get { return Proto.ExchangeService.Descriptor.Services[0]; }
@@ -15910,6 +18858,36 @@ namespace bnet.protocol.exchange {
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.exchange.GetOrderBookStatisticsResponse>(
               done));
           return;
+        case 33:
+          this.GetBidDetails(controller, (global::bnet.protocol.exchange.GetBidDetailsRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.exchange.GetBidDetailsResponse>(
+              done));
+          return;
+        case 34:
+          this.GetOfferDetails(controller, (global::bnet.protocol.exchange.GetOfferDetailsRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.exchange.GetOfferDetailsResponse>(
+              done));
+          return;
+        case 35:
+          this.GetSystemTime(controller, (global::bnet.protocol.NoData) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.exchange.GetSystemTimeResponse>(
+              done));
+          return;
+        case 36:
+          this.CreateCSTrade(controller, (global::bnet.protocol.exchange.CreateCSTradeRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
+              done));
+          return;
+        case 37:
+          this.RefundBid(controller, (global::bnet.protocol.exchange.RefundRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
+              done));
+          return;
+        case 38:
+          this.ReportRefund(controller, (global::bnet.protocol.exchange_object_provider.ReportRefundRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
+              done));
+          return;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -15987,6 +18965,18 @@ namespace bnet.protocol.exchange {
           return global::bnet.protocol.exchange.GetFeeDetailsRequest.DefaultInstance;
         case 32:
           return global::bnet.protocol.exchange.GetOrderBookStatisticsRequest.DefaultInstance;
+        case 33:
+          return global::bnet.protocol.exchange.GetBidDetailsRequest.DefaultInstance;
+        case 34:
+          return global::bnet.protocol.exchange.GetOfferDetailsRequest.DefaultInstance;
+        case 35:
+          return global::bnet.protocol.NoData.DefaultInstance;
+        case 36:
+          return global::bnet.protocol.exchange.CreateCSTradeRequest.DefaultInstance;
+        case 37:
+          return global::bnet.protocol.exchange.RefundRequest.DefaultInstance;
+        case 38:
+          return global::bnet.protocol.exchange_object_provider.ReportRefundRequest.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -16064,6 +19054,18 @@ namespace bnet.protocol.exchange {
           return global::bnet.protocol.exchange.GetFeeDetailsResponse.DefaultInstance;
         case 32:
           return global::bnet.protocol.exchange.GetOrderBookStatisticsResponse.DefaultInstance;
+        case 33:
+          return global::bnet.protocol.exchange.GetBidDetailsResponse.DefaultInstance;
+        case 34:
+          return global::bnet.protocol.exchange.GetOfferDetailsResponse.DefaultInstance;
+        case 35:
+          return global::bnet.protocol.exchange.GetSystemTimeResponse.DefaultInstance;
+        case 36:
+          return global::bnet.protocol.NoData.DefaultInstance;
+        case 37:
+          return global::bnet.protocol.NoData.DefaultInstance;
+        case 38:
+          return global::bnet.protocol.NoData.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -16382,6 +19384,60 @@ namespace bnet.protocol.exchange {
         channel.CallMethod(Descriptor.Methods[32],
             controller, request, global::bnet.protocol.exchange.GetOrderBookStatisticsResponse.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.exchange.GetOrderBookStatisticsResponse, global::bnet.protocol.exchange.GetOrderBookStatisticsResponse.Builder>(done, global::bnet.protocol.exchange.GetOrderBookStatisticsResponse.DefaultInstance));
+      }
+      
+      public override void GetBidDetails(
+          pb::IRpcController controller,
+          global::bnet.protocol.exchange.GetBidDetailsRequest request,
+          global::System.Action<global::bnet.protocol.exchange.GetBidDetailsResponse> done) {
+        channel.CallMethod(Descriptor.Methods[33],
+            controller, request, global::bnet.protocol.exchange.GetBidDetailsResponse.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.exchange.GetBidDetailsResponse, global::bnet.protocol.exchange.GetBidDetailsResponse.Builder>(done, global::bnet.protocol.exchange.GetBidDetailsResponse.DefaultInstance));
+      }
+      
+      public override void GetOfferDetails(
+          pb::IRpcController controller,
+          global::bnet.protocol.exchange.GetOfferDetailsRequest request,
+          global::System.Action<global::bnet.protocol.exchange.GetOfferDetailsResponse> done) {
+        channel.CallMethod(Descriptor.Methods[34],
+            controller, request, global::bnet.protocol.exchange.GetOfferDetailsResponse.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.exchange.GetOfferDetailsResponse, global::bnet.protocol.exchange.GetOfferDetailsResponse.Builder>(done, global::bnet.protocol.exchange.GetOfferDetailsResponse.DefaultInstance));
+      }
+      
+      public override void GetSystemTime(
+          pb::IRpcController controller,
+          global::bnet.protocol.NoData request,
+          global::System.Action<global::bnet.protocol.exchange.GetSystemTimeResponse> done) {
+        channel.CallMethod(Descriptor.Methods[35],
+            controller, request, global::bnet.protocol.exchange.GetSystemTimeResponse.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.exchange.GetSystemTimeResponse, global::bnet.protocol.exchange.GetSystemTimeResponse.Builder>(done, global::bnet.protocol.exchange.GetSystemTimeResponse.DefaultInstance));
+      }
+      
+      public override void CreateCSTrade(
+          pb::IRpcController controller,
+          global::bnet.protocol.exchange.CreateCSTradeRequest request,
+          global::System.Action<global::bnet.protocol.NoData> done) {
+        channel.CallMethod(Descriptor.Methods[36],
+            controller, request, global::bnet.protocol.NoData.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
+      }
+      
+      public override void RefundBid(
+          pb::IRpcController controller,
+          global::bnet.protocol.exchange.RefundRequest request,
+          global::System.Action<global::bnet.protocol.NoData> done) {
+        channel.CallMethod(Descriptor.Methods[37],
+            controller, request, global::bnet.protocol.NoData.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
+      }
+      
+      public override void ReportRefund(
+          pb::IRpcController controller,
+          global::bnet.protocol.exchange_object_provider.ReportRefundRequest request,
+          global::System.Action<global::bnet.protocol.NoData> done) {
+        channel.CallMethod(Descriptor.Methods[38],
+            controller, request, global::bnet.protocol.NoData.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
     }
   }

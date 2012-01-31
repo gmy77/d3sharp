@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Artisan
 {
-    [Message(Opcodes.RequestAddSocketMessage, Consumers.Player)]
+    //[Message(Opcodes.RequestAddSocketMessage, Consumers.Player)]
     public class RequestAddSocketMessage : GameMessage
     {
         public uint ItemID;
