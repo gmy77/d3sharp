@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.8296.*";
+            public const string Version = "1.8350.*";
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 8296;
+            public const int RequiredClientVersion = 8350;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
@@ -98,7 +98,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 8296;
+            public const int RequiredPatchVersion = 8350;
         }
 
         /// <summary>
@@ -119,9 +119,10 @@ namespace Mooege.Common.Versions
             // 0x21EEE08D                   // 7446
 
             //This is the server version sent in VersionsMessage
-            public const string VersionString = "0.6.0.8318";
+            public const string VersionString = "0.6.1.8350";
 
-            // 0.
+            // 0.6.1.8350 // 8350 patch 11
+            // 0.6.0.8318 // 8296 patch 10
             // 0.5.1.8115 // 8101 patch 9
             // 0.5.0.8059 // 8059 patch 8
             // 0.3.1.7779 // 7728
