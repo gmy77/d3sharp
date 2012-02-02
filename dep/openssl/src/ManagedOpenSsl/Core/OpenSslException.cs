@@ -86,8 +86,16 @@ namespace OpenSSL.Core
 			get
 			{
 				byte[] buf = new byte[1024];
-				uint len = Native.ERR_error_string_n(err, buf, buf.Length);
-				return Encoding.ASCII.GetString(buf, 0, (int)len);
+				int offset = 0;
+				Native.ERR_error_string_n(err, buf, buf.Length - 1);
+				// ERR_error_string_n doesn't return a length so we interate the string
+				// to find the end to prevent sending trailing nulls
+				for	(int i = buf.Length - 1; i >= 0; i--)
+				{
+					offset = i;
+					if (buf[i] != (byte)0) break;
+				}
+				return Encoding.ASCII.GetString(buf, 0, offset + 1);
 			}
 		}
 	}
