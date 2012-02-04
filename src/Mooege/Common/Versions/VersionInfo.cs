@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.8350.*";
+            public const string Version = "1.8392.*";
         }
 
         /// <summary>
@@ -47,11 +47,11 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 8350;
+            public const int RequiredClientVersion = 8392;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
-                {"Aurora 9e9ccb8fdf_public", 8350},
+                {"Aurora 9e9ccb8fdf_public", 8392},
                 {"Aurora f506438e8d_public", 8101},
                 {"Aurora fbb3e7d1b4_public", 8059},
                 {"Aurora 04768e5dce_public", 7931},
@@ -98,7 +98,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 8350;
+            public const int RequiredPatchVersion = 8392;
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace Mooege.Common.Versions
             /// </summary>
             public const int ProtocolHash = 0x1A64B41;
 
-            // 0x01A64B41                   // 8296, 8350
+            // 0x01A64B41                   // 8296, 8350, 8392
             // 0xBA957E6B                   // 8059, 8101
             // unchecked((int)0x208CA037)   // 7931
             // unchecked((int)0x208CA037)   // 7841
@@ -119,8 +119,9 @@ namespace Mooege.Common.Versions
             // 0x21EEE08D                   // 7446
 
             //This is the server version sent in VersionsMessage
-            public const string VersionString = "0.6.1.8350";
+            public const string VersionString = "0.6.2.8392";
 
+            // 0.6.2.8392 // 8392 patch 12
             // 0.6.1.8350 // 8350 patch 11
             // 0.6.0.8318 // 8296 patch 10
             // 0.5.1.8115 // 8101 patch 9
