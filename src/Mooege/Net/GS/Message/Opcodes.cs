@@ -207,7 +207,7 @@ namespace Mooege.Net.GS.Message
         SimpleMessage11 = 189, // len: 	8
         ACDShearMessage = 190, // len: 	16
         ACDGroupMessage = 191, // len: 	20
-        SimpleMessage12 = 192, // len: 	8
+        HeartbeatMessage = 192, // len: 	8 former SimpleMessage12
         PlayConvLineMessage = 193, // len: 	172
         StopConvLineMessage = 194, // len: 	16
         AdvanceConvMessage = 195, //len : 16
@@ -314,7 +314,7 @@ namespace Mooege.Net.GS.Message
         DWordDataMessage10 = 297, // len: 	12
         DWordDataMessage11 = 298, // len: 	12
         BroadcastTextMessage = 299, // len: 	520
-        SimpleMessage41 = 300, // len: 	8
+        LoadCompleteMessage = 300, // len: 	8 former SimpleMessage41
         SimpleMessage42 = 301, // len: 	8
         NPCSelectConversationMessage = 302, // len: 	12 former SNODataMessage6
         HirelingDismissMessage = 303, // len: 	12 former ANNDataMessage33
