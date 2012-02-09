@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -121,7 +121,6 @@ namespace Mooege.Common.Versions
             //This is the server version sent in VersionsMessage
             public const string VersionString = "0.6.0.8318";
 
-            // 0.
             // 0.5.1.8115 // 8101 patch 9
             // 0.5.0.8059 // 8059 patch 8
             // 0.3.1.7779 // 7728
