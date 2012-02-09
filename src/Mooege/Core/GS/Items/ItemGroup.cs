@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@ using Mooege.Common.Helpers.Hash;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
-using Mooege.Common.Helpers;
 
 namespace Mooege.Core.GS.Items
 {

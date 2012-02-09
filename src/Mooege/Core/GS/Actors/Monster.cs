@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Mooege.Common.Helpers;
 using Mooege.Common.Helpers.Math;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
@@ -30,13 +28,8 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
-using Mooege.Common.MPQ;
-using Mooege.Core.GS.Common.Types.SNO;
-using System;
 using Mooege.Core.GS.Common.Types.TagMap;
 using MonsterFF = Mooege.Common.MPQ.FileFormats.Monster;
-using ActorFF = Mooege.Common.MPQ.FileFormats.Actor;
-
 
 namespace Mooege.Core.GS.Actors
 {

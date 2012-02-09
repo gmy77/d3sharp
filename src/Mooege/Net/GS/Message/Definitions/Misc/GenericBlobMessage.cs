@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,8 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    [Message(new[] {
-        Opcodes.GenericBlobMessage1, Opcodes.GenericBlobMessage2, Opcodes.GenericBlobMessage3, Opcodes.GenericBlobMessage4, Opcodes.GenericBlobMessage5,
-        Opcodes.GenericBlobMessage15 })]
+    [Message(new[] { Opcodes.GenericBlobMessage1, Opcodes.GenericBlobMessage2, Opcodes.GenericBlobMessage3, Opcodes.GenericBlobMessage4, Opcodes.GenericBlobMessage5,
+                     Opcodes.GenericBlobMessage15 })]
     public class GenericBlobMessage : GameMessage
     {
         public byte[] Data;

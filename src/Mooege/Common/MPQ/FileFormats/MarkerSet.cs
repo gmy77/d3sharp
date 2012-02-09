@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@ using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Common.Types.Collision;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Common.Types.TagMap;
-using Mooege.Core.GS.Common.Types.Misc;
 using Mooege.Core.GS.Common.Types.Math;
 
 namespace Mooege.Common.MPQ.FileFormats
