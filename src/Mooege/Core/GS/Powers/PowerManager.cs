@@ -17,15 +17,12 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
-using Mooege.Core.GS.Players;
-using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.World;
-using System.Linq;
 using Mooege.Core.GS.Ticker;
-using Mooege.Common.Helpers.Math;
-using Mooege.Common.Logging;
+using Mooege.Net.GS.Message.Definitions.World;
 
 namespace Mooege.Core.GS.Powers
 {
@@ -87,9 +84,6 @@ namespace Mooege.Core.GS.Powers
             return true;
         }
         
-        // HACK: used for item spawn helper in StartPower()
-        private bool _spawnedHelperItems = false;
-
         public bool RunPower(Actor user, int powerSNO, uint targetId = uint.MaxValue, Vector3D targetPosition = null,
                                TargetMessage targetMessage = null)
         {
@@ -107,73 +101,6 @@ namespace Mooege.Core.GS.Powers
 
                 targetPosition = target.Position;
             }
-                        
-            #region Items and Monster spawn HACK
-            // HACK: intercept hotbar skill 1 to always spawn test mobs.
-            if (user is Player && powerSNO == (user as Player).SkillSet.HotBarSkills[4].SNOSkill)
-            {
-                // number of monsters to spawn
-                int spawn_count = 3;
-
-                // list of actorSNO values to pick from when spawning
-                int[] actorSNO_values = { 5387, 6652, 5346 };
-                int actorSNO = actorSNO_values[RandomHelper.Next(actorSNO_values.Length)];
-                Logger.Debug("3 monsters spawning with actor sno {0}", actorSNO);
-
-                for (int n = 0; n < spawn_count; ++n)
-                {
-                    Vector3D position;
-
-                    if (targetPosition.X == 0f)
-                    {
-                        position = new Vector3D(user.Position);
-                        if ((n % 2) == 0)
-                        {
-                            position.X += (float)(RandomHelper.NextDouble() * 20);
-                            position.Y += (float)(RandomHelper.NextDouble() * 20);
-                        }
-                        else
-                        {
-                            position.X -= (float)(RandomHelper.NextDouble() * 20);
-                            position.Y -= (float)(RandomHelper.NextDouble() * 20);
-                        }
-                    }
-                    else
-                    {
-                        position = new Vector3D(targetPosition);
-                        position.X += (float)(RandomHelper.NextDouble() - 0.5) * 20;
-                        position.Y += (float)(RandomHelper.NextDouble() - 0.5) * 20;
-                        position.Z = user.Position.Z;
-                    }
-
-                    Monster mon = new Monster(user.World, actorSNO, null);
-                    mon.SetBrain(new Mooege.Core.GS.AI.Brains.MonsterBrain(mon));
-                    mon.Position = position;
-                    mon.Scale = 1.35f;
-                    mon.Attributes[GameAttribute.Hitpoints_Max_Total] = 5f;
-                    mon.Attributes[GameAttribute.Hitpoints_Max] = 5f;
-                    mon.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 0f;
-                    mon.Attributes[GameAttribute.Hitpoints_Cur] = 5f;
-                    mon.Attributes[GameAttribute.Attacks_Per_Second_Total] = 1.0f;
-                    mon.Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] = 5f;
-                    mon.Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] = 7f;
-                    mon.Attributes[GameAttribute.Casting_Speed_Total] = 1.0f;
-                    user.World.Enter(mon);
-                }
-
-                // spawn some useful items for testing at the ground of the player
-                if (!_spawnedHelperItems)
-                {
-                    _spawnedHelperItems = true;
-                    Items.ItemGenerator.Cook((Players.Player)user, "Sword_2H_205").EnterWorld(user.Position);
-                    Items.ItemGenerator.Cook((Players.Player)user, "Crossbow_102").EnterWorld(user.Position);
-                    for (int n = 0; n < 30; ++n)
-                        Items.ItemGenerator.Cook((Players.Player)user, "Runestone_Unattuned_07").EnterWorld(user.Position);
-                }
-                
-                return true;
-            }
-            #endregion
 
             // find and run a power implementation
             var implementation = PowerLoader.CreateImplementationForPowerSNO(powerSNO);
@@ -183,12 +110,6 @@ namespace Mooege.Core.GS.Powers
             }
             else
             {
-                // no power script is available, but try to play the cast effects
-                var efgTag = Mooege.Core.GS.Common.Types.TagMap.PowerKeys.CastingEffectGroup_Male;
-                var tagmap = PowerTagHelper.FindTagMapWithKey(powerSNO, efgTag);
-                if (tagmap != null)
-                    user.PlayEffectGroup(tagmap[efgTag].Id);
-
                 return false;
             }
         }
