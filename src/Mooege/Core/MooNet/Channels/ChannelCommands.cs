@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,14 +18,9 @@
 
 using System;
 using System.Linq;
-using Mooege.Common.Helpers.Hash;
 using Mooege.Core.MooNet.Accounts;
-using Mooege.Core.MooNet.Objects;
-using Mooege.Core.MooNet.Services;
-using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net.MooNet;
-using Mooege.Common.Helpers;
 
 namespace Mooege.Core.MooNet.Channels
 {

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,13 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using Mooege.Core.MooNet.Toons;
 
 // TODO: Might be able to make all toon-class classes into enums instead of having a bunch of const fields and
-//       lists, with maybe an implicit cast operator for each one
+// lists, with maybe an implicit cast operator for each one
 
 namespace Mooege.Core.GS.Skills
 {

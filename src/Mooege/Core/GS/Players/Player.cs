@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
-using Mooege.Common;
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
 using Mooege.Core.GS.Common.Types.Math;
@@ -32,8 +31,6 @@ using Mooege.Core.GS.Skills;
 using Mooege.Core.MooNet.Toons;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.Actor;
-using Mooege.Net.GS.Message.Definitions.Conversation;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Pet;
 using Mooege.Net.GS.Message.Definitions.Waypoint;
@@ -46,7 +43,6 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Trade;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Net.GS.Message.Definitions.Artisan;
-using Mooege.Core.GS.Actors.Implementations.Artisans;
 using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
 using Mooege.Common.Helpers;

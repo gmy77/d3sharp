@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,18 +17,12 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Net.GS.Message.Definitions.Animation;
-using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using TreasureClass = Mooege.Common.MPQ.FileFormats.TreasureClass;
-using Mooege.Core.GS.Ticker;
-using Mooege.Core.GS.Items;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
