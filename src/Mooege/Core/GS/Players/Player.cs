@@ -1645,7 +1645,6 @@ namespace Mooege.Core.GS.Players
             // play lore to player
             InGameClient.SendMessage(new Mooege.Net.GS.Message.Definitions.Quest.LoreMessage
             {
-                Id = (int)(Opcodes.LoreMessage),
                 LoreSNOId = loreSNOId
             });
             if (!HasLore(loreSNOId))
