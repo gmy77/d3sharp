@@ -104,6 +104,38 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\GS\Actors\Actions\PowerAction.cs" />
+    <Compile Include="Core\GS\Powers\ActionTimedSkill.cs" />
+    <Compile Include="Core\GS\Powers\ActorMover.cs" />
+    <Compile Include="Core\GS\Powers\ComboSkill.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\CooldownBuff.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\KnockbackBuff.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\Ranged.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\StatusDebuffs.cs" />
+    <Compile Include="Core\GS\Powers\Payloads\AttackPayload.cs" />
+    <Compile Include="Core\GS\Powers\BaseBuffs.cs" />
+    <Compile Include="Core\GS\Powers\BuffManager.cs" />
+    <Compile Include="Core\GS\Powers\ImplementsPowerBuff.cs" />
+    <Compile Include="Core\GS\Powers\EffectActor.cs" />
+    <Compile Include="Core\GS\Powers\ChanneledSkill.cs" />
+    <Compile Include="Core\GS\Powers\DamageType.cs" />
+    <Compile Include="Core\GS\Powers\Payloads\DeathPayload.cs" />
+    <Compile Include="Core\GS\Powers\Payloads\HitPayload.cs" />
+    <Compile Include="Core\GS\Powers\Payloads\Payload.cs" />
+    <Compile Include="Core\GS\Powers\ScriptFormulaEvaluator.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Barbarian.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\DemonHunter.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\Melee.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Monk.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\WitchDoctor.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Wizard.cs" />
+    <Compile Include="Core\GS\Powers\ImplementsPowerSNO.cs" />
+    <Compile Include="Core\GS\Powers\PowerContext.cs" />
+    <Compile Include="Core\GS\Powers\PowerScript.cs" />
+    <Compile Include="Core\GS\Powers\PowerLoader.cs" />
+    <Compile Include="Core\GS\Powers\PowerManager.cs" />
+    <Compile Include="Core\GS\Powers\PowerTagHelper.cs" />
+    <Compile Include="Core\GS\Powers\Projectile.cs" />
     <Compile Include="Common\Extensions\BigIntegerExtensions.cs" />
     <Compile Include="Common\Extensions\CodedOutputStream.cs" />
     <Compile Include="Common\Extensions\ListExtensions.cs" />
@@ -239,12 +271,15 @@
     <Compile Include="Core\GS\Map\Debug\WorldVisualizer.Designer.cs">
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\GS\Powers\PowerMath.cs" />
     <Compile Include="Core\GS\Games\Quest.cs" />
     <Compile Include="Core\GS\Players\ConversationManager.cs" />
     <Compile Include="Core\GS\Common\InventoryGrid.cs" />
     <Compile Include="Core\GS\Objects\IUpdateable.cs" />
     <Compile Include="Core\GS\Players\ExpBonusData.cs" />
     <Compile Include="Core\GS\Players\Equipment.cs" />
+    <Compile Include="Core\GS\Powers\Skill.cs" />
+    <Compile Include="Core\GS\Powers\TargetList.cs" />
     <Compile Include="Core\GS\Ticker\SteppedTickTimer.cs" />
     <Compile Include="Core\GS\Ticker\TickTimer.cs" />
     <Compile Include="Core\GS\Web\GSWebService.cs" />
@@ -314,6 +349,7 @@
     <Compile Include="Core\MooNet\Toons\Toon.cs" />
     <Compile Include="Core\MooNet\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\MooNet\Toons\ToonManager.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Skill\CancelChanneledSkillMessage.cs" />
     <Compile Include="Common\Logging\LogConfig.cs" />
     <Compile Include="Core\MooNet\Web\AccountWebService.cs" />
     <Compile Include="Core\Web\CoreWebService.cs" />

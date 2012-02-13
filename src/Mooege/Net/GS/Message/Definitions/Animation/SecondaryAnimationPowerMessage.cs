@@ -30,7 +30,9 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
         public AnimPreplayData Field1;
 
         public void Handle(GameClient client)
-        { }
+        {
+            client.Player.World.PowerManager.RunPower(client.Player, PowerSNO);
+        }
 
         public override void Parse(GameBitBuffer buffer)
         {

@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
+﻿/*
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,21 +18,16 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Skill
 {
-    [Message(new[] {
-        Opcodes.DWordDataMessage1,Opcodes.DWordDataMessage2,Opcodes.DWordDataMessage4,Opcodes.DWordDataMessage5,
-        Opcodes.DWordDataMessage7,Opcodes.DWordDataMessage8,Opcodes.DWordDataMessage9,Opcodes.DWordDataMessage10,Opcodes.DWordDataMessage11,Opcodes.DWordDataMessage12})]
-    public class DWordDataMessage : GameMessage, ISelfHandler
+    [Message(Opcodes.DWordDataMessage3)]
+    public class CancelChanneledSkillMessage : GameMessage, ISelfHandler
     {
         public int Field0;
 
-        public DWordDataMessage() { }
-        public DWordDataMessage(int opcode):base(opcode) { }
-
         public void Handle(GameClient client)
         {
-
+            client.Player.World.PowerManager.CancelChanneledSkill(client.Player, Field0);
         }
 
         public override void Parse(GameBitBuffer buffer)
@@ -48,7 +43,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("DWordDataMessage:");
+            b.AppendLine("CancelChanneledSkillMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");

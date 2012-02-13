@@ -18,6 +18,8 @@
 
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Net.GS.Message;
+using Mooege.Core.GS.AI.Brains;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
@@ -27,7 +29,14 @@ namespace Mooege.Core.GS.Actors.Implementations
         public Zombie(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            //this.Brain = new MonsterBrain(this);
+            this.Brain = new MonsterBrain(this);
+            this.Attributes[GameAttribute.Hitpoints_Max_Total] = 5f;
+            this.Attributes[GameAttribute.Hitpoints_Max] = 5f;
+            this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 0f;
+            this.Attributes[GameAttribute.Hitpoints_Cur] = 5f;
+            this.Attributes[GameAttribute.Attacks_Per_Second_Total] = 1.0f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] = 5f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] = 7f;
         }
     }
 }

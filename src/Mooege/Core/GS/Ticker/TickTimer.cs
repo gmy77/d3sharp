@@ -50,8 +50,11 @@ namespace Mooege.Core.GS.Ticker
         /// <param name="completionCallback">The completition action to be called on timeout</param>
         public TickTimer(Game game, int timeoutTick, Action<int> completionCallback = null)
         {
-            if (timeoutTick <= game.TickCounter)
-                throw new ArgumentOutOfRangeException("timeoutTick", string.Format("timeoutTick value {0} can not be equal or less then timer's belonging game's current TickCounter value {1}.", timeoutTick, game.TickCounter));
+            // Some code that was calculating movement ticks was rounding the tick difference to 0 for really small
+            // movements sometimes and thus would cause this exception. Enforcing every timer created to not 
+            // already be timed out doesn't seem necessary and having to worry about it just complicates things. /mdz
+            //if (timeoutTick <= game.TickCounter)
+            //    throw new ArgumentOutOfRangeException("timeoutTick", string.Format("timeoutTick value {0} can not be equal or less then timer's belonging game's current TickCounter value {1}.", timeoutTick, game.TickCounter));
                                                           
             this.Game = game;
             this.TimeoutTick = timeoutTick;

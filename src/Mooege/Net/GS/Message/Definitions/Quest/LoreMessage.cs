@@ -25,6 +25,8 @@ namespace Mooege.Net.GS.Message.Definitions.Quest
     {
         public int LoreSNOId;
 
+        public LoreMessage() : base(Opcodes.LoreMessage) { }
+
         public override void Parse(GameBitBuffer buffer)
         {
             LoreSNOId = buffer.ReadInt(32);
