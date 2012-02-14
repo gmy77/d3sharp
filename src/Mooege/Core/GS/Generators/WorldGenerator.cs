@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,12 +24,10 @@ using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.SNO;
 using Mooege.Core.GS.Games;
-using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Common.MPQ.FileFormats;
 using World = Mooege.Core.GS.Map.World;
 using Scene = Mooege.Core.GS.Map.Scene;
-
 
 namespace Mooege.Core.GS.Generators
 {
@@ -324,6 +322,10 @@ namespace Mooege.Core.GS.Generators
                 // Load monsters for level area
                 foreach (var scene in levelAreas[la])
                 {
+                    // HACK: don't spawn monsters in tristram town scenes /mdz
+                    if (MPQStorage.Data.Assets[SNOGroup.Scene][scene.SceneSNO.Id].Name.StartsWith("trOut_Tristram_"))
+                        continue;
+
                     for (int i = 0; i < 100; i++)
                     {
                         if (RandomHelper.NextDouble() > 0.8)

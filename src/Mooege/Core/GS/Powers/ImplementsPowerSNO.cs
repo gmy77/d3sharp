@@ -15,33 +15,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace Mooege.Core.GS.Items.Implementations
+namespace Mooege.Core.GS.Powers
 {
-    [HandledItem("StoneOfWealth")]
-    class CauldronOfJordan : Item
+    [AttributeUsage(AttributeTargets.Class)]
+    public class ImplementsPowerSNO : Attribute
     {
-        public CauldronOfJordan(GS.Map.World world, Mooege.Common.MPQ.FileFormats.ItemTable definition)
-            : base(world, definition)
+        public int PowerSNO;
+
+        public ImplementsPowerSNO(int powerSNO)
         {
+            PowerSNO = powerSNO;
         }
 
-        public override void OnTargeted(Players.Player player, Net.GS.Message.Definitions.World.TargetMessage message)
+        public static int GetPowerSNOForClass(Type klass)
         {
-            player.EnableCauldronOfJordan();
-            this.Destroy();
-        }
+            var attributes = (ImplementsPowerSNO[])klass.GetCustomAttributes(typeof(ImplementsPowerSNO), true);
+            int powerSNO = -1;
+            foreach (var snoAttribute in attributes)
+            {
+                powerSNO = snoAttribute.PowerSNO;
+            }
 
-        public static void OnUse(GS.Players.Player player, Item sellItem)
-        {
-            int sellValue = sellItem.ItemDefinition.BaseGoldValue; // TODO: calculate correct sell value for magic items
-            player.Inventory.AddGoldAmount(sellValue);
-
-            // TODO: instead of destroying item, it should be moved to merchants inventory for rebuy. 
-            player.Inventory.DestroyInventoryItem(sellItem);
+            return powerSNO;
         }
     }
 }

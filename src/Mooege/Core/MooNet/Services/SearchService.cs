@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,6 @@ using System;
 using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
-using bnet.protocol;
-using bnet.protocol.search;
-
 namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0xe, serviceName: "bnet.protocol.search.SearchService")]
@@ -32,17 +29,17 @@ namespace Mooege.Core.MooNet.Services
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
 
-        public override void FindMatches(IRpcController controller, FindMatchesRequest request, Action<FindMatchesResponse> done)
+        public override void FindMatches(IRpcController controller, bnet.protocol.search.FindMatchesRequest request, Action<bnet.protocol.search.FindMatchesResponse> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void SetObject(IRpcController controller, SetObjectRequest request, Action<NO_RESPONSE> done)
+        public override void SetObject(IRpcController controller, bnet.protocol.search.SetObjectRequest request, Action<bnet.protocol.NO_RESPONSE> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void RemoveObjects(IRpcController controller, RemoveObjectsRequest request, Action<NO_RESPONSE> done)
+        public override void RemoveObjects(IRpcController controller, bnet.protocol.search.RemoveObjectsRequest request, Action<bnet.protocol.NO_RESPONSE> done)
         {
             throw new NotImplementedException();
         }

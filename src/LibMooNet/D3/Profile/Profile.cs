@@ -48,41 +48,43 @@ namespace D3.Profile {
           "aWN1bHR5GAMgASgNOgEwIjQKDVNraWxsV2l0aFJ1bmUSEQoFc2tpbGwYASAC" + 
           "KA86Ai0xEhAKBHJ1bmUYAiABKA86Ai0xIjsKD1NraWxsc1dpdGhSdW5lcxIo" + 
           "CgVydW5lcxgBIAMoCzIZLkQzLlByb2ZpbGUuU2tpbGxXaXRoUnVuZSIjCg1Q" + 
-          "YXNzaXZlU2tpbGxzEhIKCnNub190cmFpdHMYASADKA8ilwYKC0hlcm9Qcm9m" + 
+          "YXNzaXZlU2tpbGxzEhIKCnNub190cmFpdHMYASADKA8i0gYKC0hlcm9Qcm9m" + 
           "aWxlEhcKD21vbnN0ZXJzX2tpbGxlZBgBIAEoBBIVCg1lbGl0ZXNfa2lsbGVk" + 
           "GAIgASgEEhYKDmdvbGRfY29sbGVjdGVkGAMgASgEEhUKDWhpZ2hlc3RfbGV2" + 
           "ZWwYBCABKA0SGgoSaGlnaGVzdF9kaWZmaWN1bHR5GAUgASgNEhMKC2NyZWF0" + 
           "ZV90aW1lGAYgASgNEhcKCGhhcmRjb3JlGAcgASgIOgVmYWxzZRIOCgZhdHRh" + 
           "Y2sYCCABKA0SEQoJcHJlY2lzaW9uGAkgASgNEg8KB2RlZmVuc2UYCiABKA0S" + 
-          "EAoIdml0YWxpdHkYCyABKA0SDQoFYXJtb3IYDCABKA0SCwoDZHBzGA0gASgC" + 
-          "EhUKDXJlc2lzdF9hcmNhbmUYDiABKA0SEwoLcmVzaXN0X2ZpcmUYDyABKA0S" + 
-          "GAoQcmVzaXN0X2xpZ2h0bmluZxgQIAEoDRIVCg1yZXNpc3RfcG9pc29uGBEg" + 
-          "ASgNEhMKC3Jlc2lzdF9jb2xkGBIgASgNEiUKCWVxdWlwbWVudBgTIAEoCzIS" + 
-          "LkQzLkl0ZW1zLkl0ZW1MaXN0EjYKEXNub19hY3RpdmVfc2tpbGxzGBQgASgL" + 
-          "MhsuRDMuUHJvZmlsZS5Ta2lsbHNXaXRoUnVuZXMSLQoKc25vX3RyYWl0cxgV" + 
-          "IAEoCzIZLkQzLlByb2ZpbGUuUGFzc2l2ZVNraWxscxISCgpkZWF0aF90aW1l" + 
-          "GBYgASgNEiYKBmtpbGxlchgXIAEoCzIWLkQzLkdhbWVCYWxhbmNlLkhhbmRs" + 
-          "ZRItCg1raWxsX2xvY2F0aW9uGBggASgLMhYuRDMuR2FtZUJhbGFuY2UuSGFu" + 
-          "ZGxlEg8KB2VwaXRhcGgYGSABKAkSKwoHaGVyb19pZBgaIAEoCzIaLkQzLk9u" + 
-          "bGluZVNlcnZpY2UuRW50aXR5SWQSFwoPZGFtYWdlX2luY3JlYXNlGBsgASgC" + 
-          "EhMKC2NyaXRfY2hhbmNlGBwgASgCEhgKEGRhbWFnZV9yZWR1Y3Rpb24YHSAB" + 
-          "KAISDAoEbGlmZRgeIAEoDSI5Cg9IZXJvUHJvZmlsZUxpc3QSJgoFaGVyb3MY" + 
-          "ASADKAsyFy5EMy5Qcm9maWxlLkhlcm9Qcm9maWxlIpcFCg5BY2NvdW50UHJv" + 
-          "ZmlsZRIaChJoaWdoZXN0X2RpZmZpY3VsdHkYASABKA0SIQoZaGlnaGVzdF9i" + 
-          "b3NzX2RpZmZpY3VsdHlfMRgCIAEoDRIhChloaWdoZXN0X2Jvc3NfZGlmZmlj" + 
-          "dWx0eV8yGAMgASgNEiEKGWhpZ2hlc3RfYm9zc19kaWZmaWN1bHR5XzMYBCAB" + 
-          "KA0SIQoZaGlnaGVzdF9ib3NzX2RpZmZpY3VsdHlfNBgFIAEoDRIaCg9tb25z" + 
-          "dGVyc19raWxsZWQYBiABKAQ6ATASGAoNZWxpdGVzX2tpbGxlZBgHIAEoBDoB" + 
-          "MBIZCg5nb2xkX2NvbGxlY3RlZBgIIAEoBDoBMBIeChZoaWdoZXN0X2hhcmRj" + 
-          "b3JlX2xldmVsGAkgASgEEiAKGGhhcmRjb3JlX21vbnN0ZXJzX2tpbGxlZBgK" + 
-          "IAEoBBIuCg9jbGFzc19iYXJiYXJpYW4YCyABKAsyFS5EMy5Qcm9maWxlLkNs" + 
-          "YXNzSW5mbxIwChFjbGFzc19kZW1vbmh1bnRlchgMIAEoCzIVLkQzLlByb2Zp" + 
-          "bGUuQ2xhc3NJbmZvEikKCmNsYXNzX21vbmsYDSABKAsyFS5EMy5Qcm9maWxl" + 
-          "LkNsYXNzSW5mbxIwChFjbGFzc193aXRjaGRvY3RvchgOIAEoCzIVLkQzLlBy" + 
-          "b2ZpbGUuQ2xhc3NJbmZvEisKDGNsYXNzX3dpemFyZBgPIAEoCzIVLkQzLlBy" + 
-          "b2ZpbGUuQ2xhc3NJbmZvEh4KFmFjaGlldmVtZW50X3Nob3djYXNlXzAYECAB" + 
-          "KAQSHgoWYWNoaWV2ZW1lbnRfc2hvd2Nhc2VfMRgRIAEoBBIeChZhY2hpZXZl" + 
-          "bWVudF9zaG93Y2FzZV8yGBIgASgE");
+          "EAoIc3RyZW5ndGgYHyABKA0SEQoJZGV4dGVyaXR5GCAgASgNEhQKDGludGVs" + 
+          "bGlnZW5jZRghIAEoDRIQCgh2aXRhbGl0eRgLIAEoDRINCgVhcm1vchgMIAEo" + 
+          "DRILCgNkcHMYDSABKAISFQoNcmVzaXN0X2FyY2FuZRgOIAEoDRITCgtyZXNp" + 
+          "c3RfZmlyZRgPIAEoDRIYChByZXNpc3RfbGlnaHRuaW5nGBAgASgNEhUKDXJl" + 
+          "c2lzdF9wb2lzb24YESABKA0SEwoLcmVzaXN0X2NvbGQYEiABKA0SJQoJZXF1" + 
+          "aXBtZW50GBMgASgLMhIuRDMuSXRlbXMuSXRlbUxpc3QSNgoRc25vX2FjdGl2" + 
+          "ZV9za2lsbHMYFCABKAsyGy5EMy5Qcm9maWxlLlNraWxsc1dpdGhSdW5lcxIt" + 
+          "Cgpzbm9fdHJhaXRzGBUgASgLMhkuRDMuUHJvZmlsZS5QYXNzaXZlU2tpbGxz" + 
+          "EhIKCmRlYXRoX3RpbWUYFiABKA0SJgoGa2lsbGVyGBcgASgLMhYuRDMuR2Ft" + 
+          "ZUJhbGFuY2UuSGFuZGxlEi0KDWtpbGxfbG9jYXRpb24YGCABKAsyFi5EMy5H" + 
+          "YW1lQmFsYW5jZS5IYW5kbGUSDwoHZXBpdGFwaBgZIAEoCRIrCgdoZXJvX2lk" + 
+          "GBogASgLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIXCg9kYW1hZ2Vf" + 
+          "aW5jcmVhc2UYGyABKAISEwoLY3JpdF9jaGFuY2UYHCABKAISGAoQZGFtYWdl" + 
+          "X3JlZHVjdGlvbhgdIAEoAhIMCgRsaWZlGB4gASgNIjkKD0hlcm9Qcm9maWxl" + 
+          "TGlzdBImCgVoZXJvcxgBIAMoCzIXLkQzLlByb2ZpbGUuSGVyb1Byb2ZpbGUi" + 
+          "uAUKDkFjY291bnRQcm9maWxlEhoKEmhpZ2hlc3RfZGlmZmljdWx0eRgBIAEo" + 
+          "DRIhChloaWdoZXN0X2Jvc3NfZGlmZmljdWx0eV8xGAIgASgNEiEKGWhpZ2hl" + 
+          "c3RfYm9zc19kaWZmaWN1bHR5XzIYAyABKA0SIQoZaGlnaGVzdF9ib3NzX2Rp" + 
+          "ZmZpY3VsdHlfMxgEIAEoDRIhChloaWdoZXN0X2Jvc3NfZGlmZmljdWx0eV80" + 
+          "GAUgASgNEhoKD21vbnN0ZXJzX2tpbGxlZBgGIAEoBDoBMBIYCg1lbGl0ZXNf" + 
+          "a2lsbGVkGAcgASgEOgEwEhkKDmdvbGRfY29sbGVjdGVkGAggASgEOgEwEh4K" + 
+          "FmhpZ2hlc3RfaGFyZGNvcmVfbGV2ZWwYCSABKAQSIAoYaGFyZGNvcmVfbW9u" + 
+          "c3RlcnNfa2lsbGVkGAogASgEEi4KD2NsYXNzX2JhcmJhcmlhbhgLIAEoCzIV" + 
+          "LkQzLlByb2ZpbGUuQ2xhc3NJbmZvEjAKEWNsYXNzX2RlbW9uaHVudGVyGAwg" + 
+          "ASgLMhUuRDMuUHJvZmlsZS5DbGFzc0luZm8SKQoKY2xhc3NfbW9uaxgNIAEo" + 
+          "CzIVLkQzLlByb2ZpbGUuQ2xhc3NJbmZvEjAKEWNsYXNzX3dpdGNoZG9jdG9y" + 
+          "GA4gASgLMhUuRDMuUHJvZmlsZS5DbGFzc0luZm8SKwoMY2xhc3Nfd2l6YXJk" + 
+          "GA8gASgLMhUuRDMuUHJvZmlsZS5DbGFzc0luZm8SKQohZGVwcmVjYXRlZF9h" + 
+          "Y2hpZXZlbWVudF9zaG93Y2FzZV8wGBAgASgEEikKIWRlcHJlY2F0ZWRfYWNo" + 
+          "aWV2ZW1lbnRfc2hvd2Nhc2VfMRgRIAEoBBIpCiFkZXByZWNhdGVkX2FjaGll" + 
+          "dmVtZW50X3Nob3djYXNlXzIYEiABKAQ=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Profile_ClassInfo__Descriptor = Descriptor.MessageTypes[0];
@@ -104,7 +106,7 @@ namespace D3.Profile {
         internal__static_D3_Profile_HeroProfile__Descriptor = Descriptor.MessageTypes[4];
         internal__static_D3_Profile_HeroProfile__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Profile.HeroProfile, global::D3.Profile.HeroProfile.Builder>(internal__static_D3_Profile_HeroProfile__Descriptor,
-                new string[] { "MonstersKilled", "ElitesKilled", "GoldCollected", "HighestLevel", "HighestDifficulty", "CreateTime", "Hardcore", "Attack", "Precision", "Defense", "Vitality", "Armor", "Dps", "ResistArcane", "ResistFire", "ResistLightning", "ResistPoison", "ResistCold", "Equipment", "SnoActiveSkills", "SnoTraits", "DeathTime", "Killer", "KillLocation", "Epitaph", "HeroId", "DamageIncrease", "CritChance", "DamageReduction", "Life", });
+                new string[] { "MonstersKilled", "ElitesKilled", "GoldCollected", "HighestLevel", "HighestDifficulty", "CreateTime", "Hardcore", "Attack", "Precision", "Defense", "Strength", "Dexterity", "Intelligence", "Vitality", "Armor", "Dps", "ResistArcane", "ResistFire", "ResistLightning", "ResistPoison", "ResistCold", "Equipment", "SnoActiveSkills", "SnoTraits", "DeathTime", "Killer", "KillLocation", "Epitaph", "HeroId", "DamageIncrease", "CritChance", "DamageReduction", "Life", });
         internal__static_D3_Profile_HeroProfileList__Descriptor = Descriptor.MessageTypes[5];
         internal__static_D3_Profile_HeroProfileList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Profile.HeroProfileList, global::D3.Profile.HeroProfileList.Builder>(internal__static_D3_Profile_HeroProfileList__Descriptor,
@@ -112,7 +114,7 @@ namespace D3.Profile {
         internal__static_D3_Profile_AccountProfile__Descriptor = Descriptor.MessageTypes[6];
         internal__static_D3_Profile_AccountProfile__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Profile.AccountProfile, global::D3.Profile.AccountProfile.Builder>(internal__static_D3_Profile_AccountProfile__Descriptor,
-                new string[] { "HighestDifficulty", "HighestBossDifficulty1", "HighestBossDifficulty2", "HighestBossDifficulty3", "HighestBossDifficulty4", "MonstersKilled", "ElitesKilled", "GoldCollected", "HighestHardcoreLevel", "HardcoreMonstersKilled", "ClassBarbarian", "ClassDemonhunter", "ClassMonk", "ClassWitchdoctor", "ClassWizard", "AchievementShowcase0", "AchievementShowcase1", "AchievementShowcase2", });
+                new string[] { "HighestDifficulty", "HighestBossDifficulty1", "HighestBossDifficulty2", "HighestBossDifficulty3", "HighestBossDifficulty4", "MonstersKilled", "ElitesKilled", "GoldCollected", "HighestHardcoreLevel", "HardcoreMonstersKilled", "ClassBarbarian", "ClassDemonhunter", "ClassMonk", "ClassWitchdoctor", "ClassWizard", "DeprecatedAchievementShowcase0", "DeprecatedAchievementShowcase1", "DeprecatedAchievementShowcase2", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -1406,8 +1408,8 @@ namespace D3.Profile {
   public sealed partial class HeroProfile : pb::GeneratedMessage<HeroProfile, HeroProfile.Builder> {
     private HeroProfile() { }
     private static readonly HeroProfile defaultInstance = new HeroProfile().MakeReadOnly();
-    private static readonly string[] _heroProfileFieldNames = new string[] { "armor", "attack", "create_time", "crit_chance", "damage_increase", "damage_reduction", "death_time", "defense", "dps", "elites_killed", "epitaph", "equipment", "gold_collected", "hardcore", "hero_id", "highest_difficulty", "highest_level", "kill_location", "killer", "life", "monsters_killed", "precision", "resist_arcane", "resist_cold", "resist_fire", "resist_lightning", "resist_poison", "sno_active_skills", "sno_traits", "vitality" };
-    private static readonly uint[] _heroProfileFieldTags = new uint[] { 96, 64, 48, 229, 221, 237, 176, 80, 109, 16, 202, 154, 24, 56, 210, 40, 32, 194, 186, 240, 8, 72, 112, 144, 120, 128, 136, 162, 170, 88 };
+    private static readonly string[] _heroProfileFieldNames = new string[] { "armor", "attack", "create_time", "crit_chance", "damage_increase", "damage_reduction", "death_time", "defense", "dexterity", "dps", "elites_killed", "epitaph", "equipment", "gold_collected", "hardcore", "hero_id", "highest_difficulty", "highest_level", "intelligence", "kill_location", "killer", "life", "monsters_killed", "precision", "resist_arcane", "resist_cold", "resist_fire", "resist_lightning", "resist_poison", "sno_active_skills", "sno_traits", "strength", "vitality" };
+    private static readonly uint[] _heroProfileFieldTags = new uint[] { 96, 64, 48, 229, 221, 237, 176, 80, 256, 109, 16, 202, 154, 24, 56, 210, 40, 32, 264, 194, 186, 240, 8, 72, 112, 144, 120, 128, 136, 162, 170, 248, 88 };
     public static HeroProfile DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1526,6 +1528,36 @@ namespace D3.Profile {
     }
     public uint Defense {
       get { return defense_; }
+    }
+    
+    public const int StrengthFieldNumber = 31;
+    private bool hasStrength;
+    private uint strength_;
+    public bool HasStrength {
+      get { return hasStrength; }
+    }
+    public uint Strength {
+      get { return strength_; }
+    }
+    
+    public const int DexterityFieldNumber = 32;
+    private bool hasDexterity;
+    private uint dexterity_;
+    public bool HasDexterity {
+      get { return hasDexterity; }
+    }
+    public uint Dexterity {
+      get { return dexterity_; }
+    }
+    
+    public const int IntelligenceFieldNumber = 33;
+    private bool hasIntelligence;
+    private uint intelligence_;
+    public bool HasIntelligence {
+      get { return hasIntelligence; }
+    }
+    public uint Intelligence {
+      get { return intelligence_; }
     }
     
     public const int VitalityFieldNumber = 11;
@@ -1753,82 +1785,82 @@ namespace D3.Profile {
       int size = SerializedSize;
       string[] field_names = _heroProfileFieldNames;
       if (hasMonstersKilled) {
-        output.WriteUInt64(1, field_names[20], MonstersKilled);
+        output.WriteUInt64(1, field_names[22], MonstersKilled);
       }
       if (hasElitesKilled) {
-        output.WriteUInt64(2, field_names[9], ElitesKilled);
+        output.WriteUInt64(2, field_names[10], ElitesKilled);
       }
       if (hasGoldCollected) {
-        output.WriteUInt64(3, field_names[12], GoldCollected);
+        output.WriteUInt64(3, field_names[13], GoldCollected);
       }
       if (hasHighestLevel) {
-        output.WriteUInt32(4, field_names[16], HighestLevel);
+        output.WriteUInt32(4, field_names[17], HighestLevel);
       }
       if (hasHighestDifficulty) {
-        output.WriteUInt32(5, field_names[15], HighestDifficulty);
+        output.WriteUInt32(5, field_names[16], HighestDifficulty);
       }
       if (hasCreateTime) {
         output.WriteUInt32(6, field_names[2], CreateTime);
       }
       if (hasHardcore) {
-        output.WriteBool(7, field_names[13], Hardcore);
+        output.WriteBool(7, field_names[14], Hardcore);
       }
       if (hasAttack) {
         output.WriteUInt32(8, field_names[1], Attack);
       }
       if (hasPrecision) {
-        output.WriteUInt32(9, field_names[21], Precision);
+        output.WriteUInt32(9, field_names[23], Precision);
       }
       if (hasDefense) {
         output.WriteUInt32(10, field_names[7], Defense);
       }
       if (hasVitality) {
-        output.WriteUInt32(11, field_names[29], Vitality);
+        output.WriteUInt32(11, field_names[32], Vitality);
       }
       if (hasArmor) {
         output.WriteUInt32(12, field_names[0], Armor);
       }
       if (hasDps) {
-        output.WriteFloat(13, field_names[8], Dps);
+        output.WriteFloat(13, field_names[9], Dps);
       }
       if (hasResistArcane) {
-        output.WriteUInt32(14, field_names[22], ResistArcane);
+        output.WriteUInt32(14, field_names[24], ResistArcane);
       }
       if (hasResistFire) {
-        output.WriteUInt32(15, field_names[24], ResistFire);
+        output.WriteUInt32(15, field_names[26], ResistFire);
       }
       if (hasResistLightning) {
-        output.WriteUInt32(16, field_names[25], ResistLightning);
+        output.WriteUInt32(16, field_names[27], ResistLightning);
       }
       if (hasResistPoison) {
-        output.WriteUInt32(17, field_names[26], ResistPoison);
+        output.WriteUInt32(17, field_names[28], ResistPoison);
       }
       if (hasResistCold) {
-        output.WriteUInt32(18, field_names[23], ResistCold);
+        output.WriteUInt32(18, field_names[25], ResistCold);
       }
       if (hasEquipment) {
-        output.WriteMessage(19, field_names[11], Equipment);
+        output.WriteMessage(19, field_names[12], Equipment);
       }
       if (hasSnoActiveSkills) {
-        output.WriteMessage(20, field_names[27], SnoActiveSkills);
+        output.WriteMessage(20, field_names[29], SnoActiveSkills);
       }
       if (hasSnoTraits) {
-        output.WriteMessage(21, field_names[28], SnoTraits);
+        output.WriteMessage(21, field_names[30], SnoTraits);
       }
       if (hasDeathTime) {
         output.WriteUInt32(22, field_names[6], DeathTime);
       }
       if (hasKiller) {
-        output.WriteMessage(23, field_names[18], Killer);
+        output.WriteMessage(23, field_names[20], Killer);
       }
       if (hasKillLocation) {
-        output.WriteMessage(24, field_names[17], KillLocation);
+        output.WriteMessage(24, field_names[19], KillLocation);
       }
       if (hasEpitaph) {
-        output.WriteString(25, field_names[10], Epitaph);
+        output.WriteString(25, field_names[11], Epitaph);
       }
       if (hasHeroId) {
-        output.WriteMessage(26, field_names[14], HeroId);
+        output.WriteMessage(26, field_names[15], HeroId);
       }
       if (hasDamageIncrease) {
         output.WriteFloat(27, field_names[4], DamageIncrease);
@@ -1840,7 +1872,16 @@ namespace D3.Profile {
         output.WriteFloat(29, field_names[5], DamageReduction);
       }
       if (hasLife) {
-        output.WriteUInt32(30, field_names[19], Life);
+        output.WriteUInt32(30, field_names[21], Life);
+      }
+      if (hasStrength) {
+        output.WriteUInt32(31, field_names[31], Strength);
+      }
+      if (hasDexterity) {
+        output.WriteUInt32(32, field_names[8], Dexterity);
+      }
+      if (hasIntelligence) {
+        output.WriteUInt32(33, field_names[18], Intelligence);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1881,6 +1922,15 @@ namespace D3.Profile {
         }
         if (hasDefense) {
           size += pb::CodedOutputStream.ComputeUInt32Size(10, Defense);
+        }
+        if (hasStrength) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(31, Strength);
+        }
+        if (hasDexterity) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(32, Dexterity);
+        }
+        if (hasIntelligence) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(33, Intelligence);
         }
         if (hasVitality) {
           size += pb::CodedOutputStream.ComputeUInt32Size(11, Vitality);
@@ -2097,6 +2147,15 @@ namespace D3.Profile {
         }
         if (other.HasDefense) {
           Defense = other.Defense;
+        }
+        if (other.HasStrength) {
+          Strength = other.Strength;
+        }
+        if (other.HasDexterity) {
+          Dexterity = other.Dexterity;
+        }
+        if (other.HasIntelligence) {
+          Intelligence = other.Intelligence;
         }
         if (other.HasVitality) {
           Vitality = other.Vitality;
@@ -2351,6 +2410,18 @@ namespace D3.Profile {
               result.hasLife = input.ReadUInt32(ref result.life_);
               break;
             }
+            case 248: {
+              result.hasStrength = input.ReadUInt32(ref result.strength_);
+              break;
+            }
+            case 256: {
+              result.hasDexterity = input.ReadUInt32(ref result.dexterity_);
+              break;
+            }
+            case 264: {
+              result.hasIntelligence = input.ReadUInt32(ref result.intelligence_);
+              break;
+            }
           }
         }
         
@@ -2558,6 +2629,66 @@ namespace D3.Profile {
         PrepareBuilder();
         result.hasDefense = false;
         result.defense_ = 0;
+        return this;
+      }
+      
+      public bool HasStrength {
+        get { return result.hasStrength; }
+      }
+      public uint Strength {
+        get { return result.Strength; }
+        set { SetStrength(value); }
+      }
+      public Builder SetStrength(uint value) {
+        PrepareBuilder();
+        result.hasStrength = true;
+        result.strength_ = value;
+        return this;
+      }
+      public Builder ClearStrength() {
+        PrepareBuilder();
+        result.hasStrength = false;
+        result.strength_ = 0;
+        return this;
+      }
+      
+      public bool HasDexterity {
+        get { return result.hasDexterity; }
+      }
+      public uint Dexterity {
+        get { return result.Dexterity; }
+        set { SetDexterity(value); }
+      }
+      public Builder SetDexterity(uint value) {
+        PrepareBuilder();
+        result.hasDexterity = true;
+        result.dexterity_ = value;
+        return this;
+      }
+      public Builder ClearDexterity() {
+        PrepareBuilder();
+        result.hasDexterity = false;
+        result.dexterity_ = 0;
+        return this;
+      }
+      
+      public bool HasIntelligence {
+        get { return result.hasIntelligence; }
+      }
+      public uint Intelligence {
+        get { return result.Intelligence; }
+        set { SetIntelligence(value); }
+      }
+      public Builder SetIntelligence(uint value) {
+        PrepareBuilder();
+        result.hasIntelligence = true;
+        result.intelligence_ = value;
+        return this;
+      }
+      public Builder ClearIntelligence() {
+        PrepareBuilder();
+        result.hasIntelligence = false;
+        result.intelligence_ = 0;
         return this;
       }
       
@@ -3397,8 +3528,8 @@ namespace D3.Profile {
   public sealed partial class AccountProfile : pb::GeneratedMessage<AccountProfile, AccountProfile.Builder> {
     private AccountProfile() { }
     private static readonly AccountProfile defaultInstance = new AccountProfile().MakeReadOnly();
-    private static readonly string[] _accountProfileFieldNames = new string[] { "achievement_showcase_0", "achievement_showcase_1", "achievement_showcase_2", "class_barbarian", "class_demonhunter", "class_monk", "class_witchdoctor", "class_wizard", "elites_killed", "gold_collected", "hardcore_monsters_killed", "highest_boss_difficulty_1", "highest_boss_difficulty_2", "highest_boss_difficulty_3", "highest_boss_difficulty_4", "highest_difficulty", "highest_hardcore_level", "monsters_killed" };
-    private static readonly uint[] _accountProfileFieldTags = new uint[] { 128, 136, 144, 90, 98, 106, 114, 122, 56, 64, 80, 16, 24, 32, 40, 8, 72, 48 };
+    private static readonly string[] _accountProfileFieldNames = new string[] { "class_barbarian", "class_demonhunter", "class_monk", "class_witchdoctor", "class_wizard", "deprecated_achievement_showcase_0", "deprecated_achievement_showcase_1", "deprecated_achievement_showcase_2", "elites_killed", "gold_collected", "hardcore_monsters_killed", "highest_boss_difficulty_1", "highest_boss_difficulty_2", "highest_boss_difficulty_3", "highest_boss_difficulty_4", "highest_difficulty", "highest_hardcore_level", "monsters_killed" };
+    private static readonly uint[] _accountProfileFieldTags = new uint[] { 90, 98, 106, 114, 122, 128, 136, 144, 56, 64, 80, 16, 24, 32, 40, 8, 72, 48 };
     public static AccountProfile DefaultInstance {
       get { return defaultInstance; }
     }
@@ -3569,34 +3700,34 @@ namespace D3.Profile {
       get { return classWizard_ ?? global::D3.Profile.ClassInfo.DefaultInstance; }
     }
     
-    public const int AchievementShowcase0FieldNumber = 16;
-    private bool hasAchievementShowcase0;
-    private ulong achievementShowcase0_;
-    public bool HasAchievementShowcase0 {
-      get { return hasAchievementShowcase0; }
+    public const int DeprecatedAchievementShowcase0FieldNumber = 16;
+    private bool hasDeprecatedAchievementShowcase0;
+    private ulong deprecatedAchievementShowcase0_;
+    public bool HasDeprecatedAchievementShowcase0 {
+      get { return hasDeprecatedAchievementShowcase0; }
     }
-    public ulong AchievementShowcase0 {
-      get { return achievementShowcase0_; }
-    }
-    
-    public const int AchievementShowcase1FieldNumber = 17;
-    private bool hasAchievementShowcase1;
-    private ulong achievementShowcase1_;
-    public bool HasAchievementShowcase1 {
-      get { return hasAchievementShowcase1; }
-    }
-    public ulong AchievementShowcase1 {
-      get { return achievementShowcase1_; }
+    public ulong DeprecatedAchievementShowcase0 {
+      get { return deprecatedAchievementShowcase0_; }
     }
     
-    public const int AchievementShowcase2FieldNumber = 18;
-    private bool hasAchievementShowcase2;
-    private ulong achievementShowcase2_;
-    public bool HasAchievementShowcase2 {
-      get { return hasAchievementShowcase2; }
+    public const int DeprecatedAchievementShowcase1FieldNumber = 17;
+    private bool hasDeprecatedAchievementShowcase1;
+    private ulong deprecatedAchievementShowcase1_;
+    public bool HasDeprecatedAchievementShowcase1 {
+      get { return hasDeprecatedAchievementShowcase1; }
     }
-    public ulong AchievementShowcase2 {
-      get { return achievementShowcase2_; }
+    public ulong DeprecatedAchievementShowcase1 {
+      get { return deprecatedAchievementShowcase1_; }
+    }
+    
+    public const int DeprecatedAchievementShowcase2FieldNumber = 18;
+    private bool hasDeprecatedAchievementShowcase2;
+    private ulong deprecatedAchievementShowcase2_;
+    public bool HasDeprecatedAchievementShowcase2 {
+      get { return hasDeprecatedAchievementShowcase2; }
+    }
+    public ulong DeprecatedAchievementShowcase2 {
+      get { return deprecatedAchievementShowcase2_; }
     }
     
     public override bool IsInitialized {
@@ -3639,28 +3770,28 @@ namespace D3.Profile {
         output.WriteUInt64(10, field_names[10], HardcoreMonstersKilled);
       }
       if (hasClassBarbarian) {
-        output.WriteMessage(11, field_names[3], ClassBarbarian);
+        output.WriteMessage(11, field_names[0], ClassBarbarian);
       }
       if (hasClassDemonhunter) {
-        output.WriteMessage(12, field_names[4], ClassDemonhunter);
+        output.WriteMessage(12, field_names[1], ClassDemonhunter);
       }
       if (hasClassMonk) {
-        output.WriteMessage(13, field_names[5], ClassMonk);
+        output.WriteMessage(13, field_names[2], ClassMonk);
       }
       if (hasClassWitchdoctor) {
-        output.WriteMessage(14, field_names[6], ClassWitchdoctor);
+        output.WriteMessage(14, field_names[3], ClassWitchdoctor);
       }
       if (hasClassWizard) {
-        output.WriteMessage(15, field_names[7], ClassWizard);
+        output.WriteMessage(15, field_names[4], ClassWizard);
       }
-      if (hasAchievementShowcase0) {
-        output.WriteUInt64(16, field_names[0], AchievementShowcase0);
+      if (hasDeprecatedAchievementShowcase0) {
+        output.WriteUInt64(16, field_names[5], DeprecatedAchievementShowcase0);
       }
-      if (hasAchievementShowcase1) {
-        output.WriteUInt64(17, field_names[1], AchievementShowcase1);
+      if (hasDeprecatedAchievementShowcase1) {
+        output.WriteUInt64(17, field_names[6], DeprecatedAchievementShowcase1);
       }
-      if (hasAchievementShowcase2) {
-        output.WriteUInt64(18, field_names[2], AchievementShowcase2);
+      if (hasDeprecatedAchievementShowcase2) {
+        output.WriteUInt64(18, field_names[7], DeprecatedAchievementShowcase2);
       }
       UnknownFields.WriteTo(output);
     }
@@ -3717,14 +3848,14 @@ namespace D3.Profile {
         if (hasClassWizard) {
           size += pb::CodedOutputStream.ComputeMessageSize(15, ClassWizard);
         }
-        if (hasAchievementShowcase0) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(16, AchievementShowcase0);
+        if (hasDeprecatedAchievementShowcase0) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(16, DeprecatedAchievementShowcase0);
         }
-        if (hasAchievementShowcase1) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(17, AchievementShowcase1);
+        if (hasDeprecatedAchievementShowcase1) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(17, DeprecatedAchievementShowcase1);
         }
-        if (hasAchievementShowcase2) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(18, AchievementShowcase2);
+        if (hasDeprecatedAchievementShowcase2) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(18, DeprecatedAchievementShowcase2);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -3897,14 +4028,14 @@ namespace D3.Profile {
         if (other.HasClassWizard) {
           MergeClassWizard(other.ClassWizard);
         }
-        if (other.HasAchievementShowcase0) {
-          AchievementShowcase0 = other.AchievementShowcase0;
+        if (other.HasDeprecatedAchievementShowcase0) {
+          DeprecatedAchievementShowcase0 = other.DeprecatedAchievementShowcase0;
         }
-        if (other.HasAchievementShowcase1) {
-          AchievementShowcase1 = other.AchievementShowcase1;
+        if (other.HasDeprecatedAchievementShowcase1) {
+          DeprecatedAchievementShowcase1 = other.DeprecatedAchievementShowcase1;
         }
-        if (other.HasAchievementShowcase2) {
-          AchievementShowcase2 = other.AchievementShowcase2;
+        if (other.HasDeprecatedAchievementShowcase2) {
+          DeprecatedAchievementShowcase2 = other.DeprecatedAchievementShowcase2;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -4035,15 +4166,15 @@ namespace D3.Profile {
               break;
             }
             case 128: {
-              result.hasAchievementShowcase0 = input.ReadUInt64(ref result.achievementShowcase0_);
+              result.hasDeprecatedAchievementShowcase0 = input.ReadUInt64(ref result.deprecatedAchievementShowcase0_);
               break;
             }
             case 136: {
-              result.hasAchievementShowcase1 = input.ReadUInt64(ref result.achievementShowcase1_);
+              result.hasDeprecatedAchievementShowcase1 = input.ReadUInt64(ref result.deprecatedAchievementShowcase1_);
               break;
             }
             case 144: {
-              result.hasAchievementShowcase2 = input.ReadUInt64(ref result.achievementShowcase2_);
+              result.hasDeprecatedAchievementShowcase2 = input.ReadUInt64(ref result.deprecatedAchievementShowcase2_);
               break;
             }
           }
@@ -4456,63 +4587,63 @@ namespace D3.Profile {
         return this;
       }
       
-      public bool HasAchievementShowcase0 {
-        get { return result.hasAchievementShowcase0; }
+      public bool HasDeprecatedAchievementShowcase0 {
+        get { return result.hasDeprecatedAchievementShowcase0; }
       }
-      public ulong AchievementShowcase0 {
-        get { return result.AchievementShowcase0; }
-        set { SetAchievementShowcase0(value); }
+      public ulong DeprecatedAchievementShowcase0 {
+        get { return result.DeprecatedAchievementShowcase0; }
+        set { SetDeprecatedAchievementShowcase0(value); }
       }
-      public Builder SetAchievementShowcase0(ulong value) {
+      public Builder SetDeprecatedAchievementShowcase0(ulong value) {
         PrepareBuilder();
-        result.hasAchievementShowcase0 = true;
-        result.achievementShowcase0_ = value;
+        result.hasDeprecatedAchievementShowcase0 = true;
+        result.deprecatedAchievementShowcase0_ = value;
         return this;
       }
-      public Builder ClearAchievementShowcase0() {
+      public Builder ClearDeprecatedAchievementShowcase0() {
         PrepareBuilder();
-        result.hasAchievementShowcase0 = false;
-        result.achievementShowcase0_ = 0UL;
-        return this;
-      }
-      
-      public bool HasAchievementShowcase1 {
-        get { return result.hasAchievementShowcase1; }
-      }
-      public ulong AchievementShowcase1 {
-        get { return result.AchievementShowcase1; }
-        set { SetAchievementShowcase1(value); }
-      }
-      public Builder SetAchievementShowcase1(ulong value) {
-        PrepareBuilder();
-        result.hasAchievementShowcase1 = true;
-        result.achievementShowcase1_ = value;
-        return this;
-      }
-      public Builder ClearAchievementShowcase1() {
-        PrepareBuilder();
-        result.hasAchievementShowcase1 = false;
-        result.achievementShowcase1_ = 0UL;
+        result.hasDeprecatedAchievementShowcase0 = false;
+        result.deprecatedAchievementShowcase0_ = 0UL;
         return this;
       }
       
-      public bool HasAchievementShowcase2 {
-        get { return result.hasAchievementShowcase2; }
+      public bool HasDeprecatedAchievementShowcase1 {
+        get { return result.hasDeprecatedAchievementShowcase1; }
       }
-      public ulong AchievementShowcase2 {
-        get { return result.AchievementShowcase2; }
-        set { SetAchievementShowcase2(value); }
+      public ulong DeprecatedAchievementShowcase1 {
+        get { return result.DeprecatedAchievementShowcase1; }
+        set { SetDeprecatedAchievementShowcase1(value); }
       }
-      public Builder SetAchievementShowcase2(ulong value) {
+      public Builder SetDeprecatedAchievementShowcase1(ulong value) {
         PrepareBuilder();
-        result.hasAchievementShowcase2 = true;
-        result.achievementShowcase2_ = value;
+        result.hasDeprecatedAchievementShowcase1 = true;
+        result.deprecatedAchievementShowcase1_ = value;
         return this;
       }
-      public Builder ClearAchievementShowcase2() {
+      public Builder ClearDeprecatedAchievementShowcase1() {
         PrepareBuilder();
-        result.hasAchievementShowcase2 = false;
-        result.achievementShowcase2_ = 0UL;
+        result.hasDeprecatedAchievementShowcase1 = false;
+        result.deprecatedAchievementShowcase1_ = 0UL;
+        return this;
+      }
+      
+      public bool HasDeprecatedAchievementShowcase2 {
+        get { return result.hasDeprecatedAchievementShowcase2; }
+      }
+      public ulong DeprecatedAchievementShowcase2 {
+        get { return result.DeprecatedAchievementShowcase2; }
+        set { SetDeprecatedAchievementShowcase2(value); }
+      }
+      public Builder SetDeprecatedAchievementShowcase2(ulong value) {
+        PrepareBuilder();
+        result.hasDeprecatedAchievementShowcase2 = true;
+        result.deprecatedAchievementShowcase2_ = value;
+        return this;
+      }
+      public Builder ClearDeprecatedAchievementShowcase2() {
+        PrepareBuilder();
+        result.hasDeprecatedAchievementShowcase2 = false;
+        result.deprecatedAchievementShowcase2_ = 0UL;
         return this;
       }
     }

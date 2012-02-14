@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,12 +46,12 @@ namespace Mooege.Core.MooNet.Services
 
                 Logger.Debug("RecentPlayer => " + client.Account.CurrentGameAccount.CurrentToon);
                 var recentPlayer = bnet.protocol.user_manager.RecentPlayer.CreateBuilder()
-                    .SetEntity(client.Account.CurrentGameAccount.Owner.BnetEntityId)
+                    .SetEntity(client.Account.BnetEntityId)
                     .SetProgramId("D3")
                     .AddAttributes(bnet.protocol.attribute.Attribute.CreateBuilder()
                         .SetName("GameAccountEntityId")
                         .SetValue(bnet.protocol.attribute.Variant.CreateBuilder()
-                            .SetMessageValue(client.Account.CurrentGameAccount.BnetEntityId.ToByteString())
+                            .SetMessageValue(client.Account.CurrentGameAccount.D3GameAccountId.ToByteString())
                             .Build())
                         .Build())
                     .SetId(i++)

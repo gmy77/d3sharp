@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@ using Google.ProtocolBuffers;
 using Mooege.Common.Versions;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
-using Mooege.Core.MooNet.Achievement;
 using Mooege.Common.Extensions;
 
 namespace Mooege.Core.MooNet.Services
@@ -41,12 +40,17 @@ namespace Mooege.Core.MooNet.Services
         public override void RegisterWithService(IRpcController controller, bnet.protocol.achievements.RegisterWithServiceRequest request, Action<bnet.protocol.achievements.RegisterWithServiceResponse> done)
         {
             // This should register client with achievement notifier service. -Egris
+            var snapshot = bnet.protocol.achievements.Snapshot.CreateBuilder();
+
+            foreach (var achievement in this.Client.Account.CurrentGameAccount.Achievements)
+                snapshot.AddAchievementSnapshot(achievement);
+
+            foreach (var criteria in this.Client.Account.CurrentGameAccount.AchievementCriteria)
+                snapshot.AddCriteriaSnapshot(criteria);
+
             var response = bnet.protocol.achievements.RegisterWithServiceResponse.CreateBuilder()
-                .SetMaxRecordsPerUpdate(1)
-                .SetMaxCriteriaPerRecord(2)
-                .SetMaxAchievementsPerRecord(1)
-                .SetMaxRegistrations(16)
-                .SetFlushFrequency(180);
+                .SetSnapshot(snapshot);
+
             done(response.Build());
         }
 
@@ -72,13 +76,17 @@ namespace Mooege.Core.MooNet.Services
         public override void Initialize(IRpcController controller, bnet.protocol.achievements.InitializeRequest request, Action<bnet.protocol.achievements.InitializeResponse> done)
         {
             var contentHandle = bnet.protocol.ContentHandle.CreateBuilder()
-                .SetRegion(0x00005553)
-                .SetUsage(0x61636876)
+                .SetRegion(0x00005553) //US
+                .SetUsage(0x61636876) //achv
                 .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.Achievements.AchievementFileHash.ToByteArray()));
             var reponse = bnet.protocol.achievements.InitializeResponse.CreateBuilder().SetContentHandle(contentHandle);
 
             done(reponse.Build());
         }
 
+        public override void ValidateStaticData(IRpcController controller, bnet.protocol.achievements.ValidateStaticDataRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

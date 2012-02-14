@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,8 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    [Message(new[] { Opcodes.IntDataMessage1, Opcodes.IntDataMessage2, Opcodes.IntDataMessage3, Opcodes.IntDataMessage4, Opcodes.IntDataMessage5, Opcodes.IntDataMessage6, Opcodes.IntDataMessage7, Opcodes.IntDataMessage8 })]
+    [Message(new[] { Opcodes.IntDataMessage1, Opcodes.IntDataMessage2, Opcodes.IntDataMessage3, Opcodes.IntDataMessage4, Opcodes.IntDataMessage5,
+                    Opcodes.IntDataMessage6, Opcodes.IntDataMessage7, Opcodes.IntDataMessage8, Opcodes.IntDataMessage9 })]
     public class IntDataMessage : GameMessage
     {
         public int Field0;

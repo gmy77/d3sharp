@@ -177,6 +177,14 @@ message CancelRequest
     optional .bnet.protocol.EntityId bnet_account = 4;
 }
 
+message RefundRequest
+{
+    required .bnet.protocol.exchange.PartitionId partition_id = 1;
+    required uint64 order_id = 2;
+    required string cs_notes = 3;
+    required uint64 cs_user_id = 4;
+}
+
 message GetConfigurationRequest
 {
     required fixed32 program = 1;
@@ -265,6 +273,48 @@ message GetOrderBookStatisticsResponse
     repeated .bnet.protocol.exchange.PriceDetail price_details = 1;
     required uint64 last_trades_average = 2;
     required uint64 last_days_average = 3;
+}
+
+message GetBidDetailsRequest
+{
+    required uint64 order_id = 1;
+    required .bnet.protocol.exchange.PartitionId partition_id = 2;
+}
+
+message GetBidDetailsResponse
+{
+    required .bnet.protocol.exchange.OrderExtended bid = 1;
+}
+
+message GetOfferDetailsRequest
+{
+    required uint64 order_id = 1;
+    required .bnet.protocol.exchange.PartitionId partition_id = 2;
+}
+
+message GetOfferDetailsResponse
+{
+    required .bnet.protocol.exchange.OrderExtended offer = 1;
+}
+
+message GetSystemTimeResponse
+{
+    required uint64 time = 1;
+}
+
+message CreateCSTradeRequest
+{
+    required .bnet.protocol.exchange.PartitionId partition_id = 1;
+    required .bnet.protocol.exchange.BlobOfType object = 2;
+    required fixed32 program = 3;
+    required uint32 compatibility = 4;
+    required uint32 allowed_realm = 5;
+    required uint32 amount = 6;
+    required .bnet.protocol.EntityId bnet_account = 7;
+    optional .bnet.protocol.EntityId game_account = 8;
+    required .bnet.protocol.exchange.BlobFrom account_for_item = 9;
+    required string cs_notes = 10;
+    required uint64 cs_user_id = 11;
 }
 
 service ExchangeService
@@ -400,6 +450,30 @@ service ExchangeService
     rpc GetOrderBookStatistics(.bnet.protocol.exchange.GetOrderBookStatisticsRequest) returns(.bnet.protocol.exchange.GetOrderBookStatisticsResponse)
     {
         option (method_id) = 35;
+    }
+    rpc GetBidDetails(.bnet.protocol.exchange.GetBidDetailsRequest) returns(.bnet.protocol.exchange.GetBidDetailsResponse)
+    {
+        option (method_id) = 36;
+    }
+    rpc GetOfferDetails(.bnet.protocol.exchange.GetOfferDetailsRequest) returns(.bnet.protocol.exchange.GetOfferDetailsResponse)
+    {
+        option (method_id) = 37;
+    }
+    rpc GetSystemTime(.bnet.protocol.NoData) returns(.bnet.protocol.exchange.GetSystemTimeResponse)
+    {
+        option (method_id) = 38;
+    }
+    rpc CreateCSTrade(.bnet.protocol.exchange.CreateCSTradeRequest) returns(.bnet.protocol.NoData)
+    {
+        option (method_id) = 39;
+    }
+    rpc RefundBid(.bnet.protocol.exchange.RefundRequest) returns(.bnet.protocol.NoData)
+    {
+        option (method_id) = 40;
+    }
+    rpc ReportRefund(.bnet.protocol.exchange_object_provider.ReportRefundRequest) returns(.bnet.protocol.NoData)
+    {
+        option (method_id) = 41;
     }
 }
 

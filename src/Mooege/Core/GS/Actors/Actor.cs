@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,11 +30,14 @@ using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Core.GS.Map;
 using Mooege.Net.GS.Message;
-using Mooege.Net.GS.Message.Definitions.Actor;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Core.GS.Common.Types.TagMap;
+using System;
+using Mooege.Core.GS.Powers;
+using Mooege.Net.GS.Message.Definitions.Effect;
+using Mooege.Net.GS.Message.Definitions.Animation;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -137,7 +140,7 @@ namespace Mooege.Core.GS.Actors
             get { return true; }
         }
 
-        protected Mooege.Common.MPQ.FileFormats.Actor ActorData { get; private set; }
+        public Mooege.Common.MPQ.FileFormats.Actor ActorData { get; private set; }
 
         /// <summary>
         /// The animation set for actor.
@@ -297,6 +300,144 @@ namespace Mooege.Core.GS.Actors
             this.World.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
         }
 
+        #endregion
+        
+        #region Movement/Translation
+
+        public void TranslateFacing(Vector3D target, bool immediately = false)
+        {
+            float facingAngle = Movement.MovementHelpers.GetFacingAngle(this, target);
+            this.SetFacingRotation(facingAngle);
+
+            if (this.World == null) return;
+
+            this.World.BroadcastIfRevealed(new ACDTranslateFacingMessage
+            {
+                ActorId = DynamicID,
+                Angle = facingAngle,
+                TurnImmediately = immediately
+            }, this);
+        }
+
+        #endregion
+
+        #region Effects
+
+        public void PlayEffectGroup(int effectGroupSNO)
+        {
+            PlayEffect(Effect.PlayEffectGroup, effectGroupSNO);
+        }
+
+        public void PlayEffectGroup(int effectGroupSNO, Actor target)
+        {
+            if (target == null || this.World == null) return;
+
+            World.BroadcastIfRevealed(new EffectGroupACDToACDMessage
+            {
+                ActorID = this.DynamicID,
+                TargetID = target.DynamicID,
+                EffectSNOId = effectGroupSNO
+            }, this);
+        }
+
+        public void PlayHitEffect(int hitEffect, Actor hitDealer)
+        {
+            if (hitDealer.World == null || this.World == null) return;
+
+            World.BroadcastIfRevealed(new PlayHitEffectMessage
+            {
+                ActorID = DynamicID,
+                HitDealer = hitDealer.DynamicID,
+                Field2 = hitEffect,
+                Field3 = false
+            }, this);
+        }
+
+        public void PlayEffect(Effect effect, int? param = null)
+        {
+            if (this.World == null) return;
+
+            World.BroadcastIfRevealed(new PlayEffectMessage
+            {
+                ActorId = this.DynamicID,
+                Effect = effect,
+                OptionalParameter = param
+            }, this);
+        }
+
+        public void AddRopeEffect(int ropeSNO, Actor target)
+        {
+            if (target == null || target.World == null || this.World == null) return;
+
+            World.BroadcastIfRevealed(new RopeEffectMessageACDToACD
+            {
+                Id = (int)Opcodes.RopeEffectMessageACDToACD,
+                Field0 = ropeSNO,
+                Field1 = (int)DynamicID,
+                Field2 = 4,
+                Field3 = (int)target.DynamicID,
+                Field4 = 1
+            }, this);
+        }
+
+        public void AddRopeEffect(int ropeSNO, Vector3D target)
+        {
+            if (this.World == null) return;
+
+            this.World.BroadcastIfRevealed(new RopeEffectMessageACDToPlace
+            {
+                Id = (int)Opcodes.RopeEffectMessageACDToPlace,
+                Field0 = ropeSNO,
+                Field1 = (int)this.DynamicID,
+                Field2 = 4,
+                Field3 = new WorldPlace { Position = target, WorldID = this.World.DynamicID }
+            }, this);
+        }
+
+        public void AddComplexEffect(int effectGroupSNO, Actor target)
+        {
+            if (target == null || target.World == null || this.World == null) return;
+
+            // TODO: Might need to track complex effects
+            World.BroadcastIfRevealed(new ComplexEffectAddMessage
+            {
+                Id = (int)Opcodes.ComplexEffectAddMessage,
+                Field0 = (int)World.NewActorID, // TODO: maybe not use actor ids?
+                Field1 = 1,  // 0=efg, 1=efg, 2=rope
+                Field2 = effectGroupSNO, // efgSNO or ropeSNO
+                Field3 = (int)this.DynamicID, // source
+                Field4 = (int)target.DynamicID, // target
+                Field5 = 0, // 0=efg, 4=rope1, 3=rope2
+                Field6 = 0 // 0=efg, 1=rope1, 3=rope2
+            }, target);
+        }
+
+        public void PlayAnimation(int animationType, int animationSNO, float speed = 1.0f, int? ticksToPlay = null)
+        {
+            if (this.World == null) return;
+
+            this.World.BroadcastIfRevealed(new PlayAnimationMessage
+            {
+                ActorID = this.DynamicID,
+                Field1 = animationType,
+                Field2 = 0,
+                tAnim = new PlayAnimationMessageSpec[]
+                {
+                    new PlayAnimationMessageSpec
+                    {
+                        Duration = ticksToPlay.HasValue ? ticksToPlay.Value : -2,  // -2 = play animation once through
+                        AnimationSNO = animationSNO,
+                        PermutationIndex = 0x0,  // TODO: implement variations?
+                        Speed = speed,
+                    }
+                }
+            }, this);
+        }
+
+        public void PlayActionAnimation(int animationSNO, float speed = 1.0f, int? ticksToPlay = null)
+        {
+            PlayAnimation(3, animationSNO, speed, ticksToPlay);
+        }
         #endregion
 
         #region reveal & unreveal handling

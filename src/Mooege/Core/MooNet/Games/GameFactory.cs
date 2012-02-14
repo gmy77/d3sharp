@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@ using Google.ProtocolBuffers;
 using Mooege.Core.GS.Games;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Helpers;
-using Mooege.Core.MooNet.Objects;
 using Mooege.Net.MooNet;
 using Config = Mooege.Net.GS.Config;
 
@@ -50,7 +49,7 @@ namespace Mooege.Core.MooNet.Games
         public bool Started { get; private set; }
 
         public GameFactory(MooNetClient owner, bnet.protocol.game_master.FindGameRequest request, ulong requestId)
-            : base(owner)
+            : base(owner, true)
         {
             this.Started = false;
             this.Owner = owner; //Game is really the owner Channel.Owner should maybe be EntityId instead of MooNetClient -Egris
@@ -84,6 +83,8 @@ namespace Mooege.Core.MooNet.Games
             {
                 client.MapLocalObjectID(this.DynamicId, objectId); // map remote object-id.
                 this.SendConnectionInfo(client);
+                client.Account.CurrentGameAccount.ScreenStatus = D3.PartyMessage.ScreenStatus.CreateBuilder().SetScreen(0).SetStatus(0).Build();
+                client.Account.CurrentGameAccount.NotifyUpdate();
             }
 
             this.Started = true;
@@ -98,7 +99,7 @@ namespace Mooege.Core.MooNet.Games
             }
         }
 
-        private bnet.protocol.game_master.ConnectInfo GetConnectionInfoForClient(MooNetClient client)
+        public bnet.protocol.game_master.ConnectInfo GetConnectionInfoForClient(MooNetClient client)
         {
             //TODO: We should actually find the server's public-interface and use that /raist
 
@@ -123,7 +124,9 @@ namespace Mooege.Core.MooNet.Games
                 .SetStateChange(channelStatePrivacyLevel)
                 .Build();
 
-            client.MakeTargetedRPC(client.CurrentChannel, () =>
+            var gameChannel = ChannelManager.GetChannelByEntityId(this.BnetEntityId);
+
+            client.MakeTargetedRPC(gameChannel, () =>
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPrivacyLevel, callback => { }));
 
             var channelStatePartyLock = bnet.protocol.channel.ChannelState.CreateBuilder()
@@ -137,7 +140,7 @@ namespace Mooege.Core.MooNet.Games
                 .SetStateChange(channelStatePartyLock)
                 .Build();
 
-            client.MakeTargetedRPC(client.CurrentChannel, () =>
+            client.MakeTargetedRPC(gameChannel, () =>
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPartyLock, callback => { }));
 
             // send the notification.
@@ -158,7 +161,7 @@ namespace Mooege.Core.MooNet.Games
             var notificationBuilder = bnet.protocol.notification.Notification.CreateBuilder()
                 .SetSenderId(bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.GameAccountId).SetLow(0).Build())
                 .SetTargetId(client.Account.CurrentGameAccount.BnetEntityId)
-                .SetType("GAME_CONNECTION_INFO")
+                .SetType("GAME_ENTRY")
                 .AddAttribute(connectionInfoAttribute)
                 .AddAttribute(gameHandleAttribute)
                 .AddAttribute(requestIdAttribute)

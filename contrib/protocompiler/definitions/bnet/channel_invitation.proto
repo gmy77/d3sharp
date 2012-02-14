@@ -4,6 +4,7 @@ import "bnet/invitation_types.proto";
 import "bnet/rpc.proto";
 import "bnet/channel_service.proto";
 import "bnet/channel_invitation_types.proto";
+import "bnet/channel_types.proto";
 
 package bnet.protocol.channel_invitation;
 
@@ -13,8 +14,9 @@ option (google.protobuf.csharp_file_options).umbrella_classname = "ChannelInvita
 message AcceptInvitationRequest
 {
     optional .bnet.protocol.EntityId agent_id = 1;
-    required fixed64 invitation_id = 2;
-    required uint64 object_id = 3;
+    optional .bnet.protocol.channel.MemberState member_state = 2;
+    required fixed64 invitation_id = 3;
+    required uint64 object_id = 4;
 }
 
 message AcceptInvitationResponse

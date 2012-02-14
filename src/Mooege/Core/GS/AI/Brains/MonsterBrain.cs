@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,55 +22,87 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Actors.Movement;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
+using Mooege.Core.GS.Actors.Actions;
+using Mooege.Net.GS.Message;
+using Mooege.Common.MPQ;
+using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.AI.Brains
 {
-    public class MonsterBrain:Brain
+    public class MonsterBrain : Brain
     {
-        /// <summary>
-        /// Hostile actors in range.
-        /// </summary>
-        public List<Player> EnemiesInRange { get; protected set; }
+        // list of power SNOs that are defined for the monster
+        public List<int> PresetPowers { get; private set; }
+
+        private TickTimer _powerDelay;
 
         public MonsterBrain(Actor body)
             : base(body)
         {
-        }
+            this.PresetPowers = new List<int>();
 
-        private List<Player> GetPlayersInRange(Mooege.Core.GS.Map.World world)
-        {
-            // Not as clean and fancy as quadtreee, but the cost is like alot less.
-            // Quadtree avg's 0.134ms vs 0.004ms for this. Probably could stick to the Quadtree by just only checking every X seconds.
-            List<Player> playerList = new List<Player>();
-            foreach (var p in world.Players.Values)
+            // build list of powers defined in monster mpq data
+            if (body.ActorData.MonsterSNO > 0)
             {
-                if (MovementHelpers.GetDistance(this.Body.Position, p.Position) < 240f)
+                var monsterData = (Mooege.Common.MPQ.FileFormats.Monster)MPQStorage.Data.Assets[SNOGroup.Monster][body.ActorData.MonsterSNO].Data;
+                foreach (var monsterSkill in monsterData.SkillDeclarations)
                 {
-                    playerList.Add(p);
+                    if (monsterSkill.SNOPower > 0)
+                        this.PresetPowers.Add(monsterSkill.SNOPower);
                 }
             }
-            return playerList;
         }
 
         public override void Think(int tickCounter)
         {
+            // this needed? /mdz
             if (this.Body is NPC) return;
+            
+            // check if in disabled state, if so cancel any action then do nothing
+            if (this.Body.Attributes[GameAttribute.Frozen] ||
+                this.Body.Attributes[GameAttribute.Stunned] ||
+                this.Body.Attributes[GameAttribute.Blind] ||
+                this.Body.World.BuffManager.GetFirstBuff<Powers.Implementations.KnockbackBuff>(this.Body) != null)
+            {
+                if (this.CurrentAction != null)
+                {
+                    this.CurrentAction.Cancel(tickCounter);
+                    this.CurrentAction = null;
+                }
+                _powerDelay = null;
 
-            // Reading enemies in range from quad map is quite expensive, so read it once at the very start. /raist.
-            this.EnemiesInRange = this.GetPlayersInRange(Body.World); //this.Body.GetPlayersInRange();
+                return;
+            }
 
-            if (this.EnemiesInRange.Count > 0) // if there are enemies around
-                this.State = BrainState.Combat; // attack them.
-            else
-                this.State = BrainState.Wander; // else just wander around.
-
+            // select and start executing a power if no active action
             if (this.CurrentAction == null)
             {
-                var heading = new Vector3D(this.Body.Position.X + FastRandom.Instance.Next(-40, 40), this.Body.Position.Y + FastRandom.Instance.Next(-40, 40), this.Body.Position.Z);
+                // do a little delay so groups of monsters don't all execute at once
+                if (_powerDelay == null)
+                    _powerDelay = new SecondsTickTimer(this.Body.World.Game, (float)RandomHelper.NextDouble());
 
-                if (this.Body.Position.DistanceSquared(ref heading) > this.Body.WalkSpeed * this.Body.World.Game.TickRate) // just skip the movements that can be accomplished in a single game.update(). /raist.
-                    this.CurrentAction = new MoveToPointWithPathfindAction(this.Body, heading);
+                if (_powerDelay.TimedOut)
+                {
+                    int powerToUse = PickPowerToUse();
+                    if (powerToUse > 0)
+                        this.CurrentAction = new PowerAction(this.Body, powerToUse);
+                }
             }
+        }
+
+        protected virtual int PickPowerToUse()
+        {
+            // randomly used an implemented power
+            if (this.PresetPowers.Count > 0)
+            {
+                int powerIndex = RandomHelper.Next(this.PresetPowers.Count);
+                if (Powers.PowerLoader.HasImplementationForPowerSNO(this.PresetPowers[powerIndex]))
+                    return this.PresetPowers[powerIndex];
+            }
+
+            // no usable power
+            return -1;
         }
     }
 }

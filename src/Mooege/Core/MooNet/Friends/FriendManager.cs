@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Linq;
 using Mooege.Common.Storage;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
@@ -51,15 +50,26 @@ namespace Mooege.Core.MooNet.Friends
 
         public static void HandleInvitation(MooNetClient client, bnet.protocol.invitation.Invitation invitation)
         {
-            var invitee = Instance.Subscribers.FirstOrDefault(subscriber => subscriber.Account.BnetEntityId.Low == invitation.InviteeIdentity.AccountId.Low);
+            var invitee = AccountManager.GetAccountByPersistentID(invitation.InviteeIdentity.AccountId.Low);
+            //var invitee = Instance.Subscribers.FirstOrDefault(subscriber => subscriber.Account.BnetEntityId.Low == invitation.InviteeIdentity.AccountId.Low);
             if (invitee == null) return; // if we can't find invite just return - though we should actually check for it until expiration time and store this in database.
+
+            //Check for duplicate invites
+            foreach (var oldInvite in OnGoingInvitations.Values)
+            {
+                if ((oldInvite.InviteeIdentity.AccountId == invitation.InviteeIdentity.AccountId) && (oldInvite.InviterIdentity.AccountId == invitation.InviterIdentity.AccountId))
+                    return;
+            }
 
             OnGoingInvitations.Add(invitation.Id, invitation); // track ongoing invitations so we can tranport it forth and back.
 
-            var notification = bnet.protocol.friends.InvitationNotification.CreateBuilder().SetInvitation(invitation);
+            if (invitee.IsOnline)
+            {
+                var notification = bnet.protocol.friends.InvitationNotification.CreateBuilder().SetInvitation(invitation);
 
-            invitee.MakeTargetedRPC(FriendManager.Instance, () =>
-                bnet.protocol.friends.FriendsNotify.CreateStub(invitee).NotifyReceivedInvitationAdded(null, notification.Build(), callback => { }));
+                invitee.CurrentGameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
+                    bnet.protocol.friends.FriendsNotify.CreateStub(invitee.CurrentGameAccount.LoggedInClient).NotifyReceivedInvitationAdded(null, notification.Build(), callback => { }));
+            }
         }
 
         public static void HandleAccept(MooNetClient client, bnet.protocol.invitation.GenericRequest request)

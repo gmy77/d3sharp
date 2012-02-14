@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections.Generic;
-using Mooege.Common;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
 
@@ -75,7 +74,9 @@ namespace Mooege.Core.MooNet.Objects
             client.MapLocalObjectID(this.DynamicId, remoteObjectId);
             this.Subscribers.Add(client);
             // Since the client wasn't previously subscribed, it should not be aware of the object's state -- let's notify it
-            this.NotifySubscriptionAdded(client);
+            foreach (var subscriber in this.Subscribers)
+                this.NotifySubscriptionAdded(subscriber);
+            //this.NotifySubscriptionAdded(client);
         }
 
         /// <summary>
@@ -94,6 +95,9 @@ namespace Mooege.Core.MooNet.Objects
             this.Subscribers.Remove(client);
             // We don't need to do a notify nor respond to the client with anything since the client will ultimately act
             // like the object never existed in the first place
+
+            foreach (var subscriber in this.Subscribers)
+                this.NotifySubscriptionAdded(subscriber);
         }
 
         /// <summary>
@@ -107,14 +111,9 @@ namespace Mooege.Core.MooNet.Objects
         }
 
         /// <summary>
-        /// Provide a list of update notifications.
-        /// Once the notification system is smart enough to determine which value/property to update this would auto generate notifications
+        /// Stores only changed Fields to send to clients
         /// </summary>
-        /// <returns></returns>
-        public virtual List<bnet.protocol.presence.FieldOperation> GetUpdateNotifications()
-        {
-            return new List<bnet.protocol.presence.FieldOperation>();
-        }
+        public Mooege.Core.MooNet.Helpers.FieldKeyHelper ChangedFields = new Mooege.Core.MooNet.Helpers.FieldKeyHelper();
 
         /// <summary>
         /// Notifies a specific subscriber about the object's present state.
@@ -127,10 +126,36 @@ namespace Mooege.Core.MooNet.Objects
             MakeRPC(client, operations);
         }
 
-        public void NotifyUpdate(MooNetClient client)
+        public virtual void NotifyUpdate() {}
+
+        public void UpdateSubscribers(List<MooNetClient> subscribers, List<bnet.protocol.presence.FieldOperation> operations)
         {
-            var operations = GetUpdateNotifications();
-            MakeRPC(client, operations);
+            var disconnected = new List<MooNetClient>();
+            foreach (var subscriber in this.Subscribers)
+            {
+                var gameAccount = subscriber.Account.CurrentGameAccount;
+                if (gameAccount.IsOnline) //This should never be false, subscribers should be unsubscribed if disconnected
+                {
+                    var state = bnet.protocol.presence.ChannelState.CreateBuilder().SetEntityId(this.BnetEntityId).AddRangeFieldOperation(operations).Build();
+
+                    // Embed in channel.ChannelState
+                    var channelState = bnet.protocol.channel.ChannelState.CreateBuilder().SetExtension(bnet.protocol.presence.ChannelState.Presence, state);
+
+                    // Put in addnotification message
+                    var notification = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder().SetStateChange(channelState);
+
+                    gameAccount.LoggedInClient.MakeTargetedRPC(this, () =>
+                        bnet.protocol.channel.ChannelSubscriber.CreateStub(gameAccount.LoggedInClient).NotifyUpdateChannelState(null, notification.Build(), callback => { }));
+                }
+                else
+                {
+                    disconnected.Add(subscriber);
+                    Logger.Warn("Subscriber: {0} not online.", subscriber.Account);
+                }
+            }
+
+            foreach (var subscriber in disconnected)
+                this.Subscribers.Remove(subscriber);
         }
 
         protected void MakeRPC(MooNetClient client, List<bnet.protocol.presence.FieldOperation> operations)

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ namespace Mooege.Core.GS.AI
 
             this.Think(tickCounter); // let the brain think.
             this.Perform(tickCounter); // perform any outstanding actions.
-        }        
+        }
 
         /// <summary>
         /// Lets the brain think and decide the next action to take.
@@ -74,21 +74,31 @@ namespace Mooege.Core.GS.AI
         public virtual void Think(int tickCounter)
         { }
 
+        /// <summary>
+        /// Stop all brain activities.
+        /// </summary>
+        public virtual void Kill()
+        {
+            if (this.CurrentAction != null)
+            {
+                this.CurrentAction.Cancel(0);
+                this.CurrentAction = null;
+            }
+            this.State = BrainState.Dead;
+        }
+
         private void Perform(int tickCounter)
         {
             if (this.CurrentAction == null)
                 return;
 
-            if (this.CurrentAction.Done)
-            {
-                this.CurrentAction = null;
-                return;
-            }
-
             if (!this.CurrentAction.Started)
                 this.CurrentAction.Start(tickCounter);
             else
                 this.CurrentAction.Update(tickCounter);
+
+            if (this.CurrentAction.Done)
+                this.CurrentAction = null;
         }        
     }
 }

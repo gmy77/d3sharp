@@ -12,3 +12,16 @@ message Identity
     optional .bnet.protocol.EntityId game_account_id = 2;
 }
 
+message AccountInfo
+{
+    enum AccountStatus
+    {
+        TRIAL = 1;
+        PAID = 2;
+        GM = 3;
+    }
+
+    optional .bnet.protocol.AccountInfo.AccountStatus account_status = 1 [default = TRIAL];
+    optional fixed32 country_id = 2 [default = 0];
+}
+

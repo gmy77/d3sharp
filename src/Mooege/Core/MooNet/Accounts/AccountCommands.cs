@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
 using System.Linq;
 using Mooege.Core.MooNet.Commands;
-using Mooege.Core.MooNet.Toons;
 using Mooege.Net.MooNet;
 
 namespace Mooege.Core.MooNet.Accounts
@@ -136,7 +134,7 @@ namespace Mooege.Core.MooNet.Accounts
             return string.Format("Updated password for account {0}.", email);
         }
 
-        [Command("setuserlevel", "Allows you to set a new user level for account\nUsage: account setuserlevel <email> <user level>", Account.UserLevels.GM)]
+        [Command("setuserlevel", "Allows you to set a new user level for account\nUsage: account setuserlevel <email> <user level>.\nAvailable user levels: owner, admin, gm, user.", Account.UserLevels.GM)]
         public string SetLevel(string[] @params, MooNetClient invokerClient)
         {
             if (@params.Count() < 2)

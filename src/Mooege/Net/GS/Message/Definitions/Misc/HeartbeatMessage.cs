@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,40 +16,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    /// <summary>
-    /// Sent by the client, when the player uses cauldron of jordan on an item
-    /// </summary>
-    [Message(Opcodes.RequestUseCauldronOfJordanMessage, Consumers.Inventory)]
-    public class RequestUseCauldronOfJordanMessage : GameMessage
+    [Message(Opcodes.HeartbeatMessage)]
+    public class HeartbeatMessage : GameMessage, ISelfHandler
     {
-        public uint ActorID; // Id of the target
-
-        public RequestUseCauldronOfJordanMessage() : base(Opcodes.RequestUseCauldronOfJordanMessage) { }
-
+        public void Handle(GameClient client)
+        {
+            // Removes spam every 15 seconds for no handler
+        }
         public override void Parse(GameBitBuffer buffer)
         {
-            ActorID = buffer.ReadUInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteUInt(32, ActorID);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("RequestUseCauldronOfJordanMessage:");
+            b.AppendLine("HeartbeatMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("ActorID: 0x" + ActorID.ToString("X8") + " (" + ActorID + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using Mooege.Common;
 using Mooege.Common.Logging;
 using Mooege.Core.GS.Items;
 using Mooege.Net.GS;
@@ -28,11 +27,8 @@ using Mooege.Core.GS.Common;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Net.GS.Message.Definitions.Stash;
 using Mooege.Core.GS.Objects;
-using Mooege.Common.Helpers;
-using Mooege.Net.GS.Message.Definitions.Misc;
 using System.Collections.Generic;
 using System.Linq;
-using Mooege.Core.GS.Items.Implementations;
 
 namespace Mooege.Core.GS.Players
 {
@@ -411,8 +407,6 @@ namespace Mooege.Core.GS.Players
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
             else if (message is RequestBuySharedStashSlotsMessage) OnBuySharedStashSlots(message as RequestBuySharedStashSlotsMessage);
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
-            else if (message is RequestUseCauldronOfJordanMessage) OnUseCauldronOfJordanMessage(message as RequestUseCauldronOfJordanMessage);
-            else if (message is RequestUseNephalemCubeMessage) OnUseNephalmCubeMessage(message as RequestUseNephalemCubeMessage);
             else return;
         }
 
@@ -546,7 +540,7 @@ namespace Mooege.Core.GS.Players
             _owner.Attributes[GameAttribute.Rune_D, powerSNOId] = rune.Attributes[GameAttribute.Rune_D];
             _owner.Attributes[GameAttribute.Rune_E, powerSNOId] = rune.Attributes[GameAttribute.Rune_E];
             // position of rune is read from mpq as INDEX of skill in skill kit - loaded in helper /xsochor
-            rune.SetInventoryLocation(16, RuneHelper.GetRuneIndexForPower(powerSNOId), 0);
+            rune.SetInventoryLocation(15, RuneHelper.GetRuneIndexForPower(powerSNOId), 0);
         }
 
         /// <summary>
@@ -573,19 +567,6 @@ namespace Mooege.Core.GS.Players
             _owner.Attributes[GameAttribute.Rune_D, powerSNOId] = 0;
             _owner.Attributes[GameAttribute.Rune_E, powerSNOId] = 0;
             return rune;
-        }
-
-
-		private void OnUseNephalmCubeMessage(RequestUseNephalemCubeMessage requestUseNephalemCubeMessage)
-        {
-            Item salvageItem = GetItem(requestUseNephalemCubeMessage.ActorID);
-            NephalemCube.OnUse(_owner, salvageItem);
-        }
-
-        private void OnUseCauldronOfJordanMessage(RequestUseCauldronOfJordanMessage requestUseCauldronOfJordanMessage)
-        {
-            Item sellItem = GetItem(requestUseCauldronOfJordanMessage.ActorID);
-            CauldronOfJordan.OnUse(_owner, sellItem);
         }
 
 

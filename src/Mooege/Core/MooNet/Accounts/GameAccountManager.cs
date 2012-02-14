@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,6 @@ namespace Mooege.Core.MooNet.Accounts
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-
-
         private static readonly Dictionary<ulong, GameAccount> GameAccounts = new Dictionary<ulong, GameAccount>();
         public static List<GameAccount> GameAccountsList { get { return GameAccounts.Values.ToList(); } }
 
@@ -56,6 +54,19 @@ namespace Mooege.Core.MooNet.Accounts
             return GameAccounts.Where(account => account.Value.PersistentID == persistentId).Select(account => account.Value).FirstOrDefault();
         }
 
+        public static ulong GetNextAvailablePersistentId()
+        {
+            var cmd = new SQLiteCommand("SELECT max(id) from gameaccounts", DBManager.Connection);
+            try
+            {
+                return Convert.ToUInt64(cmd.ExecuteScalar());
+            }
+            catch (InvalidCastException)
+            {
+                return 0;
+            }
+        }
+
         static GameAccountManager()
         {
             LoadGameAccounts();
@@ -73,9 +84,15 @@ namespace Mooege.Core.MooNet.Accounts
             {
                 var gameAccountId = (ulong)reader.GetInt64(0);
                 var accountId = (ulong)reader.GetInt64(1);
-
                 var gameAccount = new GameAccount(gameAccountId, accountId);
+
+                #region Populate GameAccount Data
+
+                var banner = (byte[])reader.GetValue(2);
+                gameAccount.BannerConfiguration = D3.Account.BannerConfiguration.ParseFrom(banner);
                 GameAccounts.Add(gameAccountId, gameAccount);
+
+                #endregion
             }
         }
 

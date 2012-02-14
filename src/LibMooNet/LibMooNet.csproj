@@ -43,6 +43,7 @@
     <Compile Include="bnet\protocol\channel_invitation\ChannelInvitationService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bnet\protocol\config\Locale.cs" />
     <Compile Include="bnet\protocol\config\RpcConfig.cs" />
     <Compile Include="bnet\protocol\connection\ConnectionService.cs" />
     <Compile Include="bnet\protocol\exchange\Exchange.cs" />

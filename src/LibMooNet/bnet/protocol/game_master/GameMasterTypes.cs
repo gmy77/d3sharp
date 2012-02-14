@@ -52,13 +52,13 @@ namespace bnet.protocol.game_master {
           "ChF3YWl0X21pbGxpc2Vjb25kcxgDIAEoDToBMBIZCg5nYW1lc19wZXJfaG91" + 
           "chgEIAEoDToBMBIXCgxhY3RpdmVfZ2FtZXMYBSABKA06ATASGQoOYWN0aXZl" + 
           "X3BsYXllcnMYBiABKA06ATASGAoNZm9ybWluZ19nYW1lcxgHIAEoDToBMBIa" + 
-          "Cg93YWl0aW5nX3BsYXllcnMYCCABKA06ATAiqwEKFkdhbWVGYWN0b3J5RGVz" + 
+          "Cg93YWl0aW5nX3BsYXllcnMYCCABKA06ATAiwwEKFkdhbWVGYWN0b3J5RGVz" + 
           "Y3JpcHRpb24SCgoCaWQYASACKAYSDAoEbmFtZRgCIAEoCRI1CglhdHRyaWJ1" + 
           "dGUYAyADKAsyIi5ibmV0LnByb3RvY29sLmF0dHJpYnV0ZS5BdHRyaWJ1dGUS" + 
           "QAoMc3RhdHNfYnVja2V0GAQgAygLMiouYm5ldC5wcm90b2NvbC5nYW1lX21h" + 
-          "c3Rlci5HYW1lU3RhdHNCdWNrZXQiSgoKR2FtZUhhbmRsZRISCgpmYWN0b3J5" + 
-          "X2lkGAEgAigGEigKB2dhbWVfaWQYAiACKAsyFy5ibmV0LnByb3RvY29sLkVu" + 
-          "dGl0eUlk");
+          "c3Rlci5HYW1lU3RhdHNCdWNrZXQSFgoLdW5zZWVkZWRfaWQYBSABKAY6ATAi" + 
+          "SgoKR2FtZUhhbmRsZRISCgpmYWN0b3J5X2lkGAEgAigGEigKB2dhbWVfaWQY" + 
+          "AiACKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlk");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_game_master_Player__Descriptor = Descriptor.MessageTypes[0];
@@ -76,7 +76,7 @@ namespace bnet.protocol.game_master {
         internal__static_bnet_protocol_game_master_GameFactoryDescription__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_game_master_GameFactoryDescription__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.game_master.GameFactoryDescription, global::bnet.protocol.game_master.GameFactoryDescription.Builder>(internal__static_bnet_protocol_game_master_GameFactoryDescription__Descriptor,
-                new string[] { "Id", "Name", "Attribute", "StatsBucket", });
+                new string[] { "Id", "Name", "Attribute", "StatsBucket", "UnseededId", });
         internal__static_bnet_protocol_game_master_GameHandle__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_game_master_GameHandle__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.game_master.GameHandle, global::bnet.protocol.game_master.GameHandle.Builder>(internal__static_bnet_protocol_game_master_GameHandle__Descriptor,
@@ -1622,8 +1622,8 @@ namespace bnet.protocol.game_master {
   public sealed partial class GameFactoryDescription : pb::GeneratedMessage<GameFactoryDescription, GameFactoryDescription.Builder> {
     private GameFactoryDescription() { }
     private static readonly GameFactoryDescription defaultInstance = new GameFactoryDescription().MakeReadOnly();
-    private static readonly string[] _gameFactoryDescriptionFieldNames = new string[] { "attribute", "id", "name", "stats_bucket" };
-    private static readonly uint[] _gameFactoryDescriptionFieldTags = new uint[] { 26, 9, 18, 34 };
+    private static readonly string[] _gameFactoryDescriptionFieldNames = new string[] { "attribute", "id", "name", "stats_bucket", "unseeded_id" };
+    private static readonly uint[] _gameFactoryDescriptionFieldTags = new uint[] { 26, 9, 18, 34, 41 };
     public static GameFactoryDescription DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1688,6 +1688,16 @@ namespace bnet.protocol.game_master {
       return statsBucket_[index];
     }
     
+    public const int UnseededIdFieldNumber = 5;
+    private bool hasUnseededId;
+    private ulong unseededId_;
+    public bool HasUnseededId {
+      get { return hasUnseededId; }
+    }
+    public ulong UnseededId {
+      get { return unseededId_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasId) return false;
@@ -1713,6 +1723,9 @@ namespace bnet.protocol.game_master {
       if (statsBucket_.Count > 0) {
         output.WriteMessageArray(4, field_names[3], statsBucket_);
       }
+      if (hasUnseededId) {
+        output.WriteFixed64(5, field_names[4], UnseededId);
+      }
       UnknownFields.WriteTo(output);
     }
     
@@ -1734,6 +1747,9 @@ namespace bnet.protocol.game_master {
         }
         foreach (global::bnet.protocol.game_master.GameStatsBucket element in StatsBucketList) {
           size += pb::CodedOutputStream.ComputeMessageSize(4, element);
+        }
+        if (hasUnseededId) {
+          size += pb::CodedOutputStream.ComputeFixed64Size(5, UnseededId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1875,6 +1891,9 @@ namespace bnet.protocol.game_master {
         if (other.statsBucket_.Count != 0) {
           result.statsBucket_.Add(other.statsBucket_);
         }
+        if (other.HasUnseededId) {
+          UnseededId = other.UnseededId;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1932,6 +1951,10 @@ namespace bnet.protocol.game_master {
             }
             case 34: {
               input.ReadMessageArray(tag, field_name, result.statsBucket_, global::bnet.protocol.game_master.GameStatsBucket.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 41: {
+              result.hasUnseededId = input.ReadFixed64(ref result.unseededId_);
               break;
             }
           }
@@ -2070,6 +2093,26 @@ namespace bnet.protocol.game_master {
       public Builder ClearStatsBucket() {
         PrepareBuilder();
         result.statsBucket_.Clear();
+        return this;
+      }
+      
+      public bool HasUnseededId {
+        get { return result.hasUnseededId; }
+      }
+      public ulong UnseededId {
+        get { return result.UnseededId; }
+        set { SetUnseededId(value); }
+      }
+      public Builder SetUnseededId(ulong value) {
+        PrepareBuilder();
+        result.hasUnseededId = true;
+        result.unseededId_ = value;
+        return this;
+      }
+      public Builder ClearUnseededId() {
+        PrepareBuilder();
+        result.hasUnseededId = false;
+        result.unseededId_ = 0;
         return this;
       }
     }

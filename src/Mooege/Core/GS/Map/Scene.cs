@@ -1,5 +1,5 @@
 ﻿﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +17,7 @@
  */
 
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
-using Mooege.Common;
 using Mooege.Common.Logging;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Actors;
@@ -31,7 +29,6 @@ using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.Map;
 using Mooege.Net.GS.Message.Definitions.Scene;
-using Mooege.Common.Helpers;
 using Mooege.Common.Helpers.Math;
 
 namespace Mooege.Core.GS.Map
@@ -363,7 +360,11 @@ namespace Mooege.Core.GS.Map
                 specification.SNOCombatMusic = World.Environment.snoCombatMusic;
                 specification.SNOAmbient = World.Environment.snoAmbient;
                 specification.SNOReverb = World.Environment.snoReverb;
-                specification.SNOWeather = World.Environment.snoWeather;
+                //specification.SNOWeather = World.Environment.snoWeather;
+                //World data is being read from olders mpq patch files and reading the wrong
+                //weather.  forcing new weather from town to all scenes for now
+                //since it's much more pleasing on the eyes than the blue haze
+                specification.SNOWeather = 0x00013220;
 
                 return new RevealSceneMessage
                 {

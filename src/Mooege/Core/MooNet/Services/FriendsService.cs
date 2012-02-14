@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Google.ProtocolBuffers;
 using Mooege.Common.Extensions;
 using Mooege.Common.Logging;
@@ -38,7 +39,7 @@ namespace Mooege.Core.MooNet.Services
             Logger.Trace("Subscribe() {0}", this.Client);
 
             FriendManager.Instance.AddSubscriber(this.Client, request.ObjectId);
-            
+
             var builder = bnet.protocol.friends.SubscribeToFriendsResponse.CreateBuilder()
                 .SetMaxFriends(127)
                 .SetMaxReceivedInvitations(127)
@@ -51,11 +52,26 @@ namespace Mooege.Core.MooNet.Services
                 builder.AddFriends(friend);
             }
 
+            var invitations = new List<bnet.protocol.invitation.Invitation>();
+
+            foreach (var invitation in FriendManager.OnGoingInvitations.Values)
+            {
+                if (invitation.InviteeIdentity.AccountId == this.Client.Account.BnetEntityId)
+                {
+                    invitations.Add(invitation);
+                }
+            }
+
+            if (invitations.Count > 0)
+                builder.AddRangeReceivedInvitations(invitations);
+
             done(builder.Build());
         }
 
         public override void SendInvitation(IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
+            //TODO: Add battletag invitation -Egris
+
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
             var extensionBytes = request.Params.UnknownFields.FieldDictionary[103].LengthDelimitedList[0].ToByteArray();
             var friendRequest = bnet.protocol.friends.FriendInvitationParams.ParseFrom(extensionBytes);
@@ -64,6 +80,7 @@ namespace Mooege.Core.MooNet.Services
                                                                                                     // also he shouldn't be allowed to invite his current friends - put that check too!. /raist
             var inviteee = AccountManager.GetAccountByEmail(friendRequest.TargetEmail);
             if (inviteee == null) return; // we need send an error response here /raist.
+            //Header.Status(4) = account does not exist
 
             Logger.Trace("{0} sent {1} friend invitation.", this.Client.Account, inviteee);
 

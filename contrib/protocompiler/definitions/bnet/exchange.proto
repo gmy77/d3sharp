@@ -29,3 +29,17 @@ message BlobFromOfType
     required bytes data = 3;
 }
 
+message ActionErrorDetail
+{
+    required uint32 error_code = 1;
+    optional uint32 extra_error_code = 2;
+}
+
+message BillingAddress
+{
+    required int32 country_id = 1;
+    required string city = 2;
+    optional string state = 3;
+    optional string postal_code = 4;
+}
+

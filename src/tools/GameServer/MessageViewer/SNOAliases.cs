@@ -40,8 +40,8 @@ namespace GameMessageViewer
         public static string GetGroup(int uhash)
         {
             var dic = MPQStorage.Data.Assets[SNOGroup.Globals].First().Value.Data as Mooege.Common.MPQ.FileFormats.Globals;
-            if (dic.ActorGroup.ContainsKey(uhash))
-                return dic.ActorGroup[uhash].S0;
+            //if (dic.ActorGroup.ContainsKey(uhash))
+            //    return dic.ActorGroup[uhash].S0;
 
             return "";
         }

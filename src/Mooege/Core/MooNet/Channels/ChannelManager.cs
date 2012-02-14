@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,12 +28,12 @@ namespace Mooege.Core.MooNet.Channels
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        private readonly static Dictionary<ulong, Channel> Channels =
+        public readonly static Dictionary<ulong, Channel> Channels =
             new Dictionary<ulong, Channel>();
 
         public static Channel CreateNewChannel(MooNetClient client, ulong remoteObjectId)
         {
-            var channel = new Channel(client, remoteObjectId);
+            var channel = new Channel(client, false, remoteObjectId);
             Channels.Add(channel.DynamicId, channel);
             return channel;
         }

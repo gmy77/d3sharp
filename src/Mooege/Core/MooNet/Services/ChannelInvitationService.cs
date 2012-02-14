@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ using System;
 using Mooege.Common.Extensions;
 using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Channels;
-using Mooege.Core.MooNet.Toons;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Net.MooNet;
 
@@ -46,12 +45,14 @@ namespace Mooege.Core.MooNet.Services
 
         public override void AcceptInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel_invitation.AcceptInvitationRequest request, Action<bnet.protocol.channel_invitation.AcceptInvitationResponse> done)
         {
-            Logger.Trace("{0} accepted invitation.", this.Client.Account.CurrentGameAccount.CurrentToon);
+            var channel = ChannelManager.GetChannelByEntityId(this._invitationManager.GetInvitationById(request.InvitationId).GetExtension(bnet.protocol.channel_invitation.ChannelInvitation.ChannelInvitationProp).ChannelDescription.ChannelId);
 
-            var channel = this._invitationManager.HandleAccept(this.Client, request);
+            Logger.Trace("{0} accepted invitation id {1} to channel {2}.", this.Client.Account.CurrentGameAccount.CurrentToon, request.InvitationId, channel);
 
             var response = bnet.protocol.channel_invitation.AcceptInvitationResponse.CreateBuilder().SetObjectId(channel.DynamicId).Build();
             done(response);
+
+            this._invitationManager.HandleAccept(this.Client, request);
         }
 
         public override void DeclineInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
@@ -77,7 +78,7 @@ namespace Mooege.Core.MooNet.Services
         public override void SendInvitation(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.invitation.SendInvitationResponse> done)
         {
             var invitee = GameAccountManager.GetAccountByPersistentID(request.TargetId.Low);
-            if (this.Client.CurrentChannel.HasMember(invitee)) return; // don't allow a second invitation if invitee is already a member of client's current channel.
+            //if (this.Client.CurrentChannel.HasMember(invitee)) return; // don't allow a second invitation if invitee is already a member of client's current channel.
 
             Logger.Debug("{0} invited {1} to his channel.", Client.Account.CurrentGameAccount.CurrentToon, invitee);
 
@@ -85,30 +86,38 @@ namespace Mooege.Core.MooNet.Services
             var extensionBytes = request.Params.UnknownFields.FieldDictionary[105].LengthDelimitedList[0].ToByteArray();
             var channelInvitationInfo = bnet.protocol.channel_invitation.ChannelInvitationParams.ParseFrom(extensionBytes);
 
-            var channelInvitation = bnet.protocol.channel_invitation.ChannelInvitationParams.CreateBuilder()
+            var channel = ChannelManager.GetChannelByEntityId(channelInvitationInfo.ChannelId);
+            var channelDescription = bnet.protocol.channel.ChannelDescription.CreateBuilder()
                 .SetChannelId(channelInvitationInfo.ChannelId)
+                .SetCurrentMembers((uint)channel.Members.Count)
+                .SetState(channel.State);
+
+            var channelInvitation = bnet.protocol.channel_invitation.ChannelInvitation.CreateBuilder()
+                .SetChannelDescription(channelDescription)
                 .SetReserved(channelInvitationInfo.Reserved)
                 .SetServiceType(channelInvitationInfo.ServiceType)
                 .SetRejoin(false).Build();
 
-            //Todo: Verify Inviter and Invitee names -Egris
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder();
             invitation.SetId(ChannelInvitationManager.InvitationIdCounter++)
-                .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(Client.Account.CurrentGameAccount.BnetEntityId).Build())
+                .SetInviterIdentity(bnet.protocol.Identity.CreateBuilder().SetGameAccountId(Client.Account.CurrentGameAccount.BnetEntityId).Build())
                 .SetInviterName(Client.Account.CurrentGameAccount.Owner.BattleTag)
-                .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(request.TargetId).Build())
+                .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetGameAccountId(request.TargetId).Build())
                 .SetInviteeName(invitee.Owner.BattleTag)
                 .SetInvitationMessage(request.Params.InvitationMessage)
                 .SetCreationTime(DateTime.Now.ToExtendedEpoch())
                 .SetExpirationTime(DateTime.Now.ToUnixTime() + request.Params.ExpirationTime)
-                .SetExtension(bnet.protocol.channel_invitation.ChannelInvitationParams.ChannelParams, channelInvitation);
+                .SetExtension(bnet.protocol.channel_invitation.ChannelInvitation.ChannelInvitationProp, channelInvitation);
 
             // oh blizz, cmon. your buggy client even doesn't care this message at all but waits the UpdateChannelStateNotification with embedded invitation proto to show "invitation sent message".
             // ADVICE TO POTENTIAL BLIZZ-WORKER READING THIS;
             // change rpc SendInvitation(.bnet.protocol.invitation.SendInvitationRequest) returns (.bnet.protocol.invitation.SendInvitationResponse); to rpc SendInvitation(.bnet.protocol.invitation.SendInvitationRequest) returns (.bnet.protocol.NoData);
 
-            var builder = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder()
-                .SetInvitation(invitation.Clone()); // clone it because we need that invitation as un-builded below.
+            var builder = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder();
+            channel.AddInvitation(invitation.Build());
+
+            if (!channel.HasMember(invitee))
+                builder.SetInvitation(invitation.Clone()); // clone it because we need that invitation as un-builded below.
 
             done(builder.Build());
 
@@ -118,7 +127,7 @@ namespace Mooege.Core.MooNet.Services
                 .SetAgentId(Client.Account.CurrentGameAccount.BnetEntityId)
                 .SetStateChange(bnet.protocol.channel.ChannelState.CreateBuilder().AddInvitation(invitation.Clone()));
 
-            this.Client.MakeTargetedRPC(this.Client.CurrentChannel, () =>
+            this.Client.MakeTargetedRPC(channel, () =>
                 bnet.protocol.channel.ChannelSubscriber.CreateStub(Client).NotifyUpdateChannelState(controller, notification.Build(), callback => { }));
 
             // notify the invitee on invitation.

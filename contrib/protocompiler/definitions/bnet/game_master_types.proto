@@ -43,6 +43,7 @@ message GameFactoryDescription
     optional string name = 2;
     repeated .bnet.protocol.attribute.Attribute attribute = 3;
     repeated .bnet.protocol.game_master.GameStatsBucket stats_bucket = 4;
+    optional fixed64 unseeded_id = 5 [default = 0];
 }
 
 message GameHandle

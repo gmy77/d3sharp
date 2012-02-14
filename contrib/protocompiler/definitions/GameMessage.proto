@@ -94,12 +94,6 @@ message TutorialState
     required bytes seen_tutorials = 1;
 }
 
-message SetAchievementShowcase
-{
-    required uint64 achievement_id = 1;
-    required uint32 slot = 2;
-}
-
 message DeleteHero
 {
     required .D3.OnlineService.EntityId account_id = 1;

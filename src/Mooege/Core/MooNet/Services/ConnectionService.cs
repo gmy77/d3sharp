@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,7 +97,9 @@ namespace Mooege.Core.MooNet.Services
 
         public override void RequestDisconnect(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.connection.DisconnectRequest request, Action<bnet.protocol.NO_RESPONSE> done)
         {
-            throw new NotImplementedException();
-        }        
+            Logger.Trace("RequestDisconnect()");
+            this.Client.Account.CurrentGameAccount.SaveToDB();
+            this.Client.Account.CurrentGameAccount.LoggedInClient.Connection.Disconnect();
+        }
     }
 }

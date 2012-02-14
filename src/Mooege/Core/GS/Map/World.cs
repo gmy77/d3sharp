@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,11 +21,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using Mooege.Common;
-using Mooege.Common.Helpers;
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
-using Mooege.Common.MPQ.FileFormats.Types;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.QuadTrees;
@@ -38,6 +35,7 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.World;
+using Mooege.Core.GS.Powers;
 using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Core.GS.Ticker;
 using Mooege.Net.GS.Message.Definitions.Misc;
@@ -102,6 +100,9 @@ namespace Mooege.Core.GS.Map
             get { return this._actors.Values.OfType<StartingPoint>().Select(actor => actor).ToList(); }
         }
 
+        public PowerManager PowerManager;
+        public BuffManager BuffManager;
+
         /// <summary>
         /// Creates a new world for the given game with given snoId.
         /// </summary>
@@ -119,7 +120,9 @@ namespace Mooege.Core.GS.Map
             this._actors = new ConcurrentDictionary<uint, Actor>();
             this.Players = new ConcurrentDictionary<uint, Player>();
             this.QuadTree = new QuadTree(new Size(60, 60), 0);
-            this.Game.AddWorld(this); 
+            this.PowerManager = new PowerManager();
+            this.BuffManager = new BuffManager();
+            this.Game.AddWorld(this);
         }
 
         #region update & tick logic
@@ -144,7 +147,15 @@ namespace Mooege.Core.GS.Map
                 actor.Update(tickCounter);
             }
 
+            this.BuffManager.Update();
+            this.PowerManager.Update();
+
             UpdateFlippy(tickCounter);
+
+            foreach (var player in this.Players.Values)
+            {
+                player.InGameClient.SendTick(); // if there's available messages to send, will handle ticking and flush the outgoing buffer.
+            }
         }
 
         #endregion
