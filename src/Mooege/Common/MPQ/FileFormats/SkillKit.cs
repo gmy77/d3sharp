@@ -63,6 +63,12 @@ namespace Mooege.Common.MPQ.FileFormats
         public ActiveSkillCategory Category { get; private set; }
         public int ReqLevel { get; private set; }
         public int I2 { get; private set; }
+        public int I3 { get; private set; }
+        public int I4 { get; private set; }
+        public int I5 { get; private set; }
+        public int I6 { get; private set; }
+        public int I7 { get; private set; }
+        public int I8 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -70,7 +76,12 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Category = (ActiveSkillCategory)stream.ReadValueS32();
             this.ReqLevel = stream.ReadValueS32();
             this.I2 = stream.ReadValueS32();
-
+            this.I3 = stream.ReadValueS32();
+            this.I4 = stream.ReadValueS32();
+            this.I5 = stream.ReadValueS32();
+            this.I6 = stream.ReadValueS32();
+            this.I7 = stream.ReadValueS32();
+            this.I8 = stream.ReadValueS32();
         }
     }
 

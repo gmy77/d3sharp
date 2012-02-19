@@ -341,7 +341,6 @@
     <Compile Include="Core\MooNet\Services\SearchService.cs" />
     <Compile Include="Core\MooNet\Services\ServerPoolService.cs" />
     <Compile Include="Core\MooNet\Services\Service.cs" />
-    <Compile Include="Core\MooNet\Services\StorageService.cs" />
     <Compile Include="Core\MooNet\Services\UserManagerService.cs" />
     <Compile Include="Core\GS\Skills\SkillSet.cs" />
     <Compile Include="Core\GS\Skills\Skills.cs" />

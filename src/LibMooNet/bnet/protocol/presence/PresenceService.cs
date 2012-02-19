@@ -22,8 +22,12 @@ namespace bnet.protocol.presence {
       #region Static variables
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_presence_SubscribeRequest__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.SubscribeRequest, global::bnet.protocol.presence.SubscribeRequest.Builder> internal__static_bnet_protocol_presence_SubscribeRequest__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_presence_SubscribeNotificationRequest__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.SubscribeNotificationRequest, global::bnet.protocol.presence.SubscribeNotificationRequest.Builder> internal__static_bnet_protocol_presence_SubscribeNotificationRequest__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_presence_UnsubscribeRequest__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.UnsubscribeRequest, global::bnet.protocol.presence.UnsubscribeRequest.Builder> internal__static_bnet_protocol_presence_UnsubscribeRequest__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_presence_UnsubscribeNotificationRequest__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.UnsubscribeNotificationRequest, global::bnet.protocol.presence.UnsubscribeNotificationRequest.Builder> internal__static_bnet_protocol_presence_UnsubscribeNotificationRequest__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_presence_UpdateRequest__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.UpdateRequest, global::bnet.protocol.presence.UpdateRequest.Builder> internal__static_bnet_protocol_presence_UpdateRequest__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_presence_QueryRequest__Descriptor;
@@ -46,53 +50,70 @@ namespace bnet.protocol.presence {
             "cm90bxoOYm5ldC9ycGMucHJvdG8aGWJuZXQvcHJlc2VuY2VfdHlwZXMucHJv" + 
             "dG8ifAoQU3Vic2NyaWJlUmVxdWVzdBIpCghhZ2VudF9pZBgBIAEoCzIXLmJu" + 
             "ZXQucHJvdG9jb2wuRW50aXR5SWQSKgoJZW50aXR5X2lkGAIgAigLMhcuYm5l" + 
-            "dC5wcm90b2NvbC5FbnRpdHlJZBIRCglvYmplY3RfaWQYAyACKAQiawoSVW5z" + 
-            "dWJzY3JpYmVSZXF1ZXN0EikKCGFnZW50X2lkGAEgASgLMhcuYm5ldC5wcm90" + 
-            "b2NvbC5FbnRpdHlJZBIqCgllbnRpdHlfaWQYAiACKAsyFy5ibmV0LnByb3Rv" + 
-            "Y29sLkVudGl0eUlkInwKDVVwZGF0ZVJlcXVlc3QSKgoJZW50aXR5X2lkGAEg" + 
-            "AigLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBI/Cg9maWVsZF9vcGVyYXRp" + 
-            "b24YAiADKAsyJi5ibmV0LnByb3RvY29sLnByZXNlbmNlLkZpZWxkT3BlcmF0" + 
-            "aW9uImkKDFF1ZXJ5UmVxdWVzdBIqCgllbnRpdHlfaWQYASACKAsyFy5ibmV0" + 
-            "LnByb3RvY29sLkVudGl0eUlkEi0KA2tleRgCIAMoCzIgLmJuZXQucHJvdG9j" + 
-            "b2wucHJlc2VuY2UuRmllbGRLZXkiPQoNUXVlcnlSZXNwb25zZRIsCgVmaWVs" + 
-            "ZBgCIAMoCzIdLmJuZXQucHJvdG9jb2wucHJlc2VuY2UuRmllbGQiYAoQT3du" + 
-            "ZXJzaGlwUmVxdWVzdBIqCgllbnRpdHlfaWQYASACKAsyFy5ibmV0LnByb3Rv" + 
-            "Y29sLkVudGl0eUlkEiAKEXJlbGVhc2Vfb3duZXJzaGlwGAIgASgIOgVmYWxz" + 
-            "ZTKHBAoPUHJlc2VuY2VTZXJ2aWNlElIKCVN1YnNjcmliZRIoLmJuZXQucHJv" + 
-            "dG9jb2wucHJlc2VuY2UuU3Vic2NyaWJlUmVxdWVzdBoVLmJuZXQucHJvdG9j" + 
-            "b2wuTm9EYXRhIgSAtRgBElYKC1Vuc3Vic2NyaWJlEiouYm5ldC5wcm90b2Nv" + 
-            "bC5wcmVzZW5jZS5VbnN1YnNjcmliZVJlcXVlc3QaFS5ibmV0LnByb3RvY29s" + 
-            "Lk5vRGF0YSIEgLUYAhJMCgZVcGRhdGUSJS5ibmV0LnByb3RvY29sLnByZXNl" + 
-            "bmNlLlVwZGF0ZVJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUY" + 
-            "AxJaCgVRdWVyeRIkLmJuZXQucHJvdG9jb2wucHJlc2VuY2UuUXVlcnlSZXF1" + 
-            "ZXN0GiUuYm5ldC5wcm90b2NvbC5wcmVzZW5jZS5RdWVyeVJlc3BvbnNlIgSA" + 
-            "tRgEElIKCU93bmVyc2hpcBIoLmJuZXQucHJvdG9jb2wucHJlc2VuY2UuT3du" + 
-            "ZXJzaGlwUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgFEkoK" + 
-            "BEhlYWwSJS5ibmV0LnByb3RvY29sLnByZXNlbmNlLlVwZGF0ZVJlcXVlc3Qa" + 
-            "FS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYBkIDgAEA");
+            "dC5wcm90b2NvbC5FbnRpdHlJZBIRCglvYmplY3RfaWQYAyACKAQiSgocU3Vi" + 
+            "c2NyaWJlTm90aWZpY2F0aW9uUmVxdWVzdBIqCgllbnRpdHlfaWQYASACKAsy" + 
+            "Fy5ibmV0LnByb3RvY29sLkVudGl0eUlkImsKElVuc3Vic2NyaWJlUmVxdWVz" + 
+            "dBIpCghhZ2VudF9pZBgBIAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQS" + 
+            "KgoJZW50aXR5X2lkGAIgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZCJM" + 
+            "Ch5VbnN1YnNjcmliZU5vdGlmaWNhdGlvblJlcXVlc3QSKgoJZW50aXR5X2lk" + 
+            "GAEgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZCJ8Cg1VcGRhdGVSZXF1" + 
+            "ZXN0EioKCWVudGl0eV9pZBgBIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5" + 
+            "SWQSPwoPZmllbGRfb3BlcmF0aW9uGAIgAygLMiYuYm5ldC5wcm90b2NvbC5w" + 
+            "cmVzZW5jZS5GaWVsZE9wZXJhdGlvbiJpCgxRdWVyeVJlcXVlc3QSKgoJZW50" + 
+            "aXR5X2lkGAEgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBItCgNrZXkY" + 
+            "AiADKAsyIC5ibmV0LnByb3RvY29sLnByZXNlbmNlLkZpZWxkS2V5Ij0KDVF1" + 
+            "ZXJ5UmVzcG9uc2USLAoFZmllbGQYAiADKAsyHS5ibmV0LnByb3RvY29sLnBy" + 
+            "ZXNlbmNlLkZpZWxkImAKEE93bmVyc2hpcFJlcXVlc3QSKgoJZW50aXR5X2lk" + 
+            "GAEgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBIgChFyZWxlYXNlX293" + 
+            "bmVyc2hpcBgCIAEoCDoFZmFsc2Uy4wUKD1ByZXNlbmNlU2VydmljZRJSCglT" + 
+            "dWJzY3JpYmUSKC5ibmV0LnByb3RvY29sLnByZXNlbmNlLlN1YnNjcmliZVJl" + 
+            "cXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYARJWCgtVbnN1YnNj" + 
+            "cmliZRIqLmJuZXQucHJvdG9jb2wucHJlc2VuY2UuVW5zdWJzY3JpYmVSZXF1" + 
+            "ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GAISTAoGVXBkYXRlEiUu" + 
+            "Ym5ldC5wcm90b2NvbC5wcmVzZW5jZS5VcGRhdGVSZXF1ZXN0GhUuYm5ldC5w" + 
+            "cm90b2NvbC5Ob0RhdGEiBIC1GAMSWgoFUXVlcnkSJC5ibmV0LnByb3RvY29s" + 
+            "LnByZXNlbmNlLlF1ZXJ5UmVxdWVzdBolLmJuZXQucHJvdG9jb2wucHJlc2Vu" + 
+            "Y2UuUXVlcnlSZXNwb25zZSIEgLUYBBJSCglPd25lcnNoaXASKC5ibmV0LnBy" + 
+            "b3RvY29sLnByZXNlbmNlLk93bmVyc2hpcFJlcXVlc3QaFS5ibmV0LnByb3Rv" + 
+            "Y29sLk5vRGF0YSIEgLUYBRJKCgRIZWFsEiUuYm5ldC5wcm90b2NvbC5wcmVz" + 
+            "ZW5jZS5VcGRhdGVSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1" + 
+            "GAYSagoVU3Vic2NyaWJlTm90aWZpY2F0aW9uEjQuYm5ldC5wcm90b2NvbC5w" + 
+            "cmVzZW5jZS5TdWJzY3JpYmVOb3RpZmljYXRpb25SZXF1ZXN0GhUuYm5ldC5w" + 
+            "cm90b2NvbC5Ob0RhdGEiBIC1GAcSbgoXVW5zdWJzY3JpYmVOb3RpZmljYXRp" + 
+            "b24SNi5ibmV0LnByb3RvY29sLnByZXNlbmNlLlVuc3Vic2NyaWJlTm90aWZp" + 
+            "Y2F0aW9uUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgIQgOA" + 
+            "AQA=");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_presence_SubscribeRequest__Descriptor = Descriptor.MessageTypes[0];
           internal__static_bnet_protocol_presence_SubscribeRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.SubscribeRequest, global::bnet.protocol.presence.SubscribeRequest.Builder>(internal__static_bnet_protocol_presence_SubscribeRequest__Descriptor,
                   new string[] { "AgentId", "EntityId", "ObjectId", });
-          internal__static_bnet_protocol_presence_UnsubscribeRequest__Descriptor = Descriptor.MessageTypes[1];
+          internal__static_bnet_protocol_presence_SubscribeNotificationRequest__Descriptor = Descriptor.MessageTypes[1];
+          internal__static_bnet_protocol_presence_SubscribeNotificationRequest__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.SubscribeNotificationRequest, global::bnet.protocol.presence.SubscribeNotificationRequest.Builder>(internal__static_bnet_protocol_presence_SubscribeNotificationRequest__Descriptor,
+                  new string[] { "EntityId", });
+          internal__static_bnet_protocol_presence_UnsubscribeRequest__Descriptor = Descriptor.MessageTypes[2];
           internal__static_bnet_protocol_presence_UnsubscribeRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.UnsubscribeRequest, global::bnet.protocol.presence.UnsubscribeRequest.Builder>(internal__static_bnet_protocol_presence_UnsubscribeRequest__Descriptor,
                   new string[] { "AgentId", "EntityId", });
-          internal__static_bnet_protocol_presence_UpdateRequest__Descriptor = Descriptor.MessageTypes[2];
+          internal__static_bnet_protocol_presence_UnsubscribeNotificationRequest__Descriptor = Descriptor.MessageTypes[3];
+          internal__static_bnet_protocol_presence_UnsubscribeNotificationRequest__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.UnsubscribeNotificationRequest, global::bnet.protocol.presence.UnsubscribeNotificationRequest.Builder>(internal__static_bnet_protocol_presence_UnsubscribeNotificationRequest__Descriptor,
+                  new string[] { "EntityId", });
+          internal__static_bnet_protocol_presence_UpdateRequest__Descriptor = Descriptor.MessageTypes[4];
           internal__static_bnet_protocol_presence_UpdateRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.UpdateRequest, global::bnet.protocol.presence.UpdateRequest.Builder>(internal__static_bnet_protocol_presence_UpdateRequest__Descriptor,
                   new string[] { "EntityId", "FieldOperation", });
-          internal__static_bnet_protocol_presence_QueryRequest__Descriptor = Descriptor.MessageTypes[3];
+          internal__static_bnet_protocol_presence_QueryRequest__Descriptor = Descriptor.MessageTypes[5];
           internal__static_bnet_protocol_presence_QueryRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.QueryRequest, global::bnet.protocol.presence.QueryRequest.Builder>(internal__static_bnet_protocol_presence_QueryRequest__Descriptor,
                   new string[] { "EntityId", "Key", });
-          internal__static_bnet_protocol_presence_QueryResponse__Descriptor = Descriptor.MessageTypes[4];
+          internal__static_bnet_protocol_presence_QueryResponse__Descriptor = Descriptor.MessageTypes[6];
           internal__static_bnet_protocol_presence_QueryResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.QueryResponse, global::bnet.protocol.presence.QueryResponse.Builder>(internal__static_bnet_protocol_presence_QueryResponse__Descriptor,
                   new string[] { "Field", });
-          internal__static_bnet_protocol_presence_OwnershipRequest__Descriptor = Descriptor.MessageTypes[5];
+          internal__static_bnet_protocol_presence_OwnershipRequest__Descriptor = Descriptor.MessageTypes[7];
           internal__static_bnet_protocol_presence_OwnershipRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.presence.OwnershipRequest, global::bnet.protocol.presence.OwnershipRequest.Builder>(internal__static_bnet_protocol_presence_OwnershipRequest__Descriptor,
                   new string[] { "EntityId", "ReleaseOwnership", });
@@ -536,6 +557,307 @@ namespace bnet.protocol.presence {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class SubscribeNotificationRequest : pb::GeneratedMessage<SubscribeNotificationRequest, SubscribeNotificationRequest.Builder> {
+    private SubscribeNotificationRequest() { }
+    private static readonly SubscribeNotificationRequest defaultInstance = new SubscribeNotificationRequest().MakeReadOnly();
+    private static readonly string[] _subscribeNotificationRequestFieldNames = new string[] { "entity_id" };
+    private static readonly uint[] _subscribeNotificationRequestFieldTags = new uint[] { 10 };
+    public static SubscribeNotificationRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override SubscribeNotificationRequest DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override SubscribeNotificationRequest ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.presence.Proto.PresenceService.internal__static_bnet_protocol_presence_SubscribeNotificationRequest__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<SubscribeNotificationRequest, SubscribeNotificationRequest.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.presence.Proto.PresenceService.internal__static_bnet_protocol_presence_SubscribeNotificationRequest__FieldAccessorTable; }
+    }
+    
+    public const int EntityIdFieldNumber = 1;
+    private bool hasEntityId;
+    private global::bnet.protocol.EntityId entityId_;
+    public bool HasEntityId {
+      get { return hasEntityId; }
+    }
+    public global::bnet.protocol.EntityId EntityId {
+      get { return entityId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasEntityId) return false;
+        if (!EntityId.IsInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _subscribeNotificationRequestFieldNames;
+      if (hasEntityId) {
+        output.WriteMessage(1, field_names[0], EntityId);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasEntityId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, EntityId);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static SubscribeNotificationRequest ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static SubscribeNotificationRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static SubscribeNotificationRequest ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static SubscribeNotificationRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static SubscribeNotificationRequest ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static SubscribeNotificationRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static SubscribeNotificationRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static SubscribeNotificationRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static SubscribeNotificationRequest ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static SubscribeNotificationRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private SubscribeNotificationRequest MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(SubscribeNotificationRequest prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<SubscribeNotificationRequest, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(SubscribeNotificationRequest cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private SubscribeNotificationRequest result;
+      
+      private SubscribeNotificationRequest PrepareBuilder() {
+        if (resultIsReadOnly) {
+          SubscribeNotificationRequest original = result;
+          result = new SubscribeNotificationRequest();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override SubscribeNotificationRequest MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.presence.SubscribeNotificationRequest.Descriptor; }
+      }
+      
+      public override SubscribeNotificationRequest DefaultInstanceForType {
+        get { return global::bnet.protocol.presence.SubscribeNotificationRequest.DefaultInstance; }
+      }
+      
+      public override SubscribeNotificationRequest BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is SubscribeNotificationRequest) {
+          return MergeFrom((SubscribeNotificationRequest) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(SubscribeNotificationRequest other) {
+        if (other == global::bnet.protocol.presence.SubscribeNotificationRequest.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasEntityId) {
+          MergeEntityId(other.EntityId);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_subscribeNotificationRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _subscribeNotificationRequestFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasEntityId) {
+                subBuilder.MergeFrom(EntityId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              EntityId = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasEntityId {
+       get { return result.hasEntityId; }
+      }
+      public global::bnet.protocol.EntityId EntityId {
+        get { return result.EntityId; }
+        set { SetEntityId(value); }
+      }
+      public Builder SetEntityId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasEntityId = true;
+        result.entityId_ = value;
+        return this;
+      }
+      public Builder SetEntityId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasEntityId = true;
+        result.entityId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeEntityId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasEntityId &&
+            result.entityId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.entityId_ = global::bnet.protocol.EntityId.CreateBuilder(result.entityId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.entityId_ = value;
+        }
+        result.hasEntityId = true;
+        return this;
+      }
+      public Builder ClearEntityId() {
+        PrepareBuilder();
+        result.hasEntityId = false;
+        result.entityId_ = null;
+        return this;
+      }
+    }
+    static SubscribeNotificationRequest() {
+      object.ReferenceEquals(global::bnet.protocol.presence.Proto.PresenceService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
   public sealed partial class UnsubscribeRequest : pb::GeneratedMessage<UnsubscribeRequest, UnsubscribeRequest.Builder> {
     private UnsubscribeRequest() { }
     private static readonly UnsubscribeRequest defaultInstance = new UnsubscribeRequest().MakeReadOnly();
@@ -901,6 +1223,307 @@ namespace bnet.protocol.presence {
       }
     }
     static UnsubscribeRequest() {
+      object.ReferenceEquals(global::bnet.protocol.presence.Proto.PresenceService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class UnsubscribeNotificationRequest : pb::GeneratedMessage<UnsubscribeNotificationRequest, UnsubscribeNotificationRequest.Builder> {
+    private UnsubscribeNotificationRequest() { }
+    private static readonly UnsubscribeNotificationRequest defaultInstance = new UnsubscribeNotificationRequest().MakeReadOnly();
+    private static readonly string[] _unsubscribeNotificationRequestFieldNames = new string[] { "entity_id" };
+    private static readonly uint[] _unsubscribeNotificationRequestFieldTags = new uint[] { 10 };
+    public static UnsubscribeNotificationRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override UnsubscribeNotificationRequest DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override UnsubscribeNotificationRequest ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.presence.Proto.PresenceService.internal__static_bnet_protocol_presence_UnsubscribeNotificationRequest__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<UnsubscribeNotificationRequest, UnsubscribeNotificationRequest.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.presence.Proto.PresenceService.internal__static_bnet_protocol_presence_UnsubscribeNotificationRequest__FieldAccessorTable; }
+    }
+    
+    public const int EntityIdFieldNumber = 1;
+    private bool hasEntityId;
+    private global::bnet.protocol.EntityId entityId_;
+    public bool HasEntityId {
+      get { return hasEntityId; }
+    }
+    public global::bnet.protocol.EntityId EntityId {
+      get { return entityId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasEntityId) return false;
+        if (!EntityId.IsInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _unsubscribeNotificationRequestFieldNames;
+      if (hasEntityId) {
+        output.WriteMessage(1, field_names[0], EntityId);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasEntityId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, EntityId);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static UnsubscribeNotificationRequest ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static UnsubscribeNotificationRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static UnsubscribeNotificationRequest ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static UnsubscribeNotificationRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static UnsubscribeNotificationRequest ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static UnsubscribeNotificationRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static UnsubscribeNotificationRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static UnsubscribeNotificationRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static UnsubscribeNotificationRequest ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static UnsubscribeNotificationRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private UnsubscribeNotificationRequest MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(UnsubscribeNotificationRequest prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<UnsubscribeNotificationRequest, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(UnsubscribeNotificationRequest cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private UnsubscribeNotificationRequest result;
+      
+      private UnsubscribeNotificationRequest PrepareBuilder() {
+        if (resultIsReadOnly) {
+          UnsubscribeNotificationRequest original = result;
+          result = new UnsubscribeNotificationRequest();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override UnsubscribeNotificationRequest MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.presence.UnsubscribeNotificationRequest.Descriptor; }
+      }
+      
+      public override UnsubscribeNotificationRequest DefaultInstanceForType {
+        get { return global::bnet.protocol.presence.UnsubscribeNotificationRequest.DefaultInstance; }
+      }
+      
+      public override UnsubscribeNotificationRequest BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is UnsubscribeNotificationRequest) {
+          return MergeFrom((UnsubscribeNotificationRequest) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(UnsubscribeNotificationRequest other) {
+        if (other == global::bnet.protocol.presence.UnsubscribeNotificationRequest.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasEntityId) {
+          MergeEntityId(other.EntityId);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_unsubscribeNotificationRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _unsubscribeNotificationRequestFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasEntityId) {
+                subBuilder.MergeFrom(EntityId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              EntityId = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasEntityId {
+       get { return result.hasEntityId; }
+      }
+      public global::bnet.protocol.EntityId EntityId {
+        get { return result.EntityId; }
+        set { SetEntityId(value); }
+      }
+      public Builder SetEntityId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasEntityId = true;
+        result.entityId_ = value;
+        return this;
+      }
+      public Builder SetEntityId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasEntityId = true;
+        result.entityId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeEntityId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasEntityId &&
+            result.entityId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.entityId_ = global::bnet.protocol.EntityId.CreateBuilder(result.entityId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.entityId_ = value;
+        }
+        result.hasEntityId = true;
+        return this;
+      }
+      public Builder ClearEntityId() {
+        PrepareBuilder();
+        result.hasEntityId = false;
+        result.entityId_ = null;
+        return this;
+      }
+    }
+    static UnsubscribeNotificationRequest() {
       object.ReferenceEquals(global::bnet.protocol.presence.Proto.PresenceService.Descriptor, null);
     }
   }
@@ -2332,6 +2955,14 @@ namespace bnet.protocol.presence {
         pb::IRpcController controller,
         global::bnet.protocol.presence.UpdateRequest request,
         global::System.Action<global::bnet.protocol.NoData> done);
+    public abstract void SubscribeNotification(
+        pb::IRpcController controller,
+        global::bnet.protocol.presence.SubscribeNotificationRequest request,
+        global::System.Action<global::bnet.protocol.NoData> done);
+    public abstract void UnsubscribeNotification(
+        pb::IRpcController controller,
+        global::bnet.protocol.presence.UnsubscribeNotificationRequest request,
+        global::System.Action<global::bnet.protocol.NoData> done);
     
     public static pbd::ServiceDescriptor Descriptor {
       get { return Proto.PresenceService.Descriptor.Services[0]; }
@@ -2380,6 +3011,16 @@ namespace bnet.protocol.presence {
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
+        case 6:
+          this.SubscribeNotification(controller, (global::bnet.protocol.presence.SubscribeNotificationRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
+              done));
+          return;
+        case 7:
+          this.UnsubscribeNotification(controller, (global::bnet.protocol.presence.UnsubscribeNotificationRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
+              done));
+          return;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2403,6 +3044,10 @@ namespace bnet.protocol.presence {
           return global::bnet.protocol.presence.OwnershipRequest.DefaultInstance;
         case 5:
           return global::bnet.protocol.presence.UpdateRequest.DefaultInstance;
+        case 6:
+          return global::bnet.protocol.presence.SubscribeNotificationRequest.DefaultInstance;
+        case 7:
+          return global::bnet.protocol.presence.UnsubscribeNotificationRequest.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2425,6 +3070,10 @@ namespace bnet.protocol.presence {
         case 4:
           return global::bnet.protocol.NoData.DefaultInstance;
         case 5:
+          return global::bnet.protocol.NoData.DefaultInstance;
+        case 6:
+          return global::bnet.protocol.NoData.DefaultInstance;
+        case 7:
           return global::bnet.protocol.NoData.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -2499,6 +3148,24 @@ namespace bnet.protocol.presence {
           global::bnet.protocol.presence.UpdateRequest request,
           global::System.Action<global::bnet.protocol.NoData> done) {
         channel.CallMethod(Descriptor.Methods[5],
+            controller, request, global::bnet.protocol.NoData.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
+      }
+      
+      public override void SubscribeNotification(
+          pb::IRpcController controller,
+          global::bnet.protocol.presence.SubscribeNotificationRequest request,
+          global::System.Action<global::bnet.protocol.NoData> done) {
+        channel.CallMethod(Descriptor.Methods[6],
+            controller, request, global::bnet.protocol.NoData.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
+      }
+      
+      public override void UnsubscribeNotification(
+          pb::IRpcController controller,
+          global::bnet.protocol.presence.UnsubscribeNotificationRequest request,
+          global::System.Action<global::bnet.protocol.NoData> done) {
+        channel.CallMethod(Descriptor.Methods[7],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }

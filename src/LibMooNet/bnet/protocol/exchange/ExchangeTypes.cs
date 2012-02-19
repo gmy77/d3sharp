@@ -101,7 +101,7 @@ namespace bnet.protocol.exchange {
           "bmdlLkJsb2JGcm9tEi0KDGJuZXRfYWNjb3VudBgGIAEoCzIXLmJuZXQucHJv" + 
           "dG9jb2wuRW50aXR5SWQSLQoMZ2FtZV9hY2NvdW50GAcgASgLMhcuYm5ldC5w" + 
           "cm90b2NvbC5FbnRpdHlJZBI3CgpzZXNzaW9uX2lkGAggASgLMiMuYm5ldC5w" + 
-          "cm90b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25JZCL8AwoJRXh0ZW5zaW9uEjkK" + 
+          "cm90b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25JZCKqBAoJRXh0ZW5zaW9uEjkK" + 
           "DHBhcnRpdGlvbl9pZBgBIAIoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
           "UGFydGl0aW9uSWQSFQoNb3JkZXJfYm9va19pZBgCIAIoBBIQCghvcmRlcl9p" + 
           "ZBgDIAIoBBIVCg1maWxsZWRfYW1vdW50GAQgASgEEhQKDG9yZGVyX3N0YXR1" + 
@@ -112,71 +112,74 @@ namespace bnet.protocol.exchange {
           "ZXlfdG9fY2xhaW0YDCABKAQSFgoOaXRlbXNfdG9fY2xhaW0YDSABKAQSGwoM" + 
           "cmlza19kZWxheWVkGA4gASgIOgVmYWxzZRIZChFmYWlsX29yZGVyX2FjdGlv" + 
           "bhgPIAEoDRIYChBmYWlsX29iamVjdF90eXBlGBAgASgNEhcKD2ZhaWxfZXJy" + 
-          "b3JfY29kZRgRIAEoDRIdChVmYWlsX2V4dHJhX2Vycm9yX2NvZGUYEiABKA0i" + 
-          "fAoFT2ZmZXISLAoFb3JkZXIYASACKAsyHS5ibmV0LnByb3RvY29sLmV4Y2hh" + 
-          "bmdlLk9yZGVyEhcKD3RyYWRlX25vd19wcmljZRgCIAEoBBIVCg1yZXNlcnZl" + 
-          "X3ByaWNlGAMgASgEEhUKDW91dF9iaWRfcHJpY2UYBCABKAQikgEKDU9mZmVy" + 
-          "RXh0ZW5kZWQSLAoFb2ZmZXIYASACKAsyHS5ibmV0LnByb3RvY29sLmV4Y2hh" + 
-          "bmdlLk9mZmVyEjQKCWV4dGVuc2lvbhgCIAIoCzIhLmJuZXQucHJvdG9jb2wu" + 
-          "ZXhjaGFuZ2UuRXh0ZW5zaW9uEh0KFWN1cnJlbnRfd2lubmluZ19wcmljZRgD" + 
-          "IAEoBCK1AQoNT2ZmZXJDcmVhdGlvbhIsCgVvZmZlchgBIAIoCzIdLmJuZXQu" + 
-          "cHJvdG9jb2wuZXhjaGFuZ2UuT2ZmZXISGAoQYXVjdGlvbl9kdXJhdGlvbhgC" + 
-          "IAEoBBIbChNhdWN0aW9uX3N0YXJ0X2RlbGF5GAMgASgEEj8KD2JpbGxpbmdf" + 
-          "YWRkcmVzcxgEIAEoCzImLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmlsbGlu" + 
-          "Z0FkZHJlc3MiZwoDQmlkEiwKBW9yZGVyGAEgAigLMh0uYm5ldC5wcm90b2Nv" + 
-          "bC5leGNoYW5nZS5PcmRlchIaChJjdXJyZW50X3VuaXRfcHJpY2UYAiABKAQS" + 
-          "FgoObWF4X3VuaXRfcHJpY2UYAyABKAQizgEKC0JpZEV4dGVuZGVkEigKA2Jp" + 
-          "ZBgBIAIoCzIbLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmlkEjQKCWV4dGVu" + 
-          "c2lvbhgCIAIoCzIhLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuRXh0ZW5zaW9u" + 
-          "EhsKE29mZmVyX291dF9iaWRfcHJpY2UYAyABKAQSHQoVb2ZmZXJfdHJhZGVf" + 
-          "bm93X3ByaWNlGAQgASgEEiMKG29mZmVyX2N1cnJlbnRfd2lubmluZ19wcmlj" + 
-          "ZRgFIAEoBCKvAQoLQmlkQ3JlYXRpb24SKAoDYmlkGAEgAigLMhsuYm5ldC5w" + 
-          "cm90b2NvbC5leGNoYW5nZS5CaWQSGAoQYXVjdGlvbl9kdXJhdGlvbhgCIAEo" + 
-          "BBIbChNhdWN0aW9uX3N0YXJ0X2RlbGF5GAMgASgEEj8KD2JpbGxpbmdfYWRk" + 
-          "cmVzcxgEIAEoCzImLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmlsbGluZ0Fk" + 
-          "ZHJlc3MinQEKDU9yZGVyRXh0ZW5kZWQSEgoKb3JkZXJfdHlwZRgBIAIoDRI5" + 
-          "CgxiaWRfZXh0ZW5kZWQYAiABKAsyIy5ibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
-          "LkJpZEV4dGVuZGVkEj0KDm9mZmVyX2V4dGVuZGVkGAMgASgLMiUuYm5ldC5w" + 
-          "cm90b2NvbC5leGNoYW5nZS5PZmZlckV4dGVuZGVkIlMKFFF1ZXJ5RmlsdGVy" + 
-          "QnlPcmRlcklkEhIKCm1heF9yZXN1bHQYASACKA0SFAoMcmVmX29yZGVyX2lk" + 
-          "GAIgASgEEhEKCXJlZl9wcmljZRgDIAEoBCJIChhRdWVyeUZpbHRlckJ5Q3Jl" + 
-          "YXRlZFRpbWUSEgoKbWF4X3Jlc3VsdBgBIAIoDRIYChByZWZfY3JlYXRlZF90" + 
-          "aW1lGAIgASgEItsBChBRdWVyeU9yZGVyRmlsdGVyEhAKCGN1cnJlbmN5GAEg" + 
-          "ASgJEhIKCnNwZWNpYWxpc3QYAiABKA0SEgoKb3JkZXJfdHlwZRgDIAEoDRIU" + 
-          "CgljbGFpbWFibGUYBCABKA06ATASGQoRb3JkZXJfc3RhdHVzX21hc2sYBSAB" + 
-          "KA0SFQoGcm9sbHVwGAYgASgIOgVmYWxzZRJFCgt0aW1lX2ZpbHRlchgHIAIo" + 
-          "CzIwLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUXVlcnlGaWx0ZXJCeUNyZWF0" + 
-          "ZWRUaW1lImgKClNldHRsZW1lbnQSFQoNb3JkZXJfYm9va19pZBgBIAIoBBIU" + 
-          "Cgxtb25leV9hbW91bnQYAiACKAQSFAoMaXRlbXNfYW1vdW50GAMgAigEEhcK" + 
-          "D29mZmVyX3NldHRsZV9pZBgEIAIoBCKXAQoOQ3VycmVuY3lDb25maWcSEAoI" + 
-          "Y3VycmVuY3kYASACKAkSEQoJdGlja19zaXplGAIgAigEEhYKDm1pbl91bml0" + 
-          "X3ByaWNlGAMgAigEEhYKDm1heF91bml0X3ByaWNlGAQgAigEEhcKD21pbl90" + 
-          "b3RhbF9wcmljZRgFIAIoBBIXCg9tYXhfdG90YWxfcHJpY2UYBiACKAQilAMK" + 
-          "EFNwZWNpYWxpc3RDb25maWcSEgoKc3BlY2lhbGlzdBgBIAIoBRIdChFhdWN0" + 
-          "aW9uX2R1cmF0aW9ucxgCIAMoBEICEAESIAoUYXVjdGlvbl9zdGFydF9kZWxh" + 
-          "eXMYAyADKARCAhABEiQKHGFudGlfc25pcGluZ19leHRlbnNpb25fZGVsYXkY" + 
-          "BCACKAQSGwoQbWF4X2l0ZW1zX2Ftb3VudBgFIAEoBDoBMBIgChhzdGFydGlu" + 
-          "Z191bml0X3ByaWNlX3J1bGUYBiACKAUSIAoYcmVzZXJ2ZWRfdW5pdF9wcmlj" + 
-          "ZV9ydWxlGAcgAigFEiEKGXRyYWRlX25vd191bml0X3ByaWNlX3J1bGUYCCAC" + 
-          "KAUSHwoXY3VycmVudF91bml0X3ByaWNlX3J1bGUYCSACKAUSHwoXbWF4aW11" + 
-          "bV91bml0X3ByaWNlX3J1bGUYCiACKAUSPwoPY3VycmVuY3lfY29uZmlnGAsg" + 
-          "AygLMiYuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5DdXJyZW5jeUNvbmZpZyL1" + 
-          "AQoRRmVlRXN0aW1hdGlvbkRhdGESDwoHcHJvZ3JhbRgBIAIoBxISCgpzcGVj" + 
-          "aWFsaXN0GAIgAigFEhAKCGN1cnJlbmN5GAMgAigJEg4KBnNvdXJjZRgEIAIo" + 
-          "BxIUCgxtb25leV9hbW91bnQYBSACKAQSEwoLaXRlbV9hbW91bnQYBiACKAQS" + 
-          "LQoMYm5ldF9hY2NvdW50GAcgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJ" + 
-          "ZBI/Cg9iaWxsaW5nX2FkZHJlc3MYCCABKAsyJi5ibmV0LnByb3RvY29sLmV4" + 
-          "Y2hhbmdlLkJpbGxpbmdBZGRyZXNzIqMDCglGZWVEZXRhaWwSDgoGcm93bnVt" + 
-          "GAEgAigEEhoKEmZlZV9hdXRoX2RldGFpbF9pZBgCIAIoBBIOCgZmZWVfaWQY" + 
-          "AyABKAQSEgoKZmVlX2Ftb3VudBgEIAEoBBIXCg9kaXNjb3VudF9hbW91bnQY" + 
-          "BSABKAQSFAoMZmVlX2dyb3VwX2lkGAYgASgEEhYKDmZlZV9ncm91cF9uYW1l" + 
-          "GAcgASgJEhcKD2ZsYXRfZmVlX2Ftb3VudBgIIAEoBBIaChJzY2FsaW5nX2Zl" + 
-          "ZV9hbW91bnQYCSABKAQSFgoObWF4X2ZlZV9hbW91bnQYCiABKAQSFwoPZmVl" + 
-          "X2Rlc2NyaXB0aW9uGAsgASgJEg4KBmlzX3RheBgMIAIoCBIWCg5jb3Vwb25f" + 
-          "Ym9va19pZBgNIAEoBBITCgtjb3Vwb25fdHlwZRgOIAEoBBIaChJjb3Vwb25f" + 
-          "ZGVzY3JpcHRpb24YDyABKAkSHwoXbGVmdF9vdmVyX2NvdXBvbl9jcmVkaXQY" + 
-          "ECABKAQSHwoXbGVmdF9vdmVyX2NvdXBvbl9jaGFyZ2UYESABKAQiMgoLUHJp" + 
-          "Y2VEZXRhaWwSEwoLdHJhZGVfcHJpY2UYASACKAQSDgoGYW1vdW50GAIgAigE");
+          "b3JfY29kZRgRIAEoDRIdChVmYWlsX2V4dHJhX2Vycm9yX2NvZGUYEiABKA0S" + 
+          "EAoIcmVmdW5kZWQYEyABKAQSGgoSZmlsbGVkX2Z1bmRfYW1vdW50GBQgASgE" + 
+          "InwKBU9mZmVyEiwKBW9yZGVyGAEgAigLMh0uYm5ldC5wcm90b2NvbC5leGNo" + 
+          "YW5nZS5PcmRlchIXCg90cmFkZV9ub3dfcHJpY2UYAiABKAQSFQoNcmVzZXJ2" + 
+          "ZV9wcmljZRgDIAEoBBIVCg1vdXRfYmlkX3ByaWNlGAQgASgEIpIBCg1PZmZl" + 
+          "ckV4dGVuZGVkEiwKBW9mZmVyGAEgAigLMh0uYm5ldC5wcm90b2NvbC5leGNo" + 
+          "YW5nZS5PZmZlchI0CglleHRlbnNpb24YAiACKAsyIS5ibmV0LnByb3RvY29s" + 
+          "LmV4Y2hhbmdlLkV4dGVuc2lvbhIdChVjdXJyZW50X3dpbm5pbmdfcHJpY2UY" + 
+          "AyABKAQitQEKDU9mZmVyQ3JlYXRpb24SLAoFb2ZmZXIYASACKAsyHS5ibmV0" + 
+          "LnByb3RvY29sLmV4Y2hhbmdlLk9mZmVyEhgKEGF1Y3Rpb25fZHVyYXRpb24Y" + 
+          "AiABKAQSGwoTYXVjdGlvbl9zdGFydF9kZWxheRgDIAEoBBI/Cg9iaWxsaW5n" + 
+          "X2FkZHJlc3MYBCABKAsyJi5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkJpbGxp" + 
+          "bmdBZGRyZXNzImcKA0JpZBIsCgVvcmRlchgBIAIoCzIdLmJuZXQucHJvdG9j" + 
+          "b2wuZXhjaGFuZ2UuT3JkZXISGgoSY3VycmVudF91bml0X3ByaWNlGAIgASgE" + 
+          "EhYKDm1heF91bml0X3ByaWNlGAMgASgEIooCCgtCaWRFeHRlbmRlZBIoCgNi" + 
+          "aWQYASACKAsyGy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkJpZBI0CglleHRl" + 
+          "bnNpb24YAiACKAsyIS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkV4dGVuc2lv" + 
+          "bhIbChNvZmZlcl9vdXRfYmlkX3ByaWNlGAMgASgEEh0KFW9mZmVyX3RyYWRl" + 
+          "X25vd19wcmljZRgEIAEoBBIjChtvZmZlcl9jdXJyZW50X3dpbm5pbmdfcHJp" + 
+          "Y2UYBSABKAQSHgoWYmlkX2N1cnJlbnRfdW5pdF9wcmljZRgGIAEoBBIaChJi" + 
+          "aWRfbWF4X3VuaXRfcHJpY2UYByABKAQirwEKC0JpZENyZWF0aW9uEigKA2Jp" + 
+          "ZBgBIAIoCzIbLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmlkEhgKEGF1Y3Rp" + 
+          "b25fZHVyYXRpb24YAiABKAQSGwoTYXVjdGlvbl9zdGFydF9kZWxheRgDIAEo" + 
+          "BBI/Cg9iaWxsaW5nX2FkZHJlc3MYBCABKAsyJi5ibmV0LnByb3RvY29sLmV4" + 
+          "Y2hhbmdlLkJpbGxpbmdBZGRyZXNzIp0BCg1PcmRlckV4dGVuZGVkEhIKCm9y" + 
+          "ZGVyX3R5cGUYASACKA0SOQoMYmlkX2V4dGVuZGVkGAIgASgLMiMuYm5ldC5w" + 
+          "cm90b2NvbC5leGNoYW5nZS5CaWRFeHRlbmRlZBI9Cg5vZmZlcl9leHRlbmRl" + 
+          "ZBgDIAEoCzIlLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuT2ZmZXJFeHRlbmRl" + 
+          "ZCJTChRRdWVyeUZpbHRlckJ5T3JkZXJJZBISCgptYXhfcmVzdWx0GAEgAigN" + 
+          "EhQKDHJlZl9vcmRlcl9pZBgCIAEoBBIRCglyZWZfcHJpY2UYAyABKAQiSAoY" + 
+          "UXVlcnlGaWx0ZXJCeUNyZWF0ZWRUaW1lEhIKCm1heF9yZXN1bHQYASACKA0S" + 
+          "GAoQcmVmX2NyZWF0ZWRfdGltZRgCIAEoBCLbAQoQUXVlcnlPcmRlckZpbHRl" + 
+          "chIQCghjdXJyZW5jeRgBIAEoCRISCgpzcGVjaWFsaXN0GAIgASgNEhIKCm9y" + 
+          "ZGVyX3R5cGUYAyABKA0SFAoJY2xhaW1hYmxlGAQgASgNOgEwEhkKEW9yZGVy" + 
+          "X3N0YXR1c19tYXNrGAUgASgNEhUKBnJvbGx1cBgGIAEoCDoFZmFsc2USRQoL" + 
+          "dGltZV9maWx0ZXIYByACKAsyMC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlF1" + 
+          "ZXJ5RmlsdGVyQnlDcmVhdGVkVGltZSJoCgpTZXR0bGVtZW50EhUKDW9yZGVy" + 
+          "X2Jvb2tfaWQYASACKAQSFAoMbW9uZXlfYW1vdW50GAIgAigEEhQKDGl0ZW1z" + 
+          "X2Ftb3VudBgDIAIoBBIXCg9vZmZlcl9zZXR0bGVfaWQYBCACKAQilwEKDkN1" + 
+          "cnJlbmN5Q29uZmlnEhAKCGN1cnJlbmN5GAEgAigJEhEKCXRpY2tfc2l6ZRgC" + 
+          "IAEoBBIWCg5taW5fdW5pdF9wcmljZRgDIAEoBBIWCg5tYXhfdW5pdF9wcmlj" + 
+          "ZRgEIAEoBBIXCg9taW5fdG90YWxfcHJpY2UYBSABKAQSFwoPbWF4X3RvdGFs" + 
+          "X3ByaWNlGAYgASgEIpQDChBTcGVjaWFsaXN0Q29uZmlnEhIKCnNwZWNpYWxp" + 
+          "c3QYASACKAUSHQoRYXVjdGlvbl9kdXJhdGlvbnMYAiADKARCAhABEiAKFGF1" + 
+          "Y3Rpb25fc3RhcnRfZGVsYXlzGAMgAygEQgIQARIkChxhbnRpX3NuaXBpbmdf" + 
+          "ZXh0ZW5zaW9uX2RlbGF5GAQgASgEEhsKEG1heF9pdGVtc19hbW91bnQYBSAB" + 
+          "KAQ6ATASIAoYc3RhcnRpbmdfdW5pdF9wcmljZV9ydWxlGAYgASgFEiAKGHJl" + 
+          "c2VydmVkX3VuaXRfcHJpY2VfcnVsZRgHIAEoBRIhChl0cmFkZV9ub3dfdW5p" + 
+          "dF9wcmljZV9ydWxlGAggASgFEh8KF2N1cnJlbnRfdW5pdF9wcmljZV9ydWxl" + 
+          "GAkgASgFEh8KF21heGltdW1fdW5pdF9wcmljZV9ydWxlGAogASgFEj8KD2N1" + 
+          "cnJlbmN5X2NvbmZpZxgLIAMoCzImLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
+          "Q3VycmVuY3lDb25maWci9QEKEUZlZUVzdGltYXRpb25EYXRhEg8KB3Byb2dy" + 
+          "YW0YASACKAcSEgoKc3BlY2lhbGlzdBgCIAIoBRIQCghjdXJyZW5jeRgDIAIo" + 
+          "CRIOCgZzb3VyY2UYBCACKAcSFAoMbW9uZXlfYW1vdW50GAUgAigEEhMKC2l0" + 
+          "ZW1fYW1vdW50GAYgAigEEi0KDGJuZXRfYWNjb3VudBgHIAEoCzIXLmJuZXQu" + 
+          "cHJvdG9jb2wuRW50aXR5SWQSPwoPYmlsbGluZ19hZGRyZXNzGAggASgLMiYu" + 
+          "Ym5ldC5wcm90b2NvbC5leGNoYW5nZS5CaWxsaW5nQWRkcmVzcyKjAwoJRmVl" + 
+          "RGV0YWlsEg4KBnJvd251bRgBIAIoBBIaChJmZWVfYXV0aF9kZXRhaWxfaWQY" + 
+          "AiACKAQSDgoGZmVlX2lkGAMgASgEEhIKCmZlZV9hbW91bnQYBCABKAQSFwoP" + 
+          "ZGlzY291bnRfYW1vdW50GAUgASgEEhQKDGZlZV9ncm91cF9pZBgGIAEoBBIW" + 
+          "Cg5mZWVfZ3JvdXBfbmFtZRgHIAEoCRIXCg9mbGF0X2ZlZV9hbW91bnQYCCAB" + 
+          "KAQSGgoSc2NhbGluZ19mZWVfYW1vdW50GAkgASgEEhYKDm1heF9mZWVfYW1v" + 
+          "dW50GAogASgEEhcKD2ZlZV9kZXNjcmlwdGlvbhgLIAEoCRIOCgZpc190YXgY" + 
+          "DCACKAgSFgoOY291cG9uX2Jvb2tfaWQYDSABKAQSEwoLY291cG9uX3R5cGUY" + 
+          "DiABKAQSGgoSY291cG9uX2Rlc2NyaXB0aW9uGA8gASgJEh8KF2xlZnRfb3Zl" + 
+          "cl9jb3Vwb25fY3JlZGl0GBAgASgEEh8KF2xlZnRfb3Zlcl9jb3Vwb25fY2hh" + 
+          "cmdlGBEgASgEIjIKC1ByaWNlRGV0YWlsEhMKC3RyYWRlX3ByaWNlGAEgAigE" + 
+          "Eg4KBmFtb3VudBgCIAIoBA==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_OrderBook__Descriptor = Descriptor.MessageTypes[0];
@@ -202,7 +205,7 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_Extension__Descriptor = Descriptor.MessageTypes[5];
         internal__static_bnet_protocol_exchange_Extension__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.Extension, global::bnet.protocol.exchange.Extension.Builder>(internal__static_bnet_protocol_exchange_Extension__Descriptor,
-                new string[] { "PartitionId", "OrderBookId", "OrderId", "FilledAmount", "OrderStatus", "AuthorizedTime", "CreatedTime", "ClosedTime", "Reason", "OrderBook", "OrderBookStatus", "MoneyToClaim", "ItemsToClaim", "RiskDelayed", "FailOrderAction", "FailObjectType", "FailErrorCode", "FailExtraErrorCode", });
+                new string[] { "PartitionId", "OrderBookId", "OrderId", "FilledAmount", "OrderStatus", "AuthorizedTime", "CreatedTime", "ClosedTime", "Reason", "OrderBook", "OrderBookStatus", "MoneyToClaim", "ItemsToClaim", "RiskDelayed", "FailOrderAction", "FailObjectType", "FailErrorCode", "FailExtraErrorCode", "Refunded", "FilledFundAmount", });
         internal__static_bnet_protocol_exchange_Offer__Descriptor = Descriptor.MessageTypes[6];
         internal__static_bnet_protocol_exchange_Offer__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.Offer, global::bnet.protocol.exchange.Offer.Builder>(internal__static_bnet_protocol_exchange_Offer__Descriptor,
@@ -222,7 +225,7 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_BidExtended__Descriptor = Descriptor.MessageTypes[10];
         internal__static_bnet_protocol_exchange_BidExtended__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BidExtended, global::bnet.protocol.exchange.BidExtended.Builder>(internal__static_bnet_protocol_exchange_BidExtended__Descriptor,
-                new string[] { "Bid", "Extension", "OfferOutBidPrice", "OfferTradeNowPrice", "OfferCurrentWinningPrice", });
+                new string[] { "Bid", "Extension", "OfferOutBidPrice", "OfferTradeNowPrice", "OfferCurrentWinningPrice", "BidCurrentUnitPrice", "BidMaxUnitPrice", });
         internal__static_bnet_protocol_exchange_BidCreation__Descriptor = Descriptor.MessageTypes[11];
         internal__static_bnet_protocol_exchange_BidCreation__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BidCreation, global::bnet.protocol.exchange.BidCreation.Builder>(internal__static_bnet_protocol_exchange_BidCreation__Descriptor,
@@ -3434,8 +3437,8 @@ namespace bnet.protocol.exchange {
   public sealed partial class Extension : pb::GeneratedMessage<Extension, Extension.Builder> {
     private Extension() { }
     private static readonly Extension defaultInstance = new Extension().MakeReadOnly();
-    private static readonly string[] _extensionFieldNames = new string[] { "authorized_time", "closed_time", "created_time", "fail_error_code", "fail_extra_error_code", "fail_object_type", "fail_order_action", "filled_amount", "items_to_claim", "money_to_claim", "order_book", "order_book_id", "order_book_status", "order_id", "order_status", "partition_id", "reason", "risk_delayed" };
-    private static readonly uint[] _extensionFieldTags = new uint[] { 48, 64, 56, 136, 144, 128, 120, 32, 104, 96, 82, 16, 88, 24, 40, 10, 72, 112 };
+    private static readonly string[] _extensionFieldNames = new string[] { "authorized_time", "closed_time", "created_time", "fail_error_code", "fail_extra_error_code", "fail_object_type", "fail_order_action", "filled_amount", "filled_fund_amount", "items_to_claim", "money_to_claim", "order_book", "order_book_id", "order_book_status", "order_id", "order_status", "partition_id", "reason", "refunded", "risk_delayed" };
+    private static readonly uint[] _extensionFieldTags = new uint[] { 48, 64, 56, 136, 144, 128, 120, 32, 160, 104, 96, 82, 16, 88, 24, 40, 10, 72, 152, 112 };
     public static Extension DefaultInstance {
       get { return defaultInstance; }
     }
@@ -3636,6 +3639,26 @@ namespace bnet.protocol.exchange {
       get { return failExtraErrorCode_; }
     }
     
+    public const int RefundedFieldNumber = 19;
+    private bool hasRefunded;
+    private ulong refunded_;
+    public bool HasRefunded {
+      get { return hasRefunded; }
+    }
+    public ulong Refunded {
+      get { return refunded_; }
+    }
+    
+    public const int FilledFundAmountFieldNumber = 20;
+    private bool hasFilledFundAmount;
+    private ulong filledFundAmount_;
+    public bool HasFilledFundAmount {
+      get { return hasFilledFundAmount; }
+    }
+    public ulong FilledFundAmount {
+      get { return filledFundAmount_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasPartitionId) return false;
@@ -3653,19 +3676,19 @@ namespace bnet.protocol.exchange {
       int size = SerializedSize;
       string[] field_names = _extensionFieldNames;
       if (hasPartitionId) {
-        output.WriteMessage(1, field_names[15], PartitionId);
+        output.WriteMessage(1, field_names[16], PartitionId);
       }
       if (hasOrderBookId) {
-        output.WriteUInt64(2, field_names[11], OrderBookId);
+        output.WriteUInt64(2, field_names[12], OrderBookId);
       }
       if (hasOrderId) {
-        output.WriteUInt64(3, field_names[13], OrderId);
+        output.WriteUInt64(3, field_names[14], OrderId);
       }
       if (hasFilledAmount) {
         output.WriteUInt64(4, field_names[7], FilledAmount);
       }
       if (hasOrderStatus) {
-        output.WriteInt32(5, field_names[14], OrderStatus);
+        output.WriteInt32(5, field_names[15], OrderStatus);
       }
       if (hasAuthorizedTime) {
         output.WriteUInt64(6, field_names[0], AuthorizedTime);
@@ -3677,22 +3700,22 @@ namespace bnet.protocol.exchange {
         output.WriteUInt64(8, field_names[1], ClosedTime);
       }
       if (hasReason) {
-        output.WriteUInt32(9, field_names[16], Reason);
+        output.WriteUInt32(9, field_names[17], Reason);
       }
       if (hasOrderBook) {
-        output.WriteMessage(10, field_names[10], OrderBook);
+        output.WriteMessage(10, field_names[11], OrderBook);
       }
       if (hasOrderBookStatus) {
-        output.WriteUInt64(11, field_names[12], OrderBookStatus);
+        output.WriteUInt64(11, field_names[13], OrderBookStatus);
       }
       if (hasMoneyToClaim) {
-        output.WriteUInt64(12, field_names[9], MoneyToClaim);
+        output.WriteUInt64(12, field_names[10], MoneyToClaim);
       }
       if (hasItemsToClaim) {
-        output.WriteUInt64(13, field_names[8], ItemsToClaim);
+        output.WriteUInt64(13, field_names[9], ItemsToClaim);
       }
       if (hasRiskDelayed) {
-        output.WriteBool(14, field_names[17], RiskDelayed);
+        output.WriteBool(14, field_names[19], RiskDelayed);
       }
       if (hasFailOrderAction) {
         output.WriteUInt32(15, field_names[6], FailOrderAction);
@@ -3705,6 +3728,12 @@ namespace bnet.protocol.exchange {
       }
       if (hasFailExtraErrorCode) {
         output.WriteUInt32(18, field_names[4], FailExtraErrorCode);
+      }
+      if (hasRefunded) {
+        output.WriteUInt64(19, field_names[18], Refunded);
+      }
+      if (hasFilledFundAmount) {
+        output.WriteUInt64(20, field_names[8], FilledFundAmount);
       }
       UnknownFields.WriteTo(output);
     }
@@ -3769,6 +3798,12 @@ namespace bnet.protocol.exchange {
         }
         if (hasFailExtraErrorCode) {
           size += pb::CodedOutputStream.ComputeUInt32Size(18, FailExtraErrorCode);
+        }
+        if (hasRefunded) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(19, Refunded);
+        }
+        if (hasFilledFundAmount) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(20, FilledFundAmount);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -3950,6 +3985,12 @@ namespace bnet.protocol.exchange {
         if (other.HasFailExtraErrorCode) {
           FailExtraErrorCode = other.FailExtraErrorCode;
         }
+        if (other.HasRefunded) {
+          Refunded = other.Refunded;
+        }
+        if (other.HasFilledFundAmount) {
+          FilledFundAmount = other.FilledFundAmount;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -4073,6 +4114,14 @@ namespace bnet.protocol.exchange {
             }
             case 144: {
               result.hasFailExtraErrorCode = input.ReadUInt32(ref result.failExtraErrorCode_);
+              break;
+            }
+            case 152: {
+              result.hasRefunded = input.ReadUInt64(ref result.refunded_);
+              break;
+            }
+            case 160: {
+              result.hasFilledFundAmount = input.ReadUInt64(ref result.filledFundAmount_);
               break;
             }
           }
@@ -4482,6 +4531,46 @@ namespace bnet.protocol.exchange {
         PrepareBuilder();
         result.hasFailExtraErrorCode = false;
         result.failExtraErrorCode_ = 0;
+        return this;
+      }
+      
+      public bool HasRefunded {
+        get { return result.hasRefunded; }
+      }
+      public ulong Refunded {
+        get { return result.Refunded; }
+        set { SetRefunded(value); }
+      }
+      public Builder SetRefunded(ulong value) {
+        PrepareBuilder();
+        result.hasRefunded = true;
+        result.refunded_ = value;
+        return this;
+      }
+      public Builder ClearRefunded() {
+        PrepareBuilder();
+        result.hasRefunded = false;
+        result.refunded_ = 0UL;
+        return this;
+      }
+      
+      public bool HasFilledFundAmount {
+        get { return result.hasFilledFundAmount; }
+      }
+      public ulong FilledFundAmount {
+        get { return result.FilledFundAmount; }
+        set { SetFilledFundAmount(value); }
+      }
+      public Builder SetFilledFundAmount(ulong value) {
+        PrepareBuilder();
+        result.hasFilledFundAmount = true;
+        result.filledFundAmount_ = value;
+        return this;
+      }
+      public Builder ClearFilledFundAmount() {
+        PrepareBuilder();
+        result.hasFilledFundAmount = false;
+        result.filledFundAmount_ = 0UL;
         return this;
       }
     }
@@ -6185,8 +6274,8 @@ namespace bnet.protocol.exchange {
   public sealed partial class BidExtended : pb::GeneratedMessage<BidExtended, BidExtended.Builder> {
     private BidExtended() { }
     private static readonly BidExtended defaultInstance = new BidExtended().MakeReadOnly();
-    private static readonly string[] _bidExtendedFieldNames = new string[] { "bid", "extension", "offer_current_winning_price", "offer_out_bid_price", "offer_trade_now_price" };
-    private static readonly uint[] _bidExtendedFieldTags = new uint[] { 10, 18, 40, 24, 32 };
+    private static readonly string[] _bidExtendedFieldNames = new string[] { "bid", "bid_current_unit_price", "bid_max_unit_price", "extension", "offer_current_winning_price", "offer_out_bid_price", "offer_trade_now_price" };
+    private static readonly uint[] _bidExtendedFieldTags = new uint[] { 10, 48, 56, 18, 40, 24, 32 };
     public static BidExtended DefaultInstance {
       get { return defaultInstance; }
     }
@@ -6257,6 +6346,26 @@ namespace bnet.protocol.exchange {
       get { return offerCurrentWinningPrice_; }
     }
     
+    public const int BidCurrentUnitPriceFieldNumber = 6;
+    private bool hasBidCurrentUnitPrice;
+    private ulong bidCurrentUnitPrice_;
+    public bool HasBidCurrentUnitPrice {
+      get { return hasBidCurrentUnitPrice; }
+    }
+    public ulong BidCurrentUnitPrice {
+      get { return bidCurrentUnitPrice_; }
+    }
+    
+    public const int BidMaxUnitPriceFieldNumber = 7;
+    private bool hasBidMaxUnitPrice;
+    private ulong bidMaxUnitPrice_;
+    public bool HasBidMaxUnitPrice {
+      get { return hasBidMaxUnitPrice; }
+    }
+    public ulong BidMaxUnitPrice {
+      get { return bidMaxUnitPrice_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasBid) return false;
@@ -6274,16 +6383,22 @@ namespace bnet.protocol.exchange {
         output.WriteMessage(1, field_names[0], Bid);
       }
       if (hasExtension) {
-        output.WriteMessage(2, field_names[1], Extension);
+        output.WriteMessage(2, field_names[3], Extension);
       }
       if (hasOfferOutBidPrice) {
-        output.WriteUInt64(3, field_names[3], OfferOutBidPrice);
+        output.WriteUInt64(3, field_names[5], OfferOutBidPrice);
       }
       if (hasOfferTradeNowPrice) {
-        output.WriteUInt64(4, field_names[4], OfferTradeNowPrice);
+        output.WriteUInt64(4, field_names[6], OfferTradeNowPrice);
       }
       if (hasOfferCurrentWinningPrice) {
-        output.WriteUInt64(5, field_names[2], OfferCurrentWinningPrice);
+        output.WriteUInt64(5, field_names[4], OfferCurrentWinningPrice);
+      }
+      if (hasBidCurrentUnitPrice) {
+        output.WriteUInt64(6, field_names[1], BidCurrentUnitPrice);
+      }
+      if (hasBidMaxUnitPrice) {
+        output.WriteUInt64(7, field_names[2], BidMaxUnitPrice);
       }
       UnknownFields.WriteTo(output);
     }
@@ -6309,6 +6424,12 @@ namespace bnet.protocol.exchange {
         }
         if (hasOfferCurrentWinningPrice) {
           size += pb::CodedOutputStream.ComputeUInt64Size(5, OfferCurrentWinningPrice);
+        }
+        if (hasBidCurrentUnitPrice) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(6, BidCurrentUnitPrice);
+        }
+        if (hasBidMaxUnitPrice) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(7, BidMaxUnitPrice);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -6451,6 +6572,12 @@ namespace bnet.protocol.exchange {
         if (other.HasOfferCurrentWinningPrice) {
           OfferCurrentWinningPrice = other.OfferCurrentWinningPrice;
         }
+        if (other.HasBidCurrentUnitPrice) {
+          BidCurrentUnitPrice = other.BidCurrentUnitPrice;
+        }
+        if (other.HasBidMaxUnitPrice) {
+          BidMaxUnitPrice = other.BidMaxUnitPrice;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -6522,6 +6649,14 @@ namespace bnet.protocol.exchange {
             }
             case 40: {
               result.hasOfferCurrentWinningPrice = input.ReadUInt64(ref result.offerCurrentWinningPrice_);
+              break;
+            }
+            case 48: {
+              result.hasBidCurrentUnitPrice = input.ReadUInt64(ref result.bidCurrentUnitPrice_);
+              break;
+            }
+            case 56: {
+              result.hasBidMaxUnitPrice = input.ReadUInt64(ref result.bidMaxUnitPrice_);
               break;
             }
           }
@@ -6671,6 +6806,46 @@ namespace bnet.protocol.exchange {
         PrepareBuilder();
         result.hasOfferCurrentWinningPrice = false;
         result.offerCurrentWinningPrice_ = 0UL;
+        return this;
+      }
+      
+      public bool HasBidCurrentUnitPrice {
+        get { return result.hasBidCurrentUnitPrice; }
+      }
+      public ulong BidCurrentUnitPrice {
+        get { return result.BidCurrentUnitPrice; }
+        set { SetBidCurrentUnitPrice(value); }
+      }
+      public Builder SetBidCurrentUnitPrice(ulong value) {
+        PrepareBuilder();
+        result.hasBidCurrentUnitPrice = true;
+        result.bidCurrentUnitPrice_ = value;
+        return this;
+      }
+      public Builder ClearBidCurrentUnitPrice() {
+        PrepareBuilder();
+        result.hasBidCurrentUnitPrice = false;
+        result.bidCurrentUnitPrice_ = 0UL;
+        return this;
+      }
+      
+      public bool HasBidMaxUnitPrice {
+        get { return result.hasBidMaxUnitPrice; }
+      }
+      public ulong BidMaxUnitPrice {
+        get { return result.BidMaxUnitPrice; }
+        set { SetBidMaxUnitPrice(value); }
+      }
+      public Builder SetBidMaxUnitPrice(ulong value) {
+        PrepareBuilder();
+        result.hasBidMaxUnitPrice = true;
+        result.bidMaxUnitPrice_ = value;
+        return this;
+      }
+      public Builder ClearBidMaxUnitPrice() {
+        PrepareBuilder();
+        result.hasBidMaxUnitPrice = false;
+        result.bidMaxUnitPrice_ = 0UL;
         return this;
       }
     }
@@ -9291,11 +9466,6 @@ namespace bnet.protocol.exchange {
     public override bool IsInitialized {
       get {
         if (!hasCurrency) return false;
-        if (!hasTickSize) return false;
-        if (!hasMinUnitPrice) return false;
-        if (!hasMaxUnitPrice) return false;
-        if (!hasMinTotalPrice) return false;
-        if (!hasMaxTotalPrice) return false;
         return true;
       }
     }
@@ -9845,12 +10015,6 @@ namespace bnet.protocol.exchange {
     public override bool IsInitialized {
       get {
         if (!hasSpecialist) return false;
-        if (!hasAntiSnipingExtensionDelay) return false;
-        if (!hasStartingUnitPriceRule) return false;
-        if (!hasReservedUnitPriceRule) return false;
-        if (!hasTradeNowUnitPriceRule) return false;
-        if (!hasCurrentUnitPriceRule) return false;
-        if (!hasMaximumUnitPriceRule) return false;
         foreach (global::bnet.protocol.exchange.CurrencyConfig element in CurrencyConfigList) {
           if (!element.IsInitialized) return false;
         }

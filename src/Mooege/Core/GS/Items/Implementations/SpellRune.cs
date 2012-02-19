@@ -25,7 +25,7 @@ using Mooege.Core.GS.Map;
 
 namespace Mooege.Core.GS.Items.Implementations
 {
-    [HandledType("SpellRune")]
+    //[HandledType("SpellRune")]
     public class SpellRune : Item
     {
         // type of rune is in Name

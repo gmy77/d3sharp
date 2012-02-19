@@ -61,8 +61,9 @@ namespace Mooege.Core.MooNet.Authentication
                 .SetMessage(ByteString.CopyFrom(srp6a.LogonChallenge))
                 .Build();
 
-            client.MakeRPCWithListenerId(request.ListenerId, () =>
-                bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
+            //client.MakeRPCWithListenerId(request.ListenerId, () =>
+            //    bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
+            client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
         }
 
         public static void HandleAuthResponse(MooNetClient client, int moduleId, byte[] authMessage)

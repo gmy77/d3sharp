@@ -266,7 +266,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             get
             {
-                var builder = D3.Account.Digest.CreateBuilder().SetVersion(105) // 7447=>99, 7728=> 100, 8801=>102, 8296=>105
+                var builder = D3.Account.Digest.CreateBuilder().SetVersion(106) // 7447=>99, 7728=> 100, 8801=>102, 8296=>105, 8610=>106
                     .SetBannerConfiguration(this.BannerConfigurationField.Value)
                     .SetFlags(0)
                     .SetLastPlayedHeroId(lastPlayedHeroId);
@@ -407,6 +407,10 @@ namespace Mooege.Core.MooNet.Accounts
                         this.AwayStatus = (AwayStatusFlag)field.Value.IntValue;
                         returnField.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.AwayStatus).Build());
                         Logger.Trace("{0} set AwayStatus to {1}.", this, this.AwayStatus);
+                    }
+                    else if (field.Key.Group == 2 && field.Key.Field == 8)
+                    {
+                        returnField.SetValue((field.Value));
                     }
                     else
                     {

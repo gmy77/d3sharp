@@ -205,6 +205,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F17 { get; private set; }
         public float F18 { get; private set; }
         public float F19 { get; private set; }
+        public float F20 { get; private set; }
+        public float F21 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -243,7 +245,9 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F17 = stream.ReadValueF32();
             this.F18 = stream.ReadValueF32();
             this.F19 = stream.ReadValueF32();
-            stream.Position += 8;
+            this.F20 = stream.ReadValueF32();
+            this.F21 = stream.ReadValueF32();
+            stream.Position += 4;
         }
     }
 

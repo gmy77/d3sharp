@@ -37,10 +37,8 @@ namespace bnet.protocol {
           "ZBIMCgRoaWdoGAEgAigGEgsKA2xvdxgCIAIoBiJpCghJZGVudGl0eRIrCgph" + 
           "Y2NvdW50X2lkGAEgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBIwCg9n" + 
           "YW1lX2FjY291bnRfaWQYAiABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlk" + 
-          "IpsBCgtBY2NvdW50SW5mbxJHCg5hY2NvdW50X3N0YXR1cxgBIAEoDjIoLmJu" + 
-          "ZXQucHJvdG9jb2wuQWNjb3VudEluZm8uQWNjb3VudFN0YXR1czoFVFJJQUwS" + 
-          "FQoKY291bnRyeV9pZBgCIAEoBzoBMCIsCg1BY2NvdW50U3RhdHVzEgkKBVRS" + 
-          "SUFMEAESCAoEUEFJRBACEgYKAkdNEAM=");
+          "IkEKC0FjY291bnRJbmZvEhsKDGFjY291bnRfcGFpZBgBIAEoCDoFZmFsc2US" + 
+          "FQoKY291bnRyeV9pZBgCIAEoBzoBMA==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_EntityId__Descriptor = Descriptor.MessageTypes[0];
@@ -54,7 +52,7 @@ namespace bnet.protocol {
         internal__static_bnet_protocol_AccountInfo__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_AccountInfo__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.AccountInfo, global::bnet.protocol.AccountInfo.Builder>(internal__static_bnet_protocol_AccountInfo__Descriptor,
-                new string[] { "AccountStatus", "CountryId", });
+                new string[] { "AccountPaid", "CountryId", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -763,7 +761,7 @@ namespace bnet.protocol {
   public sealed partial class AccountInfo : pb::GeneratedMessage<AccountInfo, AccountInfo.Builder> {
     private AccountInfo() { }
     private static readonly AccountInfo defaultInstance = new AccountInfo().MakeReadOnly();
-    private static readonly string[] _accountInfoFieldNames = new string[] { "account_status", "country_id" };
+    private static readonly string[] _accountInfoFieldNames = new string[] { "account_paid", "country_id" };
     private static readonly uint[] _accountInfoFieldTags = new uint[] { 8, 21 };
     public static AccountInfo DefaultInstance {
       get { return defaultInstance; }
@@ -785,30 +783,14 @@ namespace bnet.protocol {
       get { return global::bnet.protocol.Entity.internal__static_bnet_protocol_AccountInfo__FieldAccessorTable; }
     }
     
-    #region Nested types
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public static class Types {
-      [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-      [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-      public enum AccountStatus {
-        TRIAL = 1,
-        PAID = 2,
-        GM = 3,
-      }
-      
+    public const int AccountPaidFieldNumber = 1;
+    private bool hasAccountPaid;
+    private bool accountPaid_;
+    public bool HasAccountPaid {
+      get { return hasAccountPaid; }
     }
-    #endregion
-    
-    public const int AccountStatusFieldNumber = 1;
-    private bool hasAccountStatus;
-    private global::bnet.protocol.AccountInfo.Types.AccountStatus accountStatus_ = global::bnet.protocol.AccountInfo.Types.AccountStatus.TRIAL;
-    public bool HasAccountStatus {
-      get { return hasAccountStatus; }
-    }
-    public global::bnet.protocol.AccountInfo.Types.AccountStatus AccountStatus {
-      get { return accountStatus_; }
+    public bool AccountPaid {
+      get { return accountPaid_; }
     }
     
     public const int CountryIdFieldNumber = 2;
@@ -830,8 +812,8 @@ namespace bnet.protocol {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _accountInfoFieldNames;
-      if (hasAccountStatus) {
-        output.WriteEnum(1, field_names[0], (int) AccountStatus, AccountStatus);
+      if (hasAccountPaid) {
+        output.WriteBool(1, field_names[0], AccountPaid);
       }
       if (hasCountryId) {
         output.WriteFixed32(2, field_names[1], CountryId);
@@ -846,8 +828,8 @@ namespace bnet.protocol {
         if (size != -1) return size;
         
         size = 0;
-        if (hasAccountStatus) {
-          size += pb::CodedOutputStream.ComputeEnumSize(1, (int) AccountStatus);
+        if (hasAccountPaid) {
+          size += pb::CodedOutputStream.ComputeBoolSize(1, AccountPaid);
         }
         if (hasCountryId) {
           size += pb::CodedOutputStream.ComputeFixed32Size(2, CountryId);
@@ -978,8 +960,8 @@ namespace bnet.protocol {
       public override Builder MergeFrom(AccountInfo other) {
         if (other == global::bnet.protocol.AccountInfo.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasAccountStatus) {
-          AccountStatus = other.AccountStatus;
+        if (other.HasAccountPaid) {
+          AccountPaid = other.AccountPaid;
         }
         if (other.HasCountryId) {
           CountryId = other.CountryId;
@@ -1028,15 +1010,7 @@ namespace bnet.protocol {
               break;
             }
             case 8: {
-              object unknown;
-              if(input.ReadEnum(ref result.accountStatus_, out unknown)) {
-                result.hasAccountStatus = true;
-              } else if(unknown is int) {
-                if (unknownFields == null) {
-                  unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-                }
-                unknownFields.MergeVarintField(1, (ulong)(int)unknown);
-              }
+              result.hasAccountPaid = input.ReadBool(ref result.accountPaid_);
               break;
             }
             case 21: {
@@ -1053,23 +1027,23 @@ namespace bnet.protocol {
       }
       
       
-      public bool HasAccountStatus {
-       get { return result.hasAccountStatus; }
+      public bool HasAccountPaid {
+        get { return result.hasAccountPaid; }
       }
-      public global::bnet.protocol.AccountInfo.Types.AccountStatus AccountStatus {
-        get { return result.AccountStatus; }
-        set { SetAccountStatus(value); }
+      public bool AccountPaid {
+        get { return result.AccountPaid; }
+        set { SetAccountPaid(value); }
       }
-      public Builder SetAccountStatus(global::bnet.protocol.AccountInfo.Types.AccountStatus value) {
+      public Builder SetAccountPaid(bool value) {
         PrepareBuilder();
-        result.hasAccountStatus = true;
-        result.accountStatus_ = value;
+        result.hasAccountPaid = true;
+        result.accountPaid_ = value;
         return this;
       }
-      public Builder ClearAccountStatus() {
+      public Builder ClearAccountPaid() {
         PrepareBuilder();
-        result.hasAccountStatus = false;
-        result.accountStatus_ = global::bnet.protocol.AccountInfo.Types.AccountStatus.TRIAL;
+        result.hasAccountPaid = false;
+        result.accountPaid_ = false;
         return this;
       }
       

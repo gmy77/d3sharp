@@ -297,5 +297,10 @@ namespace Mooege.Core.MooNet.Services
         {
             throw new NotImplementedException();
         }
+
+        public override void GetNotClosedOfferCount(IRpcController controller, bnet.protocol.exchange.GetNotClosedOfferCountRequest request, Action<bnet.protocol.exchange.GetNotClosedOfferCountResponse> done)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

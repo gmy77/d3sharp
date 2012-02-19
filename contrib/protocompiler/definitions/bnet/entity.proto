@@ -14,14 +14,7 @@ message Identity
 
 message AccountInfo
 {
-    enum AccountStatus
-    {
-        TRIAL = 1;
-        PAID = 2;
-        GM = 3;
-    }
-
-    optional .bnet.protocol.AccountInfo.AccountStatus account_status = 1 [default = TRIAL];
+    optional bool account_paid = 1 [default = false];
     optional fixed32 country_id = 2 [default = 0];
 }
 

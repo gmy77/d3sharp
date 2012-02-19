@@ -169,5 +169,15 @@ namespace Mooege.Core.MooNet.Services
         {
             throw new NotImplementedException();
         }
+
+        public override void SubscribeNotification(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.SubscribeNotificationRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UnsubscribeNotification(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.presence.UnsubscribeNotificationRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -45,6 +45,7 @@ message SavedDefinition
     optional sfixed64 num_vote_kicks_initiated = 9;
     optional sfixed64 num_public_games_no_kick = 10;
     optional sfixed64 times_vote_kicked = 11;
-    optional .D3.OnlineService.EntityId gold_id = 12;
+    optional .D3.OnlineService.EntityId gold_id_normal = 12;
+    optional .D3.OnlineService.EntityId gold_id_hardcore = 13;
 }
 

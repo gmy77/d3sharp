@@ -7,12 +7,15 @@ option cc_generic_services = false;
 message ConnectRequest
 {
     optional .bnet.protocol.ProcessId client_id = 1;
+    optional .bnet.protocol.connection.BindRequest bind_request = 2;
 }
 
 message ConnectResponse
 {
     required .bnet.protocol.ProcessId server_id = 1;
     optional .bnet.protocol.ProcessId client_id = 2;
+    optional uint32 bind_result = 3;
+    optional .bnet.protocol.connection.BindResponse bind_response = 4;
 }
 
 message BoundService

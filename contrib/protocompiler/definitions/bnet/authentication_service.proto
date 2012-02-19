@@ -1,3 +1,4 @@
+import "bnet/account_types.proto";
 import "bnet/rpc.proto";
 import "bnet/content_handle.proto";
 import "bnet/entity.proto";
@@ -29,15 +30,24 @@ message LogonRequest
     optional string platform = 2;
     optional string locale = 3;
     optional string email = 4;
-    optional uint64 listener_id = 5;
-    optional string version = 6;
-    optional int32 application_version = 7;
+    optional string version = 5;
+    optional int32 application_version = 6;
 }
 
 message LogonResponse
 {
     required .bnet.protocol.EntityId account = 1;
     repeated .bnet.protocol.EntityId game_account = 2;
+}
+
+message AccountSettingsNotification
+{
+    repeated .bnet.protocol.account.AccountLicense account_licenses = 1;
+    repeated .bnet.protocol.account.AccountLicense game_account_licenses = 2;
+    optional bool is_using_rid = 3;
+    optional bool is_playing_from_igr = 4;
+    optional bool can_receive_voice = 5;
+    optional bool can_send_voice = 6;
 }
 
 service AuthenticationClient
@@ -49,6 +59,10 @@ service AuthenticationClient
     rpc ModuleMessage(.bnet.protocol.authentication.ModuleMessageRequest) returns(.bnet.protocol.NoData)
     {
         option (method_id) = 2;
+    }
+    rpc AccountSettings(.bnet.protocol.authentication.AccountSettingsNotification) returns(.bnet.protocol.NO_RESPONSE)
+    {
+        option (method_id) = 3;
     }
 }
 

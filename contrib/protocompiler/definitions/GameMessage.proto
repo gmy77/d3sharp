@@ -96,28 +96,56 @@ message TutorialState
 
 message DeleteHero
 {
-    required .D3.OnlineService.EntityId account_id = 1;
-    required .D3.OnlineService.EntityId hero_id = 2;
+    required .D3.OnlineService.EntityId hero_id = 1;
 }
 
 message UndeleteHero
 {
-    required .D3.OnlineService.EntityId account_id = 1;
-    required .D3.OnlineService.EntityId hero_id = 2;
+    required .D3.OnlineService.EntityId undelete_hero_id = 1;
+    optional .D3.OnlineService.EntityId replace_hero_id = 2;
 }
 
-message ForceRenameHero
+message GetFallenHeros
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+}
+
+message ArchiveHardcore
+{
+    required .D3.OnlineService.EntityId hero_id = 1;
+    required string epitaph = 2;
+}
+
+message DeleteFallenHero
+{
+    required .D3.OnlineService.EntityId hero_id = 1;
+}
+
+message ServerDeleteHero
 {
     required .D3.OnlineService.EntityId account_id = 1;
     required .D3.OnlineService.EntityId hero_id = 2;
 }
 
-message FetchHeros
+message ServerUndeleteHero
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required .D3.OnlineService.EntityId undelete_hero_id = 2;
+    optional .D3.OnlineService.EntityId replace_hero_id = 3;
+}
+
+message ServerForceRenameHero
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required .D3.OnlineService.EntityId hero_id = 2;
+}
+
+message ServerFetchHeros
 {
     required .D3.OnlineService.EntityId account_id = 1;
 }
 
-message FetchInventory
+message ServerFetchInventory
 {
     required .D3.OnlineService.EntityId account_id = 1;
     required .D3.OnlineService.EntityId hero_id = 2;
@@ -125,20 +153,17 @@ message FetchInventory
 
 message RenameHero
 {
-    required .D3.OnlineService.EntityId account_id = 1;
-    required .D3.OnlineService.EntityId hero_id = 2;
-    required string new_name = 3;
+    required .D3.OnlineService.EntityId hero_id = 1;
+    required string new_name = 2;
 }
 
 message GetGameAccountSettings
 {
-    required .D3.OnlineService.EntityId account_id = 1;
 }
 
 message SetGameAccountSettings
 {
-    required .D3.OnlineService.EntityId account_id = 1;
-    required .D3.Client.GameAccountSettings settings = 2;
+    required .D3.Client.GameAccountSettings settings = 1;
 }
 
 message GetToonSettings
@@ -154,7 +179,6 @@ message SetToonSettings
 
 message GetAccountDigest
 {
-    required .D3.OnlineService.EntityId account_id = 1;
 }
 
 message GetHeroItems
@@ -164,7 +188,7 @@ message GetHeroItems
 
 message GetAccountItems
 {
-    required .D3.OnlineService.EntityId account_id = 1;
+    required bool hardcore = 1;
 }
 
 message GetAccountProfile
@@ -180,13 +204,11 @@ message GetHeroProfiles
 
 message GetAccountPrefs
 {
-    required .D3.OnlineService.EntityId account_id = 1;
 }
 
 message SetAccountPrefs
 {
-    required .D3.OnlineService.EntityId account_id = 1;
-    required .D3.Client.Preferences prefs = 2;
+    required .D3.Client.Preferences prefs = 1;
 }
 
 message GetHeroDigest
@@ -198,5 +220,22 @@ message GetHeroDigest
 message GetHeroIds
 {
     required .D3.OnlineService.EntityId account_id = 1;
+}
+
+message GetDeletedHero
+{
+}
+
+message CSGetSnapshots
+{
+}
+
+message CSRestoreToSnapshot
+{
+    required uint64 version = 1;
+}
+
+message CSWriteSnapshot
+{
 }
 

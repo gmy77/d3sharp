@@ -105,11 +105,6 @@ namespace Mooege.Core.MooNet.Services
             FriendManager.HandleInvitation(this.Client, invitation.Build());
         }
 
-        public override void UpdateInvitation(IRpcController controller, bnet.protocol.invitation.UpdateInvitationRequest request, Action<bnet.protocol.NoData> done)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void AcceptInvitation(IRpcController controller, bnet.protocol.invitation.GenericRequest request, Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("{0} accepted friend invitation.", this.Client.Account);
