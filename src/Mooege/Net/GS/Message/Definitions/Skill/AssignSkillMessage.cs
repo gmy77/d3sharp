@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Skill
 {
-    [Message(new[] { Opcodes.AssignSkillMessage3, Opcodes.AssignSkillMessage4 })]
+    [Message(new[] { Opcodes.AssignSkillMessage1, Opcodes.AssignSkillMessage2, Opcodes.AssignSkillMessage3 })]
     public class AssignSkillMessage : GameMessage
     {
         public int /* sno */ SNOSkill;

@@ -109,7 +109,7 @@ namespace Mooege.Core.GS.Actors
                             case GizmoGroup.DungeonStonePortal:
                             case GizmoGroup.Headstone:
                             case GizmoGroup.HearthPortal:
-                            case GizmoGroup.NephalemAltar:
+                            //case GizmoGroup.NephalemAltar:
                             case GizmoGroup.Passive:
                             case GizmoGroup.PlayerSharedStash:
                             case GizmoGroup.QuestLoot:

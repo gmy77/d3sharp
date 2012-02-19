@@ -26,7 +26,8 @@ namespace Mooege.Core.GS.Skills
     {
         public ToonClass @Class;
 
-        public int[] ActiveSkills;
+        public int[] ActiveSkillsList;
+        public ActiveSkillSavedData[] ActiveSkills;
         public HotbarButtonData[] HotBarSkills;
         public int[] PassiveSkills;
 
@@ -34,17 +35,22 @@ namespace Mooege.Core.GS.Skills
         {
             this.@Class = @class;
 
-            this.ActiveSkills = Skills.GetAllActiveSkillsByClass(this.@Class).Take(6).ToArray();
+            this.ActiveSkillsList = Skills.GetAllActiveSkillsByClass(this.@Class).Take(6).ToArray();
+            ActiveSkills = new ActiveSkillSavedData[6];
+            for (int i = 0; i < ActiveSkillsList.Length; i++)
+            {
+                ActiveSkills[i].snoSkill = ActiveSkillsList[i];
+            }
 
             this.HotBarSkills = new HotbarButtonData[9] {
-                new HotbarButtonData { SNOSkill = ActiveSkills[4], ItemGBId = -1 }, // left-click
-                new HotbarButtonData { SNOSkill = ActiveSkills[5], ItemGBId = -1 }, // right-click
-                new HotbarButtonData { SNOSkill = ActiveSkills[0], ItemGBId = -1 }, // hidden-bar - left-click switch - which key??
-                new HotbarButtonData { SNOSkill = ActiveSkills[1], ItemGBId = -1 }, // hidden-bar - right-click switch (press x ingame)
-                new HotbarButtonData { SNOSkill = ActiveSkills[0], ItemGBId = -1 }, // bar-1
-                new HotbarButtonData { SNOSkill = ActiveSkills[1], ItemGBId = -1 }, // bar-2
-                new HotbarButtonData { SNOSkill = ActiveSkills[2], ItemGBId = -1 }, // bar-3
-                new HotbarButtonData { SNOSkill = ActiveSkills[3], ItemGBId = -1 }, // bar-4 
+                new HotbarButtonData { SNOSkill = ActiveSkills[4].snoSkill, ItemGBId = -1 }, // left-click
+                new HotbarButtonData { SNOSkill = ActiveSkills[5].snoSkill, ItemGBId = -1 }, // right-click
+                new HotbarButtonData { SNOSkill = ActiveSkills[0].snoSkill, ItemGBId = -1 }, // hidden-bar - left-click switch - which key??
+                new HotbarButtonData { SNOSkill = ActiveSkills[1].snoSkill, ItemGBId = -1 }, // hidden-bar - right-click switch (press x ingame)
+                new HotbarButtonData { SNOSkill = ActiveSkills[0].snoSkill, ItemGBId = -1 }, // bar-1
+                new HotbarButtonData { SNOSkill = ActiveSkills[1].snoSkill, ItemGBId = -1 }, // bar-2
+                new HotbarButtonData { SNOSkill = ActiveSkills[2].snoSkill, ItemGBId = -1 }, // bar-3
+                new HotbarButtonData { SNOSkill = ActiveSkills[3].snoSkill, ItemGBId = -1 }, // bar-4 
                 new HotbarButtonData { SNOSkill = Skills.None, ItemGBId = 0x622256D4 } // bar-5 - potion
             };
 

@@ -349,7 +349,7 @@ namespace Mooege.Core.GS.Map
         public void SpawnRandomItemDrop(Actor source, Player player)
         {
             var item = ItemGenerator.GenerateRandom(player);
-            if ((item is SpellRune) && (item.Attributes[GameAttribute.Rune_Rank] == 0)) {
+            if ((item is SpellRune) /*&& (item.Attributes[GameAttribute.Rune_Rank] == 0)*/) {
                 // favor player's class in attuned runes // TODO: remove or move this
                 if (RandomHelper.NextDouble() > 0.6f)
                 {

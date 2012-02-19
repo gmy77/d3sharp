@@ -27,8 +27,8 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         Opcodes.SimpleMessage18, Opcodes.SimpleMessage20, Opcodes.SimpleMessage21, Opcodes.SimpleMessage22, Opcodes.SimpleMessage23, Opcodes.SimpleMessage24, 
         Opcodes.SimpleMessage25, Opcodes.SimpleMessage26, Opcodes.SimpleMessage27, Opcodes.SimpleMessage28, Opcodes.SimpleMessage29, Opcodes.SimpleMessage30, Opcodes.SimpleMessage31,
         Opcodes.SimpleMessage32, Opcodes.SimpleMessage34, Opcodes.SimpleMessage35, Opcodes.SimpleMessage36, Opcodes.SimpleMessage37, Opcodes.SimpleMessage38, 
-        Opcodes.SimpleMessage39, Opcodes.SimpleMessage40, Opcodes.SimpleMessage42,
-        Opcodes.SimpleMessage47, Opcodes.SimpleMessage48})]
+        Opcodes.SimpleMessage39, Opcodes.SimpleMessage40, Opcodes.SimpleMessage42, Opcodes.SimpleMessage47, Opcodes.SimpleMessage48,  Opcodes.SimpleMessage49,
+        Opcodes.SimpleMessage50,  Opcodes.SimpleMessage51})]
     public class SimpleMessage : GameMessage
     {
 

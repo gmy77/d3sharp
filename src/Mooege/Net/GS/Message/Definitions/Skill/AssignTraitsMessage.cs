@@ -17,31 +17,35 @@
  */
 
 using System.Text;
-using System;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Skill
 {
-    [Message(Opcodes.NephalemAltarWindowClosedMessage)]
-    public class NephalemAltarWindowClosedMessage : GameMessage
+    [Message(Opcodes.AssignTraitsMessage)]
+    public class AssignTraitsMessage : GameMessage
     {
+        public int[] /* sno */ snoPower;
 
         public override void Parse(GameBitBuffer buffer)
         {
+            snoPower = new int[3];
+            for (int i = 0; i < snoPower.Length; i++) snoPower[i] = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < snoPower.Length; i++) buffer.WriteInt(32, snoPower[i]);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("NephalemAltarWindowClosedMessage:");
+            b.AppendLine("AssignTraitsMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
+            for (int i = 0; i < snoPower.Length; ) { b.Append(' ', pad + 1); for (int j = 0; j < 8 && i < snoPower.Length; j++, i++) { b.Append("0x" + snoPower[i].ToString("X8") + ", "); } b.AppendLine(); }
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
+
     }
 }

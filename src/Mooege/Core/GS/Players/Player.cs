@@ -453,8 +453,8 @@ namespace Mooege.Core.GS.Players
             // unlocking assigned skills
             for (int i = 0; i < this.SkillSet.ActiveSkills.Length; i++)
             {
-                this.Attributes[GameAttribute.Skill, this.SkillSet.ActiveSkills[i]] = 1;
-                this.Attributes[GameAttribute.Skill_Total, this.SkillSet.ActiveSkills[i]] = 1;
+                this.Attributes[GameAttribute.Skill, this.SkillSet.ActiveSkills[i].snoSkill] = 1;
+                this.Attributes[GameAttribute.Skill_Total, this.SkillSet.ActiveSkills[i].snoSkill] = 1;
             }
 
             this.Inventory = new Inventory(this); // Here because it needs attributes /fasbat
@@ -471,14 +471,14 @@ namespace Mooege.Core.GS.Players
         {
             if (message is AssignActiveSkillMessage) OnAssignActiveSkill(client, (AssignActiveSkillMessage)message);
             else if (message is AssignPassiveSkillMessage) OnAssignPassiveSkill(client, (AssignPassiveSkillMessage)message);
-            else if (message is PlayerChangeHotbarButtonMessage) OnPlayerChangeHotbarButtonMessage(client, (PlayerChangeHotbarButtonMessage)message);
+            //else if (message is PlayerChangeHotbarButtonMessage) OnPlayerChangeHotbarButtonMessage(client, (PlayerChangeHotbarButtonMessage)message);
             else if (message is TargetMessage) OnObjectTargeted(client, (TargetMessage)message);
             else if (message is ACDClientTranslateMessage) OnPlayerMovement(client, (ACDClientTranslateMessage)message);
             else if (message is TryWaypointMessage) OnTryWaypoint(client, (TryWaypointMessage)message);
             else if (message is RequestBuyItemMessage) OnRequestBuyItem(client, (RequestBuyItemMessage)message);
             //else if (message is RequestAddSocketMessage) OnRequestAddSocket(client, (RequestAddSocketMessage)message);
             else if (message is HirelingDismissMessage) OnHirelingDismiss();
-            else if (message is SocketSpellMessage) OnSocketSpell(client, (SocketSpellMessage)message);
+            //else if (message is SocketSpellMessage) OnSocketSpell(client, (SocketSpellMessage)message);
             else if (message is PlayerTranslateFacingMessage) OnTranslateFacing(client, (PlayerTranslateFacingMessage)message);
             else return;
         }
@@ -497,7 +497,7 @@ namespace Mooege.Core.GS.Players
 
         private void OnAssignActiveSkill(GameClient client, AssignActiveSkillMessage message)
         {
-            var oldSNOSkill = this.SkillSet.ActiveSkills[message.SkillIndex]; // find replaced skills SNO.
+            var oldSNOSkill = this.SkillSet.ActiveSkills[message.SkillIndex].snoSkill; // find replaced skills SNO.
             if (oldSNOSkill != -1)
             {
                 // if old power was socketted, pickup rune
@@ -525,7 +525,7 @@ namespace Mooege.Core.GS.Players
                 button.SNOSkill = message.SNOSkill;
             }
 
-            this.SkillSet.ActiveSkills[message.SkillIndex] = message.SNOSkill;
+            this.SkillSet.ActiveSkills[message.SkillIndex].snoSkill = message.SNOSkill;
             this.UpdateHeroState();
         }
 
@@ -548,79 +548,79 @@ namespace Mooege.Core.GS.Players
             this.UpdateHeroState();
         }
 
-        private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
-        {
-            this.SkillSet.HotBarSkills[message.BarIndex] = message.ButtonData;
-        }
+        //private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
+        //{
+        //    this.SkillSet.HotBarSkills[message.BarIndex] = message.ButtonData;
+        //}
 
         /// <summary>
         /// Sockets skill with rune.
         /// </summary>
         /// <param name="client"></param>
         /// <param name="socketSpellMessage"></param>
-        private void OnSocketSpell(GameClient client, SocketSpellMessage socketSpellMessage)
-        {
-            Item rune = this.Inventory.GetItem(unchecked((uint)socketSpellMessage.RuneDynamicId));
-            int PowerSNOId = socketSpellMessage.PowerSNOId;
-            int skillIndex = -1; // find index of power in skills
-            for (int i = 0; i < this.SkillSet.ActiveSkills.Length; i++)
-            {
-                if (this.SkillSet.ActiveSkills[i] == PowerSNOId)
-                {
-                    skillIndex = i;
-                    break;
-                }
-            }
-            if (skillIndex == -1)
-            {
-                // validity of message is controlled on client side, this shouldn't happen
-                return;
-            }
-            Item oldRune = this.Inventory.RemoveRune(skillIndex); // removes old rune (if present)
-            if (rune.Attributes[GameAttribute.Rune_Rank] != 0)
-            {
-                // unattuned rune: pick random color, create new rune, set attunement to new rune and destroy unattuned one
-                int rank = rune.Attributes[GameAttribute.Rune_Rank];
-                int colorIndex = RandomHelper.Next(0, 5);
-                Item newRune = ItemGenerator.Cook(this, "Runestone_" + (char)('A' + colorIndex) + "_0" + rank); // TODO: quite of hack, find better solution /xsochor
-                newRune.Attributes[GameAttribute.Rune_Attuned_Power] = PowerSNOId;
-                switch (colorIndex)
-                {
-                    case 0:
-                        newRune.Attributes[GameAttribute.Rune_A] = rank;
-                        break;
-                    case 1:
-                        newRune.Attributes[GameAttribute.Rune_B] = rank;
-                        break;
-                    case 2:
-                        newRune.Attributes[GameAttribute.Rune_C] = rank;
-                        break;
-                    case 3:
-                        newRune.Attributes[GameAttribute.Rune_D] = rank;
-                        break;
-                    case 4:
-                        newRune.Attributes[GameAttribute.Rune_E] = rank;
-                        break;
-                }
-                newRune.Owner = this;
-                newRune.InventoryLocation.X = rune.InventoryLocation.X; // sets position of original
-                newRune.InventoryLocation.Y = rune.InventoryLocation.Y; // sets position of original
-                this.Inventory.DestroyInventoryItem(rune); // destroy unattuned rune
-                newRune.EnterWorld(this.Position);
-                newRune.Reveal(this);
-                this.Inventory.SetRune(newRune, PowerSNOId, skillIndex);
-            }
-            else
-            {
-                this.Inventory.SetRune(rune, PowerSNOId, skillIndex);
-            }
-            if (oldRune != null)
-            {
-                this.Inventory.PickUp(oldRune); // pick removed rune
-            }
-            this.Attributes.BroadcastChangedIfRevealed();
-            UpdateHeroState();
-        }
+        //private void OnSocketSpell(GameClient client, SocketSpellMessage socketSpellMessage)
+        //{
+        //    Item rune = this.Inventory.GetItem(unchecked((uint)socketSpellMessage.RuneDynamicId));
+        //    int PowerSNOId = socketSpellMessage.PowerSNOId;
+        //    int skillIndex = -1; // find index of power in skills
+        //    for (int i = 0; i < this.SkillSet.ActiveSkills.Length; i++)
+        //    {
+        //        if (this.SkillSet.ActiveSkills[i] == PowerSNOId)
+        //        {
+        //            skillIndex = i;
+        //            break;
+        //        }
+        //    }
+        //    if (skillIndex == -1)
+        //    {
+        //        // validity of message is controlled on client side, this shouldn't happen
+        //        return;
+        //    }
+        //    Item oldRune = this.Inventory.RemoveRune(skillIndex); // removes old rune (if present)
+        //    if (rune.Attributes[GameAttribute.Rune_Rank] != 0)
+        //    {
+        //        // unattuned rune: pick random color, create new rune, set attunement to new rune and destroy unattuned one
+        //        int rank = rune.Attributes[GameAttribute.Rune_Rank];
+        //        int colorIndex = RandomHelper.Next(0, 5);
+        //        Item newRune = ItemGenerator.Cook(this, "Runestone_" + (char)('A' + colorIndex) + "_0" + rank); // TODO: quite of hack, find better solution /xsochor
+        //        newRune.Attributes[GameAttribute.Rune_Attuned_Power] = PowerSNOId;
+        //        switch (colorIndex)
+        //        {
+        //            case 0:
+        //                newRune.Attributes[GameAttribute.Rune_A] = rank;
+        //                break;
+        //            case 1:
+        //                newRune.Attributes[GameAttribute.Rune_B] = rank;
+        //                break;
+        //            case 2:
+        //                newRune.Attributes[GameAttribute.Rune_C] = rank;
+        //                break;
+        //            case 3:
+        //                newRune.Attributes[GameAttribute.Rune_D] = rank;
+        //                break;
+        //            case 4:
+        //                newRune.Attributes[GameAttribute.Rune_E] = rank;
+        //                break;
+        //        }
+        //        newRune.Owner = this;
+        //        newRune.InventoryLocation.X = rune.InventoryLocation.X; // sets position of original
+        //        newRune.InventoryLocation.Y = rune.InventoryLocation.Y; // sets position of original
+        //        this.Inventory.DestroyInventoryItem(rune); // destroy unattuned rune
+        //        newRune.EnterWorld(this.Position);
+        //        newRune.Reveal(this);
+        //        this.Inventory.SetRune(newRune, PowerSNOId, skillIndex);
+        //    }
+        //    else
+        //    {
+        //        this.Inventory.SetRune(rune, PowerSNOId, skillIndex);
+        //    }
+        //    if (oldRune != null)
+        //    {
+        //        this.Inventory.PickUp(oldRune); // pick removed rune
+        //    }
+        //    this.Attributes.BroadcastChangedIfRevealed();
+        //    UpdateHeroState();
+        //}
 
         private void OnObjectTargeted(GameClient client, TargetMessage message)
         {
@@ -1060,7 +1060,6 @@ namespace Mooege.Core.GS.Players
             return new PlayerSavedData()
             {
                 HotBarButtons = this.SkillSet.HotBarSkills,
-                SkilKeyMappings = this.SkillKeyMappings,
 
                 PlaytimeTotal = 0x00000000,
                 WaypointFlags = 0x7FFFFFFF,
@@ -1075,7 +1074,7 @@ namespace Mooege.Core.GS.Players
                 Field5 = 0x00006A770,
 
                 LearnedLore = this.LearnedLore,
-                snoActiveSkills = this.SkillSet.ActiveSkills,
+                ActiveSkills = this.SkillSet.ActiveSkills,
                 snoTraits = this.SkillSet.PassiveSkills,
                 SavePointData = new SavePointData { snoWorld = -1, SavepointId = -1, },
             };

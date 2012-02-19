@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,41 +17,38 @@
  */
 
 using System.Text;
-using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
-    [Message(Opcodes.PlayerChangeHotbarButtonMessage, Consumers.Player)]
-    public class PlayerChangeHotbarButtonMessage : GameMessage
+    [Message(Opcodes.UnlockDifficultyMessage)]
+    public class UnlockDifficultyMessage : GameMessage
     {
-        public int BarIndex;
-        public HotbarButtonData ButtonData;
+        public int Field0;
+        public bool Field1;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            BarIndex = buffer.ReadInt(4) + (-1);
-            ButtonData = new HotbarButtonData();
-            ButtonData.Parse(buffer);
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(4, BarIndex - (-1));
-            ButtonData.Encode(buffer);
+            buffer.WriteInt(32, Field0);
+            buffer.WriteBool(Field1);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("PlayerChangeHotbarButtonMessage:");
+            b.AppendLine("UnlockDifficultyMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + BarIndex.ToString("X8") + " (" + BarIndex + ")");
-            ButtonData.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Field1: " + (Field1 ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
 
     }
 }
