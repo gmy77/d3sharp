@@ -153,7 +153,7 @@ namespace Mooege.Net.GS.Message
         WaypointActivatedMessage = 136, // len: 	20
         OpenWaypointSelectionWindowMessage = 137, // len: 	12 former ANNDataMessage14
         ANNDataMessage15 = 138, // len: 	12
-        ANNDataMessage16 = 149, // len: 	12
+        ANNDataMessage16 = 139, // len: 	12
         SimpleMessage49 = 140, // len: 8 added patch 13
         AimTargetMessage = 141, // len: 	36
         ACDChangeGBHandleMessage = 142, // len: 	20
