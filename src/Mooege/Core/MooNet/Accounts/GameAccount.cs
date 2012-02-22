@@ -44,22 +44,22 @@ namespace Mooege.Core.MooNet.Accounts
             = new IntPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Channel, 2, 0);
 
         public FourCCPresenceField ProgramField
-            = new FourCCPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 4, 0);
+            = new FourCCPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 3, 0);
 
         public StringPresenceField BattleTagField
+            = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 5, 0);
+
+        public StringPresenceField GameAccountNameField
             = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 6, 0);
 
-        public StringPresenceField AccountField
-            = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 7, 0);
-
         public ByteStringPresenceField<bnet.protocol.EntityId> OwnerIdField
-            = new ByteStringPresenceField<bnet.protocol.EntityId>(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 8, 0);
+            = new ByteStringPresenceField<bnet.protocol.EntityId>(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 7, 0);
 
         public BoolPresenceField GameAccountStatusField
             = new BoolPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 1, 0, false);
 
-        public IntPresenceField GameAccountStatusIdField
-            = new IntPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 5, 0);
+        public IntPresenceField LastOnlineField
+            = new IntPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 4, 0);
 
         public FieldKeyHelper.Program Program;
 
@@ -107,7 +107,7 @@ namespace Mooege.Core.MooNet.Accounts
                 this._currentToon = value;
                 this.CurrentHeroIdField.Value = value.D3EntityID;
                 this.Owner.LastSelectedHero = value.D3EntityID;
-                this.ChangedFields.SetPresenceFieldValue(this.Owner.LastSelectedHeroField);
+                this.ChangedFields.SetPresenceFieldValue(this.Owner.LastPlayedHeroIdField);
                 this.ChangedFields.SetPresenceFieldValue(this.CurrentHeroIdField);
                 this.ChangedFields.SetPresenceFieldValue(value.HeroClassField);
                 this.ChangedFields.SetPresenceFieldValue(value.HeroLevelField);
@@ -226,7 +226,7 @@ namespace Mooege.Core.MooNet.Accounts
 
             //TODO: Now hardcode all game account notifications to D3
             this.ProgramField.Value = "D3";
-            this.AccountField.Value = Owner.BnetEntityId.Low.ToString() + "#1";
+            this.GameAccountNameField.Value = Owner.BnetEntityId.Low.ToString() + "#1";
             this.BattleTagField.Value = this.Owner.BattleTag;
 
             this.Achievements = new List<bnet.protocol.achievements.AchievementUpdateRecord>();
@@ -249,16 +249,16 @@ namespace Mooege.Core.MooNet.Accounts
                 this._loggedInClient = value;
 
                 this.GameAccountStatusField.Value = this.IsOnline;
-                this.GameAccountStatusIdField.Value = (int)(this.IsOnline == true ? 1324923597904795 : 0);
+                this.LastOnlineField.Value = (int)(this.IsOnline == true ? 1324923597904795 : 0);
 
                 ChangedFields.SetPresenceFieldValue(this.GameAccountStatusField);
-                ChangedFields.SetPresenceFieldValue(this.GameAccountStatusIdField);
+                ChangedFields.SetPresenceFieldValue(this.LastOnlineField);
 
                 //TODO: Remove this set once delegate for set is added to presence field
-                this.Owner.AccountOnlineField.Value = this.Owner.IsOnline;
-                var operation = this.Owner.AccountOnlineField.GetFieldOperation();
+                //this.Owner.AccountOnlineField.Value = this.Owner.IsOnline;
+                //var operation = this.Owner.AccountOnlineField.GetFieldOperation();
                 this.NotifyUpdate();
-                this.UpdateSubscribers(this.Subscribers, new List<bnet.protocol.presence.FieldOperation>() { operation });
+                //  this.UpdateSubscribers(this.Subscribers, new List<bnet.protocol.presence.FieldOperation>() { operation });
             }
         }
 
@@ -288,7 +288,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             //for now set it here
             this.GameAccountStatusField.Value = this.IsOnline;
-            this.GameAccountStatusIdField.Value = (int)(this.IsOnline == true ? 1324923597904795 : 0);
+            this.LastOnlineField.Value = (int)(this.IsOnline == true ? 1324923597904795 : 0);
 
             var operationList = new List<bnet.protocol.presence.FieldOperation>();
 
@@ -300,14 +300,14 @@ namespace Mooege.Core.MooNet.Accounts
             //D3,Hero,3,0 -> D3.Hero.VisualEquipment
             //D3,Hero,4,0 -> Hero's flags
             //D3,Hero,5,0 -> Hero Name
-            //D3,Hero,6,0 -> Unk Int64 (0)
-            //D3,Hero,7,0 -> Unk Int64 (0)
+            //D3,Hero,6,0 -> HighestUnlockedAct
+            //D3,Hero,7,0 -> HighestUnlockedDifficulty
             //Bnet,GameAccount,1,0 -> GameAccount Online
-            //Bnet,GameAccount,4,0 -> FourCC = "D3"
-            //Bnet,GameAccount,5,0 -> Unk Int (0 if GameAccount is Offline)
-            //Bnet,GameAccount,6,0 -> BattleTag
-            //Bnet,GameAccount,7,0 -> Account.Low + "#1"
-            //Bnet,GameAccount,8,0 -> Account.EntityId
+            //Bnet,GameAccount,3,0 -> FourCC = "D3"
+            //Bnet,GameAccount,4,0 -> Unk Int (0 if GameAccount is Offline)
+            //Bnet,GameAccount,5,0 -> BattleTag
+            //Bnet,GameAccount,6,0 -> Account.Low + "#1"
+            //Bnet,GameAccount,7,0 -> Account.EntityId
 
             operationList.Add(BannerConfigurationField.GetFieldOperation());
             if (this.lastPlayedHeroId != AccountHasNoToons)
@@ -318,9 +318,9 @@ namespace Mooege.Core.MooNet.Accounts
 
             operationList.Add(this.GameAccountStatusField.GetFieldOperation());
             operationList.Add(this.ProgramField.GetFieldOperation());
-            operationList.Add(this.GameAccountStatusIdField.GetFieldOperation());
+            operationList.Add(this.LastOnlineField.GetFieldOperation());
             operationList.Add(this.BattleTagField.GetFieldOperation());
-            operationList.Add(this.AccountField.GetFieldOperation());
+            operationList.Add(this.GameAccountNameField.GetFieldOperation());
             operationList.Add(this.OwnerIdField.GetFieldOperation());
 
             return operationList;
@@ -353,7 +353,7 @@ namespace Mooege.Core.MooNet.Accounts
             switch ((FieldKeyHelper.Program)field.Key.Program)
             {
                 case FieldKeyHelper.Program.D3:
-                    if (field.Key.Group == 4 && field.Key.Field == 1)
+                    if (field.Key.Group == 4 && field.Key.Field == 1) //PartyId
                     {
                         if (field.Value.HasMessageValue) //7727 Sends empty SET instead of a CLEAR -Egris
                         {
@@ -375,7 +375,7 @@ namespace Mooege.Core.MooNet.Accounts
                             }
                         }
                     }
-                    else if (field.Key.Group == 4 && field.Key.Field == 2)
+                    else if (field.Key.Group == 4 && field.Key.Field == 2) //JoinPermission
                     {
                         //catch to stop Logger.Warn spam on client start and exit
                         // should D3.4.2 int64 Current screen (0=in-menus, 1=in-menus, 3=in-menus); see ScreenStatus sent to ChannelService.UpdateChannelState call /raist
@@ -386,15 +386,14 @@ namespace Mooege.Core.MooNet.Accounts
                             Logger.Trace("{0} set current screen to {1}.", this, field.Value.IntValue);
                         }
                     }
-                    else if (field.Key.Group == 4 && field.Key.Field == 3)
+                    else if (field.Key.Group == 4 && field.Key.Field == 3) //CallToArmsMessage
                     {
                         returnField.SetValue(field.Value);
                         //Looks to be the ToonFlags of the party leader/inviter when it is an int, OR the message set in an open to friends game when it is a string /dustinconrad
                     }
-                    else if (field.Key.Group == 4 && field.Key.Field == 4)
+                    else if (field.Key.Group == 4 && field.Key.Field == 4) //Party IsFull
                     {
                         returnField.SetValue(field.Value);
-                        //this is some unknown bool
                     }
                     else
                     {

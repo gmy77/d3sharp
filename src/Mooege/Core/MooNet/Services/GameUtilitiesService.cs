@@ -105,7 +105,7 @@ namespace Mooege.Core.MooNet.Services
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(getHeroProfiles).Build());
                     break;
                 case 16: //? - Client expecting D3.Client.Preferences
-                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(D3.Client.Preferences.CreateBuilder().SetVersion(105).Build().ToByteString()).Build());
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(D3.Client.Preferences.CreateBuilder().SetVersion(106).Build().ToByteString()).Build());
                     break;
                 case 19: //D3.GameMessage.GetHeroIds -> D3.Hero.HeroList
                     var HeroList = GetHeroList(D3.GameMessage.GetHeroIds.ParseFrom(request.GetAttribute(2).Value.MessageValue));

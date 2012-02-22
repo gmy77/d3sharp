@@ -862,6 +862,7 @@ namespace Mooege.Core.GS.Players
                 Field0 = 0x00000000,
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
+                Field3 = -1,
                 Gender = Toon.Gender,
                 PlayerSavedData = this.GetSavedData(),
                 QuestRewardHistoryEntriesCount = 0x00000000,
@@ -1060,7 +1061,7 @@ namespace Mooege.Core.GS.Players
             return new PlayerSavedData()
             {
                 HotBarButtons = this.SkillSet.HotBarSkills,
-
+                HotBarButton = new HotbarButtonData { SNOSkill = -1, ItemGBId = -1 },
                 PlaytimeTotal = 0x00000000,
                 WaypointFlags = 0x7FFFFFFF,
 
@@ -1485,7 +1486,7 @@ namespace Mooege.Core.GS.Players
                         Type = FloatingAmountMessage.FloatType.Gold,
                     });
 
-                    player.Inventory.PickUpGold(item.DynamicID);
+                    //player.Inventory.PickUpGold(item.DynamicID);
                 }
 
 

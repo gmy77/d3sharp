@@ -22,7 +22,7 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class PlayerSavedData
     {
-        // MaxLength = 9
+        // MaxLength = 6
         public HotbarButtonData[] HotBarButtons;
         public HotbarButtonData HotBarButton;
         public int PlaytimeTotal;
@@ -38,12 +38,13 @@ namespace Mooege.Net.GS.Message.Fields
 
         public void Parse(GameBitBuffer buffer)
         {
-            HotBarButtons = new HotbarButtonData[9];
+            HotBarButtons = new HotbarButtonData[6];
             for (int i = 0; i < HotBarButtons.Length; i++)
             {
                 HotBarButtons[i] = new HotbarButtonData();
                 HotBarButtons[i].Parse(buffer);
             }
+            HotBarButton = new HotbarButtonData();
             HotBarButton.Parse(buffer);
             PlaytimeTotal = buffer.ReadInt(32);
             WaypointFlags = buffer.ReadInt(32);
