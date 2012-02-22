@@ -1486,7 +1486,7 @@ namespace Mooege.Core.GS.Players
                         Type = FloatingAmountMessage.FloatType.Gold,
                     });
 
-                    //player.Inventory.PickUpGold(item.DynamicID);
+                    player.Inventory.PickUpGold(item.DynamicID);
                 }
 
 

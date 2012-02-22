@@ -419,11 +419,11 @@ namespace Mooege.Core.GS.Players
         }
 
         // TODO: The inventory's gold item should not be created here. /komiga
-        //public void PickUpGold(uint itemID)
-        //{
-        //    Item collectedItem = _owner.World.GetItem(itemID);
-        //    Item sumGoldItem = _equipment.AddGoldItem(collectedItem);
-        //}
+        public void PickUpGold(uint itemID)
+        {
+            Item collectedItem = _owner.World.GetItem(itemID);
+            Item sumGoldItem = _equipment.AddGoldItem(collectedItem);
+        }
 
         private void OnInventoryRequestUseMessage(InventoryRequestUseMessage inventoryRequestUseMessage)
         {
@@ -570,9 +570,9 @@ namespace Mooege.Core.GS.Players
         }
 
 
-        //public void AddGoldAmount(int amount)
-        //{
-        //    _equipment.AddGoldAmount(amount);
-        //}
+        public void AddGoldAmount(int amount)
+        {
+            _equipment.AddGoldAmount(amount);
+        }
     }
 }
