@@ -170,6 +170,9 @@ namespace Mooege.Core.GS.Players
         // Resource generation timing /mdz
         private int _lastResourceUpdateTick;
 
+        // number of seconds to use for the cooldown that is started after changing a skill.
+        private const float SkillChangeCooldownLength = 15f;
+
         /// <summary>
         /// Creates a new player.
         /// </summary>
@@ -533,6 +536,7 @@ namespace Mooege.Core.GS.Players
 
             this.SkillSet.ActiveSkills[message.SkillIndex].snoSkill = message.SNOSkill;
             this.UpdateHeroState();
+            _StartSkillCooldown(message.SNOSkill, SkillChangeCooldownLength);
         }
 
         private void OnAssignPassiveSkills(GameClient client, AssignTraitsMessage message)
@@ -540,24 +544,38 @@ namespace Mooege.Core.GS.Players
             for (int i = 0; i < message.snoPower.Length; ++i)
             {
                 int oldSNOSkill = this.SkillSet.PassiveSkills[i]; // find replaced skills SNO.
-                if (oldSNOSkill != -1)
+                if (message.snoPower[i] != oldSNOSkill)
                 {
-                    // switch off old passive skill
-                    this.Attributes[GameAttribute.Trait, oldSNOSkill] = 0;
-                    this.Attributes[GameAttribute.Skill, oldSNOSkill] = 0;
-                    this.Attributes[GameAttribute.Skill_Total, oldSNOSkill] = 0;
+                    if (oldSNOSkill != -1)
+                    {
+                        // switch off old passive skill
+                        this.Attributes[GameAttribute.Trait, oldSNOSkill] = 0;
+                        this.Attributes[GameAttribute.Skill, oldSNOSkill] = 0;
+                        this.Attributes[GameAttribute.Skill_Total, oldSNOSkill] = 0;
+                    }
+
+                    if (message.snoPower[i] != -1)
+                    {
+                        // switch on new passive skill
+                        this.Attributes[GameAttribute.Trait, message.snoPower[i]] = 1;
+                        this.Attributes[GameAttribute.Skill, message.snoPower[i]] = 1;
+                        this.Attributes[GameAttribute.Skill_Total, message.snoPower[i]] = 1;
+                    }
+
+                    this.SkillSet.PassiveSkills[i] = message.snoPower[i];
+                    _StartSkillCooldown(message.snoPower[i], SkillChangeCooldownLength);
                 }
-                if (message.snoPower[i] != -1)
-                {
-                    // switch on new passive skill
-                    this.Attributes[GameAttribute.Trait, message.snoPower[i]] = 1;
-                    this.Attributes[GameAttribute.Skill, message.snoPower[i]] = 1;
-                    this.Attributes[GameAttribute.Skill_Total, message.snoPower[i]] = 1;
-                    this.Attributes.BroadcastChangedIfRevealed();
-                }
-                this.SkillSet.PassiveSkills[i] = message.snoPower[i];
             }
+
+            this.Attributes.BroadcastChangedIfRevealed();
             this.UpdateHeroState();
+        }
+
+        private void _StartSkillCooldown(int snoPower, float seconds)
+        {
+            this.World.BuffManager.AddBuff(this, this,
+                new Powers.Implementations.CooldownBuff(snoPower,
+                    new Ticker.SecondsTickTimer(this.InGameClient.Game, seconds)));
         }
 
         //private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
