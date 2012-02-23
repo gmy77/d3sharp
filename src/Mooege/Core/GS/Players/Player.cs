@@ -470,7 +470,7 @@ namespace Mooege.Core.GS.Players
         public void Consume(GameClient client, GameMessage message)
         {
             if (message is AssignActiveSkillMessage) OnAssignActiveSkill(client, (AssignActiveSkillMessage)message);
-            else if (message is AssignPassiveSkillMessage) OnAssignPassiveSkill(client, (AssignPassiveSkillMessage)message);
+            else if (message is AssignTraitsMessage) OnAssignPassiveSkills(client, (AssignTraitsMessage)message);
             //else if (message is PlayerChangeHotbarButtonMessage) OnPlayerChangeHotbarButtonMessage(client, (PlayerChangeHotbarButtonMessage)message);
             else if (message is TargetMessage) OnObjectTargeted(client, (TargetMessage)message);
             else if (message is ACDClientTranslateMessage) OnPlayerMovement(client, (ACDClientTranslateMessage)message);
@@ -500,27 +500,33 @@ namespace Mooege.Core.GS.Players
             var oldSNOSkill = this.SkillSet.ActiveSkills[message.SkillIndex].snoSkill; // find replaced skills SNO.
             if (oldSNOSkill != -1)
             {
-                // if old power was socketted, pickup rune
-                Item oldRune = this.Inventory.RemoveRune(message.SkillIndex);
-                if (oldRune != null)
-                {
-                    if (!this.Inventory.PickUp(oldRune))
-                    {
-                        // full inventory, cancel socketting
-                        this.Inventory.SetRune(oldRune, oldSNOSkill, message.SkillIndex); // readd old rune
-                        return;
-                    }
-                }
-                // switch off old skill in hotbar
+                //// if old power was socketted, pickup rune
+                //Item oldRune = this.Inventory.RemoveRune(message.SkillIndex);
+                //if (oldRune != null)
+                //{
+                //    if (!this.Inventory.PickUp(oldRune))
+                //    {
+                //        // full inventory, cancel socketting
+                //        this.Inventory.SetRune(oldRune, oldSNOSkill, message.SkillIndex); // readd old rune
+                //        return;
+                //    }
+                //}
                 this.Attributes[GameAttribute.Skill, oldSNOSkill] = 0;
                 this.Attributes[GameAttribute.Skill_Total, oldSNOSkill] = 0;
             }
-            // switch on new skill in hotbar
+
             this.Attributes[GameAttribute.Skill, message.SNOSkill] = 1;
             this.Attributes[GameAttribute.Skill_Total, message.SNOSkill] = 1;
+            // update rune attributes for new skill
+            this.Attributes[GameAttribute.Rune_A, message.SNOSkill] = message.RuneIndex == 0 ? 1 : 0;
+            this.Attributes[GameAttribute.Rune_B, message.SNOSkill] = message.RuneIndex == 1 ? 1 : 0;
+            this.Attributes[GameAttribute.Rune_C, message.SNOSkill] = message.RuneIndex == 2 ? 1 : 0;
+            this.Attributes[GameAttribute.Rune_D, message.SNOSkill] = message.RuneIndex == 3 ? 1 : 0;
+            this.Attributes[GameAttribute.Rune_E, message.SNOSkill] = message.RuneIndex == 4 ? 1 : 0;
             this.Attributes.BroadcastChangedIfRevealed();
 
-            foreach (HotbarButtonData button in this.SkillSet.HotBarSkills.Where(button => button.SNOSkill == oldSNOSkill)) // loop through hotbar and replace the old skill with new one
+            // loop through hotbar and replace the old skill with new one
+            foreach (HotbarButtonData button in this.SkillSet.HotBarSkills.Where(button => button.SNOSkill == oldSNOSkill)) 
             {
                 button.SNOSkill = message.SNOSkill;
             }
@@ -529,22 +535,28 @@ namespace Mooege.Core.GS.Players
             this.UpdateHeroState();
         }
 
-        private void OnAssignPassiveSkill(GameClient client, AssignPassiveSkillMessage message)
+        private void OnAssignPassiveSkills(GameClient client, AssignTraitsMessage message)
         {
-            var oldSNOSkill = this.SkillSet.PassiveSkills[message.SkillIndex]; // find replaced skills SNO.
-            if (oldSNOSkill != -1)
+            for (int i = 0; i < message.snoPower.Length; ++i)
             {
-                // switch off old passive skill
-                this.Attributes[GameAttribute.Trait, oldSNOSkill] = 0;
-                this.Attributes[GameAttribute.Skill, oldSNOSkill] = 0;
-                this.Attributes[GameAttribute.Skill_Total, oldSNOSkill] = 0;
+                int oldSNOSkill = this.SkillSet.PassiveSkills[i]; // find replaced skills SNO.
+                if (oldSNOSkill != -1)
+                {
+                    // switch off old passive skill
+                    this.Attributes[GameAttribute.Trait, oldSNOSkill] = 0;
+                    this.Attributes[GameAttribute.Skill, oldSNOSkill] = 0;
+                    this.Attributes[GameAttribute.Skill_Total, oldSNOSkill] = 0;
+                }
+                if (message.snoPower[i] != -1)
+                {
+                    // switch on new passive skill
+                    this.Attributes[GameAttribute.Trait, message.snoPower[i]] = 1;
+                    this.Attributes[GameAttribute.Skill, message.snoPower[i]] = 1;
+                    this.Attributes[GameAttribute.Skill_Total, message.snoPower[i]] = 1;
+                    this.Attributes.BroadcastChangedIfRevealed();
+                }
+                this.SkillSet.PassiveSkills[i] = message.snoPower[i];
             }
-            // switch on new passive skill
-            this.Attributes[GameAttribute.Trait, message.SNOSkill] = 1;
-            this.Attributes[GameAttribute.Skill, message.SNOSkill] = 1;
-            this.Attributes[GameAttribute.Skill_Total, message.SNOSkill] = 1;
-            this.Attributes.BroadcastChangedIfRevealed();
-            this.SkillSet.PassiveSkills[message.SkillIndex] = message.SNOSkill;
             this.UpdateHeroState();
         }
 
