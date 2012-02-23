@@ -46,14 +46,14 @@ namespace Mooege.Core.GS.Skills
             };
 
             this.HotBarSkills = new HotbarButtonData[6] {
-                new HotbarButtonData { SNOSkill = ActiveSkills[4].snoSkill, ItemGBId = -1 }, // left-click
-                new HotbarButtonData { SNOSkill = ActiveSkills[5].snoSkill, ItemGBId = -1 }, // right-click
-                new HotbarButtonData { SNOSkill = ActiveSkills[0].snoSkill, ItemGBId = -1 }, // hidden-bar - left-click switch - which key??
-                new HotbarButtonData { SNOSkill = ActiveSkills[1].snoSkill, ItemGBId = -1 }, // hidden-bar - right-click switch (press x ingame)
-                new HotbarButtonData { SNOSkill = ActiveSkills[0].snoSkill, ItemGBId = -1 }, // bar-1
-                new HotbarButtonData { SNOSkill = ActiveSkills[1].snoSkill, ItemGBId = -1 }, // bar-2
-                //new HotbarButtonData { SNOSkill = ActiveSkills[2].snoSkill, ItemGBId = -1 }, // bar-3
-                //new HotbarButtonData { SNOSkill = ActiveSkills[3].snoSkill, ItemGBId = -1 }, // bar-4 
+                new HotbarButtonData { SNOSkill = ActiveSkills[0].snoSkill, ItemGBId = -1 }, // left-click
+                new HotbarButtonData { SNOSkill = ActiveSkills[1].snoSkill, ItemGBId = -1 }, // right-click
+                //new HotbarButtonData { SNOSkill = ActiveSkills[0].snoSkill, ItemGBId = -1 }, // hidden-bar - left-click switch - which key??
+                //new HotbarButtonData { SNOSkill = ActiveSkills[1].snoSkill, ItemGBId = -1 }, // hidden-bar - right-click switch (press x ingame)
+                new HotbarButtonData { SNOSkill = ActiveSkills[2].snoSkill, ItemGBId = -1 }, // bar-1
+                new HotbarButtonData { SNOSkill = ActiveSkills[3].snoSkill, ItemGBId = -1 }, // bar-2
+                new HotbarButtonData { SNOSkill = ActiveSkills[4].snoSkill, ItemGBId = -1 }, // bar-3
+                new HotbarButtonData { SNOSkill = ActiveSkills[5].snoSkill, ItemGBId = -1 }, // bar-4 
                 //new HotbarButtonData { SNOSkill = Skills.None, ItemGBId = 0x622256D4 } // bar-5 - potion
             };
 
