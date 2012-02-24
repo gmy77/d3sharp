@@ -43,7 +43,7 @@ namespace bnet.protocol.exchange_object_provider {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           "CilibmV0L2V4Y2hhbmdlX29iamVjdF9wcm92aWRlcl90eXBlcy5wcm90bxIm" + 
           "Ym5ldC5wcm90b2NvbC5leGNoYW5nZV9vYmplY3RfcHJvdmlkZXIaEWJuZXQv" + 
-          "ZW50aXR5LnByb3RvGhNibmV0L2V4Y2hhbmdlLnByb3RvIt8CChZSZXBvcnRB" + 
+          "ZW50aXR5LnByb3RvGhNibmV0L2V4Y2hhbmdlLnByb3RvIocDChZSZXBvcnRB" + 
           "dXRob3JpemVSZXF1ZXN0EjkKDHBhcnRpdGlvbl9pZBgBIAIoCzIjLmJuZXQu" + 
           "cHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQSMgoFdG9rZW4YAiACKAsy" + 
           "Iy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBhcnRpdGlvbklkEg4KBnJlc3Vs" + 
@@ -51,45 +51,47 @@ namespace bnet.protocol.exchange_object_provider {
           "ZXhjaGFuZ2UuQmxvYkZyb21PZlR5cGUSFgoOZGVmZXJfZGVsaXZlcnkYBSAB" + 
           "KAgSMAoPYm5ldF9hY2NvdW50X2lkGAYgAigLMhcuYm5ldC5wcm90b2NvbC5F" + 
           "bnRpdHlJZBI/CgxlcnJvcl9kZXRhaWwYByABKAsyKS5ibmV0LnByb3RvY29s" + 
-          "LmV4Y2hhbmdlLkFjdGlvbkVycm9yRGV0YWlsIpgCChNSZXBvcnRTZXR0bGVS" + 
-          "ZXF1ZXN0EjkKDHBhcnRpdGlvbl9pZBgBIAIoCzIjLmJuZXQucHJvdG9jb2wu" + 
-          "ZXhjaGFuZ2UuUGFydGl0aW9uSWQSMgoFdG9rZW4YAiACKAsyIy5ibmV0LnBy" + 
-          "b3RvY29sLmV4Y2hhbmdlLlBhcnRpdGlvbklkEg4KBnJlc3VsdBgDIAIoBBJB" + 
-          "Chdub3RpZmljYXRpb25fZXh0cmFfaW5mbxgEIAEoCzIgLmJuZXQucHJvdG9j" + 
-          "b2wuZXhjaGFuZ2UuQmxvYkZyb20SPwoMZXJyb3JfZGV0YWlsGAUgASgLMiku" + 
-          "Ym5ldC5wcm90b2NvbC5leGNoYW5nZS5BY3Rpb25FcnJvckRldGFpbCKYAgoT" + 
-          "UmVwb3J0Q2FuY2VsUmVxdWVzdBI5CgxwYXJ0aXRpb25faWQYASACKAsyIy5i" + 
-          "bmV0LnByb3RvY29sLmV4Y2hhbmdlLlBhcnRpdGlvbklkEjIKBXRva2VuGAIg" + 
-          "AigLMiMuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25JZBIOCgZy" + 
-          "ZXN1bHQYAyACKAQSQQoXbm90aWZpY2F0aW9uX2V4dHJhX2luZm8YBCABKAsy" + 
-          "IC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkJsb2JGcm9tEj8KDGVycm9yX2Rl" + 
-          "dGFpbBgFIAEoCzIpLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQWN0aW9uRXJy" + 
-          "b3JEZXRhaWwimAIKE1JlcG9ydFJlZnVuZFJlcXVlc3QSOQoMcGFydGl0aW9u" + 
-          "X2lkGAEgAigLMiMuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25J" + 
-          "ZBIyCgV0b2tlbhgCIAIoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFy" + 
-          "dGl0aW9uSWQSDgoGcmVzdWx0GAMgAigEEkEKF25vdGlmaWNhdGlvbl9leHRy" + 
-          "YV9pbmZvGAQgASgLMiAuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5CbG9iRnJv" + 
-          "bRI/CgxlcnJvcl9kZXRhaWwYBSABKAsyKS5ibmV0LnByb3RvY29sLmV4Y2hh" + 
-          "bmdlLkFjdGlvbkVycm9yRGV0YWlsIvkBChhHZXRQYXltZW50TWV0aG9kc1Jl" + 
-          "cXVlc3QSLQoMYm5ldF9hY2NvdW50GAEgASgLMhcuYm5ldC5wcm90b2NvbC5F" + 
-          "bnRpdHlJZBItCgxnYW1lX2FjY291bnQYAiABKAsyFy5ibmV0LnByb3RvY29s" + 
-          "LkVudGl0eUlkEhAKCGN1cnJlbmN5GAMgAigJEhgKEGNhc2hfaW5fb3V0X21h" + 
-          "c2sYBCACKA0SKwoccmVmcmVzaF9wYXltZW50X21ldGhvZF9jYWNoZRgFIAEo" + 
-          "CDoFZmFsc2USJgoXcmVmcmVzaF9lX2JhbGFuY2VfY2FjaGUYBiABKAg6BWZh" + 
-          "bHNlItgBCg1QYXltZW50TWV0aG9kEjEKB2FjY291bnQYASACKAsyIC5ibmV0" + 
-          "LnByb3RvY29sLmV4Y2hhbmdlLkJsb2JGcm9tEhMKC2Rlc2NyaXB0aW9uGAIg" + 
-          "ASgJEg4KBmFtb3VudBgDIAEoBBIbChBjYXNoX2luX291dF9tYXNrGAQgASgN" + 
-          "OgEzEj8KD2JpbGxpbmdfYWRkcmVzcxgFIAEoCzImLmJuZXQucHJvdG9jb2wu" + 
-          "ZXhjaGFuZ2UuQmlsbGluZ0FkZHJlc3MSEQoJd2FsbGV0X2lkGAYgAigEImMK" + 
-          "GUdldFBheW1lbnRNZXRob2RzUmVzcG9uc2USRgoHbWV0aG9kcxgBIAMoCzI1" + 
-          "LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Vfb2JqZWN0X3Byb3ZpZGVyLlBheW1l" + 
-          "bnRNZXRob2RCA4ABAA==");
+          "LmV4Y2hhbmdlLkFjdGlvbkVycm9yRGV0YWlsEhIKCmF2c19yZXN1bHQYCCAB" + 
+          "KAkSEgoKY3Z2X3Jlc3VsdBgJIAEoCSKYAgoTUmVwb3J0U2V0dGxlUmVxdWVz" + 
+          "dBI5CgxwYXJ0aXRpb25faWQYASACKAsyIy5ibmV0LnByb3RvY29sLmV4Y2hh" + 
+          "bmdlLlBhcnRpdGlvbklkEjIKBXRva2VuGAIgAigLMiMuYm5ldC5wcm90b2Nv" + 
+          "bC5leGNoYW5nZS5QYXJ0aXRpb25JZBIOCgZyZXN1bHQYAyACKAQSQQoXbm90" + 
+          "aWZpY2F0aW9uX2V4dHJhX2luZm8YBCABKAsyIC5ibmV0LnByb3RvY29sLmV4" + 
+          "Y2hhbmdlLkJsb2JGcm9tEj8KDGVycm9yX2RldGFpbBgFIAEoCzIpLmJuZXQu" + 
+          "cHJvdG9jb2wuZXhjaGFuZ2UuQWN0aW9uRXJyb3JEZXRhaWwimAIKE1JlcG9y" + 
+          "dENhbmNlbFJlcXVlc3QSOQoMcGFydGl0aW9uX2lkGAEgAigLMiMuYm5ldC5w" + 
+          "cm90b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25JZBIyCgV0b2tlbhgCIAIoCzIj" + 
+          "LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQSDgoGcmVzdWx0" + 
+          "GAMgAigEEkEKF25vdGlmaWNhdGlvbl9leHRyYV9pbmZvGAQgASgLMiAuYm5l" + 
+          "dC5wcm90b2NvbC5leGNoYW5nZS5CbG9iRnJvbRI/CgxlcnJvcl9kZXRhaWwY" + 
+          "BSABKAsyKS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkFjdGlvbkVycm9yRGV0" + 
+          "YWlsIpgCChNSZXBvcnRSZWZ1bmRSZXF1ZXN0EjkKDHBhcnRpdGlvbl9pZBgB" + 
+          "IAIoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQSMgoF" + 
+          "dG9rZW4YAiACKAsyIy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBhcnRpdGlv" + 
+          "bklkEg4KBnJlc3VsdBgDIAIoBBJBChdub3RpZmljYXRpb25fZXh0cmFfaW5m" + 
+          "bxgEIAEoCzIgLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmxvYkZyb20SPwoM" + 
+          "ZXJyb3JfZGV0YWlsGAUgASgLMikuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5B" + 
+          "Y3Rpb25FcnJvckRldGFpbCL5AQoYR2V0UGF5bWVudE1ldGhvZHNSZXF1ZXN0" + 
+          "Ei0KDGJuZXRfYWNjb3VudBgBIAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5" + 
+          "SWQSLQoMZ2FtZV9hY2NvdW50GAIgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRp" + 
+          "dHlJZBIQCghjdXJyZW5jeRgDIAIoCRIYChBjYXNoX2luX291dF9tYXNrGAQg" + 
+          "AigNEisKHHJlZnJlc2hfcGF5bWVudF9tZXRob2RfY2FjaGUYBSABKAg6BWZh" + 
+          "bHNlEiYKF3JlZnJlc2hfZV9iYWxhbmNlX2NhY2hlGAYgASgIOgVmYWxzZSKe" + 
+          "AgoNUGF5bWVudE1ldGhvZBIxCgdhY2NvdW50GAEgAigLMiAuYm5ldC5wcm90" + 
+          "b2NvbC5leGNoYW5nZS5CbG9iRnJvbRITCgtkZXNjcmlwdGlvbhgCIAEoCRIO" + 
+          "CgZhbW91bnQYAyABKAQSGwoQY2FzaF9pbl9vdXRfbWFzaxgEIAEoDToBMxI/" + 
+          "Cg9iaWxsaW5nX2FkZHJlc3MYBSABKAsyJi5ibmV0LnByb3RvY29sLmV4Y2hh" + 
+          "bmdlLkJpbGxpbmdBZGRyZXNzEhEKCXdhbGxldF9pZBgGIAIoBBIXCg9jYXBf" + 
+          "cmVzdHJpY3Rpb24YByABKA0SGQoRYXV0aGVudGljYXRvcl9jYXAYCCABKAQS" + 
+          "EAoIc29mdF9jYXAYCSABKAQiYwoZR2V0UGF5bWVudE1ldGhvZHNSZXNwb25z" + 
+          "ZRJGCgdtZXRob2RzGAEgAygLMjUuYm5ldC5wcm90b2NvbC5leGNoYW5nZV9v" + 
+          "YmplY3RfcHJvdmlkZXIuUGF5bWVudE1ldGhvZEIDgAEA");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_object_provider_ReportAuthorizeRequest__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_exchange_object_provider_ReportAuthorizeRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_object_provider.ReportAuthorizeRequest, global::bnet.protocol.exchange_object_provider.ReportAuthorizeRequest.Builder>(internal__static_bnet_protocol_exchange_object_provider_ReportAuthorizeRequest__Descriptor,
-                new string[] { "PartitionId", "Token", "Result", "AuthHandle", "DeferDelivery", "BnetAccountId", "ErrorDetail", });
+                new string[] { "PartitionId", "Token", "Result", "AuthHandle", "DeferDelivery", "BnetAccountId", "ErrorDetail", "AvsResult", "CvvResult", });
         internal__static_bnet_protocol_exchange_object_provider_ReportSettleRequest__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_exchange_object_provider_ReportSettleRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_object_provider.ReportSettleRequest, global::bnet.protocol.exchange_object_provider.ReportSettleRequest.Builder>(internal__static_bnet_protocol_exchange_object_provider_ReportSettleRequest__Descriptor,
@@ -109,7 +111,7 @@ namespace bnet.protocol.exchange_object_provider {
         internal__static_bnet_protocol_exchange_object_provider_PaymentMethod__Descriptor = Descriptor.MessageTypes[5];
         internal__static_bnet_protocol_exchange_object_provider_PaymentMethod__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_object_provider.PaymentMethod, global::bnet.protocol.exchange_object_provider.PaymentMethod.Builder>(internal__static_bnet_protocol_exchange_object_provider_PaymentMethod__Descriptor,
-                new string[] { "Account", "Description", "Amount", "CashInOutMask", "BillingAddress", "WalletId", });
+                new string[] { "Account", "Description", "Amount", "CashInOutMask", "BillingAddress", "WalletId", "CapRestriction", "AuthenticatorCap", "SoftCap", });
         internal__static_bnet_protocol_exchange_object_provider_GetPaymentMethodsResponse__Descriptor = Descriptor.MessageTypes[6];
         internal__static_bnet_protocol_exchange_object_provider_GetPaymentMethodsResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_object_provider.GetPaymentMethodsResponse, global::bnet.protocol.exchange_object_provider.GetPaymentMethodsResponse.Builder>(internal__static_bnet_protocol_exchange_object_provider_GetPaymentMethodsResponse__Descriptor,
@@ -132,8 +134,8 @@ namespace bnet.protocol.exchange_object_provider {
   public sealed partial class ReportAuthorizeRequest : pb::GeneratedMessage<ReportAuthorizeRequest, ReportAuthorizeRequest.Builder> {
     private ReportAuthorizeRequest() { }
     private static readonly ReportAuthorizeRequest defaultInstance = new ReportAuthorizeRequest().MakeReadOnly();
-    private static readonly string[] _reportAuthorizeRequestFieldNames = new string[] { "auth_handle", "bnet_account_id", "defer_delivery", "error_detail", "partition_id", "result", "token" };
-    private static readonly uint[] _reportAuthorizeRequestFieldTags = new uint[] { 34, 50, 40, 58, 10, 24, 18 };
+    private static readonly string[] _reportAuthorizeRequestFieldNames = new string[] { "auth_handle", "avs_result", "bnet_account_id", "cvv_result", "defer_delivery", "error_detail", "partition_id", "result", "token" };
+    private static readonly uint[] _reportAuthorizeRequestFieldTags = new uint[] { 34, 66, 50, 74, 40, 58, 10, 24, 18 };
     public static ReportAuthorizeRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -224,6 +226,26 @@ namespace bnet.protocol.exchange_object_provider {
       get { return errorDetail_ ?? global::bnet.protocol.exchange.ActionErrorDetail.DefaultInstance; }
     }
     
+    public const int AvsResultFieldNumber = 8;
+    private bool hasAvsResult;
+    private string avsResult_ = "";
+    public bool HasAvsResult {
+      get { return hasAvsResult; }
+    }
+    public string AvsResult {
+      get { return avsResult_; }
+    }
+    
+    public const int CvvResultFieldNumber = 9;
+    private bool hasCvvResult;
+    private string cvvResult_ = "";
+    public bool HasCvvResult {
+      get { return hasCvvResult; }
+    }
+    public string CvvResult {
+      get { return cvvResult_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasPartitionId) return false;
@@ -247,25 +269,31 @@ namespace bnet.protocol.exchange_object_provider {
       int size = SerializedSize;
       string[] field_names = _reportAuthorizeRequestFieldNames;
       if (hasPartitionId) {
-        output.WriteMessage(1, field_names[4], PartitionId);
+        output.WriteMessage(1, field_names[6], PartitionId);
       }
       if (hasToken) {
-        output.WriteMessage(2, field_names[6], Token);
+        output.WriteMessage(2, field_names[8], Token);
       }
       if (hasResult) {
-        output.WriteUInt64(3, field_names[5], Result);
+        output.WriteUInt64(3, field_names[7], Result);
       }
       if (hasAuthHandle) {
         output.WriteMessage(4, field_names[0], AuthHandle);
       }
       if (hasDeferDelivery) {
-        output.WriteBool(5, field_names[2], DeferDelivery);
+        output.WriteBool(5, field_names[4], DeferDelivery);
       }
       if (hasBnetAccountId) {
-        output.WriteMessage(6, field_names[1], BnetAccountId);
+        output.WriteMessage(6, field_names[2], BnetAccountId);
       }
       if (hasErrorDetail) {
-        output.WriteMessage(7, field_names[3], ErrorDetail);
+        output.WriteMessage(7, field_names[5], ErrorDetail);
+      }
+      if (hasAvsResult) {
+        output.WriteString(8, field_names[1], AvsResult);
+      }
+      if (hasCvvResult) {
+        output.WriteString(9, field_names[3], CvvResult);
       }
       UnknownFields.WriteTo(output);
     }
@@ -297,6 +325,12 @@ namespace bnet.protocol.exchange_object_provider {
         }
         if (hasErrorDetail) {
           size += pb::CodedOutputStream.ComputeMessageSize(7, ErrorDetail);
+        }
+        if (hasAvsResult) {
+          size += pb::CodedOutputStream.ComputeStringSize(8, AvsResult);
+        }
+        if (hasCvvResult) {
+          size += pb::CodedOutputStream.ComputeStringSize(9, CvvResult);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -445,6 +479,12 @@ namespace bnet.protocol.exchange_object_provider {
         if (other.HasErrorDetail) {
           MergeErrorDetail(other.ErrorDetail);
         }
+        if (other.HasAvsResult) {
+          AvsResult = other.AvsResult;
+        }
+        if (other.HasCvvResult) {
+          CvvResult = other.CvvResult;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -539,6 +579,14 @@ namespace bnet.protocol.exchange_object_provider {
               }
               input.ReadMessage(subBuilder, extensionRegistry);
               ErrorDetail = subBuilder.BuildPartial();
+              break;
+            }
+            case 66: {
+              result.hasAvsResult = input.ReadString(ref result.avsResult_);
+              break;
+            }
+            case 74: {
+              result.hasCvvResult = input.ReadString(ref result.cvvResult_);
               break;
             }
           }
@@ -788,6 +836,48 @@ namespace bnet.protocol.exchange_object_provider {
         PrepareBuilder();
         result.hasErrorDetail = false;
         result.errorDetail_ = null;
+        return this;
+      }
+      
+      public bool HasAvsResult {
+        get { return result.hasAvsResult; }
+      }
+      public string AvsResult {
+        get { return result.AvsResult; }
+        set { SetAvsResult(value); }
+      }
+      public Builder SetAvsResult(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasAvsResult = true;
+        result.avsResult_ = value;
+        return this;
+      }
+      public Builder ClearAvsResult() {
+        PrepareBuilder();
+        result.hasAvsResult = false;
+        result.avsResult_ = "";
+        return this;
+      }
+      
+      public bool HasCvvResult {
+        get { return result.hasCvvResult; }
+      }
+      public string CvvResult {
+        get { return result.CvvResult; }
+        set { SetCvvResult(value); }
+      }
+      public Builder SetCvvResult(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasCvvResult = true;
+        result.cvvResult_ = value;
+        return this;
+      }
+      public Builder ClearCvvResult() {
+        PrepareBuilder();
+        result.hasCvvResult = false;
+        result.cvvResult_ = "";
         return this;
       }
     }
@@ -3021,8 +3111,8 @@ namespace bnet.protocol.exchange_object_provider {
   public sealed partial class PaymentMethod : pb::GeneratedMessage<PaymentMethod, PaymentMethod.Builder> {
     private PaymentMethod() { }
     private static readonly PaymentMethod defaultInstance = new PaymentMethod().MakeReadOnly();
-    private static readonly string[] _paymentMethodFieldNames = new string[] { "account", "amount", "billing_address", "cash_in_out_mask", "description", "wallet_id" };
-    private static readonly uint[] _paymentMethodFieldTags = new uint[] { 10, 24, 42, 32, 18, 48 };
+    private static readonly string[] _paymentMethodFieldNames = new string[] { "account", "amount", "authenticator_cap", "billing_address", "cap_restriction", "cash_in_out_mask", "description", "soft_cap", "wallet_id" };
+    private static readonly uint[] _paymentMethodFieldTags = new uint[] { 10, 24, 64, 42, 56, 32, 18, 72, 48 };
     public static PaymentMethod DefaultInstance {
       get { return defaultInstance; }
     }
@@ -3103,6 +3193,36 @@ namespace bnet.protocol.exchange_object_provider {
       get { return walletId_; }
     }
     
+    public const int CapRestrictionFieldNumber = 7;
+    private bool hasCapRestriction;
+    private uint capRestriction_;
+    public bool HasCapRestriction {
+      get { return hasCapRestriction; }
+    }
+    public uint CapRestriction {
+      get { return capRestriction_; }
+    }
+    
+    public const int AuthenticatorCapFieldNumber = 8;
+    private bool hasAuthenticatorCap;
+    private ulong authenticatorCap_;
+    public bool HasAuthenticatorCap {
+      get { return hasAuthenticatorCap; }
+    }
+    public ulong AuthenticatorCap {
+      get { return authenticatorCap_; }
+    }
+    
+    public const int SoftCapFieldNumber = 9;
+    private bool hasSoftCap;
+    private ulong softCap_;
+    public bool HasSoftCap {
+      get { return hasSoftCap; }
+    }
+    public ulong SoftCap {
+      get { return softCap_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasAccount) return false;
@@ -3122,19 +3242,28 @@ namespace bnet.protocol.exchange_object_provider {
         output.WriteMessage(1, field_names[0], Account);
       }
       if (hasDescription) {
-        output.WriteString(2, field_names[4], Description);
+        output.WriteString(2, field_names[6], Description);
       }
       if (hasAmount) {
         output.WriteUInt64(3, field_names[1], Amount);
       }
       if (hasCashInOutMask) {
-        output.WriteUInt32(4, field_names[3], CashInOutMask);
+        output.WriteUInt32(4, field_names[5], CashInOutMask);
       }
       if (hasBillingAddress) {
-        output.WriteMessage(5, field_names[2], BillingAddress);
+        output.WriteMessage(5, field_names[3], BillingAddress);
       }
       if (hasWalletId) {
-        output.WriteUInt64(6, field_names[5], WalletId);
+        output.WriteUInt64(6, field_names[8], WalletId);
+      }
+      if (hasCapRestriction) {
+        output.WriteUInt32(7, field_names[4], CapRestriction);
+      }
+      if (hasAuthenticatorCap) {
+        output.WriteUInt64(8, field_names[2], AuthenticatorCap);
+      }
+      if (hasSoftCap) {
+        output.WriteUInt64(9, field_names[7], SoftCap);
       }
       UnknownFields.WriteTo(output);
     }
@@ -3163,6 +3292,15 @@ namespace bnet.protocol.exchange_object_provider {
         }
         if (hasWalletId) {
           size += pb::CodedOutputStream.ComputeUInt64Size(6, WalletId);
+        }
+        if (hasCapRestriction) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(7, CapRestriction);
+        }
+        if (hasAuthenticatorCap) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(8, AuthenticatorCap);
+        }
+        if (hasSoftCap) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(9, SoftCap);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -3308,6 +3446,15 @@ namespace bnet.protocol.exchange_object_provider {
         if (other.HasWalletId) {
           WalletId = other.WalletId;
         }
+        if (other.HasCapRestriction) {
+          CapRestriction = other.CapRestriction;
+        }
+        if (other.HasAuthenticatorCap) {
+          AuthenticatorCap = other.AuthenticatorCap;
+        }
+        if (other.HasSoftCap) {
+          SoftCap = other.SoftCap;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -3383,6 +3530,18 @@ namespace bnet.protocol.exchange_object_provider {
             }
             case 48: {
               result.hasWalletId = input.ReadUInt64(ref result.walletId_);
+              break;
+            }
+            case 56: {
+              result.hasCapRestriction = input.ReadUInt32(ref result.capRestriction_);
+              break;
+            }
+            case 64: {
+              result.hasAuthenticatorCap = input.ReadUInt64(ref result.authenticatorCap_);
+              break;
+            }
+            case 72: {
+              result.hasSoftCap = input.ReadUInt64(ref result.softCap_);
               break;
             }
           }
@@ -3553,6 +3712,66 @@ namespace bnet.protocol.exchange_object_provider {
         PrepareBuilder();
         result.hasWalletId = false;
         result.walletId_ = 0UL;
+        return this;
+      }
+      
+      public bool HasCapRestriction {
+        get { return result.hasCapRestriction; }
+      }
+      public uint CapRestriction {
+        get { return result.CapRestriction; }
+        set { SetCapRestriction(value); }
+      }
+      public Builder SetCapRestriction(uint value) {
+        PrepareBuilder();
+        result.hasCapRestriction = true;
+        result.capRestriction_ = value;
+        return this;
+      }
+      public Builder ClearCapRestriction() {
+        PrepareBuilder();
+        result.hasCapRestriction = false;
+        result.capRestriction_ = 0;
+        return this;
+      }
+      
+      public bool HasAuthenticatorCap {
+        get { return result.hasAuthenticatorCap; }
+      }
+      public ulong AuthenticatorCap {
+        get { return result.AuthenticatorCap; }
+        set { SetAuthenticatorCap(value); }
+      }
+      public Builder SetAuthenticatorCap(ulong value) {
+        PrepareBuilder();
+        result.hasAuthenticatorCap = true;
+        result.authenticatorCap_ = value;
+        return this;
+      }
+      public Builder ClearAuthenticatorCap() {
+        PrepareBuilder();
+        result.hasAuthenticatorCap = false;
+        result.authenticatorCap_ = 0UL;
+        return this;
+      }
+      
+      public bool HasSoftCap {
+        get { return result.hasSoftCap; }
+      }
+      public ulong SoftCap {
+        get { return result.SoftCap; }
+        set { SetSoftCap(value); }
+      }
+      public Builder SetSoftCap(ulong value) {
+        PrepareBuilder();
+        result.hasSoftCap = true;
+        result.softCap_ = value;
+        return this;
+      }
+      public Builder ClearSoftCap() {
+        PrepareBuilder();
+        result.hasSoftCap = false;
+        result.softCap_ = 0UL;
         return this;
       }
     }

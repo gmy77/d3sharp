@@ -343,6 +343,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public enum MonsterType
         {
+            Unknown = -1,
             Undead = 0,
             Demon = 1,
             Beast = 2,

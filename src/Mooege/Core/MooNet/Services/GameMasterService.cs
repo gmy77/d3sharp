@@ -50,17 +50,7 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("ListFactories() {0}", this.Client);
 
-            var description = bnet.protocol.game_master.GameFactoryDescription.CreateBuilder().SetId(14249086168335147635);
-            var attributes = new bnet.protocol.attribute.Attribute[4]
-                {
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("min_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("max_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(4)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("num_teams").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("0.6.0")).Build() //This should be a static string so all versions are the same -Egris
-                };
-
-            description.AddRangeAttribute(attributes);
-            description.AddStatsBucket(bnet.protocol.game_master.GameStatsBucket.CreateBuilder()
+            var statsBucket = bnet.protocol.game_master.GameStatsBucket.CreateBuilder()
                .SetBucketMin(0)
                .SetBucketMax(4267296)
                .SetWaitMilliseconds(1354)
@@ -68,9 +58,31 @@ namespace Mooege.Core.MooNet.Services
                .SetActiveGames(69)
                .SetActivePlayers(75)
                .SetFormingGames(5)
-               .SetWaitingPlayers(0).Build());
+               .SetWaitingPlayers(0).Build();
 
-            var builder = bnet.protocol.game_master.ListFactoriesResponse.CreateBuilder().AddDescription(description).SetTotalResults(1);
+            var factoryDescriptions = new bnet.protocol.game_master.GameFactoryDescription[4];
+            for (var i = 0; i < factoryDescriptions.Length; i++)
+            {
+                var factoryAttributes = new bnet.protocol.attribute.Attribute[]
+                {
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("min_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("max_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(4)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("num_teams").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("0.7.0")).Build(), //This should be a static string so all versions are the same -Egris
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("PlayerGroup").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("PlayerGroup").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("PlayerGroup").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("Game.CurrentQuest").SetValue(bnet.protocol.attribute.Variant.CreateBuilder()).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("DifficultyLevel").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(i)).Build(),
+                };
+                factoryDescriptions[i] = bnet.protocol.game_master.GameFactoryDescription.CreateBuilder()
+                    .AddRangeAttribute(factoryAttributes)
+                    .SetId(14249086168335147635 + (ulong)i)
+                    .AddStatsBucket(statsBucket)
+                    .Build();
+            }
+
+            var builder = bnet.protocol.game_master.ListFactoriesResponse.CreateBuilder().AddRangeDescription(factoryDescriptions).SetTotalResults((uint)factoryDescriptions.Length);
             done(builder.Build());
         }
 
@@ -137,7 +149,7 @@ namespace Mooege.Core.MooNet.Services
             }
         }
 
-        public override void CancelGame(IRpcController controller, bnet.protocol.game_master.CancelGameRequest request, Action<bnet.protocol.NoData> done)
+        public override void CancelGameEntry(IRpcController controller, bnet.protocol.game_master.CancelGameEntryRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }

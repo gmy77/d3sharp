@@ -34,6 +34,10 @@ namespace bnet.protocol.game_utilities {
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.game_utilities.GameVariablesRequest, global::bnet.protocol.game_utilities.GameVariablesRequest.Builder> internal__static_bnet_protocol_game_utilities_GameVariablesRequest__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_game_utilities_VariablesResponse__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.game_utilities.VariablesResponse, global::bnet.protocol.game_utilities.VariablesResponse.Builder> internal__static_bnet_protocol_game_utilities_VariablesResponse__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_game_utilities_GameAccountOnlineNotification__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.game_utilities.GameAccountOnlineNotification, global::bnet.protocol.game_utilities.GameAccountOnlineNotification.Builder> internal__static_bnet_protocol_game_utilities_GameAccountOnlineNotification__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_game_utilities_GameAccountOfflineNotification__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.game_utilities.GameAccountOfflineNotification, global::bnet.protocol.game_utilities.GameAccountOfflineNotification.Builder> internal__static_bnet_protocol_game_utilities_GameAccountOfflineNotification__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -70,24 +74,35 @@ namespace bnet.protocol.game_utilities {
           "YXJpYWJsZXNSZXF1ZXN0EjUKCWF0dHJpYnV0ZRgBIAMoCzIiLmJuZXQucHJv" + 
           "dG9jb2wuYXR0cmlidXRlLkF0dHJpYnV0ZRIQCgh2YXJpYWJsZRgCIAMoCRIm" + 
           "CgRob3N0GAMgASgLMhguYm5ldC5wcm90b2NvbC5Qcm9jZXNzSWQiJgoRVmFy" + 
-          "aWFibGVzUmVzcG9uc2USEQoFdmFsdWUYASADKAJCAhABMtwFCg1HYW1lVXRp" + 
-          "bGl0aWVzEncKFFByb2Nlc3NDbGllbnRSZXF1ZXN0EisuYm5ldC5wcm90b2Nv" + 
-          "bC5nYW1lX3V0aWxpdGllcy5DbGllbnRSZXF1ZXN0GiwuYm5ldC5wcm90b2Nv" + 
-          "bC5nYW1lX3V0aWxpdGllcy5DbGllbnRSZXNwb25zZSIEgLUYARJyChZQcmVz" + 
-          "ZW5jZUNoYW5uZWxDcmVhdGVkEjsuYm5ldC5wcm90b2NvbC5nYW1lX3V0aWxp" + 
-          "dGllcy5QcmVzZW5jZUNoYW5uZWxDcmVhdGVkUmVxdWVzdBoVLmJuZXQucHJv" + 
-          "dG9jb2wuTm9EYXRhIgSAtRgCEoEBChJHZXRQbGF5ZXJWYXJpYWJsZXMSNC5i" + 
-          "bmV0LnByb3RvY29sLmdhbWVfdXRpbGl0aWVzLlBsYXllclZhcmlhYmxlc1Jl" + 
-          "cXVlc3QaLy5ibmV0LnByb3RvY29sLmdhbWVfdXRpbGl0aWVzLlZhcmlhYmxl" + 
-          "c1Jlc3BvbnNlIgSAtRgDEn0KEEdldEdhbWVWYXJpYWJsZXMSMi5ibmV0LnBy" + 
-          "b3RvY29sLmdhbWVfdXRpbGl0aWVzLkdhbWVWYXJpYWJsZXNSZXF1ZXN0Gi8u" + 
-          "Ym5ldC5wcm90b2NvbC5nYW1lX3V0aWxpdGllcy5WYXJpYWJsZXNSZXNwb25z" + 
-          "ZSIEgLUYBBJiCgdHZXRMb2FkEikuYm5ldC5wcm90b2NvbC5zZXJ2ZXJfcG9v" + 
-          "bC5HZXRMb2FkUmVxdWVzdBomLmJuZXQucHJvdG9jb2wuc2VydmVyX3Bvb2wu" + 
-          "U2VydmVyU3RhdGUiBIC1GAUSdwoUUHJvY2Vzc1NlcnZlclJlcXVlc3QSKy5i" + 
-          "bmV0LnByb3RvY29sLmdhbWVfdXRpbGl0aWVzLlNlcnZlclJlcXVlc3QaLC5i" + 
-          "bmV0LnByb3RvY29sLmdhbWVfdXRpbGl0aWVzLlNlcnZlclJlc3BvbnNlIgSA" + 
-          "tRgGQgOAAQA=");
+          "aWFibGVzUmVzcG9uc2USEQoFdmFsdWUYASADKAJCAhABInkKHUdhbWVBY2Nv" + 
+          "dW50T25saW5lTm90aWZpY2F0aW9uEjAKD2dhbWVfYWNjb3VudF9pZBgBIAIo" + 
+          "CzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSJgoEaG9zdBgCIAEoCzIYLmJu" + 
+          "ZXQucHJvdG9jb2wuUHJvY2Vzc0lkInoKHkdhbWVBY2NvdW50T2ZmbGluZU5v" + 
+          "dGlmaWNhdGlvbhIwCg9nYW1lX2FjY291bnRfaWQYASACKAsyFy5ibmV0LnBy" + 
+          "b3RvY29sLkVudGl0eUlkEiYKBGhvc3QYAiABKAsyGC5ibmV0LnByb3RvY29s" + 
+          "LlByb2Nlc3NJZDLSBwoNR2FtZVV0aWxpdGllcxJ3ChRQcm9jZXNzQ2xpZW50" + 
+          "UmVxdWVzdBIrLmJuZXQucHJvdG9jb2wuZ2FtZV91dGlsaXRpZXMuQ2xpZW50" + 
+          "UmVxdWVzdBosLmJuZXQucHJvdG9jb2wuZ2FtZV91dGlsaXRpZXMuQ2xpZW50" + 
+          "UmVzcG9uc2UiBIC1GAEScgoWUHJlc2VuY2VDaGFubmVsQ3JlYXRlZBI7LmJu" + 
+          "ZXQucHJvdG9jb2wuZ2FtZV91dGlsaXRpZXMuUHJlc2VuY2VDaGFubmVsQ3Jl" + 
+          "YXRlZFJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYAhKBAQoS" + 
+          "R2V0UGxheWVyVmFyaWFibGVzEjQuYm5ldC5wcm90b2NvbC5nYW1lX3V0aWxp" + 
+          "dGllcy5QbGF5ZXJWYXJpYWJsZXNSZXF1ZXN0Gi8uYm5ldC5wcm90b2NvbC5n" + 
+          "YW1lX3V0aWxpdGllcy5WYXJpYWJsZXNSZXNwb25zZSIEgLUYAxJ9ChBHZXRH" + 
+          "YW1lVmFyaWFibGVzEjIuYm5ldC5wcm90b2NvbC5nYW1lX3V0aWxpdGllcy5H" + 
+          "YW1lVmFyaWFibGVzUmVxdWVzdBovLmJuZXQucHJvdG9jb2wuZ2FtZV91dGls" + 
+          "aXRpZXMuVmFyaWFibGVzUmVzcG9uc2UiBIC1GAQSYgoHR2V0TG9hZBIpLmJu" + 
+          "ZXQucHJvdG9jb2wuc2VydmVyX3Bvb2wuR2V0TG9hZFJlcXVlc3QaJi5ibmV0" + 
+          "LnByb3RvY29sLnNlcnZlcl9wb29sLlNlcnZlclN0YXRlIgSAtRgFEncKFFBy" + 
+          "b2Nlc3NTZXJ2ZXJSZXF1ZXN0EisuYm5ldC5wcm90b2NvbC5nYW1lX3V0aWxp" + 
+          "dGllcy5TZXJ2ZXJSZXF1ZXN0GiwuYm5ldC5wcm90b2NvbC5nYW1lX3V0aWxp" + 
+          "dGllcy5TZXJ2ZXJSZXNwb25zZSIEgLUYBhJ4ChdOb3RpZnlHYW1lQWNjb3Vu" + 
+          "dE9ubGluZRI7LmJuZXQucHJvdG9jb2wuZ2FtZV91dGlsaXRpZXMuR2FtZUFj" + 
+          "Y291bnRPbmxpbmVOb3RpZmljYXRpb24aGi5ibmV0LnByb3RvY29sLk5PX1JF" + 
+          "U1BPTlNFIgSAtRgHEnoKGE5vdGlmeUdhbWVBY2NvdW50T2ZmbGluZRI8LmJu" + 
+          "ZXQucHJvdG9jb2wuZ2FtZV91dGlsaXRpZXMuR2FtZUFjY291bnRPZmZsaW5l" + 
+          "Tm90aWZpY2F0aW9uGhouYm5ldC5wcm90b2NvbC5OT19SRVNQT05TRSIEgLUY" + 
+          "CEIDgAEA");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_game_utilities_ClientRequest__Descriptor = Descriptor.MessageTypes[0];
@@ -122,6 +137,14 @@ namespace bnet.protocol.game_utilities {
         internal__static_bnet_protocol_game_utilities_VariablesResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.game_utilities.VariablesResponse, global::bnet.protocol.game_utilities.VariablesResponse.Builder>(internal__static_bnet_protocol_game_utilities_VariablesResponse__Descriptor,
                 new string[] { "Value", });
+        internal__static_bnet_protocol_game_utilities_GameAccountOnlineNotification__Descriptor = Descriptor.MessageTypes[8];
+        internal__static_bnet_protocol_game_utilities_GameAccountOnlineNotification__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.game_utilities.GameAccountOnlineNotification, global::bnet.protocol.game_utilities.GameAccountOnlineNotification.Builder>(internal__static_bnet_protocol_game_utilities_GameAccountOnlineNotification__Descriptor,
+                new string[] { "GameAccountId", "Host", });
+        internal__static_bnet_protocol_game_utilities_GameAccountOfflineNotification__Descriptor = Descriptor.MessageTypes[9];
+        internal__static_bnet_protocol_game_utilities_GameAccountOfflineNotification__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.game_utilities.GameAccountOfflineNotification, global::bnet.protocol.game_utilities.GameAccountOfflineNotification.Builder>(internal__static_bnet_protocol_game_utilities_GameAccountOfflineNotification__Descriptor,
+                new string[] { "GameAccountId", "Host", });
         pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
         RegisterAllExtensions(registry);
         global::bnet.protocol.game_master.GameMasterService.RegisterAllExtensions(registry);
@@ -3440,6 +3463,750 @@ namespace bnet.protocol.game_utilities {
     }
   }
   
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class GameAccountOnlineNotification : pb::GeneratedMessage<GameAccountOnlineNotification, GameAccountOnlineNotification.Builder> {
+    private GameAccountOnlineNotification() { }
+    private static readonly GameAccountOnlineNotification defaultInstance = new GameAccountOnlineNotification().MakeReadOnly();
+    private static readonly string[] _gameAccountOnlineNotificationFieldNames = new string[] { "game_account_id", "host" };
+    private static readonly uint[] _gameAccountOnlineNotificationFieldTags = new uint[] { 10, 18 };
+    public static GameAccountOnlineNotification DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override GameAccountOnlineNotification DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override GameAccountOnlineNotification ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.game_utilities.GameUtilitiesService.internal__static_bnet_protocol_game_utilities_GameAccountOnlineNotification__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<GameAccountOnlineNotification, GameAccountOnlineNotification.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.game_utilities.GameUtilitiesService.internal__static_bnet_protocol_game_utilities_GameAccountOnlineNotification__FieldAccessorTable; }
+    }
+    
+    public const int GameAccountIdFieldNumber = 1;
+    private bool hasGameAccountId;
+    private global::bnet.protocol.EntityId gameAccountId_;
+    public bool HasGameAccountId {
+      get { return hasGameAccountId; }
+    }
+    public global::bnet.protocol.EntityId GameAccountId {
+      get { return gameAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int HostFieldNumber = 2;
+    private bool hasHost;
+    private global::bnet.protocol.ProcessId host_;
+    public bool HasHost {
+      get { return hasHost; }
+    }
+    public global::bnet.protocol.ProcessId Host {
+      get { return host_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasGameAccountId) return false;
+        if (!GameAccountId.IsInitialized) return false;
+        if (HasHost) {
+          if (!Host.IsInitialized) return false;
+        }
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _gameAccountOnlineNotificationFieldNames;
+      if (hasGameAccountId) {
+        output.WriteMessage(1, field_names[0], GameAccountId);
+      }
+      if (hasHost) {
+        output.WriteMessage(2, field_names[1], Host);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasGameAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, GameAccountId);
+        }
+        if (hasHost) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, Host);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static GameAccountOnlineNotification ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GameAccountOnlineNotification ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GameAccountOnlineNotification ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GameAccountOnlineNotification ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GameAccountOnlineNotification ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GameAccountOnlineNotification ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static GameAccountOnlineNotification ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static GameAccountOnlineNotification ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static GameAccountOnlineNotification ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GameAccountOnlineNotification ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private GameAccountOnlineNotification MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(GameAccountOnlineNotification prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<GameAccountOnlineNotification, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(GameAccountOnlineNotification cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private GameAccountOnlineNotification result;
+      
+      private GameAccountOnlineNotification PrepareBuilder() {
+        if (resultIsReadOnly) {
+          GameAccountOnlineNotification original = result;
+          result = new GameAccountOnlineNotification();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override GameAccountOnlineNotification MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.game_utilities.GameAccountOnlineNotification.Descriptor; }
+      }
+      
+      public override GameAccountOnlineNotification DefaultInstanceForType {
+        get { return global::bnet.protocol.game_utilities.GameAccountOnlineNotification.DefaultInstance; }
+      }
+      
+      public override GameAccountOnlineNotification BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is GameAccountOnlineNotification) {
+          return MergeFrom((GameAccountOnlineNotification) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(GameAccountOnlineNotification other) {
+        if (other == global::bnet.protocol.game_utilities.GameAccountOnlineNotification.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasGameAccountId) {
+          MergeGameAccountId(other.GameAccountId);
+        }
+        if (other.HasHost) {
+          MergeHost(other.Host);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_gameAccountOnlineNotificationFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _gameAccountOnlineNotificationFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasGameAccountId) {
+                subBuilder.MergeFrom(GameAccountId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              GameAccountId = subBuilder.BuildPartial();
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.ProcessId.Builder subBuilder = global::bnet.protocol.ProcessId.CreateBuilder();
+              if (result.hasHost) {
+                subBuilder.MergeFrom(Host);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              Host = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasGameAccountId {
+       get { return result.hasGameAccountId; }
+      }
+      public global::bnet.protocol.EntityId GameAccountId {
+        get { return result.GameAccountId; }
+        set { SetGameAccountId(value); }
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = value;
+        return this;
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasGameAccountId &&
+            result.gameAccountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.gameAccountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccountId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.gameAccountId_ = value;
+        }
+        result.hasGameAccountId = true;
+        return this;
+      }
+      public Builder ClearGameAccountId() {
+        PrepareBuilder();
+        result.hasGameAccountId = false;
+        result.gameAccountId_ = null;
+        return this;
+      }
+      
+      public bool HasHost {
+       get { return result.hasHost; }
+      }
+      public global::bnet.protocol.ProcessId Host {
+        get { return result.Host; }
+        set { SetHost(value); }
+      }
+      public Builder SetHost(global::bnet.protocol.ProcessId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasHost = true;
+        result.host_ = value;
+        return this;
+      }
+      public Builder SetHost(global::bnet.protocol.ProcessId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasHost = true;
+        result.host_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeHost(global::bnet.protocol.ProcessId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasHost &&
+            result.host_ != global::bnet.protocol.ProcessId.DefaultInstance) {
+            result.host_ = global::bnet.protocol.ProcessId.CreateBuilder(result.host_).MergeFrom(value).BuildPartial();
+        } else {
+          result.host_ = value;
+        }
+        result.hasHost = true;
+        return this;
+      }
+      public Builder ClearHost() {
+        PrepareBuilder();
+        result.hasHost = false;
+        result.host_ = null;
+        return this;
+      }
+    }
+    static GameAccountOnlineNotification() {
+      object.ReferenceEquals(global::bnet.protocol.game_utilities.GameUtilitiesService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class GameAccountOfflineNotification : pb::GeneratedMessage<GameAccountOfflineNotification, GameAccountOfflineNotification.Builder> {
+    private GameAccountOfflineNotification() { }
+    private static readonly GameAccountOfflineNotification defaultInstance = new GameAccountOfflineNotification().MakeReadOnly();
+    private static readonly string[] _gameAccountOfflineNotificationFieldNames = new string[] { "game_account_id", "host" };
+    private static readonly uint[] _gameAccountOfflineNotificationFieldTags = new uint[] { 10, 18 };
+    public static GameAccountOfflineNotification DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override GameAccountOfflineNotification DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override GameAccountOfflineNotification ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.game_utilities.GameUtilitiesService.internal__static_bnet_protocol_game_utilities_GameAccountOfflineNotification__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<GameAccountOfflineNotification, GameAccountOfflineNotification.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.game_utilities.GameUtilitiesService.internal__static_bnet_protocol_game_utilities_GameAccountOfflineNotification__FieldAccessorTable; }
+    }
+    
+    public const int GameAccountIdFieldNumber = 1;
+    private bool hasGameAccountId;
+    private global::bnet.protocol.EntityId gameAccountId_;
+    public bool HasGameAccountId {
+      get { return hasGameAccountId; }
+    }
+    public global::bnet.protocol.EntityId GameAccountId {
+      get { return gameAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int HostFieldNumber = 2;
+    private bool hasHost;
+    private global::bnet.protocol.ProcessId host_;
+    public bool HasHost {
+      get { return hasHost; }
+    }
+    public global::bnet.protocol.ProcessId Host {
+      get { return host_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasGameAccountId) return false;
+        if (!GameAccountId.IsInitialized) return false;
+        if (HasHost) {
+          if (!Host.IsInitialized) return false;
+        }
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _gameAccountOfflineNotificationFieldNames;
+      if (hasGameAccountId) {
+        output.WriteMessage(1, field_names[0], GameAccountId);
+      }
+      if (hasHost) {
+        output.WriteMessage(2, field_names[1], Host);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasGameAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, GameAccountId);
+        }
+        if (hasHost) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, Host);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static GameAccountOfflineNotification ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GameAccountOfflineNotification ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GameAccountOfflineNotification ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static GameAccountOfflineNotification ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static GameAccountOfflineNotification ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GameAccountOfflineNotification ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static GameAccountOfflineNotification ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static GameAccountOfflineNotification ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static GameAccountOfflineNotification ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static GameAccountOfflineNotification ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private GameAccountOfflineNotification MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(GameAccountOfflineNotification prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<GameAccountOfflineNotification, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(GameAccountOfflineNotification cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private GameAccountOfflineNotification result;
+      
+      private GameAccountOfflineNotification PrepareBuilder() {
+        if (resultIsReadOnly) {
+          GameAccountOfflineNotification original = result;
+          result = new GameAccountOfflineNotification();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override GameAccountOfflineNotification MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.game_utilities.GameAccountOfflineNotification.Descriptor; }
+      }
+      
+      public override GameAccountOfflineNotification DefaultInstanceForType {
+        get { return global::bnet.protocol.game_utilities.GameAccountOfflineNotification.DefaultInstance; }
+      }
+      
+      public override GameAccountOfflineNotification BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is GameAccountOfflineNotification) {
+          return MergeFrom((GameAccountOfflineNotification) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(GameAccountOfflineNotification other) {
+        if (other == global::bnet.protocol.game_utilities.GameAccountOfflineNotification.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasGameAccountId) {
+          MergeGameAccountId(other.GameAccountId);
+        }
+        if (other.HasHost) {
+          MergeHost(other.Host);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_gameAccountOfflineNotificationFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _gameAccountOfflineNotificationFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasGameAccountId) {
+                subBuilder.MergeFrom(GameAccountId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              GameAccountId = subBuilder.BuildPartial();
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.ProcessId.Builder subBuilder = global::bnet.protocol.ProcessId.CreateBuilder();
+              if (result.hasHost) {
+                subBuilder.MergeFrom(Host);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              Host = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasGameAccountId {
+       get { return result.hasGameAccountId; }
+      }
+      public global::bnet.protocol.EntityId GameAccountId {
+        get { return result.GameAccountId; }
+        set { SetGameAccountId(value); }
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = value;
+        return this;
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasGameAccountId &&
+            result.gameAccountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.gameAccountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccountId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.gameAccountId_ = value;
+        }
+        result.hasGameAccountId = true;
+        return this;
+      }
+      public Builder ClearGameAccountId() {
+        PrepareBuilder();
+        result.hasGameAccountId = false;
+        result.gameAccountId_ = null;
+        return this;
+      }
+      
+      public bool HasHost {
+       get { return result.hasHost; }
+      }
+      public global::bnet.protocol.ProcessId Host {
+        get { return result.Host; }
+        set { SetHost(value); }
+      }
+      public Builder SetHost(global::bnet.protocol.ProcessId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasHost = true;
+        result.host_ = value;
+        return this;
+      }
+      public Builder SetHost(global::bnet.protocol.ProcessId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasHost = true;
+        result.host_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeHost(global::bnet.protocol.ProcessId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasHost &&
+            result.host_ != global::bnet.protocol.ProcessId.DefaultInstance) {
+            result.host_ = global::bnet.protocol.ProcessId.CreateBuilder(result.host_).MergeFrom(value).BuildPartial();
+        } else {
+          result.host_ = value;
+        }
+        result.hasHost = true;
+        return this;
+      }
+      public Builder ClearHost() {
+        PrepareBuilder();
+        result.hasHost = false;
+        result.host_ = null;
+        return this;
+      }
+    }
+    static GameAccountOfflineNotification() {
+      object.ReferenceEquals(global::bnet.protocol.game_utilities.GameUtilitiesService.Descriptor, null);
+    }
+  }
+  
   #endregion
   
   #region Services
@@ -3471,6 +4238,14 @@ namespace bnet.protocol.game_utilities {
         pb::IRpcController controller,
         global::bnet.protocol.game_utilities.ServerRequest request,
         global::System.Action<global::bnet.protocol.game_utilities.ServerResponse> done);
+    public abstract void NotifyGameAccountOnline(
+        pb::IRpcController controller,
+        global::bnet.protocol.game_utilities.GameAccountOnlineNotification request,
+        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
+    public abstract void NotifyGameAccountOffline(
+        pb::IRpcController controller,
+        global::bnet.protocol.game_utilities.GameAccountOfflineNotification request,
+        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
     
     public static pbd::ServiceDescriptor Descriptor {
       get { return GameUtilitiesService.Descriptor.Services[0]; }
@@ -3519,6 +4294,16 @@ namespace bnet.protocol.game_utilities {
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.game_utilities.ServerResponse>(
               done));
           return;
+        case 6:
+          this.NotifyGameAccountOnline(controller, (global::bnet.protocol.game_utilities.GameAccountOnlineNotification) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
+              done));
+          return;
+        case 7:
+          this.NotifyGameAccountOffline(controller, (global::bnet.protocol.game_utilities.GameAccountOfflineNotification) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
+              done));
+          return;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -3542,6 +4327,10 @@ namespace bnet.protocol.game_utilities {
           return global::bnet.protocol.server_pool.GetLoadRequest.DefaultInstance;
         case 5:
           return global::bnet.protocol.game_utilities.ServerRequest.DefaultInstance;
+        case 6:
+          return global::bnet.protocol.game_utilities.GameAccountOnlineNotification.DefaultInstance;
+        case 7:
+          return global::bnet.protocol.game_utilities.GameAccountOfflineNotification.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -3565,6 +4354,10 @@ namespace bnet.protocol.game_utilities {
           return global::bnet.protocol.server_pool.ServerState.DefaultInstance;
         case 5:
           return global::bnet.protocol.game_utilities.ServerResponse.DefaultInstance;
+        case 6:
+          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
+        case 7:
+          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -3640,6 +4433,24 @@ namespace bnet.protocol.game_utilities {
         channel.CallMethod(Descriptor.Methods[5],
             controller, request, global::bnet.protocol.game_utilities.ServerResponse.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.game_utilities.ServerResponse, global::bnet.protocol.game_utilities.ServerResponse.Builder>(done, global::bnet.protocol.game_utilities.ServerResponse.DefaultInstance));
+      }
+      
+      public override void NotifyGameAccountOnline(
+          pb::IRpcController controller,
+          global::bnet.protocol.game_utilities.GameAccountOnlineNotification request,
+          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
+        channel.CallMethod(Descriptor.Methods[6],
+            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
+      }
+      
+      public override void NotifyGameAccountOffline(
+          pb::IRpcController controller,
+          global::bnet.protocol.game_utilities.GameAccountOfflineNotification request,
+          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
+        channel.CallMethod(Descriptor.Methods[7],
+            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }
     }
   }

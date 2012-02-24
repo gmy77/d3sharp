@@ -185,7 +185,6 @@
     <Compile Include="Core\GS\Actors\Implementations\Healthwell.cs" />
     <Compile Include="Core\GS\Actors\Implementations\ProximityTriggeredGizmo.cs" />
     <Compile Include="Core\GS\Actors\Implementations\DesctructibleLootContainer.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\NephalemAltar.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Savepoint.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Shrine.cs" />
     <Compile Include="Core\GS\Actors\Movement\MoveToPointWithPathfindAction.cs" />
@@ -341,7 +340,6 @@
     <Compile Include="Core\MooNet\Services\SearchService.cs" />
     <Compile Include="Core\MooNet\Services\ServerPoolService.cs" />
     <Compile Include="Core\MooNet\Services\Service.cs" />
-    <Compile Include="Core\MooNet\Services\StorageService.cs" />
     <Compile Include="Core\MooNet\Services\UserManagerService.cs" />
     <Compile Include="Core\GS\Skills\SkillSet.cs" />
     <Compile Include="Core\GS\Skills\Skills.cs" />
@@ -349,6 +347,8 @@
     <Compile Include="Core\MooNet\Toons\Toon.cs" />
     <Compile Include="Core\MooNet\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\MooNet\Toons\ToonManager.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Player\UnlockDifficultyMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Skill\AssignTraitsMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\CancelChanneledSkillMessage.cs" />
     <Compile Include="Common\Logging\LogConfig.cs" />
     <Compile Include="Core\MooNet\Web\AccountWebService.cs" />
@@ -376,7 +376,6 @@
     <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryRequestQuickMoveMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\HeartbeatMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\ShrineActivatedMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\NephalemAltarWindowClosedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBannerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\LoadCompleteMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerTranslateFacingMessage.cs" />
@@ -403,6 +402,7 @@
     <Compile Include="Net\GS\Message\Definitions\Trade\OpenTradeWindow.cs" />
     <Compile Include="Net\GS\Message\Definitions\Tutorial\TutorialShownMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Waypoint\OpenWaypointSelectionWindowMessage.cs" />
+    <Compile Include="Net\GS\Message\Fields\ActiveSkillSavedData.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Core\GS\Objects\GameAttributeMap.cs" />
     <Compile Include="Net\MooNet\MooNetClient.cs" />
@@ -560,7 +560,6 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayCutsceneMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Effect\PlayEffectMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerActorSetInitialMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Player\PlayerChangeHotbarButtonMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerDeSyncSnapMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerEnterKnownMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerIndexMessage.cs" />
@@ -596,7 +595,6 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\SimpleMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\SNODataMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\SNONameDataMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\SocketSpellMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\StopConvLineMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Scene\SwapSceneMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\World\TargetMessage.cs" />

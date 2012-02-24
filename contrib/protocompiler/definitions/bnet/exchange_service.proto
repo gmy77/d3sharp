@@ -317,6 +317,19 @@ message CreateCSTradeRequest
     required uint64 cs_user_id = 11;
 }
 
+message GetNotClosedOfferCountRequest
+{
+    optional string currency = 1;
+    optional fixed32 source = 2;
+    optional .bnet.protocol.EntityId bnet_account = 3;
+}
+
+message GetNotClosedOfferCountResponse
+{
+    required uint32 count = 1;
+    optional uint32 limit = 2;
+}
+
 service ExchangeService
 {
     rpc CreateOrderBook(.bnet.protocol.exchange.CreateOrderBookRequest) returns(.bnet.protocol.exchange.CreateOrderBookResponse)
@@ -474,6 +487,10 @@ service ExchangeService
     rpc ReportRefund(.bnet.protocol.exchange_object_provider.ReportRefundRequest) returns(.bnet.protocol.NoData)
     {
         option (method_id) = 41;
+    }
+    rpc GetNotClosedOfferCount(.bnet.protocol.exchange.GetNotClosedOfferCountRequest) returns(.bnet.protocol.exchange.GetNotClosedOfferCountResponse)
+    {
+        option (method_id) = 42;
     }
 }
 

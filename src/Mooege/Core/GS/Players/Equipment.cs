@@ -30,7 +30,7 @@ namespace Mooege.Core.GS.Players
     {
         Helm = 1, Chest = 2, Off_Hand = 3, Main_Hand = 4, Hands = 5, Belt = 6, Feet = 7,
         Shoulders = 8, Legs = 9, Bracers = 10, Ring_right = 11, Ring_left = 12, Neck = 13,
-        Skills = 15, Stash = 16, Gold = 17, Vendor = 19 // To do: Should this be here? Its not really an eq. slot /fasbat
+        Skills = 14, Stash = 15, Gold = 16, Vendor = 18 // To do: Should this be here? Its not really an eq. slot /fasbat
     }
 
     class Equipment : IRevealable
@@ -48,9 +48,9 @@ namespace Mooege.Core.GS.Players
             this.Items = new Dictionary<uint, Item>();
             this._inventoryGold = ItemGenerator.CreateGold(_owner, 0);
             this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = 0;
-            this._inventoryGold.SetInventoryLocation(17, 0, 0);
+            this._inventoryGold.SetInventoryLocation(16, 0, 0);
             this._inventoryGold.Owner = _owner;
-            this.Items.Add(_inventoryGold.DynamicID,_inventoryGold);
+            this.Items.Add(_inventoryGold.DynamicID, _inventoryGold);
         }
        
         /// <summary>

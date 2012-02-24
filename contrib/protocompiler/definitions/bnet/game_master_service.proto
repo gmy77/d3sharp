@@ -51,10 +51,11 @@ message FindGameResponse
     optional bool queued = 3 [default = false];
 }
 
-message CancelGameRequest
+message CancelGameEntryRequest
 {
     required fixed64 request_id = 1;
     optional fixed64 factory_id = 2;
+    repeated .bnet.protocol.game_master.Player player = 3;
 }
 
 message GameEndedNotification
@@ -173,7 +174,7 @@ service GameMaster
     {
         option (method_id) = 3;
     }
-    rpc CancelGame(.bnet.protocol.game_master.CancelGameRequest) returns(.bnet.protocol.NoData)
+    rpc CancelGameEntry(.bnet.protocol.game_master.CancelGameEntryRequest) returns(.bnet.protocol.NoData)
     {
         option (method_id) = 4;
     }

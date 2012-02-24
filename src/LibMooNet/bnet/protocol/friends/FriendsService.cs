@@ -82,66 +82,63 @@ namespace bnet.protocol.friends {
             "dXRlRmlsdGVyEhYKC3N0YXJ0X2luZGV4GAQgASgNOgEwEhgKC21heF9yZXN1" + 
             "bHRzGAUgASgNOgMxMDAiXAoTVmlld0ZyaWVuZHNSZXNwb25zZRIuCgdmcmll" + 
             "bmRzGAEgAygLMh0uYm5ldC5wcm90b2NvbC5mcmllbmRzLkZyaWVuZBIVCg10" + 
-            "b3RhbF9yZXN1bHRzGAIgASgNIqgBChhVcGRhdGVGcmllbmRTdGF0ZVJlcXVl" + 
+            "b3RhbF9yZXN1bHRzGAIgASgNIsIBChhVcGRhdGVGcmllbmRTdGF0ZVJlcXVl" + 
             "c3QSKQoIYWdlbnRfaWQYASABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlk" + 
             "EioKCXRhcmdldF9pZBgCIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQS" + 
             "NQoJYXR0cmlidXRlGAMgAygLMiIuYm5ldC5wcm90b2NvbC5hdHRyaWJ1dGUu" + 
-            "QXR0cmlidXRlIkMKEkZyaWVuZE5vdGlmaWNhdGlvbhItCgZ0YXJnZXQYASAC" + 
-            "KAsyHS5ibmV0LnByb3RvY29sLmZyaWVuZHMuRnJpZW5kIlYKHVVwZGF0ZUZy" + 
-            "aWVuZFN0YXRlTm90aWZpY2F0aW9uEjUKDmNoYW5nZWRfZnJpZW5kGAEgAigL" + 
-            "Mh0uYm5ldC5wcm90b2NvbC5mcmllbmRzLkZyaWVuZCJlChZJbnZpdGF0aW9u" + 
-            "Tm90aWZpY2F0aW9uEjgKCmludml0YXRpb24YASACKAsyJC5ibmV0LnByb3Rv" + 
-            "Y29sLmludml0YXRpb24uSW52aXRhdGlvbhIRCgZyZWFzb24YAiABKA06ATAy" + 
-            "wAkKDkZyaWVuZHNTZXJ2aWNlEn8KElN1YnNjcmliZVRvRnJpZW5kcxIwLmJu" + 
-            "ZXQucHJvdG9jb2wuZnJpZW5kcy5TdWJzY3JpYmVUb0ZyaWVuZHNSZXF1ZXN0" + 
-            "GjEuYm5ldC5wcm90b2NvbC5mcmllbmRzLlN1YnNjcmliZVRvRnJpZW5kc1Jl" + 
-            "c3BvbnNlIgSAtRgBEl4KDlNlbmRJbnZpdGF0aW9uEi8uYm5ldC5wcm90b2Nv" + 
-            "bC5pbnZpdGF0aW9uLlNlbmRJbnZpdGF0aW9uUmVxdWVzdBoVLmJuZXQucHJv" + 
-            "dG9jb2wuTm9EYXRhIgSAtRgCEmIKEFVwZGF0ZUludml0YXRpb24SMS5ibmV0" + 
-            "LnByb3RvY29sLmludml0YXRpb24uVXBkYXRlSW52aXRhdGlvblJlcXVlc3Qa" + 
-            "FS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYAxJZChBBY2NlcHRJbnZpdGF0" + 
-            "aW9uEiguYm5ldC5wcm90b2NvbC5pbnZpdGF0aW9uLkdlbmVyaWNSZXF1ZXN0" + 
-            "GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GAQSWQoQUmV2b2tlSW52aXRh" + 
-            "dGlvbhIoLmJuZXQucHJvdG9jb2wuaW52aXRhdGlvbi5HZW5lcmljUmVxdWVz" + 
-            "dBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgFEloKEURlY2xpbmVJbnZp" + 
-            "dGF0aW9uEiguYm5ldC5wcm90b2NvbC5pbnZpdGF0aW9uLkdlbmVyaWNSZXF1" + 
-            "ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GAYSWQoQSWdub3JlSW52" + 
-            "aXRhdGlvbhIoLmJuZXQucHJvdG9jb2wuaW52aXRhdGlvbi5HZW5lcmljUmVx" + 
-            "dWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgHElMKCkFzc2lnblJv" + 
-            "bGUSKC5ibmV0LnByb3RvY29sLmZyaWVuZHMuQXNzaWduUm9sZVJlcXVlc3Qa" + 
-            "FS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYCBJvCgxSZW1vdmVGcmllbmQS" + 
-            "Ky5ibmV0LnByb3RvY29sLmZyaWVuZHMuR2VuZXJpY0ZyaWVuZFJlcXVlc3Qa" + 
-            "LC5ibmV0LnByb3RvY29sLmZyaWVuZHMuR2VuZXJpY0ZyaWVuZFJlc3BvbnNl" + 
-            "IgSAtRgJEmoKC1ZpZXdGcmllbmRzEikuYm5ldC5wcm90b2NvbC5mcmllbmRz" + 
-            "LlZpZXdGcmllbmRzUmVxdWVzdBoqLmJuZXQucHJvdG9jb2wuZnJpZW5kcy5W" + 
-            "aWV3RnJpZW5kc1Jlc3BvbnNlIgSAtRgKEmEKEVVwZGF0ZUZyaWVuZFN0YXRl" + 
-            "Ei8uYm5ldC5wcm90b2NvbC5mcmllbmRzLlVwZGF0ZUZyaWVuZFN0YXRlUmVx" + 
-            "dWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgLEmcKFFVuc3Vic2Ny" + 
-            "aWJlVG9GcmllbmRzEjIuYm5ldC5wcm90b2NvbC5mcmllbmRzLlVuc3Vic2Ny" + 
-            "aWJlVG9GcmllbmRzUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSA" + 
-            "tRgMMvAHCg1GcmllbmRzTm90aWZ5EmAKEU5vdGlmeUZyaWVuZEFkZGVkEiku" + 
-            "Ym5ldC5wcm90b2NvbC5mcmllbmRzLkZyaWVuZE5vdGlmaWNhdGlvbhoaLmJu" + 
-            "ZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAESYgoTTm90aWZ5RnJpZW5k" + 
-            "UmVtb3ZlZBIpLmJuZXQucHJvdG9jb2wuZnJpZW5kcy5GcmllbmROb3RpZmlj" + 
-            "YXRpb24aGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgCEnAKHU5v" + 
-            "dGlmeVJlY2VpdmVkSW52aXRhdGlvbkFkZGVkEi0uYm5ldC5wcm90b2NvbC5m" + 
-            "cmllbmRzLkludml0YXRpb25Ob3RpZmljYXRpb24aGi5ibmV0LnByb3RvY29s" + 
-            "Lk5PX1JFU1BPTlNFIgSAtRgDEnIKH05vdGlmeVJlY2VpdmVkSW52aXRhdGlv" + 
-            "blVwZGF0ZWQSLS5ibmV0LnByb3RvY29sLmZyaWVuZHMuSW52aXRhdGlvbk5v" + 
-            "dGlmaWNhdGlvbhoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAQS" + 
-            "cgofTm90aWZ5UmVjZWl2ZWRJbnZpdGF0aW9uUmVtb3ZlZBItLmJuZXQucHJv" + 
-            "dG9jb2wuZnJpZW5kcy5JbnZpdGF0aW9uTm90aWZpY2F0aW9uGhouYm5ldC5w" + 
-            "cm90b2NvbC5OT19SRVNQT05TRSIEgLUYBRJsChlOb3RpZnlTZW50SW52aXRh" + 
-            "dGlvbkFkZGVkEi0uYm5ldC5wcm90b2NvbC5mcmllbmRzLkludml0YXRpb25O" + 
-            "b3RpZmljYXRpb24aGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgG" + 
-            "Em4KG05vdGlmeVNlbnRJbnZpdGF0aW9uVXBkYXRlZBItLmJuZXQucHJvdG9j" + 
-            "b2wuZnJpZW5kcy5JbnZpdGF0aW9uTm90aWZpY2F0aW9uGhouYm5ldC5wcm90" + 
-            "b2NvbC5OT19SRVNQT05TRSIEgLUYBxJuChtOb3RpZnlTZW50SW52aXRhdGlv" + 
-            "blJlbW92ZWQSLS5ibmV0LnByb3RvY29sLmZyaWVuZHMuSW52aXRhdGlvbk5v" + 
-            "dGlmaWNhdGlvbhoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAgS" + 
-            "cQoXTm90aWZ5VXBkYXRlRnJpZW5kU3RhdGUSNC5ibmV0LnByb3RvY29sLmZy" + 
-            "aWVuZHMuVXBkYXRlRnJpZW5kU3RhdGVOb3RpZmljYXRpb24aGi5ibmV0LnBy" + 
-            "b3RvY29sLk5PX1JFU1BPTlNFIgSAtRgJQgOAAQA=");
+            "QXR0cmlidXRlEhgKEGF0dHJpYnV0ZXNfZXBvY2gYBCABKAQidQoSRnJpZW5k" + 
+            "Tm90aWZpY2F0aW9uEi0KBnRhcmdldBgBIAIoCzIdLmJuZXQucHJvdG9jb2wu" + 
+            "ZnJpZW5kcy5GcmllbmQSMAoPZ2FtZV9hY2NvdW50X2lkGAIgAigLMhcuYm5l" + 
+            "dC5wcm90b2NvbC5FbnRpdHlJZCKIAQodVXBkYXRlRnJpZW5kU3RhdGVOb3Rp" + 
+            "ZmljYXRpb24SNQoOY2hhbmdlZF9mcmllbmQYASACKAsyHS5ibmV0LnByb3Rv" + 
+            "Y29sLmZyaWVuZHMuRnJpZW5kEjAKD2dhbWVfYWNjb3VudF9pZBgCIAIoCzIX" + 
+            "LmJuZXQucHJvdG9jb2wuRW50aXR5SWQilwEKFkludml0YXRpb25Ob3RpZmlj" + 
+            "YXRpb24SOAoKaW52aXRhdGlvbhgBIAIoCzIkLmJuZXQucHJvdG9jb2wuaW52" + 
+            "aXRhdGlvbi5JbnZpdGF0aW9uEjAKD2dhbWVfYWNjb3VudF9pZBgCIAIoCzIX" + 
+            "LmJuZXQucHJvdG9jb2wuRW50aXR5SWQSEQoGcmVhc29uGAMgASgNOgEwMtwI" + 
+            "Cg5GcmllbmRzU2VydmljZRJ/ChJTdWJzY3JpYmVUb0ZyaWVuZHMSMC5ibmV0" + 
+            "LnByb3RvY29sLmZyaWVuZHMuU3Vic2NyaWJlVG9GcmllbmRzUmVxdWVzdBox" + 
+            "LmJuZXQucHJvdG9jb2wuZnJpZW5kcy5TdWJzY3JpYmVUb0ZyaWVuZHNSZXNw" + 
+            "b25zZSIEgLUYARJeCg5TZW5kSW52aXRhdGlvbhIvLmJuZXQucHJvdG9jb2wu" + 
+            "aW52aXRhdGlvbi5TZW5kSW52aXRhdGlvblJlcXVlc3QaFS5ibmV0LnByb3Rv" + 
+            "Y29sLk5vRGF0YSIEgLUYAhJZChBBY2NlcHRJbnZpdGF0aW9uEiguYm5ldC5w" + 
+            "cm90b2NvbC5pbnZpdGF0aW9uLkdlbmVyaWNSZXF1ZXN0GhUuYm5ldC5wcm90" + 
+            "b2NvbC5Ob0RhdGEiBIC1GAMSWQoQUmV2b2tlSW52aXRhdGlvbhIoLmJuZXQu" + 
+            "cHJvdG9jb2wuaW52aXRhdGlvbi5HZW5lcmljUmVxdWVzdBoVLmJuZXQucHJv" + 
+            "dG9jb2wuTm9EYXRhIgSAtRgEEloKEURlY2xpbmVJbnZpdGF0aW9uEiguYm5l" + 
+            "dC5wcm90b2NvbC5pbnZpdGF0aW9uLkdlbmVyaWNSZXF1ZXN0GhUuYm5ldC5w" + 
+            "cm90b2NvbC5Ob0RhdGEiBIC1GAUSWQoQSWdub3JlSW52aXRhdGlvbhIoLmJu" + 
+            "ZXQucHJvdG9jb2wuaW52aXRhdGlvbi5HZW5lcmljUmVxdWVzdBoVLmJuZXQu" + 
+            "cHJvdG9jb2wuTm9EYXRhIgSAtRgGElMKCkFzc2lnblJvbGUSKC5ibmV0LnBy" + 
+            "b3RvY29sLmZyaWVuZHMuQXNzaWduUm9sZVJlcXVlc3QaFS5ibmV0LnByb3Rv" + 
+            "Y29sLk5vRGF0YSIEgLUYBxJvCgxSZW1vdmVGcmllbmQSKy5ibmV0LnByb3Rv" + 
+            "Y29sLmZyaWVuZHMuR2VuZXJpY0ZyaWVuZFJlcXVlc3QaLC5ibmV0LnByb3Rv" + 
+            "Y29sLmZyaWVuZHMuR2VuZXJpY0ZyaWVuZFJlc3BvbnNlIgSAtRgIEmoKC1Zp" + 
+            "ZXdGcmllbmRzEikuYm5ldC5wcm90b2NvbC5mcmllbmRzLlZpZXdGcmllbmRz" + 
+            "UmVxdWVzdBoqLmJuZXQucHJvdG9jb2wuZnJpZW5kcy5WaWV3RnJpZW5kc1Jl" + 
+            "c3BvbnNlIgSAtRgJEmEKEVVwZGF0ZUZyaWVuZFN0YXRlEi8uYm5ldC5wcm90" + 
+            "b2NvbC5mcmllbmRzLlVwZGF0ZUZyaWVuZFN0YXRlUmVxdWVzdBoVLmJuZXQu" + 
+            "cHJvdG9jb2wuTm9EYXRhIgSAtRgKEmcKFFVuc3Vic2NyaWJlVG9GcmllbmRz" + 
+            "EjIuYm5ldC5wcm90b2NvbC5mcmllbmRzLlVuc3Vic2NyaWJlVG9GcmllbmRz" + 
+            "UmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgLMowGCg1Gcmll" + 
+            "bmRzTm90aWZ5EmAKEU5vdGlmeUZyaWVuZEFkZGVkEikuYm5ldC5wcm90b2Nv" + 
+            "bC5mcmllbmRzLkZyaWVuZE5vdGlmaWNhdGlvbhoaLmJuZXQucHJvdG9jb2wu" + 
+            "Tk9fUkVTUE9OU0UiBIC1GAESYgoTTm90aWZ5RnJpZW5kUmVtb3ZlZBIpLmJu" + 
+            "ZXQucHJvdG9jb2wuZnJpZW5kcy5GcmllbmROb3RpZmljYXRpb24aGi5ibmV0" + 
+            "LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgCEnAKHU5vdGlmeVJlY2VpdmVk" + 
+            "SW52aXRhdGlvbkFkZGVkEi0uYm5ldC5wcm90b2NvbC5mcmllbmRzLkludml0" + 
+            "YXRpb25Ob3RpZmljYXRpb24aGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNF" + 
+            "IgSAtRgDEnIKH05vdGlmeVJlY2VpdmVkSW52aXRhdGlvblJlbW92ZWQSLS5i" + 
+            "bmV0LnByb3RvY29sLmZyaWVuZHMuSW52aXRhdGlvbk5vdGlmaWNhdGlvbhoa" + 
+            "LmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAQSbAoZTm90aWZ5U2Vu" + 
+            "dEludml0YXRpb25BZGRlZBItLmJuZXQucHJvdG9jb2wuZnJpZW5kcy5JbnZp" + 
+            "dGF0aW9uTm90aWZpY2F0aW9uGhouYm5ldC5wcm90b2NvbC5OT19SRVNQT05T" + 
+            "RSIEgLUYBRJuChtOb3RpZnlTZW50SW52aXRhdGlvblJlbW92ZWQSLS5ibmV0" + 
+            "LnByb3RvY29sLmZyaWVuZHMuSW52aXRhdGlvbk5vdGlmaWNhdGlvbhoaLmJu" + 
+            "ZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAYScQoXTm90aWZ5VXBkYXRl" + 
+            "RnJpZW5kU3RhdGUSNC5ibmV0LnByb3RvY29sLmZyaWVuZHMuVXBkYXRlRnJp" + 
+            "ZW5kU3RhdGVOb3RpZmljYXRpb24aGi5ibmV0LnByb3RvY29sLk5PX1JFU1BP" + 
+            "TlNFIgSAtRgHQgOAAQA=");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_friends_SubscribeToFriendsRequest__Descriptor = Descriptor.MessageTypes[0];
@@ -179,19 +176,19 @@ namespace bnet.protocol.friends {
           internal__static_bnet_protocol_friends_UpdateFriendStateRequest__Descriptor = Descriptor.MessageTypes[8];
           internal__static_bnet_protocol_friends_UpdateFriendStateRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.UpdateFriendStateRequest, global::bnet.protocol.friends.UpdateFriendStateRequest.Builder>(internal__static_bnet_protocol_friends_UpdateFriendStateRequest__Descriptor,
-                  new string[] { "AgentId", "TargetId", "Attribute", });
+                  new string[] { "AgentId", "TargetId", "Attribute", "AttributesEpoch", });
           internal__static_bnet_protocol_friends_FriendNotification__Descriptor = Descriptor.MessageTypes[9];
           internal__static_bnet_protocol_friends_FriendNotification__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.FriendNotification, global::bnet.protocol.friends.FriendNotification.Builder>(internal__static_bnet_protocol_friends_FriendNotification__Descriptor,
-                  new string[] { "Target", });
+                  new string[] { "Target", "GameAccountId", });
           internal__static_bnet_protocol_friends_UpdateFriendStateNotification__Descriptor = Descriptor.MessageTypes[10];
           internal__static_bnet_protocol_friends_UpdateFriendStateNotification__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.UpdateFriendStateNotification, global::bnet.protocol.friends.UpdateFriendStateNotification.Builder>(internal__static_bnet_protocol_friends_UpdateFriendStateNotification__Descriptor,
-                  new string[] { "ChangedFriend", });
+                  new string[] { "ChangedFriend", "GameAccountId", });
           internal__static_bnet_protocol_friends_InvitationNotification__Descriptor = Descriptor.MessageTypes[11];
           internal__static_bnet_protocol_friends_InvitationNotification__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.InvitationNotification, global::bnet.protocol.friends.InvitationNotification.Builder>(internal__static_bnet_protocol_friends_InvitationNotification__Descriptor,
-                  new string[] { "Invitation", "Reason", });
+                  new string[] { "Invitation", "GameAccountId", "Reason", });
           pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
           RegisterAllExtensions(registry);
           global::bnet.protocol.friends.FriendsTypes.RegisterAllExtensions(registry);
@@ -3549,8 +3546,8 @@ namespace bnet.protocol.friends {
   public sealed partial class UpdateFriendStateRequest : pb::GeneratedMessage<UpdateFriendStateRequest, UpdateFriendStateRequest.Builder> {
     private UpdateFriendStateRequest() { }
     private static readonly UpdateFriendStateRequest defaultInstance = new UpdateFriendStateRequest().MakeReadOnly();
-    private static readonly string[] _updateFriendStateRequestFieldNames = new string[] { "agent_id", "attribute", "target_id" };
-    private static readonly uint[] _updateFriendStateRequestFieldTags = new uint[] { 10, 26, 18 };
+    private static readonly string[] _updateFriendStateRequestFieldNames = new string[] { "agent_id", "attribute", "attributes_epoch", "target_id" };
+    private static readonly uint[] _updateFriendStateRequestFieldTags = new uint[] { 10, 26, 32, 18 };
     public static UpdateFriendStateRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -3603,6 +3600,16 @@ namespace bnet.protocol.friends {
       return attribute_[index];
     }
     
+    public const int AttributesEpochFieldNumber = 4;
+    private bool hasAttributesEpoch;
+    private ulong attributesEpoch_;
+    public bool HasAttributesEpoch {
+      get { return hasAttributesEpoch; }
+    }
+    public ulong AttributesEpoch {
+      get { return attributesEpoch_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasTargetId) return false;
@@ -3624,10 +3631,13 @@ namespace bnet.protocol.friends {
         output.WriteMessage(1, field_names[0], AgentId);
       }
       if (hasTargetId) {
-        output.WriteMessage(2, field_names[2], TargetId);
+        output.WriteMessage(2, field_names[3], TargetId);
       }
       if (attribute_.Count > 0) {
         output.WriteMessageArray(3, field_names[1], attribute_);
+      }
+      if (hasAttributesEpoch) {
+        output.WriteUInt64(4, field_names[2], AttributesEpoch);
       }
       UnknownFields.WriteTo(output);
     }
@@ -3647,6 +3657,9 @@ namespace bnet.protocol.friends {
         }
         foreach (global::bnet.protocol.attribute.Attribute element in AttributeList) {
           size += pb::CodedOutputStream.ComputeMessageSize(3, element);
+        }
+        if (hasAttributesEpoch) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(4, AttributesEpoch);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -3784,6 +3797,9 @@ namespace bnet.protocol.friends {
         if (other.attribute_.Count != 0) {
           result.attribute_.Add(other.attribute_);
         }
+        if (other.HasAttributesEpoch) {
+          AttributesEpoch = other.AttributesEpoch;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -3847,6 +3863,10 @@ namespace bnet.protocol.friends {
             }
             case 26: {
               input.ReadMessageArray(tag, field_name, result.attribute_, global::bnet.protocol.attribute.Attribute.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 32: {
+              result.hasAttributesEpoch = input.ReadUInt64(ref result.attributesEpoch_);
               break;
             }
           }
@@ -3982,6 +4002,26 @@ namespace bnet.protocol.friends {
         result.attribute_.Clear();
         return this;
       }
+      
+      public bool HasAttributesEpoch {
+        get { return result.hasAttributesEpoch; }
+      }
+      public ulong AttributesEpoch {
+        get { return result.AttributesEpoch; }
+        set { SetAttributesEpoch(value); }
+      }
+      public Builder SetAttributesEpoch(ulong value) {
+        PrepareBuilder();
+        result.hasAttributesEpoch = true;
+        result.attributesEpoch_ = value;
+        return this;
+      }
+      public Builder ClearAttributesEpoch() {
+        PrepareBuilder();
+        result.hasAttributesEpoch = false;
+        result.attributesEpoch_ = 0UL;
+        return this;
+      }
     }
     static UpdateFriendStateRequest() {
       object.ReferenceEquals(global::bnet.protocol.friends.Proto.FriendsService.Descriptor, null);
@@ -3994,8 +4034,8 @@ namespace bnet.protocol.friends {
   public sealed partial class FriendNotification : pb::GeneratedMessage<FriendNotification, FriendNotification.Builder> {
     private FriendNotification() { }
     private static readonly FriendNotification defaultInstance = new FriendNotification().MakeReadOnly();
-    private static readonly string[] _friendNotificationFieldNames = new string[] { "target" };
-    private static readonly uint[] _friendNotificationFieldTags = new uint[] { 10 };
+    private static readonly string[] _friendNotificationFieldNames = new string[] { "game_account_id", "target" };
+    private static readonly uint[] _friendNotificationFieldTags = new uint[] { 18, 10 };
     public static FriendNotification DefaultInstance {
       get { return defaultInstance; }
     }
@@ -4026,10 +4066,22 @@ namespace bnet.protocol.friends {
       get { return target_ ?? global::bnet.protocol.friends.Friend.DefaultInstance; }
     }
     
+    public const int GameAccountIdFieldNumber = 2;
+    private bool hasGameAccountId;
+    private global::bnet.protocol.EntityId gameAccountId_;
+    public bool HasGameAccountId {
+      get { return hasGameAccountId; }
+    }
+    public global::bnet.protocol.EntityId GameAccountId {
+      get { return gameAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasTarget) return false;
+        if (!hasGameAccountId) return false;
         if (!Target.IsInitialized) return false;
+        if (!GameAccountId.IsInitialized) return false;
         return true;
       }
     }
@@ -4038,7 +4090,10 @@ namespace bnet.protocol.friends {
       int size = SerializedSize;
       string[] field_names = _friendNotificationFieldNames;
       if (hasTarget) {
-        output.WriteMessage(1, field_names[0], Target);
+        output.WriteMessage(1, field_names[1], Target);
+      }
+      if (hasGameAccountId) {
+        output.WriteMessage(2, field_names[0], GameAccountId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -4052,6 +4107,9 @@ namespace bnet.protocol.friends {
         size = 0;
         if (hasTarget) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, Target);
+        }
+        if (hasGameAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, GameAccountId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -4182,6 +4240,9 @@ namespace bnet.protocol.friends {
         if (other.HasTarget) {
           MergeTarget(other.Target);
         }
+        if (other.HasGameAccountId) {
+          MergeGameAccountId(other.GameAccountId);
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -4234,6 +4295,15 @@ namespace bnet.protocol.friends {
               Target = subBuilder.BuildPartial();
               break;
             }
+            case 18: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasGameAccountId) {
+                subBuilder.MergeFrom(GameAccountId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              GameAccountId = subBuilder.BuildPartial();
+              break;
+            }
           }
         }
         
@@ -4283,6 +4353,46 @@ namespace bnet.protocol.friends {
         result.target_ = null;
         return this;
       }
+      
+      public bool HasGameAccountId {
+       get { return result.hasGameAccountId; }
+      }
+      public global::bnet.protocol.EntityId GameAccountId {
+        get { return result.GameAccountId; }
+        set { SetGameAccountId(value); }
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = value;
+        return this;
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasGameAccountId &&
+            result.gameAccountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.gameAccountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccountId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.gameAccountId_ = value;
+        }
+        result.hasGameAccountId = true;
+        return this;
+      }
+      public Builder ClearGameAccountId() {
+        PrepareBuilder();
+        result.hasGameAccountId = false;
+        result.gameAccountId_ = null;
+        return this;
+      }
     }
     static FriendNotification() {
       object.ReferenceEquals(global::bnet.protocol.friends.Proto.FriendsService.Descriptor, null);
@@ -4295,8 +4405,8 @@ namespace bnet.protocol.friends {
   public sealed partial class UpdateFriendStateNotification : pb::GeneratedMessage<UpdateFriendStateNotification, UpdateFriendStateNotification.Builder> {
     private UpdateFriendStateNotification() { }
     private static readonly UpdateFriendStateNotification defaultInstance = new UpdateFriendStateNotification().MakeReadOnly();
-    private static readonly string[] _updateFriendStateNotificationFieldNames = new string[] { "changed_friend" };
-    private static readonly uint[] _updateFriendStateNotificationFieldTags = new uint[] { 10 };
+    private static readonly string[] _updateFriendStateNotificationFieldNames = new string[] { "changed_friend", "game_account_id" };
+    private static readonly uint[] _updateFriendStateNotificationFieldTags = new uint[] { 10, 18 };
     public static UpdateFriendStateNotification DefaultInstance {
       get { return defaultInstance; }
     }
@@ -4327,10 +4437,22 @@ namespace bnet.protocol.friends {
       get { return changedFriend_ ?? global::bnet.protocol.friends.Friend.DefaultInstance; }
     }
     
+    public const int GameAccountIdFieldNumber = 2;
+    private bool hasGameAccountId;
+    private global::bnet.protocol.EntityId gameAccountId_;
+    public bool HasGameAccountId {
+      get { return hasGameAccountId; }
+    }
+    public global::bnet.protocol.EntityId GameAccountId {
+      get { return gameAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasChangedFriend) return false;
+        if (!hasGameAccountId) return false;
         if (!ChangedFriend.IsInitialized) return false;
+        if (!GameAccountId.IsInitialized) return false;
         return true;
       }
     }
@@ -4340,6 +4462,9 @@ namespace bnet.protocol.friends {
       string[] field_names = _updateFriendStateNotificationFieldNames;
       if (hasChangedFriend) {
         output.WriteMessage(1, field_names[0], ChangedFriend);
+      }
+      if (hasGameAccountId) {
+        output.WriteMessage(2, field_names[1], GameAccountId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -4353,6 +4478,9 @@ namespace bnet.protocol.friends {
         size = 0;
         if (hasChangedFriend) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, ChangedFriend);
+        }
+        if (hasGameAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, GameAccountId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -4483,6 +4611,9 @@ namespace bnet.protocol.friends {
         if (other.HasChangedFriend) {
           MergeChangedFriend(other.ChangedFriend);
         }
+        if (other.HasGameAccountId) {
+          MergeGameAccountId(other.GameAccountId);
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -4535,6 +4666,15 @@ namespace bnet.protocol.friends {
               ChangedFriend = subBuilder.BuildPartial();
               break;
             }
+            case 18: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasGameAccountId) {
+                subBuilder.MergeFrom(GameAccountId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              GameAccountId = subBuilder.BuildPartial();
+              break;
+            }
           }
         }
         
@@ -4584,6 +4724,46 @@ namespace bnet.protocol.friends {
         result.changedFriend_ = null;
         return this;
       }
+      
+      public bool HasGameAccountId {
+       get { return result.hasGameAccountId; }
+      }
+      public global::bnet.protocol.EntityId GameAccountId {
+        get { return result.GameAccountId; }
+        set { SetGameAccountId(value); }
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = value;
+        return this;
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasGameAccountId &&
+            result.gameAccountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.gameAccountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccountId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.gameAccountId_ = value;
+        }
+        result.hasGameAccountId = true;
+        return this;
+      }
+      public Builder ClearGameAccountId() {
+        PrepareBuilder();
+        result.hasGameAccountId = false;
+        result.gameAccountId_ = null;
+        return this;
+      }
     }
     static UpdateFriendStateNotification() {
       object.ReferenceEquals(global::bnet.protocol.friends.Proto.FriendsService.Descriptor, null);
@@ -4596,8 +4776,8 @@ namespace bnet.protocol.friends {
   public sealed partial class InvitationNotification : pb::GeneratedMessage<InvitationNotification, InvitationNotification.Builder> {
     private InvitationNotification() { }
     private static readonly InvitationNotification defaultInstance = new InvitationNotification().MakeReadOnly();
-    private static readonly string[] _invitationNotificationFieldNames = new string[] { "invitation", "reason" };
-    private static readonly uint[] _invitationNotificationFieldTags = new uint[] { 10, 16 };
+    private static readonly string[] _invitationNotificationFieldNames = new string[] { "game_account_id", "invitation", "reason" };
+    private static readonly uint[] _invitationNotificationFieldTags = new uint[] { 18, 10, 24 };
     public static InvitationNotification DefaultInstance {
       get { return defaultInstance; }
     }
@@ -4628,7 +4808,17 @@ namespace bnet.protocol.friends {
       get { return invitation_ ?? global::bnet.protocol.invitation.Invitation.DefaultInstance; }
     }
     
-    public const int ReasonFieldNumber = 2;
+    public const int GameAccountIdFieldNumber = 2;
+    private bool hasGameAccountId;
+    private global::bnet.protocol.EntityId gameAccountId_;
+    public bool HasGameAccountId {
+      get { return hasGameAccountId; }
+    }
+    public global::bnet.protocol.EntityId GameAccountId {
+      get { return gameAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int ReasonFieldNumber = 3;
     private bool hasReason;
     private uint reason_;
     public bool HasReason {
@@ -4641,7 +4831,9 @@ namespace bnet.protocol.friends {
     public override bool IsInitialized {
       get {
         if (!hasInvitation) return false;
+        if (!hasGameAccountId) return false;
         if (!Invitation.IsInitialized) return false;
+        if (!GameAccountId.IsInitialized) return false;
         return true;
       }
     }
@@ -4650,10 +4842,13 @@ namespace bnet.protocol.friends {
       int size = SerializedSize;
       string[] field_names = _invitationNotificationFieldNames;
       if (hasInvitation) {
-        output.WriteMessage(1, field_names[0], Invitation);
+        output.WriteMessage(1, field_names[1], Invitation);
+      }
+      if (hasGameAccountId) {
+        output.WriteMessage(2, field_names[0], GameAccountId);
       }
       if (hasReason) {
-        output.WriteUInt32(2, field_names[1], Reason);
+        output.WriteUInt32(3, field_names[2], Reason);
       }
       UnknownFields.WriteTo(output);
     }
@@ -4668,8 +4863,11 @@ namespace bnet.protocol.friends {
         if (hasInvitation) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, Invitation);
         }
+        if (hasGameAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, GameAccountId);
+        }
         if (hasReason) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(2, Reason);
+          size += pb::CodedOutputStream.ComputeUInt32Size(3, Reason);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -4800,6 +4998,9 @@ namespace bnet.protocol.friends {
         if (other.HasInvitation) {
           MergeInvitation(other.Invitation);
         }
+        if (other.HasGameAccountId) {
+          MergeGameAccountId(other.GameAccountId);
+        }
         if (other.HasReason) {
           Reason = other.Reason;
         }
@@ -4855,7 +5056,16 @@ namespace bnet.protocol.friends {
               Invitation = subBuilder.BuildPartial();
               break;
             }
-            case 16: {
+            case 18: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasGameAccountId) {
+                subBuilder.MergeFrom(GameAccountId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              GameAccountId = subBuilder.BuildPartial();
+              break;
+            }
+            case 24: {
               result.hasReason = input.ReadUInt32(ref result.reason_);
               break;
             }
@@ -4909,6 +5119,46 @@ namespace bnet.protocol.friends {
         return this;
       }
       
+      public bool HasGameAccountId {
+       get { return result.hasGameAccountId; }
+      }
+      public global::bnet.protocol.EntityId GameAccountId {
+        get { return result.GameAccountId; }
+        set { SetGameAccountId(value); }
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = value;
+        return this;
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasGameAccountId &&
+            result.gameAccountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.gameAccountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccountId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.gameAccountId_ = value;
+        }
+        result.hasGameAccountId = true;
+        return this;
+      }
+      public Builder ClearGameAccountId() {
+        PrepareBuilder();
+        result.hasGameAccountId = false;
+        result.gameAccountId_ = null;
+        return this;
+      }
+      
       public bool HasReason {
         get { return result.hasReason; }
       }
@@ -4948,10 +5198,6 @@ namespace bnet.protocol.friends {
     public abstract void SendInvitation(
         pb::IRpcController controller,
         global::bnet.protocol.invitation.SendInvitationRequest request,
-        global::System.Action<global::bnet.protocol.NoData> done);
-    public abstract void UpdateInvitation(
-        pb::IRpcController controller,
-        global::bnet.protocol.invitation.UpdateInvitationRequest request,
         global::System.Action<global::bnet.protocol.NoData> done);
     public abstract void AcceptInvitation(
         pb::IRpcController controller,
@@ -5018,51 +5264,46 @@ namespace bnet.protocol.friends {
               done));
           return;
         case 2:
-          this.UpdateInvitation(controller, (global::bnet.protocol.invitation.UpdateInvitationRequest) request,
-              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
-              done));
-          return;
-        case 3:
           this.AcceptInvitation(controller, (global::bnet.protocol.invitation.GenericRequest) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
-        case 4:
+        case 3:
           this.RevokeInvitation(controller, (global::bnet.protocol.invitation.GenericRequest) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
-        case 5:
+        case 4:
           this.DeclineInvitation(controller, (global::bnet.protocol.invitation.GenericRequest) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
-        case 6:
+        case 5:
           this.IgnoreInvitation(controller, (global::bnet.protocol.invitation.GenericRequest) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
-        case 7:
+        case 6:
           this.AssignRole(controller, (global::bnet.protocol.friends.AssignRoleRequest) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
-        case 8:
+        case 7:
           this.RemoveFriend(controller, (global::bnet.protocol.friends.GenericFriendRequest) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.friends.GenericFriendResponse>(
               done));
           return;
-        case 9:
+        case 8:
           this.ViewFriends(controller, (global::bnet.protocol.friends.ViewFriendsRequest) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.friends.ViewFriendsResponse>(
               done));
           return;
-        case 10:
+        case 9:
           this.UpdateFriendState(controller, (global::bnet.protocol.friends.UpdateFriendStateRequest) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
-        case 11:
+        case 10:
           this.UnsubscribeToFriends(controller, (global::bnet.protocol.friends.UnsubscribeToFriendsRequest) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
@@ -5083,7 +5324,7 @@ namespace bnet.protocol.friends {
         case 1:
           return global::bnet.protocol.invitation.SendInvitationRequest.DefaultInstance;
         case 2:
-          return global::bnet.protocol.invitation.UpdateInvitationRequest.DefaultInstance;
+          return global::bnet.protocol.invitation.GenericRequest.DefaultInstance;
         case 3:
           return global::bnet.protocol.invitation.GenericRequest.DefaultInstance;
         case 4:
@@ -5091,16 +5332,14 @@ namespace bnet.protocol.friends {
         case 5:
           return global::bnet.protocol.invitation.GenericRequest.DefaultInstance;
         case 6:
-          return global::bnet.protocol.invitation.GenericRequest.DefaultInstance;
-        case 7:
           return global::bnet.protocol.friends.AssignRoleRequest.DefaultInstance;
-        case 8:
+        case 7:
           return global::bnet.protocol.friends.GenericFriendRequest.DefaultInstance;
-        case 9:
+        case 8:
           return global::bnet.protocol.friends.ViewFriendsRequest.DefaultInstance;
-        case 10:
+        case 9:
           return global::bnet.protocol.friends.UpdateFriendStateRequest.DefaultInstance;
-        case 11:
+        case 10:
           return global::bnet.protocol.friends.UnsubscribeToFriendsRequest.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -5128,14 +5367,12 @@ namespace bnet.protocol.friends {
         case 6:
           return global::bnet.protocol.NoData.DefaultInstance;
         case 7:
-          return global::bnet.protocol.NoData.DefaultInstance;
-        case 8:
           return global::bnet.protocol.friends.GenericFriendResponse.DefaultInstance;
-        case 9:
+        case 8:
           return global::bnet.protocol.friends.ViewFriendsResponse.DefaultInstance;
-        case 10:
+        case 9:
           return global::bnet.protocol.NoData.DefaultInstance;
-        case 11:
+        case 10:
           return global::bnet.protocol.NoData.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -5178,20 +5415,11 @@ namespace bnet.protocol.friends {
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
       
-      public override void UpdateInvitation(
-          pb::IRpcController controller,
-          global::bnet.protocol.invitation.UpdateInvitationRequest request,
-          global::System.Action<global::bnet.protocol.NoData> done) {
-        channel.CallMethod(Descriptor.Methods[2],
-            controller, request, global::bnet.protocol.NoData.DefaultInstance,
-            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
-      }
-      
       public override void AcceptInvitation(
           pb::IRpcController controller,
           global::bnet.protocol.invitation.GenericRequest request,
           global::System.Action<global::bnet.protocol.NoData> done) {
-        channel.CallMethod(Descriptor.Methods[3],
+        channel.CallMethod(Descriptor.Methods[2],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
@@ -5200,7 +5428,7 @@ namespace bnet.protocol.friends {
           pb::IRpcController controller,
           global::bnet.protocol.invitation.GenericRequest request,
           global::System.Action<global::bnet.protocol.NoData> done) {
-        channel.CallMethod(Descriptor.Methods[4],
+        channel.CallMethod(Descriptor.Methods[3],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
@@ -5209,7 +5437,7 @@ namespace bnet.protocol.friends {
           pb::IRpcController controller,
           global::bnet.protocol.invitation.GenericRequest request,
           global::System.Action<global::bnet.protocol.NoData> done) {
-        channel.CallMethod(Descriptor.Methods[5],
+        channel.CallMethod(Descriptor.Methods[4],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
@@ -5218,7 +5446,7 @@ namespace bnet.protocol.friends {
           pb::IRpcController controller,
           global::bnet.protocol.invitation.GenericRequest request,
           global::System.Action<global::bnet.protocol.NoData> done) {
-        channel.CallMethod(Descriptor.Methods[6],
+        channel.CallMethod(Descriptor.Methods[5],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
@@ -5227,7 +5455,7 @@ namespace bnet.protocol.friends {
           pb::IRpcController controller,
           global::bnet.protocol.friends.AssignRoleRequest request,
           global::System.Action<global::bnet.protocol.NoData> done) {
-        channel.CallMethod(Descriptor.Methods[7],
+        channel.CallMethod(Descriptor.Methods[6],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
@@ -5236,7 +5464,7 @@ namespace bnet.protocol.friends {
           pb::IRpcController controller,
           global::bnet.protocol.friends.GenericFriendRequest request,
           global::System.Action<global::bnet.protocol.friends.GenericFriendResponse> done) {
-        channel.CallMethod(Descriptor.Methods[8],
+        channel.CallMethod(Descriptor.Methods[7],
             controller, request, global::bnet.protocol.friends.GenericFriendResponse.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.friends.GenericFriendResponse, global::bnet.protocol.friends.GenericFriendResponse.Builder>(done, global::bnet.protocol.friends.GenericFriendResponse.DefaultInstance));
       }
@@ -5245,7 +5473,7 @@ namespace bnet.protocol.friends {
           pb::IRpcController controller,
           global::bnet.protocol.friends.ViewFriendsRequest request,
           global::System.Action<global::bnet.protocol.friends.ViewFriendsResponse> done) {
-        channel.CallMethod(Descriptor.Methods[9],
+        channel.CallMethod(Descriptor.Methods[8],
             controller, request, global::bnet.protocol.friends.ViewFriendsResponse.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.friends.ViewFriendsResponse, global::bnet.protocol.friends.ViewFriendsResponse.Builder>(done, global::bnet.protocol.friends.ViewFriendsResponse.DefaultInstance));
       }
@@ -5254,7 +5482,7 @@ namespace bnet.protocol.friends {
           pb::IRpcController controller,
           global::bnet.protocol.friends.UpdateFriendStateRequest request,
           global::System.Action<global::bnet.protocol.NoData> done) {
-        channel.CallMethod(Descriptor.Methods[10],
+        channel.CallMethod(Descriptor.Methods[9],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
@@ -5263,7 +5491,7 @@ namespace bnet.protocol.friends {
           pb::IRpcController controller,
           global::bnet.protocol.friends.UnsubscribeToFriendsRequest request,
           global::System.Action<global::bnet.protocol.NoData> done) {
-        channel.CallMethod(Descriptor.Methods[11],
+        channel.CallMethod(Descriptor.Methods[10],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
@@ -5285,19 +5513,11 @@ namespace bnet.protocol.friends {
         pb::IRpcController controller,
         global::bnet.protocol.friends.InvitationNotification request,
         global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
-    public abstract void NotifyReceivedInvitationUpdated(
-        pb::IRpcController controller,
-        global::bnet.protocol.friends.InvitationNotification request,
-        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
     public abstract void NotifyReceivedInvitationRemoved(
         pb::IRpcController controller,
         global::bnet.protocol.friends.InvitationNotification request,
         global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
     public abstract void NotifySentInvitationAdded(
-        pb::IRpcController controller,
-        global::bnet.protocol.friends.InvitationNotification request,
-        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
-    public abstract void NotifySentInvitationUpdated(
         pb::IRpcController controller,
         global::bnet.protocol.friends.InvitationNotification request,
         global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
@@ -5343,31 +5563,21 @@ namespace bnet.protocol.friends {
               done));
           return;
         case 3:
-          this.NotifyReceivedInvitationUpdated(controller, (global::bnet.protocol.friends.InvitationNotification) request,
-              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
-              done));
-          return;
-        case 4:
           this.NotifyReceivedInvitationRemoved(controller, (global::bnet.protocol.friends.InvitationNotification) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
               done));
           return;
-        case 5:
+        case 4:
           this.NotifySentInvitationAdded(controller, (global::bnet.protocol.friends.InvitationNotification) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
               done));
           return;
-        case 6:
-          this.NotifySentInvitationUpdated(controller, (global::bnet.protocol.friends.InvitationNotification) request,
-              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
-              done));
-          return;
-        case 7:
+        case 5:
           this.NotifySentInvitationRemoved(controller, (global::bnet.protocol.friends.InvitationNotification) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
               done));
           return;
-        case 8:
+        case 6:
           this.NotifyUpdateFriendState(controller, (global::bnet.protocol.friends.UpdateFriendStateNotification) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
               done));
@@ -5396,10 +5606,6 @@ namespace bnet.protocol.friends {
         case 5:
           return global::bnet.protocol.friends.InvitationNotification.DefaultInstance;
         case 6:
-          return global::bnet.protocol.friends.InvitationNotification.DefaultInstance;
-        case 7:
-          return global::bnet.protocol.friends.InvitationNotification.DefaultInstance;
-        case 8:
           return global::bnet.protocol.friends.UpdateFriendStateNotification.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -5425,10 +5631,6 @@ namespace bnet.protocol.friends {
         case 5:
           return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         case 6:
-          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
-        case 7:
-          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
-        case 8:
           return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -5480,7 +5682,7 @@ namespace bnet.protocol.friends {
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }
       
-      public override void NotifyReceivedInvitationUpdated(
+      public override void NotifyReceivedInvitationRemoved(
           pb::IRpcController controller,
           global::bnet.protocol.friends.InvitationNotification request,
           global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
@@ -5489,7 +5691,7 @@ namespace bnet.protocol.friends {
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }
       
-      public override void NotifyReceivedInvitationRemoved(
+      public override void NotifySentInvitationAdded(
           pb::IRpcController controller,
           global::bnet.protocol.friends.InvitationNotification request,
           global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
@@ -5498,7 +5700,7 @@ namespace bnet.protocol.friends {
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }
       
-      public override void NotifySentInvitationAdded(
+      public override void NotifySentInvitationRemoved(
           pb::IRpcController controller,
           global::bnet.protocol.friends.InvitationNotification request,
           global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
@@ -5507,29 +5709,11 @@ namespace bnet.protocol.friends {
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }
       
-      public override void NotifySentInvitationUpdated(
-          pb::IRpcController controller,
-          global::bnet.protocol.friends.InvitationNotification request,
-          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
-        channel.CallMethod(Descriptor.Methods[6],
-            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
-            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
-      }
-      
-      public override void NotifySentInvitationRemoved(
-          pb::IRpcController controller,
-          global::bnet.protocol.friends.InvitationNotification request,
-          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
-        channel.CallMethod(Descriptor.Methods[7],
-            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
-            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
-      }
-      
       public override void NotifyUpdateFriendState(
           pb::IRpcController controller,
           global::bnet.protocol.friends.UpdateFriendStateNotification request,
           global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
-        channel.CallMethod(Descriptor.Methods[8],
+        channel.CallMethod(Descriptor.Methods[6],
             controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }

@@ -143,7 +143,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         QuestLoot = 67, // only Actor\PlacedGold.acr, Gizmo and Actor\Scoundrel_LoreLoot.acr, Gizmo
         Savepoint = 68,
         DungeonStonePortal = 70, // only one actor with that name
-        NephalemAltar = 71
+        //NephalemAltar = 71
     }
 
 }

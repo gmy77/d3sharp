@@ -46,7 +46,7 @@ namespace D3.Account {
           "RDMuT25saW5lU2VydmljZS5FbnRpdHlJZBI9ChRiYW5uZXJfY29uZmlndXJh" + 
           "dGlvbhgDIAIoCzIfLkQzLkFjY291bnQuQmFubmVyQ29uZmlndXJhdGlvbhIQ" + 
           "CgVmbGFncxgEIAIoDToBMCIjCgVGbGFncxIaChZIQVJEQ09SRV9IRVJPX1VO" + 
-          "TE9DS0VEEAEihAQKD1NhdmVkRGVmaW5pdGlvbhIPCgd2ZXJzaW9uGAEgAigN" + 
+          "TE9DS0VEEAEiwQQKD1NhdmVkRGVmaW5pdGlvbhIPCgd2ZXJzaW9uGAEgAigN" + 
           "EiIKBmRpZ2VzdBgCIAEoCzISLkQzLkFjY291bnQuRGlnZXN0EkEKEHNhdmVk" + 
           "X2F0dHJpYnV0ZXMYAyACKAsyJy5EMy5BdHRyaWJ1dGVTZXJpYWxpemVyLlNh" + 
           "dmVkQXR0cmlidXRlcxI1Chlub3JtYWxfc2hhcmVkX3NhdmVkX2l0ZW1zGAQg" + 
@@ -56,8 +56,10 @@ namespace D3.Account {
           "YXZlZERhdGESFgoOc2Vlbl90dXRvcmlhbHMYByABKAwSJgoebnVtX3ZvdGVf" + 
           "a2lja3NfcGFydGljaXBhdGVkX2luGAggASgQEiAKGG51bV92b3RlX2tpY2tz" + 
           "X2luaXRpYXRlZBgJIAEoEBIgChhudW1fcHVibGljX2dhbWVzX25vX2tpY2sY" + 
-          "CiABKBASGQoRdGltZXNfdm90ZV9raWNrZWQYCyABKBASKwoHZ29sZF9pZBgM" + 
-          "IAEoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQ=");
+          "CiABKBASGQoRdGltZXNfdm90ZV9raWNrZWQYCyABKBASMgoOZ29sZF9pZF9u" + 
+          "b3JtYWwYDCABKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkEjQKEGdv" + 
+          "bGRfaWRfaGFyZGNvcmUYDSABKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0" + 
+          "eUlk");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Account_BannerConfiguration__Descriptor = Descriptor.MessageTypes[0];
@@ -71,7 +73,7 @@ namespace D3.Account {
         internal__static_D3_Account_SavedDefinition__Descriptor = Descriptor.MessageTypes[2];
         internal__static_D3_Account_SavedDefinition__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Account.SavedDefinition, global::D3.Account.SavedDefinition.Builder>(internal__static_D3_Account_SavedDefinition__Descriptor,
-                new string[] { "Version", "Digest", "SavedAttributes", "NormalSharedSavedItems", "HardcoreSharedSavedItems", "CrafterSavedData", "SeenTutorials", "NumVoteKicksParticipatedIn", "NumVoteKicksInitiated", "NumPublicGamesNoKick", "TimesVoteKicked", "GoldId", });
+                new string[] { "Version", "Digest", "SavedAttributes", "NormalSharedSavedItems", "HardcoreSharedSavedItems", "CrafterSavedData", "SeenTutorials", "NumVoteKicksParticipatedIn", "NumVoteKicksInitiated", "NumPublicGamesNoKick", "TimesVoteKicked", "GoldIdNormal", "GoldIdHardcore", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -1235,8 +1237,8 @@ namespace D3.Account {
   public sealed partial class SavedDefinition : pb::GeneratedMessage<SavedDefinition, SavedDefinition.Builder> {
     private SavedDefinition() { }
     private static readonly SavedDefinition defaultInstance = new SavedDefinition().MakeReadOnly();
-    private static readonly string[] _savedDefinitionFieldNames = new string[] { "crafter_saved_data", "digest", "gold_id", "hardcore_shared_saved_items", "normal_shared_saved_items", "num_public_games_no_kick", "num_vote_kicks_initiated", "num_vote_kicks_participated_in", "saved_attributes", "seen_tutorials", "times_vote_kicked", "version" };
-    private static readonly uint[] _savedDefinitionFieldTags = new uint[] { 50, 18, 98, 42, 34, 81, 73, 65, 26, 58, 89, 8 };
+    private static readonly string[] _savedDefinitionFieldNames = new string[] { "crafter_saved_data", "digest", "gold_id_hardcore", "gold_id_normal", "hardcore_shared_saved_items", "normal_shared_saved_items", "num_public_games_no_kick", "num_vote_kicks_initiated", "num_vote_kicks_participated_in", "saved_attributes", "seen_tutorials", "times_vote_kicked", "version" };
+    private static readonly uint[] _savedDefinitionFieldTags = new uint[] { 50, 18, 106, 98, 42, 34, 81, 73, 65, 26, 58, 89, 8 };
     public static SavedDefinition DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1367,14 +1369,24 @@ namespace D3.Account {
       get { return timesVoteKicked_; }
     }
     
-    public const int GoldIdFieldNumber = 12;
-    private bool hasGoldId;
-    private global::D3.OnlineService.EntityId goldId_;
-    public bool HasGoldId {
-      get { return hasGoldId; }
+    public const int GoldIdNormalFieldNumber = 12;
+    private bool hasGoldIdNormal;
+    private global::D3.OnlineService.EntityId goldIdNormal_;
+    public bool HasGoldIdNormal {
+      get { return hasGoldIdNormal; }
     }
-    public global::D3.OnlineService.EntityId GoldId {
-      get { return goldId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    public global::D3.OnlineService.EntityId GoldIdNormal {
+      get { return goldIdNormal_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    }
+    
+    public const int GoldIdHardcoreFieldNumber = 13;
+    private bool hasGoldIdHardcore;
+    private global::D3.OnlineService.EntityId goldIdHardcore_;
+    public bool HasGoldIdHardcore {
+      get { return hasGoldIdHardcore; }
+    }
+    public global::D3.OnlineService.EntityId GoldIdHardcore {
+      get { return goldIdHardcore_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
@@ -1394,8 +1406,11 @@ namespace D3.Account {
         if (HasCrafterSavedData) {
           if (!CrafterSavedData.IsInitialized) return false;
         }
-        if (HasGoldId) {
-          if (!GoldId.IsInitialized) return false;
+        if (HasGoldIdNormal) {
+          if (!GoldIdNormal.IsInitialized) return false;
+        }
+        if (HasGoldIdHardcore) {
+          if (!GoldIdHardcore.IsInitialized) return false;
         }
         return true;
       }
@@ -1405,40 +1420,43 @@ namespace D3.Account {
       int size = SerializedSize;
       string[] field_names = _savedDefinitionFieldNames;
       if (hasVersion) {
-        output.WriteUInt32(1, field_names[11], Version);
+        output.WriteUInt32(1, field_names[12], Version);
       }
       if (hasDigest) {
         output.WriteMessage(2, field_names[1], Digest);
       }
       if (hasSavedAttributes) {
-        output.WriteMessage(3, field_names[8], SavedAttributes);
+        output.WriteMessage(3, field_names[9], SavedAttributes);
       }
       if (hasNormalSharedSavedItems) {
-        output.WriteMessage(4, field_names[4], NormalSharedSavedItems);
+        output.WriteMessage(4, field_names[5], NormalSharedSavedItems);
       }
       if (hasHardcoreSharedSavedItems) {
-        output.WriteMessage(5, field_names[3], HardcoreSharedSavedItems);
+        output.WriteMessage(5, field_names[4], HardcoreSharedSavedItems);
       }
       if (hasCrafterSavedData) {
         output.WriteMessage(6, field_names[0], CrafterSavedData);
       }
       if (hasSeenTutorials) {
-        output.WriteBytes(7, field_names[9], SeenTutorials);
+        output.WriteBytes(7, field_names[10], SeenTutorials);
       }
       if (hasNumVoteKicksParticipatedIn) {
-        output.WriteSFixed64(8, field_names[7], NumVoteKicksParticipatedIn);
+        output.WriteSFixed64(8, field_names[8], NumVoteKicksParticipatedIn);
       }
       if (hasNumVoteKicksInitiated) {
-        output.WriteSFixed64(9, field_names[6], NumVoteKicksInitiated);
+        output.WriteSFixed64(9, field_names[7], NumVoteKicksInitiated);
       }
       if (hasNumPublicGamesNoKick) {
-        output.WriteSFixed64(10, field_names[5], NumPublicGamesNoKick);
+        output.WriteSFixed64(10, field_names[6], NumPublicGamesNoKick);
       }
       if (hasTimesVoteKicked) {
-        output.WriteSFixed64(11, field_names[10], TimesVoteKicked);
+        output.WriteSFixed64(11, field_names[11], TimesVoteKicked);
       }
-      if (hasGoldId) {
-        output.WriteMessage(12, field_names[2], GoldId);
+      if (hasGoldIdNormal) {
+        output.WriteMessage(12, field_names[3], GoldIdNormal);
+      }
+      if (hasGoldIdHardcore) {
+        output.WriteMessage(13, field_names[2], GoldIdHardcore);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1483,8 +1501,11 @@ namespace D3.Account {
         if (hasTimesVoteKicked) {
           size += pb::CodedOutputStream.ComputeSFixed64Size(11, TimesVoteKicked);
         }
-        if (hasGoldId) {
-          size += pb::CodedOutputStream.ComputeMessageSize(12, GoldId);
+        if (hasGoldIdNormal) {
+          size += pb::CodedOutputStream.ComputeMessageSize(12, GoldIdNormal);
+        }
+        if (hasGoldIdHardcore) {
+          size += pb::CodedOutputStream.ComputeMessageSize(13, GoldIdHardcore);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1645,8 +1666,11 @@ namespace D3.Account {
         if (other.HasTimesVoteKicked) {
           TimesVoteKicked = other.TimesVoteKicked;
         }
-        if (other.HasGoldId) {
-          MergeGoldId(other.GoldId);
+        if (other.HasGoldIdNormal) {
+          MergeGoldIdNormal(other.GoldIdNormal);
+        }
+        if (other.HasGoldIdHardcore) {
+          MergeGoldIdHardcore(other.GoldIdHardcore);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1762,11 +1786,20 @@ namespace D3.Account {
             }
             case 98: {
               global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasGoldId) {
-                subBuilder.MergeFrom(GoldId);
+              if (result.hasGoldIdNormal) {
+                subBuilder.MergeFrom(GoldIdNormal);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              GoldId = subBuilder.BuildPartial();
+              GoldIdNormal = subBuilder.BuildPartial();
+              break;
+            }
+            case 106: {
+              global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
+              if (result.hasGoldIdHardcore) {
+                subBuilder.MergeFrom(GoldIdHardcore);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              GoldIdHardcore = subBuilder.BuildPartial();
               break;
             }
           }
@@ -2100,43 +2133,83 @@ namespace D3.Account {
         return this;
       }
       
-      public bool HasGoldId {
-       get { return result.hasGoldId; }
+      public bool HasGoldIdNormal {
+       get { return result.hasGoldIdNormal; }
       }
-      public global::D3.OnlineService.EntityId GoldId {
-        get { return result.GoldId; }
-        set { SetGoldId(value); }
+      public global::D3.OnlineService.EntityId GoldIdNormal {
+        get { return result.GoldIdNormal; }
+        set { SetGoldIdNormal(value); }
       }
-      public Builder SetGoldId(global::D3.OnlineService.EntityId value) {
+      public Builder SetGoldIdNormal(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasGoldId = true;
-        result.goldId_ = value;
+        result.hasGoldIdNormal = true;
+        result.goldIdNormal_ = value;
         return this;
       }
-      public Builder SetGoldId(global::D3.OnlineService.EntityId.Builder builderForValue) {
+      public Builder SetGoldIdNormal(global::D3.OnlineService.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasGoldId = true;
-        result.goldId_ = builderForValue.Build();
+        result.hasGoldIdNormal = true;
+        result.goldIdNormal_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeGoldId(global::D3.OnlineService.EntityId value) {
+      public Builder MergeGoldIdNormal(global::D3.OnlineService.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasGoldId &&
-            result.goldId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.goldId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.goldId_).MergeFrom(value).BuildPartial();
+        if (result.hasGoldIdNormal &&
+            result.goldIdNormal_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.goldIdNormal_ = global::D3.OnlineService.EntityId.CreateBuilder(result.goldIdNormal_).MergeFrom(value).BuildPartial();
         } else {
-          result.goldId_ = value;
+          result.goldIdNormal_ = value;
         }
-        result.hasGoldId = true;
+        result.hasGoldIdNormal = true;
         return this;
       }
-      public Builder ClearGoldId() {
+      public Builder ClearGoldIdNormal() {
         PrepareBuilder();
-        result.hasGoldId = false;
-        result.goldId_ = null;
+        result.hasGoldIdNormal = false;
+        result.goldIdNormal_ = null;
+        return this;
+      }
+      
+      public bool HasGoldIdHardcore {
+       get { return result.hasGoldIdHardcore; }
+      }
+      public global::D3.OnlineService.EntityId GoldIdHardcore {
+        get { return result.GoldIdHardcore; }
+        set { SetGoldIdHardcore(value); }
+      }
+      public Builder SetGoldIdHardcore(global::D3.OnlineService.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasGoldIdHardcore = true;
+        result.goldIdHardcore_ = value;
+        return this;
+      }
+      public Builder SetGoldIdHardcore(global::D3.OnlineService.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasGoldIdHardcore = true;
+        result.goldIdHardcore_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeGoldIdHardcore(global::D3.OnlineService.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasGoldIdHardcore &&
+            result.goldIdHardcore_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.goldIdHardcore_ = global::D3.OnlineService.EntityId.CreateBuilder(result.goldIdHardcore_).MergeFrom(value).BuildPartial();
+        } else {
+          result.goldIdHardcore_ = value;
+        }
+        result.hasGoldIdHardcore = true;
+        return this;
+      }
+      public Builder ClearGoldIdHardcore() {
+        PrepareBuilder();
+        result.hasGoldIdHardcore = false;
+        result.goldIdHardcore_ = null;
         return this;
       }
     }

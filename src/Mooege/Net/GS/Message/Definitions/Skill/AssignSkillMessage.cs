@@ -20,21 +20,24 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Skill
 {
-    [Message(new[] { Opcodes.AssignSkillMessage3, Opcodes.AssignSkillMessage4 })]
+    [Message( Opcodes.AssignSkillMessage3 )]
     public class AssignSkillMessage : GameMessage
     {
         public int /* sno */ SNOSkill;
+        public int RuneIndex;
         public int SkillIndex;
 
         public override void Parse(GameBitBuffer buffer)
         {
             SNOSkill = buffer.ReadInt(32);
+            RuneIndex = buffer.ReadInt(3) + (-1);
             SkillIndex = buffer.ReadInt(5);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, SNOSkill);
+            buffer.WriteInt(3, RuneIndex - (-1));
             buffer.WriteInt(5, SkillIndex);
         }
 
@@ -44,8 +47,9 @@ namespace Mooege.Net.GS.Message.Definitions.Skill
             b.AppendLine("AssignSkillMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("snoPower: 0x" + SNOSkill.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + SkillIndex.ToString("X8") + " (" + SkillIndex + ")");
+            b.Append(' ', pad); b.AppendLine("SNOSkill: 0x" + SNOSkill.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("RuneIndex: 0x" + RuneIndex.ToString("X8") + " (" + RuneIndex + ")");
+            b.Append(' ', pad); b.AppendLine("SkillIndex: 0x" + SkillIndex.ToString("X8") + " (" + SkillIndex + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

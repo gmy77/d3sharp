@@ -559,7 +559,7 @@ namespace Mooege.Core.GS.Players
             {
                 _equipment.Items.Remove(rune.DynamicID);
             }
-            int powerSNOId = _owner.SkillSet.ActiveSkills[skillIndex];
+            int powerSNOId = _owner.SkillSet.ActiveSkills[skillIndex].snoSkill;
             _skillSocketRunes[skillIndex] = 0;
             _owner.Attributes[GameAttribute.Rune_A, powerSNOId] = 0;
             _owner.Attributes[GameAttribute.Rune_B, powerSNOId] = 0;

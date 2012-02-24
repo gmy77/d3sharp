@@ -26,6 +26,8 @@ namespace D3.Profile {
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Profile.SkillsWithRunes, global::D3.Profile.SkillsWithRunes.Builder> internal__static_D3_Profile_SkillsWithRunes__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Profile_PassiveSkills__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Profile.PassiveSkills, global::D3.Profile.PassiveSkills.Builder> internal__static_D3_Profile_PassiveSkills__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_D3_Profile_KillerInfo__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::D3.Profile.KillerInfo, global::D3.Profile.KillerInfo.Builder> internal__static_D3_Profile_KillerInfo__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Profile_HeroProfile__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Profile.HeroProfile, global::D3.Profile.HeroProfile.Builder> internal__static_D3_Profile_HeroProfile__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Profile_HeroProfileList__Descriptor;
@@ -45,46 +47,50 @@ namespace D3.Profile {
           "emVyLnByb3RvGgtJdGVtcy5wcm90bxoTT25saW5lU2VydmljZS5wcm90bxoO" + 
           "R0JIYW5kbGUucHJvdG8iWQoJQ2xhc3NJbmZvEhMKCHBsYXl0aW1lGAEgASgE" + 
           "OgEwEhgKDWhpZ2hlc3RfbGV2ZWwYAiABKA06ATASHQoSaGlnaGVzdF9kaWZm" + 
-          "aWN1bHR5GAMgASgNOgEwIjQKDVNraWxsV2l0aFJ1bmUSEQoFc2tpbGwYASAC" + 
-          "KA86Ai0xEhAKBHJ1bmUYAiABKA86Ai0xIjsKD1NraWxsc1dpdGhSdW5lcxIo" + 
-          "CgVydW5lcxgBIAMoCzIZLkQzLlByb2ZpbGUuU2tpbGxXaXRoUnVuZSIjCg1Q" + 
-          "YXNzaXZlU2tpbGxzEhIKCnNub190cmFpdHMYASADKA8i0gYKC0hlcm9Qcm9m" + 
-          "aWxlEhcKD21vbnN0ZXJzX2tpbGxlZBgBIAEoBBIVCg1lbGl0ZXNfa2lsbGVk" + 
-          "GAIgASgEEhYKDmdvbGRfY29sbGVjdGVkGAMgASgEEhUKDWhpZ2hlc3RfbGV2" + 
-          "ZWwYBCABKA0SGgoSaGlnaGVzdF9kaWZmaWN1bHR5GAUgASgNEhMKC2NyZWF0" + 
-          "ZV90aW1lGAYgASgNEhcKCGhhcmRjb3JlGAcgASgIOgVmYWxzZRIOCgZhdHRh" + 
-          "Y2sYCCABKA0SEQoJcHJlY2lzaW9uGAkgASgNEg8KB2RlZmVuc2UYCiABKA0S" + 
-          "EAoIc3RyZW5ndGgYHyABKA0SEQoJZGV4dGVyaXR5GCAgASgNEhQKDGludGVs" + 
-          "bGlnZW5jZRghIAEoDRIQCgh2aXRhbGl0eRgLIAEoDRINCgVhcm1vchgMIAEo" + 
-          "DRILCgNkcHMYDSABKAISFQoNcmVzaXN0X2FyY2FuZRgOIAEoDRITCgtyZXNp" + 
-          "c3RfZmlyZRgPIAEoDRIYChByZXNpc3RfbGlnaHRuaW5nGBAgASgNEhUKDXJl" + 
-          "c2lzdF9wb2lzb24YESABKA0SEwoLcmVzaXN0X2NvbGQYEiABKA0SJQoJZXF1" + 
-          "aXBtZW50GBMgASgLMhIuRDMuSXRlbXMuSXRlbUxpc3QSNgoRc25vX2FjdGl2" + 
-          "ZV9za2lsbHMYFCABKAsyGy5EMy5Qcm9maWxlLlNraWxsc1dpdGhSdW5lcxIt" + 
-          "Cgpzbm9fdHJhaXRzGBUgASgLMhkuRDMuUHJvZmlsZS5QYXNzaXZlU2tpbGxz" + 
-          "EhIKCmRlYXRoX3RpbWUYFiABKA0SJgoGa2lsbGVyGBcgASgLMhYuRDMuR2Ft" + 
-          "ZUJhbGFuY2UuSGFuZGxlEi0KDWtpbGxfbG9jYXRpb24YGCABKAsyFi5EMy5H" + 
-          "YW1lQmFsYW5jZS5IYW5kbGUSDwoHZXBpdGFwaBgZIAEoCRIrCgdoZXJvX2lk" + 
-          "GBogASgLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIXCg9kYW1hZ2Vf" + 
-          "aW5jcmVhc2UYGyABKAISEwoLY3JpdF9jaGFuY2UYHCABKAISGAoQZGFtYWdl" + 
-          "X3JlZHVjdGlvbhgdIAEoAhIMCgRsaWZlGB4gASgNIjkKD0hlcm9Qcm9maWxl" + 
-          "TGlzdBImCgVoZXJvcxgBIAMoCzIXLkQzLlByb2ZpbGUuSGVyb1Byb2ZpbGUi" + 
-          "uAUKDkFjY291bnRQcm9maWxlEhoKEmhpZ2hlc3RfZGlmZmljdWx0eRgBIAEo" + 
-          "DRIhChloaWdoZXN0X2Jvc3NfZGlmZmljdWx0eV8xGAIgASgNEiEKGWhpZ2hl" + 
-          "c3RfYm9zc19kaWZmaWN1bHR5XzIYAyABKA0SIQoZaGlnaGVzdF9ib3NzX2Rp" + 
-          "ZmZpY3VsdHlfMxgEIAEoDRIhChloaWdoZXN0X2Jvc3NfZGlmZmljdWx0eV80" + 
-          "GAUgASgNEhoKD21vbnN0ZXJzX2tpbGxlZBgGIAEoBDoBMBIYCg1lbGl0ZXNf" + 
-          "a2lsbGVkGAcgASgEOgEwEhkKDmdvbGRfY29sbGVjdGVkGAggASgEOgEwEh4K" + 
-          "FmhpZ2hlc3RfaGFyZGNvcmVfbGV2ZWwYCSABKAQSIAoYaGFyZGNvcmVfbW9u" + 
-          "c3RlcnNfa2lsbGVkGAogASgEEi4KD2NsYXNzX2JhcmJhcmlhbhgLIAEoCzIV" + 
-          "LkQzLlByb2ZpbGUuQ2xhc3NJbmZvEjAKEWNsYXNzX2RlbW9uaHVudGVyGAwg" + 
-          "ASgLMhUuRDMuUHJvZmlsZS5DbGFzc0luZm8SKQoKY2xhc3NfbW9uaxgNIAEo" + 
-          "CzIVLkQzLlByb2ZpbGUuQ2xhc3NJbmZvEjAKEWNsYXNzX3dpdGNoZG9jdG9y" + 
-          "GA4gASgLMhUuRDMuUHJvZmlsZS5DbGFzc0luZm8SKwoMY2xhc3Nfd2l6YXJk" + 
-          "GA8gASgLMhUuRDMuUHJvZmlsZS5DbGFzc0luZm8SKQohZGVwcmVjYXRlZF9h" + 
-          "Y2hpZXZlbWVudF9zaG93Y2FzZV8wGBAgASgEEikKIWRlcHJlY2F0ZWRfYWNo" + 
-          "aWV2ZW1lbnRfc2hvd2Nhc2VfMRgRIAEoBBIpCiFkZXByZWNhdGVkX2FjaGll" + 
-          "dmVtZW50X3Nob3djYXNlXzIYEiABKAQ=");
+          "aWN1bHR5GAMgASgNOgEwIjkKDVNraWxsV2l0aFJ1bmUSEQoFc2tpbGwYASAC" + 
+          "KA86Ai0xEhUKCXJ1bmVfdHlwZRgDIAEoEToCLTEiOwoPU2tpbGxzV2l0aFJ1" + 
+          "bmVzEigKBXJ1bmVzGAEgAygLMhkuRDMuUHJvZmlsZS5Ta2lsbFdpdGhSdW5l" + 
+          "IiMKDVBhc3NpdmVTa2lsbHMSEgoKc25vX3RyYWl0cxgBIAMoDyJJCgpLaWxs" + 
+          "ZXJJbmZvEhIKCnNub19raWxsZXIYASABKA0SDgoGcmFyaXR5GAIgASgNEhcK" + 
+          "D3JhcmVfbmFtZV9nYmlkcxgDIAMoBSKuBwoLSGVyb1Byb2ZpbGUSFwoPbW9u" + 
+          "c3RlcnNfa2lsbGVkGAEgASgEEhUKDWVsaXRlc19raWxsZWQYAiABKAQSFgoO" + 
+          "Z29sZF9jb2xsZWN0ZWQYAyABKAQSFQoNaGlnaGVzdF9sZXZlbBgEIAEoDRIa" + 
+          "ChJoaWdoZXN0X2RpZmZpY3VsdHkYBSABKA0SEwoLY3JlYXRlX3RpbWUYBiAB" + 
+          "KA0SFwoIaGFyZGNvcmUYByABKAg6BWZhbHNlEg4KBmF0dGFjaxgIIAEoDRIR" + 
+          "CglwcmVjaXNpb24YCSABKA0SDwoHZGVmZW5zZRgKIAEoDRIQCghzdHJlbmd0" + 
+          "aBgfIAEoDRIRCglkZXh0ZXJpdHkYICABKA0SFAoMaW50ZWxsaWdlbmNlGCEg" + 
+          "ASgNEhAKCHZpdGFsaXR5GAsgASgNEg0KBWFybW9yGAwgASgNEgsKA2RwcxgN" + 
+          "IAEoAhIVCg1yZXNpc3RfYXJjYW5lGA4gASgNEhMKC3Jlc2lzdF9maXJlGA8g" + 
+          "ASgNEhgKEHJlc2lzdF9saWdodG5pbmcYECABKA0SFQoNcmVzaXN0X3BvaXNv" + 
+          "bhgRIAEoDRITCgtyZXNpc3RfY29sZBgSIAEoDRIlCgllcXVpcG1lbnQYEyAB" + 
+          "KAsyEi5EMy5JdGVtcy5JdGVtTGlzdBI2ChFzbm9fYWN0aXZlX3NraWxscxgU" + 
+          "IAEoCzIbLkQzLlByb2ZpbGUuU2tpbGxzV2l0aFJ1bmVzEi0KCnNub190cmFp" + 
+          "dHMYFSABKAsyGS5EMy5Qcm9maWxlLlBhc3NpdmVTa2lsbHMSEgoKZGVhdGhf" + 
+          "dGltZRgWIAEoDRImCgZraWxsZXIYFyABKAsyFi5EMy5HYW1lQmFsYW5jZS5I" + 
+          "YW5kbGUSLQoNa2lsbF9sb2NhdGlvbhgYIAEoCzIWLkQzLkdhbWVCYWxhbmNl" + 
+          "LkhhbmRsZRISCgpzbm9fa2lsbGVyGCMgASgNEisKC2tpbGxlcl9pbmZvGCQg" + 
+          "ASgLMhYuRDMuUHJvZmlsZS5LaWxsZXJJbmZvEhkKEXNub19raWxsX2xvY2F0" + 
+          "aW9uGCIgASgNEg8KB2VwaXRhcGgYGSABKAkSKwoHaGVyb19pZBgaIAEoCzIa" + 
+          "LkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQSFwoPZGFtYWdlX2luY3JlYXNl" + 
+          "GBsgASgCEhMKC2NyaXRfY2hhbmNlGBwgASgCEhgKEGRhbWFnZV9yZWR1Y3Rp" + 
+          "b24YHSABKAISDAoEbGlmZRgeIAEoDSI5Cg9IZXJvUHJvZmlsZUxpc3QSJgoF" + 
+          "aGVyb3MYASADKAsyFy5EMy5Qcm9maWxlLkhlcm9Qcm9maWxlIrgFCg5BY2Nv" + 
+          "dW50UHJvZmlsZRIaChJoaWdoZXN0X2RpZmZpY3VsdHkYASABKA0SIQoZaGln" + 
+          "aGVzdF9ib3NzX2RpZmZpY3VsdHlfMRgCIAEoDRIhChloaWdoZXN0X2Jvc3Nf" + 
+          "ZGlmZmljdWx0eV8yGAMgASgNEiEKGWhpZ2hlc3RfYm9zc19kaWZmaWN1bHR5" + 
+          "XzMYBCABKA0SIQoZaGlnaGVzdF9ib3NzX2RpZmZpY3VsdHlfNBgFIAEoDRIa" + 
+          "Cg9tb25zdGVyc19raWxsZWQYBiABKAQ6ATASGAoNZWxpdGVzX2tpbGxlZBgH" + 
+          "IAEoBDoBMBIZCg5nb2xkX2NvbGxlY3RlZBgIIAEoBDoBMBIeChZoaWdoZXN0" + 
+          "X2hhcmRjb3JlX2xldmVsGAkgASgEEiAKGGhhcmRjb3JlX21vbnN0ZXJzX2tp" + 
+          "bGxlZBgKIAEoBBIuCg9jbGFzc19iYXJiYXJpYW4YCyABKAsyFS5EMy5Qcm9m" + 
+          "aWxlLkNsYXNzSW5mbxIwChFjbGFzc19kZW1vbmh1bnRlchgMIAEoCzIVLkQz" + 
+          "LlByb2ZpbGUuQ2xhc3NJbmZvEikKCmNsYXNzX21vbmsYDSABKAsyFS5EMy5Q" + 
+          "cm9maWxlLkNsYXNzSW5mbxIwChFjbGFzc193aXRjaGRvY3RvchgOIAEoCzIV" + 
+          "LkQzLlByb2ZpbGUuQ2xhc3NJbmZvEisKDGNsYXNzX3dpemFyZBgPIAEoCzIV" + 
+          "LkQzLlByb2ZpbGUuQ2xhc3NJbmZvEikKIWRlcHJlY2F0ZWRfYWNoaWV2ZW1l" + 
+          "bnRfc2hvd2Nhc2VfMBgQIAEoBBIpCiFkZXByZWNhdGVkX2FjaGlldmVtZW50" + 
+          "X3Nob3djYXNlXzEYESABKAQSKQohZGVwcmVjYXRlZF9hY2hpZXZlbWVudF9z" + 
+          "aG93Y2FzZV8yGBIgASgE");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Profile_ClassInfo__Descriptor = Descriptor.MessageTypes[0];
@@ -94,7 +100,7 @@ namespace D3.Profile {
         internal__static_D3_Profile_SkillWithRune__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_Profile_SkillWithRune__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Profile.SkillWithRune, global::D3.Profile.SkillWithRune.Builder>(internal__static_D3_Profile_SkillWithRune__Descriptor,
-                new string[] { "Skill", "Rune", });
+                new string[] { "Skill", "RuneType", });
         internal__static_D3_Profile_SkillsWithRunes__Descriptor = Descriptor.MessageTypes[2];
         internal__static_D3_Profile_SkillsWithRunes__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Profile.SkillsWithRunes, global::D3.Profile.SkillsWithRunes.Builder>(internal__static_D3_Profile_SkillsWithRunes__Descriptor,
@@ -103,15 +109,19 @@ namespace D3.Profile {
         internal__static_D3_Profile_PassiveSkills__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Profile.PassiveSkills, global::D3.Profile.PassiveSkills.Builder>(internal__static_D3_Profile_PassiveSkills__Descriptor,
                 new string[] { "SnoTraits", });
-        internal__static_D3_Profile_HeroProfile__Descriptor = Descriptor.MessageTypes[4];
+        internal__static_D3_Profile_KillerInfo__Descriptor = Descriptor.MessageTypes[4];
+        internal__static_D3_Profile_KillerInfo__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::D3.Profile.KillerInfo, global::D3.Profile.KillerInfo.Builder>(internal__static_D3_Profile_KillerInfo__Descriptor,
+                new string[] { "SnoKiller", "Rarity", "RareNameGbids", });
+        internal__static_D3_Profile_HeroProfile__Descriptor = Descriptor.MessageTypes[5];
         internal__static_D3_Profile_HeroProfile__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Profile.HeroProfile, global::D3.Profile.HeroProfile.Builder>(internal__static_D3_Profile_HeroProfile__Descriptor,
-                new string[] { "MonstersKilled", "ElitesKilled", "GoldCollected", "HighestLevel", "HighestDifficulty", "CreateTime", "Hardcore", "Attack", "Precision", "Defense", "Strength", "Dexterity", "Intelligence", "Vitality", "Armor", "Dps", "ResistArcane", "ResistFire", "ResistLightning", "ResistPoison", "ResistCold", "Equipment", "SnoActiveSkills", "SnoTraits", "DeathTime", "Killer", "KillLocation", "Epitaph", "HeroId", "DamageIncrease", "CritChance", "DamageReduction", "Life", });
-        internal__static_D3_Profile_HeroProfileList__Descriptor = Descriptor.MessageTypes[5];
+                new string[] { "MonstersKilled", "ElitesKilled", "GoldCollected", "HighestLevel", "HighestDifficulty", "CreateTime", "Hardcore", "Attack", "Precision", "Defense", "Strength", "Dexterity", "Intelligence", "Vitality", "Armor", "Dps", "ResistArcane", "ResistFire", "ResistLightning", "ResistPoison", "ResistCold", "Equipment", "SnoActiveSkills", "SnoTraits", "DeathTime", "Killer", "KillLocation", "SnoKiller", "KillerInfo", "SnoKillLocation", "Epitaph", "HeroId", "DamageIncrease", "CritChance", "DamageReduction", "Life", });
+        internal__static_D3_Profile_HeroProfileList__Descriptor = Descriptor.MessageTypes[6];
         internal__static_D3_Profile_HeroProfileList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Profile.HeroProfileList, global::D3.Profile.HeroProfileList.Builder>(internal__static_D3_Profile_HeroProfileList__Descriptor,
                 new string[] { "Heros", });
-        internal__static_D3_Profile_AccountProfile__Descriptor = Descriptor.MessageTypes[6];
+        internal__static_D3_Profile_AccountProfile__Descriptor = Descriptor.MessageTypes[7];
         internal__static_D3_Profile_AccountProfile__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Profile.AccountProfile, global::D3.Profile.AccountProfile.Builder>(internal__static_D3_Profile_AccountProfile__Descriptor,
                 new string[] { "HighestDifficulty", "HighestBossDifficulty1", "HighestBossDifficulty2", "HighestBossDifficulty3", "HighestBossDifficulty4", "MonstersKilled", "ElitesKilled", "GoldCollected", "HighestHardcoreLevel", "HardcoreMonstersKilled", "ClassBarbarian", "ClassDemonhunter", "ClassMonk", "ClassWitchdoctor", "ClassWizard", "DeprecatedAchievementShowcase0", "DeprecatedAchievementShowcase1", "DeprecatedAchievementShowcase2", });
@@ -495,8 +505,8 @@ namespace D3.Profile {
   public sealed partial class SkillWithRune : pb::GeneratedMessage<SkillWithRune, SkillWithRune.Builder> {
     private SkillWithRune() { }
     private static readonly SkillWithRune defaultInstance = new SkillWithRune().MakeReadOnly();
-    private static readonly string[] _skillWithRuneFieldNames = new string[] { "rune", "skill" };
-    private static readonly uint[] _skillWithRuneFieldTags = new uint[] { 21, 13 };
+    private static readonly string[] _skillWithRuneFieldNames = new string[] { "rune_type", "skill" };
+    private static readonly uint[] _skillWithRuneFieldTags = new uint[] { 24, 13 };
     public static SkillWithRune DefaultInstance {
       get { return defaultInstance; }
     }
@@ -527,14 +537,14 @@ namespace D3.Profile {
       get { return skill_; }
     }
     
-    public const int RuneFieldNumber = 2;
-    private bool hasRune;
-    private int rune_ = -1;
-    public bool HasRune {
-      get { return hasRune; }
+    public const int RuneTypeFieldNumber = 3;
+    private bool hasRuneType;
+    private int runeType_ = -1;
+    public bool HasRuneType {
+      get { return hasRuneType; }
     }
-    public int Rune {
-      get { return rune_; }
+    public int RuneType {
+      get { return runeType_; }
     }
     
     public override bool IsInitialized {
@@ -550,8 +560,8 @@ namespace D3.Profile {
       if (hasSkill) {
         output.WriteSFixed32(1, field_names[1], Skill);
       }
-      if (hasRune) {
-        output.WriteSFixed32(2, field_names[0], Rune);
+      if (hasRuneType) {
+        output.WriteSInt32(3, field_names[0], RuneType);
       }
       UnknownFields.WriteTo(output);
     }
@@ -566,8 +576,8 @@ namespace D3.Profile {
         if (hasSkill) {
           size += pb::CodedOutputStream.ComputeSFixed32Size(1, Skill);
         }
-        if (hasRune) {
-          size += pb::CodedOutputStream.ComputeSFixed32Size(2, Rune);
+        if (hasRuneType) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(3, RuneType);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -698,8 +708,8 @@ namespace D3.Profile {
         if (other.HasSkill) {
           Skill = other.Skill;
         }
-        if (other.HasRune) {
-          Rune = other.Rune;
+        if (other.HasRuneType) {
+          RuneType = other.RuneType;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -748,8 +758,8 @@ namespace D3.Profile {
               result.hasSkill = input.ReadSFixed32(ref result.skill_);
               break;
             }
-            case 21: {
-              result.hasRune = input.ReadSFixed32(ref result.rune_);
+            case 24: {
+              result.hasRuneType = input.ReadSInt32(ref result.runeType_);
               break;
             }
           }
@@ -782,23 +792,23 @@ namespace D3.Profile {
         return this;
       }
       
-      public bool HasRune {
-        get { return result.hasRune; }
+      public bool HasRuneType {
+        get { return result.hasRuneType; }
       }
-      public int Rune {
-        get { return result.Rune; }
-        set { SetRune(value); }
+      public int RuneType {
+        get { return result.RuneType; }
+        set { SetRuneType(value); }
       }
-      public Builder SetRune(int value) {
+      public Builder SetRuneType(int value) {
         PrepareBuilder();
-        result.hasRune = true;
-        result.rune_ = value;
+        result.hasRuneType = true;
+        result.runeType_ = value;
         return this;
       }
-      public Builder ClearRune() {
+      public Builder ClearRuneType() {
         PrepareBuilder();
-        result.hasRune = false;
-        result.rune_ = -1;
+        result.hasRuneType = false;
+        result.runeType_ = -1;
         return this;
       }
     }
@@ -1405,11 +1415,390 @@ namespace D3.Profile {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class KillerInfo : pb::GeneratedMessage<KillerInfo, KillerInfo.Builder> {
+    private KillerInfo() { }
+    private static readonly KillerInfo defaultInstance = new KillerInfo().MakeReadOnly();
+    private static readonly string[] _killerInfoFieldNames = new string[] { "rare_name_gbids", "rarity", "sno_killer" };
+    private static readonly uint[] _killerInfoFieldTags = new uint[] { 24, 16, 8 };
+    public static KillerInfo DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override KillerInfo DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override KillerInfo ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::D3.Profile.Profile.internal__static_D3_Profile_KillerInfo__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<KillerInfo, KillerInfo.Builder> InternalFieldAccessors {
+      get { return global::D3.Profile.Profile.internal__static_D3_Profile_KillerInfo__FieldAccessorTable; }
+    }
+    
+    public const int SnoKillerFieldNumber = 1;
+    private bool hasSnoKiller;
+    private uint snoKiller_;
+    public bool HasSnoKiller {
+      get { return hasSnoKiller; }
+    }
+    public uint SnoKiller {
+      get { return snoKiller_; }
+    }
+    
+    public const int RarityFieldNumber = 2;
+    private bool hasRarity;
+    private uint rarity_;
+    public bool HasRarity {
+      get { return hasRarity; }
+    }
+    public uint Rarity {
+      get { return rarity_; }
+    }
+    
+    public const int RareNameGbidsFieldNumber = 3;
+    private pbc::PopsicleList<int> rareNameGbids_ = new pbc::PopsicleList<int>();
+    public scg::IList<int> RareNameGbidsList {
+      get { return pbc::Lists.AsReadOnly(rareNameGbids_); }
+    }
+    public int RareNameGbidsCount {
+      get { return rareNameGbids_.Count; }
+    }
+    public int GetRareNameGbids(int index) {
+      return rareNameGbids_[index];
+    }
+    
+    public override bool IsInitialized {
+      get {
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _killerInfoFieldNames;
+      if (hasSnoKiller) {
+        output.WriteUInt32(1, field_names[2], SnoKiller);
+      }
+      if (hasRarity) {
+        output.WriteUInt32(2, field_names[1], Rarity);
+      }
+      if (rareNameGbids_.Count > 0) {
+        output.WriteInt32Array(3, field_names[0], rareNameGbids_);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasSnoKiller) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, SnoKiller);
+        }
+        if (hasRarity) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, Rarity);
+        }
+        {
+          int dataSize = 0;
+          foreach (int element in RareNameGbidsList) {
+            dataSize += pb::CodedOutputStream.ComputeInt32SizeNoTag(element);
+          }
+          size += dataSize;
+          size += 1 * rareNameGbids_.Count;
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static KillerInfo ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static KillerInfo ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static KillerInfo ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static KillerInfo ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static KillerInfo ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static KillerInfo ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static KillerInfo ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static KillerInfo ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static KillerInfo ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static KillerInfo ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private KillerInfo MakeReadOnly() {
+      rareNameGbids_.MakeReadOnly();
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(KillerInfo prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<KillerInfo, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(KillerInfo cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private KillerInfo result;
+      
+      private KillerInfo PrepareBuilder() {
+        if (resultIsReadOnly) {
+          KillerInfo original = result;
+          result = new KillerInfo();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override KillerInfo MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::D3.Profile.KillerInfo.Descriptor; }
+      }
+      
+      public override KillerInfo DefaultInstanceForType {
+        get { return global::D3.Profile.KillerInfo.DefaultInstance; }
+      }
+      
+      public override KillerInfo BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is KillerInfo) {
+          return MergeFrom((KillerInfo) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(KillerInfo other) {
+        if (other == global::D3.Profile.KillerInfo.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasSnoKiller) {
+          SnoKiller = other.SnoKiller;
+        }
+        if (other.HasRarity) {
+          Rarity = other.Rarity;
+        }
+        if (other.rareNameGbids_.Count != 0) {
+          result.rareNameGbids_.Add(other.rareNameGbids_);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_killerInfoFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _killerInfoFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasSnoKiller = input.ReadUInt32(ref result.snoKiller_);
+              break;
+            }
+            case 16: {
+              result.hasRarity = input.ReadUInt32(ref result.rarity_);
+              break;
+            }
+            case 26:
+            case 24: {
+              input.ReadInt32Array(tag, field_name, result.rareNameGbids_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasSnoKiller {
+        get { return result.hasSnoKiller; }
+      }
+      public uint SnoKiller {
+        get { return result.SnoKiller; }
+        set { SetSnoKiller(value); }
+      }
+      public Builder SetSnoKiller(uint value) {
+        PrepareBuilder();
+        result.hasSnoKiller = true;
+        result.snoKiller_ = value;
+        return this;
+      }
+      public Builder ClearSnoKiller() {
+        PrepareBuilder();
+        result.hasSnoKiller = false;
+        result.snoKiller_ = 0;
+        return this;
+      }
+      
+      public bool HasRarity {
+        get { return result.hasRarity; }
+      }
+      public uint Rarity {
+        get { return result.Rarity; }
+        set { SetRarity(value); }
+      }
+      public Builder SetRarity(uint value) {
+        PrepareBuilder();
+        result.hasRarity = true;
+        result.rarity_ = value;
+        return this;
+      }
+      public Builder ClearRarity() {
+        PrepareBuilder();
+        result.hasRarity = false;
+        result.rarity_ = 0;
+        return this;
+      }
+      
+      public pbc::IPopsicleList<int> RareNameGbidsList {
+        get { return PrepareBuilder().rareNameGbids_; }
+      }
+      public int RareNameGbidsCount {
+        get { return result.RareNameGbidsCount; }
+      }
+      public int GetRareNameGbids(int index) {
+        return result.GetRareNameGbids(index);
+      }
+      public Builder SetRareNameGbids(int index, int value) {
+        PrepareBuilder();
+        result.rareNameGbids_[index] = value;
+        return this;
+      }
+      public Builder AddRareNameGbids(int value) {
+        PrepareBuilder();
+        result.rareNameGbids_.Add(value);
+        return this;
+      }
+      public Builder AddRangeRareNameGbids(scg::IEnumerable<int> values) {
+        PrepareBuilder();
+        result.rareNameGbids_.Add(values);
+        return this;
+      }
+      public Builder ClearRareNameGbids() {
+        PrepareBuilder();
+        result.rareNameGbids_.Clear();
+        return this;
+      }
+    }
+    static KillerInfo() {
+      object.ReferenceEquals(global::D3.Profile.Profile.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
   public sealed partial class HeroProfile : pb::GeneratedMessage<HeroProfile, HeroProfile.Builder> {
     private HeroProfile() { }
     private static readonly HeroProfile defaultInstance = new HeroProfile().MakeReadOnly();
-    private static readonly string[] _heroProfileFieldNames = new string[] { "armor", "attack", "create_time", "crit_chance", "damage_increase", "damage_reduction", "death_time", "defense", "dexterity", "dps", "elites_killed", "epitaph", "equipment", "gold_collected", "hardcore", "hero_id", "highest_difficulty", "highest_level", "intelligence", "kill_location", "killer", "life", "monsters_killed", "precision", "resist_arcane", "resist_cold", "resist_fire", "resist_lightning", "resist_poison", "sno_active_skills", "sno_traits", "strength", "vitality" };
-    private static readonly uint[] _heroProfileFieldTags = new uint[] { 96, 64, 48, 229, 221, 237, 176, 80, 256, 109, 16, 202, 154, 24, 56, 210, 40, 32, 264, 194, 186, 240, 8, 72, 112, 144, 120, 128, 136, 162, 170, 248, 88 };
+    private static readonly string[] _heroProfileFieldNames = new string[] { "armor", "attack", "create_time", "crit_chance", "damage_increase", "damage_reduction", "death_time", "defense", "dexterity", "dps", "elites_killed", "epitaph", "equipment", "gold_collected", "hardcore", "hero_id", "highest_difficulty", "highest_level", "intelligence", "kill_location", "killer", "killer_info", "life", "monsters_killed", "precision", "resist_arcane", "resist_cold", "resist_fire", "resist_lightning", "resist_poison", "sno_active_skills", "sno_kill_location", "sno_killer", "sno_traits", "strength", "vitality" };
+    private static readonly uint[] _heroProfileFieldTags = new uint[] { 96, 64, 48, 229, 221, 237, 176, 80, 256, 109, 16, 202, 154, 24, 56, 210, 40, 32, 264, 194, 186, 290, 240, 8, 72, 112, 144, 120, 128, 136, 162, 272, 280, 170, 248, 88 };
     public static HeroProfile DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1700,6 +2089,36 @@ namespace D3.Profile {
       get { return killLocation_ ?? global::D3.GameBalance.Handle.DefaultInstance; }
     }
     
+    public const int SnoKillerFieldNumber = 35;
+    private bool hasSnoKiller;
+    private uint snoKiller_;
+    public bool HasSnoKiller {
+      get { return hasSnoKiller; }
+    }
+    public uint SnoKiller {
+      get { return snoKiller_; }
+    }
+    
+    public const int KillerInfoFieldNumber = 36;
+    private bool hasKillerInfo;
+    private global::D3.Profile.KillerInfo killerInfo_;
+    public bool HasKillerInfo {
+      get { return hasKillerInfo; }
+    }
+    public global::D3.Profile.KillerInfo KillerInfo {
+      get { return killerInfo_ ?? global::D3.Profile.KillerInfo.DefaultInstance; }
+    }
+    
+    public const int SnoKillLocationFieldNumber = 34;
+    private bool hasSnoKillLocation;
+    private uint snoKillLocation_;
+    public bool HasSnoKillLocation {
+      get { return hasSnoKillLocation; }
+    }
+    public uint SnoKillLocation {
+      get { return snoKillLocation_; }
+    }
+    
     public const int EpitaphFieldNumber = 25;
     private bool hasEpitaph;
     private string epitaph_ = "";
@@ -1785,7 +2204,7 @@ namespace D3.Profile {
       int size = SerializedSize;
       string[] field_names = _heroProfileFieldNames;
       if (hasMonstersKilled) {
-        output.WriteUInt64(1, field_names[22], MonstersKilled);
+        output.WriteUInt64(1, field_names[23], MonstersKilled);
       }
       if (hasElitesKilled) {
         output.WriteUInt64(2, field_names[10], ElitesKilled);
@@ -1809,13 +2228,13 @@ namespace D3.Profile {
         output.WriteUInt32(8, field_names[1], Attack);
       }
       if (hasPrecision) {
-        output.WriteUInt32(9, field_names[23], Precision);
+        output.WriteUInt32(9, field_names[24], Precision);
       }
       if (hasDefense) {
         output.WriteUInt32(10, field_names[7], Defense);
       }
       if (hasVitality) {
-        output.WriteUInt32(11, field_names[32], Vitality);
+        output.WriteUInt32(11, field_names[35], Vitality);
       }
       if (hasArmor) {
         output.WriteUInt32(12, field_names[0], Armor);
@@ -1824,28 +2243,28 @@ namespace D3.Profile {
         output.WriteFloat(13, field_names[9], Dps);
       }
       if (hasResistArcane) {
-        output.WriteUInt32(14, field_names[24], ResistArcane);
+        output.WriteUInt32(14, field_names[25], ResistArcane);
       }
       if (hasResistFire) {
-        output.WriteUInt32(15, field_names[26], ResistFire);
+        output.WriteUInt32(15, field_names[27], ResistFire);
       }
       if (hasResistLightning) {
-        output.WriteUInt32(16, field_names[27], ResistLightning);
+        output.WriteUInt32(16, field_names[28], ResistLightning);
       }
       if (hasResistPoison) {
-        output.WriteUInt32(17, field_names[28], ResistPoison);
+        output.WriteUInt32(17, field_names[29], ResistPoison);
       }
       if (hasResistCold) {
-        output.WriteUInt32(18, field_names[25], ResistCold);
+        output.WriteUInt32(18, field_names[26], ResistCold);
       }
       if (hasEquipment) {
         output.WriteMessage(19, field_names[12], Equipment);
       }
       if (hasSnoActiveSkills) {
-        output.WriteMessage(20, field_names[29], SnoActiveSkills);
+        output.WriteMessage(20, field_names[30], SnoActiveSkills);
       }
       if (hasSnoTraits) {
-        output.WriteMessage(21, field_names[30], SnoTraits);
+        output.WriteMessage(21, field_names[33], SnoTraits);
       }
       if (hasDeathTime) {
         output.WriteUInt32(22, field_names[6], DeathTime);
@@ -1872,16 +2291,25 @@ namespace D3.Profile {
         output.WriteFloat(29, field_names[5], DamageReduction);
       }
       if (hasLife) {
-        output.WriteUInt32(30, field_names[21], Life);
+        output.WriteUInt32(30, field_names[22], Life);
       }
       if (hasStrength) {
-        output.WriteUInt32(31, field_names[31], Strength);
+        output.WriteUInt32(31, field_names[34], Strength);
       }
       if (hasDexterity) {
         output.WriteUInt32(32, field_names[8], Dexterity);
       }
       if (hasIntelligence) {
         output.WriteUInt32(33, field_names[18], Intelligence);
+      }
+      if (hasSnoKillLocation) {
+        output.WriteUInt32(34, field_names[31], SnoKillLocation);
+      }
+      if (hasSnoKiller) {
+        output.WriteUInt32(35, field_names[32], SnoKiller);
+      }
+      if (hasKillerInfo) {
+        output.WriteMessage(36, field_names[21], KillerInfo);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1973,6 +2401,15 @@ namespace D3.Profile {
         }
         if (hasKillLocation) {
           size += pb::CodedOutputStream.ComputeMessageSize(24, KillLocation);
+        }
+        if (hasSnoKiller) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(35, SnoKiller);
+        }
+        if (hasKillerInfo) {
+          size += pb::CodedOutputStream.ComputeMessageSize(36, KillerInfo);
+        }
+        if (hasSnoKillLocation) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(34, SnoKillLocation);
         }
         if (hasEpitaph) {
           size += pb::CodedOutputStream.ComputeStringSize(25, Epitaph);
@@ -2199,6 +2636,15 @@ namespace D3.Profile {
         if (other.HasKillLocation) {
           MergeKillLocation(other.KillLocation);
         }
+        if (other.HasSnoKiller) {
+          SnoKiller = other.SnoKiller;
+        }
+        if (other.HasKillerInfo) {
+          MergeKillerInfo(other.KillerInfo);
+        }
+        if (other.HasSnoKillLocation) {
+          SnoKillLocation = other.SnoKillLocation;
+        }
         if (other.HasEpitaph) {
           Epitaph = other.Epitaph;
         }
@@ -2420,6 +2866,23 @@ namespace D3.Profile {
             }
             case 264: {
               result.hasIntelligence = input.ReadUInt32(ref result.intelligence_);
+              break;
+            }
+            case 272: {
+              result.hasSnoKillLocation = input.ReadUInt32(ref result.snoKillLocation_);
+              break;
+            }
+            case 280: {
+              result.hasSnoKiller = input.ReadUInt32(ref result.snoKiller_);
+              break;
+            }
+            case 290: {
+              global::D3.Profile.KillerInfo.Builder subBuilder = global::D3.Profile.KillerInfo.CreateBuilder();
+              if (result.hasKillerInfo) {
+                subBuilder.MergeFrom(KillerInfo);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              KillerInfo = subBuilder.BuildPartial();
               break;
             }
           }
@@ -3069,6 +3532,86 @@ namespace D3.Profile {
         PrepareBuilder();
         result.hasKillLocation = false;
         result.killLocation_ = null;
+        return this;
+      }
+      
+      public bool HasSnoKiller {
+        get { return result.hasSnoKiller; }
+      }
+      public uint SnoKiller {
+        get { return result.SnoKiller; }
+        set { SetSnoKiller(value); }
+      }
+      public Builder SetSnoKiller(uint value) {
+        PrepareBuilder();
+        result.hasSnoKiller = true;
+        result.snoKiller_ = value;
+        return this;
+      }
+      public Builder ClearSnoKiller() {
+        PrepareBuilder();
+        result.hasSnoKiller = false;
+        result.snoKiller_ = 0;
+        return this;
+      }
+      
+      public bool HasKillerInfo {
+       get { return result.hasKillerInfo; }
+      }
+      public global::D3.Profile.KillerInfo KillerInfo {
+        get { return result.KillerInfo; }
+        set { SetKillerInfo(value); }
+      }
+      public Builder SetKillerInfo(global::D3.Profile.KillerInfo value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasKillerInfo = true;
+        result.killerInfo_ = value;
+        return this;
+      }
+      public Builder SetKillerInfo(global::D3.Profile.KillerInfo.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasKillerInfo = true;
+        result.killerInfo_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeKillerInfo(global::D3.Profile.KillerInfo value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasKillerInfo &&
+            result.killerInfo_ != global::D3.Profile.KillerInfo.DefaultInstance) {
+            result.killerInfo_ = global::D3.Profile.KillerInfo.CreateBuilder(result.killerInfo_).MergeFrom(value).BuildPartial();
+        } else {
+          result.killerInfo_ = value;
+        }
+        result.hasKillerInfo = true;
+        return this;
+      }
+      public Builder ClearKillerInfo() {
+        PrepareBuilder();
+        result.hasKillerInfo = false;
+        result.killerInfo_ = null;
+        return this;
+      }
+      
+      public bool HasSnoKillLocation {
+        get { return result.hasSnoKillLocation; }
+      }
+      public uint SnoKillLocation {
+        get { return result.SnoKillLocation; }
+        set { SetSnoKillLocation(value); }
+      }
+      public Builder SetSnoKillLocation(uint value) {
+        PrepareBuilder();
+        result.hasSnoKillLocation = true;
+        result.snoKillLocation_ = value;
+        return this;
+      }
+      public Builder ClearSnoKillLocation() {
+        PrepareBuilder();
+        result.hasSnoKillLocation = false;
+        result.snoKillLocation_ = 0;
         return this;
       }
       

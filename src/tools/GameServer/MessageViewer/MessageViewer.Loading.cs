@@ -176,7 +176,7 @@ namespace GameMessageViewer
                             LoadDump(gsStreams.First());
                         else
                         {
-                            if (DialogResult.Yes == MessageBox.Show("The dump contains more than one unidentified stream, but in none of them mooege version {0} was found. The dump is either broken or of a version Mooege does not support. Continue loading all streams? (This may take longer and messages may appear broken)", "Multiple streams found", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                            if (DialogResult.Yes == MessageBox.Show(string.Format("The dump contains more than one unidentified stream, but in none of them mooege version {0} was found. The dump is either broken or of a version Mooege does not support. Continue loading all streams? (This may take longer and messages may appear broken)", Mooege.Common.Versions.VersionInfo.Ingame.VersionString), "Multiple streams found", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                                 foreach (var stream in gsStreams)
                                     LoadDump(stream);
                         }

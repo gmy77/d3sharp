@@ -40,6 +40,8 @@ namespace Mooege.Core.MooNet.Services
         public override void RegisterWithService(IRpcController controller, bnet.protocol.achievements.RegisterWithServiceRequest request, Action<bnet.protocol.achievements.RegisterWithServiceResponse> done)
         {
             // This should register client with achievement notifier service. -Egris
+            Logger.Trace("Register()");
+
             var snapshot = bnet.protocol.achievements.Snapshot.CreateBuilder();
 
             foreach (var achievement in this.Client.Account.CurrentGameAccount.Achievements)
@@ -56,6 +58,8 @@ namespace Mooege.Core.MooNet.Services
 
         public override void RequestSnapshot(IRpcController controller, bnet.protocol.achievements.RequestSnapshotRequest request, Action<bnet.protocol.achievements.RequestSnapshotResponse> done)
         {
+            Logger.Trace("RequestSnapshot()");
+
             var snapshot = bnet.protocol.achievements.Snapshot.CreateBuilder();
 
             foreach (var achievement in this.Client.Account.CurrentGameAccount.Achievements)
@@ -75,11 +79,18 @@ namespace Mooege.Core.MooNet.Services
 
         public override void Initialize(IRpcController controller, bnet.protocol.achievements.InitializeRequest request, Action<bnet.protocol.achievements.InitializeResponse> done)
         {
+            Logger.Trace("Initialize()");
+
             var contentHandle = bnet.protocol.ContentHandle.CreateBuilder()
                 .SetRegion(0x00005553) //US
                 .SetUsage(0x61636876) //achv
                 .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.Achievements.AchievementFileHash.ToByteArray()));
-            var reponse = bnet.protocol.achievements.InitializeResponse.CreateBuilder().SetContentHandle(contentHandle);
+            var reponse = bnet.protocol.achievements.InitializeResponse.CreateBuilder().SetContentHandle(contentHandle)
+                .SetMaxRecordsPerUpdate(1)
+                .SetMaxCriteriaPerRecord(2)
+                .SetMaxAchievementsPerRecord(1)
+                .SetMaxRegistrations(512)
+                .SetFlushFrequency(1);
 
             done(reponse.Build());
         }

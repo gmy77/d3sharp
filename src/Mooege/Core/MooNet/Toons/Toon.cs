@@ -209,7 +209,7 @@ namespace Mooege.Core.MooNet.Toons
         {
             get
             {
-                return D3.Hero.Digest.CreateBuilder().SetVersion(895)
+                return D3.Hero.Digest.CreateBuilder().SetVersion(901)
                                 .SetHeroId(this.D3EntityID)
                                 .SetHeroName(this.Name)
                                 .SetGbidClass((int)this.ClassID)

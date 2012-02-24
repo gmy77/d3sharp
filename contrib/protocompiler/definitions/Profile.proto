@@ -15,7 +15,7 @@ message ClassInfo
 message SkillWithRune
 {
     required sfixed32 skill = 1 [default = -1];
-    optional sfixed32 rune = 2 [default = -1];
+    optional sint32 rune_type = 3 [default = -1];
 }
 
 message SkillsWithRunes
@@ -26,6 +26,13 @@ message SkillsWithRunes
 message PassiveSkills
 {
     repeated sfixed32 sno_traits = 1;
+}
+
+message KillerInfo
+{
+    optional uint32 sno_killer = 1;
+    optional uint32 rarity = 2;
+    repeated int32 rare_name_gbids = 3;
 }
 
 message HeroProfile
@@ -57,6 +64,9 @@ message HeroProfile
     optional uint32 death_time = 22;
     optional .D3.GameBalance.Handle killer = 23;
     optional .D3.GameBalance.Handle kill_location = 24;
+    optional uint32 sno_killer = 35;
+    optional .D3.Profile.KillerInfo killer_info = 36;
+    optional uint32 sno_kill_location = 34;
     optional string epitaph = 25;
     optional .D3.OnlineService.EntityId hero_id = 26;
     optional float damage_increase = 27;

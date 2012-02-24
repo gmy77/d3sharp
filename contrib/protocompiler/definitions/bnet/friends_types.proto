@@ -10,6 +10,7 @@ message Friend
     repeated .bnet.protocol.attribute.Attribute attribute = 2;
     repeated uint32 role = 3 [packed=true];
     optional uint64 privileges = 4 [default = 0];
+    optional uint64 attributes_epoch = 5;
 }
 
 message FriendInvitation
@@ -26,8 +27,10 @@ message FriendInvitationParams
 {
     optional string target_email = 1;
     optional string target_battle_tag = 2;
-    optional string display_string = 3;
-    repeated uint32 role = 4 [packed=true];
+    optional string inviter_battle_tag = 3;
+    optional string inviter_full_name = 4;
+    optional string invitee_display_name = 5;
+    repeated uint32 role = 6 [packed=true];
     extend .bnet.protocol.invitation.InvitationParams
     {
         optional .bnet.protocol.friends.FriendInvitationParams friend_params = 103;

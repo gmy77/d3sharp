@@ -105,7 +105,7 @@ namespace Mooege.Core.MooNet.Services
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(getHeroProfiles).Build());
                     break;
                 case 16: //? - Client expecting D3.Client.Preferences
-                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(D3.Client.Preferences.CreateBuilder().SetVersion(105).Build().ToByteString()).Build());
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(D3.Client.Preferences.CreateBuilder().SetVersion(106).Build().ToByteString()).Build());
                     break;
                 case 19: //D3.GameMessage.GetHeroIds -> D3.Hero.HeroList
                     var HeroList = GetHeroList(D3.GameMessage.GetHeroIds.ParseFrom(request.GetAttribute(2).Value.MessageValue));
@@ -145,6 +145,16 @@ namespace Mooege.Core.MooNet.Services
         }
 
         public override void ProcessServerRequest(IRpcController controller, bnet.protocol.game_utilities.ServerRequest request, Action<bnet.protocol.game_utilities.ServerResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void NotifyGameAccountOffline(IRpcController controller, bnet.protocol.game_utilities.GameAccountOfflineNotification request, Action<bnet.protocol.NO_RESPONSE> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void NotifyGameAccountOnline(IRpcController controller, bnet.protocol.game_utilities.GameAccountOnlineNotification request, Action<bnet.protocol.NO_RESPONSE> done)
         {
             throw new NotImplementedException();
         }
@@ -228,7 +238,7 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("GetGameAccountSettings()");
 
-            var gameAccount = GameAccountManager.GetAccountByPersistentID(settings.AccountId.IdLow);
+            var gameAccount = this.Client.Account.CurrentGameAccount;
             return gameAccount.Settings.ToByteString();
             //var pref = D3.Client.Preferences.CreateBuilder().SetVersion(105).Build(); //hack since client is expecting this atm -Egris
             //return pref.ToByteString();

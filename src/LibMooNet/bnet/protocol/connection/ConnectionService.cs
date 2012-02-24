@@ -52,46 +52,50 @@ namespace bnet.protocol.connection {
       static ConnectionService() {
         byte[] descriptorData = global::System.Convert.FromBase64String(
             "Ch1ibmV0L2Nvbm5lY3Rpb25fc2VydmljZS5wcm90bxIYYm5ldC5wcm90b2Nv" + 
-            "bC5jb25uZWN0aW9uGg5ibmV0L3JwYy5wcm90byI9Cg5Db25uZWN0UmVxdWVz" + 
+            "bC5jb25uZWN0aW9uGg5ibmV0L3JwYy5wcm90byJ6Cg5Db25uZWN0UmVxdWVz" + 
             "dBIrCgljbGllbnRfaWQYASABKAsyGC5ibmV0LnByb3RvY29sLlByb2Nlc3NJ" + 
-            "ZCJrCg9Db25uZWN0UmVzcG9uc2USKwoJc2VydmVyX2lkGAEgAigLMhguYm5l" + 
-            "dC5wcm90b2NvbC5Qcm9jZXNzSWQSKwoJY2xpZW50X2lkGAIgASgLMhguYm5l" + 
-            "dC5wcm90b2NvbC5Qcm9jZXNzSWQiKAoMQm91bmRTZXJ2aWNlEgwKBGhhc2gY" + 
-            "ASACKAcSCgoCaWQYAiACKA0icgoLQmluZFJlcXVlc3QSIQoVaW1wb3J0ZWRf" + 
-            "c2VydmljZV9oYXNoGAEgAygHQgIQARJAChBleHBvcnRlZF9zZXJ2aWNlGAIg" + 
-            "AygLMiYuYm5ldC5wcm90b2NvbC5jb25uZWN0aW9uLkJvdW5kU2VydmljZSIv" + 
-            "CgxCaW5kUmVzcG9uc2USHwoTaW1wb3J0ZWRfc2VydmljZV9pZBgBIAMoDUIC" + 
-            "EAEiSQoLRWNob1JlcXVlc3QSDAoEdGltZRgBIAEoBhIbCgxuZXR3b3JrX29u" + 
-            "bHkYAiABKAg6BWZhbHNlEg8KB3BheWxvYWQYAyABKAwiLQoMRWNob1Jlc3Bv" + 
-            "bnNlEgwKBHRpbWUYASABKAYSDwoHcGF5bG9hZBgCIAEoDCInChFEaXNjb25u" + 
-            "ZWN0UmVxdWVzdBISCgplcnJvcl9jb2RlGAEgAigNIjwKFkRpc2Nvbm5lY3RO" + 
-            "b3RpZmljYXRpb24SEgoKZXJyb3JfY29kZRgBIAIoDRIOCgZyZWFzb24YAiAB" + 
-            "KAkiDQoLTnVsbFJlcXVlc3QiEAoORW5jcnlwdFJlcXVlc3QyoQUKEUNvbm5l" + 
-            "Y3Rpb25TZXJ2aWNlEmQKB0Nvbm5lY3QSKC5ibmV0LnByb3RvY29sLmNvbm5l" + 
-            "Y3Rpb24uQ29ubmVjdFJlcXVlc3QaKS5ibmV0LnByb3RvY29sLmNvbm5lY3Rp" + 
-            "b24uQ29ubmVjdFJlc3BvbnNlIgSAtRgBElsKBEJpbmQSJS5ibmV0LnByb3Rv" + 
-            "Y29sLmNvbm5lY3Rpb24uQmluZFJlcXVlc3QaJi5ibmV0LnByb3RvY29sLmNv" + 
-            "bm5lY3Rpb24uQmluZFJlc3BvbnNlIgSAtRgCElsKBEVjaG8SJS5ibmV0LnBy" + 
-            "b3RvY29sLmNvbm5lY3Rpb24uRWNob1JlcXVlc3QaJi5ibmV0LnByb3RvY29s" + 
-            "LmNvbm5lY3Rpb24uRWNob1Jlc3BvbnNlIgSAtRgDEmUKD0ZvcmNlRGlzY29u" + 
-            "bmVjdBIwLmJuZXQucHJvdG9jb2wuY29ubmVjdGlvbi5EaXNjb25uZWN0Tm90" + 
-            "aWZpY2F0aW9uGhouYm5ldC5wcm90b2NvbC5OT19SRVNQT05TRSIEgLUYBBJP" + 
-            "CgROdWxsEiUuYm5ldC5wcm90b2NvbC5jb25uZWN0aW9uLk51bGxSZXF1ZXN0" + 
-            "GhouYm5ldC5wcm90b2NvbC5OT19SRVNQT05TRSIEgLUYBRJQCgdFbmNyeXB0" + 
-            "EiguYm5ldC5wcm90b2NvbC5jb25uZWN0aW9uLkVuY3J5cHRSZXF1ZXN0GhUu" + 
-            "Ym5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GAYSYgoRUmVxdWVzdERpc2Nvbm5l" + 
-            "Y3QSKy5ibmV0LnByb3RvY29sLmNvbm5lY3Rpb24uRGlzY29ubmVjdFJlcXVl" + 
-            "c3QaGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgHQgOAAQA=");
+            "ZBI7CgxiaW5kX3JlcXVlc3QYAiABKAsyJS5ibmV0LnByb3RvY29sLmNvbm5l" + 
+            "Y3Rpb24uQmluZFJlcXVlc3QivwEKD0Nvbm5lY3RSZXNwb25zZRIrCglzZXJ2" + 
+            "ZXJfaWQYASACKAsyGC5ibmV0LnByb3RvY29sLlByb2Nlc3NJZBIrCgljbGll" + 
+            "bnRfaWQYAiABKAsyGC5ibmV0LnByb3RvY29sLlByb2Nlc3NJZBITCgtiaW5k" + 
+            "X3Jlc3VsdBgDIAEoDRI9Cg1iaW5kX3Jlc3BvbnNlGAQgASgLMiYuYm5ldC5w" + 
+            "cm90b2NvbC5jb25uZWN0aW9uLkJpbmRSZXNwb25zZSIoCgxCb3VuZFNlcnZp" + 
+            "Y2USDAoEaGFzaBgBIAIoBxIKCgJpZBgCIAIoDSJyCgtCaW5kUmVxdWVzdBIh" + 
+            "ChVpbXBvcnRlZF9zZXJ2aWNlX2hhc2gYASADKAdCAhABEkAKEGV4cG9ydGVk" + 
+            "X3NlcnZpY2UYAiADKAsyJi5ibmV0LnByb3RvY29sLmNvbm5lY3Rpb24uQm91" + 
+            "bmRTZXJ2aWNlIi8KDEJpbmRSZXNwb25zZRIfChNpbXBvcnRlZF9zZXJ2aWNl" + 
+            "X2lkGAEgAygNQgIQASJJCgtFY2hvUmVxdWVzdBIMCgR0aW1lGAEgASgGEhsK" + 
+            "DG5ldHdvcmtfb25seRgCIAEoCDoFZmFsc2USDwoHcGF5bG9hZBgDIAEoDCIt" + 
+            "CgxFY2hvUmVzcG9uc2USDAoEdGltZRgBIAEoBhIPCgdwYXlsb2FkGAIgASgM" + 
+            "IicKEURpc2Nvbm5lY3RSZXF1ZXN0EhIKCmVycm9yX2NvZGUYASACKA0iPAoW" + 
+            "RGlzY29ubmVjdE5vdGlmaWNhdGlvbhISCgplcnJvcl9jb2RlGAEgAigNEg4K" + 
+            "BnJlYXNvbhgCIAEoCSINCgtOdWxsUmVxdWVzdCIQCg5FbmNyeXB0UmVxdWVz" + 
+            "dDKhBQoRQ29ubmVjdGlvblNlcnZpY2USZAoHQ29ubmVjdBIoLmJuZXQucHJv" + 
+            "dG9jb2wuY29ubmVjdGlvbi5Db25uZWN0UmVxdWVzdBopLmJuZXQucHJvdG9j" + 
+            "b2wuY29ubmVjdGlvbi5Db25uZWN0UmVzcG9uc2UiBIC1GAESWwoEQmluZBIl" + 
+            "LmJuZXQucHJvdG9jb2wuY29ubmVjdGlvbi5CaW5kUmVxdWVzdBomLmJuZXQu" + 
+            "cHJvdG9jb2wuY29ubmVjdGlvbi5CaW5kUmVzcG9uc2UiBIC1GAISWwoERWNo" + 
+            "bxIlLmJuZXQucHJvdG9jb2wuY29ubmVjdGlvbi5FY2hvUmVxdWVzdBomLmJu" + 
+            "ZXQucHJvdG9jb2wuY29ubmVjdGlvbi5FY2hvUmVzcG9uc2UiBIC1GAMSZQoP" + 
+            "Rm9yY2VEaXNjb25uZWN0EjAuYm5ldC5wcm90b2NvbC5jb25uZWN0aW9uLkRp" + 
+            "c2Nvbm5lY3ROb3RpZmljYXRpb24aGi5ibmV0LnByb3RvY29sLk5PX1JFU1BP" + 
+            "TlNFIgSAtRgEEk8KBE51bGwSJS5ibmV0LnByb3RvY29sLmNvbm5lY3Rpb24u" + 
+            "TnVsbFJlcXVlc3QaGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgF" + 
+            "ElAKB0VuY3J5cHQSKC5ibmV0LnByb3RvY29sLmNvbm5lY3Rpb24uRW5jcnlw" + 
+            "dFJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYBhJiChFSZXF1" + 
+            "ZXN0RGlzY29ubmVjdBIrLmJuZXQucHJvdG9jb2wuY29ubmVjdGlvbi5EaXNj" + 
+            "b25uZWN0UmVxdWVzdBoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1" + 
+            "GAdCA4ABAA==");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_connection_ConnectRequest__Descriptor = Descriptor.MessageTypes[0];
           internal__static_bnet_protocol_connection_ConnectRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.ConnectRequest, global::bnet.protocol.connection.ConnectRequest.Builder>(internal__static_bnet_protocol_connection_ConnectRequest__Descriptor,
-                  new string[] { "ClientId", });
+                  new string[] { "ClientId", "BindRequest", });
           internal__static_bnet_protocol_connection_ConnectResponse__Descriptor = Descriptor.MessageTypes[1];
           internal__static_bnet_protocol_connection_ConnectResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.ConnectResponse, global::bnet.protocol.connection.ConnectResponse.Builder>(internal__static_bnet_protocol_connection_ConnectResponse__Descriptor,
-                  new string[] { "ServerId", "ClientId", });
+                  new string[] { "ServerId", "ClientId", "BindResult", "BindResponse", });
           internal__static_bnet_protocol_connection_BoundService__Descriptor = Descriptor.MessageTypes[2];
           internal__static_bnet_protocol_connection_BoundService__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.BoundService, global::bnet.protocol.connection.BoundService.Builder>(internal__static_bnet_protocol_connection_BoundService__Descriptor,
@@ -149,8 +153,8 @@ namespace bnet.protocol.connection {
   public sealed partial class ConnectRequest : pb::GeneratedMessage<ConnectRequest, ConnectRequest.Builder> {
     private ConnectRequest() { }
     private static readonly ConnectRequest defaultInstance = new ConnectRequest().MakeReadOnly();
-    private static readonly string[] _connectRequestFieldNames = new string[] { "client_id" };
-    private static readonly uint[] _connectRequestFieldTags = new uint[] { 10 };
+    private static readonly string[] _connectRequestFieldNames = new string[] { "bind_request", "client_id" };
+    private static readonly uint[] _connectRequestFieldTags = new uint[] { 18, 10 };
     public static ConnectRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -181,10 +185,23 @@ namespace bnet.protocol.connection {
       get { return clientId_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
     }
     
+    public const int BindRequestFieldNumber = 2;
+    private bool hasBindRequest;
+    private global::bnet.protocol.connection.BindRequest bindRequest_;
+    public bool HasBindRequest {
+      get { return hasBindRequest; }
+    }
+    public global::bnet.protocol.connection.BindRequest BindRequest {
+      get { return bindRequest_ ?? global::bnet.protocol.connection.BindRequest.DefaultInstance; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (HasClientId) {
           if (!ClientId.IsInitialized) return false;
+        }
+        if (HasBindRequest) {
+          if (!BindRequest.IsInitialized) return false;
         }
         return true;
       }
@@ -194,7 +211,10 @@ namespace bnet.protocol.connection {
       int size = SerializedSize;
       string[] field_names = _connectRequestFieldNames;
       if (hasClientId) {
-        output.WriteMessage(1, field_names[0], ClientId);
+        output.WriteMessage(1, field_names[1], ClientId);
+      }
+      if (hasBindRequest) {
+        output.WriteMessage(2, field_names[0], BindRequest);
       }
       UnknownFields.WriteTo(output);
     }
@@ -208,6 +228,9 @@ namespace bnet.protocol.connection {
         size = 0;
         if (hasClientId) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, ClientId);
+        }
+        if (hasBindRequest) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, BindRequest);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -338,6 +361,9 @@ namespace bnet.protocol.connection {
         if (other.HasClientId) {
           MergeClientId(other.ClientId);
         }
+        if (other.HasBindRequest) {
+          MergeBindRequest(other.BindRequest);
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -390,6 +416,15 @@ namespace bnet.protocol.connection {
               ClientId = subBuilder.BuildPartial();
               break;
             }
+            case 18: {
+              global::bnet.protocol.connection.BindRequest.Builder subBuilder = global::bnet.protocol.connection.BindRequest.CreateBuilder();
+              if (result.hasBindRequest) {
+                subBuilder.MergeFrom(BindRequest);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              BindRequest = subBuilder.BuildPartial();
+              break;
+            }
           }
         }
         
@@ -439,6 +474,46 @@ namespace bnet.protocol.connection {
         result.clientId_ = null;
         return this;
       }
+      
+      public bool HasBindRequest {
+       get { return result.hasBindRequest; }
+      }
+      public global::bnet.protocol.connection.BindRequest BindRequest {
+        get { return result.BindRequest; }
+        set { SetBindRequest(value); }
+      }
+      public Builder SetBindRequest(global::bnet.protocol.connection.BindRequest value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasBindRequest = true;
+        result.bindRequest_ = value;
+        return this;
+      }
+      public Builder SetBindRequest(global::bnet.protocol.connection.BindRequest.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasBindRequest = true;
+        result.bindRequest_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeBindRequest(global::bnet.protocol.connection.BindRequest value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasBindRequest &&
+            result.bindRequest_ != global::bnet.protocol.connection.BindRequest.DefaultInstance) {
+            result.bindRequest_ = global::bnet.protocol.connection.BindRequest.CreateBuilder(result.bindRequest_).MergeFrom(value).BuildPartial();
+        } else {
+          result.bindRequest_ = value;
+        }
+        result.hasBindRequest = true;
+        return this;
+      }
+      public Builder ClearBindRequest() {
+        PrepareBuilder();
+        result.hasBindRequest = false;
+        result.bindRequest_ = null;
+        return this;
+      }
     }
     static ConnectRequest() {
       object.ReferenceEquals(global::bnet.protocol.connection.Proto.ConnectionService.Descriptor, null);
@@ -451,8 +526,8 @@ namespace bnet.protocol.connection {
   public sealed partial class ConnectResponse : pb::GeneratedMessage<ConnectResponse, ConnectResponse.Builder> {
     private ConnectResponse() { }
     private static readonly ConnectResponse defaultInstance = new ConnectResponse().MakeReadOnly();
-    private static readonly string[] _connectResponseFieldNames = new string[] { "client_id", "server_id" };
-    private static readonly uint[] _connectResponseFieldTags = new uint[] { 18, 10 };
+    private static readonly string[] _connectResponseFieldNames = new string[] { "bind_response", "bind_result", "client_id", "server_id" };
+    private static readonly uint[] _connectResponseFieldTags = new uint[] { 34, 24, 18, 10 };
     public static ConnectResponse DefaultInstance {
       get { return defaultInstance; }
     }
@@ -493,6 +568,26 @@ namespace bnet.protocol.connection {
       get { return clientId_ ?? global::bnet.protocol.ProcessId.DefaultInstance; }
     }
     
+    public const int BindResultFieldNumber = 3;
+    private bool hasBindResult;
+    private uint bindResult_;
+    public bool HasBindResult {
+      get { return hasBindResult; }
+    }
+    public uint BindResult {
+      get { return bindResult_; }
+    }
+    
+    public const int BindResponseFieldNumber = 4;
+    private bool hasBindResponse;
+    private global::bnet.protocol.connection.BindResponse bindResponse_;
+    public bool HasBindResponse {
+      get { return hasBindResponse; }
+    }
+    public global::bnet.protocol.connection.BindResponse BindResponse {
+      get { return bindResponse_ ?? global::bnet.protocol.connection.BindResponse.DefaultInstance; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasServerId) return false;
@@ -508,10 +603,16 @@ namespace bnet.protocol.connection {
       int size = SerializedSize;
       string[] field_names = _connectResponseFieldNames;
       if (hasServerId) {
-        output.WriteMessage(1, field_names[1], ServerId);
+        output.WriteMessage(1, field_names[3], ServerId);
       }
       if (hasClientId) {
-        output.WriteMessage(2, field_names[0], ClientId);
+        output.WriteMessage(2, field_names[2], ClientId);
+      }
+      if (hasBindResult) {
+        output.WriteUInt32(3, field_names[1], BindResult);
+      }
+      if (hasBindResponse) {
+        output.WriteMessage(4, field_names[0], BindResponse);
       }
       UnknownFields.WriteTo(output);
     }
@@ -528,6 +629,12 @@ namespace bnet.protocol.connection {
         }
         if (hasClientId) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, ClientId);
+        }
+        if (hasBindResult) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(3, BindResult);
+        }
+        if (hasBindResponse) {
+          size += pb::CodedOutputStream.ComputeMessageSize(4, BindResponse);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -661,6 +768,12 @@ namespace bnet.protocol.connection {
         if (other.HasClientId) {
           MergeClientId(other.ClientId);
         }
+        if (other.HasBindResult) {
+          BindResult = other.BindResult;
+        }
+        if (other.HasBindResponse) {
+          MergeBindResponse(other.BindResponse);
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -720,6 +833,19 @@ namespace bnet.protocol.connection {
               }
               input.ReadMessage(subBuilder, extensionRegistry);
               ClientId = subBuilder.BuildPartial();
+              break;
+            }
+            case 24: {
+              result.hasBindResult = input.ReadUInt32(ref result.bindResult_);
+              break;
+            }
+            case 34: {
+              global::bnet.protocol.connection.BindResponse.Builder subBuilder = global::bnet.protocol.connection.BindResponse.CreateBuilder();
+              if (result.hasBindResponse) {
+                subBuilder.MergeFrom(BindResponse);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              BindResponse = subBuilder.BuildPartial();
               break;
             }
           }
@@ -809,6 +935,66 @@ namespace bnet.protocol.connection {
         PrepareBuilder();
         result.hasClientId = false;
         result.clientId_ = null;
+        return this;
+      }
+      
+      public bool HasBindResult {
+        get { return result.hasBindResult; }
+      }
+      public uint BindResult {
+        get { return result.BindResult; }
+        set { SetBindResult(value); }
+      }
+      public Builder SetBindResult(uint value) {
+        PrepareBuilder();
+        result.hasBindResult = true;
+        result.bindResult_ = value;
+        return this;
+      }
+      public Builder ClearBindResult() {
+        PrepareBuilder();
+        result.hasBindResult = false;
+        result.bindResult_ = 0;
+        return this;
+      }
+      
+      public bool HasBindResponse {
+       get { return result.hasBindResponse; }
+      }
+      public global::bnet.protocol.connection.BindResponse BindResponse {
+        get { return result.BindResponse; }
+        set { SetBindResponse(value); }
+      }
+      public Builder SetBindResponse(global::bnet.protocol.connection.BindResponse value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasBindResponse = true;
+        result.bindResponse_ = value;
+        return this;
+      }
+      public Builder SetBindResponse(global::bnet.protocol.connection.BindResponse.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasBindResponse = true;
+        result.bindResponse_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeBindResponse(global::bnet.protocol.connection.BindResponse value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasBindResponse &&
+            result.bindResponse_ != global::bnet.protocol.connection.BindResponse.DefaultInstance) {
+            result.bindResponse_ = global::bnet.protocol.connection.BindResponse.CreateBuilder(result.bindResponse_).MergeFrom(value).BuildPartial();
+        } else {
+          result.bindResponse_ = value;
+        }
+        result.hasBindResponse = true;
+        return this;
+      }
+      public Builder ClearBindResponse() {
+        PrepareBuilder();
+        result.hasBindResponse = false;
+        result.bindResponse_ = null;
         return this;
       }
     }

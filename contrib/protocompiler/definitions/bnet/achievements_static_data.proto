@@ -63,6 +63,7 @@ message AchievementFile
     repeated .bnet.protocol.achievements.StaticCategoryDefinition category = 1;
     repeated .bnet.protocol.achievements.StaticAchievementDefinition achievement = 2;
     repeated .bnet.protocol.achievements.StaticCriteriaDefinition criteria = 3;
+    repeated .bnet.protocol.achievements.Attribute attributes = 4;
 }
 
 enum ModiferTargetType

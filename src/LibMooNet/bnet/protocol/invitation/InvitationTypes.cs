@@ -64,10 +64,12 @@ namespace bnet.protocol.invitation {
           "Ip0BChdVcGRhdGVJbnZpdGF0aW9uUmVxdWVzdBIvCg5hZ2VudF9pZGVudGl0" + 
           "eRgBIAEoCzIXLmJuZXQucHJvdG9jb2wuSWRlbnRpdHkSFQoNaW52aXRhdGlv" + 
           "bl9pZBgCIAIoBhI6CgZwYXJhbXMYAyACKAsyKi5ibmV0LnByb3RvY29sLmlu" + 
-          "dml0YXRpb24uSW52aXRhdGlvblBhcmFtcyJ+Cg5HZW5lcmljUmVxdWVzdBIp" + 
-          "CghhZ2VudF9pZBgBIAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSKgoJ" + 
-          "dGFyZ2V0X2lkGAIgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBIVCg1p" + 
-          "bnZpdGF0aW9uX2lkGAMgAigG");
+          "dml0YXRpb24uSW52aXRhdGlvblBhcmFtcyLJAQoOR2VuZXJpY1JlcXVlc3QS" + 
+          "KQoIYWdlbnRfaWQYASABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEioK" + 
+          "CXRhcmdldF9pZBgCIAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSFQoN" + 
+          "aW52aXRhdGlvbl9pZBgDIAIoBhIUCgxkaXNwbGF5X25hbWUYBCABKAkSGQoN" + 
+          "cHJldmlvdXNfcm9sZRgFIAMoDUICEAESGAoMZGVzaXJlZF9yb2xlGAYgAygN" + 
+          "QgIQAQ==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_invitation_Invitation__Descriptor = Descriptor.MessageTypes[0];
@@ -97,7 +99,7 @@ namespace bnet.protocol.invitation {
         internal__static_bnet_protocol_invitation_GenericRequest__Descriptor = Descriptor.MessageTypes[6];
         internal__static_bnet_protocol_invitation_GenericRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.invitation.GenericRequest, global::bnet.protocol.invitation.GenericRequest.Builder>(internal__static_bnet_protocol_invitation_GenericRequest__Descriptor,
-                new string[] { "AgentId", "TargetId", "InvitationId", });
+                new string[] { "AgentId", "TargetId", "InvitationId", "DisplayName", "PreviousRole", "DesiredRole", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -2765,8 +2767,8 @@ namespace bnet.protocol.invitation {
   public sealed partial class GenericRequest : pb::GeneratedMessage<GenericRequest, GenericRequest.Builder> {
     private GenericRequest() { }
     private static readonly GenericRequest defaultInstance = new GenericRequest().MakeReadOnly();
-    private static readonly string[] _genericRequestFieldNames = new string[] { "agent_id", "invitation_id", "target_id" };
-    private static readonly uint[] _genericRequestFieldTags = new uint[] { 10, 25, 18 };
+    private static readonly string[] _genericRequestFieldNames = new string[] { "agent_id", "desired_role", "display_name", "invitation_id", "previous_role", "target_id" };
+    private static readonly uint[] _genericRequestFieldTags = new uint[] { 10, 50, 34, 25, 42, 18 };
     public static GenericRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -2817,6 +2819,42 @@ namespace bnet.protocol.invitation {
       get { return invitationId_; }
     }
     
+    public const int DisplayNameFieldNumber = 4;
+    private bool hasDisplayName;
+    private string displayName_ = "";
+    public bool HasDisplayName {
+      get { return hasDisplayName; }
+    }
+    public string DisplayName {
+      get { return displayName_; }
+    }
+    
+    public const int PreviousRoleFieldNumber = 5;
+    private int previousRoleMemoizedSerializedSize;
+    private pbc::PopsicleList<uint> previousRole_ = new pbc::PopsicleList<uint>();
+    public scg::IList<uint> PreviousRoleList {
+      get { return pbc::Lists.AsReadOnly(previousRole_); }
+    }
+    public int PreviousRoleCount {
+      get { return previousRole_.Count; }
+    }
+    public uint GetPreviousRole(int index) {
+      return previousRole_[index];
+    }
+    
+    public const int DesiredRoleFieldNumber = 6;
+    private int desiredRoleMemoizedSerializedSize;
+    private pbc::PopsicleList<uint> desiredRole_ = new pbc::PopsicleList<uint>();
+    public scg::IList<uint> DesiredRoleList {
+      get { return pbc::Lists.AsReadOnly(desiredRole_); }
+    }
+    public int DesiredRoleCount {
+      get { return desiredRole_.Count; }
+    }
+    public uint GetDesiredRole(int index) {
+      return desiredRole_[index];
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasInvitationId) return false;
@@ -2837,10 +2875,19 @@ namespace bnet.protocol.invitation {
         output.WriteMessage(1, field_names[0], AgentId);
       }
       if (hasTargetId) {
-        output.WriteMessage(2, field_names[2], TargetId);
+        output.WriteMessage(2, field_names[5], TargetId);
       }
       if (hasInvitationId) {
-        output.WriteFixed64(3, field_names[1], InvitationId);
+        output.WriteFixed64(3, field_names[3], InvitationId);
+      }
+      if (hasDisplayName) {
+        output.WriteString(4, field_names[2], DisplayName);
+      }
+      if (previousRole_.Count > 0) {
+        output.WritePackedUInt32Array(5, field_names[4], previousRoleMemoizedSerializedSize, previousRole_);
+      }
+      if (desiredRole_.Count > 0) {
+        output.WritePackedUInt32Array(6, field_names[1], desiredRoleMemoizedSerializedSize, desiredRole_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2860,6 +2907,31 @@ namespace bnet.protocol.invitation {
         }
         if (hasInvitationId) {
           size += pb::CodedOutputStream.ComputeFixed64Size(3, InvitationId);
+        }
+        if (hasDisplayName) {
+          size += pb::CodedOutputStream.ComputeStringSize(4, DisplayName);
+        }
+        {
+          int dataSize = 0;
+          foreach (uint element in PreviousRoleList) {
+            dataSize += pb::CodedOutputStream.ComputeUInt32SizeNoTag(element);
+          }
+          size += dataSize;
+          if (previousRole_.Count != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32SizeNoTag(dataSize);
+          }
+          previousRoleMemoizedSerializedSize = dataSize;
+        }
+        {
+          int dataSize = 0;
+          foreach (uint element in DesiredRoleList) {
+            dataSize += pb::CodedOutputStream.ComputeUInt32SizeNoTag(element);
+          }
+          size += dataSize;
+          if (desiredRole_.Count != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32SizeNoTag(dataSize);
+          }
+          desiredRoleMemoizedSerializedSize = dataSize;
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2898,6 +2970,8 @@ namespace bnet.protocol.invitation {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private GenericRequest MakeReadOnly() {
+      previousRole_.MakeReadOnly();
+      desiredRole_.MakeReadOnly();
       return this;
     }
     
@@ -2996,6 +3070,15 @@ namespace bnet.protocol.invitation {
         if (other.HasInvitationId) {
           InvitationId = other.InvitationId;
         }
+        if (other.HasDisplayName) {
+          DisplayName = other.DisplayName;
+        }
+        if (other.previousRole_.Count != 0) {
+          result.previousRole_.Add(other.previousRole_);
+        }
+        if (other.desiredRole_.Count != 0) {
+          result.desiredRole_.Add(other.desiredRole_);
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -3059,6 +3142,20 @@ namespace bnet.protocol.invitation {
             }
             case 25: {
               result.hasInvitationId = input.ReadFixed64(ref result.invitationId_);
+              break;
+            }
+            case 34: {
+              result.hasDisplayName = input.ReadString(ref result.displayName_);
+              break;
+            }
+            case 42:
+            case 40: {
+              input.ReadUInt32Array(tag, field_name, result.previousRole_);
+              break;
+            }
+            case 50:
+            case 48: {
+              input.ReadUInt32Array(tag, field_name, result.desiredRole_);
               break;
             }
           }
@@ -3168,6 +3265,87 @@ namespace bnet.protocol.invitation {
         PrepareBuilder();
         result.hasInvitationId = false;
         result.invitationId_ = 0;
+        return this;
+      }
+      
+      public bool HasDisplayName {
+        get { return result.hasDisplayName; }
+      }
+      public string DisplayName {
+        get { return result.DisplayName; }
+        set { SetDisplayName(value); }
+      }
+      public Builder SetDisplayName(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasDisplayName = true;
+        result.displayName_ = value;
+        return this;
+      }
+      public Builder ClearDisplayName() {
+        PrepareBuilder();
+        result.hasDisplayName = false;
+        result.displayName_ = "";
+        return this;
+      }
+      
+      public pbc::IPopsicleList<uint> PreviousRoleList {
+        get { return PrepareBuilder().previousRole_; }
+      }
+      public int PreviousRoleCount {
+        get { return result.PreviousRoleCount; }
+      }
+      public uint GetPreviousRole(int index) {
+        return result.GetPreviousRole(index);
+      }
+      public Builder SetPreviousRole(int index, uint value) {
+        PrepareBuilder();
+        result.previousRole_[index] = value;
+        return this;
+      }
+      public Builder AddPreviousRole(uint value) {
+        PrepareBuilder();
+        result.previousRole_.Add(value);
+        return this;
+      }
+      public Builder AddRangePreviousRole(scg::IEnumerable<uint> values) {
+        PrepareBuilder();
+        result.previousRole_.Add(values);
+        return this;
+      }
+      public Builder ClearPreviousRole() {
+        PrepareBuilder();
+        result.previousRole_.Clear();
+        return this;
+      }
+      
+      public pbc::IPopsicleList<uint> DesiredRoleList {
+        get { return PrepareBuilder().desiredRole_; }
+      }
+      public int DesiredRoleCount {
+        get { return result.DesiredRoleCount; }
+      }
+      public uint GetDesiredRole(int index) {
+        return result.GetDesiredRole(index);
+      }
+      public Builder SetDesiredRole(int index, uint value) {
+        PrepareBuilder();
+        result.desiredRole_[index] = value;
+        return this;
+      }
+      public Builder AddDesiredRole(uint value) {
+        PrepareBuilder();
+        result.desiredRole_.Add(value);
+        return this;
+      }
+      public Builder AddRangeDesiredRole(scg::IEnumerable<uint> values) {
+        PrepareBuilder();
+        result.desiredRole_.Add(values);
+        return this;
+      }
+      public Builder ClearDesiredRole() {
+        PrepareBuilder();
+        result.desiredRole_.Clear();
         return this;
       }
     }

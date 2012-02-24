@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.8392.*";
+            public const string Version = "1.8610.*";
         }
 
         /// <summary>
@@ -47,10 +47,11 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 8392;
+            public const int RequiredClientVersion = 8610;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
+                {"Aurora 7f06f1aabd_public", 8610},
                 {"Aurora 9e9ccb8fdf_public", 8392},
                 {"Aurora f506438e8d_public", 8101},
                 {"Aurora fbb3e7d1b4_public", 8059},
@@ -75,7 +76,8 @@ namespace Mooege.Common.Versions
                 /// </summary>
                 //public static string AchievementFileHash = "ef29e59b9394e7c6f694afbb92b70a74c4fd4c96961a8ec490e770371b72e6ab";
                 //public static string AchievementFileHash = "0b61aeee74bba6ba02b93c9e15089404daf5d3cd1c7e631d7c108685894b3feb"; //8101
-                public static string AchievementFileHash = "c06c3a43f760b9ef2c7965ac229531d17e93279cd2666bf1b9f130b8db5cb2f9"; //8296
+                //public static string AchievementFileHash = "c06c3a43f760b9ef2c7965ac229531d17e93279cd2666bf1b9f130b8db5cb2f9"; //8296
+                public static string AchievementFileHash = "9c1b0943a8e68352bb60ec872f35c645036feaabaac92ea13bee8b2f1dc9c5b9"; //8610
 
                 /// <summary>
                 /// AchievementFile filename.
@@ -85,7 +87,7 @@ namespace Mooege.Common.Versions
                 /// <summary>
                 /// AchievementFile download URL.
                 /// </summary>
-                public static string AchievementURL = "http://us.depot.battle.net:1119/" + AchievementFilename;
+                public static string AchievementURL = "http://XX.depot.battle.net:1119/" + AchievementFilename;
 
             }
         }
@@ -98,7 +100,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 8392;
+            public const int RequiredPatchVersion = 8610;
         }
 
         /// <summary>
@@ -109,8 +111,9 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Ingame protocol hash.
             /// </summary>
-            public const int ProtocolHash = 0x1A64B41;
+            public const int ProtocolHash = unchecked((int)0xA8F17EC5);
 
+            // unchecked((int)0xA8F17EC5)   // 8610
             // 0x01A64B41                   // 8296, 8350, 8392
             // 0xBA957E6B                   // 8059, 8101
             // unchecked((int)0x208CA037)   // 7931
@@ -119,8 +122,9 @@ namespace Mooege.Common.Versions
             // 0x21EEE08D                   // 7446
 
             //This is the server version sent in VersionsMessage
-            public const string VersionString = "0.6.2.8392";
+            public const string VersionString = "0.7.0.8619";
 
+            // 0.7.0.8619 // 8610 patch 13
             // 0.6.2.8392 // 8392 patch 12
             // 0.6.1.8350 // 8350 patch 11
             // 0.6.0.8318 // 8296 patch 10

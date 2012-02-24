@@ -28,6 +28,8 @@ namespace bnet.protocol.authentication {
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonRequest, global::bnet.protocol.authentication.LogonRequest.Builder> internal__static_bnet_protocol_authentication_LogonRequest__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_LogonResponse__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonResponse, global::bnet.protocol.authentication.LogonResponse.Builder> internal__static_bnet_protocol_authentication_LogonResponse__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_AccountSettingsNotification__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.AccountSettingsNotification, global::bnet.protocol.authentication.AccountSettingsNotification.Builder> internal__static_bnet_protocol_authentication_AccountSettingsNotification__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -38,30 +40,39 @@ namespace bnet.protocol.authentication {
     static AuthenticationService() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           "CiFibmV0L2F1dGhlbnRpY2F0aW9uX3NlcnZpY2UucHJvdG8SHGJuZXQucHJv" + 
-          "dG9jb2wuYXV0aGVudGljYXRpb24aDmJuZXQvcnBjLnByb3RvGhlibmV0L2Nv" + 
-          "bnRlbnRfaGFuZGxlLnByb3RvGhFibmV0L2VudGl0eS5wcm90byJZChFNb2R1" + 
-          "bGVMb2FkUmVxdWVzdBIzCg1tb2R1bGVfaGFuZGxlGAEgAigLMhwuYm5ldC5w" + 
-          "cm90b2NvbC5Db250ZW50SGFuZGxlEg8KB21lc3NhZ2UYAiABKAwiJwoSTW9k" + 
-          "dWxlTG9hZFJlc3BvbnNlEhEKCW1vZHVsZV9pZBgCIAEoBSI6ChRNb2R1bGVN" + 
-          "ZXNzYWdlUmVxdWVzdBIRCgltb2R1bGVfaWQYASACKAUSDwoHbWVzc2FnZRgC" + 
-          "IAEoDCKTAQoMTG9nb25SZXF1ZXN0Eg8KB3Byb2dyYW0YASABKAkSEAoIcGxh" + 
-          "dGZvcm0YAiABKAkSDgoGbG9jYWxlGAMgASgJEg0KBWVtYWlsGAQgASgJEhMK" + 
-          "C2xpc3RlbmVyX2lkGAUgASgEEg8KB3ZlcnNpb24YBiABKAkSGwoTYXBwbGlj" + 
-          "YXRpb25fdmVyc2lvbhgHIAEoBSJoCg1Mb2dvblJlc3BvbnNlEigKB2FjY291" + 
-          "bnQYASACKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEi0KDGdhbWVfYWNj" + 
-          "b3VudBgCIAMoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQy7wEKFEF1dGhl" + 
-          "bnRpY2F0aW9uQ2xpZW50EnUKCk1vZHVsZUxvYWQSLy5ibmV0LnByb3RvY29s" + 
-          "LmF1dGhlbnRpY2F0aW9uLk1vZHVsZUxvYWRSZXF1ZXN0GjAuYm5ldC5wcm90" + 
-          "b2NvbC5hdXRoZW50aWNhdGlvbi5Nb2R1bGVMb2FkUmVzcG9uc2UiBIC1GAES" + 
-          "YAoNTW9kdWxlTWVzc2FnZRIyLmJuZXQucHJvdG9jb2wuYXV0aGVudGljYXRp" + 
-          "b24uTW9kdWxlTWVzc2FnZVJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0" + 
-          "YSIEgLUYAjKrAgoUQXV0aGVudGljYXRpb25TZXJ2ZXISZgoFTG9nb24SKi5i" + 
-          "bmV0LnByb3RvY29sLmF1dGhlbnRpY2F0aW9uLkxvZ29uUmVxdWVzdBorLmJu" + 
-          "ZXQucHJvdG9jb2wuYXV0aGVudGljYXRpb24uTG9nb25SZXNwb25zZSIEgLUY" + 
-          "ARJgCg1Nb2R1bGVNZXNzYWdlEjIuYm5ldC5wcm90b2NvbC5hdXRoZW50aWNh" + 
-          "dGlvbi5Nb2R1bGVNZXNzYWdlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9E" + 
-          "YXRhIgSAtRgCEkkKEVNlbGVjdEdhbWVBY2NvdW50EhcuYm5ldC5wcm90b2Nv" + 
-          "bC5FbnRpdHlJZBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgDQgOAAQA=");
+          "dG9jb2wuYXV0aGVudGljYXRpb24aGGJuZXQvYWNjb3VudF90eXBlcy5wcm90" + 
+          "bxoOYm5ldC9ycGMucHJvdG8aGWJuZXQvY29udGVudF9oYW5kbGUucHJvdG8a" + 
+          "EWJuZXQvZW50aXR5LnByb3RvIlkKEU1vZHVsZUxvYWRSZXF1ZXN0EjMKDW1v" + 
+          "ZHVsZV9oYW5kbGUYASACKAsyHC5ibmV0LnByb3RvY29sLkNvbnRlbnRIYW5k" + 
+          "bGUSDwoHbWVzc2FnZRgCIAEoDCInChJNb2R1bGVMb2FkUmVzcG9uc2USEQoJ" + 
+          "bW9kdWxlX2lkGAIgASgFIjoKFE1vZHVsZU1lc3NhZ2VSZXF1ZXN0EhEKCW1v" + 
+          "ZHVsZV9pZBgBIAIoBRIPCgdtZXNzYWdlGAIgASgMIn4KDExvZ29uUmVxdWVz" + 
+          "dBIPCgdwcm9ncmFtGAEgASgJEhAKCHBsYXRmb3JtGAIgASgJEg4KBmxvY2Fs" + 
+          "ZRgDIAEoCRINCgVlbWFpbBgEIAEoCRIPCgd2ZXJzaW9uGAUgASgJEhsKE2Fw" + 
+          "cGxpY2F0aW9uX3ZlcnNpb24YBiABKAUiaAoNTG9nb25SZXNwb25zZRIoCgdh" + 
+          "Y2NvdW50GAEgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBItCgxnYW1l" + 
+          "X2FjY291bnQYAiADKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkIooCChtB" + 
+          "Y2NvdW50U2V0dGluZ3NOb3RpZmljYXRpb24SPwoQYWNjb3VudF9saWNlbnNl" + 
+          "cxgBIAMoCzIlLmJuZXQucHJvdG9jb2wuYWNjb3VudC5BY2NvdW50TGljZW5z" + 
+          "ZRJEChVnYW1lX2FjY291bnRfbGljZW5zZXMYAiADKAsyJS5ibmV0LnByb3Rv" + 
+          "Y29sLmFjY291bnQuQWNjb3VudExpY2Vuc2USFAoMaXNfdXNpbmdfcmlkGAMg" + 
+          "ASgIEhsKE2lzX3BsYXlpbmdfZnJvbV9pZ3IYBCABKAgSGQoRY2FuX3JlY2Vp" + 
+          "dmVfdm9pY2UYBSABKAgSFgoOY2FuX3NlbmRfdm9pY2UYBiABKAgy3wIKFEF1" + 
+          "dGhlbnRpY2F0aW9uQ2xpZW50EnUKCk1vZHVsZUxvYWQSLy5ibmV0LnByb3Rv" + 
+          "Y29sLmF1dGhlbnRpY2F0aW9uLk1vZHVsZUxvYWRSZXF1ZXN0GjAuYm5ldC5w" + 
+          "cm90b2NvbC5hdXRoZW50aWNhdGlvbi5Nb2R1bGVMb2FkUmVzcG9uc2UiBIC1" + 
+          "GAESYAoNTW9kdWxlTWVzc2FnZRIyLmJuZXQucHJvdG9jb2wuYXV0aGVudGlj" + 
+          "YXRpb24uTW9kdWxlTWVzc2FnZVJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5v" + 
+          "RGF0YSIEgLUYAhJuCg9BY2NvdW50U2V0dGluZ3MSOS5ibmV0LnByb3RvY29s" + 
+          "LmF1dGhlbnRpY2F0aW9uLkFjY291bnRTZXR0aW5nc05vdGlmaWNhdGlvbhoa" + 
+          "LmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAMyqwIKFEF1dGhlbnRp" + 
+          "Y2F0aW9uU2VydmVyEmYKBUxvZ29uEiouYm5ldC5wcm90b2NvbC5hdXRoZW50" + 
+          "aWNhdGlvbi5Mb2dvblJlcXVlc3QaKy5ibmV0LnByb3RvY29sLmF1dGhlbnRp" + 
+          "Y2F0aW9uLkxvZ29uUmVzcG9uc2UiBIC1GAESYAoNTW9kdWxlTWVzc2FnZRIy" + 
+          "LmJuZXQucHJvdG9jb2wuYXV0aGVudGljYXRpb24uTW9kdWxlTWVzc2FnZVJl" + 
+          "cXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYAhJJChFTZWxlY3RH" + 
+          "YW1lQWNjb3VudBIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQaFS5ibmV0LnBy" + 
+          "b3RvY29sLk5vRGF0YSIEgLUYA0IDgAEA");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_authentication_ModuleLoadRequest__Descriptor = Descriptor.MessageTypes[0];
@@ -79,13 +90,18 @@ namespace bnet.protocol.authentication {
         internal__static_bnet_protocol_authentication_LogonRequest__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_authentication_LogonRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonRequest, global::bnet.protocol.authentication.LogonRequest.Builder>(internal__static_bnet_protocol_authentication_LogonRequest__Descriptor,
-                new string[] { "Program", "Platform", "Locale", "Email", "ListenerId", "Version", "ApplicationVersion", });
+                new string[] { "Program", "Platform", "Locale", "Email", "Version", "ApplicationVersion", });
         internal__static_bnet_protocol_authentication_LogonResponse__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_authentication_LogonResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonResponse, global::bnet.protocol.authentication.LogonResponse.Builder>(internal__static_bnet_protocol_authentication_LogonResponse__Descriptor,
                 new string[] { "Account", "GameAccount", });
+        internal__static_bnet_protocol_authentication_AccountSettingsNotification__Descriptor = Descriptor.MessageTypes[5];
+        internal__static_bnet_protocol_authentication_AccountSettingsNotification__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.AccountSettingsNotification, global::bnet.protocol.authentication.AccountSettingsNotification.Builder>(internal__static_bnet_protocol_authentication_AccountSettingsNotification__Descriptor,
+                new string[] { "AccountLicenses", "GameAccountLicenses", "IsUsingRid", "IsPlayingFromIgr", "CanReceiveVoice", "CanSendVoice", });
         pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
         RegisterAllExtensions(registry);
+        global::bnet.protocol.account.AccountTypes.RegisterAllExtensions(registry);
         global::bnet.protocol.Rpc.RegisterAllExtensions(registry);
         global::bnet.protocol.Proto.ContentHandle.RegisterAllExtensions(registry);
         global::bnet.protocol.Entity.RegisterAllExtensions(registry);
@@ -93,6 +109,7 @@ namespace bnet.protocol.authentication {
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
           new pbd::FileDescriptor[] {
+          global::bnet.protocol.account.AccountTypes.Descriptor, 
           global::bnet.protocol.Rpc.Descriptor, 
           global::bnet.protocol.Proto.ContentHandle.Descriptor, 
           global::bnet.protocol.Entity.Descriptor, 
@@ -1046,8 +1063,8 @@ namespace bnet.protocol.authentication {
   public sealed partial class LogonRequest : pb::GeneratedMessage<LogonRequest, LogonRequest.Builder> {
     private LogonRequest() { }
     private static readonly LogonRequest defaultInstance = new LogonRequest().MakeReadOnly();
-    private static readonly string[] _logonRequestFieldNames = new string[] { "application_version", "email", "listener_id", "locale", "platform", "program", "version" };
-    private static readonly uint[] _logonRequestFieldTags = new uint[] { 56, 34, 40, 26, 18, 10, 50 };
+    private static readonly string[] _logonRequestFieldNames = new string[] { "application_version", "email", "locale", "platform", "program", "version" };
+    private static readonly uint[] _logonRequestFieldTags = new uint[] { 48, 34, 26, 18, 10, 42 };
     public static LogonRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1108,17 +1125,7 @@ namespace bnet.protocol.authentication {
       get { return email_; }
     }
     
-    public const int ListenerIdFieldNumber = 5;
-    private bool hasListenerId;
-    private ulong listenerId_;
-    public bool HasListenerId {
-      get { return hasListenerId; }
-    }
-    public ulong ListenerId {
-      get { return listenerId_; }
-    }
-    
-    public const int VersionFieldNumber = 6;
+    public const int VersionFieldNumber = 5;
     private bool hasVersion;
     private string version_ = "";
     public bool HasVersion {
@@ -1128,7 +1135,7 @@ namespace bnet.protocol.authentication {
       get { return version_; }
     }
     
-    public const int ApplicationVersionFieldNumber = 7;
+    public const int ApplicationVersionFieldNumber = 6;
     private bool hasApplicationVersion;
     private int applicationVersion_;
     public bool HasApplicationVersion {
@@ -1148,25 +1155,22 @@ namespace bnet.protocol.authentication {
       int size = SerializedSize;
       string[] field_names = _logonRequestFieldNames;
       if (hasProgram) {
-        output.WriteString(1, field_names[5], Program);
+        output.WriteString(1, field_names[4], Program);
       }
       if (hasPlatform) {
-        output.WriteString(2, field_names[4], Platform);
+        output.WriteString(2, field_names[3], Platform);
       }
       if (hasLocale) {
-        output.WriteString(3, field_names[3], Locale);
+        output.WriteString(3, field_names[2], Locale);
       }
       if (hasEmail) {
         output.WriteString(4, field_names[1], Email);
       }
-      if (hasListenerId) {
-        output.WriteUInt64(5, field_names[2], ListenerId);
-      }
       if (hasVersion) {
-        output.WriteString(6, field_names[6], Version);
+        output.WriteString(5, field_names[5], Version);
       }
       if (hasApplicationVersion) {
-        output.WriteInt32(7, field_names[0], ApplicationVersion);
+        output.WriteInt32(6, field_names[0], ApplicationVersion);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1190,14 +1194,11 @@ namespace bnet.protocol.authentication {
         if (hasEmail) {
           size += pb::CodedOutputStream.ComputeStringSize(4, Email);
         }
-        if (hasListenerId) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(5, ListenerId);
-        }
         if (hasVersion) {
-          size += pb::CodedOutputStream.ComputeStringSize(6, Version);
+          size += pb::CodedOutputStream.ComputeStringSize(5, Version);
         }
         if (hasApplicationVersion) {
-          size += pb::CodedOutputStream.ComputeInt32Size(7, ApplicationVersion);
+          size += pb::CodedOutputStream.ComputeInt32Size(6, ApplicationVersion);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1337,9 +1338,6 @@ namespace bnet.protocol.authentication {
         if (other.HasEmail) {
           Email = other.Email;
         }
-        if (other.HasListenerId) {
-          ListenerId = other.ListenerId;
-        }
         if (other.HasVersion) {
           Version = other.Version;
         }
@@ -1405,15 +1403,11 @@ namespace bnet.protocol.authentication {
               result.hasEmail = input.ReadString(ref result.email_);
               break;
             }
-            case 40: {
-              result.hasListenerId = input.ReadUInt64(ref result.listenerId_);
-              break;
-            }
-            case 50: {
+            case 42: {
               result.hasVersion = input.ReadString(ref result.version_);
               break;
             }
-            case 56: {
+            case 48: {
               result.hasApplicationVersion = input.ReadInt32(ref result.applicationVersion_);
               break;
             }
@@ -1508,26 +1502,6 @@ namespace bnet.protocol.authentication {
         PrepareBuilder();
         result.hasEmail = false;
         result.email_ = "";
-        return this;
-      }
-      
-      public bool HasListenerId {
-        get { return result.hasListenerId; }
-      }
-      public ulong ListenerId {
-        get { return result.ListenerId; }
-        set { SetListenerId(value); }
-      }
-      public Builder SetListenerId(ulong value) {
-        PrepareBuilder();
-        result.hasListenerId = true;
-        result.listenerId_ = value;
-        return this;
-      }
-      public Builder ClearListenerId() {
-        PrepareBuilder();
-        result.hasListenerId = false;
-        result.listenerId_ = 0UL;
         return this;
       }
       
@@ -1951,6 +1925,555 @@ namespace bnet.protocol.authentication {
     }
   }
   
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class AccountSettingsNotification : pb::GeneratedMessage<AccountSettingsNotification, AccountSettingsNotification.Builder> {
+    private AccountSettingsNotification() { }
+    private static readonly AccountSettingsNotification defaultInstance = new AccountSettingsNotification().MakeReadOnly();
+    private static readonly string[] _accountSettingsNotificationFieldNames = new string[] { "account_licenses", "can_receive_voice", "can_send_voice", "game_account_licenses", "is_playing_from_igr", "is_using_rid" };
+    private static readonly uint[] _accountSettingsNotificationFieldTags = new uint[] { 10, 40, 48, 18, 32, 24 };
+    public static AccountSettingsNotification DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override AccountSettingsNotification DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override AccountSettingsNotification ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_AccountSettingsNotification__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<AccountSettingsNotification, AccountSettingsNotification.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_AccountSettingsNotification__FieldAccessorTable; }
+    }
+    
+    public const int AccountLicensesFieldNumber = 1;
+    private pbc::PopsicleList<global::bnet.protocol.account.AccountLicense> accountLicenses_ = new pbc::PopsicleList<global::bnet.protocol.account.AccountLicense>();
+    public scg::IList<global::bnet.protocol.account.AccountLicense> AccountLicensesList {
+      get { return accountLicenses_; }
+    }
+    public int AccountLicensesCount {
+      get { return accountLicenses_.Count; }
+    }
+    public global::bnet.protocol.account.AccountLicense GetAccountLicenses(int index) {
+      return accountLicenses_[index];
+    }
+    
+    public const int GameAccountLicensesFieldNumber = 2;
+    private pbc::PopsicleList<global::bnet.protocol.account.AccountLicense> gameAccountLicenses_ = new pbc::PopsicleList<global::bnet.protocol.account.AccountLicense>();
+    public scg::IList<global::bnet.protocol.account.AccountLicense> GameAccountLicensesList {
+      get { return gameAccountLicenses_; }
+    }
+    public int GameAccountLicensesCount {
+      get { return gameAccountLicenses_.Count; }
+    }
+    public global::bnet.protocol.account.AccountLicense GetGameAccountLicenses(int index) {
+      return gameAccountLicenses_[index];
+    }
+    
+    public const int IsUsingRidFieldNumber = 3;
+    private bool hasIsUsingRid;
+    private bool isUsingRid_;
+    public bool HasIsUsingRid {
+      get { return hasIsUsingRid; }
+    }
+    public bool IsUsingRid {
+      get { return isUsingRid_; }
+    }
+    
+    public const int IsPlayingFromIgrFieldNumber = 4;
+    private bool hasIsPlayingFromIgr;
+    private bool isPlayingFromIgr_;
+    public bool HasIsPlayingFromIgr {
+      get { return hasIsPlayingFromIgr; }
+    }
+    public bool IsPlayingFromIgr {
+      get { return isPlayingFromIgr_; }
+    }
+    
+    public const int CanReceiveVoiceFieldNumber = 5;
+    private bool hasCanReceiveVoice;
+    private bool canReceiveVoice_;
+    public bool HasCanReceiveVoice {
+      get { return hasCanReceiveVoice; }
+    }
+    public bool CanReceiveVoice {
+      get { return canReceiveVoice_; }
+    }
+    
+    public const int CanSendVoiceFieldNumber = 6;
+    private bool hasCanSendVoice;
+    private bool canSendVoice_;
+    public bool HasCanSendVoice {
+      get { return hasCanSendVoice; }
+    }
+    public bool CanSendVoice {
+      get { return canSendVoice_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        foreach (global::bnet.protocol.account.AccountLicense element in AccountLicensesList) {
+          if (!element.IsInitialized) return false;
+        }
+        foreach (global::bnet.protocol.account.AccountLicense element in GameAccountLicensesList) {
+          if (!element.IsInitialized) return false;
+        }
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _accountSettingsNotificationFieldNames;
+      if (accountLicenses_.Count > 0) {
+        output.WriteMessageArray(1, field_names[0], accountLicenses_);
+      }
+      if (gameAccountLicenses_.Count > 0) {
+        output.WriteMessageArray(2, field_names[3], gameAccountLicenses_);
+      }
+      if (hasIsUsingRid) {
+        output.WriteBool(3, field_names[5], IsUsingRid);
+      }
+      if (hasIsPlayingFromIgr) {
+        output.WriteBool(4, field_names[4], IsPlayingFromIgr);
+      }
+      if (hasCanReceiveVoice) {
+        output.WriteBool(5, field_names[1], CanReceiveVoice);
+      }
+      if (hasCanSendVoice) {
+        output.WriteBool(6, field_names[2], CanSendVoice);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        foreach (global::bnet.protocol.account.AccountLicense element in AccountLicensesList) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, element);
+        }
+        foreach (global::bnet.protocol.account.AccountLicense element in GameAccountLicensesList) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, element);
+        }
+        if (hasIsUsingRid) {
+          size += pb::CodedOutputStream.ComputeBoolSize(3, IsUsingRid);
+        }
+        if (hasIsPlayingFromIgr) {
+          size += pb::CodedOutputStream.ComputeBoolSize(4, IsPlayingFromIgr);
+        }
+        if (hasCanReceiveVoice) {
+          size += pb::CodedOutputStream.ComputeBoolSize(5, CanReceiveVoice);
+        }
+        if (hasCanSendVoice) {
+          size += pb::CodedOutputStream.ComputeBoolSize(6, CanSendVoice);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static AccountSettingsNotification ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private AccountSettingsNotification MakeReadOnly() {
+      accountLicenses_.MakeReadOnly();
+      gameAccountLicenses_.MakeReadOnly();
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(AccountSettingsNotification prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<AccountSettingsNotification, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(AccountSettingsNotification cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private AccountSettingsNotification result;
+      
+      private AccountSettingsNotification PrepareBuilder() {
+        if (resultIsReadOnly) {
+          AccountSettingsNotification original = result;
+          result = new AccountSettingsNotification();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override AccountSettingsNotification MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.authentication.AccountSettingsNotification.Descriptor; }
+      }
+      
+      public override AccountSettingsNotification DefaultInstanceForType {
+        get { return global::bnet.protocol.authentication.AccountSettingsNotification.DefaultInstance; }
+      }
+      
+      public override AccountSettingsNotification BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is AccountSettingsNotification) {
+          return MergeFrom((AccountSettingsNotification) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(AccountSettingsNotification other) {
+        if (other == global::bnet.protocol.authentication.AccountSettingsNotification.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.accountLicenses_.Count != 0) {
+          result.accountLicenses_.Add(other.accountLicenses_);
+        }
+        if (other.gameAccountLicenses_.Count != 0) {
+          result.gameAccountLicenses_.Add(other.gameAccountLicenses_);
+        }
+        if (other.HasIsUsingRid) {
+          IsUsingRid = other.IsUsingRid;
+        }
+        if (other.HasIsPlayingFromIgr) {
+          IsPlayingFromIgr = other.IsPlayingFromIgr;
+        }
+        if (other.HasCanReceiveVoice) {
+          CanReceiveVoice = other.CanReceiveVoice;
+        }
+        if (other.HasCanSendVoice) {
+          CanSendVoice = other.CanSendVoice;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_accountSettingsNotificationFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _accountSettingsNotificationFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              input.ReadMessageArray(tag, field_name, result.accountLicenses_, global::bnet.protocol.account.AccountLicense.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 18: {
+              input.ReadMessageArray(tag, field_name, result.gameAccountLicenses_, global::bnet.protocol.account.AccountLicense.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 24: {
+              result.hasIsUsingRid = input.ReadBool(ref result.isUsingRid_);
+              break;
+            }
+            case 32: {
+              result.hasIsPlayingFromIgr = input.ReadBool(ref result.isPlayingFromIgr_);
+              break;
+            }
+            case 40: {
+              result.hasCanReceiveVoice = input.ReadBool(ref result.canReceiveVoice_);
+              break;
+            }
+            case 48: {
+              result.hasCanSendVoice = input.ReadBool(ref result.canSendVoice_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public pbc::IPopsicleList<global::bnet.protocol.account.AccountLicense> AccountLicensesList {
+        get { return PrepareBuilder().accountLicenses_; }
+      }
+      public int AccountLicensesCount {
+        get { return result.AccountLicensesCount; }
+      }
+      public global::bnet.protocol.account.AccountLicense GetAccountLicenses(int index) {
+        return result.GetAccountLicenses(index);
+      }
+      public Builder SetAccountLicenses(int index, global::bnet.protocol.account.AccountLicense value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.accountLicenses_[index] = value;
+        return this;
+      }
+      public Builder SetAccountLicenses(int index, global::bnet.protocol.account.AccountLicense.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.accountLicenses_[index] = builderForValue.Build();
+        return this;
+      }
+      public Builder AddAccountLicenses(global::bnet.protocol.account.AccountLicense value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.accountLicenses_.Add(value);
+        return this;
+      }
+      public Builder AddAccountLicenses(global::bnet.protocol.account.AccountLicense.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.accountLicenses_.Add(builderForValue.Build());
+        return this;
+      }
+      public Builder AddRangeAccountLicenses(scg::IEnumerable<global::bnet.protocol.account.AccountLicense> values) {
+        PrepareBuilder();
+        result.accountLicenses_.Add(values);
+        return this;
+      }
+      public Builder ClearAccountLicenses() {
+        PrepareBuilder();
+        result.accountLicenses_.Clear();
+        return this;
+      }
+      
+      public pbc::IPopsicleList<global::bnet.protocol.account.AccountLicense> GameAccountLicensesList {
+        get { return PrepareBuilder().gameAccountLicenses_; }
+      }
+      public int GameAccountLicensesCount {
+        get { return result.GameAccountLicensesCount; }
+      }
+      public global::bnet.protocol.account.AccountLicense GetGameAccountLicenses(int index) {
+        return result.GetGameAccountLicenses(index);
+      }
+      public Builder SetGameAccountLicenses(int index, global::bnet.protocol.account.AccountLicense value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.gameAccountLicenses_[index] = value;
+        return this;
+      }
+      public Builder SetGameAccountLicenses(int index, global::bnet.protocol.account.AccountLicense.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.gameAccountLicenses_[index] = builderForValue.Build();
+        return this;
+      }
+      public Builder AddGameAccountLicenses(global::bnet.protocol.account.AccountLicense value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.gameAccountLicenses_.Add(value);
+        return this;
+      }
+      public Builder AddGameAccountLicenses(global::bnet.protocol.account.AccountLicense.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.gameAccountLicenses_.Add(builderForValue.Build());
+        return this;
+      }
+      public Builder AddRangeGameAccountLicenses(scg::IEnumerable<global::bnet.protocol.account.AccountLicense> values) {
+        PrepareBuilder();
+        result.gameAccountLicenses_.Add(values);
+        return this;
+      }
+      public Builder ClearGameAccountLicenses() {
+        PrepareBuilder();
+        result.gameAccountLicenses_.Clear();
+        return this;
+      }
+      
+      public bool HasIsUsingRid {
+        get { return result.hasIsUsingRid; }
+      }
+      public bool IsUsingRid {
+        get { return result.IsUsingRid; }
+        set { SetIsUsingRid(value); }
+      }
+      public Builder SetIsUsingRid(bool value) {
+        PrepareBuilder();
+        result.hasIsUsingRid = true;
+        result.isUsingRid_ = value;
+        return this;
+      }
+      public Builder ClearIsUsingRid() {
+        PrepareBuilder();
+        result.hasIsUsingRid = false;
+        result.isUsingRid_ = false;
+        return this;
+      }
+      
+      public bool HasIsPlayingFromIgr {
+        get { return result.hasIsPlayingFromIgr; }
+      }
+      public bool IsPlayingFromIgr {
+        get { return result.IsPlayingFromIgr; }
+        set { SetIsPlayingFromIgr(value); }
+      }
+      public Builder SetIsPlayingFromIgr(bool value) {
+        PrepareBuilder();
+        result.hasIsPlayingFromIgr = true;
+        result.isPlayingFromIgr_ = value;
+        return this;
+      }
+      public Builder ClearIsPlayingFromIgr() {
+        PrepareBuilder();
+        result.hasIsPlayingFromIgr = false;
+        result.isPlayingFromIgr_ = false;
+        return this;
+      }
+      
+      public bool HasCanReceiveVoice {
+        get { return result.hasCanReceiveVoice; }
+      }
+      public bool CanReceiveVoice {
+        get { return result.CanReceiveVoice; }
+        set { SetCanReceiveVoice(value); }
+      }
+      public Builder SetCanReceiveVoice(bool value) {
+        PrepareBuilder();
+        result.hasCanReceiveVoice = true;
+        result.canReceiveVoice_ = value;
+        return this;
+      }
+      public Builder ClearCanReceiveVoice() {
+        PrepareBuilder();
+        result.hasCanReceiveVoice = false;
+        result.canReceiveVoice_ = false;
+        return this;
+      }
+      
+      public bool HasCanSendVoice {
+        get { return result.hasCanSendVoice; }
+      }
+      public bool CanSendVoice {
+        get { return result.CanSendVoice; }
+        set { SetCanSendVoice(value); }
+      }
+      public Builder SetCanSendVoice(bool value) {
+        PrepareBuilder();
+        result.hasCanSendVoice = true;
+        result.canSendVoice_ = value;
+        return this;
+      }
+      public Builder ClearCanSendVoice() {
+        PrepareBuilder();
+        result.hasCanSendVoice = false;
+        result.canSendVoice_ = false;
+        return this;
+      }
+    }
+    static AccountSettingsNotification() {
+      object.ReferenceEquals(global::bnet.protocol.authentication.AuthenticationService.Descriptor, null);
+    }
+  }
+  
   #endregion
   
   #region Services
@@ -1966,6 +2489,10 @@ namespace bnet.protocol.authentication {
         pb::IRpcController controller,
         global::bnet.protocol.authentication.ModuleMessageRequest request,
         global::System.Action<global::bnet.protocol.NoData> done);
+    public abstract void AccountSettings(
+        pb::IRpcController controller,
+        global::bnet.protocol.authentication.AccountSettingsNotification request,
+        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
     
     public static pbd::ServiceDescriptor Descriptor {
       get { return AuthenticationService.Descriptor.Services[0]; }
@@ -1994,6 +2521,11 @@ namespace bnet.protocol.authentication {
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
+        case 2:
+          this.AccountSettings(controller, (global::bnet.protocol.authentication.AccountSettingsNotification) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
+              done));
+          return;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2009,6 +2541,8 @@ namespace bnet.protocol.authentication {
           return global::bnet.protocol.authentication.ModuleLoadRequest.DefaultInstance;
         case 1:
           return global::bnet.protocol.authentication.ModuleMessageRequest.DefaultInstance;
+        case 2:
+          return global::bnet.protocol.authentication.AccountSettingsNotification.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2024,6 +2558,8 @@ namespace bnet.protocol.authentication {
           return global::bnet.protocol.authentication.ModuleLoadResponse.DefaultInstance;
         case 1:
           return global::bnet.protocol.NoData.DefaultInstance;
+        case 2:
+          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2063,6 +2599,15 @@ namespace bnet.protocol.authentication {
         channel.CallMethod(Descriptor.Methods[1],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
+      }
+      
+      public override void AccountSettings(
+          pb::IRpcController controller,
+          global::bnet.protocol.authentication.AccountSettingsNotification request,
+          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
+        channel.CallMethod(Descriptor.Methods[2],
+            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }
     }
   }

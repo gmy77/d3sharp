@@ -43,7 +43,7 @@ namespace D3.Client {
           "ZXR0aW5ncxIYCg11c2VfbGFzdF9oZXJvGAEgASgFOgEwEh0KEnNob3dfb2Zm" + 
           "bGluZV90b2FzdBgCIAEoBToBMBIeChZybXRfbGFzdF91c2VkX2N1cnJlbmN5" + 
           "GAMgASgJEigKHWNvb3BfbGFzdF9jcmVhdGVfZ2FtZV9wcml2YWN5GAQgASgF" + 
-          "OgExIucfCgtQcmVmZXJlbmNlcxIPCgd2ZXJzaW9uGAEgAigFEhAKBWZsYWdz" + 
+          "OgExIsogCgtQcmVmZXJlbmNlcxIPCgd2ZXJzaW9uGAEgAigFEhAKBWZsYWdz" + 
           "GAIgASgNOgEwEiIKF2l0ZW1zX29uX2dyb3VuZF9zZXR0aW5nGAYgASgNOgEw" + 
           "EjoKGGFjdGlvbl9iaW5kaW5nX2ludmVudG9yeRgKIAEoCzIYLkQzLkNsaWVu" + 
           "dC5BY3Rpb25CaW5kaW5nEjkKF2FjdGlvbl9iaW5kaW5nX2hpcmVsaW5nGAwg" + 
@@ -82,7 +82,7 @@ namespace D3.Client {
           "bmdfc2tpbGwyGCYgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSNwoV" + 
           "YWN0aW9uX2JpbmRpbmdfc2tpbGwzGCcgASgLMhguRDMuQ2xpZW50LkFjdGlv" + 
           "bkJpbmRpbmcSNwoVYWN0aW9uX2JpbmRpbmdfc2tpbGw0GCggASgLMhguRDMu" + 
-          "Q2xpZW50LkFjdGlvbkJpbmRpbmcSNwoVYWN0aW9uX2JpbmRpbmdfc2tpbGw1" + 
+          "Q2xpZW50LkFjdGlvbkJpbmRpbmcSNwoVYWN0aW9uX2JpbmRpbmdfcG90aW9u" + 
           "GCkgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSOwoZYWN0aW9uX2Jp" + 
           "bmRpbmdfYmFubmVyZHJvcBgqIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5k" + 
           "aW5nEjUKE2FjdGlvbl9iaW5kaW5nX3pvb20YKyABKAsyGC5EMy5DbGllbnQu" + 
@@ -124,16 +124,18 @@ namespace D3.Client {
           "ZGluZxI9ChthY3Rpb25fYmluZGluZ19iYW5uZXJzY3JlZW4YRSABKAsyGC5E" + 
           "My5DbGllbnQuQWN0aW9uQmluZGluZxI0ChJhY3Rpb25fYmluZGluZ19sbWIY" + 
           "RiABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI0ChJhY3Rpb25fYmlu" + 
-          "ZGluZ19ybWIYRyABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZyKFAwoF" + 
-          "RmxhZ3MSHQoZU0hPV19JVEVNX1RPT0xUSVBfT05fRFJPUBABEhgKFFNIT1df" + 
-          "TU9OU1RFUl9IUF9CQVJTEAISFwoTU0hPV19QTEFZRVJfSFBfQkFSUxADEhgK" + 
-          "FFNIT1dfSVRFTVNfT05fR1JPVU5EEAYSEQoNTE9DS19TS0lMTEJBUhAHEhcK" + 
-          "E1NIT1dfREFNQUdFX05VTUJFUlMQCBISCg5TSE9XX0NSSVRJQ0FMUxAJEhsK" + 
-          "F1NIT1dfREVGRU5TSVZFX01FU1NBR0VTEAoSEgoOSU5WRU5UT1JZX1pPT00Q" + 
-          "CxIUChBBVVRPX0VRVUlQX0lURU1TEAwSEgoOU0hPV19UVVRPUklBTFMQDRIU" + 
-          "ChBTSE9XX0JSRUFEX0NSVU1CEA4SGAoURElTQUJMRV9PU19TSE9SVENVVFMQ" + 
-          "ERIVChFTSE9XX0hFQUxfTlVNQkVSUxASEhUKEVNIT1dfUExBWUVSX05BTUVT" + 
-          "EBMSFwoTU0hPV19IUF9CQVJfTlVNQkVSUxAU");
+          "ZGluZ19ybWIYRyABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI1ChNh" + 
+          "Y3Rpb25fYmluZGluZ193YWxrGEggASgLMhguRDMuQ2xpZW50LkFjdGlvbkJp" + 
+          "bmRpbmcisQMKBUZsYWdzEh0KGVNIT1dfSVRFTV9UT09MVElQX09OX0RST1AQ" + 
+          "ARIYChRTSE9XX01PTlNURVJfSFBfQkFSUxACEhcKE1NIT1dfUExBWUVSX0hQ" + 
+          "X0JBUlMQAxIYChRTSE9XX0lURU1TX09OX0dST1VORBAGEhcKE1NIT1dfREFN" + 
+          "QUdFX05VTUJFUlMQCBISCg5TSE9XX0NSSVRJQ0FMUxAJEhsKF1NIT1dfREVG" + 
+          "RU5TSVZFX01FU1NBR0VTEAoSEgoOSU5WRU5UT1JZX1pPT00QCxIUChBBVVRP" + 
+          "X0VRVUlQX0lURU1TEAwSEgoOU0hPV19UVVRPUklBTFMQDRIUChBTSE9XX0JS" + 
+          "RUFEX0NSVU1CEA4SGAoURElTQUJMRV9PU19TSE9SVENVVFMQERIVChFTSE9X" + 
+          "X0hFQUxfTlVNQkVSUxASEhUKEVNIT1dfUExBWUVSX05BTUVTEBMSFwoTU0hP" + 
+          "V19IUF9CQVJfTlVNQkVSUxAUEg4KClNIT1dfQ0xPQ0sQFRIaChZTSE9XX0FE" + 
+          "VkFOQ0VEX1RPT0xUSVBTEBYSEQoNRUxFQ1RJVkVfTU9ERRAX");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Client_ToonSettings__Descriptor = Descriptor.MessageTypes[0];
@@ -151,7 +153,7 @@ namespace D3.Client {
         internal__static_D3_Client_Preferences__Descriptor = Descriptor.MessageTypes[3];
         internal__static_D3_Client_Preferences__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Client.Preferences, global::D3.Client.Preferences.Builder>(internal__static_D3_Client_Preferences__Descriptor,
-                new string[] { "Version", "Flags", "ItemsOnGroundSetting", "ActionBindingInventory", "ActionBindingHireling", "ActionBindingSkills", "ActionBindingQuests", "ActionBindingLore", "ActionBindingSocial", "ActionBindingWorldmap", "ActionBindingHelp", "ActionBindingRecentplayers", "ActionBindingChatlobby", "ActionBindingAchievements", "ActionBindingProfile", "ActionBindingAuctionhouse", "ActionBindingClear", "ActionBindingConsole", "ActionBindingMap", "ActionBindingSkillcycle", "ActionBindingTogglemonsterhpbars", "ActionBindingToggleplayerhpbars", "ActionBindingToggledamagenumbers", "ActionBindingToggleitemsonground", "ActionBindingRewhisper", "ActionBindingWhisperreply", "ActionBindingVoiceptt", "ActionBindingSkill1", "ActionBindingSkill2", "ActionBindingSkill3", "ActionBindingSkill4", "ActionBindingSkill5", "ActionBindingBannerdrop", "ActionBindingZoom", "ActionBindingEmotefollow", "ActionBindingEmotegive", "ActionBindingEmotethanks", "ActionBindingEmotesorry", "ActionBindingEmotebye", "ActionBindingEmotedie", "ActionBindingEmoterun", "ActionBindingEmotewait", "ActionBindingEmotego", "ActionBindingEmotehelp", "ActionBindingEmoteyes", "ActionBindingEmoteno", "ActionBindingEmotestay", "ActionBindingEmoteattack", "ActionBindingEmoteretreat", "ActionBindingEmotehold", "ActionBindingEmotetakeobjective", "ActionBindingEmotelaugh", "ActionBindingHoldposition", "ActionBindingSystemmastervolumeup", "ActionBindingSystemmastervolumedown", "ActionBindingSystemtogglemusic", "ActionBindingSystemtogglesound", "ActionBindingSystemscreenshot", "ActionBindingStoneofrecall", "ActionBindingBannerscreen", "ActionBindingLmb", "ActionBindingRmb", });
+                new string[] { "Version", "Flags", "ItemsOnGroundSetting", "ActionBindingInventory", "ActionBindingHireling", "ActionBindingSkills", "ActionBindingQuests", "ActionBindingLore", "ActionBindingSocial", "ActionBindingWorldmap", "ActionBindingHelp", "ActionBindingRecentplayers", "ActionBindingChatlobby", "ActionBindingAchievements", "ActionBindingProfile", "ActionBindingAuctionhouse", "ActionBindingClear", "ActionBindingConsole", "ActionBindingMap", "ActionBindingSkillcycle", "ActionBindingTogglemonsterhpbars", "ActionBindingToggleplayerhpbars", "ActionBindingToggledamagenumbers", "ActionBindingToggleitemsonground", "ActionBindingRewhisper", "ActionBindingWhisperreply", "ActionBindingVoiceptt", "ActionBindingSkill1", "ActionBindingSkill2", "ActionBindingSkill3", "ActionBindingSkill4", "ActionBindingPotion", "ActionBindingBannerdrop", "ActionBindingZoom", "ActionBindingEmotefollow", "ActionBindingEmotegive", "ActionBindingEmotethanks", "ActionBindingEmotesorry", "ActionBindingEmotebye", "ActionBindingEmotedie", "ActionBindingEmoterun", "ActionBindingEmotewait", "ActionBindingEmotego", "ActionBindingEmotehelp", "ActionBindingEmoteyes", "ActionBindingEmoteno", "ActionBindingEmotestay", "ActionBindingEmoteattack", "ActionBindingEmoteretreat", "ActionBindingEmotehold", "ActionBindingEmotetakeobjective", "ActionBindingEmotelaugh", "ActionBindingHoldposition", "ActionBindingSystemmastervolumeup", "ActionBindingSystemmastervolumedown", "ActionBindingSystemtogglemusic", "ActionBindingSystemtogglesound", "ActionBindingSystemscreenshot", "ActionBindingStoneofrecall", "ActionBindingBannerscreen", "ActionBindingLmb", "ActionBindingRmb", "ActionBindingWalk", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -1296,8 +1298,8 @@ namespace D3.Client {
   public sealed partial class Preferences : pb::GeneratedMessage<Preferences, Preferences.Builder> {
     private Preferences() { }
     private static readonly Preferences defaultInstance = new Preferences().MakeReadOnly();
-    private static readonly string[] _preferencesFieldNames = new string[] { "action_binding_achievements", "action_binding_auctionhouse", "action_binding_bannerdrop", "action_binding_bannerscreen", "action_binding_chatlobby", "action_binding_clear", "action_binding_console", "action_binding_emoteattack", "action_binding_emotebye", "action_binding_emotedie", "action_binding_emotefollow", "action_binding_emotegive", "action_binding_emotego", "action_binding_emotehelp", "action_binding_emotehold", "action_binding_emotelaugh", "action_binding_emoteno", "action_binding_emoteretreat", "action_binding_emoterun", "action_binding_emotesorry", "action_binding_emotestay", "action_binding_emotetakeobjective", "action_binding_emotethanks", "action_binding_emotewait", "action_binding_emoteyes", "action_binding_help", "action_binding_hireling", "action_binding_holdposition", "action_binding_inventory", "action_binding_lmb", "action_binding_lore", "action_binding_map", "action_binding_profile", "action_binding_quests", "action_binding_recentplayers", "action_binding_rewhisper", "action_binding_rmb", "action_binding_skill1", "action_binding_skill2", "action_binding_skill3", "action_binding_skill4", "action_binding_skill5", "action_binding_skillcycle", "action_binding_skills", "action_binding_social", "action_binding_stoneofrecall", "action_binding_systemmastervolumedown", "action_binding_systemmastervolumeup", "action_binding_systemscreenshot", "action_binding_systemtogglemusic", "action_binding_systemtogglesound", "action_binding_toggledamagenumbers", "action_binding_toggleitemsonground", "action_binding_togglemonsterhpbars", "action_binding_toggleplayerhpbars", "action_binding_voiceptt", "action_binding_whisperreply", "action_binding_worldmap", "action_binding_zoom", "flags", "items_on_ground_setting", "version" };
-    private static readonly uint[] _preferencesFieldTags = new uint[] { 178, 194, 338, 554, 170, 202, 210, 458, 386, 394, 354, 362, 418, 426, 474, 490, 442, 466, 402, 378, 450, 482, 370, 410, 434, 146, 98, 498, 82, 562, 122, 218, 186, 114, 162, 274, 570, 298, 306, 314, 322, 330, 226, 106, 130, 546, 514, 506, 538, 522, 530, 258, 266, 234, 250, 290, 282, 138, 346, 16, 48, 8 };
+    private static readonly string[] _preferencesFieldNames = new string[] { "action_binding_achievements", "action_binding_auctionhouse", "action_binding_bannerdrop", "action_binding_bannerscreen", "action_binding_chatlobby", "action_binding_clear", "action_binding_console", "action_binding_emoteattack", "action_binding_emotebye", "action_binding_emotedie", "action_binding_emotefollow", "action_binding_emotegive", "action_binding_emotego", "action_binding_emotehelp", "action_binding_emotehold", "action_binding_emotelaugh", "action_binding_emoteno", "action_binding_emoteretreat", "action_binding_emoterun", "action_binding_emotesorry", "action_binding_emotestay", "action_binding_emotetakeobjective", "action_binding_emotethanks", "action_binding_emotewait", "action_binding_emoteyes", "action_binding_help", "action_binding_hireling", "action_binding_holdposition", "action_binding_inventory", "action_binding_lmb", "action_binding_lore", "action_binding_map", "action_binding_potion", "action_binding_profile", "action_binding_quests", "action_binding_recentplayers", "action_binding_rewhisper", "action_binding_rmb", "action_binding_skill1", "action_binding_skill2", "action_binding_skill3", "action_binding_skill4", "action_binding_skillcycle", "action_binding_skills", "action_binding_social", "action_binding_stoneofrecall", "action_binding_systemmastervolumedown", "action_binding_systemmastervolumeup", "action_binding_systemscreenshot", "action_binding_systemtogglemusic", "action_binding_systemtogglesound", "action_binding_toggledamagenumbers", "action_binding_toggleitemsonground", "action_binding_togglemonsterhpbars", "action_binding_toggleplayerhpbars", "action_binding_voiceptt", "action_binding_walk", "action_binding_whisperreply", "action_binding_worldmap", "action_binding_zoom", "flags", "items_on_ground_setting", "version" };
+    private static readonly uint[] _preferencesFieldTags = new uint[] { 178, 194, 338, 554, 170, 202, 210, 458, 386, 394, 354, 362, 418, 426, 474, 490, 442, 466, 402, 378, 450, 482, 370, 410, 434, 146, 98, 498, 82, 562, 122, 218, 330, 186, 114, 162, 274, 570, 298, 306, 314, 322, 226, 106, 130, 546, 514, 506, 538, 522, 530, 258, 266, 234, 250, 290, 578, 282, 138, 346, 16, 48, 8 };
     public static Preferences DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1330,7 +1332,6 @@ namespace D3.Client {
         SHOW_MONSTER_HP_BARS = 2,
         SHOW_PLAYER_HP_BARS = 3,
         SHOW_ITEMS_ON_GROUND = 6,
-        LOCK_SKILLBAR = 7,
         SHOW_DAMAGE_NUMBERS = 8,
         SHOW_CRITICALS = 9,
         SHOW_DEFENSIVE_MESSAGES = 10,
@@ -1342,6 +1343,9 @@ namespace D3.Client {
         SHOW_HEAL_NUMBERS = 18,
         SHOW_PLAYER_NAMES = 19,
         SHOW_HP_BAR_NUMBERS = 20,
+        SHOW_CLOCK = 21,
+        SHOW_ADVANCED_TOOLTIPS = 22,
+        ELECTIVE_MODE = 23,
       }
       
     }
@@ -1657,14 +1661,14 @@ namespace D3.Client {
       get { return actionBindingSkill4_ ?? global::D3.Client.ActionBinding.DefaultInstance; }
     }
     
-    public const int ActionBindingSkill5FieldNumber = 41;
-    private bool hasActionBindingSkill5;
-    private global::D3.Client.ActionBinding actionBindingSkill5_;
-    public bool HasActionBindingSkill5 {
-      get { return hasActionBindingSkill5; }
+    public const int ActionBindingPotionFieldNumber = 41;
+    private bool hasActionBindingPotion;
+    private global::D3.Client.ActionBinding actionBindingPotion_;
+    public bool HasActionBindingPotion {
+      get { return hasActionBindingPotion; }
     }
-    public global::D3.Client.ActionBinding ActionBindingSkill5 {
-      get { return actionBindingSkill5_ ?? global::D3.Client.ActionBinding.DefaultInstance; }
+    public global::D3.Client.ActionBinding ActionBindingPotion {
+      get { return actionBindingPotion_ ?? global::D3.Client.ActionBinding.DefaultInstance; }
     }
     
     public const int ActionBindingBannerdropFieldNumber = 42;
@@ -1967,6 +1971,16 @@ namespace D3.Client {
       get { return actionBindingRmb_ ?? global::D3.Client.ActionBinding.DefaultInstance; }
     }
     
+    public const int ActionBindingWalkFieldNumber = 72;
+    private bool hasActionBindingWalk;
+    private global::D3.Client.ActionBinding actionBindingWalk_;
+    public bool HasActionBindingWalk {
+      get { return hasActionBindingWalk; }
+    }
+    public global::D3.Client.ActionBinding ActionBindingWalk {
+      get { return actionBindingWalk_ ?? global::D3.Client.ActionBinding.DefaultInstance; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasVersion) return false;
@@ -2054,8 +2068,8 @@ namespace D3.Client {
         if (HasActionBindingSkill4) {
           if (!ActionBindingSkill4.IsInitialized) return false;
         }
-        if (HasActionBindingSkill5) {
-          if (!ActionBindingSkill5.IsInitialized) return false;
+        if (HasActionBindingPotion) {
+          if (!ActionBindingPotion.IsInitialized) return false;
         }
         if (HasActionBindingBannerdrop) {
           if (!ActionBindingBannerdrop.IsInitialized) return false;
@@ -2147,6 +2161,9 @@ namespace D3.Client {
         if (HasActionBindingRmb) {
           if (!ActionBindingRmb.IsInitialized) return false;
         }
+        if (HasActionBindingWalk) {
+          if (!ActionBindingWalk.IsInitialized) return false;
+        }
         return true;
       }
     }
@@ -2155,13 +2172,13 @@ namespace D3.Client {
       int size = SerializedSize;
       string[] field_names = _preferencesFieldNames;
       if (hasVersion) {
-        output.WriteInt32(1, field_names[61], Version);
+        output.WriteInt32(1, field_names[62], Version);
       }
       if (hasFlags) {
-        output.WriteUInt32(2, field_names[59], Flags);
+        output.WriteUInt32(2, field_names[60], Flags);
       }
       if (hasItemsOnGroundSetting) {
-        output.WriteUInt32(6, field_names[60], ItemsOnGroundSetting);
+        output.WriteUInt32(6, field_names[61], ItemsOnGroundSetting);
       }
       if (hasActionBindingInventory) {
         output.WriteMessage(10, field_names[28], ActionBindingInventory);
@@ -2173,7 +2190,7 @@ namespace D3.Client {
         output.WriteMessage(13, field_names[43], ActionBindingSkills);
       }
       if (hasActionBindingQuests) {
-        output.WriteMessage(14, field_names[33], ActionBindingQuests);
+        output.WriteMessage(14, field_names[34], ActionBindingQuests);
       }
       if (hasActionBindingLore) {
         output.WriteMessage(15, field_names[30], ActionBindingLore);
@@ -2182,13 +2199,13 @@ namespace D3.Client {
         output.WriteMessage(16, field_names[44], ActionBindingSocial);
       }
       if (hasActionBindingWorldmap) {
-        output.WriteMessage(17, field_names[57], ActionBindingWorldmap);
+        output.WriteMessage(17, field_names[58], ActionBindingWorldmap);
       }
       if (hasActionBindingHelp) {
         output.WriteMessage(18, field_names[25], ActionBindingHelp);
       }
       if (hasActionBindingRecentplayers) {
-        output.WriteMessage(20, field_names[34], ActionBindingRecentplayers);
+        output.WriteMessage(20, field_names[35], ActionBindingRecentplayers);
       }
       if (hasActionBindingChatlobby) {
         output.WriteMessage(21, field_names[4], ActionBindingChatlobby);
@@ -2197,7 +2214,7 @@ namespace D3.Client {
         output.WriteMessage(22, field_names[0], ActionBindingAchievements);
       }
       if (hasActionBindingProfile) {
-        output.WriteMessage(23, field_names[32], ActionBindingProfile);
+        output.WriteMessage(23, field_names[33], ActionBindingProfile);
       }
       if (hasActionBindingAuctionhouse) {
         output.WriteMessage(24, field_names[1], ActionBindingAuctionhouse);
@@ -2227,34 +2244,34 @@ namespace D3.Client {
         output.WriteMessage(33, field_names[52], ActionBindingToggleitemsonground);
       }
       if (hasActionBindingRewhisper) {
-        output.WriteMessage(34, field_names[35], ActionBindingRewhisper);
+        output.WriteMessage(34, field_names[36], ActionBindingRewhisper);
       }
       if (hasActionBindingWhisperreply) {
-        output.WriteMessage(35, field_names[56], ActionBindingWhisperreply);
+        output.WriteMessage(35, field_names[57], ActionBindingWhisperreply);
       }
       if (hasActionBindingVoiceptt) {
         output.WriteMessage(36, field_names[55], ActionBindingVoiceptt);
       }
       if (hasActionBindingSkill1) {
-        output.WriteMessage(37, field_names[37], ActionBindingSkill1);
+        output.WriteMessage(37, field_names[38], ActionBindingSkill1);
       }
       if (hasActionBindingSkill2) {
-        output.WriteMessage(38, field_names[38], ActionBindingSkill2);
+        output.WriteMessage(38, field_names[39], ActionBindingSkill2);
       }
       if (hasActionBindingSkill3) {
-        output.WriteMessage(39, field_names[39], ActionBindingSkill3);
+        output.WriteMessage(39, field_names[40], ActionBindingSkill3);
       }
       if (hasActionBindingSkill4) {
-        output.WriteMessage(40, field_names[40], ActionBindingSkill4);
+        output.WriteMessage(40, field_names[41], ActionBindingSkill4);
       }
-      if (hasActionBindingSkill5) {
-        output.WriteMessage(41, field_names[41], ActionBindingSkill5);
+      if (hasActionBindingPotion) {
+        output.WriteMessage(41, field_names[32], ActionBindingPotion);
       }
       if (hasActionBindingBannerdrop) {
         output.WriteMessage(42, field_names[2], ActionBindingBannerdrop);
       }
       if (hasActionBindingZoom) {
-        output.WriteMessage(43, field_names[58], ActionBindingZoom);
+        output.WriteMessage(43, field_names[59], ActionBindingZoom);
       }
       if (hasActionBindingEmotefollow) {
         output.WriteMessage(44, field_names[10], ActionBindingEmotefollow);
@@ -2338,7 +2355,10 @@ namespace D3.Client {
         output.WriteMessage(70, field_names[29], ActionBindingLmb);
       }
       if (hasActionBindingRmb) {
-        output.WriteMessage(71, field_names[36], ActionBindingRmb);
+        output.WriteMessage(71, field_names[37], ActionBindingRmb);
+      }
+      if (hasActionBindingWalk) {
+        output.WriteMessage(72, field_names[56], ActionBindingWalk);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2443,8 +2463,8 @@ namespace D3.Client {
         if (hasActionBindingSkill4) {
           size += pb::CodedOutputStream.ComputeMessageSize(40, ActionBindingSkill4);
         }
-        if (hasActionBindingSkill5) {
-          size += pb::CodedOutputStream.ComputeMessageSize(41, ActionBindingSkill5);
+        if (hasActionBindingPotion) {
+          size += pb::CodedOutputStream.ComputeMessageSize(41, ActionBindingPotion);
         }
         if (hasActionBindingBannerdrop) {
           size += pb::CodedOutputStream.ComputeMessageSize(42, ActionBindingBannerdrop);
@@ -2535,6 +2555,9 @@ namespace D3.Client {
         }
         if (hasActionBindingRmb) {
           size += pb::CodedOutputStream.ComputeMessageSize(71, ActionBindingRmb);
+        }
+        if (hasActionBindingWalk) {
+          size += pb::CodedOutputStream.ComputeMessageSize(72, ActionBindingWalk);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2755,8 +2778,8 @@ namespace D3.Client {
         if (other.HasActionBindingSkill4) {
           MergeActionBindingSkill4(other.ActionBindingSkill4);
         }
-        if (other.HasActionBindingSkill5) {
-          MergeActionBindingSkill5(other.ActionBindingSkill5);
+        if (other.HasActionBindingPotion) {
+          MergeActionBindingPotion(other.ActionBindingPotion);
         }
         if (other.HasActionBindingBannerdrop) {
           MergeActionBindingBannerdrop(other.ActionBindingBannerdrop);
@@ -2847,6 +2870,9 @@ namespace D3.Client {
         }
         if (other.HasActionBindingRmb) {
           MergeActionBindingRmb(other.ActionBindingRmb);
+        }
+        if (other.HasActionBindingWalk) {
+          MergeActionBindingWalk(other.ActionBindingWalk);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -3157,11 +3183,11 @@ namespace D3.Client {
             }
             case 330: {
               global::D3.Client.ActionBinding.Builder subBuilder = global::D3.Client.ActionBinding.CreateBuilder();
-              if (result.hasActionBindingSkill5) {
-                subBuilder.MergeFrom(ActionBindingSkill5);
+              if (result.hasActionBindingPotion) {
+                subBuilder.MergeFrom(ActionBindingPotion);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              ActionBindingSkill5 = subBuilder.BuildPartial();
+              ActionBindingPotion = subBuilder.BuildPartial();
               break;
             }
             case 338: {
@@ -3432,6 +3458,15 @@ namespace D3.Client {
               }
               input.ReadMessage(subBuilder, extensionRegistry);
               ActionBindingRmb = subBuilder.BuildPartial();
+              break;
+            }
+            case 578: {
+              global::D3.Client.ActionBinding.Builder subBuilder = global::D3.Client.ActionBinding.CreateBuilder();
+              if (result.hasActionBindingWalk) {
+                subBuilder.MergeFrom(ActionBindingWalk);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              ActionBindingWalk = subBuilder.BuildPartial();
               break;
             }
           }
@@ -4624,43 +4659,43 @@ namespace D3.Client {
         return this;
       }
       
-      public bool HasActionBindingSkill5 {
-       get { return result.hasActionBindingSkill5; }
+      public bool HasActionBindingPotion {
+       get { return result.hasActionBindingPotion; }
       }
-      public global::D3.Client.ActionBinding ActionBindingSkill5 {
-        get { return result.ActionBindingSkill5; }
-        set { SetActionBindingSkill5(value); }
+      public global::D3.Client.ActionBinding ActionBindingPotion {
+        get { return result.ActionBindingPotion; }
+        set { SetActionBindingPotion(value); }
       }
-      public Builder SetActionBindingSkill5(global::D3.Client.ActionBinding value) {
+      public Builder SetActionBindingPotion(global::D3.Client.ActionBinding value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasActionBindingSkill5 = true;
-        result.actionBindingSkill5_ = value;
+        result.hasActionBindingPotion = true;
+        result.actionBindingPotion_ = value;
         return this;
       }
-      public Builder SetActionBindingSkill5(global::D3.Client.ActionBinding.Builder builderForValue) {
+      public Builder SetActionBindingPotion(global::D3.Client.ActionBinding.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasActionBindingSkill5 = true;
-        result.actionBindingSkill5_ = builderForValue.Build();
+        result.hasActionBindingPotion = true;
+        result.actionBindingPotion_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeActionBindingSkill5(global::D3.Client.ActionBinding value) {
+      public Builder MergeActionBindingPotion(global::D3.Client.ActionBinding value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasActionBindingSkill5 &&
-            result.actionBindingSkill5_ != global::D3.Client.ActionBinding.DefaultInstance) {
-            result.actionBindingSkill5_ = global::D3.Client.ActionBinding.CreateBuilder(result.actionBindingSkill5_).MergeFrom(value).BuildPartial();
+        if (result.hasActionBindingPotion &&
+            result.actionBindingPotion_ != global::D3.Client.ActionBinding.DefaultInstance) {
+            result.actionBindingPotion_ = global::D3.Client.ActionBinding.CreateBuilder(result.actionBindingPotion_).MergeFrom(value).BuildPartial();
         } else {
-          result.actionBindingSkill5_ = value;
+          result.actionBindingPotion_ = value;
         }
-        result.hasActionBindingSkill5 = true;
+        result.hasActionBindingPotion = true;
         return this;
       }
-      public Builder ClearActionBindingSkill5() {
+      public Builder ClearActionBindingPotion() {
         PrepareBuilder();
-        result.hasActionBindingSkill5 = false;
-        result.actionBindingSkill5_ = null;
+        result.hasActionBindingPotion = false;
+        result.actionBindingPotion_ = null;
         return this;
       }
       
@@ -5861,6 +5896,46 @@ namespace D3.Client {
         PrepareBuilder();
         result.hasActionBindingRmb = false;
         result.actionBindingRmb_ = null;
+        return this;
+      }
+      
+      public bool HasActionBindingWalk {
+       get { return result.hasActionBindingWalk; }
+      }
+      public global::D3.Client.ActionBinding ActionBindingWalk {
+        get { return result.ActionBindingWalk; }
+        set { SetActionBindingWalk(value); }
+      }
+      public Builder SetActionBindingWalk(global::D3.Client.ActionBinding value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasActionBindingWalk = true;
+        result.actionBindingWalk_ = value;
+        return this;
+      }
+      public Builder SetActionBindingWalk(global::D3.Client.ActionBinding.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasActionBindingWalk = true;
+        result.actionBindingWalk_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeActionBindingWalk(global::D3.Client.ActionBinding value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasActionBindingWalk &&
+            result.actionBindingWalk_ != global::D3.Client.ActionBinding.DefaultInstance) {
+            result.actionBindingWalk_ = global::D3.Client.ActionBinding.CreateBuilder(result.actionBindingWalk_).MergeFrom(value).BuildPartial();
+        } else {
+          result.actionBindingWalk_ = value;
+        }
+        result.hasActionBindingWalk = true;
+        return this;
+      }
+      public Builder ClearActionBindingWalk() {
+        PrepareBuilder();
+        result.hasActionBindingWalk = false;
+        result.actionBindingWalk_ = null;
         return this;
       }
     }

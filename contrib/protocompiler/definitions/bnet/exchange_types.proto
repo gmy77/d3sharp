@@ -82,6 +82,8 @@ message Extension
     optional uint32 fail_object_type = 16;
     optional uint32 fail_error_code = 17;
     optional uint32 fail_extra_error_code = 18;
+    optional uint64 refunded = 19;
+    optional uint64 filled_fund_amount = 20;
 }
 
 message Offer
@@ -121,6 +123,8 @@ message BidExtended
     optional uint64 offer_out_bid_price = 3;
     optional uint64 offer_trade_now_price = 4;
     optional uint64 offer_current_winning_price = 5;
+    optional uint64 bid_current_unit_price = 6;
+    optional uint64 bid_max_unit_price = 7;
 }
 
 message BidCreation
@@ -173,11 +177,11 @@ message Settlement
 message CurrencyConfig
 {
     required string currency = 1;
-    required uint64 tick_size = 2;
-    required uint64 min_unit_price = 3;
-    required uint64 max_unit_price = 4;
-    required uint64 min_total_price = 5;
-    required uint64 max_total_price = 6;
+    optional uint64 tick_size = 2;
+    optional uint64 min_unit_price = 3;
+    optional uint64 max_unit_price = 4;
+    optional uint64 min_total_price = 5;
+    optional uint64 max_total_price = 6;
 }
 
 message SpecialistConfig
@@ -185,13 +189,13 @@ message SpecialistConfig
     required int32 specialist = 1;
     repeated uint64 auction_durations = 2 [packed=true];
     repeated uint64 auction_start_delays = 3 [packed=true];
-    required uint64 anti_sniping_extension_delay = 4;
+    optional uint64 anti_sniping_extension_delay = 4;
     optional uint64 max_items_amount = 5 [default = 0];
-    required int32 starting_unit_price_rule = 6;
-    required int32 reserved_unit_price_rule = 7;
-    required int32 trade_now_unit_price_rule = 8;
-    required int32 current_unit_price_rule = 9;
-    required int32 maximum_unit_price_rule = 10;
+    optional int32 starting_unit_price_rule = 6;
+    optional int32 reserved_unit_price_rule = 7;
+    optional int32 trade_now_unit_price_rule = 8;
+    optional int32 current_unit_price_rule = 9;
+    optional int32 maximum_unit_price_rule = 10;
     repeated .bnet.protocol.exchange.CurrencyConfig currency_config = 11;
 }
 

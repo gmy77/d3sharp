@@ -26,7 +26,6 @@ message Generator
     optional sint32 item_binding_level = 12 [default = 0];
     optional uint32 max_durability = 13 [default = 0];
     repeated .D3.Items.EmbeddedGenerator contents = 14;
-    optional sfixed32 attuned_skill = 15 [default = -1];
     optional uint64 item_unlock_timestamp = 16 [default = 0];
     optional uint32 enchant_range_val = 17 [default = 0];
 }

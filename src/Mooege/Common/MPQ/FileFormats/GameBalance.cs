@@ -249,13 +249,13 @@ namespace Mooege.Common.MPQ.FileFormats
         PlayerLeftFinger = 11,
         PlayerRightFinger = 12,
         PlayerNeck = 13,
-        Merchant = 19,
-        PetRightHand = 22,
-        PetLeftHand = 23,
-        PetSpecial = 24,
-        PetNeck = 25,
-        PetRightFinger = 26,
-        PetLeftFinger = 27,
+        Merchant = 18,
+        PetRightHand = 21,
+        PetLeftHand = 22,
+        PetSpecial = 23,
+        PetNeck = 24,
+        PetRightFinger = 25,
+        PetLeftFinger = 26,
     }
 
     public class ItemTable : ISerializableData
@@ -706,7 +706,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int SNOSKillKit3 { get; private set; }
         public Resource PrimaryResource { get; private set; }
         public Resource SecondaryResource { get; private set; }
-        public Attribute CoreAttribute { get; private set; }
+        public PrimaryAttribute CoreAttribute { get; private set; }
         public float F0 { get; private set; }
         public int I1 { get; private set; }
         public float HitpointsMax { get; private set; }
@@ -768,7 +768,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.SNOSKillKit3 = stream.ReadValueS32();
             this.PrimaryResource = (Resource)stream.ReadValueS32();
             this.SecondaryResource = (Resource)stream.ReadValueS32();
-            this.CoreAttribute = (Attribute)stream.ReadValueS32();
+            this.CoreAttribute = (PrimaryAttribute)stream.ReadValueS32();
             this.F0 = stream.ReadValueF32(); //312
             this.I1 = stream.ReadValueS32(); //316
             stream.Position += 16;
@@ -842,13 +842,6 @@ namespace Mooege.Common.MPQ.FileFormats
             Discipline,
         }
 
-        public enum Attribute : int
-        {
-            None = -1,
-            Strength,
-            Dexterity,
-            Intelligence,
-        }
     }
 
     public class MovementStyle : ISerializableData //0 byte file
@@ -1050,13 +1043,13 @@ namespace Mooege.Common.MPQ.FileFormats
             this.I7 = new int[6]; //316
             for (int i = 0; i < 6; i++)
                 this.I7[i] = stream.ReadValueS32();
-            this.ItemGroup = new int[6]; //340
-            for (int i = 0; i < 6; i++)
+            this.ItemGroup = new int[16]; //340
+            for (int i = 0; i < 16; i++)
                 this.ItemGroup[i] = stream.ReadValueS32();
-            this.QualityMask = (QualityMask)stream.ReadValueS32(); //364
-            this.AffixType2 = (AffixType2)stream.ReadValueS32(); //368
-            this.AssociatedAffix = stream.ReadValueS32(); //372
-            this.AttributeSpecifier = new AttributeSpecifier[4]; //376
+            this.QualityMask = (QualityMask)stream.ReadValueS32(); //404
+            this.AffixType2 = (AffixType2)stream.ReadValueS32(); //408
+            this.AssociatedAffix = stream.ReadValueS32(); //412
+            this.AttributeSpecifier = new AttributeSpecifier[4]; //416
             for (int i = 0; i < 4; i++)
                 this.AttributeSpecifier[i] = new AttributeSpecifier(stream);
             stream.Position += 72;
@@ -1541,6 +1534,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public int SNOActor { get; private set; }
         public int SNOProxy { get; private set; }
         public int SNOInventory { get; private set; }
+        public PrimaryAttribute Attribute { get; private set; }
         public float F0 { get; private set; }
         public float F1 { get; private set; }
         public float F2 { get; private set; }
@@ -1548,6 +1542,9 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F4 { get; private set; }
         public float F5 { get; private set; }
         public float F6 { get; private set; }
+        public float F7 { get; private set; }
+        public float F8 { get; private set; }
+        public float F9 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -1556,15 +1553,21 @@ namespace Mooege.Common.MPQ.FileFormats
             this.SNOActor = stream.ReadValueS32();
             this.SNOProxy = stream.ReadValueS32();
             this.SNOInventory = stream.ReadValueS32();
-            stream.Position += 480;
-            this.F0 = stream.ReadValueF32(); //752
-            this.F1 = stream.ReadValueF32(); //756
-            this.F2 = stream.ReadValueF32(); //760
-            this.F3 = stream.ReadValueF32(); //764
+            this.Attribute = (PrimaryAttribute)stream.ReadValueS32();
+            stream.Position += 164;
+            this.F0 = stream.ReadValueF32(); //440
+            this.F1 = stream.ReadValueF32(); //444
+            stream.Position += 280;
+            this.F2 = stream.ReadValueF32(); //728
+            stream.Position += 24;
+            this.F3 = stream.ReadValueF32(); //756
+            this.F4 = stream.ReadValueF32(); //760
+            this.F5 = stream.ReadValueF32(); //764
+            this.F6 = stream.ReadValueF32(); //768
             stream.Position += 8;
-            this.F4 = stream.ReadValueF32(); //776
-            this.F5 = stream.ReadValueF32(); //780
-            this.F6 = stream.ReadValueF32(); //784
+            this.F7 = stream.ReadValueF32(); //780
+            this.F8 = stream.ReadValueF32(); //784
+            this.F9 = stream.ReadValueF32(); //788
             stream.Position += 36;
         }
 
@@ -1789,6 +1792,14 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += 4;
             this.Name = stream.ReadString(256, true);
         }
+    }
+
+    public enum PrimaryAttribute : int
+    {
+        None = -1,
+        Strength,
+        Dexterity,
+        Intelligence,
     }
 
 }
