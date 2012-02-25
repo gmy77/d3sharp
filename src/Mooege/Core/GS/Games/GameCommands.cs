@@ -181,37 +181,36 @@ namespace Mooege.Core.GS.Games
     //    }
     //}
 
-    //[CommandGroup("levelup", "Levels your character.")]
-    //public class LevelUpCommand : CommandGroup
-    //{
-    //    [DefaultCommand]
-    //    public string LevelUp(string[] @params, MooNetClient invokerClient)
-    //    {
-    //        // TODO: does not work, should be actually refactoring Player.cs:UpdateExp() and use it. /raist.
+    [CommandGroup("levelup", "Levels your character.\nOptionally specify the number of levels: !levelup [count]")]
+    public class LevelUpCommand : CommandGroup
+    {
+        [DefaultCommand]
+        public string LevelUp(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
 
-    //        if (invokerClient == null)
-    //            return "You can not invoke this command from console.";
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
 
-    //        if (invokerClient.InGameClient == null)
-    //            return "You can only invoke this command while ingame.";
+            var player = invokerClient.InGameClient.Player;
+            var amount = 1;
 
-    //        var player = invokerClient.InGameClient.Player;
-    //        var amount = 1;
+            if (@params != null)
+            {
+                if (!Int32.TryParse(@params[0], out amount))
+                    amount = 1;
+            }
 
-    //        if(@params!=null)
-    //        {
-    //            if (!Int32.TryParse(@params[0], out amount))
-    //                amount = 1;
-    //        }
+            for (int i = 0; i < amount; i++)
+            {
+                player.UpdateExp(player.Attributes[Net.GS.Message.GameAttribute.Experience_Next]);
+            }
 
-    //        for(int i=0;i<amount;i++)
-    //        {
-    //            player.Toon.LevelUp();                
-    //        }
-
-    //        return string.Format("New level: {0}", player.Toon.Level);
-    //    }
-    //}
+            player.Toon.GameAccount.NotifyUpdate();
+            return string.Format("New level: {0}", player.Toon.Level);
+        }
+    }
 
     [CommandGroup("item", "Spawns an item (with a name or type).\nUsage: item [type <type>|<name>] [amount]")]
     public class ItemCommand : CommandGroup
