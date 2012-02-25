@@ -540,10 +540,10 @@ namespace Mooege.Core.GS.Players
 
         private void OnAssignPassiveSkills(GameClient client, AssignTraitsMessage message)
         {
-            for (int i = 0; i < message.snoPower.Length; ++i)
+            for (int i = 0; i < message.SNOPowers.Length; ++i)
             {
                 int oldSNOSkill = this.SkillSet.PassiveSkills[i]; // find replaced skills SNO.
-                if (message.snoPower[i] != oldSNOSkill)
+                if (message.SNOPowers[i] != oldSNOSkill)
                 {
                     if (oldSNOSkill != -1)
                     {
@@ -553,16 +553,16 @@ namespace Mooege.Core.GS.Players
                         this.Attributes[GameAttribute.Skill_Total, oldSNOSkill] = 0;
                     }
 
-                    if (message.snoPower[i] != -1)
+                    if (message.SNOPowers[i] != -1)
                     {
                         // switch on new passive skill
-                        this.Attributes[GameAttribute.Trait, message.snoPower[i]] = 1;
-                        this.Attributes[GameAttribute.Skill, message.snoPower[i]] = 1;
-                        this.Attributes[GameAttribute.Skill_Total, message.snoPower[i]] = 1;
+                        this.Attributes[GameAttribute.Trait, message.SNOPowers[i]] = 1;
+                        this.Attributes[GameAttribute.Skill, message.SNOPowers[i]] = 1;
+                        this.Attributes[GameAttribute.Skill_Total, message.SNOPowers[i]] = 1;
                     }
 
-                    this.SkillSet.PassiveSkills[i] = message.snoPower[i];
-                    _StartSkillCooldown(message.snoPower[i], SkillChangeCooldownLength);
+                    this.SkillSet.PassiveSkills[i] = message.SNOPowers[i];
+                    _StartSkillCooldown(message.SNOPowers[i], SkillChangeCooldownLength);
                 }
             }
 
