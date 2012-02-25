@@ -23,17 +23,17 @@ namespace Mooege.Net.GS.Message.Definitions.Skill
     [Message(Opcodes.AssignTraitsMessage, Consumers.Player)]
     public class AssignTraitsMessage : GameMessage
     {
-        public int[] /* sno */ snoPower;
+        public int[] /* sno */ SNOPowers;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            snoPower = new int[3];
-            for (int i = 0; i < snoPower.Length; i++) snoPower[i] = buffer.ReadInt(32);
+            SNOPowers = new int[3];
+            for (int i = 0; i < SNOPowers.Length; i++) SNOPowers[i] = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            for (int i = 0; i < snoPower.Length; i++) buffer.WriteInt(32, snoPower[i]);
+            for (int i = 0; i < SNOPowers.Length; i++) buffer.WriteInt(32, SNOPowers[i]);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -42,7 +42,7 @@ namespace Mooege.Net.GS.Message.Definitions.Skill
             b.AppendLine("AssignTraitsMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            for (int i = 0; i < snoPower.Length; ) { b.Append(' ', pad + 1); for (int j = 0; j < 8 && i < snoPower.Length; j++, i++) { b.Append("0x" + snoPower[i].ToString("X8") + ", "); } b.AppendLine(); }
+            for (int i = 0; i < SNOPowers.Length; ) { b.Append(' ', pad + 1); for (int j = 0; j < 8 && i < SNOPowers.Length; j++, i++) { b.Append("0x" + SNOPowers[i].ToString("X8") + ", "); } b.AppendLine(); }
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
