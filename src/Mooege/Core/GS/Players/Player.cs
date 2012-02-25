@@ -335,6 +335,7 @@ namespace Mooege.Core.GS.Players
 
             //Resource
             this.Attributes[GameAttribute.Resource_Max, (int)data.PrimaryResource] = data.PrimaryResourceMax;
+            this.Attributes[GameAttribute.Resource_Factor_Level, (int)data.PrimaryResource] = data.PrimaryResourceFactorLevel;
             this.Attributes[GameAttribute.Resource_Max_Total, (int)data.PrimaryResource] = GetMaxResource((int)data.PrimaryResource);
             this.Attributes[GameAttribute.Resource_Effective_Max, (int)data.PrimaryResource] = GetMaxResource((int)data.PrimaryResource);
             this.Attributes[GameAttribute.Resource_Cur, (int)data.PrimaryResource] = GetMaxResource((int)data.PrimaryResource);
@@ -345,6 +346,7 @@ namespace Mooege.Core.GS.Players
             {
                 this.Attributes[GameAttribute.Resource_Type_Secondary] = (int)data.SecondaryResource;
                 this.Attributes[GameAttribute.Resource_Max, (int)data.SecondaryResource] = data.SecondaryResourceMax;
+                this.Attributes[GameAttribute.Resource_Factor_Level, (int)data.SecondaryResource] = data.SecondaryResourceFactorLevel;
                 this.Attributes[GameAttribute.Resource_Cur, (int)data.SecondaryResource] = GetMaxResource((int)data.SecondaryResource);
                 this.Attributes[GameAttribute.Resource_Max_Total, (int)data.SecondaryResource] = GetMaxResource((int)data.SecondaryResource);
                 this.Attributes[GameAttribute.Resource_Effective_Max, (int)data.SecondaryResource] = GetMaxResource((int)data.SecondaryResource);
@@ -1409,7 +1411,7 @@ namespace Mooege.Core.GS.Players
         //Max((Resource_Max + ((Level#NONE - 1) * Resource_Factor_Level) + Resource_Max_Bonus) * (Resource_Max_Percent_Bonus + 1), 0)
         private float GetMaxResource(int resourceId)
         {
-            return (Math.Max((this.Attributes[GameAttribute.Resource_Max, resourceId] + ((this.Attributes[GameAttribute.Level] - 1) + this.Attributes[GameAttribute.Resource_Max_Bonus, resourceId]) * (this.Attributes[GameAttribute.Resource_Max_Percent_Bonus, resourceId] + 1)), 0));
+            return (Math.Max((this.Attributes[GameAttribute.Resource_Max, resourceId] + ((this.Attributes[GameAttribute.Level] - 1) * this.Attributes[GameAttribute.Resource_Factor_Level, resourceId]) + this.Attributes[GameAttribute.Resource_Max_Bonus, resourceId]) * (this.Attributes[GameAttribute.Resource_Max_Percent_Bonus, resourceId] + 1), 0));
         }
 
         public static int[] LevelBorders =
@@ -1492,6 +1494,15 @@ namespace Mooege.Core.GS.Players
 
                 // On level up, health is set to max
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
+
+
+                this.Attributes[GameAttribute.Resource_Max_Total, this.Attributes[GameAttribute.Resource_Type_Primary]] = GetMaxResource(this.Attributes[GameAttribute.Resource_Type_Primary]);
+                this.Attributes[GameAttribute.Resource_Effective_Max, this.Attributes[GameAttribute.Resource_Type_Primary]] = GetMaxResource(this.Attributes[GameAttribute.Resource_Type_Primary]);
+                this.Attributes[GameAttribute.Resource_Cur, this.Attributes[GameAttribute.Resource_Type_Primary]] = GetMaxResource(this.Attributes[GameAttribute.Resource_Type_Primary]);
+
+                this.Attributes[GameAttribute.Resource_Max_Total, this.Attributes[GameAttribute.Resource_Type_Secondary]] = GetMaxResource(this.Attributes[GameAttribute.Resource_Type_Secondary]);
+                this.Attributes[GameAttribute.Resource_Effective_Max, this.Attributes[GameAttribute.Resource_Type_Secondary]] = GetMaxResource(this.Attributes[GameAttribute.Resource_Type_Secondary]);
+                this.Attributes[GameAttribute.Resource_Cur, this.Attributes[GameAttribute.Resource_Type_Secondary]] = GetMaxResource(this.Attributes[GameAttribute.Resource_Type_Secondary]);
 
                 this.Attributes.BroadcastChangedIfRevealed();
 
@@ -1625,7 +1636,7 @@ namespace Mooege.Core.GS.Players
             {
                 this.Attributes[GameAttribute.Resource_Cur, resourceID] = Math.Min(
                     this.Attributes[GameAttribute.Resource_Cur, resourceID] + amount,
-                    this.Attributes[GameAttribute.Resource_Max, resourceID]);
+                    this.Attributes[GameAttribute.Resource_Max_Total, resourceID]);
             }
             else
             {
