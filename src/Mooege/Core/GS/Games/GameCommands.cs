@@ -181,7 +181,7 @@ namespace Mooege.Core.GS.Games
     //    }
     //}
 
-    [CommandGroup("levelup", "Levels your character.")]
+    [CommandGroup("levelup", "Levels your character.\nOptionally specify the number of levels: !levelup [count]")]
     public class LevelUpCommand : CommandGroup
     {
         [DefaultCommand]

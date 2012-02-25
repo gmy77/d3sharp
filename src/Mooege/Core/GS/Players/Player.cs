@@ -308,7 +308,7 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Casting_Speed] = 1f;
 
             //Basic stats
-            this.Attributes[GameAttribute.Level_Cap] = 13;
+            this.Attributes[GameAttribute.Level_Cap] = 60;
             this.Attributes[GameAttribute.Level] = this.Toon.Level;
             this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Toon.Level];
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
@@ -329,25 +329,25 @@ namespace Mooege.Core.GS.Players
             //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
             this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 40f; // For now, this just adds 40 hitpoints to the hitpoints gained from vitality
             this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality] = this.Attributes[GameAttribute.Vitality] * this.Attributes[GameAttribute.Hitpoints_Factor_Vitality];
-            this.Attributes[GameAttribute.Hitpoints_Max] = GetMaxTotalHitpoints();
+            this.Attributes[GameAttribute.Hitpoints_Max] = this.Attributes[GameAttribute.Hitpoints_Total_From_Level] + this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality];
             this.Attributes[GameAttribute.Hitpoints_Max_Total] = GetMaxTotalHitpoints();
             this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
 
             //Resource
-            this.Attributes[GameAttribute.Resource_Cur, (int)data.PrimaryResource] = data.PrimaryResourceMax;
             this.Attributes[GameAttribute.Resource_Max, (int)data.PrimaryResource] = data.PrimaryResourceMax;
-            this.Attributes[GameAttribute.Resource_Max_Total, (int)data.PrimaryResource] = data.PrimaryResourceMax;
-            this.Attributes[GameAttribute.Resource_Effective_Max, (int)data.PrimaryResource] = data.PrimaryResourceMax;
+            this.Attributes[GameAttribute.Resource_Max_Total, (int)data.PrimaryResource] = GetMaxResource((int)data.PrimaryResource);
+            this.Attributes[GameAttribute.Resource_Effective_Max, (int)data.PrimaryResource] = GetMaxResource((int)data.PrimaryResource);
+            this.Attributes[GameAttribute.Resource_Cur, (int)data.PrimaryResource] = GetMaxResource((int)data.PrimaryResource);
             this.Attributes[GameAttribute.Resource_Regen_Per_Second, (int)data.PrimaryResource] = data.PrimaryResourceRegenPerSecond;
             this.Attributes[GameAttribute.Resource_Regen_Total, (int)data.PrimaryResource] = data.PrimaryResourceRegenPerSecond;
             this.Attributes[GameAttribute.Resource_Type_Primary] = (int)data.PrimaryResource;
             if (data.SecondaryResource != Mooege.Common.MPQ.FileFormats.HeroTable.Resource.None)
             {
                 this.Attributes[GameAttribute.Resource_Type_Secondary] = (int)data.SecondaryResource;
-                this.Attributes[GameAttribute.Resource_Cur, (int)data.SecondaryResource] = data.SecondaryResourceMax;
                 this.Attributes[GameAttribute.Resource_Max, (int)data.SecondaryResource] = data.SecondaryResourceMax;
-                this.Attributes[GameAttribute.Resource_Max_Total, (int)data.SecondaryResource] = data.SecondaryResourceMax;
-                this.Attributes[GameAttribute.Resource_Effective_Max, (int)data.SecondaryResource] = data.SecondaryResourceMax;
+                this.Attributes[GameAttribute.Resource_Cur, (int)data.SecondaryResource] = GetMaxResource((int)data.SecondaryResource);
+                this.Attributes[GameAttribute.Resource_Max_Total, (int)data.SecondaryResource] = GetMaxResource((int)data.SecondaryResource);
+                this.Attributes[GameAttribute.Resource_Effective_Max, (int)data.SecondaryResource] = GetMaxResource((int)data.SecondaryResource);
                 this.Attributes[GameAttribute.Resource_Regen_Per_Second, (int)data.SecondaryResource] = data.SecondaryResourceRegenPerSecond;
                 this.Attributes[GameAttribute.Resource_Regen_Total, (int)data.SecondaryResource] = data.SecondaryResourceRegenPerSecond;
                 this.Attributes[GameAttribute.Resource_Type_Secondary] = (int)data.SecondaryResource;
@@ -1398,16 +1398,19 @@ namespace Mooege.Core.GS.Players
 
         #region experience handling
 
+        //Max((Hitpoints_Max + Hitpoints_Total_From_Level + Hitpoints_Total_From_Vitality + Hitpoints_Max_Bonus) * (Hitpoints_Max_Percent_Bonus + Hitpoints_Max_Percent_Bonus_Item + 1), 1)
         private float GetMaxTotalHitpoints()
         {
-            // Defines the Max Total hitpoints for the current level
-            // May want to move this into a property if it has to made class-specific
-            // This is still a work in progress on getting the right algorithm for all the classes
-
-            return (this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality]) +
-                    (this.Attributes[GameAttribute.Hitpoints_Total_From_Level]);
+            return (Math.Max((this.Attributes[GameAttribute.Hitpoints_Max] + this.Attributes[GameAttribute.Hitpoints_Total_From_Level] +
+                this.Attributes[GameAttribute.Hitpoints_Max_Bonus]) *
+                (this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus] + this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus_Item] + 1),1));
         }
 
+        //Max((Resource_Max + ((Level#NONE - 1) * Resource_Factor_Level) + Resource_Max_Bonus) * (Resource_Max_Percent_Bonus + 1), 0)
+        private float GetMaxResource(int resourceId)
+        {
+            return (Math.Max((this.Attributes[GameAttribute.Resource_Max, resourceId] + ((this.Attributes[GameAttribute.Level] - 1) + this.Attributes[GameAttribute.Resource_Max_Bonus, resourceId]) * (this.Attributes[GameAttribute.Resource_Max_Percent_Bonus, resourceId] + 1)), 0));
+        }
 
         public static int[] LevelBorders =
         {
@@ -1479,12 +1482,12 @@ namespace Mooege.Core.GS.Players
                 this.Attributes[GameAttribute.Resistance_Total, 6] = this.Attributes[GameAttribute.Resistance_From_Intelligence];
 
                 // Hitpoints from level may actually change. This needs to be verified by someone with the beta.
-                //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = this.Attributes[GameAttribute.Level] * this.Attributes[GameAttribute.Hitpoints_Factor_Level];
+                this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = this.Attributes[GameAttribute.Level] * this.Attributes[GameAttribute.Hitpoints_Factor_Level];
 
                 // For now, hit points are based solely on vitality and initial hitpoints received.
                 // This will have to change when hitpoint bonuses from items are implemented.
                 this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality] = this.Attributes[GameAttribute.Vitality] * this.Attributes[GameAttribute.Hitpoints_Factor_Vitality];
-                this.Attributes[GameAttribute.Hitpoints_Max] = GetMaxTotalHitpoints();
+                this.Attributes[GameAttribute.Hitpoints_Max] = this.Attributes[GameAttribute.Hitpoints_Total_From_Level] + this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality];
                 this.Attributes[GameAttribute.Hitpoints_Max_Total] = GetMaxTotalHitpoints();
 
                 // On level up, health is set to max
@@ -1495,18 +1498,8 @@ namespace Mooege.Core.GS.Players
 
                 this.Attributes.BroadcastChangedIfRevealed();
 
-                this.InGameClient.SendMessage(new PlayEffectMessage()
-                {
-                    ActorId = this.DynamicID,
-                    Effect = Effect.LevelUp,
-                });
-
-                this.World.BroadcastGlobal(new PlayEffectMessage()
-                {
-                    ActorId = this.DynamicID,
-                    Effect = Effect.PlayEffectGroup,
-                    OptionalParameter = LevelUpEffects[this.Attributes[GameAttribute.Level]],
-                });
+                this.PlayEffect(Effect.LevelUp);
+                this.PlayEffectGroup(LevelUpEffects[this.Attributes[GameAttribute.Level]]);
             }
 
             // constant 0 exp at Level_Cap
