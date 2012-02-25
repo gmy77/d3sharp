@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
+using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Objects;
@@ -54,6 +55,7 @@ namespace Mooege.Core.GS.Players
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
+        private static readonly Mooege.Common.MPQ.FileFormats.GameBalance HeroData = (Mooege.Common.MPQ.FileFormats.GameBalance)MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.GameBalance][19740].Data;
         /// <summary>
         /// The ingame-client for player.
         /// </summary>
@@ -182,9 +184,11 @@ namespace Mooege.Core.GS.Players
         public Player(World world, GameClient client, Toon bnetToon)
             : base(world, GetClassSNOId(bnetToon.Gender, bnetToon.Class))
         {
+
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
             this.Toon = bnetToon;
+            var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
             this.GBHandle.Type = (int)GBHandleType.Player;
             this.GBHandle.GBID = this.Toon.ClassID;
 
@@ -210,7 +214,7 @@ namespace Mooege.Core.GS.Players
             #region Attributes
 
             //Skills
-            this.Attributes[GameAttribute.SkillKit] = this.SkillKit;
+            this.Attributes[GameAttribute.SkillKit] = data.SNOSKillKit0;
             this.Attributes[GameAttribute.Skill_Total, 0x7545] = 1; //Axe Operate Gizmo
             this.Attributes[GameAttribute.Skill, 0x7545] = 1;
             this.Attributes[GameAttribute.Skill_Total, 0x76B7] = 1; //Punch!
@@ -231,21 +235,6 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Buff_Active, 0xCE11] = true;
             this.Attributes[GameAttribute.Buff_Icon_Count0, 0x0000CE11] = 1;
             this.Attributes[GameAttribute.Buff_Visual_Effect, 0xFFFFF] = true;
-
-            //Resistance
-            this.Attributes[GameAttribute.Resistance, 0xDE] = 0.5f;
-            this.Attributes[GameAttribute.Resistance, 0x226] = 0.5f;
-            this.Attributes[GameAttribute.Resistance_Total, 0] = 10f; // im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
-            // likely the physical school of damage, it probably doesn't actually do anything in this case (or maybe just not for the player's hero)
-            // but exists for the sake of parity with weapon damage schools
-            this.Attributes[GameAttribute.Resistance_Total, 1] = 10f; //Fire
-            this.Attributes[GameAttribute.Resistance_Total, 2] = 10f; //Lightning
-            this.Attributes[GameAttribute.Resistance_Total, 3] = 10f; //Cold
-            this.Attributes[GameAttribute.Resistance_Total, 4] = 10f; //Poison
-            this.Attributes[GameAttribute.Resistance_Total, 5] = 10f; //Arcane
-            this.Attributes[GameAttribute.Resistance_Total, 6] = 10f; //Holy
-            this.Attributes[GameAttribute.Resistance_Total, 0xDE] = 0.5f;
-            this.Attributes[GameAttribute.Resistance_Total, 0x226] = 0.5f;
 
             //Damage
             this.Attributes[GameAttribute.Damage_Delta_Total, 0] = 1f;
@@ -300,11 +289,11 @@ namespace Mooege.Core.GS.Players
 
             //Bonus stats
             this.Attributes[GameAttribute.Get_Hit_Recovery] = 6f;
-            this.Attributes[GameAttribute.Get_Hit_Recovery_Per_Level] = 1f;
-            this.Attributes[GameAttribute.Get_Hit_Recovery_Base] = 5f;
+            this.Attributes[GameAttribute.Get_Hit_Recovery_Per_Level] = data.GetHitRecoveryPerLevel;
+            this.Attributes[GameAttribute.Get_Hit_Recovery_Base] = data.GetHitRecoveryBase;
             this.Attributes[GameAttribute.Get_Hit_Max] = 60f;
-            this.Attributes[GameAttribute.Get_Hit_Max_Per_Level] = 10f;
-            this.Attributes[GameAttribute.Get_Hit_Max_Base] = 50f;
+            this.Attributes[GameAttribute.Get_Hit_Max_Per_Level] = data.GetHitMaxPerLevel;
+            this.Attributes[GameAttribute.Get_Hit_Max_Base] = data.GetHitMaxBase;
             this.Attributes[GameAttribute.Hit_Chance] = 1f;
             this.Attributes[GameAttribute.Attacks_Per_Second_Item_CurrentHand] = 1.199219f;
             this.Attributes[GameAttribute.Attacks_Per_Second_Item_Total_MainHand] = 1.199219f;
@@ -314,7 +303,7 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Attacks_Per_Second_Item_Total] = 1.199219f;
             this.Attributes[GameAttribute.Attacks_Per_Second_Item_Subtotal] = 3.051758E-05f;
             this.Attributes[GameAttribute.Attacks_Per_Second_Item] = 3.051758E-05f;
-            this.Attributes[GameAttribute.Crit_Percent_Cap] = 0x3F400000;
+            this.Attributes[GameAttribute.Crit_Percent_Cap] = data.CritPercentCap;
             this.Attributes[GameAttribute.Casting_Speed_Total] = 1f;
             this.Attributes[GameAttribute.Casting_Speed] = 1f;
 
@@ -324,13 +313,18 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Toon.Level];
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             this.Attributes[GameAttribute.Armor_Total] = 0;
-            this.Attributes[GameAttribute.Attack] = (int)this.InitialAttack;
-            this.Attributes[GameAttribute.Precision] = (int)this.InitialPrecision;
-            this.Attributes[GameAttribute.Defense] = (int)this.InitialDefense;
-            this.Attributes[GameAttribute.Vitality] = (int)this.InitialVitality;
+
+            this.Attributes[GameAttribute.Strength] = data.Strength;
+            this.Attributes[GameAttribute.Dexterity] = data.Dexterity;
+            this.Attributes[GameAttribute.Vitality] = data.Vitality;
+            this.Attributes[GameAttribute.Intelligence] = data.Intelligence;
+            this.Attributes[GameAttribute.Strength_Total] = this.StrengthTotal;
+            this.Attributes[GameAttribute.Intelligence_Total] = this.IntelligenceTotal;
+            this.Attributes[GameAttribute.Dexterity_Total] = this.DexterityTotal;
+            this.Attributes[GameAttribute.Vitality_Total] = this.VitalityTotal;
 
             //Hitpoints have to be calculated after Vitality
-            this.Attributes[GameAttribute.Hitpoints_Factor_Level] = 4f;
+            this.Attributes[GameAttribute.Hitpoints_Factor_Level] = data.HitpointsFactorLevel;
             this.Attributes[GameAttribute.Hitpoints_Factor_Vitality] = 4f;
             //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
             this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 40f; // For now, this just adds 40 hitpoints to the hitpoints gained from vitality
@@ -340,12 +334,40 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
 
             //Resource
-            this.Attributes[GameAttribute.Resource_Cur, this.ResourceID] = 200f;
-            this.Attributes[GameAttribute.Resource_Max, this.ResourceID] = 200f;
-            this.Attributes[GameAttribute.Resource_Max_Total, this.ResourceID] = 200f;
-            this.Attributes[GameAttribute.Resource_Effective_Max, this.ResourceID] = 200f;
-            this.Attributes[GameAttribute.Resource_Regen_Total, this.ResourceID] = 3.051758E-05f;
-            this.Attributes[GameAttribute.Resource_Type_Primary] = this.ResourceID;
+            this.Attributes[GameAttribute.Resource_Cur, (int)data.PrimaryResource] = data.PrimaryResourceMax;
+            this.Attributes[GameAttribute.Resource_Max, (int)data.PrimaryResource] = data.PrimaryResourceMax;
+            this.Attributes[GameAttribute.Resource_Max_Total, (int)data.PrimaryResource] = data.PrimaryResourceMax;
+            this.Attributes[GameAttribute.Resource_Effective_Max, (int)data.PrimaryResource] = data.PrimaryResourceMax;
+            this.Attributes[GameAttribute.Resource_Regen_Per_Second, (int)data.PrimaryResource] = data.PrimaryResourceRegenPerSecond;
+            this.Attributes[GameAttribute.Resource_Regen_Total, (int)data.PrimaryResource] = data.PrimaryResourceRegenPerSecond;
+            this.Attributes[GameAttribute.Resource_Type_Primary] = (int)data.PrimaryResource;
+            if (data.SecondaryResource != Mooege.Common.MPQ.FileFormats.HeroTable.Resource.None)
+            {
+                this.Attributes[GameAttribute.Resource_Type_Secondary] = (int)data.SecondaryResource;
+                this.Attributes[GameAttribute.Resource_Cur, (int)data.SecondaryResource] = data.SecondaryResourceMax;
+                this.Attributes[GameAttribute.Resource_Max, (int)data.SecondaryResource] = data.SecondaryResourceMax;
+                this.Attributes[GameAttribute.Resource_Max_Total, (int)data.SecondaryResource] = data.SecondaryResourceMax;
+                this.Attributes[GameAttribute.Resource_Effective_Max, (int)data.SecondaryResource] = data.SecondaryResourceMax;
+                this.Attributes[GameAttribute.Resource_Regen_Per_Second, (int)data.SecondaryResource] = data.SecondaryResourceRegenPerSecond;
+                this.Attributes[GameAttribute.Resource_Regen_Total, (int)data.SecondaryResource] = data.SecondaryResourceRegenPerSecond;
+                this.Attributes[GameAttribute.Resource_Type_Secondary] = (int)data.SecondaryResource;
+            }
+
+            //Resistance
+            this.Attributes[GameAttribute.Resistance_From_Intelligence] = this.Attributes[GameAttribute.Intelligence] * 0.1f;
+            this.Attributes[GameAttribute.Resistance_Total, 0] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; // im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
+            // likely the physical school of damage, it probably doesn't actually do anything in this case (or maybe just not for the player's hero)
+            // but exists for the sake of parity with weapon damage schools
+            this.Attributes[GameAttribute.Resistance_Total, 1] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Fire
+            this.Attributes[GameAttribute.Resistance_Total, 2] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Lightning
+            this.Attributes[GameAttribute.Resistance_Total, 3] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Cold
+            this.Attributes[GameAttribute.Resistance_Total, 4] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Poison
+            this.Attributes[GameAttribute.Resistance_Total, 5] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Arcane
+            this.Attributes[GameAttribute.Resistance_Total, 6] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Holy
+            this.Attributes[GameAttribute.Resistance, 0xDE] = 0.5f;
+            this.Attributes[GameAttribute.Resistance, 0x226] = 0.5f;
+            this.Attributes[GameAttribute.Resistance_Total, 0xDE] = 0.5f;
+            this.Attributes[GameAttribute.Resistance_Total, 0x226] = 0.5f;
 
             // Class specific
             switch (this.Toon.Class)
@@ -370,13 +392,6 @@ namespace Mooege.Core.GS.Players
                     this.Attributes[GameAttribute.Buff_Active, ] = true;
                     this.Attributes[GameAttribute.Buff_Icon_Count0, ] = 1;
                      */
-                    //Secondary Resource for the Demon Hunter
-                    int Discipline = this.ResourceID + 1; //0x00000006
-                    this.Attributes[GameAttribute.Resource_Cur, Discipline] = 30;
-                    this.Attributes[GameAttribute.Resource_Max, Discipline] = 30;
-                    this.Attributes[GameAttribute.Resource_Max_Total, Discipline] = 30;
-                    this.Attributes[GameAttribute.Resource_Effective_Max, Discipline] = 30f;
-                    this.Attributes[GameAttribute.Resource_Type_Secondary] = Discipline;
                     break;
                 case ToonClass.Monk:
                     this.Attributes[GameAttribute.Skill_Total, 0x0000CE11] = 1;  //Spirit Trait
@@ -409,18 +424,18 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Movement_Scalar_Capped_Total] = 1f;
             this.Attributes[GameAttribute.Movement_Scalar_Subtotal] = 1f;
             this.Attributes[GameAttribute.Movement_Scalar] = 1f;
-            this.Attributes[GameAttribute.Walking_Rate_Total] = 0.2797852f;
-            this.Attributes[GameAttribute.Walking_Rate] = 0.2797852f;
-            this.Attributes[GameAttribute.Running_Rate_Total] = 0.3598633f;
-            this.Attributes[GameAttribute.Running_Rate] = 0.3598633f;
-            this.Attributes[GameAttribute.Sprinting_Rate_Total] = 3.051758E-05f;
-            this.Attributes[GameAttribute.Strafing_Rate_Total] = 3.051758E-05f;
+            this.Attributes[GameAttribute.Walking_Rate_Total] = data.WalkingRate;
+            this.Attributes[GameAttribute.Walking_Rate] = data.WalkingRate;
+            this.Attributes[GameAttribute.Running_Rate_Total] = data.RunningRate;
+            this.Attributes[GameAttribute.Running_Rate] = data.RunningRate;
+            this.Attributes[GameAttribute.Sprinting_Rate_Total] = data.F17; //These two are guesses -Egris
+            this.Attributes[GameAttribute.Strafing_Rate_Total] = data.F18; 
 
             //Miscellaneous
 
-            //this.Attributes[GameAttribute.Disabled] = true; // we should be making use of these ones too /raist.
-            //this.Attributes[GameAttribute.Loading] = true;
-            //this.Attributes[GameAttribute.Invulnerable] = true;
+            this.Attributes[GameAttribute.Disabled] = true; // we should be making use of these ones too /raist.
+            this.Attributes[GameAttribute.Loading] = true;
+            this.Attributes[GameAttribute.Invulnerable] = true;
             this.Attributes[GameAttribute.Hidden] = false;
             this.Attributes[GameAttribute.Immobolize] = true;
             this.Attributes[GameAttribute.Untargetable] = true;
@@ -432,24 +447,6 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Backpack_Slots] = 60;
             this.Attributes[GameAttribute.General_Cooldown] = 0;
 
-
-            // TODO: Fix this shit! Should be actually done so after loading is complete /raist.
-            this.Attributes[GameAttribute.Banter_Cooldown, 0xFFFFF] = 0x000007C9;
-            this.Attributes[GameAttribute.Buff_Active, 0x20CBE] = true;
-            this.Attributes[GameAttribute.Buff_Active, 0x33C40] = false;
-            this.Attributes[GameAttribute.Immobolize] = false;
-            this.Attributes[GameAttribute.Untargetable] = false;
-            this.Attributes[GameAttribute.CantStartDisplayedPowers] = false;
-            this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x20CBE] = 0xC1;
-            this.Attributes[GameAttribute.Disabled] = false;
-            this.Attributes[GameAttribute.Hidden] = false;
-            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x33C40] = 0;
-            this.Attributes[GameAttribute.Buff_Icon_End_Tick0, 0x20CBE] = 0x7C9;
-            this.Attributes[GameAttribute.Loading] = false;
-            this.Attributes[GameAttribute.Buff_Icon_End_Tick0, 0x33C40] = 0;
-            this.Attributes[GameAttribute.Invulnerable] = false;
-            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x20CBE] = 1;
-            this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x33C40] = 0;
 
             #endregion // Attributes
 
@@ -903,7 +900,7 @@ namespace Mooege.Core.GS.Players
         #endregion
 
         #region player attribute handling
-
+        /*
         public float InitialAttack // Defines the amount of attack points with which a player starts
         {
             get
@@ -993,12 +990,14 @@ namespace Mooege.Core.GS.Players
                 return 10f + ((this.Toon.Level - 1) * 2);
             }
         }
+        */
 
         // Notes on attribute increment algorithm:
         // Precision: Barbarian => +1, else => +2
         // Defense:   Wizard or Demon Hunter => (lvl+1)%2+1, else => +2
         // Vitality:  Wizard or Demon Hunter => lvl%2+1, Barbarian => +2, else +1
         // Attack:    All +2
+        /*
         public float AttackIncrement
         {
             get
@@ -1082,6 +1081,90 @@ namespace Mooege.Core.GS.Players
                 return 2f;
             }
         }
+        */
+
+        public float Strength
+        {
+            get
+            {
+                var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
+                if (data.CoreAttribute == Mooege.Common.MPQ.FileFormats.PrimaryAttribute.Strength)
+                    return data.Strength + (this.Toon.Level * 2);
+                else
+                    return data.Strength + (this.Toon.Level);
+            }
+        }
+
+        //((Strength + Stats_All_Bonus + Strength_Bonus + (Strength_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Strength_Bonus_Percent)) * (1 - Strength_Reduction_Percent)
+        public float StrengthTotal
+        {
+            get
+            {
+                return Strength;
+            }
+        }
+
+        public float Dexterity
+        {
+            get
+            {
+                var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
+                if (data.CoreAttribute == Mooege.Common.MPQ.FileFormats.PrimaryAttribute.Dexterity)
+                    return data.Dexterity + (this.Toon.Level * 2);
+                else
+                    return data.Dexterity + (this.Toon.Level);
+            }
+        }
+
+        //((Dexterity + Stats_All_Bonus + Dexterity_Bonus + (Dexterity_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Dexterity_Bonus_Percent)) * (1 - Dexterity_Reduction_Percent)
+        public float DexterityTotal
+        {
+            get
+            {
+                return Dexterity;
+            }
+        }
+
+        public float Vitality
+        {
+            get
+            {
+                var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
+                return data.Vitality + (this.Toon.Level * 2);
+            }
+        }
+
+        //((Vitality + Stats_All_Bonus + Vitality_Bonus + (Vitality_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Vitality_Bonus_Percent)) * (1 - Vitality_Reduction_Percent)
+        public float VitalityTotal
+        {
+            get
+            {
+                return Vitality;
+            }
+        }
+
+        public float Intelligence
+        {
+            get
+            {
+                var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
+                if (data.CoreAttribute == Mooege.Common.MPQ.FileFormats.PrimaryAttribute.Intelligence)
+                    return data.Intelligence + (this.Toon.Level * 2);
+                else
+                    return data.Intelligence + (this.Toon.Level);
+            }
+        }
+
+        //((Intelligence + Stats_All_Bonus + Intelligence_Bonus + (Intelligence_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Intelligence_Bonus_Percent)) * (1 - Intelligence_Reduction_Percent)
+        public float IntelligenceTotal
+        {
+            get
+            {
+                return Intelligence;
+            }
+        }
+
+
         #endregion
 
         #region saved-data
@@ -1092,7 +1175,7 @@ namespace Mooege.Core.GS.Players
             {
                 HotBarButtons = this.SkillSet.HotBarSkills,
                 HotBarButton = new HotbarButtonData { SNOSkill = -1, ItemGBId = -1 },
-                PlaytimeTotal = 0x00000000,
+                PlaytimeTotal = (int)this.Toon.TimePlayed,
                 WaypointFlags = 0x7FFFFFFF,
 
                 Field4 = new HirelingSavedData()
@@ -1236,78 +1319,31 @@ namespace Mooege.Core.GS.Players
 
         public static int GetClassSNOId(int gender, ToonClass @class)
         {
+            var data = HeroData.Heros.Find(item => item.Name == @class.ToString());
+
             if(gender==0) // male
             {
-                switch(@class)
-                {
-                    case ToonClass.Barbarian:
-                        return 0x0CE5;
-                    case ToonClass.DemonHunter:
-                        return 0x0125C7;
-                    case ToonClass.Monk:
-                        return 0x1271;
-                    case ToonClass.WitchDoctor:
-                        return 0x1955;
-                    case ToonClass.Wizard:
-                        return 0x1990;
-                }
+                return data.SNOMaleActor;
             }
             else // female
             {
-                switch (@class)
-                {
-                    case ToonClass.Barbarian:
-                        return 0x0CD5;
-                    case ToonClass.DemonHunter:
-                        return 0x0123D2;
-                    case ToonClass.Monk:
-                        return 0x126D;
-                    case ToonClass.WitchDoctor:
-                        return 0x1951;
-                    case ToonClass.Wizard:
-                        return 0x197E;
-                }
+                    return data.SNOFemaleActor;
             }
-            return 0x0;
         }
 
         public int ClassSNO
         {
             get
             {
+                var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
                 if (this.Toon.Gender == 0)
                 {
-                    switch (this.Toon.Class)
-                    {
-                        case ToonClass.Barbarian:
-                            return 0x0CE5;
-                        case ToonClass.DemonHunter:
-                            return 0x0125C7;
-                        case ToonClass.Monk:
-                            return 0x1271;
-                        case ToonClass.WitchDoctor:
-                            return 0x1955;
-                        case ToonClass.Wizard:
-                            return 0x1990;
-                    }
+                    return data.SNOMaleActor;
                 }
                 else
                 {
-                    switch (this.Toon.Class)
-                    {
-                        case ToonClass.Barbarian:
-                            return 0x0CD5;
-                        case ToonClass.DemonHunter:
-                            return 0x0123D2;
-                        case ToonClass.Monk:
-                            return 0x126D;
-                        case ToonClass.WitchDoctor:
-                            return 0x1951;
-                        case ToonClass.Wizard:
-                            return 0x197E;
-                    }
+                    return data.SNOFemaleActor;
                 }
-                return 0x0;
             }
         }
 
@@ -1332,47 +1368,22 @@ namespace Mooege.Core.GS.Players
             }
         }
 
-        public int ResourceID
+        public int PrimaryResourceID
         {
             get
             {
-                switch (this.Toon.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 0x00000002;
-                    case ToonClass.DemonHunter:
-                        return 0x00000005;
-                    case ToonClass.Monk:
-                        return 0x00000003;
-                    case ToonClass.WitchDoctor:
-                        return 0x00000000;
-                    case ToonClass.Wizard:
-                        return 0x00000001;
-                }
-                return 0x00000000;
+                return (int)HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString()).PrimaryResource;
             }
         }
 
-        public int SkillKit
+        public int SecondaryResourceID
         {
             get
             {
-                switch (this.Toon.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 0x00008AF4;
-                    case ToonClass.DemonHunter:
-                        return 0x00008AFC;
-                    case ToonClass.Monk:
-                        return 0x00008AFA;
-                    case ToonClass.WitchDoctor:
-                        return 0x00008AFF;
-                    case ToonClass.Wizard:
-                        return 0x00008B00;
-                }
-                return 0x00000001;
+                return (int)HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString()).SecondaryResource;
             }
         }
+
 
         #endregion
 
@@ -1396,6 +1407,13 @@ namespace Mooege.Core.GS.Players
             return (this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality]) +
                     (this.Attributes[GameAttribute.Hitpoints_Total_From_Level]);
         }
+
+        private float GetInt()
+        {
+            return 0f;
+        }
+
+
 
         public static int[] LevelBorders =
         {
@@ -1428,21 +1446,43 @@ namespace Mooege.Core.GS.Players
         public void UpdateExp(int addedExp)
         {
 
-            this.Attributes[GameAttribute.Experience_Next] -= addedExp;
-
             // Levelup
-            if ((this.Attributes[GameAttribute.Experience_Next] <= 0) && (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]))
+            if ((this.Attributes[GameAttribute.Experience_Next] <= addedExp) && (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]))
             {
                 this.Attributes[GameAttribute.Level]++;
                 this.Toon.LevelUp();
+
+                this.InGameClient.SendMessage(new PlayerLevel()
+                {
+                    PlayerIndex = this.PlayerIndex,
+                    Level = this.Attributes[GameAttribute.Level],
+                });
+
+                this.Conversations.StartConversation(0x0002A777);
+
+                this.Attributes[GameAttribute.Experience_Next] -= addedExp;
+
                 if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
                 else { this.Attributes[GameAttribute.Experience_Next] = 0; }
 
                 // 4 main attributes are incremented according to class
-                this.Attributes[GameAttribute.Attack] += (int)this.AttackIncrement;
-                this.Attributes[GameAttribute.Precision] += (int)this.PrecisionIncrement;
-                this.Attributes[GameAttribute.Vitality] += (int)this.VitalityIncrement;
-                this.Attributes[GameAttribute.Defense] += (int)this.DefenseIncrement;
+                this.Attributes[GameAttribute.Strength] = this.Strength;
+                this.Attributes[GameAttribute.Intelligence] = this.Intelligence;
+                this.Attributes[GameAttribute.Vitality] = this.Vitality;
+                this.Attributes[GameAttribute.Dexterity] = this.Dexterity;
+                this.Attributes[GameAttribute.Strength_Total] = this.StrengthTotal;
+                this.Attributes[GameAttribute.Intelligence_Total] = this.IntelligenceTotal;
+                this.Attributes[GameAttribute.Dexterity_Total] = this.DexterityTotal;
+                this.Attributes[GameAttribute.Vitality_Total] = this.VitalityTotal;
+
+                this.Attributes[GameAttribute.Resistance_From_Intelligence] = this.Attributes[GameAttribute.Intelligence] * 0.1f;
+                this.Attributes[GameAttribute.Resistance_Total, 0] = this.Attributes[GameAttribute.Resistance_From_Intelligence];
+                this.Attributes[GameAttribute.Resistance_Total, 1] = this.Attributes[GameAttribute.Resistance_From_Intelligence];
+                this.Attributes[GameAttribute.Resistance_Total, 2] = this.Attributes[GameAttribute.Resistance_From_Intelligence];
+                this.Attributes[GameAttribute.Resistance_Total, 3] = this.Attributes[GameAttribute.Resistance_From_Intelligence];
+                this.Attributes[GameAttribute.Resistance_Total, 4] = this.Attributes[GameAttribute.Resistance_From_Intelligence];
+                this.Attributes[GameAttribute.Resistance_Total, 5] = this.Attributes[GameAttribute.Resistance_From_Intelligence];
+                this.Attributes[GameAttribute.Resistance_Total, 6] = this.Attributes[GameAttribute.Resistance_From_Intelligence];
 
                 // Hitpoints from level may actually change. This needs to be verified by someone with the beta.
                 //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = this.Attributes[GameAttribute.Level] * this.Attributes[GameAttribute.Hitpoints_Factor_Level];
@@ -1456,13 +1496,10 @@ namespace Mooege.Core.GS.Players
                 // On level up, health is set to max
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
 
-                this.Attributes.BroadcastChangedIfRevealed();
+                this.Attributes[GameAttribute.Buff_Icon_Count0, 0x00020C51] = 3;
+                this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x00020C51] = 2592;
 
-                this.InGameClient.SendMessage(new PlayerLevel()
-                {
-                    Field0 = 0x00000000,
-                    Field1 = this.Attributes[GameAttribute.Level],
-                });
+                this.Attributes.BroadcastChangedIfRevealed();
 
                 this.InGameClient.SendMessage(new PlayEffectMessage()
                 {
@@ -1485,6 +1522,7 @@ namespace Mooege.Core.GS.Players
 
             }
             this.Attributes.BroadcastChangedIfRevealed();
+            this.Toon.GameAccount.NotifyUpdate();
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
         }
 
@@ -1579,26 +1617,22 @@ namespace Mooege.Core.GS.Players
 
         public void GeneratePrimaryResource(float amount)
         {
-            _ModifyResourceAttribute(this.ResourceID, amount);
+            _ModifyResourceAttribute(this.PrimaryResourceID, amount);
         }
 
         public void UsePrimaryResource(float amount)
         {
-            _ModifyResourceAttribute(this.ResourceID, -amount);
+            _ModifyResourceAttribute(this.PrimaryResourceID, -amount);
         }
 
         public void GenerateSecondaryResource(float amount)
         {
-            // always assume dh discipline
-            int disciplineID = this.ResourceID + 1; //0x00000006
-            _ModifyResourceAttribute(disciplineID, amount);
+            _ModifyResourceAttribute(this.SecondaryResourceID, amount);
         }
 
         public void UseSecondaryResource(float amount)
         {
-            // always assume dh discipline
-            int disciplineID = this.ResourceID + 1; //0x00000006
-            _ModifyResourceAttribute(disciplineID, -amount);
+            _ModifyResourceAttribute(this.SecondaryResourceID, -amount);
         }
 
         private void _ModifyResourceAttribute(int resourceID, float amount)
@@ -1630,25 +1664,12 @@ namespace Mooege.Core.GS.Players
 
             _lastResourceUpdateTick = this.InGameClient.Game.TickCounter;
 
-            // TODO: setup and use attributes Resource_Regen_Per_Second or Resource_Regen_Percent_Per_Second
-            switch (this.Toon.Class)
-            {
-                case ToonClass.Barbarian:
-                    UsePrimaryResource(0.1f);
-                    break;
-                case ToonClass.DemonHunter:
-                    GeneratePrimaryResource(3f);
-                    GenerateSecondaryResource(0.3f);
-                    break;
-                case ToonClass.Monk:
-                    break;
-                case ToonClass.WitchDoctor:
-                    GeneratePrimaryResource(1f);
-                    break;
-                case ToonClass.Wizard:
-                    GeneratePrimaryResource(2f);
-                    break;
-            }
+            var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
+            GeneratePrimaryResource(data.PrimaryResourceRegenPerSecond);
+            GenerateSecondaryResource(data.SecondaryResourceRegenPerSecond);
+
+            if (this.Toon.Class == ToonClass.Barbarian)
+                UsePrimaryResource(0.1f);
         }
 
         #endregion

@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using CrystalMpq;
 using Gibbed.IO;
@@ -712,12 +713,12 @@ namespace Mooege.Common.MPQ.FileFormats
         public float HitpointsMax { get; private set; }
         public float HitpointsFactorLevel { get; private set; }
         public float F3 { get; private set; }
-        public float ResourceMax { get; private set; }
-        public float ResourceFactorLevel { get; private set; }
-        public float ResourceRegenPerSecond { get; private set; }
-        public float F7 { get; private set; }
-        public float F8 { get; private set; }
-        public float F9 { get; private set; }
+        public float PrimaryResourceMax { get; private set; }
+        public float PrimaryResourceFactorLevel { get; private set; }
+        public float PrimaryResourceRegenPerSecond { get; private set; }
+        public float SecondaryResourceMax { get; private set; }
+        public float SecondaryResourceFactorLevel { get; private set; }
+        public float SecondaryResourceRegenPerSecond { get; private set; }
         public float F10 { get; private set; }
         public float F11 { get; private set; }
         public float CritPercentCap { get; private set; }
@@ -743,10 +744,10 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F32 { get; private set; }
         public float F33 { get; private set; }
         public float F34 { get; private set; }
-        public float Attack { get; private set; }
-        public float Precision { get; private set; }
+        public float Strength { get; private set; }
+        public float Dexterity { get; private set; }
         public float Vitality { get; private set; }
-        public float Defense { get; private set; }
+        public float Intelligence { get; private set; }
         public float GetHitMaxBase { get; private set; }
         public float GetHitMaxPerLevel { get; private set; }
         public float GetHitRecoveryBase { get; private set; }
@@ -776,13 +777,13 @@ namespace Mooege.Common.MPQ.FileFormats
             this.HitpointsFactorLevel = stream.ReadValueF32(); //340
             stream.Position += 8;
             this.F3 = stream.ReadValueF32(); //352
-            this.ResourceMax = stream.ReadValueF32(); //356
-            this.ResourceFactorLevel = stream.ReadValueF32(); //360
-            this.ResourceRegenPerSecond = stream.ReadValueF32(); //364
+            this.PrimaryResourceMax = stream.ReadValueF32(); //356
+            this.PrimaryResourceFactorLevel = stream.ReadValueF32(); //360
+            this.PrimaryResourceRegenPerSecond = stream.ReadValueF32(); //364
             stream.Position += 4;
-            this.F7 = stream.ReadValueF32(); //372
-            this.F8 = stream.ReadValueF32(); //376
-            this.F9 = stream.ReadValueF32(); //380
+            this.SecondaryResourceMax = stream.ReadValueF32(); //372
+            this.SecondaryResourceFactorLevel = stream.ReadValueF32(); //376
+            this.SecondaryResourceRegenPerSecond = stream.ReadValueF32(); //380
             stream.Position += 24;
             this.F10 = stream.ReadValueF32(); //408
             stream.Position += 72;
@@ -820,10 +821,10 @@ namespace Mooege.Common.MPQ.FileFormats
             stream.Position += 40;
             this.F34 = stream.ReadValueF32(); //772
             stream.Position += 24;
-            this.Attack = stream.ReadValueF32(); //800
-            this.Precision = stream.ReadValueF32(); //804
+            this.Strength = stream.ReadValueF32(); //800
+            this.Dexterity = stream.ReadValueF32(); //804
             this.Vitality = stream.ReadValueF32(); //808
-            this.Defense = stream.ReadValueF32(); //812
+            this.Intelligence = stream.ReadValueF32(); //812
             stream.Position += 40;
             this.GetHitMaxBase = stream.ReadValueF32(); //856
             this.GetHitMaxPerLevel = stream.ReadValueF32(); //860
@@ -833,6 +834,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public enum Resource : int
         {
+            None = -1,
             Mana = 0,
             Arcanum,
             Fury,

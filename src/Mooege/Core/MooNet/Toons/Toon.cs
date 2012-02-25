@@ -354,6 +354,7 @@ namespace Mooege.Core.MooNet.Toons
         public void LevelUp()
         {
             this.Level++;
+            this.GameAccount.ChangedFields.SetIntPresenceFieldValue(this.HeroLevelField);
         }
 
         #region Notifications
