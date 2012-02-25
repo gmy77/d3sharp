@@ -1445,8 +1445,10 @@ namespace Mooege.Core.GS.Players
         public void UpdateExp(int addedExp)
         {
 
+            this.Attributes[GameAttribute.Experience_Next] -= addedExp;
+
             // Levelup
-            if ((this.Attributes[GameAttribute.Experience_Next] <= addedExp) && (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]))
+            if ((this.Attributes[GameAttribute.Experience_Next] <= 0) && (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]))
             {
                 this.Attributes[GameAttribute.Level]++;
                 this.Toon.LevelUp();
@@ -1458,8 +1460,6 @@ namespace Mooege.Core.GS.Players
                 });
 
                 this.Conversations.StartConversation(0x0002A777);
-
-                this.Attributes[GameAttribute.Experience_Next] -= addedExp;
 
                 if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
                 else { this.Attributes[GameAttribute.Experience_Next] = 0; }
