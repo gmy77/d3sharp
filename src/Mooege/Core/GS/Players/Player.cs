@@ -1493,9 +1493,6 @@ namespace Mooege.Core.GS.Players
                 // On level up, health is set to max
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
 
-                this.Attributes[GameAttribute.Buff_Icon_Count0, 0x00020C51] = 3;
-                this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x00020C51] = 2592;
-
                 this.Attributes.BroadcastChangedIfRevealed();
 
                 this.PlayEffect(Effect.LevelUp);
