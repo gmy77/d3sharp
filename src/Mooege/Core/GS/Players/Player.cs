@@ -1408,12 +1408,6 @@ namespace Mooege.Core.GS.Players
                     (this.Attributes[GameAttribute.Hitpoints_Total_From_Level]);
         }
 
-        private float GetInt()
-        {
-            return 0f;
-        }
-
-
 
         public static int[] LevelBorders =
         {
