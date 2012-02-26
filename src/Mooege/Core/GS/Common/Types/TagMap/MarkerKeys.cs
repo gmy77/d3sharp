@@ -48,7 +48,10 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public static TagKeySNO ConversationList = new TagKeySNO(526080);
         public static TagKeyFloat Scale = new TagKeyFloat(524288);
         public static TagKeySNO OnActorSpawnedScript = new TagKeySNO(524808);
-        public static TagKeyInt GroupHash = new TagKeyInt(524814);
+        //TODO: Thes probably should be under actor keys...
+        public static TagKeyInt Group1Hash = new TagKeyInt(524814);
+        public static TagKeyInt Group2Hash = new TagKeyInt(524815);
+        public static TagKeySNO SpawnActor = new TagKeySNO(532496);
 
         // Used for portal destination resolution
         public static TagKeySNO DestinationWorld = new TagKeySNO(526850);
@@ -59,7 +62,9 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public static TagKeyInt SavepointId = new TagKeyInt(526976);
 
         public static TagKeySNO TriggeredConversation = new TagKeySNO(528128);
+        public static TagKeySNO TriggeredConversation1 = new TagKeySNO(528129);
         public static TagKeyInt TriggerDistance = new TagKeyInt(528384); // raven_pecking
+        public static TagKeySNO TriggeredActor = new TagKeySNO(526592);
 
         public static TagKeySNO MinimapTexture = new TagKeySNO(548864);
     }

@@ -108,6 +108,10 @@ namespace Mooege.Core.GS.Common.Types.TagMap
             {
                 return key.GetValue(_tagMapEntries[key.ID]);
             }
+            set
+            {
+                _tagMapEntries[key.ID].Int = value;
+            }
         }
 
         public float this[TagKeyFloat key]
@@ -196,7 +200,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public ScriptFormula ScriptFormula { get; private set; }
 
         [PersistentProperty("Int")]
-        public int Int { get; private set; }
+        public int Int { get; set; }
 
         [PersistentProperty("Float")]
         public float Float { get; private set; }

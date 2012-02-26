@@ -99,6 +99,7 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("RequestDisconnect()");
             this.Client.Account.CurrentGameAccount.SaveToDB();
+            this.Client.Account.SaveToDB();
             this.Client.Account.CurrentGameAccount.LoggedInClient.Connection.Disconnect();
         }
     }

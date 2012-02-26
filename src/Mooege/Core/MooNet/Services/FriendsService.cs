@@ -78,18 +78,25 @@ namespace Mooege.Core.MooNet.Services
 
             if (friendRequest.TargetEmail.ToLower() == this.Client.Account.Email.ToLower()) return; // don't allow him to invite himself - and we should actually return an error!
                                                                                                     // also he shouldn't be allowed to invite his current friends - put that check too!. /raist
-            var inviteee = AccountManager.GetAccountByEmail(friendRequest.TargetEmail);
-            if (inviteee == null) return; // we need send an error response here /raist.
+            if (friendRequest.TargetBattleTag == this.Client.Account.BattleTag) return;
+
+            Account invitee = null;
+            if (friendRequest.HasTargetEmail)
+                invitee = AccountManager.GetAccountByEmail(friendRequest.TargetEmail);
+            else
+                invitee = AccountManager.GetAccountByBattletag(friendRequest.TargetBattleTag);
+
+            if (invitee == null) return; // we need send an error response here /raist.
             //Header.Status(4) = account does not exist
 
-            Logger.Trace("{0} sent {1} friend invitation.", this.Client.Account, inviteee);
+            Logger.Trace("{0} sent {1} friend invitation.", this.Client.Account, invitee);
 
             var invitation = bnet.protocol.invitation.Invitation.CreateBuilder()
                 .SetId(FriendManager.InvitationIdCounter++) // we may actually need to store invitation ids in database with the actual invitation there. /raist.                
                 .SetInviterIdentity(this.Client.GetIdentity(true, false, false))
                 .SetInviterName(this.Client.Account.Email) // we shoulde be instead using account owner's name here.
-                .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(inviteee.BnetEntityId))
-                .SetInviteeName(inviteee.Email) // again we should be instead using invitee's name.
+                .SetInviteeIdentity(bnet.protocol.Identity.CreateBuilder().SetAccountId(invitee.BnetEntityId))
+                .SetInviteeName(invitee.Email) // again we should be instead using invitee's name.
                 .SetInvitationMessage(request.Params.InvitationMessage)
                 .SetCreationTime(DateTime.Now.ToUnixTime())
                 .SetExpirationTime(86400);

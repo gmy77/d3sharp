@@ -512,8 +512,8 @@ namespace Mooege.Core.GS.Actors
             player.InGameClient.SendMessage(new ACDGroupMessage
             {
                 ActorID = DynamicID,
-                Field1 = -1,
-                Field2 = -1,
+                Group1Hash = -1,
+                Group2Hash = -1,
             });
 
             // Reveal actor (creates actor and makes it visible to the player)

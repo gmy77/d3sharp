@@ -47,6 +47,16 @@ namespace Mooege.Core.MooNet.Accounts
             return Accounts.ContainsKey(email) ? Accounts[email] : null;
         }
 
+        public static Account GetAccountByBattletag(string battletag)
+        {
+            foreach (var account in Accounts.Values)
+            {
+                if (account.AccountBattleTagField.Value == battletag)
+                    return account;
+            }
+            return null;
+        }
+
         public static Account CreateAccount(string email, string password, string battleTag, Account.UserLevels userLevel = Account.UserLevels.User)
         {
             var hashCode = AccountManager.GetUnusedHashCodeForBattleTag(battleTag);
