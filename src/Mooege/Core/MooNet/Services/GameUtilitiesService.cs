@@ -216,6 +216,7 @@ namespace Mooege.Core.MooNet.Services
             {
                 this.Client.Account.CurrentGameAccount.NotifyUpdate();
                 this.Client.Account.CurrentGameAccount.lastPlayedHeroId = this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID;
+                this.Client.Account.SaveToDB();
             }
             return this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID.ToByteString();
         }

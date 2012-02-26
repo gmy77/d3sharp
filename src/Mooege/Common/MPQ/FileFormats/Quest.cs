@@ -122,7 +122,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public SNOHandle SNOName2 { get; private set; }
         public int GBID1 { get; private set; }
         public int GBID2 { get; private set; }
-        public string Unknown1 { get; private set; }
+        public string Group1Name { get; private set; }
         public string Unknown2 { get; private set; }
         public int I4 { get; private set; }              // min = 0, max = 1 unless i know what it is im not making it a bool
         public int I5 { get; private set; }
@@ -138,7 +138,7 @@ namespace Mooege.Common.MPQ.FileFormats
             SNOName2 = new SNOHandle(stream);
             GBID1 = stream.ReadValueS32();
             GBID2 = stream.ReadValueS32();
-            Unknown1 = stream.ReadString(256, true);
+            Group1Name = stream.ReadString(256, true);
             Unknown2 = stream.ReadString(256, true);
             I4 = stream.ReadValueS32();
             I5 = stream.ReadValueS32();

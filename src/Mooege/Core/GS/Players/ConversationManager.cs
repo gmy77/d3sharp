@@ -298,6 +298,7 @@ namespace Mooege.Core.GS.Players
                     Field1 = 0x00000000,
                     Field2 = false,
                     Field3 = true,
+                    Field4 = false,
                     LineID = currentLineNode.LineID,
                     Speaker = currentLineNode.Speaker1,
                     Field5 = -1,

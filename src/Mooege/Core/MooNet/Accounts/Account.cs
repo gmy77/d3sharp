@@ -307,18 +307,36 @@ namespace Mooege.Core.MooNet.Accounts
             return calculatedVerifier.SequenceEqual(this.PasswordVerifier);
         }
 
+        #region DB
         public void SaveToDB()
         {
             try
             {
-                var query = string.Format("INSERT INTO accounts (id, email, salt, passwordVerifier, battletagname, hashcode, userLevel) VALUES({0}, '{1}', @salt, @passwordVerifier, '{2}', {3}, {4})",
-                        this.PersistentID, this.Email, this.Name, this.HashCode, (byte)this.UserLevel);
-
-                using (var cmd = new SQLiteCommand(query, DBManager.Connection))
+                if (ExistsInDB())
                 {
-                    cmd.Parameters.Add("@salt", System.Data.DbType.Binary, 32).Value = this.Salt;
-                    cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
-                    cmd.ExecuteNonQuery();
+                    var query =
+                        string.Format(
+                            "UPDATE accounts SET email='{0}', salt=@salt, passwordVerifier=@passwordVerifier, battletagname='{1}', hashcode={2}, userLevel={3} WHERE id={4}",
+                            this.Email, this.Name, this.HashCode, (byte)this.UserLevel, this.PersistentID);
+
+                    using (var cmd = new SQLiteCommand(query, DBManager.Connection))
+                    {
+                        cmd.Parameters.Add("@salt", System.Data.DbType.Binary, 32).Value = this.Salt;
+                        cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                else
+                {
+                    var query = string.Format("INSERT INTO accounts (id, email, salt, passwordVerifier, battletagname, hashcode, userLevel) VALUES({0}, '{1}', @salt, @passwordVerifier, '{2}', {3}, {4})",
+                            this.PersistentID, this.Email, this.Name, this.HashCode, (byte)this.UserLevel);
+
+                    using (var cmd = new SQLiteCommand(query, DBManager.Connection))
+                    {
+                        cmd.Parameters.Add("@salt", System.Data.DbType.Binary, 32).Value = this.Salt;
+                        cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
             catch (Exception e)
@@ -361,6 +379,18 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
+        private bool ExistsInDB()
+        {
+            var query =
+                string.Format(
+                    "SELECT id from accounts where id={0}",
+                    this.PersistentID);
+
+            var cmd = new SQLiteCommand(query, DBManager.Connection);
+            var reader = cmd.ExecuteReader();
+            return reader.HasRows;
+        }
+#endregion
         public override string ToString()
         {
             return String.Format("{{ Account: {0} [lowId: {1}] }}", this.Email, this.BnetEntityId.Low);

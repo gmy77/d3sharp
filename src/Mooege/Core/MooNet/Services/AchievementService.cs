@@ -74,7 +74,11 @@ namespace Mooege.Core.MooNet.Services
 
         public override void UnregisterFromService(IRpcController controller, bnet.protocol.achievements.UnregisterFromServiceRequest request, Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("Unregister()");
+
+            var builder = bnet.protocol.NoData.CreateBuilder();
+
+            done(builder.Build());
         }
 
         public override void Initialize(IRpcController controller, bnet.protocol.achievements.InitializeRequest request, Action<bnet.protocol.achievements.InitializeResponse> done)

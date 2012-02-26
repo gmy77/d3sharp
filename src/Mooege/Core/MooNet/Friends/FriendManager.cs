@@ -65,7 +65,9 @@ namespace Mooege.Core.MooNet.Friends
 
             if (invitee.IsOnline)
             {
-                var notification = bnet.protocol.friends.InvitationNotification.CreateBuilder().SetInvitation(invitation);
+                var inviter = AccountManager.GetAccountByPersistentID(invitation.InviterIdentity.AccountId.Low);
+
+                var notification = bnet.protocol.friends.InvitationNotification.CreateBuilder().SetInvitation(invitation).SetGameAccountId(inviter.CurrentGameAccount.BnetEntityId);
 
                 invitee.CurrentGameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
                     bnet.protocol.friends.FriendsNotify.CreateStub(invitee.CurrentGameAccount.LoggedInClient).NotifyReceivedInvitationAdded(null, notification.Build(), callback => { }));
@@ -83,11 +85,13 @@ namespace Mooege.Core.MooNet.Friends
             var inviterAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(invitation.InviterIdentity.AccountId).Build();
 
             var notificationToInviter = bnet.protocol.friends.InvitationNotification.CreateBuilder()
+                .SetGameAccountId(invitee.BnetEntityId)
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Accepted) // success?
                 .Build();
 
             var notificationToInvitee = bnet.protocol.friends.InvitationNotification.CreateBuilder()
+                .SetGameAccountId(inviter.BnetEntityId)
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Accepted) // success?
                 .Build();
@@ -97,8 +101,8 @@ namespace Mooege.Core.MooNet.Friends
             AddFriendshipToDB(inviter,invitee);
 
             // send friend added notifications
-            var friendAddedNotificationToInviter = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviteeAsFriend).Build();
-            var friendAddedNotificationToInvitee = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviterAsFriend).Build();
+            var friendAddedNotificationToInviter = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviteeAsFriend).SetGameAccountId(invitee.BnetEntityId).Build();
+            var friendAddedNotificationToInvitee = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviterAsFriend).SetGameAccountId(inviter.BnetEntityId).Build();
 
             var inviterGameAccounts = GameAccountManager.GetGameAccountsForAccount(inviter).Values;
             var inviteeGameAccounts = GameAccountManager.GetGameAccountsForAccount(invitee).Values;
