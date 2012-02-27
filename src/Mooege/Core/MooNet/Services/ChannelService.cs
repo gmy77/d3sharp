@@ -136,7 +136,7 @@ namespace Mooege.Core.MooNet.Services
                             .SetName("D3.Party.ScreenStatus")
                             .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(oldScreen.ToByteString()));
                         channelState.AddAttribute(attr);
-                        Logger.Debug("Client moving to Screen: {0}, with Status: {1}", oldScreen.Screen, oldScreen.Status);
+                        Logger.Trace("Client moving to Screen: {0}, with Status: {1}", oldScreen.Screen, oldScreen.Status);
                     }
                 }
                 else if (attribute.Name == "D3.Party.JoinPermissionPreviousToLock")

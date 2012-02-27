@@ -672,7 +672,7 @@ namespace Mooege.Core.GS.Generators
                         int amount = RandomHelper.Next(spawnEntry.Max, spawnEntry.Max);
                         if (amount > gizmoLocations.Count)
                         {
-                            Logger.Warn("Breaking after spawnEntry {0} for LevelArea {1} because there are less locations ({2}) than spawn amount ({3}, {4} min)", spawnEntry.SNOHandle, levelAreaHandle, gizmoLocations.Count, amount, spawnEntry.Min);
+                            Logger.Trace("Breaking after spawnEntry {0} for LevelArea {1} because there are less locations ({2}) than spawn amount ({3}, {4} min)", spawnEntry.SNOHandle, levelAreaHandle, gizmoLocations.Count, amount, spawnEntry.Min);
                             break;
                         }
 
