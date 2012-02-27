@@ -66,9 +66,11 @@ namespace Mooege
                 return;
             }
 
-            Logger.Info("Item database loaded with a total of {0} item definitions.", ItemGenerator.TotalItems);
+            Logger.Info("Loading item database..");
+            Logger.Trace("Item database loaded with a total of {0} item definitions.", ItemGenerator.TotalItems);
 
-            Logger.Info("Achievement file parsed with a total of {0} achievements and {1} criteria in {2} categories.",
+            Logger.Info("Loading achievements database..");
+            Logger.Trace("Achievement file parsed with a total of {0} achievements and {1} criteria in {2} categories.",
                 AchievementManager.TotalAchievements, AchievementManager.TotalCriteria, AchievementManager.TotalCategories);
 
             StartupServers();
