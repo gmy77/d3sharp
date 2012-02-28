@@ -1507,7 +1507,7 @@ namespace Mooege.Core.GS.Players
                 this.Attributes.BroadcastChangedIfRevealed();
 
                 this.PlayEffect(Effect.LevelUp);
-                this.World.PowerManager.RunPower(this, 85954, this.DynamicID, this.Position); //g_LevelUp.pow 85954
+                this.World.PowerManager.RunPower(this, 85954); //g_LevelUp.pow 85954
             }
 
             // constant 0 exp at Level_Cap
