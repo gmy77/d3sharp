@@ -1457,9 +1457,9 @@ namespace Mooege.Core.GS.Players
                 {
                     PlayerIndex = this.PlayerIndex,
                     Level = this.Attributes[GameAttribute.Level],
-                });
+                }, true);
 
-                this.Conversations.StartConversation(0x0002A777);
+                this.Conversations.StartConversation(0x0002A777); //LevelUp Conversation
 
                 if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
                 else { this.Attributes[GameAttribute.Experience_Next] = 0; }
@@ -1507,7 +1507,7 @@ namespace Mooege.Core.GS.Players
                 this.Attributes.BroadcastChangedIfRevealed();
 
                 this.PlayEffect(Effect.LevelUp);
-                this.PlayEffectGroup(LevelUpEffects[this.Attributes[GameAttribute.Level]]);
+                this.World.PowerManager.RunPower(this, 85954, this.DynamicID, this.Position); //g_LevelUp.pow 85954
             }
 
             // constant 0 exp at Level_Cap
