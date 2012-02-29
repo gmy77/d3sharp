@@ -194,21 +194,21 @@ namespace Mooege.Core.GS.Items
             if (definition.WeaponDamageMin > 0)
             {
                 Attributes[GameAttribute.Attacks_Per_Second_Item] += definition.AttacksPerSecond;
-                Attributes[GameAttribute.Attacks_Per_Second_Item_Subtotal] += definition.AttacksPerSecond;
-                Attributes[GameAttribute.Attacks_Per_Second_Item_Total] += definition.AttacksPerSecond;
+                //Attributes[GameAttribute.Attacks_Per_Second_Item_Subtotal] += definition.AttacksPerSecond;
+                //Attributes[GameAttribute.Attacks_Per_Second_Item_Total] += definition.AttacksPerSecond;
 
                 Attributes[GameAttribute.Damage_Weapon_Min, 0] += definition.WeaponDamageMin;
-                Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] += definition.WeaponDamageMin;
+                //Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] += definition.WeaponDamageMin;
 
                 Attributes[GameAttribute.Damage_Weapon_Delta, 0] += definition.WeaponDamageDelta;
-                Attributes[GameAttribute.Damage_Weapon_Delta_SubTotal, 0] += definition.WeaponDamageDelta;
-                Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] += definition.WeaponDamageDelta;
+                //Attributes[GameAttribute.Damage_Weapon_Delta_SubTotal, 0] += definition.WeaponDamageDelta;
+                //Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] += definition.WeaponDamageDelta;
 
-                Attributes[GameAttribute.Damage_Weapon_Max, 0] += Attributes[GameAttribute.Damage_Weapon_Min, 0] + Attributes[GameAttribute.Damage_Weapon_Delta, 0];
-                Attributes[GameAttribute.Damage_Weapon_Max_Total, 0] += Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] + Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0];
+                //Attributes[GameAttribute.Damage_Weapon_Max, 0] += Attributes[GameAttribute.Damage_Weapon_Min, 0] + Attributes[GameAttribute.Damage_Weapon_Delta, 0];
+                //Attributes[GameAttribute.Damage_Weapon_Max_Total, 0] += Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] + Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0];
 
-                Attributes[GameAttribute.Damage_Weapon_Min_Total_All] = definition.WeaponDamageMin;
-                Attributes[GameAttribute.Damage_Weapon_Delta_Total_All] = definition.WeaponDamageDelta;
+                //Attributes[GameAttribute.Damage_Weapon_Min_Total_All] = definition.WeaponDamageMin;
+                //Attributes[GameAttribute.Damage_Weapon_Delta_Total_All] = definition.WeaponDamageDelta;
             }
         }
 
@@ -217,8 +217,8 @@ namespace Mooege.Core.GS.Items
             if (definition.ArmorValue > 0)
             {
                 Attributes[GameAttribute.Armor_Item] += definition.ArmorValue;
-                Attributes[GameAttribute.Armor_Item_SubTotal] += definition.ArmorValue;
-                Attributes[GameAttribute.Armor_Item_Total] += definition.ArmorValue;
+                //Attributes[GameAttribute.Armor_Item_SubTotal] += definition.ArmorValue;
+                //Attributes[GameAttribute.Armor_Item_Total] += definition.ArmorValue;
             }
         }
 

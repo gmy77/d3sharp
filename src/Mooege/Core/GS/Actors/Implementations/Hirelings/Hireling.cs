@@ -68,9 +68,9 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             // TODO: fix this hardcoded crap
             if (!IsProxy)
                 this.Attributes[GameAttribute.Buff_Visual_Effect, 0x000FFFFF] = true;
-            this.Attributes[GameAttribute.Hitpoints_Max_Total] = 308.25f;
+            //this.Attributes[GameAttribute.Hitpoints_Max_Total] = 308.25f;
             this.Attributes[GameAttribute.Hitpoints_Max] = 216.25f;
-            this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
+            //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
             this.Attributes[GameAttribute.Hitpoints_Cur] = 308.25f;
             
 
