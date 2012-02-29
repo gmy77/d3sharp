@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 mooege project
+ * Copyright (C) 2011 - 2012 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 
 using System.Collections.Generic;
 using System.Text;
-using System.Linq;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Actors;

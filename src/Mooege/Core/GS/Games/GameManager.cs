@@ -62,13 +62,18 @@ namespace Mooege.Core.GS.Games
 
             if (p != null)
             {
+                //TODO: Move this inside player OnLeave event
                 var toon = p.Toon;
                 toon.TimePlayed += DateTimeExtensions.ToUnixTime(DateTime.UtcNow) - toon.LoginTime;
-                toon.SaveToDB();
 
                 // Remove Player From World
                 if (p.InGameClient != null)
                     p.World.Leave(p);
+           
+                // Generate Update for Client
+                gameClient.BnetClient.Account.CurrentGameAccount.NotifyUpdate();
+                //save hero to db after player data was updated in toon
+                toon.SaveToDB();
             }
 
             if (game.Players.Count == 0)

@@ -800,6 +800,38 @@ namespace Mooege.Core.GS.Players
 
             this.RevealScenesToPlayer(); // reveal scenes in players proximity.
             this.RevealActorsToPlayer(); // reveal actors in players proximity.
+
+            //This can't be in the c-tor
+            //TODO: Hack until proper equipment slots are set 
+            Dictionary<int, int> visualToSlotMapping = new Dictionary<int, int>();
+            visualToSlotMapping.Add(0, 1);
+            visualToSlotMapping.Add(1, 2);
+            visualToSlotMapping.Add(2, 7);
+            visualToSlotMapping.Add(3, 5);
+            visualToSlotMapping.Add(4, 4);
+            visualToSlotMapping.Add(5, 3);
+            visualToSlotMapping.Add(6, 8);
+            visualToSlotMapping.Add(7, 9);
+
+            Dictionary<int, Mooege.Common.MPQ.FileFormats.ItemTable> itemsToAdd = new Dictionary<int, Mooege.Common.MPQ.FileFormats.ItemTable>();
+            //get items
+            for (int slot = 0; slot < 8; slot++)
+            {
+                var gbid = this.Toon.HeroVisualEquipmentField.Value.GetVisualItem(slot).Gbid;
+                //if item equiped
+                if (gbid > 0)
+                {
+                    itemsToAdd.Add(slot, ItemGenerator.GetDefinitionFromGBID(gbid));
+                }
+            }
+
+            foreach (var pair in itemsToAdd)
+            {
+                this.Inventory.EquipItem(ItemGenerator.CookFromDefinition(this, pair.Value), visualToSlotMapping[pair.Key]);
+            }
+
+            //generate visual update message
+            this.Inventory.SendVisualInventory(this);
         }
 
         public override void OnTeleport()
@@ -811,6 +843,11 @@ namespace Mooege.Core.GS.Players
         public override void OnLeave(World world)
         {
             this.Conversations.StopAll();
+            //save visual equipment
+            this.Toon.HeroVisualEquipmentField.Value = this.Inventory.GetVisualEquipment();
+            this.Toon.HeroLevelField.Value = this.Attributes[GameAttribute.Level];
+            this.Toon.GameAccount.ChangedFields.SetPresenceFieldValue(this.Toon.HeroVisualEquipmentField);
+            this.Toon.GameAccount.ChangedFields.SetPresenceFieldValue(this.Toon.HeroLevelField);
         }
 
         public override bool Reveal(Player player)

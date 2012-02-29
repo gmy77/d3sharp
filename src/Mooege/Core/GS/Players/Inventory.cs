@@ -29,6 +29,7 @@ using Mooege.Net.GS.Message.Definitions.Stash;
 using Mooege.Core.GS.Objects;
 using System.Collections.Generic;
 using System.Linq;
+using Mooege.Core.MooNet.Toons;
 
 namespace Mooege.Core.GS.Players
 {
@@ -84,6 +85,10 @@ namespace Mooege.Core.GS.Players
              player.World.BroadcastGlobal(message);
          }
 
+        public D3.Hero.VisualEquipment GetVisualEquipment()
+        {
+            return this._equipment.GetVisualEquipmentForToon();   
+        }
 
         public bool HasInventorySpace(Item item)
         {
@@ -153,6 +158,17 @@ namespace Mooege.Core.GS.Players
             }
           
             return success;
+        }
+
+        /// <summary>
+        /// Used for equiping item after game starts
+        /// TOOD: Needs rewrite
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="slot"></param>
+        public void EquipItem(Item item, int slot)
+        {
+            this._equipment.EquipItem(item, slot);
         }
 
         private List<Item> FindSameItems(int gbid)

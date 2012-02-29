@@ -54,6 +54,11 @@ namespace Mooege.Core.GS.Items
             SetAllowedTypes();
         }
 
+        public static ItemTable GetDefinitionFromGBID(int Gbid)
+        {
+            return (from pair in Items where pair.Value.Hash == Gbid select pair.Value).FirstOrDefault();
+        }
+
         private static void LoadHandlers()
         {
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
@@ -217,6 +222,12 @@ namespace Mooege.Core.GS.Items
         {
             int hash = StringHashHelper.HashItemName(name);
             ItemTable definition = Items[hash];
+            return CookFromDefinition(player, definition);
+        }
+
+        // Allows cooking a custom item.
+        public static Item CookFromDefinition(Player player, ItemTable definition)
+        {
             Type type = GetItemClass(definition);
 
             var item = (Item)Activator.CreateInstance(type, new object[] { player.World, definition });

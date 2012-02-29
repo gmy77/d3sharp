@@ -107,6 +107,7 @@ namespace Mooege.Core.GS.Players
             return IsItemEquipped(item.DynamicID);
         }
 
+        //TODO: Soon to become obsolete as D3.Hero classes will be used
         private VisualItem GetEquipmentItem(EquipmentSlotId equipSlot)
         {
             if (_equipment[(int)equipSlot] == 0)
@@ -119,13 +120,29 @@ namespace Mooege.Core.GS.Players
                     Field3 = 0,
                 };
             }
-            else
-            {
-                return Items[(_equipment[(int)equipSlot])].CreateVisualItem();
-            }
+
+            return Items[(_equipment[(int)equipSlot])].CreateVisualItem();
         }
 
-        public VisualItem[] GetVisualEquipment(){
+        private D3.Hero.VisualItem GetEquipmentItemForToon(EquipmentSlotId equipSlot)
+        {
+            if (_equipment[(int)equipSlot] == 0)
+            {
+                return D3.Hero.VisualItem.CreateBuilder()
+                    .SetGbid(-1)
+                    .SetDyeType(0)
+                    .SetEffectLevel(0)
+                    .SetItemEffectType(-1)
+                    .Build();
+            }
+
+            return Items[(_equipment[(int)equipSlot])].GetVisualItem();
+        }
+
+        //TODO: Soon to become obsolete: Save this at toon level
+
+        public VisualItem[] GetVisualEquipment()
+        {
             return new VisualItem[8]
                     {
                         GetEquipmentItem(EquipmentSlotId.Helm),
@@ -137,6 +154,24 @@ namespace Mooege.Core.GS.Players
                         GetEquipmentItem(EquipmentSlotId.Shoulders),
                         GetEquipmentItem(EquipmentSlotId.Legs),
                     };
+        }
+
+
+        public D3.Hero.VisualEquipment GetVisualEquipmentForToon()
+        {
+            var visualItems = new[]
+            {       
+                    GetEquipmentItemForToon(EquipmentSlotId.Helm),
+                    GetEquipmentItemForToon(EquipmentSlotId.Chest),
+                    GetEquipmentItemForToon(EquipmentSlotId.Feet),
+                    GetEquipmentItemForToon(EquipmentSlotId.Hands),
+                    GetEquipmentItemForToon(EquipmentSlotId.Main_Hand),
+                    GetEquipmentItemForToon(EquipmentSlotId.Off_Hand),
+                    GetEquipmentItemForToon(EquipmentSlotId.Shoulders),
+                    GetEquipmentItemForToon(EquipmentSlotId.Legs),
+            };
+
+            return D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
         }
 
         public Item AddGoldItem(Item collectedItem)
