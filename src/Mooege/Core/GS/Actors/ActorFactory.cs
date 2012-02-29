@@ -77,6 +77,8 @@ namespace Mooege.Core.GS.Actors
                         {
                             case GizmoGroup.LootContainer:
                                 return new LootContainer(world, snoId, tags);
+                            case GizmoGroup.Door:
+                                return new Door(world, snoId, tags);
                             case GizmoGroup.DestructibleLootContainer:
                                 return new DesctructibleLootContainer(world, snoId, tags);
                             case GizmoGroup.Portal:
@@ -105,7 +107,6 @@ namespace Mooege.Core.GS.Actors
                             case GizmoGroup.Barricade:
                             case GizmoGroup.CathedralIdol:
                             case GizmoGroup.Destructible:
-                            case GizmoGroup.Door:
                             case GizmoGroup.DungeonStonePortal:
                             case GizmoGroup.Headstone:
                             case GizmoGroup.HearthPortal:
