@@ -5,3 +5,4 @@
 *.dll
 bin/Debug/
 /obj/
+/*.suo
