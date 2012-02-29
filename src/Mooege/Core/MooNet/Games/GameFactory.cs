@@ -124,25 +124,26 @@ namespace Mooege.Core.MooNet.Games
                 .SetStateChange(channelStatePrivacyLevel)
                 .Build();
 
-            var gameChannel = ChannelManager.GetChannelByEntityId(this.BnetEntityId);
+            if (client.CurrentChannel != null)
+            {
+                client.MakeTargetedRPC(client.CurrentChannel, () =>
+                    bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPrivacyLevel, callback => { }));
 
-            client.MakeTargetedRPC(gameChannel, () =>
-                bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPrivacyLevel, callback => { }));
+                var channelStatePartyLock = bnet.protocol.channel.ChannelState.CreateBuilder()
+                    .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder()
+                    .SetName("D3.Party.LockReasons")
+                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build())
+                    .Build()).Build();
 
-            var channelStatePartyLock = bnet.protocol.channel.ChannelState.CreateBuilder()
-                .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder()
-                .SetName("D3.Party.LockReasons")
-                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build())
-                .Build()).Build();
+                var notificationPartyLock = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
+                    .SetAgentId(client.Account.CurrentGameAccount.BnetEntityId)
+                    .SetStateChange(channelStatePartyLock)
+                    .Build();
 
-            var notificationPartyLock = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(client.Account.CurrentGameAccount.BnetEntityId)
-                .SetStateChange(channelStatePartyLock)
-                .Build();
-
-            client.MakeTargetedRPC(gameChannel, () =>
-                bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPartyLock, callback => { }));
-
+                client.MakeTargetedRPC(client.CurrentChannel, () =>
+                    bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPartyLock, callback => { }));
+            }
+            
             // send the notification.
             var connectionInfo = GetConnectionInfoForClient(client);
 
