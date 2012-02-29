@@ -166,6 +166,11 @@ namespace Mooege.Core.MooNet.Toons
         public uint TimePlayed { get; set; }
 
         /// <summary>
+        /// Gold amount for toon.
+        /// </summary>
+        public int GoldAmount { get; set; }
+        
+        /// <summary>
         /// Last login time for toon.
         /// </summary>
         public uint LoginTime { get; set; }
@@ -260,16 +265,16 @@ namespace Mooege.Core.MooNet.Toons
             }
         }
 
-        public Toon(ulong persistentId, string name, int hashCode, byte @class, byte gender, byte level, long accountId, uint timePlayed) // Toon with given persistent ID
+        public Toon(ulong persistentId, string name, int hashCode, byte @class, byte gender, byte level, long accountId, uint timePlayed, int goldAmount) // Toon with given persistent ID
             : base(persistentId)
         {
-            this.SetFields(name, hashCode, (ToonClass)@class, (ToonFlags)gender, level, GameAccountManager.GetAccountByPersistentID((ulong)accountId), timePlayed);
+            this.SetFields(name, hashCode, (ToonClass)@class, (ToonFlags)gender, level, GameAccountManager.GetAccountByPersistentID((ulong)accountId), timePlayed, goldAmount);
         }
 
         public Toon(string name, int hashCode, int classId, ToonFlags flags, byte level, GameAccount account) // Toon with **newly generated** persistent ID
             : base(StringHashHelper.HashIdentity(name + "#" + hashCode.ToString("D3")))
         {
-            this.SetFields(name, hashCode, GetClassByID(classId), flags, level, account, 0);
+            this.SetFields(name, hashCode, GetClassByID(classId), flags, level, account, 0, 0);
         }
 
         public int ClassID
@@ -322,7 +327,7 @@ namespace Mooege.Core.MooNet.Toons
             }
         }
 
-        private void SetFields(string name, int hashCode, ToonClass @class, ToonFlags flags, byte level, GameAccount owner, uint timePlayed)
+        private void SetFields(string name, int hashCode, ToonClass @class, ToonFlags flags, byte level, GameAccount owner, uint timePlayed, int goldAmount)
         {
             //this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ToonId + this.PersistentID).SetLow(this.PersistentID).Build();
             this.D3EntityID = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId).SetIdLow(this.PersistentID).Build();
@@ -334,6 +339,7 @@ namespace Mooege.Core.MooNet.Toons
             this.Level = level;
             this.GameAccount = owner;
             this.TimePlayed = timePlayed;
+            this.GoldAmount = goldAmount;
 
             var visualItems = new[]
             {                                
@@ -396,9 +402,9 @@ namespace Mooege.Core.MooNet.Toons
                     return ToonClass.Barbarian;
                 case unchecked((int)0xC88B9649):
                     return ToonClass.DemonHunter;
-                case 0x3DAC15:
+                case 0x003DAC15:
                     return ToonClass.Monk;
-                case 0x343C22A:
+                case 0x0343C22A:
                     return ToonClass.WitchDoctor;
                 case 0x1D4681B1:
                     return ToonClass.Wizard;
@@ -421,8 +427,8 @@ namespace Mooege.Core.MooNet.Toons
                 {
                     var query =
                         string.Format(
-                            "UPDATE toons SET name='{0}', hashCode={1}, class={1}, gender={2}, level={3}, accountId={4}, timePlayed={5} WHERE id={6}",
-                            this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.GameAccount.PersistentID, this.TimePlayed, this.PersistentID);
+                            "UPDATE toons SET name='{0}', hashCode={1}, class={1}, gender={2}, level={3}, accountId={4}, timePlayed={5}, goldAmount={6} WHERE id={7}",
+                            this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.GameAccount.PersistentID, this.TimePlayed, this.GoldAmount, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -431,8 +437,8 @@ namespace Mooege.Core.MooNet.Toons
                 {
                     var query =
                         string.Format(
-                            "INSERT INTO toons (id, name,  hashCode, class, gender, level, timePlayed, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7})",
-                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.TimePlayed, this.GameAccount.PersistentID);
+                            "INSERT INTO toons (id, name,  hashCode, class, gender, level, timePlayed, goldAmount, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7},{8})",
+                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.TimePlayed, this.GoldAmount, this.GameAccount.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();

@@ -46,8 +46,8 @@ namespace Mooege.Core.GS.Players
             this._equipment = new uint[17];
             this._owner = owner;
             this.Items = new Dictionary<uint, Item>();
-            this._inventoryGold = ItemGenerator.CreateGold(_owner, 0);
-            this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = 0;
+            this._inventoryGold = ItemGenerator.CreateGold(_owner, _owner.Toon.GoldAmount);
+            this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = _owner.Toon.GoldAmount;
             this._inventoryGold.SetInventoryLocation(16, 0, 0);
             this._inventoryGold.Owner = _owner;
             this.Items.Add(_inventoryGold.DynamicID, _inventoryGold);
@@ -224,6 +224,11 @@ namespace Mooege.Core.GS.Players
             if (!Items.TryGetValue(itemId, out item))
                 return null;
             return item;
+        }
+
+        public int Gold()
+        {
+            return _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo];
         }
     }
 }

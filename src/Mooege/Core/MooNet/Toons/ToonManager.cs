@@ -112,7 +112,7 @@ namespace Mooege.Core.MooNet.Toons
             {
                 var databaseId = (ulong)reader.GetInt64(0);
                 //TODO: Move this to toon class only create a toon with id and call load from DB
-                var toon = new Toon(databaseId, reader.GetString(1), reader.GetInt32(6), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5), (uint)reader.GetInt32(7));
+                var toon = new Toon(databaseId, reader.GetString(1), reader.GetInt32(6), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5), (uint)reader.GetInt32(7), (int)reader.GetInt32(8));
 
                 //add visual equipment
                 //TODO: Load all visualEquipment at once

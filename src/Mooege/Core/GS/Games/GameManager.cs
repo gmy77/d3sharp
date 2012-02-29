@@ -65,6 +65,7 @@ namespace Mooege.Core.GS.Games
                 //TODO: Move this inside player OnLeave event
                 var toon = p.Toon;
                 toon.TimePlayed += DateTimeExtensions.ToUnixTime(DateTime.UtcNow) - toon.LoginTime;
+                toon.GoldAmount = p.Inventory.GetGoldAmount();
 
                 // Remove Player From World
                 if (p.InGameClient != null)
