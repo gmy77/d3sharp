@@ -34,15 +34,15 @@ namespace Mooege.Core.GS.Skills
         {
             switch (@class)
             {
-                case ToonClass.EnumBarbarian:
+                case ToonClass.Barbarian:
                     return Barbarian.AllActiveSkillsList;
-                case ToonClass.EnumDemonHunter:
+                case ToonClass.DemonHunter:
                     return DemonHunter.AllActiveSkillsList;
-                case ToonClass.EnumMonk:
+                case ToonClass.Monk:
                     return Monk.AllActiveSkillsList;
-                case ToonClass.EnumWitchDoctor:
+                case ToonClass.WitchDoctor:
                     return WitchDoctor.AllActiveSkillsList;
-                case ToonClass.EnumWizard:
+                case ToonClass.Wizard:
                     return Wizard.AllActiveSkillsList;
                 default:
                     return null;
@@ -53,15 +53,15 @@ namespace Mooege.Core.GS.Skills
         {
             switch (@class)
             {
-                case ToonClass.EnumBarbarian:
+                case ToonClass.Barbarian:
                     return Barbarian.FuryGenerators.List;
-                case ToonClass.EnumDemonHunter:
+                case ToonClass.DemonHunter:
                     return DemonHunter.HatredGenerators.List;
-                case ToonClass.EnumMonk:
+                case ToonClass.Monk:
                     return Monk.SpiritGenerator.List;
-                case ToonClass.EnumWitchDoctor:
+                case ToonClass.WitchDoctor:
                     return WitchDoctor.PhysicalRealm.List;
-                case ToonClass.EnumWizard:
+                case ToonClass.Wizard:
                     return Wizard.Signature.List;
                 default:
                     return null;
@@ -72,15 +72,15 @@ namespace Mooege.Core.GS.Skills
         {
             switch (@class)
             {
-                case ToonClass.EnumBarbarian:
+                case ToonClass.Barbarian:
                     return Barbarian.FurySpenders.List;
-                case ToonClass.EnumDemonHunter:
+                case ToonClass.DemonHunter:
                     return DemonHunter.HatredSpenders.List;
-                case ToonClass.EnumMonk:
+                case ToonClass.Monk:
                     return Monk.SpiritSpenders.List;
-                case ToonClass.EnumWitchDoctor:
+                case ToonClass.WitchDoctor:
                     return WitchDoctor.SpiritRealm.List;
-                case ToonClass.EnumWizard:
+                case ToonClass.Wizard:
                     return Wizard.Offensive.List;
                 default:
                     return null;
@@ -91,15 +91,15 @@ namespace Mooege.Core.GS.Skills
         {
             switch (@class)
             {
-                case ToonClass.EnumBarbarian:
+                case ToonClass.Barbarian:
                     return Barbarian.Situational.List;
-                case ToonClass.EnumDemonHunter:
+                case ToonClass.DemonHunter:
                     return DemonHunter.Discipline.List;
-                case ToonClass.EnumMonk:
+                case ToonClass.Monk:
                     return Monk.Mantras.List;
-                case ToonClass.EnumWitchDoctor:
+                case ToonClass.WitchDoctor:
                     return WitchDoctor.Support.List;
-                case ToonClass.EnumWizard:
+                case ToonClass.Wizard:
                     return Wizard.Utility.List;
                 default:
                     return null;
@@ -110,15 +110,15 @@ namespace Mooege.Core.GS.Skills
         {
             switch (@class)
             {
-                case ToonClass.EnumBarbarian:
+                case ToonClass.Barbarian:
                     return Barbarian.Passives.List;
-                case ToonClass.EnumDemonHunter:
+                case ToonClass.DemonHunter:
                     return DemonHunter.Passives.List;
-                case ToonClass.EnumMonk:
+                case ToonClass.Monk:
                     return Monk.Passives.List;
-                case ToonClass.EnumWitchDoctor:
+                case ToonClass.WitchDoctor:
                     return WitchDoctor.Passives.List;
-                case ToonClass.EnumWizard:
+                case ToonClass.Wizard:
                     return Wizard.Passives.List;
                 default:
                     return null;

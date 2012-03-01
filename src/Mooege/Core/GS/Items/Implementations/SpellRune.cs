@@ -74,19 +74,19 @@ namespace Mooege.Core.GS.Items.Implementations
             int PowerSNOId = -1;
             switch (toonClass)
             {
-                case ToonClass.EnumBarbarian:
+                case ToonClass.Barbarian:
                     PowerSNOId = Mooege.Core.GS.Skills.Skills.Barbarian.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.Barbarian.AllActiveSkillsList.Count));
                     break;
-                case ToonClass.EnumDemonHunter:
+                case ToonClass.DemonHunter:
                     PowerSNOId = Mooege.Core.GS.Skills.Skills.DemonHunter.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.DemonHunter.AllActiveSkillsList.Count));
                     break;
-                case ToonClass.EnumMonk:
+                case ToonClass.Monk:
                     PowerSNOId = Mooege.Core.GS.Skills.Skills.Monk.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.Monk.AllActiveSkillsList.Count));
                     break;
-                case ToonClass.EnumWitchDoctor:
+                case ToonClass.WitchDoctor:
                     PowerSNOId = Mooege.Core.GS.Skills.Skills.WitchDoctor.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.WitchDoctor.AllActiveSkillsList.Count));
                     break;
-                case ToonClass.EnumWizard:
+                case ToonClass.Wizard:
                     PowerSNOId = Mooege.Core.GS.Skills.Skills.Wizard.AllActiveSkillsList.ElementAt(RandomHelper.Next(0, Mooege.Core.GS.Skills.Skills.Wizard.AllActiveSkillsList.Count));
                     break;
             }

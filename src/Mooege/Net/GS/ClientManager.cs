@@ -37,6 +37,7 @@ namespace Mooege.Net.GS
         private static readonly ClientManager _instance = new ClientManager();
         public static ClientManager Instance { get { return _instance; } }
         
+
         public void OnConnect(object sender, ConnectionEventArgs e)
         {
             Logger.Trace("Game-Client connected: {0}", e.Connection.ToString());

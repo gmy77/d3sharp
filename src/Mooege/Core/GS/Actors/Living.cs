@@ -45,8 +45,7 @@ namespace Mooege.Core.GS.Actors
 
             // FIXME: This is hardcoded crap
             this.SetFacingRotation((float)(RandomHelper.NextDouble() * 2.0f * Math.PI));
-            this.GBHandle.Type = -1; 
-            this.GBHandle.GBID = -1;
+            this.GBHandle.Type = -1; this.GBHandle.GBID = -1;
             this.Field7 = 0x00000001;
             this.Field10 = 0x0;
 
