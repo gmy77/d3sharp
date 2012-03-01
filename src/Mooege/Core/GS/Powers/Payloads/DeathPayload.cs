@@ -266,6 +266,9 @@ namespace Mooege.Core.GS.Powers.Payloads
             this.Target.Attributes[GameAttribute.CantStartDisplayedPowers] = false;
             this.Target.Attributes.BroadcastChangedIfRevealed();
 
+            // Update player.Position otherwise server treats you as your at old loc till you take a step - DarkLotus
+            this.Target.Position = lastWaypoint;
+
             return;
         }
 
