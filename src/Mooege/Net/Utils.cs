@@ -23,19 +23,23 @@ namespace Mooege.Net
 {
     public static class Utils
     {
-        public static readonly IPAddress LocalHost = IPAddress.Parse("127.0.0.1");
-
         public static string GetGameServerIPForClient(MooNetClient client)
         {
-            if (!NATConfig.Instance.Enabled) // if NAT is not enabled, just return bnetclient's localendpoint address.
+            if (!NATConfig.Instance.Enabled)
+            {
+                // if NAT is not enabled, just return bnetclient's localendpoint address.
+                // Note: D3 client doesn't seem to accept IPv6 addresses as of patch 13! 
+                // read more on IPv6 in server.cs. /raist.
                 return client.Connection.LocalEndPoint.Address.ToString();
+            }
             else
             {
                 return client.Connection.LocalEndPoint.Address.ToString() == "127.0.0.1"
                            ? client.Connection.LocalEndPoint.ToString()
                            : NATConfig.Instance.PublicIP; // if client is not connected over localhost, send him public-ip.
 
-                // Known problems: If user enables NAT, LAN-clients (and even local-computer if d3 is configured to use lan-ip) will not able to connect in gs.
+                // Known problems: 
+                // If user enables NAT, LAN-clients (and even local-computer if d3 is configured to use lan-ip) will not able to connect in gs.
                 // That needs a full implementation similar to pvpgn where we currently pretty miss the time for /raist.
             }
         }       

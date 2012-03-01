@@ -21,6 +21,7 @@ namespace Mooege.Net.MooNet
     public sealed class Config: Common.Config.Config
     {
         public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("BindIP", value); } }
+        public string BindIPv6 { get { return this.GetString("BindIPv6", "::1"); } set { this.Set("BindIPv6", value); } }
         public int Port { get { return this.GetInt("Port", 1345); } set { this.Set("Port", value); } }
         public string MOTD { get { return this.GetString("MOTD", ""); } set { this.Set("MOTD", value); } }
 
