@@ -31,6 +31,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Run()
         {
             User.PlayEffectGroup(Player.LevelUpEffects[this.User.Attributes[GameAttribute.Level]]);
+            yield return WaitSeconds(0.6f);
             WeaponDamage(GetEnemiesInRadius(User.Position, ScriptFormula(2)), ScriptFormula(0), DamageType.Physical);
             yield break;
         }
