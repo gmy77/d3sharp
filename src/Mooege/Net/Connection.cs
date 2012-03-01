@@ -25,117 +25,200 @@ using Mooege.Net.MooNet.Packets;
 
 namespace Mooege.Net
 {
+    /// <summary>
+    /// TCP Connection class.
+    /// </summary>
     public class Connection : IConnection
     {
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        protected static readonly Logger Logger = LogManager.CreateLogger(); // the logger.
 
-        private readonly Server _server;
-        public  Socket _Socket { get; private set; }
-        private readonly byte[] _recvBuffer = new byte[BufferSize];
-        public static readonly int BufferSize = 16 * 1024; // 16 KB       
+        /// <summary>
+        /// Gets underlying socket.
+        /// </summary>
+        public Socket Socket { get; private set; }
 
+        /// <summary>
+        /// Gets or sets bound client.
+        /// </summary>
         public IClient Client { get; set; }
 
+        /// <summary>
+        /// Default buffer size.
+        /// </summary>
+        public static readonly int BufferSize = 16 * 1024; // 16 KB       
+
+        /// <summary>
+        /// The server that connection is bound to.
+        /// </summary>
+        private readonly Server _server;
+
+        /// <summary>
+        /// The recieve buffer.
+        /// </summary>
+        private readonly byte[] _recvBuffer = new byte[BufferSize];
+                
         public Connection(Server server, Socket socket)
         {
-            if (server == null) throw new ArgumentNullException("server");
-            if (socket == null) throw new ArgumentNullException("socket");
+            if (server == null) 
+                throw new ArgumentNullException("server");
+
+            if (socket == null) 
+                throw new ArgumentNullException("socket");
 
             this._server = server;
-            this._Socket = socket;
+            this.Socket = socket;
         }       
 
         #region socket stuff
 
+        /// <summary>
+        /// Returns true if there exists an active connection.
+        /// </summary>
         public bool IsConnected
         {
-            get { return _Socket.Connected; }
+            get { return Socket.Connected; }
         }
 
+        /// <summary>
+        /// Returns remote endpoint.
+        /// </summary>
         public IPEndPoint RemoteEndPoint
         {
-            get { return _Socket.RemoteEndPoint as IPEndPoint; }
+            get { return Socket.RemoteEndPoint as IPEndPoint; }
         }
 
+        /// <summary>
+        /// Returns local endpoint.
+        /// </summary>
         public IPEndPoint LocalEndPoint
         {
-            get { return _Socket.LocalEndPoint as IPEndPoint; }
+            get { return Socket.LocalEndPoint as IPEndPoint; }
         }
 
+        /// <summary>
+        /// Returns the recieve-buffer.
+        /// </summary>
         public byte[] RecvBuffer
         {
             get { return _recvBuffer; }
         }
 
-        public Socket Socket
-        {
-            get { return _Socket; }
-        }
-
+        /// <summary>
+        /// Begins recieving data async.
+        /// </summary>
+        /// <param name="callback">Callback function be called when recv() is complete.</param>
+        /// <param name="state">State manager object.</param>
+        /// <returns>Returns <see cref="IAsyncResult"/></returns>
         public IAsyncResult BeginReceive(AsyncCallback callback, object state)
         {
-            return _Socket.BeginReceive(_recvBuffer, 0, BufferSize, SocketFlags.None, callback, state);
+            return Socket.BeginReceive(_recvBuffer, 0, BufferSize, SocketFlags.None, callback, state);
         }
 
         public int EndReceive(IAsyncResult result)
         {
-            return _Socket.EndReceive(result);
+            return Socket.EndReceive(result);
         }
 
+        /// <summary>
+        /// Sends a <see cref="PacketOut"/> to remote endpoint.
+        /// </summary>
+        /// <param name="packet"><see cref="PacketOut"/> to send.</param>
+        /// <returns>Returns count of sent bytes.</returns>
         public int Send(PacketOut packet)
         {
             if (packet == null) throw new ArgumentNullException("packet");
             return Send(packet.Data);
         }
 
-        public int Send(IEnumerable<byte> data)
-        {
-            if (data == null) throw new ArgumentNullException("data");
-            return Send(data, SocketFlags.None);
-        }
-
-        public int Send(IEnumerable<byte> data, SocketFlags flags)
-        {
-            if (data == null) throw new ArgumentNullException("data");
-            return _server.Send(this, data, flags);
-        }
-
+        /// <summary>
+        /// Sends byte buffer to remote endpoint.
+        /// </summary>
+        /// <param name="buffer">Byte buffer to send.</param>
+        /// <returns>Returns count of sent bytes.</returns>
         public int Send(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
             return Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
 
+        /// <summary>
+        /// Sends byte buffer to remote endpoint.
+        /// </summary>
+        /// <param name="buffer">Byte buffer to send.</param>
+        /// <param name="flags">Sockets flags to use.</param>
+        /// <returns>Returns count of sent bytes.</returns>
         public int Send(byte[] buffer, SocketFlags flags)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
             return Send(buffer, 0, buffer.Length, flags);
         }
 
+        /// <summary>
+        /// Sends byte buffer to remote endpoint.
+        /// </summary>
+        /// <param name="buffer">Byte buffer to send.</param>
+        /// <param name="start">Start index to read from buffer.</param>
+        /// <param name="count">Count of bytes to send.</param>
+        /// <returns>Returns count of sent bytes.</returns>
         public int Send(byte[] buffer, int start, int count)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
             return Send(buffer, start, count, SocketFlags.None);
         }
 
+        /// <summary>
+        /// Sends byte buffer to remote endpoint.
+        /// </summary>
+        /// <param name="buffer">Byte buffer to send.</param>
+        /// <param name="start">Start index to read from buffer.</param>
+        /// <param name="count">Count of bytes to send.</param>
+        /// <param name="flags">Sockets flags to use.</param>
+        /// <returns>Returns count of sent bytes.</returns>
         public int Send(byte[] buffer, int start, int count, SocketFlags flags)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
             return _server.Send(this, buffer, start, count, flags);
         }
 
+        /// <summary>
+        /// Sends an enumarable byte buffer to remote endpoint.
+        /// </summary>
+        /// <param name="data">Enumrable byte buffer to send.</param>
+        /// <returns>Returns count of sent bytes.</returns>
+        public int Send(IEnumerable<byte> data)
+        {
+            if (data == null) throw new ArgumentNullException("data");
+            return Send(data, SocketFlags.None);
+        }
+
+        /// <summary>
+        /// Sends an enumarable byte buffer to remote endpoint.
+        /// </summary>
+        /// <param name="data">Enumrable byte buffer to send.</param>
+        /// <param name="flags">Sockets flags to use.</param>
+        /// <returns>Returns count of sent bytes.</returns>
+        public int Send(IEnumerable<byte> data, SocketFlags flags)
+        {
+            if (data == null) throw new ArgumentNullException("data");
+            return _server.Send(this, data, flags);
+        }
+
+        /// <summary>
+        /// Kills the connection to remote endpoint.
+        /// </summary>
         public void Disconnect()
         {
             if (this.IsConnected)
                 _server.Disconnect(this);
         }
 
+        /// <summary>
+        /// Returns a connection state string.
+        /// </summary>
+        /// <returns>Connection state string.</returns>
         public override string ToString()
         {
-            if (_Socket.RemoteEndPoint != null)
-                return _Socket.RemoteEndPoint.ToString();
-            else
-                return "Not Connected";
+            return Socket.RemoteEndPoint != null ? Socket.RemoteEndPoint.ToString() : "Not Connected!";
         }
 
         #endregion

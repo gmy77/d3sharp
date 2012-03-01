@@ -39,7 +39,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
 
         public override void Parse(GameBitBuffer buffer)
         {
-            throw new NotImplementedException();
+            // do not return back a not-implemented exception! /raist.
         }
 
         public override void Encode(GameBitBuffer buffer)
