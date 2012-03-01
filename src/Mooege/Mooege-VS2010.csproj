@@ -618,6 +618,7 @@
     <Compile Include="Net\MooNet\Packets\PacketOut.cs" />
     <Compile Include="Net\MooNet\RPC\RPCCallback.cs" />
     <Compile Include="Net\NATConfig.cs" />
+    <Compile Include="Net\NetworkingConfig.cs" />
     <Compile Include="Net\Utils.cs" />
     <Compile Include="Net\WebServices\Config.cs" />
     <Compile Include="Net\WebServices\IWebService.cs" />
