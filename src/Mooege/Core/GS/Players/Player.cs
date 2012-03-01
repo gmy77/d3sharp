@@ -374,14 +374,14 @@ namespace Mooege.Core.GS.Players
             // Class specific
             switch (this.Toon.Class)
             {
-                case ToonClass.Barbarian:
+                case ToonClass.EnumBarbarian:
                     this.Attributes[GameAttribute.Skill_Total, 30078] = 1;  //Fury Trait
                     this.Attributes[GameAttribute.Skill, 30078] = 1;
                     this.Attributes[GameAttribute.Trait, 30078] = 1;
                     this.Attributes[GameAttribute.Buff_Active, 30078] = true;
                     this.Attributes[GameAttribute.Buff_Icon_Count0, 30078] = 1;
                     break;
-                case ToonClass.DemonHunter:
+                case ToonClass.EnumDemonHunter:
                     /* // unknown
                     this.Attributes[GameAttribute.Skill_Total, ] = 1;  // Hatred Trait
                     this.Attributes[GameAttribute.Skill, ] = 1;
@@ -395,14 +395,14 @@ namespace Mooege.Core.GS.Players
                     this.Attributes[GameAttribute.Buff_Icon_Count0, ] = 1;
                      */
                     break;
-                case ToonClass.Monk:
+                case ToonClass.EnumMonk:
                     this.Attributes[GameAttribute.Skill_Total, 0x0000CE11] = 1;  //Spirit Trait
                     this.Attributes[GameAttribute.Skill, 0x0000CE11] = 1;
                     this.Attributes[GameAttribute.Trait, 0x0000CE11] = 1;
                     this.Attributes[GameAttribute.Buff_Active, 0xCE11] = true;
                     this.Attributes[GameAttribute.Buff_Icon_Count0, 0x0000CE11] = 1;
                     break;
-                case ToonClass.WitchDoctor:
+                case ToonClass.EnumWitchDoctor:
                     /* // unknown
                     this.Attributes[GameAttribute.Skill_Total, ] = 1;  //Mana Trait
                     this.Attributes[GameAttribute.Skill, ] = 1;
@@ -410,7 +410,7 @@ namespace Mooege.Core.GS.Players
                     this.Attributes[GameAttribute.Buff_Icon_Count0, ] = 1;
                      */
                     break;
-                case ToonClass.Wizard:
+                case ToonClass.EnumWizard:
                     /* // unknown
                     this.Attributes[GameAttribute.Skill_Total, ] = 1;  //Arcane Power Trait
                     this.Attributes[GameAttribute.Skill, ] = 1;
@@ -946,15 +946,15 @@ namespace Mooege.Core.GS.Players
             {
                 switch (this.Toon.Class)
                 {
-                    case ToonClass.Barbarian:
+                    case ToonClass.EnumBarbarian:
                         return 10f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.DemonHunter:
+                    case ToonClass.EnumDemonHunter:
                         return 10f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.Monk:
+                    case ToonClass.EnumMonk:
                         return 10f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.WitchDoctor:
+                    case ToonClass.EnumWitchDoctor:
                         return 10f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.Wizard:
+                    case ToonClass.EnumWizard:
                         return 10f + ((this.Toon.Level - 1) * 2);
                 }
                 return 10f + (this.Toon.Level - 1) * 2;
@@ -967,15 +967,15 @@ namespace Mooege.Core.GS.Players
             {
                 switch (this.Toon.Class)
                 {
-                    case ToonClass.Barbarian:
+                    case ToonClass.EnumBarbarian:
                         return 9f + (this.Toon.Level - 1);
-                    case ToonClass.DemonHunter:
+                    case ToonClass.EnumDemonHunter:
                         return 11f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.Monk:
+                    case ToonClass.EnumMonk:
                         return 11f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.WitchDoctor:
+                    case ToonClass.EnumWitchDoctor:
                         return 9f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.Wizard:
+                    case ToonClass.EnumWizard:
                         return 10f + ((this.Toon.Level - 1) * 2);
                 }
                 return 10f + ((this.Toon.Level - 1) * 2);
@@ -988,18 +988,18 @@ namespace Mooege.Core.GS.Players
             {
                 switch (this.Toon.Class)
                 {
-                    case ToonClass.Barbarian:
+                    case ToonClass.EnumBarbarian:
                         return 11f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.DemonHunter:
+                    case ToonClass.EnumDemonHunter:
                         // For DH and Wizard, half the levels (starting with the first) give 2 defense => (Level / 2) * 2
                         // and half give 1 defense => ((Level - 1) / 2) * 1
                         // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
                         return 9f + (((this.Toon.Level / 2) * 2) + ((this.Toon.Level - 1) / 2));
-                    case ToonClass.Monk:
+                    case ToonClass.EnumMonk:
                         return 10f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.WitchDoctor:
+                    case ToonClass.EnumWitchDoctor:
                         return 9f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.Wizard:
+                    case ToonClass.EnumWizard:
                         return 8f + (((this.Toon.Level / 2) * 2) + ((this.Toon.Level - 1) / 2));
                 }
                 return 10f + ((this.Toon.Level - 1) * 2);
@@ -1012,18 +1012,18 @@ namespace Mooege.Core.GS.Players
             {
                 switch (this.Toon.Class)
                 {
-                    case ToonClass.Barbarian:
+                    case ToonClass.EnumBarbarian:
                         return 11f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.DemonHunter:
+                    case ToonClass.EnumDemonHunter:
                         // For DH and Wizard, half the levels give 2 vit => ((Level - 1) / 2) * 2
                         // and half (starting with the first) give 1 vit => (Level / 2) * 1
                         // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
                         return 9f + ((((this.Toon.Level - 1) / 2) * 2) + (this.Toon.Level / 2));
-                    case ToonClass.Monk:
+                    case ToonClass.EnumMonk:
                         return 9f + (this.Toon.Level - 1);
-                    case ToonClass.WitchDoctor:
+                    case ToonClass.EnumWitchDoctor:
                         return 10f + (this.Toon.Level - 1);
-                    case ToonClass.Wizard:
+                    case ToonClass.EnumWizard:
                         return 9f + ((((this.Toon.Level - 1) / 2) * 2) + (this.Toon.Level / 2));
                 }
                 return 10f + ((this.Toon.Level - 1) * 2);
@@ -1043,15 +1043,15 @@ namespace Mooege.Core.GS.Players
             {
                 switch (this.Toon.Class)
                 {
-                    case ToonClass.Barbarian:
+                    case ToonClass.EnumBarbarian:
                         return 2f;
-                    case ToonClass.DemonHunter:
+                    case ToonClass.EnumDemonHunter:
                         return 2f;
-                    case ToonClass.Monk:
+                    case ToonClass.EnumMonk:
                         return 2f;
-                    case ToonClass.WitchDoctor:
+                    case ToonClass.EnumWitchDoctor:
                         return 2f;
-                    case ToonClass.Wizard:
+                    case ToonClass.EnumWizard:
                         return 2f;
                 }
                 return 2f;
@@ -1064,15 +1064,15 @@ namespace Mooege.Core.GS.Players
             {
                 switch (this.Toon.Class)
                 {
-                    case ToonClass.Barbarian:
+                    case ToonClass.EnumBarbarian:
                         return 2f;
-                    case ToonClass.DemonHunter:
+                    case ToonClass.EnumDemonHunter:
                         return (this.Attributes[GameAttribute.Level] % 2) + 1f;
-                    case ToonClass.Monk:
+                    case ToonClass.EnumMonk:
                         return 1f;
-                    case ToonClass.WitchDoctor:
+                    case ToonClass.EnumWitchDoctor:
                         return 1f;
-                    case ToonClass.Wizard:
+                    case ToonClass.EnumWizard:
                         return (this.Attributes[GameAttribute.Level] % 2) + 1f;
                 }
                 return 1f;
@@ -1085,15 +1085,15 @@ namespace Mooege.Core.GS.Players
             {
                 switch (this.Toon.Class)
                 {
-                    case ToonClass.Barbarian:
+                    case ToonClass.EnumBarbarian:
                         return 2f;
-                    case ToonClass.DemonHunter:
+                    case ToonClass.EnumDemonHunter:
                         return ((this.Attributes[GameAttribute.Level] + 1) % 2) + 1f;
-                    case ToonClass.Monk:
+                    case ToonClass.EnumMonk:
                         return 2f;
-                    case ToonClass.WitchDoctor:
+                    case ToonClass.EnumWitchDoctor:
                         return 2f;
-                    case ToonClass.Wizard:
+                    case ToonClass.EnumWizard:
                         return ((this.Attributes[GameAttribute.Level] + 1) % 2) + 1f;
                 }
                 return 2f;
@@ -1106,15 +1106,15 @@ namespace Mooege.Core.GS.Players
             {
                 switch (this.Toon.Class)
                 {
-                    case ToonClass.Barbarian:
+                    case ToonClass.EnumBarbarian:
                         return 1f;
-                    case ToonClass.DemonHunter:
+                    case ToonClass.EnumDemonHunter:
                         return 2f;
-                    case ToonClass.Monk:
+                    case ToonClass.EnumMonk:
                         return 2f;
-                    case ToonClass.WitchDoctor:
+                    case ToonClass.EnumWitchDoctor:
                         return 2f;
-                    case ToonClass.Wizard:
+                    case ToonClass.EnumWizard:
                         return 2f;
                 }
                 return 2f;
@@ -1392,15 +1392,15 @@ namespace Mooege.Core.GS.Players
             {
                 switch (this.Toon.Class)
                 {
-                    case ToonClass.Barbarian:
+                    case ToonClass.EnumBarbarian:
                         return 1.2f;
-                    case ToonClass.DemonHunter:
+                    case ToonClass.EnumDemonHunter:
                         return 1.35f;
-                    case ToonClass.Monk:
+                    case ToonClass.EnumMonk:
                         return 1.43f;
-                    case ToonClass.WitchDoctor:
+                    case ToonClass.EnumWitchDoctor:
                         return 1.1f;
-                    case ToonClass.Wizard:
+                    case ToonClass.EnumWizard:
                         return 1.3f;
                 }
                 return 1.43f;
@@ -1700,7 +1700,7 @@ namespace Mooege.Core.GS.Players
             GeneratePrimaryResource(data.PrimaryResourceRegenPerSecond);
             GenerateSecondaryResource(data.SecondaryResourceRegenPerSecond);
 
-            if (this.Toon.Class == ToonClass.Barbarian)
+            if (this.Toon.Class == ToonClass.EnumBarbarian)
                 UsePrimaryResource(0.1f);
         }
 

@@ -22,19 +22,19 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class EntityId
     {
-        public long High;
-        public long Low;
+        public ulong High;
+        public ulong Low;
 
         public void Parse(GameBitBuffer buffer)
         {
-            High = buffer.ReadInt64(64);
-            Low = buffer.ReadInt64(64);
+            High = buffer.ReadUInt64(64);
+            Low = buffer.ReadUInt64(64);
         }
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt64(64, High);
-            buffer.WriteInt64(64, Low);
+            buffer.WriteUInt64(64, High);
+            buffer.WriteUInt64(64, Low);
         }
 
         public void AsText(StringBuilder b, int pad)

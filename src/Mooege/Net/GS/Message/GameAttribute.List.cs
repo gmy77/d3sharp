@@ -40,7 +40,6 @@ namespace Mooege.Net.GS.Message
         // Caution: Be advised, converting these attribs from Int to Float may crash d3 client or make it throw an error! Do it with caution if needed any! /raist.
         // Attack, Precision, Vitality, Defense
 
-
         // TODO: move into categories? will probably just end up as properties on actor objects
         public static readonly GameAttributeI Axe_Bad_Data = new GameAttributeI(0, 0, -1, 0, 0, "", "", "Axe_Bad_Data", GameAttributeEncoding.Int, 0, 0, 0, 32);
         public static readonly GameAttributeI Attribute_Timer = new GameAttributeI(1, 0, 5, 0, 1, "", "", "Attribute_Timer", GameAttributeEncoding.Int, 31, 0, 0, 32);

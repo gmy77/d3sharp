@@ -103,23 +103,23 @@ namespace Mooege.Core.MooNet.Toons
                 _class = value;
                 switch (_class)
                 {
-                    case ToonClass.Barbarian:
-                        this.HeroClassField.Value = (long)ToonClassSimple.HeroBarbarian;
+                    case ToonClass.EnumBarbarian:
+                        this.HeroClassField.Value = (long)ToonClass.HeroBarbarian;
                         break;
-                    case ToonClass.DemonHunter:
-                        this.HeroClassField.Value = (long)ToonClassSimple.HeroDemonHunter;
+                    case ToonClass.EnumDemonHunter:
+                        this.HeroClassField.Value = (long)ToonClass.HeroDemonHunter;
                         break;
-                    case ToonClass.Monk:
-                        this.HeroClassField.Value = (long)ToonClassSimple.HeroMonk;
+                    case ToonClass.EnumMonk:
+                        this.HeroClassField.Value = (long)ToonClass.HeroMonk;
                         break;
-                    case ToonClass.WitchDoctor:
-                        this.HeroClassField.Value = (long)ToonClassSimple.HeroWitchDoctor;
+                    case ToonClass.EnumWitchDoctor:
+                        this.HeroClassField.Value = (long)ToonClass.HeroWitchDoctor;
                         break;
-                    case ToonClass.Wizard:
-                        this.HeroClassField.Value = (long)ToonClassSimple.HeroWizard;
+                    case ToonClass.EnumWizard:
+                        this.HeroClassField.Value = (long)ToonClass.HeroWizard;
                         break;
                     default:
-                        this.HeroClassField.Value = (long)ToonClassSimple.HeroNone;
+                        this.HeroClassField.Value = (long)ToonClass.HeroNone;
                         break;
                 }
             }
@@ -283,18 +283,18 @@ namespace Mooege.Core.MooNet.Toons
             {
                 switch (this.Class)
                 {
-                    case ToonClass.Barbarian:
-                        return (int)ToonClassSimple.HeroBarbarian;
-                    case ToonClass.DemonHunter:
-                        return unchecked((int)ToonClassSimple.HeroDemonHunter);
-                    case ToonClass.Monk:
-                        return (int)ToonClassSimple.HeroMonk;
-                    case ToonClass.WitchDoctor:
-                        return (int)ToonClassSimple.HeroWitchDoctor;
-                    case ToonClass.Wizard:
-                        return (int)ToonClassSimple.HeroWizard;
+                    case ToonClass.EnumBarbarian:
+                        return (int)ToonClass.HeroBarbarian;
+                    case ToonClass.EnumDemonHunter:
+                        return unchecked((int)ToonClass.HeroDemonHunter);
+                    case ToonClass.EnumMonk:
+                        return (int)ToonClass.HeroMonk;
+                    case ToonClass.EnumWitchDoctor:
+                        return (int)ToonClass.HeroWitchDoctor;
+                    case ToonClass.EnumWizard:
+                        return (int)ToonClass.HeroWizard;
                     default:
-                        return (int)ToonClassSimple.HeroNone;
+                        return (int)ToonClass.HeroNone;
                 }
             }
         }
@@ -305,18 +305,18 @@ namespace Mooege.Core.MooNet.Toons
             {
                 switch (this.Class)
                 {
-                    case ToonClass.DemonHunter:
-                        return (int)ToonClassSimple.VoiceDemonHunter;
-                    case ToonClass.Barbarian:
-                        return (int)ToonClassSimple.VoiceBarbarian;
-                    case ToonClass.Wizard:
-                        return (int)ToonClassSimple.VoiceWizard;
-                    case ToonClass.WitchDoctor:
-                        return (int)ToonClassSimple.VoiceWitchDoctor;
-                    case ToonClass.Monk:
-                        return (int)ToonClassSimple.VoiceMonk;
+                    case ToonClass.EnumDemonHunter:
+                        return (int)ToonClass.VoiceDemonHunter;
+                    case ToonClass.EnumBarbarian:
+                        return (int)ToonClass.VoiceBarbarian;
+                    case ToonClass.EnumWizard:
+                        return (int)ToonClass.VoiceWizard;
+                    case ToonClass.EnumWitchDoctor:
+                        return (int)ToonClass.VoiceWitchDoctor;
+                    case ToonClass.EnumMonk:
+                        return (int)ToonClass.VoiceMonk;
                     default:
-                        return (int)ToonClassSimple.VoiceNone;
+                        return (int)ToonClass.VoiceNone;
                 }
             }
         }
@@ -399,18 +399,18 @@ namespace Mooege.Core.MooNet.Toons
         {
             switch (classId)
             {
-                case (int)ToonClassSimple.HeroBarbarian:
-                    return ToonClass.Barbarian;
-                case unchecked((int)ToonClassSimple.HeroDemonHunter):
-                    return ToonClass.DemonHunter;
-                case (int)ToonClassSimple.HeroMonk:
-                    return ToonClass.Monk;
-                case (int)ToonClassSimple.HeroWitchDoctor:
-                    return ToonClass.WitchDoctor;
-                case (int)ToonClassSimple.HeroWizard:
-                    return ToonClass.Wizard;
+                case (int)ToonClass.HeroBarbarian:
+                    return ToonClass.EnumBarbarian;
+                case unchecked((int)ToonClass.HeroDemonHunter):
+                    return ToonClass.EnumDemonHunter;
+                case (int)ToonClass.HeroMonk:
+                    return ToonClass.EnumMonk;
+                case (int)ToonClass.HeroWitchDoctor:
+                    return ToonClass.EnumWitchDoctor;
+                case (int)ToonClass.HeroWizard:
+                    return ToonClass.EnumWizard;
                 default:
-                    return ToonClass.Barbarian;
+                    return ToonClass.EnumBarbarian;
             }
         }
 
@@ -452,13 +452,13 @@ namespace Mooege.Core.MooNet.Toons
                     //item_identity_id = gbid
                     if (VisualItemExistsInDb(slot))
                     {
-                        var itemQuery = string.Format("UPDATE inventory SET item_entity_id={0} WHERE toon_id={1} and inventory_slot={2}", visualItem.Gbid, this.PersistentID, slot);
+                        var itemQuery = string.Format("UPDATE inventory SET item_entity_id={0} WHERE toon_id={1} and inventory_slot={2}", unchecked((uint)visualItem.Gbid), unchecked((uint)this.PersistentID), slot);
                         var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
                         itemCmd.ExecuteNonQuery();
                     }
                     else
                     {
-                        var itemQuery = string.Format("INSERT INTO inventory (toon_id, inventory_loc_x, inventory_loc_y, inventory_slot, item_entity_id) VALUES({0},{1},{2},{3},{4})", this.PersistentID, 0, 0, slot, visualItem.Gbid);
+                        var itemQuery = string.Format("INSERT INTO inventory (toon_id, inventory_loc_x, inventory_loc_y, inventory_slot, item_entity_id) VALUES({0},{1},{2},{3},{4})", unchecked((uint)this.PersistentID), 0, 0, slot, unchecked((uint)visualItem.Gbid));
                         var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
                         itemCmd.ExecuteNonQuery();
                     }
@@ -515,16 +515,7 @@ namespace Mooege.Core.MooNet.Toons
         }
     }
 
-    public enum ToonClass
-    {
-        Barbarian, // 0x4FB91EE2
-        Monk, // 0x3DAC15
-        DemonHunter, // 0xC88B9649
-        WitchDoctor, // 0x343C22A
-        Wizard // 0x1D4681B1
-    }
-
-    public enum ToonClassSimple: uint
+    public enum ToonClass: uint
     {
         HeroNone         = 0x00000000,
         HeroBarbarian    = 0x4FB91EE2,
@@ -537,19 +528,25 @@ namespace Mooege.Core.MooNet.Toons
         VoiceBarbarian   = 1,
         VoiceWizard      = 2,
         VoiceWitchDoctor = 3,
-        VoiceMonk        = 4
+        VoiceMonk        = 4,
+        EnumNone         = 0,
+        EnumBarbarian    = 0,
+        EnumMonk         = 1,
+        EnumDemonHunter  = 2,
+        EnumWitchDoctor  = 3,
+        EnumWizard       = 4
     }
 
     [Flags]
     public enum ToonFlags: uint
     {
-        Male = 0x00,
-        Female = 0x02,
+        Male     = 0x00000000,
+        Female   = 0x00000002,
         // TODO: These two need to be figured out still.. /plash
-        Unknown1 = 0x20,
-        Unknown2 = 0x40,
-        Unknown3 = 0x80000,
-        Unknown4 = 0x2000000,
+        Unknown1 = 0x00000020,
+        Unknown2 = 0x00000040,
+        Unknown3 = 0x00080000,
+        Unknown4 = 0x02000000,
         AllUnknowns = Unknown1 | Unknown2 | Unknown3 | Unknown4
     }
 

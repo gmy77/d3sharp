@@ -8,7 +8,7 @@ namespace Mooege.Net.GS.Message.Fields
     public class ActiveSkillSavedData
     {
         public int snoSkill;
-        int Field1;
+        public int Field1;
 
         public void Parse(GameBitBuffer buffer)
         {
