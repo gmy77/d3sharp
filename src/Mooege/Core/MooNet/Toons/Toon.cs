@@ -427,7 +427,7 @@ namespace Mooege.Core.MooNet.Toons
                 {
                     var query =
                         string.Format(
-                            "UPDATE toons SET name='{0}', hashCode={1}, class={1}, gender={2}, level={3}, accountId={4}, timePlayed={5}, goldAmount={6} WHERE id={7}",
+                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, accountId={5}, timePlayed={6}, goldAmount={7} WHERE id={8}",
                             this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.GameAccount.PersistentID, this.TimePlayed, this.GoldAmount, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
