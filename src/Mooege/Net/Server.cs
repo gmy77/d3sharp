@@ -78,7 +78,9 @@ namespace Mooege.Net
             // * IPv6Only - false - create a dual-socket that both supports IPv4 and IPv6 - check the IPv6 support note above.
             Listener.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
             Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
+			#if !__MonoCS__
             if (NetworkingConfig.Instance.EnableIPv6) Listener.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
+			#endif
 
             try
             {
