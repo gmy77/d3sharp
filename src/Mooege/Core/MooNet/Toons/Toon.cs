@@ -104,22 +104,22 @@ namespace Mooege.Core.MooNet.Toons
                 switch (_class)
                 {
                     case ToonClass.Barbarian:
-                        this.HeroClassField.Value = 0x4FB91EE2;
+                        this.HeroClassField.Value = (long)ToonClassSimple.HeroBarbarian;
                         break;
                     case ToonClass.DemonHunter:
-                        this.HeroClassField.Value = unchecked((int)0xC88B9649);
+                        this.HeroClassField.Value = (long)ToonClassSimple.HeroDemonHunter;
                         break;
                     case ToonClass.Monk:
-                        this.HeroClassField.Value = 0x3DAC15;
+                        this.HeroClassField.Value = (long)ToonClassSimple.HeroMonk;
                         break;
                     case ToonClass.WitchDoctor:
-                        this.HeroClassField.Value = 0x343C22A;
+                        this.HeroClassField.Value = (long)ToonClassSimple.HeroWitchDoctor;
                         break;
                     case ToonClass.Wizard:
-                        this.HeroClassField.Value = 0x1D4681B1;
+                        this.HeroClassField.Value = (long)ToonClassSimple.HeroWizard;
                         break;
                     default:
-                        this.HeroClassField.Value = 0x0;
+                        this.HeroClassField.Value = (long)ToonClassSimple.HeroNone;
                         break;
                 }
             }
@@ -284,17 +284,18 @@ namespace Mooege.Core.MooNet.Toons
                 switch (this.Class)
                 {
                     case ToonClass.Barbarian:
-                        return 0x4FB91EE2;
+                        return (int)ToonClassSimple.HeroBarbarian;
                     case ToonClass.DemonHunter:
-                        return unchecked((int)0xC88B9649);
+                        return unchecked((int)ToonClassSimple.HeroDemonHunter);
                     case ToonClass.Monk:
-                        return 0x3DAC15;
+                        return (int)ToonClassSimple.HeroMonk;
                     case ToonClass.WitchDoctor:
-                        return 0x343C22A;
+                        return (int)ToonClassSimple.HeroWitchDoctor;
                     case ToonClass.Wizard:
-                        return 0x1D4681B1;
+                        return (int)ToonClassSimple.HeroWizard;
+                    default:
+                        return (int)ToonClassSimple.HeroNone;
                 }
-                return 0x0;
             }
         }
 
@@ -305,17 +306,18 @@ namespace Mooege.Core.MooNet.Toons
                 switch (this.Class)
                 {
                     case ToonClass.DemonHunter:
-                        return 0;
+                        return (int)ToonClassSimple.VoiceDemonHunter;
                     case ToonClass.Barbarian:
-                        return 1;
+                        return (int)ToonClassSimple.VoiceBarbarian;
                     case ToonClass.Wizard:
-                        return 2;
+                        return (int)ToonClassSimple.VoiceWizard;
                     case ToonClass.WitchDoctor:
-                        return 3;
+                        return (int)ToonClassSimple.VoiceWitchDoctor;
                     case ToonClass.Monk:
-                        return 4;
+                        return (int)ToonClassSimple.VoiceMonk;
+                    default:
+                        return (int)ToonClassSimple.VoiceNone;
                 }
-                return 0;
             }
         }
 
@@ -357,7 +359,6 @@ namespace Mooege.Core.MooNet.Toons
 
         }
 
-
         public void LevelUp()
         {
             this.Level++;
@@ -398,19 +399,19 @@ namespace Mooege.Core.MooNet.Toons
         {
             switch (classId)
             {
-                case 0x4FB91EE2:
+                case (int)ToonClassSimple.HeroBarbarian:
                     return ToonClass.Barbarian;
-                case unchecked((int)0xC88B9649):
+                case unchecked((int)ToonClassSimple.HeroDemonHunter):
                     return ToonClass.DemonHunter;
-                case 0x003DAC15:
+                case (int)ToonClassSimple.HeroMonk:
                     return ToonClass.Monk;
-                case 0x0343C22A:
+                case (int)ToonClassSimple.HeroWitchDoctor:
                     return ToonClass.WitchDoctor;
-                case 0x1D4681B1:
+                case (int)ToonClassSimple.HeroWizard:
                     return ToonClass.Wizard;
+                default:
+                    return ToonClass.Barbarian;
             }
-
-            return ToonClass.Barbarian;
         }
 
         public override string ToString()
@@ -523,8 +524,24 @@ namespace Mooege.Core.MooNet.Toons
         Wizard // 0x1D4681B1
     }
 
+    public enum ToonClassSimple: uint
+    {
+        HeroNone         = 0x00000000,
+        HeroBarbarian    = 0x4FB91EE2,
+        HeroMonk         = 0x003DAC15,
+        HeroDemonHunter  = 0xC88B9649,
+        HeroWitchDoctor  = 0x0343C22A,
+        HeroWizard       = 0x1D4681B1,
+        VoiceNone        = 0,
+        VoiceDemonHunter = 0,
+        VoiceBarbarian   = 1,
+        VoiceWizard      = 2,
+        VoiceWitchDoctor = 3,
+        VoiceMonk        = 4
+    }
+
     [Flags]
-    public enum ToonFlags : uint
+    public enum ToonFlags: uint
     {
         Male = 0x00,
         Female = 0x02,
