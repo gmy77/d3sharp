@@ -29,9 +29,7 @@ using Mooege.Core.Cryptography.SSL;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Channels;
-using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
-using Mooege.Core.MooNet.Toons;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet.Packets;
 using Mooege.Net.MooNet.RPC;
@@ -128,7 +126,7 @@ namespace Mooege.Net.MooNet
 
             this.Connection = connection;
             if (this.Connection != null)
-                this.NetworkStream = new NetworkStream(this.Connection._Socket, true);
+                this.NetworkStream = new NetworkStream(this.Connection.Socket, true);
 
             this.Services = new Dictionary<uint, uint>();
             this.Services.Add(0x65446991, 0x0); // connection-service is always bound by default. /raist.
