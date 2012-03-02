@@ -237,6 +237,7 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Buff_Visual_Effect, 0xFFFFF] = true;
 
             //Damage
+            this.Attributes[GameAttribute.Primary_Damage_Attribute] = (int)data.CoreAttribute;
             //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 0] = 1f;
             //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 1] = 3.051758E-05f;
             //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 2] = 3.051758E-05f;
