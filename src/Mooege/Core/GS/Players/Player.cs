@@ -338,7 +338,7 @@ namespace Mooege.Core.GS.Players
 
             //Hitpoints have to be calculated after Vitality
             this.Attributes[GameAttribute.Hitpoints_Factor_Level] = data.HitpointsFactorLevel;
-            this.Attributes[GameAttribute.Hitpoints_Factor_Vitality] = 4f;
+            this.Attributes[GameAttribute.Hitpoints_Factor_Vitality] = 10f;
             //scripted //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
             //scripted //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 40f; // For now, this just adds 40 hitpoints to the hitpoints gained from vitality
             //scripted //this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality] = this.Attributes[GameAttribute.Vitality] * this.Attributes[GameAttribute.Hitpoints_Factor_Vitality];
@@ -1107,9 +1107,9 @@ namespace Mooege.Core.GS.Players
             {
                 var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
                 if (data.CoreAttribute == Mooege.Common.MPQ.FileFormats.PrimaryAttribute.Strength)
-                    return data.Strength + (this.Toon.Level * 2);
+                    return data.Strength + ((this.Toon.Level - 1) * 2);
                 else
-                    return data.Strength + (this.Toon.Level);
+                    return data.Strength + (this.Toon.Level - 1);
             }
         }
 
@@ -1128,9 +1128,9 @@ namespace Mooege.Core.GS.Players
             {
                 var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
                 if (data.CoreAttribute == Mooege.Common.MPQ.FileFormats.PrimaryAttribute.Dexterity)
-                    return data.Dexterity + (this.Toon.Level * 2);
+                    return data.Dexterity + ((this.Toon.Level - 1) * 2);
                 else
-                    return data.Dexterity + (this.Toon.Level);
+                    return data.Dexterity + (this.Toon.Level - 1);
             }
         }
 
@@ -1148,7 +1148,7 @@ namespace Mooege.Core.GS.Players
             get
             {
                 var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
-                return data.Vitality + (this.Toon.Level * 2);
+                return data.Vitality + ((this.Toon.Level - 1) * 2);
             }
         }
 
@@ -1167,9 +1167,9 @@ namespace Mooege.Core.GS.Players
             {
                 var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
                 if (data.CoreAttribute == Mooege.Common.MPQ.FileFormats.PrimaryAttribute.Intelligence)
-                    return data.Intelligence + (this.Toon.Level * 2);
+                    return data.Intelligence + ((this.Toon.Level - 1) * 2);
                 else
-                    return data.Intelligence + (this.Toon.Level);
+                    return data.Intelligence + (this.Toon.Level - 1);
             }
         }
 
