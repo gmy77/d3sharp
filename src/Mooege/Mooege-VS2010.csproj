@@ -406,6 +406,7 @@
     <Compile Include="Net\GS\Message\Fields\ActiveSkillSavedData.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Core\GS\Objects\GameAttributeMap.cs" />
+    <Compile Include="Net\GS\Message\ScriptedAttributeInitializer.cs" />
     <Compile Include="Net\MooNet\MooNetClient.cs" />
     <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />
