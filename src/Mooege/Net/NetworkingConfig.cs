@@ -16,17 +16,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-namespace Mooege.Net.GS
-{
-    public sealed class Config: Common.Config.Config
-    {       
-        public string BindIP { get { return this.GetString("BindIP", "0.0.0.0"); } set { this.Set("BindIP", value); } }
-        public string BindIPv6 { get { return this.GetString("BindIPv6", "::1"); } set { this.Set("BindIPv6", value); } }
-        public int Port { get { return this.GetInt("Port", 1345); } set { this.Set("Port", value); } }
+using Mooege.Common.Config;
 
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
-        private Config() : base("Game-Server") { }
+namespace Mooege.Net
+{
+    public sealed class NetworkingConfig : Config
+    {
+        public bool EnableIPv6 { get { return this.GetBoolean("EnableIPv6", true); } set { this.Set("EnableIPv6", value); } }
+
+        private static readonly NetworkingConfig _instance = new NetworkingConfig();
+        public static NetworkingConfig Instance { get { return _instance; } }
+        private NetworkingConfig() : base("Networking") { }
     }
 }
-
