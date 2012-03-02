@@ -819,7 +819,7 @@ namespace Mooege.Core.GS.Players
             {
                 var gbid = this.Toon.HeroVisualEquipmentField.Value.GetVisualItem(slot).Gbid;
                 //if item equiped
-                if (gbid > 0)
+                if (gbid != -1)
                 {
                     itemsToAdd.Add(slot, ItemGenerator.GetDefinitionFromGBID(gbid));
                 }
