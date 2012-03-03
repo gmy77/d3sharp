@@ -758,7 +758,7 @@ namespace Mooege.Core.GS.Generators
                         if (RandomHelper.NextDouble() > 0.8)
                         {
                             // TODO Load correct spawn population
-                             // 2.5 is units per square, TODO: Find out how to calculate units per square. Is it F1 * V0.I1 / SquareCount?
+                            // 2.5 is units per square, TODO: Find out how to calculate units per square. Is it F1 * V0.I1 / SquareCount?
                             int x = RandomHelper.Next(scene.NavMesh.SquaresCountX);
                             int y = RandomHelper.Next(scene.NavMesh.SquaresCountY);
 
@@ -797,7 +797,7 @@ namespace Mooege.Core.GS.Generators
 
             if (actor == null)
             {
-                if(actorHandle.Id != -1)
+                if (actorHandle.Id != -1)
                     Logger.Warn("ActorFactory did not load actor {0}", actorHandle);
                 return 0;
             }

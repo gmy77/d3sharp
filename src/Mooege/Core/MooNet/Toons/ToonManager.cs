@@ -98,11 +98,12 @@ namespace Mooege.Core.MooNet.Toons
             }
 
             if (toon.DeleteFromDB()) Toons.Remove(toon.PersistentID);
+			Logger.Debug("Deleting toon {0}", toon.PersistentID);
         }
 
         private static void LoadToons()
         {
-            var query = "SELECT * from toons";
+            var query = "SELECT * FROM toons";
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
 
@@ -111,29 +112,7 @@ namespace Mooege.Core.MooNet.Toons
             while (reader.Read())
             {
                 var databaseId = (ulong)reader.GetInt64(0);
-                //TODO: Move this to toon class only create a toon with id and call load from DB
-                var toon = new Toon(databaseId, reader.GetString(1), reader.GetInt32(6), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5), (uint)reader.GetInt32(7), (int)reader.GetInt32(8));
-
-                //add visual equipment
-                //TODO: Load all visualEquipment at once
-                D3.Hero.VisualItem[] visualItems = new D3.Hero.VisualItem[8];
-                var itemQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0}", databaseId);
-                var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
-                var itemReader = itemCmd.ExecuteReader();
-                if (itemReader.HasRows)
-                {
-                    while (itemReader.Read())
-                    {
-                        var slot = (int)itemReader.GetInt64(3);
-                        var gbid = (int)itemReader.GetInt64(4);
-                        visualItems[slot] = D3.Hero.VisualItem.CreateBuilder()
-                            .SetGbid(gbid)
-                            .SetEffectLevel(0)
-                            .Build();
-                    }
-
-                    toon.HeroVisualEquipmentField.Value = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
-                }
+                var toon = new Toon(databaseId);
 
                 Toons.Add(databaseId, toon);
             }
@@ -141,7 +120,7 @@ namespace Mooege.Core.MooNet.Toons
 
         public static int GetUnusedHashCodeForToonName(string name)
         {
-            var query = string.Format("SELECT hashCode from toons WHERE name='{0}'", name);
+            var query = string.Format("SELECT hashCode FROM toons WHERE name='{0}'", name);
             Logger.Trace(query);
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();

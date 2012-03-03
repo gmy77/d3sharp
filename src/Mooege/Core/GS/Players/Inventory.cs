@@ -16,6 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Linq;
 using Mooege.Common.Logging;
 using Mooege.Core.GS.Items;
 using Mooege.Net.GS;
@@ -25,10 +29,9 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common;
 using Mooege.Common.MPQ.FileFormats;
+using Mooege.Common.Storage;
 using Mooege.Net.GS.Message.Definitions.Stash;
 using Mooege.Core.GS.Objects;
-using System.Collections.Generic;
-using System.Linq;
 using Mooege.Core.MooNet.Toons;
 
 namespace Mooege.Core.GS.Players
@@ -51,8 +54,8 @@ namespace Mooege.Core.GS.Players
         {
             this._owner = owner;
             this._equipment = new Equipment(owner);
-            this._inventoryGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Backpack_Slots]/10, 10);
-            this._stashGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Shared_Stash_Slots]/7, 7, (int) EquipmentSlotId.Stash);
+            this._inventoryGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Backpack_Slots] / 10, 10);
+            this._stashGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Shared_Stash_Slots] / 7, 7, (int) EquipmentSlotId.Stash);
             this._skillSocketRunes = new uint[6];
         }
 
@@ -71,23 +74,23 @@ namespace Mooege.Core.GS.Players
         /// Refreshes the visual appearance of the hero
         /// </summary>
         public void SendVisualInventory(Player player)
-         {
-             var message = new VisualInventoryMessage()
-                               {
-                                   ActorID = this._owner.DynamicID,
-                                   EquipmentList = new VisualEquipment()
-                                                       {
-                                                           Equipment = this._equipment.GetVisualEquipment()
-                                                       },
-                               };
+        {
+            var message = new VisualInventoryMessage()
+                              {
+                                  ActorID = this._owner.DynamicID,
+                                  EquipmentList = new VisualEquipment()
+                                                      {
+                                                          Equipment = this._equipment.GetVisualEquipment()
+                                                      },
+                              };
 
-             //player.InGameClient.SendMessage(message);
-             player.World.BroadcastGlobal(message);
-         }
+            //player.InGameClient.SendMessage(message);
+            player.World.BroadcastGlobal(message);
+        }
 
         public D3.Hero.VisualEquipment GetVisualEquipment()
         {
-            return this._equipment.GetVisualEquipmentForToon();   
+            return this._equipment.GetVisualEquipmentForToon();
         }
 
         public bool HasInventorySpace(Item item)
@@ -145,7 +148,6 @@ namespace Mooege.Core.GS.Players
                 {
                     item.Owner = _owner;
                     item.World.Leave(item);
-
                 }
 
                 _inventoryGrid.AddItem(item);
@@ -170,7 +172,7 @@ namespace Mooege.Core.GS.Players
         {
             this._equipment.EquipItem(item, slot);
         }
-
+ 	 
         private List<Item> FindSameItems(int gbid)
         {
             return _inventoryGrid.Items.Values.Where(i => i.GBHandle.GBID == gbid).ToList();
@@ -585,7 +587,6 @@ namespace Mooege.Core.GS.Players
             return rune;
         }
 
-
         public void AddGoldAmount(int amount)
         {
             _equipment.AddGoldAmount(amount);
@@ -594,6 +595,90 @@ namespace Mooege.Core.GS.Players
         public int GetGoldAmount()
         {
             return _equipment.Gold();
+        }
+
+        public void LoadFromDB()
+        {
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Belt);
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Bracers);
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Chest);
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Feet);
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Hands);
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Helm);
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Legs);
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Main_Hand);
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Neck);
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Off_Hand);
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Ring_left);
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Ring_right);
+            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Shoulders);
+        }
+
+        public void SaveToDB()
+        {            
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Belt), EquipmentSlotId.Belt);
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Bracers), EquipmentSlotId.Bracers);
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Chest), EquipmentSlotId.Chest);
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Feet), EquipmentSlotId.Feet);
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Hands), EquipmentSlotId.Hands);
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Helm), EquipmentSlotId.Helm);
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Legs), EquipmentSlotId.Legs);
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Main_Hand), EquipmentSlotId.Main_Hand);
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Neck), EquipmentSlotId.Neck);
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Off_Hand), EquipmentSlotId.Off_Hand);
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Ring_left), EquipmentSlotId.Ring_left);
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Ring_right), EquipmentSlotId.Ring_right);
+            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Shoulders), EquipmentSlotId.Shoulders);
+        }
+
+        private void LoadEquipmentFromDB(Toon toon, EquipmentSlotId slotId)
+        {
+            Item item = null;
+            int itemId = -1;
+
+            var sqlQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot = {1}", toon.PersistentID, (int)slotId);
+            var sqlCmd = new SQLiteCommand(sqlQuery, DBManager.Connection);
+            var sqlReader = sqlCmd.ExecuteReader();
+
+            if (sqlReader.HasRows)
+            {
+                sqlReader.Read();
+
+                itemId = (int)(Int64)sqlReader["item_id"];
+                if (itemId != -1)
+                {
+                    item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetDefinitionFromGBID(itemId));
+                    _equipment.EquipItem(item, (int)slotId);
+                }
+            }
+        }
+
+        private void SaveEquipmentToDB(Toon toon, Item item, EquipmentSlotId slotId)
+        {
+            var sqlQuery  = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot = {1}", toon.PersistentID, (int)slotId);
+            var sqlCmd    = new SQLiteCommand(sqlQuery, DBManager.Connection);
+            var sqlReader = sqlCmd.ExecuteReader();
+
+            if (sqlReader.HasRows)
+            {
+                if (item != null)
+                {
+                    // There is a item in the database for the given toon-slot. So, UPDATE!
+                    var itemQuery = string.Format("UPDATE inventory SET item_id = {0} WHERE toon_id = {1} AND equipment_slot = {2}", item.GBHandle.GBID, toon.PersistentID, (int)slotId);
+                    var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
+                    var itemReader = itemCmd.ExecuteNonQuery();
+                }
+            }
+            else
+            {
+                if (item != null)
+                {
+                    // There is NO item in the database for the given toon-slot. So, INSERT
+                    var itemQuery = string.Format("INSERT INTO inventory (toon_id, equipment_slot, item_id) VALUES ({0}, {1}, {2})", toon.PersistentID, (int)slotId, item.GBHandle.GBID);
+                    var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
+                    var itemReader = itemCmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

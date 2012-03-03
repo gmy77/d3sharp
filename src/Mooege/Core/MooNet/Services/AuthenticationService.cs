@@ -88,7 +88,7 @@ namespace Mooege.Core.MooNet.Services
 
             done(bnet.protocol.NoData.CreateBuilder().Build());
 
-            if(command==2)
+            if (command==2)
                 AuthManager.HandleAuthResponse(this.Client, request.ModuleId, moduleMessage);
         }
 

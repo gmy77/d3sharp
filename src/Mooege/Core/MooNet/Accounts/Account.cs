@@ -390,7 +390,9 @@ namespace Mooege.Core.MooNet.Accounts
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
         }
+
 #endregion
+
         public override string ToString()
         {
             return String.Format("{{ Account: {0} [lowId: {1}] }}", this.Email, this.BnetEntityId.Low);

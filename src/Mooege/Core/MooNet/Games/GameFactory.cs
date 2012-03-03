@@ -143,7 +143,7 @@ namespace Mooege.Core.MooNet.Games
                 client.MakeTargetedRPC(client.CurrentChannel, () =>
                     bnet.protocol.channel.ChannelSubscriber.CreateStub(client).NotifyUpdateChannelState(null, notificationPartyLock, callback => { }));
             }
-            
+
             // send the notification.
             var connectionInfo = GetConnectionInfoForClient(client);
 

@@ -70,7 +70,7 @@ namespace Mooege.Core.GS.Games
                 // Remove Player From World
                 if (p.InGameClient != null)
                     p.World.Leave(p);
-           
+
                 // Generate Update for Client
                 gameClient.BnetClient.Account.CurrentGameAccount.NotifyUpdate();
                 //save hero to db after player data was updated in toon

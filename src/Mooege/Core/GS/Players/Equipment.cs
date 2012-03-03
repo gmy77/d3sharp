@@ -42,7 +42,8 @@ namespace Mooege.Core.GS.Players
 
         private uint[] _equipment;      // array of equiped items_id  (not item)
 
-        public Equipment(Player owner){
+        public Equipment(Player owner)
+        {
             this._equipment = new uint[17];
             this._owner = owner;
             this.Items = new Dictionary<uint, Item>();
@@ -58,13 +59,18 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void EquipItem(Item item, int slot)
         {
-            _equipment[slot] = item.DynamicID;
-            if (!Items.ContainsKey(item.DynamicID))
-                Items.Add(item.DynamicID, item);
-            item.Owner = _owner;
-            item.Attributes[GameAttribute.Item_Equipped] = true; // Probaly should be handled by Equipable class /fasbat
-            item.Attributes.SendChangedMessage(_owner.InGameClient);
-            item.SetInventoryLocation(slot, 0, 0);            
+            if (item != null)
+            {
+                _equipment[slot] = item.DynamicID;
+                if (!Items.ContainsKey(item.DynamicID))
+                {
+                    Items.Add(item.DynamicID, item);
+                }
+                item.Owner = _owner;
+                item.Attributes[GameAttribute.Item_Equipped] = true; // Probaly should be handled by Equipable class /fasbat
+                item.Attributes.SendChangedMessage(_owner.InGameClient);
+                item.SetInventoryLocation(slot, 0, 0);
+            }
         }
 
         public void EquipItem(uint itemID, int slot)
@@ -140,7 +146,6 @@ namespace Mooege.Core.GS.Players
         }
 
         //TODO: Soon to become obsolete: Save this at toon level
-
         public VisualItem[] GetVisualEquipment()
         {
             return new VisualItem[8]
@@ -156,7 +161,6 @@ namespace Mooege.Core.GS.Players
                     };
         }
 
-
         public D3.Hero.VisualEquipment GetVisualEquipmentForToon()
         {
             var visualItems = new[]
@@ -170,13 +174,11 @@ namespace Mooege.Core.GS.Players
                     GetEquipmentItemForToon(EquipmentSlotId.Shoulders),
                     GetEquipmentItemForToon(EquipmentSlotId.Legs),
             };
-
             return D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
         }
 
         public Item AddGoldItem(Item collectedItem)
         {
-
             return AddGoldAmount(collectedItem.Attributes[GameAttribute.Gold]);
         }
 
