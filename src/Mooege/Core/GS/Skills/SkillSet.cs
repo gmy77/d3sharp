@@ -47,18 +47,17 @@ namespace Mooege.Core.GS.Skills
             var reader = cmd.ExecuteReader();
             if (!reader.HasRows)
             {
-                int[] ActiveSkillsList = Skills.GetAllActiveSkillsByClass(this.@Class).Take(1).ToArray(); 
+                int[] ActiveSkillsList = Skills.GetAllActiveSkillsByClass(this.@Class).Take(1).ToArray();
 
-                this.HotBarSkills = new HotbarButtonData[6] {     
-                    new HotbarButtonData { SNOSkill = ActiveSkillsList[0], ItemGBId = -1 }, // left-click
-                    new HotbarButtonData { SNOSkill = Skills.None, ItemGBId = -1 }, // right-click
-                    new HotbarButtonData { SNOSkill = Skills.None, ItemGBId = -1 }, // bar-1
-                    new HotbarButtonData { SNOSkill = Skills.None, ItemGBId = -1 }, // bar-2
-                    new HotbarButtonData { SNOSkill = Skills.None, ItemGBId = -1 }, // bar-3
-                    new HotbarButtonData { SNOSkill = Skills.None, ItemGBId = -1 }, // bar-4 
+                this.ActiveSkills = new ActiveSkillSavedData[6] {
+                    new ActiveSkillSavedData { snoSkill = ActiveSkillsList[0], snoRune = -1 },
+                    new ActiveSkillSavedData { snoSkill = Skills.None, snoRune = -1 },
+                    new ActiveSkillSavedData { snoSkill = Skills.None, snoRune = -1 },
+                    new ActiveSkillSavedData { snoSkill = Skills.None, snoRune = -1 },
+                    new ActiveSkillSavedData { snoSkill = Skills.None, snoRune = -1 },
+                    new ActiveSkillSavedData { snoSkill = Skills.None, snoRune = -1 }
                 };
-
-                this.PassiveSkills = new int[3] { -1, -1, -1 }; // setting passive skills here crashes the client, need to figure out the reason. /raist.
+                this.PassiveSkills = new int[3] { -1, -1, -1 };
 
                 var insQuery = string.Format("INSERT INTO active_skills (id_toon,"+
                     "skill_0,skill_1,skill_2,skill_3,skill_4,skill_5,"+
@@ -70,75 +69,39 @@ namespace Mooege.Core.GS.Skills
             }
             else
             {
-                this.HotBarSkills = new HotbarButtonData[6] {     
-                    new HotbarButtonData { SNOSkill = (int)(Int64)reader["skill_0"], ItemGBId = -1 }, // left-click
-                    new HotbarButtonData { SNOSkill = (int)(Int64)reader["skill_1"], ItemGBId = -1 }, // right-click
-                    new HotbarButtonData { SNOSkill = (int)(Int64)reader["skill_2"], ItemGBId = -1 }, // bar-1
-                    new HotbarButtonData { SNOSkill = (int)(Int64)reader["skill_3"], ItemGBId = -1 }, // bar-2
-                    new HotbarButtonData { SNOSkill = (int)(Int64)reader["skill_4"], ItemGBId = -1 }, // bar-3
-                    new HotbarButtonData { SNOSkill = (int)(Int64)reader["skill_5"], ItemGBId = -1 }, // bar-4 
+                this.ActiveSkills = new ActiveSkillSavedData[6] {
+                    new ActiveSkillSavedData { snoSkill = (int)(Int64)reader["skill_0"], snoRune = (int)(Int64)reader["rune_0"] },
+                    new ActiveSkillSavedData { snoSkill = (int)(Int64)reader["skill_1"], snoRune = (int)(Int64)reader["rune_1"] },
+                    new ActiveSkillSavedData { snoSkill = (int)(Int64)reader["skill_2"], snoRune = (int)(Int64)reader["rune_2"] },
+                    new ActiveSkillSavedData { snoSkill = (int)(Int64)reader["skill_3"], snoRune = (int)(Int64)reader["rune_3"] },
+                    new ActiveSkillSavedData { snoSkill = (int)(Int64)reader["skill_4"], snoRune = (int)(Int64)reader["rune_4"] },
+                    new ActiveSkillSavedData { snoSkill = (int)(Int64)reader["skill_5"], snoRune = (int)(Int64)reader["rune_5"] }
                 };
                 this.PassiveSkills = new int[3] {
-                    -1,//(int)reader["passive_0"],
-                    -1,
-                    -1 }; // setting passive skills here crashes the client, need to figure out the reason. /raist.
+                    (int)(Int64)reader["passive_0"],
+                    (int)(Int64)reader["passive_1"],
+                    (int)(Int64)reader["passive_2"]
+                };
             }
-
-            this.ActiveSkills = new ActiveSkillSavedData[6] {
-                new ActiveSkillSavedData { snoSkill = this.HotBarSkills[0].SNOSkill },
-                new ActiveSkillSavedData { snoSkill = this.HotBarSkills[1].SNOSkill },
-                new ActiveSkillSavedData { snoSkill = this.HotBarSkills[2].SNOSkill },
-                new ActiveSkillSavedData { snoSkill = this.HotBarSkills[3].SNOSkill },
-                new ActiveSkillSavedData { snoSkill = this.HotBarSkills[4].SNOSkill },
-                new ActiveSkillSavedData { snoSkill = this.HotBarSkills[5].SNOSkill }
+            this.HotBarSkills = new HotbarButtonData[6] {
+                new HotbarButtonData { SNOSkill = ActiveSkills[0].snoSkill, ItemGBId = -1 }, // left-click
+                new HotbarButtonData { SNOSkill = ActiveSkills[1].snoSkill, ItemGBId = -1 }, // right-click
+                new HotbarButtonData { SNOSkill = ActiveSkills[2].snoSkill, ItemGBId = -1 }, // bar-1
+                new HotbarButtonData { SNOSkill = ActiveSkills[3].snoSkill, ItemGBId = -1 }, // bar-2
+                new HotbarButtonData { SNOSkill = ActiveSkills[4].snoSkill, ItemGBId = -1 }, // bar-3
+                new HotbarButtonData { SNOSkill = ActiveSkills[5].snoSkill, ItemGBId = -1 }, // bar-4 
             };
-
         }
 
-        public void UpdateHotbarSkills(int hotBarIndex, int SNOSkill, Toon toon)
+        public void UpdateSkills(int hotBarIndex, int SNOSkill, int SNORune, Toon toon)
         {
-            switch (hotBarIndex)
-            {
-                case 0:
-                    Logger.Debug("Update index 0 {0}", SNOSkill);
-                    var query_0 = string.Format("UPDATE active_skills SET skill_0={1} WHERE id_toon={0} ", toon.D3EntityID.IdLow, SNOSkill);
-                    var cmd_0 = new SQLiteCommand(query_0, DBManager.Connection);
-                    cmd_0.ExecuteReader();
-                    break;
-                case 1:
-                    Logger.Debug("Update index 1 {0}", SNOSkill);
-                    var query_1 = string.Format("UPDATE active_skills SET skill_1={1} WHERE id_toon={0} ", toon.D3EntityID.IdLow, SNOSkill);
-                    var cmd_1 = new SQLiteCommand(query_1, DBManager.Connection);
-                    cmd_1.ExecuteReader();
-                    break;
-                case 2:
-                    Logger.Debug("Update index 2 {0}", SNOSkill);
-                    var query_2 = string.Format("UPDATE active_skills SET skill_2={1} WHERE id_toon={0} ", toon.D3EntityID.IdLow, SNOSkill);
-                    var cmd_2 = new SQLiteCommand(query_2, DBManager.Connection);
-                    cmd_2.ExecuteReader();
-                    break;
-                case 3:
-                    Logger.Debug("Update index 3 {0}", SNOSkill);
-                    var query_3 = string.Format("UPDATE active_skills SET skill_3={1} WHERE id_toon={0} ", toon.D3EntityID.IdLow, SNOSkill);
-                    var cmd_3 = new SQLiteCommand(query_3, DBManager.Connection);
-                    cmd_3.ExecuteReader();
-                    break;
-                case 4:
-                    Logger.Debug("Update index 4 {0}", SNOSkill);
-                    var query_4 = string.Format("UPDATE active_skills SET skill_4={1} WHERE id_toon={0} ", toon.D3EntityID.IdLow, SNOSkill);
-                    var cmd_4 = new SQLiteCommand(query_4, DBManager.Connection);
-                    cmd_4.ExecuteReader();
-                    break;
-                case 5:
-                    Logger.Debug("Update index 5 {0}", SNOSkill);
-                    var query_5 = string.Format("UPDATE active_skills SET skill_5={1} WHERE id_toon={0} ", toon.D3EntityID.IdLow, SNOSkill);
-                    var cmd_5 = new SQLiteCommand(query_5, DBManager.Connection);
-                    cmd_5.ExecuteReader();
-                    break;
-            }
+            Logger.Debug("Update index {0} skill {1} rune {2}", hotBarIndex, SNOSkill, SNORune);
+            var query = string.Format("UPDATE active_skills SET skill_{1}={2}, rune_{1}={3} WHERE id_toon={0} ", toon.D3EntityID.IdLow, hotBarIndex, SNOSkill, SNORune);
+            var cmd = new SQLiteCommand(query, DBManager.Connection);
+            cmd.ExecuteNonQuery();
         }
-		
-		public void SwitchUpdateSkills(int oldSNOSkill,int SNOSkill, Toon toon)
+
+        public void SwitchUpdateSkills(int oldSNOSkill, int SNOSkill, int SNORune, Toon toon)
 		{
 			for (int i = 0; i < this.HotBarSkills.Length; i++)
 			{
@@ -146,10 +109,18 @@ namespace Mooege.Core.GS.Skills
 				{
 					Logger.Debug("SkillSet: SwitchUpdateSkill Oldskill {0} Newskill {1}", oldSNOSkill, SNOSkill);
 					this.HotBarSkills[i].SNOSkill = SNOSkill;
-					this.UpdateHotbarSkills(i,SNOSkill,toon);
-					return;
+                    this.UpdateSkills(i, SNOSkill, SNORune, toon);
+                    return;
 				}
 			}
 		}
+
+        public void UpdatePassiveSkills(Toon toon)
+        {
+            Logger.Debug("Update passive to {0} {1} {2}", PassiveSkills[0], PassiveSkills[1], PassiveSkills[2]);
+            var query = string.Format("UPDATE active_skills SET passive_0={1}, passive_1={2}, passive_2={3} WHERE id_toon={0} ", toon.D3EntityID.IdLow, PassiveSkills[0], PassiveSkills[1], PassiveSkills[2]);
+            var cmd = new SQLiteCommand(query, DBManager.Connection);
+            cmd.ExecuteNonQuery();
+        }
     }
 }

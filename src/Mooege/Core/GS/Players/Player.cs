@@ -430,7 +430,7 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Running_Rate_Total] = data.RunningRate;
             this.Attributes[GameAttribute.Running_Rate] = data.RunningRate;
             this.Attributes[GameAttribute.Sprinting_Rate_Total] = data.F17; //These two are guesses -Egris
-            this.Attributes[GameAttribute.Strafing_Rate_Total] = data.F18; 
+            this.Attributes[GameAttribute.Strafing_Rate_Total] = data.F18;
 
             //Miscellaneous
 
@@ -454,8 +454,27 @@ namespace Mooege.Core.GS.Players
             // unlocking assigned skills
             for (int i = 0; i < this.SkillSet.ActiveSkills.Length; i++)
             {
-                this.Attributes[GameAttribute.Skill, this.SkillSet.ActiveSkills[i].snoSkill] = 1;
-                this.Attributes[GameAttribute.Skill_Total, this.SkillSet.ActiveSkills[i].snoSkill] = 1;
+                if (this.SkillSet.ActiveSkills[i].snoSkill != -1)
+                {
+                    this.Attributes[GameAttribute.Skill, this.SkillSet.ActiveSkills[i].snoSkill] = 1;
+                    this.Attributes[GameAttribute.Skill_Total, this.SkillSet.ActiveSkills[i].snoSkill] = 1;
+                    // update rune attributes for new skill
+                    this.Attributes[GameAttribute.Rune_A, this.SkillSet.ActiveSkills[i].snoSkill] = this.SkillSet.ActiveSkills[i].snoRune == 0 ? 1 : 0;
+                    this.Attributes[GameAttribute.Rune_B, this.SkillSet.ActiveSkills[i].snoSkill] = this.SkillSet.ActiveSkills[i].snoRune == 1 ? 1 : 0;
+                    this.Attributes[GameAttribute.Rune_C, this.SkillSet.ActiveSkills[i].snoSkill] = this.SkillSet.ActiveSkills[i].snoRune == 2 ? 1 : 0;
+                    this.Attributes[GameAttribute.Rune_D, this.SkillSet.ActiveSkills[i].snoSkill] = this.SkillSet.ActiveSkills[i].snoRune == 3 ? 1 : 0;
+                    this.Attributes[GameAttribute.Rune_E, this.SkillSet.ActiveSkills[i].snoSkill] = this.SkillSet.ActiveSkills[i].snoRune == 4 ? 1 : 0;
+                }
+            }
+            for (int i = 0; i < this.SkillSet.PassiveSkills.Length; ++i)
+            {
+                if (this.SkillSet.PassiveSkills[i] != -1)
+                {
+                    // switch on passive skill
+                    this.Attributes[GameAttribute.Trait, this.SkillSet.PassiveSkills[i]] = 1;
+                    this.Attributes[GameAttribute.Skill, this.SkillSet.PassiveSkills[i]] = 1;
+                    this.Attributes[GameAttribute.Skill_Total, this.SkillSet.PassiveSkills[i]] = 1;
+                }
             }
 
             this.Inventory = new Inventory(this); // Here because it needs attributes /fasbat
@@ -527,7 +546,7 @@ namespace Mooege.Core.GS.Players
             this.Attributes.BroadcastChangedIfRevealed();
 
             this.SkillSet.ActiveSkills[message.SkillIndex].snoSkill = message.SNOSkill;
-            this.SkillSet.SwitchUpdateSkills(oldSNOSkill, message.SNOSkill, this.Toon);
+            this.SkillSet.SwitchUpdateSkills(oldSNOSkill, message.SNOSkill, message.RuneIndex, this.Toon);
             this.UpdateHeroState();
             _StartSkillCooldown(message.SNOSkill, SkillChangeCooldownLength);
         }
@@ -560,6 +579,7 @@ namespace Mooege.Core.GS.Players
                 }
             }
 
+            this.SkillSet.UpdatePassiveSkills(this.Toon);
             this.Attributes.BroadcastChangedIfRevealed();
             this.UpdateHeroState();
         }
