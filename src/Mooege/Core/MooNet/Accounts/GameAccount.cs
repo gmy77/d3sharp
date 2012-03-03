@@ -464,7 +464,7 @@ namespace Mooege.Core.MooNet.Accounts
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 3) // Hero's visible equipment
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.CurrentToon.Equipment.ToByteString()).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.CurrentToon.HeroVisualEquipmentField.Value.ToByteString()).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 4) // Hero's flags (gender and such)
                     {

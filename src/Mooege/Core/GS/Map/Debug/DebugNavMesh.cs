@@ -76,7 +76,7 @@ namespace Mooege.Core.GS.Map.Debug
             this.WalkableCells = new ConcurrentList<Rect>();
             this.Players = new ConcurrentList<Player>();
             this.Monsters = new ConcurrentList<Monster>();
-            this.NPCs = new ConcurrentList<NPC>();           
+            this.NPCs = new ConcurrentList<NPC>();
             this.Portals = new ConcurrentList<Portal>();
         }
 

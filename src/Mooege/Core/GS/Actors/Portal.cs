@@ -78,7 +78,7 @@ namespace Mooege.Core.GS.Actors
 
         public override bool Reveal(Player player)
         {
-            if (!base.Reveal(player) || Destination == null)
+            if (!base.Reveal(player) || this.Destination == null)
                 return false;
 
             player.InGameClient.SendMessage(new PortalSpecifierMessage()
@@ -86,7 +86,6 @@ namespace Mooege.Core.GS.Actors
                 ActorID = this.DynamicID,
                 Destination = this.Destination
             });
-
 
             // Show a minimap icon
             Mooege.Common.MPQ.Asset asset;
@@ -116,7 +115,6 @@ namespace Mooege.Core.GS.Actors
                 Field8 = true,
                 Field12 = 0
             });
-
             return true;
         }
 

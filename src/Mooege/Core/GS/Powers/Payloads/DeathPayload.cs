@@ -1,4 +1,4 @@
-﻿﻿/*
+﻿/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -66,8 +66,6 @@ namespace Mooege.Core.GS.Powers.Payloads
 
             // send this death payload to buffs
             this.Target.World.BuffManager.SendTargetPayload(this.Target, this);
-
-
 
             // wtf is this?
             this.Target.World.BroadcastIfRevealed(new Mooege.Net.GS.Message.Definitions.Effect.PlayEffectMessage()
@@ -210,9 +208,10 @@ namespace Mooege.Core.GS.Powers.Payloads
             //move user to new position
             //TODO: Find last waypoint
             var lastWaypoint = new Common.Types.Math.Vector3D();
-            lastWaypoint.X = 3143.75F;
+            lastWaypoint = this.Target.CheckPointPosition;
+            /*lastWaypoint.X = 3143.75F;
             lastWaypoint.Y = 2828.75F;
-            lastWaypoint.Z = 59.17559F;
+            lastWaypoint.Z = 59.17559F;*/
             var deathWorld = new ACDWorldPositionMessage();
             deathWorld.ActorID = this.Target.DynamicID;
             deathWorld.WorldLocation = new WorldLocationMessageData();

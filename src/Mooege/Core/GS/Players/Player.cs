@@ -184,7 +184,6 @@ namespace Mooege.Core.GS.Players
         public Player(World world, GameClient client, Toon bnetToon)
             : base(world, GetClassSNOId(bnetToon.Gender, bnetToon.Class))
         {
-
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
             this.Toon = bnetToon;
@@ -200,7 +199,7 @@ namespace Mooege.Core.GS.Players
             this.NameSNOId = -1;
             this.Field10 = 0x0;
 
-            this.SkillSet = new SkillSet(this.Toon.Class);
+            this.SkillSet = new SkillSet(this.Toon.Class, this.Toon);
             this.GroundItems = new Dictionary<uint, Item>();
             this.Conversations = new ConversationManager(this, this.World.Game.Quests);
             this.ExpBonusData = new ExpBonusData(this);
@@ -527,13 +526,8 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Rune_E, message.SNOSkill] = message.RuneIndex == 4 ? 1 : 0;
             this.Attributes.BroadcastChangedIfRevealed();
 
-            // loop through hotbar and replace the old skill with new one
-            foreach (HotbarButtonData button in this.SkillSet.HotBarSkills.Where(button => button.SNOSkill == oldSNOSkill)) 
-            {
-                button.SNOSkill = message.SNOSkill;
-            }
-
             this.SkillSet.ActiveSkills[message.SkillIndex].snoSkill = message.SNOSkill;
+            this.SkillSet.SwitchUpdateSkills(oldSNOSkill, message.SNOSkill, this.Toon);
             this.UpdateHeroState();
             _StartSkillCooldown(message.SNOSkill, SkillChangeCooldownLength);
         }
@@ -801,34 +795,8 @@ namespace Mooege.Core.GS.Players
             this.RevealScenesToPlayer(); // reveal scenes in players proximity.
             this.RevealActorsToPlayer(); // reveal actors in players proximity.
 
-            //This can't be in the c-tor
-            //TODO: Hack until proper equipment slots are set 
-            Dictionary<int, int> visualToSlotMapping = new Dictionary<int, int>();
-            visualToSlotMapping.Add(0, 1);
-            visualToSlotMapping.Add(1, 2);
-            visualToSlotMapping.Add(2, 7);
-            visualToSlotMapping.Add(3, 5);
-            visualToSlotMapping.Add(4, 4);
-            visualToSlotMapping.Add(5, 3);
-            visualToSlotMapping.Add(6, 8);
-            visualToSlotMapping.Add(7, 9);
-
-            Dictionary<int, Mooege.Common.MPQ.FileFormats.ItemTable> itemsToAdd = new Dictionary<int, Mooege.Common.MPQ.FileFormats.ItemTable>();
-            //get items
-            for (int slot = 0; slot < 8; slot++)
-            {
-                var gbid = this.Toon.HeroVisualEquipmentField.Value.GetVisualItem(slot).Gbid;
-                //if item equiped
-                if (gbid != -1)
-                {
-                    itemsToAdd.Add(slot, ItemGenerator.GetDefinitionFromGBID(gbid));
-                }
-            }
-
-            foreach (var pair in itemsToAdd)
-            {
-                this.Inventory.EquipItem(ItemGenerator.CookFromDefinition(this, pair.Value), visualToSlotMapping[pair.Key]);
-            }
+            // Load Equipped Items
+            this.Inventory.LoadFromDB();
 
             //generate visual update message
             this.Inventory.SendVisualInventory(this);
@@ -843,11 +811,15 @@ namespace Mooege.Core.GS.Players
         public override void OnLeave(World world)
         {
             this.Conversations.StopAll();
+
             //save visual equipment
             this.Toon.HeroVisualEquipmentField.Value = this.Inventory.GetVisualEquipment();
             this.Toon.HeroLevelField.Value = this.Attributes[GameAttribute.Level];
             this.Toon.GameAccount.ChangedFields.SetPresenceFieldValue(this.Toon.HeroVisualEquipmentField);
             this.Toon.GameAccount.ChangedFields.SetPresenceFieldValue(this.Toon.HeroLevelField);
+
+            //save equipped items
+            this.Inventory.SaveToDB();
         }
 
         public override bool Reveal(Player player)
@@ -1422,7 +1394,6 @@ namespace Mooege.Core.GS.Players
                 return (int)HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString()).SecondaryResource;
             }
         }
-
 
         #endregion
 

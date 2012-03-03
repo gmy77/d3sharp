@@ -24,6 +24,7 @@ using Mooege.Common.Storage;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
+using Mooege.Core.GS.Skills;
 using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.MooNet.Toons
@@ -166,31 +167,14 @@ namespace Mooege.Core.MooNet.Toons
         public uint TimePlayed { get; set; }
 
         /// <summary>
-        /// Gold amount for toon.
-        /// </summary>
-        public int GoldAmount { get; set; }
-        
-        /// <summary>
         /// Last login time for toon.
         /// </summary>
         public uint LoginTime { get; set; }
 
         /// <summary>
-        /// The visual equipment for toon.
+        /// Gold amount for toon.
         /// </summary>
-        private D3.Hero.VisualEquipment _equipment;
-        public D3.Hero.VisualEquipment Equipment
-        {
-            get
-            {
-                return _equipment;
-            }
-            protected set
-            {
-                this._equipment = value;
-                this.HeroVisualEquipmentField.Value = value;
-            }
-        }
+        public int GoldAmount { get; set; }
 
         /// <summary>
         /// Settings for toon.
@@ -221,7 +205,7 @@ namespace Mooege.Core.MooNet.Toons
                                 .SetGbidClass((int)this.ClassID)
                                 .SetPlayerFlags((uint)this.Flags)
                                 .SetLevel(this.Level)
-                                .SetVisualEquipment(this.Equipment)
+                                .SetVisualEquipment(this.HeroVisualEquipmentField.Value)
                                 .SetLastPlayedAct(0)
                                 .SetHighestUnlockedAct(0)
                                 .SetLastPlayedDifficulty(0)
@@ -263,18 +247,6 @@ namespace Mooege.Core.MooNet.Toons
                         return false;
                 }
             }
-        }
-
-        public Toon(ulong persistentId, string name, int hashCode, byte @class, byte gender, byte level, long accountId, uint timePlayed, int goldAmount) // Toon with given persistent ID
-            : base(persistentId)
-        {
-            this.SetFields(name, hashCode, (ToonClass)@class, (ToonFlags)gender, level, GameAccountManager.GetAccountByPersistentID((ulong)accountId), timePlayed, goldAmount);
-        }
-
-        public Toon(string name, int hashCode, int classId, ToonFlags flags, byte level, GameAccount account) // Toon with **newly generated** persistent ID
-            : base(StringHashHelper.HashIdentity(name + "#" + hashCode.ToString("D3")))
-        {
-            this.SetFields(name, hashCode, GetClassByID(classId), flags, level, account, 0, 0);
         }
 
         public int ClassID
@@ -327,19 +299,21 @@ namespace Mooege.Core.MooNet.Toons
             }
         }
 
-        private void SetFields(string name, int hashCode, ToonClass @class, ToonFlags flags, byte level, GameAccount owner, uint timePlayed, int goldAmount)
+        #region c-tor and setfields
+
+        public Toon(string name, int hashCode, int classId, ToonFlags flags, byte level, GameAccount account) // Toon with **newly generated** persistent ID
+            : base(StringHashHelper.HashIdentity(name + "#" + hashCode.ToString("D3")))
         {
-            //this.BnetEntityID = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.ToonId + this.PersistentID).SetLow(this.PersistentID).Build();
             this.D3EntityID = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId).SetIdLow(this.PersistentID).Build();
 
             this.Name = name;
             this.HashCode = hashCode;
-            this.Class = @class;
+            this.Class = @GetClassByID(classId);
             this.Flags = flags;
             this.Level = level;
-            this.GameAccount = owner;
-            this.TimePlayed = timePlayed;
-            this.GoldAmount = goldAmount;
+            this.GameAccount = account;
+            this.TimePlayed = 0;
+            this.GoldAmount = 0;
 
             var visualItems = new[]
             {                                
@@ -353,10 +327,76 @@ namespace Mooege.Core.MooNet.Toons
                 D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Legs
             };
 
-            this.Equipment = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
-
+            this.HeroVisualEquipmentField.Value = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
         }
 
+        public Toon(ulong persistentId)     // Load a toon from database with a given persistentId
+            : base(persistentId)
+        {
+            this.D3EntityID = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId).SetIdLow(this.PersistentID).Build();
+
+            var sqlQuery  = string.Format("SELECT * FROM toons WHERE id = {0}", persistentId);
+            var sqlCmd    = new SQLiteCommand(sqlQuery, DBManager.Connection);
+            var sqlReader = sqlCmd.ExecuteReader();
+
+            // Use name of column to prevent errors if column moved
+            while (sqlReader.Read())
+            {
+                this.Name = (string)sqlReader["name"];
+                this.HashCode = (int)(Int64)sqlReader["hashCode"];
+                this.Class = (ToonClass)(Int64)sqlReader["class"];
+                this.Flags = (ToonFlags)(Int64)sqlReader["gender"];
+                this.Level = (byte)(Int64)sqlReader["level"];
+                this.GameAccount = GameAccountManager.GetAccountByPersistentID((ulong)(Int64)sqlReader["accountId"]);
+                this.TimePlayed = (uint)(Int64)sqlReader["timePlayed"];
+                this.GoldAmount = (int)(Int64)sqlReader["goldAmount"];
+            }
+
+            var visualItems = new[]
+            {                                
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Head
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Chest
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Feet
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Hands
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Weapon (1)
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Weapon (2)
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Shoulders
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Legs
+            };
+            // Load Visual Equipment
+            Dictionary<int, int> visualToSlotMapping = new Dictionary<int, int>();
+            visualToSlotMapping.Add(1, 0);
+            visualToSlotMapping.Add(2, 1);
+            visualToSlotMapping.Add(7, 2);
+            visualToSlotMapping.Add(5, 3);
+            visualToSlotMapping.Add(4, 4);
+            visualToSlotMapping.Add(3, 5);
+            visualToSlotMapping.Add(8, 6);
+            visualToSlotMapping.Add(9, 7);
+            //add visual equipment form DB, only the visualizable equipment, not everything
+            var itemQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot <> -1", persistentId);
+            var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
+            var itemReader = itemCmd.ExecuteReader();
+            if (itemReader.HasRows)
+            {
+                while (itemReader.Read())
+                {
+                    var slot = (int)(Int64)itemReader["equipment_slot"];
+                    if (!visualToSlotMapping.ContainsKey(slot))
+                        continue;
+                    // decode vislual slot from equipment slot
+                    slot = visualToSlotMapping[slot];
+                    var gbid = (int)(Int64)itemReader["item_id"];
+                    visualItems[slot] = D3.Hero.VisualItem.CreateBuilder()
+                        .SetGbid(gbid)
+                        .SetEffectLevel(0)
+                        .Build();
+                }
+            }
+            this.HeroVisualEquipmentField.Value = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
+        }
+
+        #endregion
 
         public void LevelUp()
         {
@@ -389,9 +429,6 @@ namespace Mooege.Core.MooNet.Toons
             return operationList;
         }
 
-
-
-
         #endregion
 
         private static ToonClass GetClassByID(int classId)
@@ -418,17 +455,19 @@ namespace Mooege.Core.MooNet.Toons
             return String.Format("{{ Toon: {0} [lowId: {1}] }}", this.Name, this.D3EntityID.IdLow);
         }
 
+        #region DB
+
         public void SaveToDB()
         {
             try
             {
-                // save character
+                // save character base data
                 if (ExistsInDB())
                 {
                     var query =
                         string.Format(
-                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, accountId={5}, timePlayed={6}, goldAmount={7} WHERE id={8}",
-                            this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.GameAccount.PersistentID, this.TimePlayed, this.GoldAmount, this.PersistentID);
+                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, experience={5}, accountId={6}, timePlayed={7}, goldAmount={8} WHERE id={9}",
+                            this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, 0, this.GameAccount.PersistentID, this.TimePlayed, this.GoldAmount, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -437,38 +476,13 @@ namespace Mooege.Core.MooNet.Toons
                 {
                     var query =
                         string.Format(
-                            "INSERT INTO toons (id, name,  hashCode, class, gender, level, timePlayed, goldAmount, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7},{8})",
-                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.TimePlayed, this.GoldAmount, this.GameAccount.PersistentID);
+                            "INSERT INTO toons (id, name, hashCode, class, gender, level, experience, timePlayed, goldAmount, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7},{8},{9})",
+                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, 0, this.TimePlayed, this.GoldAmount, this.GameAccount.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
+                    Logger.Debug("Create Toon for the first time in DB {0}", this.PersistentID);
                 }
-
-                //save main gear
-                for (int slot = 0; slot < 8; slot++ )
-                {
-                    var visualItem = this.HeroVisualEquipmentField.Value.GetVisualItem(slot);
-                    //item_identity_id = gbid
-                    if (VisualItemExistsInDb(slot))
-                    {
-                        var itemQuery = string.Format("UPDATE inventory SET item_entity_id={0} WHERE toon_id={1} and inventory_slot={2}", visualItem.Gbid, this.PersistentID, slot);
-                        var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
-                        itemCmd.ExecuteNonQuery();
-                    }
-                    else
-                    {
-                        var itemQuery = string.Format("INSERT INTO inventory (toon_id, inventory_loc_x, inventory_loc_y, inventory_slot, item_entity_id) VALUES({0},{1},{2},{3},{4})", this.PersistentID, 0, 0, slot, visualItem.Gbid);
-                        var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
-                        itemCmd.ExecuteNonQuery();
-                    }
-
-
-                    //save other inventory
-
-                    //save stash
-
-                    //save gold
-                 }
             }
             catch (Exception e)
             {
@@ -483,9 +497,21 @@ namespace Mooege.Core.MooNet.Toons
                 // Remove from DB
                 if (!ExistsInDB()) return false;
 
+                //delete visualEquipment from DB
+                var itemQuery = string.Format("DELETE FROM inventory WHERE toon_id={0}", this.PersistentID);
+                var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
+                itemCmd.ExecuteNonQuery();
+
                 var query = string.Format("DELETE FROM toons WHERE id={0}", this.PersistentID);
                 var cmd = new SQLiteCommand(query, DBManager.Connection);
                 cmd.ExecuteNonQuery();
+				
+				//delete entry fron active_skills table
+				var asSkillquery = string.Format("DELETE FROM active_skills WHERE id_toon={0}", this.PersistentID);
+                var asCmd = new SQLiteCommand(asSkillquery, DBManager.Connection);
+                asCmd.ExecuteNonQuery();
+				
+				Logger.Debug("Deleting toon {0}",this.PersistentID);
                 return true;
             }
             catch (Exception e)
@@ -507,13 +533,16 @@ namespace Mooege.Core.MooNet.Toons
 
         private bool VisualItemExistsInDb(int slot)
         {
-            var query = string.Format("SELECT toon_id FROM inventory WHERE toon_id = {0} AND inventory_slot = {1}", this.PersistentID, slot);
+            var query = string.Format("SELECT toon_id FROM inventory WHERE toon_id = {0} AND equipment_slot = {1}", this.PersistentID, slot);
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
         }
     }
+    #endregion
 
+    #region Definitions and Enums
+    //Order is important as actor voices and saved data is based on enum index
     public enum ToonClass
     {
         Barbarian, // 0x4FB91EE2
@@ -535,5 +564,5 @@ namespace Mooege.Core.MooNet.Toons
         Unknown4 = 0x2000000,
         AllUnknowns = Unknown1 | Unknown2 | Unknown3 | Unknown4
     }
-
+    #endregion
 }
