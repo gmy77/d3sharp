@@ -111,9 +111,8 @@ namespace Mooege.Core.MooNet.Toons
 
             while (reader.Read())
             {
-                var databaseId = (ulong)reader.GetInt64(0);
+                var databaseId = Convert.ToUInt64(reader["id"]);
                 var toon = new Toon(databaseId);
-
                 Toons.Add(databaseId, toon);
             }
         }
@@ -129,7 +128,7 @@ namespace Mooege.Core.MooNet.Toons
             var codes = new HashSet<int>();
             while (reader.Read())
             {
-                var hashCode = reader.GetInt32(0);
+                var hashCode = Convert.ToInt32(reader["hashCode"]);
                 codes.Add(hashCode);
             }
             return GenerateHashCodeNotInList(codes);

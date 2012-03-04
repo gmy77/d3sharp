@@ -636,7 +636,7 @@ namespace Mooege.Core.GS.Players
             Item item = null;
             int itemId = -1;
 
-            var sqlQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot = {1}", toon.PersistentID, (int)slotId);
+            var sqlQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot = {1} AND inventory_type = 'equipped' AND item_id <> -1", toon.PersistentID, (int)slotId);
             var sqlCmd = new SQLiteCommand(sqlQuery, DBManager.Connection);
             var sqlReader = sqlCmd.ExecuteReader();
 
@@ -644,18 +644,15 @@ namespace Mooege.Core.GS.Players
             {
                 sqlReader.Read();
 
-                itemId = (int)(Int64)sqlReader["item_id"];
-                if (itemId != -1)
-                {
-                    item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(itemId));
-                    _equipment.EquipItem(item, (int)slotId);
-                }
+                itemId = Convert.ToInt32(sqlReader["item_id"]);
+                item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(itemId));
+                _equipment.EquipItem(item, (int)slotId);
             }
         }
 
         private void SaveEquipmentToDB(Toon toon, Item item, EquipmentSlotId slotId)
         {
-            var sqlQuery  = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot = {1}", toon.PersistentID, (int)slotId);
+            var sqlQuery  = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot = {1} AND inventory_type = 'equipped'", toon.PersistentID, (int)slotId);
             var sqlCmd    = new SQLiteCommand(sqlQuery, DBManager.Connection);
             var sqlReader = sqlCmd.ExecuteReader();
 
@@ -664,7 +661,7 @@ namespace Mooege.Core.GS.Players
                 if (item != null)
                 {
                     // There is a item in the database for the given toon-slot. So, UPDATE!
-                    var itemQuery = string.Format("UPDATE inventory SET item_id = {0} WHERE toon_id = {1} AND equipment_slot = {2}", item.GBHandle.GBID, toon.PersistentID, (int)slotId);
+                    var itemQuery = string.Format("UPDATE inventory SET item_id = {0} WHERE toon_id = {1} AND equipment_slot = {2} AND inventory_type = 'equipped'", item.GBHandle.GBID, toon.PersistentID, (int)slotId);
                     var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
                     var itemReader = itemCmd.ExecuteNonQuery();
                 }
@@ -674,7 +671,7 @@ namespace Mooege.Core.GS.Players
                 if (item != null)
                 {
                     // There is NO item in the database for the given toon-slot. So, INSERT
-                    var itemQuery = string.Format("INSERT INTO inventory (toon_id, equipment_slot, item_id) VALUES ({0}, {1}, {2})", toon.PersistentID, (int)slotId, item.GBHandle.GBID);
+                    var itemQuery = string.Format("INSERT INTO inventory (toon_id, inventory_type, equipment_slot, item_id) VALUES ({0}, 'equipped', {1}, {2})", toon.PersistentID, (int)slotId, item.GBHandle.GBID);
                     var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
                     var itemReader = itemCmd.ExecuteNonQuery();
                 }

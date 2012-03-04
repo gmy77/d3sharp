@@ -348,15 +348,15 @@ namespace Mooege.Core.MooNet.Toons
             // Use name of column to prevent errors if column moved
             while (sqlReader.Read())
             {
-                this.Name = (string)sqlReader["name"];
-                this.HashCode = (int)(Int64)sqlReader["hashCode"];
-                this.Class = (ToonClass)(Int64)sqlReader["class"];
-                this.Flags = (ToonFlags)(Int64)sqlReader["gender"];
-                this.Level = (byte)(Int64)sqlReader["level"];
-                this.ExperienceNext = (int)(Int64)sqlReader["experience"];
-                this.GameAccount = GameAccountManager.GetAccountByPersistentID((ulong)(Int64)sqlReader["accountId"]);
-                this.TimePlayed = (uint)(Int64)sqlReader["timePlayed"];
-                this.GoldAmount = (int)(Int64)sqlReader["goldAmount"];
+                this.Name = Convert.ToString(sqlReader["name"]);
+                this.HashCode = Convert.ToInt32(sqlReader["hashCode"]);
+                this.Class = (ToonClass)Convert.ToInt32(sqlReader["class"]);
+                this.Flags = (ToonFlags)Convert.ToInt32(sqlReader["gender"]);
+                this.Level = Convert.ToByte(sqlReader["level"]);
+                this.ExperienceNext = Convert.ToInt32(sqlReader["experience"]);
+                this.GameAccount = GameAccountManager.GetAccountByPersistentID(Convert.ToUInt64(sqlReader["accountId"]));
+                this.TimePlayed = Convert.ToUInt32(sqlReader["timePlayed"]);
+                this.GoldAmount = Convert.ToInt32(sqlReader["goldAmount"]);
             }
 
             var visualItems = new[]
@@ -370,6 +370,7 @@ namespace Mooege.Core.MooNet.Toons
                 D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Shoulders
                 D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Legs
             };
+            
             // Load Visual Equipment
             Dictionary<int, int> visualToSlotMapping = new Dictionary<int, int>();
             visualToSlotMapping.Add(1, 0);
@@ -380,20 +381,21 @@ namespace Mooege.Core.MooNet.Toons
             visualToSlotMapping.Add(3, 5);
             visualToSlotMapping.Add(8, 6);
             visualToSlotMapping.Add(9, 7);
+            
             //add visual equipment form DB, only the visualizable equipment, not everything
-            var itemQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot <> -1", persistentId);
+            var itemQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot <> -1 AND inventory_type = 'equipped'", persistentId);
             var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
             var itemReader = itemCmd.ExecuteReader();
             if (itemReader.HasRows)
             {
                 while (itemReader.Read())
                 {
-                    var slot = (int)(Int64)itemReader["equipment_slot"];
+                    var slot = Convert.ToInt32(itemReader["equipment_slot"]);
                     if (!visualToSlotMapping.ContainsKey(slot))
                         continue;
                     // decode vislual slot from equipment slot
                     slot = visualToSlotMapping[slot];
-                    var gbid = (int)(Int64)itemReader["item_id"];
+                    var gbid = Convert.ToInt32(itemReader["item_id"]);
                     visualItems[slot] = D3.Hero.VisualItem.CreateBuilder()
                         .SetGbid(gbid)
                         .SetEffectLevel(0)
@@ -509,14 +511,15 @@ namespace Mooege.Core.MooNet.Toons
                 var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
                 itemCmd.ExecuteNonQuery();
 
+                //delete entry from active_skills table
+                var asSkillquery = string.Format("DELETE FROM active_skills WHERE id_toon={0}", this.PersistentID);
+                var asCmd = new SQLiteCommand(asSkillquery, DBManager.Connection);
+                asCmd.ExecuteNonQuery();
+
+                //delete the actual toon from toons table
                 var query = string.Format("DELETE FROM toons WHERE id={0}", this.PersistentID);
                 var cmd = new SQLiteCommand(query, DBManager.Connection);
                 cmd.ExecuteNonQuery();
-				
-				//delete entry fron active_skills table
-				var asSkillquery = string.Format("DELETE FROM active_skills WHERE id_toon={0}", this.PersistentID);
-                var asCmd = new SQLiteCommand(asSkillquery, DBManager.Connection);
-                asCmd.ExecuteNonQuery();
 				
 				Logger.Debug("Deleting toon {0}",this.PersistentID);
                 return true;
@@ -539,7 +542,7 @@ namespace Mooege.Core.MooNet.Toons
 
         private bool VisualItemExistsInDb(int slot)
         {
-            var query = string.Format("SELECT toon_id FROM inventory WHERE toon_id = {0} AND equipment_slot = {1}", this.PersistentID, slot);
+            var query = string.Format("SELECT toon_id FROM inventory WHERE toon_id = {0} AND equipment_slot = {1} AND inventory_type = 'equipped'", this.PersistentID, slot);
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
             return reader.HasRows;

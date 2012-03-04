@@ -381,10 +381,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         private bool ExistsInDB()
         {
-            var query =
-                string.Format(
-                    "SELECT id from accounts where id={0}",
-                    this.PersistentID);
+            var query = string.Format("SELECT id FROM accounts where id={0}", this.PersistentID);
 
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
