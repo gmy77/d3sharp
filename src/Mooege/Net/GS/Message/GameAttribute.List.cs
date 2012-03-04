@@ -35,6 +35,18 @@ namespace Mooege.Net.GS.Message
                 .Select(a => a.GetValue(null) as GameAttribute)
                 .OrderBy(a => a.Id)
                 .ToArray();
+
+            ScriptedAttributeInitializer.ProcessAttributes(Attributes);
+
+            // Have to manually add in some necessary keyed attribute dependents, as I don't know
+            // of any proper list for all potential keys a given attribute will be used with.
+
+            // add dependency so that all 7 resistances update when intelligence does
+            for (int n = 0; n < 7; ++n)
+            {
+                Resistance_From_Intelligence.Dependents.Add(
+                    new GameAttributeDependency(Resistance_Total, n, true, true));
+            }
         }
 
         // Caution: Be advised, converting these attribs from Int to Float may crash d3 client or make it throw an error! Do it with caution if needed any! /raist.

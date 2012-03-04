@@ -30,13 +30,16 @@ namespace Mooege.Core.GS.Actors.Implementations
             : base(world, snoId, tags)
         {
             this.Brain = new MonsterBrain(this);
-            this.Attributes[GameAttribute.Hitpoints_Max_Total] = 5f;
+            //scripted //this.Attributes[GameAttribute.Hitpoints_Max_Total] = 5f;
             this.Attributes[GameAttribute.Hitpoints_Max] = 5f;
-            this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 0f;
+            //scripted //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 0f;
             this.Attributes[GameAttribute.Hitpoints_Cur] = 5f;
-            this.Attributes[GameAttribute.Attacks_Per_Second_Total] = 1.0f;
-            this.Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] = 5f;
-            this.Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] = 7f;
+            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Total] = 1.0f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] = 5f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] = 7f;
+            this.Attributes[GameAttribute.Attacks_Per_Second] = 1.0f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 5f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 7f;
         }
     }
 }
