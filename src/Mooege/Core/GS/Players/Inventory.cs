@@ -55,7 +55,7 @@ namespace Mooege.Core.GS.Players
             this._owner = owner;
             this._equipment = new Equipment(owner);
             this._inventoryGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Backpack_Slots] / 10, 10);
-            this._stashGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Shared_Stash_Slots] / 7, 7, (int) EquipmentSlotId.Stash);
+            this._stashGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Shared_Stash_Slots] / 7, 7, (int)EquipmentSlotId.Stash);
             this._skillSocketRunes = new uint[6];
         }
 
@@ -647,7 +647,7 @@ namespace Mooege.Core.GS.Players
                 itemId = (int)(Int64)sqlReader["item_id"];
                 if (itemId != -1)
                 {
-                    item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetDefinitionFromGBID(itemId));
+                    item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(itemId));
                     _equipment.EquipItem(item, (int)slotId);
                 }
             }

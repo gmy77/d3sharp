@@ -309,7 +309,7 @@ namespace Mooege.Core.GS.Players
             //Basic stats
             this.Attributes[GameAttribute.Level_Cap] = 60;
             this.Attributes[GameAttribute.Level] = this.Toon.Level;
-            this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Toon.Level];
+            this.Attributes[GameAttribute.Experience_Next] = this.Toon.ExperienceNext;
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             this.Attributes[GameAttribute.Armor_Total] = 0;
 
@@ -1444,9 +1444,9 @@ namespace Mooege.Core.GS.Players
 
         public static int[] LevelBorders =
         {
-            0, 1200, 2250, 4000, 6050, 8500, 11700, 15400, 19500, 24000, /* Level 1-10 */
-            28900, 34200, 39900, 44100, 45000, 46200, 48300, 50400, 52500, 54600, /* Level 11-20 */
-            56700, 58800, 60900, 63000, 65100, 67200, 69300, 71400, 73500, 75600, /* Level 21-30 */
+            0, 1200, 2700, 4500, 6600, 9000, 11700, 14700, 17625, 20800, 24225, /* Level 0-10 */
+            27900, 31825, 36000, 41475, 38500, 40250, 42000, 43750, 45500, 47250, /* Level 11-20 */
+            49000, 58800, 63750, 73625, 84000, 94875, 106250, 118125, 130500, 134125, /* Level 21-30 */
             77700, 81700, 85800, 90000, 94300, 98700, 103200, 107800, 112500, 117300, /* Level 31-40 */
             122200, 127200, 132300, 137500, 142800, 148200, 153700, 159300, 165000, 170800, /* Level 41-50 */
             176700, 182700, 188800, 195000, 201300, 207700, 214200, 220800, 227500, 234300, /* Level 51-60 */
@@ -1472,7 +1472,6 @@ namespace Mooege.Core.GS.Players
 
         public void UpdateExp(int addedExp)
         {
-
             this.Attributes[GameAttribute.Experience_Next] -= addedExp;
 
             // Levelup
@@ -1542,7 +1541,6 @@ namespace Mooege.Core.GS.Players
             if (this.Attributes[GameAttribute.Experience_Next] < 0) 
             { 
                 this.Attributes[GameAttribute.Experience_Next] = 0;
-
             }
             this.Attributes.BroadcastChangedIfRevealed();
             this.Toon.GameAccount.NotifyUpdate();
@@ -1579,8 +1577,6 @@ namespace Mooege.Core.GS.Players
 
                     player.Inventory.PickUpGold(item.DynamicID);
                 }
-
-
                 item.Destroy();
             }
         }
@@ -1608,7 +1604,6 @@ namespace Mooege.Core.GS.Players
                     player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
                 }
                 item.Destroy();
-
             }
         }
 
