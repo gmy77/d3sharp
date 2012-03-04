@@ -62,8 +62,8 @@ namespace Mooege.Core.GS.Skills
                 var insQuery = string.Format("INSERT INTO active_skills (id_toon,"+
                     "skill_0,skill_1,skill_2,skill_3,skill_4,skill_5,"+
                     "rune_0,rune_1,rune_2,rune_3,rune_4,rune_5,"+
-                    "passive_0,passive_1,passive_2) VALUES ({0},-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1 )",
-                                 toon.PersistentID);
+                    "passive_0,passive_1,passive_2) VALUES ({0},{1},-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1 )",
+                                 toon.PersistentID, ActiveSkillsList[0]);
                 var insCmd = new SQLiteCommand(insQuery, DBManager.Connection);
                 insCmd.ExecuteNonQuery();
             }

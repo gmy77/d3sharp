@@ -16,11 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
+using Mooege.Common.Extensions;
 using Mooege.Common.Logging;
 using Mooege.Core.GS.Players;
-using Mooege.Common.Extensions;
-using System;
+using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Games
 {
@@ -66,6 +67,7 @@ namespace Mooege.Core.GS.Games
                 var toon = p.Toon;
                 toon.TimePlayed += DateTimeExtensions.ToUnixTime(DateTime.UtcNow) - toon.LoginTime;
                 toon.GoldAmount = p.Inventory.GetGoldAmount();
+                toon.ExperienceNext = p.Attributes[GameAttribute.Experience_Next];
 
                 // Remove Player From World
                 if (p.InGameClient != null)

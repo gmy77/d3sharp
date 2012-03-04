@@ -54,11 +54,6 @@ namespace Mooege.Core.GS.Items
             SetAllowedTypes();
         }
 
-        public static ItemTable GetDefinitionFromGBID(int Gbid)
-        {
-            return (from pair in Items where pair.Value.Hash == Gbid select pair.Value).FirstOrDefault();
-        }
- 	 
         private static void LoadHandlers()
         {
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())

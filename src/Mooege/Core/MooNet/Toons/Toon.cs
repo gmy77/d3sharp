@@ -162,6 +162,11 @@ namespace Mooege.Core.MooNet.Toons
         }
 
         /// <summary>
+        /// Experience to next level
+        /// </summary>
+        public int ExperienceNext { get; set; }
+
+        /// <summary>
         /// Total time played for toon.
         /// </summary>
         public uint TimePlayed { get; set; }
@@ -311,6 +316,7 @@ namespace Mooege.Core.MooNet.Toons
             this.Class = @GetClassByID(classId);
             this.Flags = flags;
             this.Level = level;
+            this.ExperienceNext = Player.LevelBorders[level];
             this.GameAccount = account;
             this.TimePlayed = 0;
             this.GoldAmount = 0;
@@ -347,6 +353,7 @@ namespace Mooege.Core.MooNet.Toons
                 this.Class = (ToonClass)Convert.ToInt32(sqlReader["class"]);
                 this.Flags = (ToonFlags)Convert.ToInt32(sqlReader["gender"]);
                 this.Level = Convert.ToByte(sqlReader["level"]);
+                this.ExperienceNext = Convert.ToInt32(sqlReader["experience"]);
                 this.GameAccount = GameAccountManager.GetAccountByPersistentID(Convert.ToUInt64(sqlReader["accountId"]));
                 this.TimePlayed = Convert.ToUInt32(sqlReader["timePlayed"]);
                 this.GoldAmount = Convert.ToInt32(sqlReader["goldAmount"]);
@@ -376,7 +383,7 @@ namespace Mooege.Core.MooNet.Toons
             visualToSlotMapping.Add(9, 7);
             
             //add visual equipment form DB, only the visualizable equipment, not everything
-            var itemQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot <> -1 AND inventory_type = 'visual'", persistentId);
+            var itemQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot <> -1 AND inventory_type = 'equipped'", persistentId);
             var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
             var itemReader = itemCmd.ExecuteReader();
             if (itemReader.HasRows)
@@ -469,7 +476,7 @@ namespace Mooege.Core.MooNet.Toons
                     var query =
                         string.Format(
                             "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, experience={5}, accountId={6}, timePlayed={7}, goldAmount={8} WHERE id={9}",
-                            this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, 0, this.GameAccount.PersistentID, this.TimePlayed, this.GoldAmount, this.PersistentID);
+                            this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.ExperienceNext, this.GameAccount.PersistentID, this.TimePlayed, this.GoldAmount, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -479,30 +486,11 @@ namespace Mooege.Core.MooNet.Toons
                     var query =
                         string.Format(
                             "INSERT INTO toons (id, name, hashCode, class, gender, level, experience, timePlayed, goldAmount, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7},{8},{9})",
-                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, 0, this.TimePlayed, this.GoldAmount, this.GameAccount.PersistentID);
+                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.ExperienceNext, this.TimePlayed, this.GoldAmount, this.GameAccount.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
                     Logger.Debug("Create Toon for the first time in DB {0}", this.PersistentID);
-                }
-
-                //save main gear
-                for (int slot = 0; slot < 8; slot++ )
-                {
-                    var visualItem = this.HeroVisualEquipmentField.Value.GetVisualItem(slot);
-                    //item_identity_id = gbid
-                    if (VisualItemExistsInDb(slot))
-                    {
-                        var itemQuery = string.Format("UPDATE inventory SET item_entity_id={0} WHERE toon_id={1} AND inventory_slot={2} AND inventory_type = 'visual'", visualItem.Gbid, this.PersistentID, slot);
-                        var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
-                        itemCmd.ExecuteNonQuery();
-                    }
-                    else
-                    {
-                        var itemQuery = string.Format("INSERT INTO inventory (toon_id, inventory_type, inventory_slot, item_entity_id) VALUES({0}, 'visual', {1}, {2})", this.PersistentID, slot, visualItem.Gbid);
-                        var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
-                        itemCmd.ExecuteNonQuery();
-                    }
                 }
             }
             catch (Exception e)
@@ -554,7 +542,7 @@ namespace Mooege.Core.MooNet.Toons
 
         private bool VisualItemExistsInDb(int slot)
         {
-            var query = string.Format("SELECT toon_id FROM inventory WHERE toon_id = {0} AND equipment_slot = {1} AND inventory_type = 'visual'", this.PersistentID, slot);
+            var query = string.Format("SELECT toon_id FROM inventory WHERE toon_id = {0} AND equipment_slot = {1} AND inventory_type = 'equipped'", this.PersistentID, slot);
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
