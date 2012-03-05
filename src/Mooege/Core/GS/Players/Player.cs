@@ -1472,8 +1472,7 @@ namespace Mooege.Core.GS.Players
                 this.InGameClient.SendMessage(new PlayerLevel()
                 {
                     PlayerIndex = this.PlayerIndex,
-                    Level = this.Toon.Level,
-                    Id = (int)Opcodes.PlayerLevel
+                    Level = this.Toon.Level
                 });
 
                 this.Conversations.StartConversation(0x0002A777); //LevelUp Conversation

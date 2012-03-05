@@ -21,8 +21,10 @@ using System.Text;
 namespace Mooege.Net.GS.Message.Definitions.Player
 {
     [Message(Opcodes.PlayerLevel)]
-    public class PlayerLevel : GameMessage
+    public class PlayerLevel : GameMessage 
     {
+        public PlayerLevel() : base(Opcodes.PlayerLevel) { }
+        
         public int PlayerIndex;
         public int Level;
 
