@@ -47,6 +47,7 @@ namespace Mooege.Core.GS.Players
         private Equipment _equipment;
         private InventoryGrid _inventoryGrid;
         private InventoryGrid _stashGrid;
+        private Item _inventoryGold;
         // backpack for spellRunes, their Items are kept in equipment
         private uint[] _skillSocketRunes;
 
@@ -68,7 +69,6 @@ namespace Mooege.Core.GS.Players
                 Field2 = 1 // what does this do?  // 0 - source item not disappearing from inventory, 1 - Moving, any other possibilities? its an int32
             }); */
         }
-
 
         /// <summary>
         /// Refreshes the visual appearance of the hero
@@ -440,7 +440,7 @@ namespace Mooege.Core.GS.Players
         public void PickUpGold(uint itemID)
         {
             Item collectedItem = _owner.World.GetItem(itemID);
-            Item sumGoldItem = _equipment.AddGoldItem(collectedItem);
+            AddGoldAmount(collectedItem.Attributes[GameAttribute.Gold]);
         }
 
         private void OnInventoryRequestUseMessage(InventoryRequestUseMessage inventoryRequestUseMessage)
@@ -589,93 +589,135 @@ namespace Mooege.Core.GS.Players
 
         public void AddGoldAmount(int amount)
         {
-            _equipment.AddGoldAmount(amount);
+            _inventoryGold.Attributes[GameAttribute.Gold] += amount;
+            _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = _inventoryGold.Attributes[GameAttribute.Gold];
+            _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient);
         }
 
         public int GetGoldAmount()
         {
-            return _equipment.Gold();
+            return _inventoryGold.Attributes[GameAttribute.Gold];
         }
 
         public void LoadFromDB()
         {
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Belt);
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Bracers);
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Chest);
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Feet);
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Hands);
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Helm);
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Legs);
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Main_Hand);
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Neck);
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Off_Hand);
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Ring_left);
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Ring_right);
-            LoadEquipmentFromDB(this._owner.Toon, EquipmentSlotId.Shoulders);
+            // Maybe it can be optimized to load everything and make a switch on inventory_type, but let's try like this for now...
+            Item item = null;
+            ItemTable definition = null;
+
+            // Load equipment
+            var equipmentQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND inventory_type = 'equipped' AND item_id <> -1", _owner.Toon.PersistentID);
+            var equipmentCmd = new SQLiteCommand(equipmentQuery, DBManager.Connection);
+            var equipmentReader = equipmentCmd.ExecuteReader();
+            if (equipmentReader.HasRows)
+            {
+                while (equipmentReader.Read())
+                {
+                    var slot = Convert.ToInt32(equipmentReader["equipment_slot"]);
+                    var gbid = Convert.ToInt32(equipmentReader["item_id"]);
+                    item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(gbid));
+                    _equipment.EquipItem(item, (int)slot);
+                }
+            }
+
+            // load inventory
+            var inventoryQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND inventory_type = 'inventory' AND item_id <> -1", _owner.Toon.PersistentID);
+            var inventoryCmd = new SQLiteCommand(inventoryQuery, DBManager.Connection);
+            var inventoryReader = inventoryCmd.ExecuteReader();
+            if (inventoryReader.HasRows)
+            {
+                while (inventoryReader.Read())
+                {
+                    var gbid = Convert.ToInt32(inventoryReader["item_id"]);
+                    definition = ItemGenerator.GetItemDefinition(gbid);
+                    if (definition != null)
+                    {
+                        item = ItemGenerator.CreateItem(_owner, definition);
+                        item.Attributes[GameAttribute.Item_Quality_Level] = 0;
+                        this._inventoryGrid.AddItem(item, Convert.ToInt32(inventoryReader["inventory_loc_y"]), Convert.ToInt32(inventoryReader["inventory_loc_x"]));
+                    }
+                }
+            }
+
+            // load stash
+            var stashQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND inventory_type = 'stash' AND item_id <> -1", _owner.Toon.PersistentID);
+            var stashCmd = new SQLiteCommand(stashQuery, DBManager.Connection);
+            var stashReader = stashCmd.ExecuteReader();
+            if (stashReader.HasRows)
+            {
+                while (stashReader.Read())
+                {
+                    var gbid = Convert.ToInt32(stashReader["item_id"]);
+                    definition = ItemGenerator.GetItemDefinition(gbid);
+                    if (definition != null)
+                    {
+                        item = ItemGenerator.CreateItem(_owner, definition);
+                        item.Attributes[GameAttribute.Item_Quality_Level] = 0;
+                        this._stashGrid.AddItem(item, Convert.ToInt32(stashReader["inventory_loc_y"]), Convert.ToInt32(stashReader["inventory_loc_x"]));
+                    }
+                }
+            }
+
+            // load gold
+            var goldQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND inventory_type = 'inventory' AND equipment_slot = {1}", _owner.Toon.PersistentID, (int)EquipmentSlotId.Gold);
+            var goldCmd = new SQLiteCommand(goldQuery, DBManager.Connection);
+            var goldReader = goldCmd.ExecuteReader();
+            int amount = 0;
+            if (goldReader.HasRows)
+            {
+                goldReader.Read();
+                amount = Convert.ToInt32(goldReader["item_id"]);// is the amount
+            }
+            this._inventoryGold = ItemGenerator.CreateGold(this._owner, amount);
+            this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = amount; // This is the attribute that makes the gold visible in game
+            this._inventoryGold.Owner = _owner;
+            //?? is it really needed?
+            //this._equipment.Items.Add(_inventoryGold.DynamicID, _inventoryGold);
+            this._inventoryGold.SetInventoryLocation((int)EquipmentSlotId.Gold, 0, 0);
         }
 
         public void SaveToDB()
-        {            
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Belt), EquipmentSlotId.Belt);
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Bracers), EquipmentSlotId.Bracers);
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Chest), EquipmentSlotId.Chest);
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Feet), EquipmentSlotId.Feet);
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Hands), EquipmentSlotId.Hands);
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Helm), EquipmentSlotId.Helm);
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Legs), EquipmentSlotId.Legs);
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Main_Hand), EquipmentSlotId.Main_Hand);
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Neck), EquipmentSlotId.Neck);
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Off_Hand), EquipmentSlotId.Off_Hand);
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Ring_left), EquipmentSlotId.Ring_left);
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Ring_right), EquipmentSlotId.Ring_right);
-            SaveEquipmentToDB(this._owner.Toon, _equipment.GetEquipment(EquipmentSlotId.Shoulders), EquipmentSlotId.Shoulders);
+        {
+            // Changed with a DELETE all and only inserting instead of SELECT and INSERT/UPDATE
+            // if for equipment SELECT INSERT/UPDATE can be ok, for items in inventory we do not have a primary key with whome to select and update
+            var itemQuery = string.Format("DELETE FROM inventory WHERE toon_id={0}", this._owner.Toon.PersistentID);
+            var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
+            itemCmd.ExecuteNonQuery();
+
+            // save equipment
+            for (int i=1; i <= 13; i++) // from Helm = 1 to Neck = 13 in EquipmentSlotId
+            {
+                SaveItemToDB(this._owner.Toon.PersistentID, "equipped", (EquipmentSlotId)i, _equipment.GetEquipment((EquipmentSlotId)i));
+            }
+            // save inventory
+            foreach (Item itm in _inventoryGrid.Items.Values)
+            {
+                SaveItemToDB(this._owner.Toon.PersistentID, "inventory", 0, itm);
+            }
+            // save stash
+            foreach (Item itm in _stashGrid.Items.Values)
+            {
+                SaveItemToDB(this._owner.Toon.PersistentID, "stash", EquipmentSlotId.Stash, itm);
+            }
+            // save gold
+            SaveGoldToDB(this._owner.Toon.PersistentID, "inventory", EquipmentSlotId.Gold, GetGoldAmount());
         }
 
-        private void LoadEquipmentFromDB(Toon toon, EquipmentSlotId slotId)
+        private void SaveItemToDB(ulong toon_id, string inventory_type, EquipmentSlotId slotId, Item item)
         {
-            Item item = null;
-            int itemId = -1;
-
-            var sqlQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot = {1} AND inventory_type = 'equipped' AND item_id <> -1", toon.PersistentID, (int)slotId);
-            var sqlCmd = new SQLiteCommand(sqlQuery, DBManager.Connection);
-            var sqlReader = sqlCmd.ExecuteReader();
-
-            if (sqlReader.HasRows)
-            {
-                sqlReader.Read();
-
-                itemId = Convert.ToInt32(sqlReader["item_id"]);
-                item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(itemId));
-                _equipment.EquipItem(item, (int)slotId);
-            }
+            if (item == null)
+                return;
+            var itemQuery = string.Format("INSERT INTO inventory (toon_id, inventory_type, inventory_loc_x, inventory_loc_y, equipment_slot, item_id) VALUES ({0}, '{1}', {2}, {3}, {4}, {5})",
+                toon_id, inventory_type, item.InventoryLocation.X, item.InventoryLocation.Y, (int)slotId, item.GBHandle.GBID);
+            var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
+            var itemReader = itemCmd.ExecuteNonQuery();
         }
 
-        private void SaveEquipmentToDB(Toon toon, Item item, EquipmentSlotId slotId)
+        private void SaveGoldToDB(ulong toon_id, string inventory_type, EquipmentSlotId slotId, int amount)
         {
-            var sqlQuery  = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot = {1} AND inventory_type = 'equipped'", toon.PersistentID, (int)slotId);
-            var sqlCmd    = new SQLiteCommand(sqlQuery, DBManager.Connection);
-            var sqlReader = sqlCmd.ExecuteReader();
-
-            if (sqlReader.HasRows)
-            {
-                if (item != null)
-                {
-                    // There is a item in the database for the given toon-slot. So, UPDATE!
-                    var itemQuery = string.Format("UPDATE inventory SET item_id = {0} WHERE toon_id = {1} AND equipment_slot = {2} AND inventory_type = 'equipped'", item.GBHandle.GBID, toon.PersistentID, (int)slotId);
-                    var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
-                    var itemReader = itemCmd.ExecuteNonQuery();
-                }
-            }
-            else
-            {
-                if (item != null)
-                {
-                    // There is NO item in the database for the given toon-slot. So, INSERT
-                    var itemQuery = string.Format("INSERT INTO inventory (toon_id, inventory_type, equipment_slot, item_id) VALUES ({0}, 'equipped', {1}, {2})", toon.PersistentID, (int)slotId, item.GBHandle.GBID);
-                    var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
-                    var itemReader = itemCmd.ExecuteNonQuery();
-                }
-            }
+            var itemQuery = string.Format("INSERT INTO inventory (toon_id, inventory_type, equipment_slot, item_id) VALUES ({0}, '{1}', {2}, {3})", toon_id, inventory_type, (int)slotId, amount);
+            var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
+            var itemReader = itemCmd.ExecuteNonQuery();
         }
     }
 }
