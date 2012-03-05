@@ -237,6 +237,7 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Buff_Visual_Effect, 0xFFFFF] = true;
 
             //Damage
+            this.Attributes[GameAttribute.Primary_Damage_Attribute] = (int)data.CoreAttribute;
             //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 0] = 1f;
             //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 1] = 3.051758E-05f;
             //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 2] = 3.051758E-05f;
@@ -1107,7 +1108,7 @@ namespace Mooege.Core.GS.Players
             {
                 var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
                 if (data.CoreAttribute == Mooege.Common.MPQ.FileFormats.PrimaryAttribute.Strength)
-                    return data.Strength + ((this.Toon.Level - 1) * 2);
+                    return data.Strength + ((this.Toon.Level - 1) * 3);
                 else
                     return data.Strength + (this.Toon.Level - 1);
             }
@@ -1128,7 +1129,7 @@ namespace Mooege.Core.GS.Players
             {
                 var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
                 if (data.CoreAttribute == Mooege.Common.MPQ.FileFormats.PrimaryAttribute.Dexterity)
-                    return data.Dexterity + ((this.Toon.Level - 1) * 2);
+                    return data.Dexterity + ((this.Toon.Level - 1) * 3);
                 else
                     return data.Dexterity + (this.Toon.Level - 1);
             }
@@ -1167,7 +1168,7 @@ namespace Mooege.Core.GS.Players
             {
                 var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
                 if (data.CoreAttribute == Mooege.Common.MPQ.FileFormats.PrimaryAttribute.Intelligence)
-                    return data.Intelligence + ((this.Toon.Level - 1) * 2);
+                    return data.Intelligence + ((this.Toon.Level - 1) * 3);
                 else
                     return data.Intelligence + (this.Toon.Level - 1);
             }
@@ -1510,6 +1511,10 @@ namespace Mooege.Core.GS.Players
 
                 // On level up, health is set to max
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
+
+                // force GameAttributeMap to re-calc resources for the active resource types
+                this.Attributes[GameAttribute.Resource_Max, this.Attributes[GameAttribute.Resource_Type_Primary]] = this.Attributes[GameAttribute.Resource_Max, this.Attributes[GameAttribute.Resource_Type_Primary]];
+                this.Attributes[GameAttribute.Resource_Max, this.Attributes[GameAttribute.Resource_Type_Secondary]] = this.Attributes[GameAttribute.Resource_Max, this.Attributes[GameAttribute.Resource_Type_Secondary]];
 
                 // set resources to max as well
                 this.Attributes[GameAttribute.Resource_Cur, this.Attributes[GameAttribute.Resource_Type_Primary]] = this.Attributes[GameAttribute.Resource_Max_Total, this.Attributes[GameAttribute.Resource_Type_Primary]];
