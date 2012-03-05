@@ -27,7 +27,7 @@ namespace Mooege.Core.GS.Players
     // these ids are transmitted by the client when equipping an item
     public enum EquipmentSlotId
     {
-        Helm = 1, Chest = 2, Off_Hand = 3, Main_Hand = 4, Hands = 5, Belt = 6, Feet = 7,
+        Inventory = 0, Helm = 1, Chest = 2, Off_Hand = 3, Main_Hand = 4, Hands = 5, Belt = 6, Feet = 7,
         Shoulders = 8, Legs = 9, Bracers = 10, Ring_right = 11, Ring_left = 12, Neck = 13,
         Skills = 14, Stash = 15, Gold = 16, Vendor = 18 // To do: Should this be here? Its not really an eq. slot /fasbat
     }
@@ -42,7 +42,7 @@ namespace Mooege.Core.GS.Players
 
         public Equipment(Player owner)
         {
-            this._equipment = new uint[17];
+            this._equipment = new uint[18];
             this._owner = owner;
             this.Items = new Dictionary<uint, Item>();
         }

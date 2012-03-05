@@ -601,78 +601,49 @@ namespace Mooege.Core.GS.Players
 
         public void LoadFromDB()
         {
-            // Maybe it can be optimized to load everything and make a switch on inventory_type, but let's try like this for now...
+            //load everything and make a switch on slot_id
+            // maybe "inventory_type" is no more needed
             Item item = null;
-            ItemTable definition = null;
+            int goldAmount = 0;
 
-            // Load equipment
-            var equipmentQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND inventory_type = 'equipped' AND item_id <> -1", _owner.Toon.PersistentID);
-            var equipmentCmd = new SQLiteCommand(equipmentQuery, DBManager.Connection);
-            var equipmentReader = equipmentCmd.ExecuteReader();
-            if (equipmentReader.HasRows)
+            var itemsQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND item_id <> -1", _owner.Toon.PersistentID);
+            var itemsCmd = new SQLiteCommand(itemsQuery, DBManager.Connection);
+            var itemsReader = itemsCmd.ExecuteReader();
+            if (itemsReader.HasRows)
             {
-                while (equipmentReader.Read())
+                while (itemsReader.Read())
                 {
-                    var slot = Convert.ToInt32(equipmentReader["equipment_slot"]);
-                    var gbid = Convert.ToInt32(equipmentReader["item_id"]);
-                    item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(gbid));
-                    _equipment.EquipItem(item, (int)slot);
-                }
-            }
-
-            // load inventory
-            var inventoryQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND inventory_type = 'inventory' AND item_id <> -1", _owner.Toon.PersistentID);
-            var inventoryCmd = new SQLiteCommand(inventoryQuery, DBManager.Connection);
-            var inventoryReader = inventoryCmd.ExecuteReader();
-            if (inventoryReader.HasRows)
-            {
-                while (inventoryReader.Read())
-                {
-                    var gbid = Convert.ToInt32(inventoryReader["item_id"]);
-                    definition = ItemGenerator.GetItemDefinition(gbid);
-                    if (definition != null)
+                    var slot = Convert.ToInt32(itemsReader["equipment_slot"]);
+                    var gbid = Convert.ToInt32(itemsReader["item_id"]);
+                    if (slot == (int)EquipmentSlotId.Inventory)
                     {
-                        item = ItemGenerator.CreateItem(_owner, definition);
+                        // load inventory
+                        item = ItemGenerator.CreateItem(_owner, ItemGenerator.GetItemDefinition(gbid));
                         item.Attributes[GameAttribute.Item_Quality_Level] = 0;
-                        this._inventoryGrid.AddItem(item, Convert.ToInt32(inventoryReader["inventory_loc_y"]), Convert.ToInt32(inventoryReader["inventory_loc_x"]));
+                        this._inventoryGrid.AddItem(item, Convert.ToInt32(itemsReader["inventory_loc_y"]), Convert.ToInt32(itemsReader["inventory_loc_x"]));
+                    }
+                    else if (slot == (int)EquipmentSlotId.Gold)
+                    {
+                        goldAmount = Convert.ToInt32(itemsReader["item_id"]);// is the amount
+                    }
+                    else if (slot == (int)EquipmentSlotId.Stash)
+                    {
+                        // load stash
+                        item = ItemGenerator.CreateItem(_owner, ItemGenerator.GetItemDefinition(gbid));
+                        item.Attributes[GameAttribute.Item_Quality_Level] = 0;
+                        this._stashGrid.AddItem(item, Convert.ToInt32(itemsReader["inventory_loc_y"]), Convert.ToInt32(itemsReader["inventory_loc_x"]));
+                    }
+                    else
+                    {
+                        // load equipment
+                        item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(gbid));
+                        _equipment.EquipItem(item, (int)slot);
                     }
                 }
             }
-
-            // load stash
-            var stashQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND inventory_type = 'stash' AND item_id <> -1", _owner.Toon.PersistentID);
-            var stashCmd = new SQLiteCommand(stashQuery, DBManager.Connection);
-            var stashReader = stashCmd.ExecuteReader();
-            if (stashReader.HasRows)
-            {
-                while (stashReader.Read())
-                {
-                    var gbid = Convert.ToInt32(stashReader["item_id"]);
-                    definition = ItemGenerator.GetItemDefinition(gbid);
-                    if (definition != null)
-                    {
-                        item = ItemGenerator.CreateItem(_owner, definition);
-                        item.Attributes[GameAttribute.Item_Quality_Level] = 0;
-                        this._stashGrid.AddItem(item, Convert.ToInt32(stashReader["inventory_loc_y"]), Convert.ToInt32(stashReader["inventory_loc_x"]));
-                    }
-                }
-            }
-
-            // load gold
-            var goldQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND inventory_type = 'inventory' AND equipment_slot = {1}", _owner.Toon.PersistentID, (int)EquipmentSlotId.Gold);
-            var goldCmd = new SQLiteCommand(goldQuery, DBManager.Connection);
-            var goldReader = goldCmd.ExecuteReader();
-            int amount = 0;
-            if (goldReader.HasRows)
-            {
-                goldReader.Read();
-                amount = Convert.ToInt32(goldReader["item_id"]);// is the amount
-            }
-            this._inventoryGold = ItemGenerator.CreateGold(this._owner, amount);
-            this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = amount; // This is the attribute that makes the gold visible in game
+            this._inventoryGold = ItemGenerator.CreateGold(this._owner, goldAmount);
+            this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = goldAmount; // This is the attribute that makes the gold visible in game
             this._inventoryGold.Owner = _owner;
-            //?? is it really needed?
-            //this._equipment.Items.Add(_inventoryGold.DynamicID, _inventoryGold);
             this._inventoryGold.SetInventoryLocation((int)EquipmentSlotId.Gold, 0, 0);
         }
 
@@ -692,7 +663,7 @@ namespace Mooege.Core.GS.Players
             // save inventory
             foreach (Item itm in _inventoryGrid.Items.Values)
             {
-                SaveItemToDB(this._owner.Toon.PersistentID, "inventory", 0, itm);
+                SaveItemToDB(this._owner.Toon.PersistentID, "inventory", EquipmentSlotId.Inventory, itm);
             }
             // save stash
             foreach (Item itm in _stashGrid.Items.Values)
