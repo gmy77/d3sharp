@@ -815,10 +815,10 @@ namespace Mooege.Core.GS.Players
             this.RevealScenesToPlayer(); // reveal scenes in players proximity.
             this.RevealActorsToPlayer(); // reveal actors in players proximity.
 
-            // Load Equipped Items
+            // load all inventory items
             this.Inventory.LoadFromDB();
 
-            //generate visual update message
+            // generate visual update message
             this.Inventory.SendVisualInventory(this);
         }
 
@@ -832,13 +832,13 @@ namespace Mooege.Core.GS.Players
         {
             this.Conversations.StopAll();
 
-            //save visual equipment
+            // save visual equipment
             this.Toon.HeroVisualEquipmentField.Value = this.Inventory.GetVisualEquipment();
             this.Toon.HeroLevelField.Value = this.Attributes[GameAttribute.Level];
             this.Toon.GameAccount.ChangedFields.SetPresenceFieldValue(this.Toon.HeroVisualEquipmentField);
             this.Toon.GameAccount.ChangedFields.SetPresenceFieldValue(this.Toon.HeroLevelField);
 
-            //save equipped items
+            // save all inventory items
             this.Inventory.SaveToDB();
         }
 

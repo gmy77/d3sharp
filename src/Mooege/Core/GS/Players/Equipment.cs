@@ -24,11 +24,10 @@ using Mooege.Core.GS.Objects;
 
 namespace Mooege.Core.GS.Players
 {
-
-    // these ids are transmitted by the client when equipping an item         
+    // these ids are transmitted by the client when equipping an item
     public enum EquipmentSlotId
     {
-        Helm = 1, Chest = 2, Off_Hand = 3, Main_Hand = 4, Hands = 5, Belt = 6, Feet = 7,
+        Inventory = 0, Helm = 1, Chest = 2, Off_Hand = 3, Main_Hand = 4, Hands = 5, Belt = 6, Feet = 7,
         Shoulders = 8, Legs = 9, Bracers = 10, Ring_right = 11, Ring_left = 12, Neck = 13,
         Skills = 14, Stash = 15, Gold = 16, Vendor = 18 // To do: Should this be here? Its not really an eq. slot /fasbat
     }
@@ -38,20 +37,14 @@ namespace Mooege.Core.GS.Players
         public int EquipmentSlots { get { return _equipment.GetLength(0); } }
         public Dictionary<uint, Item> Items { get; private set; }
         private readonly Player _owner; // Used, because most information is not in the item class but Actors managed by the world
-        private Item _inventoryGold;
 
-        private uint[] _equipment;      // array of equiped items_id  (not item)
+        private uint[] _equipment;      // array of equiped items_id (not item)
 
         public Equipment(Player owner)
         {
-            this._equipment = new uint[17];
+            this._equipment = new uint[18];
             this._owner = owner;
             this.Items = new Dictionary<uint, Item>();
-            this._inventoryGold = ItemGenerator.CreateGold(_owner, _owner.Toon.GoldAmount);
-            this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = _owner.Toon.GoldAmount;
-            this._inventoryGold.SetInventoryLocation(16, 0, 0);
-            this._inventoryGold.Owner = _owner;
-            this.Items.Add(_inventoryGold.DynamicID, _inventoryGold);
         }
        
         /// <summary>
@@ -177,18 +170,6 @@ namespace Mooege.Core.GS.Players
             return D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
         }
 
-        public Item AddGoldItem(Item collectedItem)
-        {
-            return AddGoldAmount(collectedItem.Attributes[GameAttribute.Gold]);
-        }
-
-        internal Item AddGoldAmount(int amount)
-        {
-            _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += amount;
-            _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient);
-            return _inventoryGold;
-        }
-
         internal Item GetEquipment(int targetEquipSlot)
         {
             return GetItem(this._equipment[targetEquipSlot]);
@@ -205,8 +186,6 @@ namespace Mooege.Core.GS.Players
             {
                 item.Reveal(player);
             }
-
-            _inventoryGold.SetInventoryLocation((int)EquipmentSlotId.Gold, 0, 0);
             return true;
         }
 
@@ -216,7 +195,6 @@ namespace Mooege.Core.GS.Players
             {
                 item.Unreveal(player);
             }
-
             return true;
         }
 
@@ -226,11 +204,6 @@ namespace Mooege.Core.GS.Players
             if (!Items.TryGetValue(itemId, out item))
                 return null;
             return item;
-        }
-
-        public int Gold()
-        {
-            return _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo];
         }
     }
 }
