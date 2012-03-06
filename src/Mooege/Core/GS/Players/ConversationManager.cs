@@ -128,6 +128,7 @@ namespace Mooege.Core.GS.Players
                 logger.Warn("Actor not found, using player actor instead");
                 return player;
             }
+
             return actors.First() as Mooege.Core.GS.Actors.Actor;
         }
 
@@ -284,12 +285,14 @@ namespace Mooege.Core.GS.Players
             endTick = startTick + duration;
 
             // TODO Actor id should be CurrentSpeaker.DynamicID not PrimaryNPC.ActorID. This is a workaround because no audio for the player is playing otherwise
+            // TODO GetActorBySNO sometimes returns incorrect SNO's therefor ActorID and Field1 values get messed up causing the conversation sound to be barely hearable.
+            // Using player.SelectedNPC fixes this for now. Example to reproduce the above issue: Debug the conversation from the guy next to the wagon were a guy is droping bodies into a fire. -Wesko
             player.InGameClient.SendMessage(new PlayConvLineMessage()
             {
-                ActorID = GetSpeaker(currentLineNode.Speaker1).DynamicID, // GetActorBySNO(asset.SNOPrimaryNpc).DynamicID,
+                ActorID = player.SelectedNPC.DynamicID,//GetSpeaker(currentLineNode.Speaker1).DynamicID, //GetActorBySNO(asset.SNOPrimaryNpc).DynamicID,               
                 Field1 = new uint[9]
                         {
-                            player.DynamicID, asset.SNOPrimaryNpc != -1 ? GetActorBySNO(asset.SNOPrimaryNpc).DynamicID : 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
+                            asset.SNOPrimaryNpc != -1 ? 0xFFFFFFFF : player.DynamicID, asset.SNOPrimaryNpc != -1 ? player.SelectedNPC.DynamicID : 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
                         },
 
                 PlayLineParams = new PlayLineParams()

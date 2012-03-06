@@ -1576,7 +1576,6 @@ namespace Mooege.Core.GS.Players
                     player.Inventory.PickUpGold(item.DynamicID);
                 }
 
-
                 item.Destroy();
             }
         }
@@ -1603,8 +1602,8 @@ namespace Mooege.Core.GS.Players
                     //every summon and mercenary owned by you must broadcast their green text to you /H_DANILO
                     player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
                 }
-                item.Destroy();
 
+                item.Destroy();
             }
         }
 

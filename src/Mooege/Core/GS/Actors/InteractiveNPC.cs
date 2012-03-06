@@ -31,14 +31,16 @@ using Mooege.Net.GS.Message.Definitions.Hireling;
 using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Net.GS.Message.Definitions.Artisan;
+using Mooege.Common.Logging;
 
 namespace Mooege.Core.GS.Actors
 {
     public class InteractiveNPC : NPC, IMessageConsumer
     {
+        Logger logger = new Logger("InteractiveNpc");
         public List<IInteraction> Interactions { get; private set; }
         public List<ConversationInteraction> Conversations { get; private set; }
-        
+    
         public InteractiveNPC(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
@@ -105,28 +107,33 @@ namespace Mooege.Core.GS.Actors
             if (count == 0)
                 return;
 
-            // If there is only one conversation option, immediatly select it without showing menu
+            // If there is only one conversation option, immediatly select it without showing menu.
+            // Update: This is not how actual beta handles Conversations when only 1 is available, you get to pick the conversation
+            // from the menu aswell. Still there are some KIND of conversations that do play on InteractiveNPC first clic, so..
+            // TODO: Trigger proper OnTargeted conversations.
+            
+            /* The code below plays conversations instantly if there is only 1 conversations available in the actor conversationList.
             if (Interactions.Count == 0 && Conversations.Count == 1)
             {
                 player.Conversations.StartConversation(Conversations[0].ConversationSNO);
                 Conversations[0].MarkAsRead();
                 UpdateConversationList();
                 return;
-            }
+            }*/
 
             NPCInteraction[] npcInters = new NPCInteraction[count];
 
-            var it = 0;
-            foreach(var conv in Conversations)
+            var _interaction = 0;
+            foreach(var conversation in Conversations)
             {
-                npcInters[it] = conv.AsNPCInteraction(this, player);
-                it++;
+                npcInters[_interaction] = conversation.AsNPCInteraction(this, player);
+                _interaction++;
             }
 
-            foreach(var inter in Interactions)
+            foreach(var interaction in Interactions)
             {
-                npcInters[it] = inter.AsNPCInteraction(this, player);
-                it++;
+                npcInters[_interaction] = interaction.AsNPCInteraction(this, player);
+                _interaction++;
             }
 
 
@@ -169,14 +176,16 @@ namespace Mooege.Core.GS.Actors
             throw new NotImplementedException();
         }
 
+        uint[] Field1 = { 0xFFFFFFFF, 0x79DB0051, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
+
         private void OnSelectConversation(Player player, NPCSelectConversationMessage message)
         {
             var conversation = Conversations.FirstOrDefault(conv => conv.ConversationSNO == message.ConversationSNO);
             if (conversation == null) 
                 return;
 
-            player.Conversations.StartConversation(conversation.ConversationSNO);
-            conversation.MarkAsRead();
+             player.Conversations.StartConversation(conversation.ConversationSNO);
+             conversation.MarkAsRead();
         }
     }
 }

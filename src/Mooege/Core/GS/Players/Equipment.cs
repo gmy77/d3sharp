@@ -141,7 +141,6 @@ namespace Mooege.Core.GS.Players
 
         public Item AddGoldItem(Item collectedItem)
         {
-
             return AddGoldAmount(collectedItem.Attributes[GameAttribute.Gold]);
         }
 
