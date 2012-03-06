@@ -1491,9 +1491,16 @@ namespace Mooege.Core.GS.Players
         {
             this.Attributes[GameAttribute.Experience_Next] -= addedExp;
 
-            // Levelup
-            if ((this.Attributes[GameAttribute.Experience_Next] <= 0) && (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]))
+            // Levelup (maybe multiple levelups... remember Diablo2 Ancients)
+            while (this.Attributes[GameAttribute.Experience_Next] <= 0)
             {
+                // No more levelup at Level_Cap
+                if (this.Attributes[GameAttribute.Level] >= this.Attributes[GameAttribute.Level_Cap])
+                {
+                    // Set maximun experience and exit.
+                    this.Attributes[GameAttribute.Experience_Next] = 0;
+                    break;
+                }
                 this.Attributes[GameAttribute.Level]++;
                 this.Toon.LevelUp();
 
@@ -1505,8 +1512,7 @@ namespace Mooege.Core.GS.Players
 
                 this.Conversations.StartConversation(0x0002A777); //LevelUp Conversation
 
-                if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
-                else { this.Attributes[GameAttribute.Experience_Next] = 0; }
+                this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]];
 
                 // 4 main attributes are incremented according to class
                 this.Attributes[GameAttribute.Strength] = this.Strength;
@@ -1561,11 +1567,6 @@ namespace Mooege.Core.GS.Players
                 this.World.PowerManager.RunPower(this, 85954); //g_LevelUp.pow 85954
             }
 
-            // constant 0 exp at Level_Cap
-            if (this.Attributes[GameAttribute.Experience_Next] < 0) 
-            { 
-                this.Attributes[GameAttribute.Experience_Next] = 0;
-            }
             this.Attributes.BroadcastChangedIfRevealed();
             this.Toon.GameAccount.NotifyUpdate();
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
