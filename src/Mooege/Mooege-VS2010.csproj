@@ -410,6 +410,7 @@
     <Compile Include="Net\GS\Message\Fields\ActiveSkillSavedData.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Core\GS\Objects\GameAttributeMap.cs" />
+    <Compile Include="Net\GS\Message\ScriptedAttributeInitializer.cs" />
     <Compile Include="Net\MooNet\MooNetClient.cs" />
     <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />
@@ -622,6 +623,7 @@
     <Compile Include="Net\MooNet\Packets\PacketOut.cs" />
     <Compile Include="Net\MooNet\RPC\RPCCallback.cs" />
     <Compile Include="Net\NATConfig.cs" />
+    <Compile Include="Net\NetworkingConfig.cs" />
     <Compile Include="Net\Utils.cs" />
     <Compile Include="Net\WebServices\Config.cs" />
     <Compile Include="Net\WebServices\IWebService.cs" />

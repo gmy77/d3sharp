@@ -56,9 +56,7 @@ namespace Mooege.Core.GS.Players
             {
                 _equipment[slot] = item.DynamicID;
                 if (!Items.ContainsKey(item.DynamicID))
-                {
                     Items.Add(item.DynamicID, item);
-                }
                 item.Owner = _owner;
                 item.Attributes[GameAttribute.Item_Equipped] = true; // Probaly should be handled by Equipable class /fasbat
                 item.Attributes.SendChangedMessage(_owner.InGameClient);
@@ -106,7 +104,6 @@ namespace Mooege.Core.GS.Players
             return IsItemEquipped(item.DynamicID);
         }
 
-        //TODO: Soon to become obsolete as D3.Hero classes will be used
         private VisualItem GetEquipmentItem(EquipmentSlotId equipSlot)
         {
             if (_equipment[(int)equipSlot] == 0)
@@ -138,7 +135,6 @@ namespace Mooege.Core.GS.Players
             return Items[(_equipment[(int)equipSlot])].GetVisualItem();
         }
 
-        //TODO: Soon to become obsolete: Save this at toon level
         public VisualItem[] GetVisualEquipment()
         {
             return new VisualItem[8]

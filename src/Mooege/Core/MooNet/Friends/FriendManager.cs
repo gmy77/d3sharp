@@ -202,7 +202,7 @@ namespace Mooege.Core.MooNet.Friends
         {
             try
             {
-                var query = string.Format("INSERT INTO friends (accountId, friendId) VALUES({0},{1}); INSERT INTO friends (accountId, friendId) VALUES({1},{0});", inviter.BnetEntityId.Low, invitee.BnetEntityId.Low);
+                var query = string.Format("INSERT INTO friends (accountId, friendId) VALUES({0},{1}); INSERT INTO friends (accountId, friendId) VALUES({2},{3});", inviter.BnetEntityId.Low, invitee.BnetEntityId.Low, invitee.BnetEntityId.Low, inviter.BnetEntityId.Low);
 
                 var cmd = new SQLiteCommand(query, DBManager.Connection);
                 cmd.ExecuteNonQuery();

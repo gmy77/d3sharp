@@ -58,14 +58,29 @@ namespace Mooege.Net
             // Check if the server is already listening.
             if (IsListening) throw new InvalidOperationException("Server is already listening.");
 
+            // --------------------
+            // Note on IPv6 support
+            // --------------------
+            // First and foremost IPv6 support is EXPERIMENTAL!
+            // Currently we use the approach to create a dual-socket which enables both IPv6 and IPv4 over the same socket
+            // though not all operating systems support this by default. Windows Vista and 7 known to support this where Windows XP does not.
+            // Also some linux distros and most BSD ones doesn't support this by default.
+            // We've to eventually create two different sockets, one for IPv4 and one for IPv6 for wide-scale support for all operating systems. /raist
+            // Still as D3 doesn't support IPv6 addresses to be returned with GameFactory services' bnet.protocol.game_master.ConnectInfo, 
+            // IPv6 only works for moonet right now. When Blizzard fixes D3 client for so, we'll be also supporting IPv6 in game-server.
+
             // Create new TCP socket and set socket options.
-            Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            Listener = new Socket(NetworkingConfig.Instance.EnableIPv6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             // Setup our options:
-            // * NoDelay - don't use packet coalescing
-            // * DontLinger - don't keep sockets around once they've been disconnected
+            // * NoDelay - true - don't use packet coalescing
+            // * DontLinger - true - don't keep sockets around once they've been disconnected
+            // * IPv6Only - false - create a dual-socket that both supports IPv4 and IPv6 - check the IPv6 support note above.
             Listener.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
             Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
+			#if !__MonoCS__
+            if (NetworkingConfig.Instance.EnableIPv6) Listener.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
+			#endif
 
             try
             {
@@ -75,7 +90,7 @@ namespace Mooege.Net
             }
             catch (SocketException)
             {
-                Logger.Fatal(string.Format("{0} can't bind on {1}, server shutting down..", this.GetType().Name, bindIP));
+                Logger.Fatal(string.Format("{0} can not bind on {1}, server shutting down..", this.GetType().Name, bindIP));
                 this.Shutdown();
                 return false;
             }
