@@ -176,8 +176,6 @@ namespace Mooege.Core.GS.Actors
             throw new NotImplementedException();
         }
 
-        uint[] Field1 = { 0xFFFFFFFF, 0x79DB0051, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
-
         private void OnSelectConversation(Player player, NPCSelectConversationMessage message)
         {
             var conversation = Conversations.FirstOrDefault(conv => conv.ConversationSNO == message.ConversationSNO);
