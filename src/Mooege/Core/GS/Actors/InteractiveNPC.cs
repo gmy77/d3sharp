@@ -92,9 +92,13 @@ namespace Mooege.Core.GS.Actors
                             if (conversation.Read == false)
                                 questConversation = true;
 
-                // show the exclamation mark if actor has an unread quest conversation
-                Attributes[GameAttribute.Conversation_Icon, 0] = questConversation ? 1 : 0;
-                Attributes.BroadcastChangedIfRevealed();
+                // show the exclamation mark if actor has an unread quest conversation and make the actor operable again.
+                if (questConversation)
+                {
+                    Attributes[GameAttribute.Conversation_Icon, 0] = questConversation ? 1 : 0;
+                    Attributes[GameAttributeB.NPC_Is_Operatable] = true;
+                    Attributes.BroadcastChangedIfRevealed();
+                }
             }
         }
 
@@ -107,6 +111,38 @@ namespace Mooege.Core.GS.Actors
             if (count == 0)
                 return;
 
+            foreach (var _conversation in player.SelectedNPC.Conversations)
+            {
+                //logger.Debug("Conversation available for actor {0} : {1}.", player.SelectedNPC.NameSNOId, _conversation.ConversationSNO.ToString());
+                try
+                {
+                    var conversation = ((Mooege.Common.MPQ.FileFormats.Conversation)(Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Conversation][_conversation.ConversationSNO].Data));
+                    //logger.Debug("Conversation Type: {0}", conversation.ConversationType.ToString());
+                    //Unreaded AmbientGossips plays onTargeted, not by Conversation menu selection.
+                    if (conversation.ConversationType.ToString().Contains("AmbientGossip") == true && !_conversation.Read)
+                    {
+                        player.Conversations.StartConversation(_conversation.ConversationSNO);
+                        _conversation.MarkAsRead();
+                        UpdateConversationList();
+                        return;
+                    }
+                    //If you had already accepted the quest, it shouldnt keep showing over the NPC Conversation Menu.
+                    if (conversation.ConversationType.ToString().Contains("QuestEvent") == true && !_conversation.Read)
+                    {
+                        Attributes[GameAttribute.Conversation_Icon, 0] = 0;
+                        Attributes[GameAttributeB.NPC_Is_Operatable] = false;
+                        Attributes.BroadcastChangedIfRevealed();   
+                        player.Conversations.StartConversation(_conversation.ConversationSNO);
+                        _conversation.MarkAsRead();                                                                 
+                        return;
+                    }
+                }
+                catch
+                {
+                    logger.Error("Error while retrieving Conversation info for Actor {0}", this.ActorSNO.Name);
+                    return;
+                }
+            }
             // If there is only one conversation option, immediatly select it without showing menu.
             // Update: This is not how actual beta handles Conversations when only 1 is available, you get to pick the conversation
             // from the menu aswell. Still there are some KIND of conversations that do play on InteractiveNPC first clic, so..
