@@ -56,6 +56,12 @@ namespace Mooege.Net.MooNet
         /// </summary>
         public SslStream TLSStream { get; private set; }
 
+
+        /// <summary>
+        /// MooNet Layer Stream
+        /// </summary>
+        public MooNetBuffer incomingMooNetStream { get; private set; }
+
         /// <summary>
         /// Logged in gs client if any.
         /// </summary>
@@ -123,6 +129,8 @@ namespace Mooege.Net.MooNet
             this.Platform = ClientPlatform.Unknown;
             this.Locale = ClientLocale.Unknown;
             this.MOTDSent = false;
+
+            this.incomingMooNetStream = new MooNetBuffer();
 
             this.Connection = connection;
             if (this.Connection != null)
