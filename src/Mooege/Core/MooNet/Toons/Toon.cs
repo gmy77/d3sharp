@@ -468,8 +468,8 @@ namespace Mooege.Core.MooNet.Toons
                 {
                     var query =
                         string.Format(
-                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, experience={5}, accountId={6}, timePlayed={7}, goldAmount={8} WHERE id={9}",
-                            this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.ExperienceNext, this.GameAccount.PersistentID, this.TimePlayed, 0, this.PersistentID);
+                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, experience={5}, accountId={6}, timePlayed={7} WHERE id={8}",
+                            this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.ExperienceNext, this.GameAccount.PersistentID, this.TimePlayed, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();
@@ -478,8 +478,8 @@ namespace Mooege.Core.MooNet.Toons
                 {
                     var query =
                         string.Format(
-                            "INSERT INTO toons (id, name, hashCode, class, gender, level, experience, timePlayed, goldAmount, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7},{8},{9})",
-                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.ExperienceNext, this.TimePlayed, 0, this.GameAccount.PersistentID);
+                            "INSERT INTO toons (id, name, hashCode, class, gender, level, experience, timePlayed, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7},{8})",
+                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.ExperienceNext, this.TimePlayed, this.GameAccount.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();

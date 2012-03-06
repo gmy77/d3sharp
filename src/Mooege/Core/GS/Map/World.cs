@@ -388,7 +388,6 @@ namespace Mooege.Core.GS.Map
 
         /// <summary>
         /// Update the flippy animations and remove them once they have timed out
-        /// TODO: This generates an exception, needs to be multithreaded with a lock on the collection
         /// </summary>
         /// <param name="tickCounter"></param>
         private void UpdateFlippy(int tickCounter)

@@ -105,11 +105,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\GS\Actors\Actions\PowerAction.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Door.cs" />
     <Compile Include="Core\GS\Powers\ActionTimedSkill.cs" />
     <Compile Include="Core\GS\Powers\ActorMover.cs" />
     <Compile Include="Core\GS\Powers\ComboSkill.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\CooldownBuff.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\KnockbackBuff.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\LevelUp.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\Ranged.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\StatusDebuffs.cs" />
     <Compile Include="Core\GS\Powers\Payloads\AttackPayload.cs" />
@@ -405,12 +407,12 @@
     <Compile Include="Net\GS\Message\Fields\ActiveSkillSavedData.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Core\GS\Objects\GameAttributeMap.cs" />
+    <Compile Include="Net\GS\Message\ScriptedAttributeInitializer.cs" />
     <Compile Include="Net\MooNet\MooNetClient.cs" />
     <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />
     <Compile Include="Net\GS\ClientManager.cs" />
     <Compile Include="Net\GS\Config.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Skill\AssignPassiveSkillMessage.cs" />
     <Compile Include="Core\GS\Common\Types\Collision\AABB.cs" />
     <Compile Include="Net\GS\Message\Fields\ActiveEvent.cs" />
     <Compile Include="Net\GS\Message\Fields\AnimPreplayData.cs" />
@@ -618,6 +620,7 @@
     <Compile Include="Net\MooNet\Packets\PacketOut.cs" />
     <Compile Include="Net\MooNet\RPC\RPCCallback.cs" />
     <Compile Include="Net\NATConfig.cs" />
+    <Compile Include="Net\NetworkingConfig.cs" />
     <Compile Include="Net\Utils.cs" />
     <Compile Include="Net\WebServices\Config.cs" />
     <Compile Include="Net\WebServices\IWebService.cs" />
