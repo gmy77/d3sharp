@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
@@ -112,6 +112,54 @@ namespace Mooege.Core.GS.Powers.Payloads
 
             // HACK: instead of deleting actor right here, its added to a list (near the top of this function)
             //this.Target.Destroy();
+        }
+
+        private int _FindBestDeathAnimationSNO()
+        {
+            // check if power has special death animation, and roll chance to use it
+            TagKeyInt specialDeathTag = _GetTagForSpecialDeath(this.Context.EvalTag(PowerKeys.SpecialDeathType));
+            if (specialDeathTag != null)
+            {
+                float specialDeathChance = this.Context.EvalTag(PowerKeys.SpecialDeathChance);
+                if (PowerContext.Rand.NextDouble() < specialDeathChance)
+                {
+                    int specialSNO = _GetSNOFromTag(specialDeathTag);
+                    if (specialSNO != -1)
+                        return specialSNO;
+                }
+                // decided not to use special death or actor doesn't have it, just fall back to normal death anis
+            }
+
+            int sno = _GetSNOFromTag(this.DeathDamageType.DeathAnimationTag);
+            if (sno != -1)
+                return sno;
+
+            // load default ani if all else fails
+            return _GetSNOFromTag(AnimationSetKeys.DeathDefault);
+        }
+
+        private int _GetSNOFromTag(TagKeyInt tag)
+        {
+            if (this.Target.AnimationSet != null && this.Target.AnimationSet.TagMapAnimDefault.ContainsKey(tag))
+                return this.Target.AnimationSet.TagMapAnimDefault[tag];
+            else
+                return -1;
+        }
+
+        private static TagKeyInt _GetTagForSpecialDeath(int specialDeathType)
+        {
+            switch (specialDeathType)
+            {
+                default: return null;
+                case 1: return AnimationSetKeys.DeathDisintegration;
+                case 2: return AnimationSetKeys.DeathPulverise;
+                case 3: return AnimationSetKeys.DeathPlague;
+                case 4: return AnimationSetKeys.DeathDismember;
+                case 5: return AnimationSetKeys.DeathDecap;
+                case 6: return AnimationSetKeys.DeathAcid;
+                case 7: return AnimationSetKeys.DeathLava;  // haven't seen lava used, but there's no other place for it
+                case 8: return AnimationSetKeys.DeathSpirit;
+            }
         }
     }
 }
