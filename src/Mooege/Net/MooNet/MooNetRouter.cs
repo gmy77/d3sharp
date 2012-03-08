@@ -33,22 +33,32 @@ namespace Mooege.Net.MooNet
 
         public static void Route(ConnectionDataEventArgs e)
         {
-            var stream = CodedInputStream.CreateInstance(e.Data.ToArray());
-            while (!stream.IsAtEnd)
+            var client = (MooNetClient)e.Connection.Client;
+            client.incomingMooNetStream.Append(e.Data.ToArray());
+            try
             {
-                Identify(e.Connection, stream);
+                while (client.incomingMooNetStream.PacketAvaliable())
+                {
+                    Identify(client);
+                }
             }
+            catch (Exception except)
+            {
+                Logger.Error("exception caugth on decoding loop");
+                Logger.Error(except.Message);
+                Logger.Error(except.StackTrace);
+            }
+            client.incomingMooNetStream.Consume();
         }
 
-        public static void Identify(IConnection connection, CodedInputStream stream)
+        public static void Identify(MooNetClient client)
         {
-            var client = (MooNetClient) connection.Client;
-            var packet = new PacketIn(client, stream);
+            var packet = new PacketIn(client, client.incomingMooNetStream.GetPacketHeader());
 
             if (packet.Header.ServiceId == ServiceReply)
                 ProcessReply(client, packet);
             else
-                ProcessMessage(client, stream, packet);           
+                ProcessMessage(client, packet);
         }
 
         private static void ProcessReply(MooNetClient client, PacketIn packet)
@@ -68,7 +78,7 @@ namespace Mooege.Net.MooNet
             }
         }
 
-        private static void ProcessMessage(MooNetClient client, CodedInputStream stream, PacketIn packet)
+        private static void ProcessMessage(MooNetClient client, PacketIn packet)
         {
             var service = Service.GetByID(packet.Header.ServiceId);
 
@@ -81,7 +91,8 @@ namespace Mooege.Net.MooNet
             var method = service.DescriptorForType.Methods.Single(m => GetMethodId(m) == packet.Header.MethodId);
             var proto = service.GetRequestPrototype(method);
             var builder = proto.WeakCreateBuilderForType();
-            var message = builder.WeakMergeFrom(CodedInputStream.CreateInstance(packet.GetPayload(stream))).WeakBuild(); //var message = packet.ReadMessage(proto.WeakToBuilder()); // this method doesn't seem to work with 7728. /raist.
+            var message = packet.ReadMessage(builder);
+            
             Logger.LogIncoming(message, packet.Header);
 
             try
