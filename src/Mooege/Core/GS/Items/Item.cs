@@ -97,10 +97,6 @@ namespace Mooege.Core.GS.Items
             }
         }
 
-
-            
-
-
         public override bool HasWorldLocation
         {
             get { return this.Owner == null; }
@@ -163,9 +159,9 @@ namespace Mooege.Core.GS.Items
             // Attributes[GameAttribute.Requirement, 38] = definition.RequiredLevel;
 
             Attributes[GameAttribute.Item_Quality_Level] = 1;
-            if (Item.IsArmor(this.ItemType) || Item.IsWeapon(this.ItemType)|| Item.IsOffhand(this.ItemType))
+            if (Item.IsArmor(this.ItemType) || Item.IsWeapon(this.ItemType) || Item.IsOffhand(this.ItemType))
                 Attributes[GameAttribute.Item_Quality_Level] = RandomHelper.Next(6);
-            if(this.ItemType.Flags.HasFlag(ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
+            if (this.ItemType.Flags.HasFlag(ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
                 Attributes[GameAttribute.Item_Quality_Level] = 3;
 
             Attributes[GameAttribute.ItemStackQuantityLo] = 1;
@@ -293,6 +289,18 @@ namespace Mooege.Core.GS.Items
             };
         }
 
+        //TODO: Move to proper D3.Hero.Visual item classes
+        public D3.Hero.VisualItem GetVisualItem()
+        {
+            var visualItem = D3.Hero.VisualItem.CreateBuilder()
+                .SetGbid(this.GBHandle.GBID)
+                .SetDyeType(Attributes[GameAttribute.DyeType])
+                .SetEffectLevel(0)
+                .SetItemEffectType(-1)
+                .Build();
+            return visualItem;
+        }
+
         #region Is*
         public static bool IsHealthGlobe(ItemTypeTable itemType)
         {
@@ -316,14 +324,12 @@ namespace Mooege.Core.GS.Items
 
         public static bool IsRuneOrJewel(ItemTypeTable itemType)
         {
-            return ItemGroup.IsSubType(itemType, "Gem") ||
-                ItemGroup.IsSubType(itemType, "SpellRune");
+            return ItemGroup.IsSubType(itemType, "Gem") || ItemGroup.IsSubType(itemType, "SpellRune");
         }
 
         public static bool IsJournalOrScroll(ItemTypeTable itemType)
         {
-            return ItemGroup.IsSubType(itemType, "Scroll") ||
-                ItemGroup.IsSubType(itemType, "Book");
+            return ItemGroup.IsSubType(itemType, "Scroll") || ItemGroup.IsSubType(itemType, "Book");
         }
 
         public static bool IsDye(ItemTypeTable itemType)

@@ -98,11 +98,12 @@ namespace Mooege.Core.MooNet.Toons
             }
 
             if (toon.DeleteFromDB()) Toons.Remove(toon.PersistentID);
+			Logger.Debug("Deleting toon {0}", toon.PersistentID);
         }
 
         private static void LoadToons()
         {
-            var query = "SELECT * from toons";
+            var query = "SELECT * FROM toons";
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
 
@@ -110,15 +111,15 @@ namespace Mooege.Core.MooNet.Toons
 
             while (reader.Read())
             {
-                var databaseId = (ulong)reader.GetInt64(0);
-                var toon = new Toon(databaseId, reader.GetString(1), reader.GetInt32(6), reader.GetByte(2), reader.GetByte(3), reader.GetByte(4), reader.GetInt64(5), (uint)reader.GetInt32(7));
+                var databaseId = Convert.ToUInt64(reader["id"]);
+                var toon = new Toon(databaseId);
                 Toons.Add(databaseId, toon);
             }
         }
 
         public static int GetUnusedHashCodeForToonName(string name)
         {
-            var query = string.Format("SELECT hashCode from toons WHERE name='{0}'", name);
+            var query = string.Format("SELECT hashCode FROM toons WHERE name='{0}'", name);
             Logger.Trace(query);
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
@@ -127,7 +128,7 @@ namespace Mooege.Core.MooNet.Toons
             var codes = new HashSet<int>();
             while (reader.Read())
             {
-                var hashCode = reader.GetInt32(0);
+                var hashCode = Convert.ToInt32(reader["hashCode"]);
                 codes.Add(hashCode);
             }
             return GenerateHashCodeNotInList(codes);

@@ -276,7 +276,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 var attackDelay = WaitSeconds(ScriptFormula(20));
                 var demonPosition = RandomDirection(castedPosition, ScriptFormula(24), ScriptFormula(25));
 
-                var demon = SpawnEffect(149949, demonPosition, ScriptFormula(22), WaitSeconds(5.0f));                    
+                var demon = SpawnEffect(149949, demonPosition, ScriptFormula(22), WaitSeconds(5.0f));
                 demon.OnUpdate = () =>
                 {
                     if (attackDelay.TimedOut)
@@ -385,7 +385,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                     {
                         AddBuff(hitPayload.Target, new DebuffStunned(WaitSeconds(ScriptFormula(37))));
                     };
-                    attack.Apply();                    
+                    attack.Apply();
                 };
 
                 yield return WaitSeconds(ScriptFormula(4));

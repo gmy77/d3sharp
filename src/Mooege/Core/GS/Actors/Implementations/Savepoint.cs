@@ -48,8 +48,8 @@ namespace Mooege.Core.GS.Actors.Implementations
 
                 player.SavePointData = new Net.GS.Message.Fields.SavePointData() { snoWorld = World.WorldSNO.Id, SavepointId = SavepointId };
                 player.UpdateHeroState();
+                player.CheckPointPosition = this._position; // This seemed easier than having on Death find the SavePoint based on ID, then getting its location. - DarkLotus
             }
         }
-
     }
 }

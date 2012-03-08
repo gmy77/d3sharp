@@ -464,7 +464,7 @@ namespace Mooege.Core.MooNet.Accounts
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 3) // Hero's visible equipment
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.CurrentToon.Equipment.ToByteString()).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.CurrentToon.HeroVisualEquipmentField.Value.ToByteString()).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 4) // Hero's flags (gender and such)
                     {
@@ -555,10 +555,7 @@ namespace Mooege.Core.MooNet.Accounts
                 }
                 else
                 {
-                    var query =
-                        string.Format(
-                            "INSERT INTO gameaccounts (id, accountId, banner) VALUES({0},{1}, @banner)",
-                            this.PersistentID, this.Owner.PersistentID);
+                    var query = string.Format("INSERT INTO gameaccounts (id, accountId, banner) VALUES({0},{1}, @banner)", this.PersistentID, this.Owner.PersistentID);
 
                     using (var cmd = new SQLiteCommand(query, DBManager.Connection))
                     {
@@ -594,10 +591,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         private bool ExistsInDB()
         {
-            var query =
-                string.Format(
-                    "SELECT id from gameaccounts where id={0}",
-                    this.PersistentID);
+            var query = string.Format("SELECT id FROM gameaccounts where id={0}", this.PersistentID);
 
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();

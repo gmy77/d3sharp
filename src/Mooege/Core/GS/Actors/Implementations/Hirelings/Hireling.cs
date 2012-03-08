@@ -61,7 +61,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
         {
             this.owner = player;
 
-            var info = player.HirelingInfo[this.Attributes[GameAttribute.Hireling_Class]];            
+            var info = player.HirelingInfo[this.Attributes[GameAttribute.Hireling_Class]];
 
             // TODO: fix this hardcoded crap
             if (!IsProxy)
