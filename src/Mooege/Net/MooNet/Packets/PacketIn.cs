@@ -41,21 +41,21 @@ namespace Mooege.Net.MooNet.Packets
 
         public IMessage ReadMessage(IBuilder builder)
         {
-            byte[] data = Client.incomingMooNetStream.GetPacketData((int)this.Header.Size);
+            byte[] data = Client.IncomingMooNetStream.GetPacketData((int)this.Header.Size);
             
             return builder.WeakMergeFrom(ByteString.CopyFrom(data)).WeakBuild();
         }
 
         public byte[] GetPayload(CodedInputStream stream)
         {
-            var data = Client.incomingMooNetStream.GetPacketData((int)this.Header.Size);
+            var data = Client.IncomingMooNetStream.GetPacketData((int)this.Header.Size);
             return data;
         }
 
         public override string ToString()
         {
-            return this.Header.ToString();
             //return string.Format("[S]: 0x{0}, [M]: 0x{1}, [R]: 0x{2}, [O]: 0x{3}", this.ServiceId.ToString("X2"), this.MethodId.ToString("X2"), this.RequestId.ToString("X2"), this.ObjectId.ToString("X2"));
+            return this.Header.ToString();
         }
     }
 }

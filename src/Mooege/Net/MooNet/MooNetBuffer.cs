@@ -7,20 +7,15 @@ namespace Mooege.Net.MooNet
 {
     public class MooNetBuffer
     {
-        private byte[] Data = new byte[0];
-        public int Position
+        public int Position { get; private set; }
+
+        public int Length
         {
-            get;
-            private set;
+            get { return _length - Position; }
         }
 
+        private byte[] _data = new byte[0];
         private int _length = 0;
-
-        public int Length { 
-         get {
-           return _length - Position;
-         } 
-        }
 
         public MooNetBuffer()
         {
@@ -31,12 +26,14 @@ namespace Mooege.Net.MooNet
         {
             if (Length < 2)
                 return false;
-            int headerSize = (Data[Position] << 8) | Data[Position+1]; // header size.
+
+            int headerSize = (_data[Position] << 8) | _data[Position+1]; // header size.
+
             if (Length < headerSize + 2)
                 return false;
 
-            byte[] tempData = new byte[headerSize];
-            Array.Copy(Data, Position+2, tempData, 0, headerSize);
+            var tempData = new byte[headerSize];
+            Array.Copy(_data, Position+2, tempData, 0, headerSize);
 
             var headerData = bnet.protocol.Header.ParseFrom(tempData); // header data.
 
@@ -51,15 +48,15 @@ namespace Mooege.Net.MooNet
             if (Length < 2)
                 throw new Exception("GetPacketHeader when insuficient data avaliable");
 
-            int headerSize = (Data[Position] << 8) | Data[Position + 1]; // header size.
+            int headerSize = (_data[Position] << 8) | _data[Position + 1]; // header size.
+
             if (Length < headerSize + 2)
                 throw new Exception("GetPacketHeader when insuficient data avaliable");
 
-            byte[] tempData = new byte[headerSize];
-            Array.Copy(Data, Position+2, tempData, 0, headerSize);
+            var tempData = new byte[headerSize];
+            Array.Copy(_data, Position+2, tempData, 0, headerSize);
 
             var headerData = bnet.protocol.Header.ParseFrom(tempData); // header data.
-
             Position += 2 + headerSize;
 
             return headerData;
@@ -68,12 +65,10 @@ namespace Mooege.Net.MooNet
         public byte[] GetPacketData(int count)
         {
             if (Length < count)
-            {
-                throw new Exception("GetPacketData when insuficient data avaliable");
-            }
+                throw new Exception("GetPacketData called when insuficient data avaliable!");
 
-            byte[] tempData = new byte[count];
-            Array.Copy(Data, Position, tempData, 0, count);
+            var tempData = new byte[count];
+            Array.Copy(_data, Position, tempData, 0, count);
 
             Position += count;
             return tempData;
@@ -81,7 +76,7 @@ namespace Mooege.Net.MooNet
 
         public void Consume()
         {
-            Array.Copy(Data, Position, Data, 0, Length);
+            Array.Copy(_data, Position, _data, 0, Length);
 
             _length = _length - Position;
             Position = 0;
@@ -89,10 +84,10 @@ namespace Mooege.Net.MooNet
 
         public void Append(byte[] newdata)
         {
-            if (Data.Length < _length + newdata.Length)
-                Array.Resize(ref Data, _length + newdata.Length);
+            if (_data.Length < _length + newdata.Length)
+                Array.Resize(ref _data, _length + newdata.Length);
 
-            Array.Copy(newdata, 0, Data, _length, newdata.Length);
+            Array.Copy(newdata, 0, _data, _length, newdata.Length);
             _length = _length + newdata.Length;
         }
     }

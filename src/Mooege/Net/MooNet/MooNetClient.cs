@@ -60,7 +60,7 @@ namespace Mooege.Net.MooNet
         /// <summary>
         /// MooNet Layer Stream
         /// </summary>
-        public MooNetBuffer incomingMooNetStream { get; private set; }
+        public MooNetBuffer IncomingMooNetStream { get; private set; }
 
         /// <summary>
         /// Logged in gs client if any.
@@ -130,7 +130,7 @@ namespace Mooege.Net.MooNet
             this.Locale = ClientLocale.Unknown;
             this.MOTDSent = false;
 
-            this.incomingMooNetStream = new MooNetBuffer();
+            this.IncomingMooNetStream = new MooNetBuffer();
 
             this.Connection = connection;
             if (this.Connection != null)

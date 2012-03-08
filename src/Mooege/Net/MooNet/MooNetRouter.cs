@@ -34,10 +34,11 @@ namespace Mooege.Net.MooNet
         public static void Route(ConnectionDataEventArgs e)
         {
             var client = (MooNetClient)e.Connection.Client;
-            client.incomingMooNetStream.Append(e.Data.ToArray());
+            client.IncomingMooNetStream.Append(e.Data.ToArray());
+
             try
             {
-                while (client.incomingMooNetStream.PacketAvaliable())
+                while (client.IncomingMooNetStream.PacketAvaliable())
                 {
                     Identify(client);
                 }
@@ -48,12 +49,13 @@ namespace Mooege.Net.MooNet
                 Logger.Error(except.Message);
                 Logger.Error(except.StackTrace);
             }
-            client.incomingMooNetStream.Consume();
+
+            client.IncomingMooNetStream.Consume();
         }
 
         public static void Identify(MooNetClient client)
         {
-            var packet = new PacketIn(client, client.incomingMooNetStream.GetPacketHeader());
+            var packet = new PacketIn(client, client.IncomingMooNetStream.GetPacketHeader());
 
             if (packet.Header.ServiceId == ServiceReply)
                 ProcessReply(client, packet);
