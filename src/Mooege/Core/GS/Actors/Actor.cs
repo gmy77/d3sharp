@@ -673,7 +673,6 @@ namespace Mooege.Core.GS.Actors
         /// </summary>
         public virtual void OnPlayerApproaching(Player player)
         {
-            //Trigger conversation.
         }
 
         #endregion
@@ -740,24 +739,10 @@ namespace Mooege.Core.GS.Actors
             {
                 int snoConversationList = Tags[MarkerKeys.ConversationList].Id;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList].ContainsKey(snoConversationList))
-                {
                     ConversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
-                    foreach (Mooege.Common.MPQ.FileFormats.ConversationListEntry conversation in ConversationList.ConversationListEntries)
-                    {
-                        if (Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Conversation].ContainsKey(conversation.SNOConv))
-                        {
-                            Logger.Warn("Conversation found: {0}", conversation.SNOConv);
-                            continue;
-                        }
-                        else
-                        {
-                            Logger.Debug("Conversation NOT found {0}", conversation.SNOConv);
-                            continue;
-                        }
-                    }
-                }
                 else Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", NameSNOId, snoConversationList);
             }
+
 
             if (this.Tags.ContainsKey(MarkerKeys.TriggeredConversation))
                 snoTriggeredConversation = Tags[MarkerKeys.TriggeredConversation].Id;

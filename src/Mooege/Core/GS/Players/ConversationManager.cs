@@ -286,7 +286,7 @@ namespace Mooege.Core.GS.Players
 
             // TODO Actor id should be CurrentSpeaker.DynamicID not PrimaryNPC.ActorID. This is a workaround because no audio for the player is playing otherwise
             // TODO GetActorBySNO sometimes returns incorrect SNO's therefor ActorID and Field1 values get messed up causing the conversation sound to be barely hearable.
-            // Using player.SelectedNPC fixes this for now. Example to reproduce the above issue: Debug the conversation from the guy next to the wagon were a guy is droping bodies into a fire. -Wesko.
+            // Using player.SelectedNPC fixes this for now. Example to reproduce the above issue: Debug the conversation from the guy next to the wagon were a guy is droping bodies into a fire. -Wesko
             player.InGameClient.SendMessage(new PlayConvLineMessage()
             {
                 ActorID = player.SelectedNPC.DynamicID,//GetSpeaker(currentLineNode.Speaker1).DynamicID, //GetActorBySNO(asset.SNOPrimaryNpc).DynamicID,               

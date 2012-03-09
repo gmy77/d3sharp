@@ -32,7 +32,6 @@ using Mooege.Core.GS.Games;
 using Mooege.Core.GS.Common.Types.TagMap;
 using Mooege.Net.GS.Message.Definitions.Artisan;
 using Mooege.Common.Logging;
-using Mooege.Common.MPQ.FileFormats.Types;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -93,7 +92,7 @@ namespace Mooege.Core.GS.Actors
                             if (conversation.Read == false)
                                 questConversation = true;
 
-                // show the exclamation mark if actor has an unread quest conversation and make the actor operable again.
+                // show the exclamation mark if actor has an unread quest conversation
                 Attributes[GameAttribute.Conversation_Icon, 0] = questConversation ? 1 : 0;
                 Attributes.BroadcastChangedIfRevealed();
             }
@@ -108,35 +107,13 @@ namespace Mooege.Core.GS.Actors
             if (count == 0)
                 return;
 
-            foreach (var _conversation in player.SelectedNPC.Conversations)
-            {
-                logger.Debug("Conversation available for actor {0} : {1}.", player.SelectedNPC.NameSNOId, _conversation.ConversationSNO.ToString());
-                try
-                {
-                    var conversation = ((Mooege.Common.MPQ.FileFormats.Conversation)(Mooege.Common.MPQ.MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.Conversation][_conversation.ConversationSNO].Data));
-                    logger.Debug("Conversation Type: {0}", conversation.ConversationType.ToString());
-                    //Unreaded AmbientGossips plays onTargeted, not by Conversation menu selection.
-                    if (conversation.ConversationType == Mooege.Common.MPQ.FileFormats.ConversationTypes.AmbientGossip && !_conversation.Read)
-                    {
-                        player.Conversations.StartConversation(_conversation.ConversationSNO);
-                        _conversation.MarkAsRead();
-                        UpdateConversationList();
-                        break;
-                    }
-                }
-                catch
-                {
-                    logger.Error("Error while retrieving Conversation info for Actor {0}", this.ActorSNO.Name);
-                    return;
-                }
-            }
             // If there is only one conversation option, immediatly select it without showing menu.
             // Update: This is not how actual beta handles Conversations when only 1 is available, you get to pick the conversation
             // from the menu aswell. Still there are some KIND of conversations that do play on InteractiveNPC first clic, so..
             // TODO: Trigger proper OnTargeted conversations.
             
-            // The code below plays conversations instantly if there is only 1 conversations available in the actor conversationList.
-            /*if (Interactions.Count == 0 && Conversations.Count == 1)
+            /* The code below plays conversations instantly if there is only 1 conversations available in the actor conversationList.
+            if (Interactions.Count == 0 && Conversations.Count == 1)
             {
                 player.Conversations.StartConversation(Conversations[0].ConversationSNO);
                 Conversations[0].MarkAsRead();
@@ -159,11 +136,12 @@ namespace Mooege.Core.GS.Actors
                 _interaction++;
             }
 
+
             player.InGameClient.SendMessage(new NPCInteractOptionsMessage()
             {
                 ActorID = this.DynamicID,
                 tNPCInteraction = npcInters,
-                Type = NPCInteractOptionsType.Normal  
+                Type = NPCInteractOptionsType.Normal             
             });
 
             // TODO: this has no effect, why is it sent?
