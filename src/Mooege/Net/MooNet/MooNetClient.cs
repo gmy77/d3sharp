@@ -56,15 +56,12 @@ namespace Mooege.Net.MooNet
         /// </summary>
         public SslStream TLSStream { get; private set; }
 
-<<<<<<< HEAD
-=======
 
         /// <summary>
         /// MooNet Layer Stream
         /// </summary>
-        public MooNetBuffer incomingMooNetStream { get; private set; }
+        public MooNetBuffer IncomingMooNetStream { get; private set; }
 
->>>>>>> parent of a2d0d01... Tiny code cleanup.
         /// <summary>
         /// Logged in gs client if any.
         /// </summary>
@@ -133,11 +130,8 @@ namespace Mooege.Net.MooNet
             this.Locale = ClientLocale.Unknown;
             this.MOTDSent = false;
 
-<<<<<<< HEAD
-=======
-            this.incomingMooNetStream = new MooNetBuffer();
+            this.IncomingMooNetStream = new MooNetBuffer();
 
->>>>>>> parent of a2d0d01... Tiny code cleanup.
             this.Connection = connection;
             if (this.Connection != null)
                 this.NetworkStream = new NetworkStream(this.Connection.Socket, true);

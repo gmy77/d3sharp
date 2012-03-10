@@ -18,7 +18,6 @@
 
 using System.Collections.Generic;
 using System.Text;
-using System.Linq;
 using Mooege.Core.GS.Skills;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Actors;

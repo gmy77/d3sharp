@@ -97,7 +97,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         private static void LoadAccounts()
         {
-            var query = "SELECT * from accounts";
+            var query = "SELECT * FROM accounts";
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
 
@@ -105,8 +105,8 @@ namespace Mooege.Core.MooNet.Accounts
 
             while (reader.Read())
             {
-                var accountId = (ulong)reader.GetInt64(0);
-                var email = reader.GetString(1);
+                var accountId = Convert.ToUInt64(reader["id"]);
+                var email = Convert.ToString(reader["email"]);
 
                 var salt = new byte[32];
                 var readBytes = reader.GetBytes(2, 0, salt, 0, 32);
@@ -114,11 +114,9 @@ namespace Mooege.Core.MooNet.Accounts
                 var passwordVerifier = new byte[128];
                 readBytes = reader.GetBytes(3, 0, passwordVerifier, 0, 128);
 
-                var battleTagName = reader.GetString(4);
-
-                var hashCode = reader.GetInt32(5);
-
-                var userLevel = reader.GetByte(6);
+                var battleTagName = Convert.ToString(reader["battletagname"]);
+                var hashCode = Convert.ToInt32(reader["hashCode"]);
+                var userLevel = Convert.ToByte(reader["userLevel"]);
 
                 var account = new Account(accountId, email, salt, passwordVerifier, battleTagName, hashCode, (Account.UserLevels)userLevel);
                 Accounts.Add(email, account);
@@ -127,7 +125,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         public static int GetUnusedHashCodeForBattleTag(string name)
         {
-            var query = string.Format("SELECT hashCode from accounts WHERE battletagname='{0}'", name);
+            var query = string.Format("SELECT hashCode FROM accounts WHERE battletagname='{0}'", name);
             Logger.Trace(query);
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
@@ -136,7 +134,7 @@ namespace Mooege.Core.MooNet.Accounts
             var codes = new HashSet<int>();
             while (reader.Read())
             {
-                var hashCode = reader.GetInt32(0);
+                var hashCode = Convert.ToInt32(reader["hashCode"]);
                 codes.Add(hashCode);
             }
             return GenerateHashCodeNotInList(codes);
@@ -144,7 +142,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         public static ulong GetNextAvailablePersistentId()
         {
-            var cmd = new SQLiteCommand("SELECT max(id) from accounts", DBManager.Connection);
+            var cmd = new SQLiteCommand("SELECT MAX(id) FROM accounts", DBManager.Connection);
             try
             {
                 return Convert.ToUInt64(cmd.ExecuteScalar());

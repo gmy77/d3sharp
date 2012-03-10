@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\GS\Actors\Actions\PowerAction.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Door.cs" />
     <Compile Include="Core\GS\Powers\ActionTimedSkill.cs" />
     <Compile Include="Core\GS\Powers\ActorMover.cs" />
     <Compile Include="Core\GS\Powers\ComboSkill.cs" />
@@ -406,6 +407,7 @@
     <Compile Include="Net\GS\Message\Fields\ActiveSkillSavedData.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Core\GS\Objects\GameAttributeMap.cs" />
+    <Compile Include="Net\GS\Message\ScriptedAttributeInitializer.cs" />
     <Compile Include="Net\MooNet\MooNetClient.cs" />
     <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />

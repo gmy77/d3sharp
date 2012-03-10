@@ -230,7 +230,7 @@ namespace Mooege.Core.MooNet.Friends
 
         private static void LoadFriendships() // load friends from database.
         {
-            const string query = "SELECT * from friends";
+            const string query = "SELECT * FROM friends";
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
 
@@ -241,9 +241,9 @@ namespace Mooege.Core.MooNet.Friends
                 var friend =
                     bnet.protocol.friends.Friend.CreateBuilder().SetId(
                         bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).
-                            SetLow((ulong)reader.GetInt64(1))).Build();
+                            SetLow(Convert.ToUInt64(reader["friendId"]))).Build();
 
-                Friends.Add((ulong)reader.GetInt64(0), friend);
+                Friends.Add(Convert.ToUInt64(reader["accountId"]), friend);
             }
         }
     }

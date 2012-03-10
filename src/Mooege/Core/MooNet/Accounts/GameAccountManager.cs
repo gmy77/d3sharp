@@ -56,7 +56,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         public static ulong GetNextAvailablePersistentId()
         {
-            var cmd = new SQLiteCommand("SELECT max(id) from gameaccounts", DBManager.Connection);
+            var cmd = new SQLiteCommand("SELECT MAX(id) FROM gameaccounts", DBManager.Connection);
             try
             {
                 return Convert.ToUInt64(cmd.ExecuteScalar());
@@ -74,7 +74,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         private static void LoadGameAccounts()
         {
-            var query = "SELECT * from gameaccounts";
+            var query = "SELECT * FROM gameaccounts";
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
 
@@ -82,8 +82,8 @@ namespace Mooege.Core.MooNet.Accounts
 
             while (reader.Read())
             {
-                var gameAccountId = (ulong)reader.GetInt64(0);
-                var accountId = (ulong)reader.GetInt64(1);
+                var gameAccountId = Convert.ToUInt64(reader["id"]);
+                var accountId = Convert.ToUInt64(reader["accountid"]);
                 var gameAccount = new GameAccount(gameAccountId, accountId);
 
                 #region Populate GameAccount Data

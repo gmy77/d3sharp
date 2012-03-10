@@ -16,6 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Linq;
 using Mooege.Common.Logging;
 using Mooege.Core.GS.Items;
 using Mooege.Net.GS;
@@ -25,10 +29,10 @@ using Mooege.Net.GS.Message.Fields;
 using Mooege.Net.GS.Message.Definitions.ACD;
 using Mooege.Core.GS.Common;
 using Mooege.Common.MPQ.FileFormats;
+using Mooege.Common.Storage;
 using Mooege.Net.GS.Message.Definitions.Stash;
 using Mooege.Core.GS.Objects;
-using System.Collections.Generic;
-using System.Linq;
+using Mooege.Core.MooNet.Toons;
 
 namespace Mooege.Core.GS.Players
 {
@@ -43,6 +47,7 @@ namespace Mooege.Core.GS.Players
         private Equipment _equipment;
         private InventoryGrid _inventoryGrid;
         private InventoryGrid _stashGrid;
+        private Item _inventoryGold;
         // backpack for spellRunes, their Items are kept in equipment
         private uint[] _skillSocketRunes;
 
@@ -50,8 +55,8 @@ namespace Mooege.Core.GS.Players
         {
             this._owner = owner;
             this._equipment = new Equipment(owner);
-            this._inventoryGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Backpack_Slots]/10, 10);
-            this._stashGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Shared_Stash_Slots]/7, 7, (int) EquipmentSlotId.Stash);
+            this._inventoryGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Backpack_Slots] / 10, 10);
+            this._stashGrid = new InventoryGrid(owner, owner.Attributes[GameAttribute.Shared_Stash_Slots] / 7, 7, (int)EquipmentSlotId.Stash);
             this._skillSocketRunes = new uint[6];
         }
 
@@ -65,25 +70,28 @@ namespace Mooege.Core.GS.Players
             }); */
         }
 
-
         /// <summary>
         /// Refreshes the visual appearance of the hero
         /// </summary>
         public void SendVisualInventory(Player player)
-         {
-             var message = new VisualInventoryMessage()
-                               {
-                                   ActorID = this._owner.DynamicID,
-                                   EquipmentList = new VisualEquipment()
-                                                       {
-                                                           Equipment = this._equipment.GetVisualEquipment()
-                                                       },
-                               };
+        {
+            var message = new VisualInventoryMessage()
+                              {
+                                  ActorID = this._owner.DynamicID,
+                                  EquipmentList = new VisualEquipment()
+                                                      {
+                                                          Equipment = this._equipment.GetVisualEquipment()
+                                                      },
+                              };
 
-             //player.InGameClient.SendMessage(message);
-             player.World.BroadcastGlobal(message);
-         }
+            //player.InGameClient.SendMessage(message);
+            player.World.BroadcastGlobal(message);
+        }
 
+        public D3.Hero.VisualEquipment GetVisualEquipment()
+        {
+            return this._equipment.GetVisualEquipmentForToon();
+        }
 
         public bool HasInventorySpace(Item item)
         {
@@ -140,7 +148,6 @@ namespace Mooege.Core.GS.Players
                 {
                     item.Owner = _owner;
                     item.World.Leave(item);
-
                 }
 
                 _inventoryGrid.AddItem(item);
@@ -155,6 +162,17 @@ namespace Mooege.Core.GS.Players
             return success;
         }
 
+        /// <summary>
+        /// Used for equiping item after game starts
+        /// TOOD: Needs rewrite
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="slot"></param>
+        public void EquipItem(Item item, int slot)
+        {
+            this._equipment.EquipItem(item, slot);
+        }
+ 	 
         private List<Item> FindSameItems(int gbid)
         {
             return _inventoryGrid.Items.Values.Where(i => i.GBHandle.GBID == gbid).ToList();
@@ -422,7 +440,7 @@ namespace Mooege.Core.GS.Players
         public void PickUpGold(uint itemID)
         {
             Item collectedItem = _owner.World.GetItem(itemID);
-            Item sumGoldItem = _equipment.AddGoldItem(collectedItem);
+            AddGoldAmount(collectedItem.Attributes[GameAttribute.Gold]);
         }
 
         private void OnInventoryRequestUseMessage(InventoryRequestUseMessage inventoryRequestUseMessage)
@@ -569,10 +587,108 @@ namespace Mooege.Core.GS.Players
             return rune;
         }
 
-
         public void AddGoldAmount(int amount)
         {
-            _equipment.AddGoldAmount(amount);
+            _inventoryGold.Attributes[GameAttribute.Gold] += amount;
+            _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = _inventoryGold.Attributes[GameAttribute.Gold];
+            _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient);
+        }
+
+        public int GetGoldAmount()
+        {
+            return _inventoryGold.Attributes[GameAttribute.Gold];
+        }
+
+        public void LoadFromDB()
+        {
+            //load everything and make a switch on slot_id
+            // maybe "inventory_type" is no more needed
+            Item item = null;
+            int goldAmount = 0;
+
+            var itemsQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND item_id <> -1", _owner.Toon.PersistentID);
+            var itemsCmd = new SQLiteCommand(itemsQuery, DBManager.Connection);
+            var itemsReader = itemsCmd.ExecuteReader();
+            if (itemsReader.HasRows)
+            {
+                while (itemsReader.Read())
+                {
+                    var slot = Convert.ToInt32(itemsReader["equipment_slot"]);
+                    var gbid = Convert.ToInt32(itemsReader["item_id"]);
+                    if (slot == (int)EquipmentSlotId.Inventory)
+                    {
+                        // load inventory
+                        item = ItemGenerator.CreateItem(_owner, ItemGenerator.GetItemDefinition(gbid));
+                        item.Attributes[GameAttribute.Item_Quality_Level] = 0;
+                        this._inventoryGrid.AddItem(item, Convert.ToInt32(itemsReader["inventory_loc_y"]), Convert.ToInt32(itemsReader["inventory_loc_x"]));
+                    }
+                    else if (slot == (int)EquipmentSlotId.Gold)
+                    {
+                        goldAmount = Convert.ToInt32(itemsReader["item_id"]);// is the amount
+                    }
+                    else if (slot == (int)EquipmentSlotId.Stash)
+                    {
+                        // load stash
+                        item = ItemGenerator.CreateItem(_owner, ItemGenerator.GetItemDefinition(gbid));
+                        item.Attributes[GameAttribute.Item_Quality_Level] = 0;
+                        this._stashGrid.AddItem(item, Convert.ToInt32(itemsReader["inventory_loc_y"]), Convert.ToInt32(itemsReader["inventory_loc_x"]));
+                    }
+                    else
+                    {
+                        // load equipment
+                        item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(gbid));
+                        _equipment.EquipItem(item, (int)slot);
+                    }
+                }
+            }
+            this._inventoryGold = ItemGenerator.CreateGold(this._owner, goldAmount);
+            this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = goldAmount; // This is the attribute that makes the gold visible in game
+            this._inventoryGold.Owner = _owner;
+            this._inventoryGold.SetInventoryLocation((int)EquipmentSlotId.Gold, 0, 0);
+        }
+
+        public void SaveToDB()
+        {
+            // Changed with a DELETE all and only inserting instead of SELECT and INSERT/UPDATE
+            // if for equipment SELECT INSERT/UPDATE can be ok, for items in inventory we do not have a primary key with whome to select and update
+            var itemQuery = string.Format("DELETE FROM inventory WHERE toon_id={0}", this._owner.Toon.PersistentID);
+            var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
+            itemCmd.ExecuteNonQuery();
+
+            // save equipment
+            for (int i=1; i <= 13; i++) // from Helm = 1 to Neck = 13 in EquipmentSlotId
+            {
+                SaveItemToDB(this._owner.Toon.PersistentID, "equipped", (EquipmentSlotId)i, _equipment.GetEquipment((EquipmentSlotId)i));
+            }
+            // save inventory
+            foreach (Item itm in _inventoryGrid.Items.Values)
+            {
+                SaveItemToDB(this._owner.Toon.PersistentID, "inventory", EquipmentSlotId.Inventory, itm);
+            }
+            // save stash
+            foreach (Item itm in _stashGrid.Items.Values)
+            {
+                SaveItemToDB(this._owner.Toon.PersistentID, "stash", EquipmentSlotId.Stash, itm);
+            }
+            // save gold
+            SaveGoldToDB(this._owner.Toon.PersistentID, "inventory", EquipmentSlotId.Gold, GetGoldAmount());
+        }
+
+        private void SaveItemToDB(ulong toon_id, string inventory_type, EquipmentSlotId slotId, Item item)
+        {
+            if (item == null)
+                return;
+            var itemQuery = string.Format("INSERT INTO inventory (toon_id, inventory_type, inventory_loc_x, inventory_loc_y, equipment_slot, item_id) VALUES ({0}, '{1}', {2}, {3}, {4}, {5})",
+                toon_id, inventory_type, item.InventoryLocation.X, item.InventoryLocation.Y, (int)slotId, item.GBHandle.GBID);
+            var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
+            var itemReader = itemCmd.ExecuteNonQuery();
+        }
+
+        private void SaveGoldToDB(ulong toon_id, string inventory_type, EquipmentSlotId slotId, int amount)
+        {
+            var itemQuery = string.Format("INSERT INTO inventory (toon_id, inventory_type, equipment_slot, item_id) VALUES ({0}, '{1}', {2}, {3})", toon_id, inventory_type, (int)slotId, amount);
+            var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
+            var itemReader = itemCmd.ExecuteNonQuery();
         }
     }
 }

@@ -24,11 +24,10 @@ using Mooege.Core.GS.Objects;
 
 namespace Mooege.Core.GS.Players
 {
-
-    // these ids are transmitted by the client when equipping an item         
+    // these ids are transmitted by the client when equipping an item
     public enum EquipmentSlotId
     {
-        Helm = 1, Chest = 2, Off_Hand = 3, Main_Hand = 4, Hands = 5, Belt = 6, Feet = 7,
+        Inventory = 0, Helm = 1, Chest = 2, Off_Hand = 3, Main_Hand = 4, Hands = 5, Belt = 6, Feet = 7,
         Shoulders = 8, Legs = 9, Bracers = 10, Ring_right = 11, Ring_left = 12, Neck = 13,
         Skills = 14, Stash = 15, Gold = 16, Vendor = 18 // To do: Should this be here? Its not really an eq. slot /fasbat
     }
@@ -38,19 +37,14 @@ namespace Mooege.Core.GS.Players
         public int EquipmentSlots { get { return _equipment.GetLength(0); } }
         public Dictionary<uint, Item> Items { get; private set; }
         private readonly Player _owner; // Used, because most information is not in the item class but Actors managed by the world
-        private Item _inventoryGold;
 
-        private uint[] _equipment;      // array of equiped items_id  (not item)
+        private uint[] _equipment;      // array of equiped items_id (not item)
 
-        public Equipment(Player owner){
-            this._equipment = new uint[17];
+        public Equipment(Player owner)
+        {
+            this._equipment = new uint[18];
             this._owner = owner;
             this.Items = new Dictionary<uint, Item>();
-            this._inventoryGold = ItemGenerator.CreateGold(_owner, 0);
-            this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = 0;
-            this._inventoryGold.SetInventoryLocation(16, 0, 0);
-            this._inventoryGold.Owner = _owner;
-            this.Items.Add(_inventoryGold.DynamicID, _inventoryGold);
         }
        
         /// <summary>
@@ -58,13 +52,16 @@ namespace Mooege.Core.GS.Players
         /// </summary>
         public void EquipItem(Item item, int slot)
         {
-            _equipment[slot] = item.DynamicID;
-            if (!Items.ContainsKey(item.DynamicID))
-                Items.Add(item.DynamicID, item);
-            item.Owner = _owner;
-            item.Attributes[GameAttribute.Item_Equipped] = true; // Probaly should be handled by Equipable class /fasbat
-            item.Attributes.SendChangedMessage(_owner.InGameClient);
-            item.SetInventoryLocation(slot, 0, 0);            
+            if (item != null)
+            {
+                _equipment[slot] = item.DynamicID;
+                if (!Items.ContainsKey(item.DynamicID))
+                    Items.Add(item.DynamicID, item);
+                item.Owner = _owner;
+                item.Attributes[GameAttribute.Item_Equipped] = true; // Probaly should be handled by Equipable class /fasbat
+                item.Attributes.SendChangedMessage(_owner.InGameClient);
+                item.SetInventoryLocation(slot, 0, 0);
+            }
         }
 
         public void EquipItem(uint itemID, int slot)
@@ -119,13 +116,27 @@ namespace Mooege.Core.GS.Players
                     Field3 = 0,
                 };
             }
-            else
-            {
-                return Items[(_equipment[(int)equipSlot])].CreateVisualItem();
-            }
+
+            return Items[(_equipment[(int)equipSlot])].CreateVisualItem();
         }
 
-        public VisualItem[] GetVisualEquipment(){
+        private D3.Hero.VisualItem GetEquipmentItemForToon(EquipmentSlotId equipSlot)
+        {
+            if (_equipment[(int)equipSlot] == 0)
+            {
+                return D3.Hero.VisualItem.CreateBuilder()
+                    .SetGbid(-1)
+                    .SetDyeType(0)
+                    .SetEffectLevel(0)
+                    .SetItemEffectType(-1)
+                    .Build();
+            }
+
+            return Items[(_equipment[(int)equipSlot])].GetVisualItem();
+        }
+
+        public VisualItem[] GetVisualEquipment()
+        {
             return new VisualItem[8]
                     {
                         GetEquipmentItem(EquipmentSlotId.Helm),
@@ -139,16 +150,20 @@ namespace Mooege.Core.GS.Players
                     };
         }
 
-        public Item AddGoldItem(Item collectedItem)
+        public D3.Hero.VisualEquipment GetVisualEquipmentForToon()
         {
-            return AddGoldAmount(collectedItem.Attributes[GameAttribute.Gold]);
-        }
-
-        internal Item AddGoldAmount(int amount)
-        {
-            _inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] += amount;
-            _inventoryGold.Attributes.SendChangedMessage(_owner.InGameClient);
-            return _inventoryGold;
+            var visualItems = new[]
+            {       
+                    GetEquipmentItemForToon(EquipmentSlotId.Helm),
+                    GetEquipmentItemForToon(EquipmentSlotId.Chest),
+                    GetEquipmentItemForToon(EquipmentSlotId.Feet),
+                    GetEquipmentItemForToon(EquipmentSlotId.Hands),
+                    GetEquipmentItemForToon(EquipmentSlotId.Main_Hand),
+                    GetEquipmentItemForToon(EquipmentSlotId.Off_Hand),
+                    GetEquipmentItemForToon(EquipmentSlotId.Shoulders),
+                    GetEquipmentItemForToon(EquipmentSlotId.Legs),
+            };
+            return D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
         }
 
         internal Item GetEquipment(int targetEquipSlot)
@@ -167,8 +182,6 @@ namespace Mooege.Core.GS.Players
             {
                 item.Reveal(player);
             }
-
-            _inventoryGold.SetInventoryLocation((int)EquipmentSlotId.Gold, 0, 0);
             return true;
         }
 
@@ -178,7 +191,6 @@ namespace Mooege.Core.GS.Players
             {
                 item.Unreveal(player);
             }
-
             return true;
         }
 

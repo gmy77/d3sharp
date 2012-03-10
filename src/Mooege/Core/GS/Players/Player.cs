@@ -184,7 +184,6 @@ namespace Mooege.Core.GS.Players
         public Player(World world, GameClient client, Toon bnetToon)
             : base(world, GetClassSNOId(bnetToon.Gender, bnetToon.Class))
         {
-
             this.InGameClient = client;
             this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
             this.Toon = bnetToon;
@@ -200,7 +199,7 @@ namespace Mooege.Core.GS.Players
             this.NameSNOId = -1;
             this.Field10 = 0x0;
 
-            this.SkillSet = new SkillSet(this.Toon.Class);
+            this.SkillSet = new SkillSet(this.Toon.Class, this.Toon);
             this.GroundItems = new Dictionary<uint, Item>();
             this.Conversations = new ConversationManager(this, this.World.Game.Quests);
             this.ExpBonusData = new ExpBonusData(this);
@@ -324,7 +323,7 @@ namespace Mooege.Core.GS.Players
             //Basic stats
             this.Attributes[GameAttribute.Level_Cap] = 60;
             this.Attributes[GameAttribute.Level] = this.Toon.Level;
-            this.Attributes[GameAttribute.Experience_Next] = LevelBorders[this.Toon.Level];
+            this.Attributes[GameAttribute.Experience_Next] = this.Toon.ExperienceNext;
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             //scripted //this.Attributes[GameAttribute.Armor_Total] = 0;
 
@@ -472,8 +471,27 @@ namespace Mooege.Core.GS.Players
             // unlocking assigned skills
             for (int i = 0; i < this.SkillSet.ActiveSkills.Length; i++)
             {
-                this.Attributes[GameAttribute.Skill, this.SkillSet.ActiveSkills[i].snoSkill] = 1;
-                //scripted //this.Attributes[GameAttribute.Skill_Total, this.SkillSet.ActiveSkills[i].snoSkill] = 1;
+                if (this.SkillSet.ActiveSkills[i].snoSkill != -1)
+                {
+                    this.Attributes[GameAttribute.Skill, this.SkillSet.ActiveSkills[i].snoSkill] = 1;
+                    //scripted //this.Attributes[GameAttribute.Skill_Total, this.SkillSet.ActiveSkills[i].snoSkill] = 1;
+                    // update rune attributes for new skill
+                    this.Attributes[GameAttribute.Rune_A, this.SkillSet.ActiveSkills[i].snoSkill] = this.SkillSet.ActiveSkills[i].snoRune == 0 ? 1 : 0;
+                    this.Attributes[GameAttribute.Rune_B, this.SkillSet.ActiveSkills[i].snoSkill] = this.SkillSet.ActiveSkills[i].snoRune == 1 ? 1 : 0;
+                    this.Attributes[GameAttribute.Rune_C, this.SkillSet.ActiveSkills[i].snoSkill] = this.SkillSet.ActiveSkills[i].snoRune == 2 ? 1 : 0;
+                    this.Attributes[GameAttribute.Rune_D, this.SkillSet.ActiveSkills[i].snoSkill] = this.SkillSet.ActiveSkills[i].snoRune == 3 ? 1 : 0;
+                    this.Attributes[GameAttribute.Rune_E, this.SkillSet.ActiveSkills[i].snoSkill] = this.SkillSet.ActiveSkills[i].snoRune == 4 ? 1 : 0;
+                }
+            }
+            for (int i = 0; i < this.SkillSet.PassiveSkills.Length; ++i)
+            {
+                if (this.SkillSet.PassiveSkills[i] != -1)
+                {
+                    // switch on passive skill
+                    this.Attributes[GameAttribute.Trait, this.SkillSet.PassiveSkills[i]] = 1;
+                    this.Attributes[GameAttribute.Skill, this.SkillSet.PassiveSkills[i]] = 1;
+                    //scripted //this.Attributes[GameAttribute.Skill_Total, this.SkillSet.PassiveSkills[i]] = 1;
+                }
             }
 
             this.Inventory = new Inventory(this); // Here because it needs attributes /fasbat
@@ -544,13 +562,8 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Rune_E, message.SNOSkill] = message.RuneIndex == 4 ? 1 : 0;
             this.Attributes.BroadcastChangedIfRevealed();
 
-            // loop through hotbar and replace the old skill with new one
-            foreach (HotbarButtonData button in this.SkillSet.HotBarSkills.Where(button => button.SNOSkill == oldSNOSkill)) 
-            {
-                button.SNOSkill = message.SNOSkill;
-            }
-
             this.SkillSet.ActiveSkills[message.SkillIndex].snoSkill = message.SNOSkill;
+            this.SkillSet.SwitchUpdateSkills(oldSNOSkill, message.SNOSkill, message.RuneIndex, this.Toon);
             this.UpdateHeroState();
             _StartSkillCooldown(message.SNOSkill, SkillChangeCooldownLength);
         }
@@ -583,6 +596,7 @@ namespace Mooege.Core.GS.Players
                 }
             }
 
+            this.SkillSet.UpdatePassiveSkills(this.Toon);
             this.Attributes.BroadcastChangedIfRevealed();
             this.UpdateHeroState();
         }
@@ -817,6 +831,12 @@ namespace Mooege.Core.GS.Players
 
             this.RevealScenesToPlayer(); // reveal scenes in players proximity.
             this.RevealActorsToPlayer(); // reveal actors in players proximity.
+
+            // load all inventory items
+            this.Inventory.LoadFromDB();
+
+            // generate visual update message
+            this.Inventory.SendVisualInventory(this);
         }
 
         public override void OnTeleport()
@@ -828,6 +848,15 @@ namespace Mooege.Core.GS.Players
         public override void OnLeave(World world)
         {
             this.Conversations.StopAll();
+
+            // save visual equipment
+            this.Toon.HeroVisualEquipmentField.Value = this.Inventory.GetVisualEquipment();
+            this.Toon.HeroLevelField.Value = this.Attributes[GameAttribute.Level];
+            this.Toon.GameAccount.ChangedFields.SetPresenceFieldValue(this.Toon.HeroVisualEquipmentField);
+            this.Toon.GameAccount.ChangedFields.SetPresenceFieldValue(this.Toon.HeroLevelField);
+
+            // save all inventory items
+            this.Inventory.SaveToDB();
         }
 
         public override bool Reveal(Player player)
@@ -1403,7 +1432,6 @@ namespace Mooege.Core.GS.Players
             }
         }
 
-
         #endregion
 
         #region queries
@@ -1433,9 +1461,9 @@ namespace Mooege.Core.GS.Players
 
         public static int[] LevelBorders =
         {
-            0, 1200, 2250, 4000, 6050, 8500, 11700, 15400, 19500, 24000, /* Level 1-10 */
-            28900, 34200, 39900, 44100, 45000, 46200, 48300, 50400, 52500, 54600, /* Level 11-20 */
-            56700, 58800, 60900, 63000, 65100, 67200, 69300, 71400, 73500, 75600, /* Level 21-30 */
+            0, 1200, 2700, 4500, 6600, 9000, 11700, 14700, 17625, 20800, 24225, /* Level 0-10 */
+            27900, 31825, 36000, 41475, 38500, 40250, 42000, 43750, 45500, 47250, /* Level 11-20 */
+            49000, 58800, 63750, 73625, 84000, 94875, 106250, 118125, 130500, 134125, /* Level 21-30 */
             77700, 81700, 85800, 90000, 94300, 98700, 103200, 107800, 112500, 117300, /* Level 31-40 */
             122200, 127200, 132300, 137500, 142800, 148200, 153700, 159300, 165000, 170800, /* Level 41-50 */
             176700, 182700, 188800, 195000, 201300, 207700, 214200, 220800, 227500, 234300, /* Level 51-60 */
@@ -1461,12 +1489,18 @@ namespace Mooege.Core.GS.Players
 
         public void UpdateExp(int addedExp)
         {
-
             this.Attributes[GameAttribute.Experience_Next] -= addedExp;
 
-            // Levelup
-            if ((this.Attributes[GameAttribute.Experience_Next] <= 0) && (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]))
+            // Levelup (maybe multiple levelups... remember Diablo2 Ancients)
+            while (this.Attributes[GameAttribute.Experience_Next] <= 0)
             {
+                // No more levelup at Level_Cap
+                if (this.Attributes[GameAttribute.Level] >= this.Attributes[GameAttribute.Level_Cap])
+                {
+                    // Set maximun experience and exit.
+                    this.Attributes[GameAttribute.Experience_Next] = 0;
+                    break;
+                }
                 this.Attributes[GameAttribute.Level]++;
                 this.Toon.LevelUp();
 
@@ -1478,8 +1512,7 @@ namespace Mooege.Core.GS.Players
 
                 this.Conversations.StartConversation(0x0002A777); //LevelUp Conversation
 
-                if (this.Attributes[GameAttribute.Level] < this.Attributes[GameAttribute.Level_Cap]) { this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]]; }
-                else { this.Attributes[GameAttribute.Experience_Next] = 0; }
+                this.Attributes[GameAttribute.Experience_Next] = this.Attributes[GameAttribute.Experience_Next] + LevelBorders[this.Attributes[GameAttribute.Level]];
 
                 // 4 main attributes are incremented according to class
                 this.Attributes[GameAttribute.Strength] = this.Strength;
@@ -1534,12 +1567,6 @@ namespace Mooege.Core.GS.Players
                 this.World.PowerManager.RunPower(this, 85954); //g_LevelUp.pow 85954
             }
 
-            // constant 0 exp at Level_Cap
-            if (this.Attributes[GameAttribute.Experience_Next] < 0) 
-            { 
-                this.Attributes[GameAttribute.Experience_Next] = 0;
-
-            }
             this.Attributes.BroadcastChangedIfRevealed();
             this.Toon.GameAccount.NotifyUpdate();
             //this.Attributes.SendMessage(this.InGameClient, this.DynamicID); kills the player atm
@@ -1575,7 +1602,6 @@ namespace Mooege.Core.GS.Players
 
                     player.Inventory.PickUpGold(item.DynamicID);
                 }
-
                 item.Destroy();
             }
         }
@@ -1602,7 +1628,6 @@ namespace Mooege.Core.GS.Players
                     //every summon and mercenary owned by you must broadcast their green text to you /H_DANILO
                     player.AddPercentageHP((int)item.Attributes[GameAttribute.Health_Globe_Bonus_Health]);
                 }
-
                 item.Destroy();
             }
         }

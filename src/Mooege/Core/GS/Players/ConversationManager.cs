@@ -194,7 +194,7 @@ namespace Mooege.Core.GS.Players
                 {
                     Mooege.Core.GS.Actors.Actor speaker1 = GetSpeaker(currentLineNode.Speaker1);
                     Mooege.Core.GS.Actors.Actor speaker2 = GetSpeaker(currentLineNode.Speaker2);
-                    
+
                     Vector3D translation = speaker2.Position - speaker1.Position;
                     Vector2F flatTranslation = new Vector2F(translation.X, translation.Y);
 
@@ -364,7 +364,6 @@ namespace Mooege.Core.GS.Players
             foreach (Conversation conversation in clonedList)
                 conversation.Stop();
         }
-
 
         /// <summary>
         /// Starts and plays a conversation
