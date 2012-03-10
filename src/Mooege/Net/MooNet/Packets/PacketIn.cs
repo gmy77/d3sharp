@@ -44,7 +44,11 @@ namespace Mooege.Net.MooNet.Packets
 
         public IMessage ReadMessage(IBuilder builder)
         {
+<<<<<<< HEAD
             return builder.WeakMergeFrom(CodedInputStream.CreateInstance(this.GetPayload(Stream))).WeakBuild();
+=======
+            byte[] data = Client.incomingMooNetStream.GetPacketData((int)this.Header.Size);
+>>>>>>> parent of a2d0d01... Tiny code cleanup.
             
             // this._stream.ReadMessage(builder, ExtensionRegistry.Empty); // this method doesn't seem to work with 7728. /raist.
             // return builder.WeakBuild();
@@ -52,7 +56,12 @@ namespace Mooege.Net.MooNet.Packets
 
         public byte[] GetPayload(CodedInputStream stream)
         {
+<<<<<<< HEAD
             return stream.ReadRawBytes((int)this.Header.Size);
+=======
+            var data = Client.incomingMooNetStream.GetPacketData((int)this.Header.Size);
+            return data;
+>>>>>>> parent of a2d0d01... Tiny code cleanup.
         }
 
         public override string ToString()

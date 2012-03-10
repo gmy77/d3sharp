@@ -33,17 +33,40 @@ namespace Mooege.Net.MooNet
 
         public static void Route(ConnectionDataEventArgs e)
         {
+<<<<<<< HEAD
             var stream = CodedInputStream.CreateInstance(e.Data.ToArray());
             while (!stream.IsAtEnd)
             {
                 Identify(e.Connection, stream);
             }
+=======
+            var client = (MooNetClient)e.Connection.Client;
+            client.incomingMooNetStream.Append(e.Data.ToArray());
+            try
+            {
+                while (client.incomingMooNetStream.PacketAvaliable())
+                {
+                    Identify(client);
+                }
+            }
+            catch (Exception except)
+            {
+                Logger.Error("exception caugth on decoding loop");
+                Logger.Error(except.Message);
+                Logger.Error(except.StackTrace);
+            }
+            client.incomingMooNetStream.Consume();
+>>>>>>> parent of a2d0d01... Tiny code cleanup.
         }
 
         public static void Identify(IConnection connection, CodedInputStream stream)
         {
+<<<<<<< HEAD
             var client = (MooNetClient) connection.Client;
             var packet = new PacketIn(client, stream);
+=======
+            var packet = new PacketIn(client, client.incomingMooNetStream.GetPacketHeader());
+>>>>>>> parent of a2d0d01... Tiny code cleanup.
 
             if (packet.Header.ServiceId == ServiceReply)
                 ProcessReply(client, packet);
