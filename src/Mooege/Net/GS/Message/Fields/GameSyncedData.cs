@@ -22,7 +22,7 @@ namespace Mooege.Net.GS.Message.Fields
 {
     public class GameSyncedData
     {
-        public bool Field0;
+        public int Field0;
         public int Field1;
         public int Field2;
         public int Field3;
@@ -36,7 +36,7 @@ namespace Mooege.Net.GS.Message.Fields
 
         public void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadBool();
+            Field0 = buffer.ReadInt(2);
             Field1 = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(32);
             Field3 = buffer.ReadInt(32);
@@ -51,7 +51,7 @@ namespace Mooege.Net.GS.Message.Fields
 
         public void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteBool(Field0);
+            buffer.WriteInt(2,Field0);
             buffer.WriteInt(32, Field1);
             buffer.WriteInt(32, Field2);
             buffer.WriteInt(32, Field3);
@@ -69,7 +69,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad);
-            b.AppendLine("Field0: " + (Field0 ? "true" : "false"));
+            b.AppendLine("Field0: 0x" + Field0);
             b.Append(' ', pad);
             b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', pad);

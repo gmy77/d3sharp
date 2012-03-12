@@ -25,6 +25,7 @@ namespace Mooege.Net.GS.Message.Fields
         // MaxLength = 6
         public HotbarButtonData[] HotBarButtons;
         public HotbarButtonData HotBarButton;
+        public byte Field2;
         public int PlaytimeTotal;
         public int WaypointFlags;
         public HirelingSavedData Field4;
@@ -46,6 +47,7 @@ namespace Mooege.Net.GS.Message.Fields
             }
             HotBarButton = new HotbarButtonData();
             HotBarButton.Parse(buffer);
+            Field2 = (byte)buffer.ReadInt(8);
             PlaytimeTotal = buffer.ReadInt(32);
             WaypointFlags = buffer.ReadInt(32);
             Field4 = new HirelingSavedData();
@@ -72,6 +74,7 @@ namespace Mooege.Net.GS.Message.Fields
                 HotBarButtons[i].Encode(buffer);
             }
             HotBarButton.Encode(buffer);
+            buffer.WriteInt(8, Field2);
             buffer.WriteInt(32, PlaytimeTotal);
             buffer.WriteInt(32, WaypointFlags);
             Field4.Encode(buffer);
@@ -106,7 +109,9 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             HotBarButton.AsText(b, pad);
             b.Append(' ', pad);
-            b.AppendLine("PlaytimeTotal: 0x" + PlaytimeTotal.ToString("X8"));
+            b.AppendLine("Field2: 0x" + Field2.ToString("X2") + " (" + Field2 + ")");
+            b.Append(' ', pad);
+            b.AppendLine("PlaytimeTotal: 0x" + PlaytimeTotal.ToString("X8") + " (" + PlaytimeTotal + ")");
             b.Append(' ', pad);
             b.AppendLine("WaypointFlags: 0x" + WaypointFlags.ToString("X8") + " (" + WaypointFlags + ")");
             Field4.AsText(b, pad);

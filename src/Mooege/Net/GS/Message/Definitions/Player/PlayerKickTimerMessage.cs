@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,40 +18,34 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Fields
+namespace Mooege.Net.GS.Message.Definitions.Player
 {
-    public class HotbarButtonData
+    [Message(Opcodes.PlayerKickTimerMessage)]
+    public class PlayerKickTimerMessage : GameMessage
     {
-        public int /* sno */ SNOSkill;
+        public int Field0;
         public int Field1;
-        public int /* gbid */ ItemGBId;
 
-        public void Parse(GameBitBuffer buffer)
+        public override void Parse(GameBitBuffer buffer)
         {
-            SNOSkill = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(3) + (-1);
-            ItemGBId = buffer.ReadInt(32);
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadInt(32);
         }
 
-        public void Encode(GameBitBuffer buffer)
+        public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, SNOSkill);
-            buffer.WriteInt(3, Field1 - (-1));
-            buffer.WriteInt(32, ItemGBId);
+            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, Field1);
         }
 
-        public void AsText(StringBuilder b, int pad)
+        public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("HotbarButtonData:");
+            b.AppendLine("PlayerKickTimerMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad);
-            b.AppendLine("m_snoPower: 0x" + SNOSkill.ToString("X8"));
-            b.Append(' ', pad);
-            b.AppendLine("Field1: " + Field1);
-            b.Append(' ', pad);
-            b.AppendLine("m_gbidItem: 0x" + ItemGBId.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

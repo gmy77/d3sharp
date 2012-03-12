@@ -27,7 +27,6 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
         public int Field1;
         public int Field2;
         public int Field3;
-        public int /* sno */ snoKillerMonster;
         public int /* sno */ snoKillerActor;
         public int Field6;
         // MaxLength = 2
@@ -40,7 +39,6 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
             Field1 = buffer.ReadInt(7);
             Field2 = buffer.ReadInt(4) + (-1);
             Field3 = buffer.ReadInt(4) + (-1);
-            snoKillerMonster = buffer.ReadInt(32);
             snoKillerActor = buffer.ReadInt(32);
             Field6 = buffer.ReadInt(5) + (-1);
             Field7 = new int /* gbid */[2];
@@ -54,7 +52,6 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
             buffer.WriteInt(7, Field1);
             buffer.WriteInt(4, Field2 - (-1));
             buffer.WriteInt(4, Field3 - (-1));
-            buffer.WriteInt(32, snoKillerMonster);
             buffer.WriteInt(32, snoKillerActor);
             buffer.WriteInt(5, Field6 - (-1));
             for (int i = 0; i < Field7.Length; i++) buffer.WriteInt(32, Field7[i]);
@@ -71,7 +68,6 @@ namespace Mooege.Net.GS.Message.Definitions.Combat
             b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
-            b.Append(' ', pad); b.AppendLine("snoKillerMonster: 0x" + snoKillerMonster.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("snoKillerActor: 0x" + snoKillerActor.ToString("X8"));
             b.Append(' ', pad); b.AppendLine("Field6: 0x" + Field6.ToString("X8") + " (" + Field6 + ")");
             b.Append(' ', pad); b.AppendLine("Field7:");

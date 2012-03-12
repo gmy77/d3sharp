@@ -50,47 +50,47 @@ namespace D3.Profile {
           "aWN1bHR5GAMgASgNOgEwIjkKDVNraWxsV2l0aFJ1bmUSEQoFc2tpbGwYASAC" + 
           "KA86Ai0xEhUKCXJ1bmVfdHlwZRgDIAEoEToCLTEiOwoPU2tpbGxzV2l0aFJ1" + 
           "bmVzEigKBXJ1bmVzGAEgAygLMhkuRDMuUHJvZmlsZS5Ta2lsbFdpdGhSdW5l" + 
-          "IiMKDVBhc3NpdmVTa2lsbHMSEgoKc25vX3RyYWl0cxgBIAMoDyJJCgpLaWxs" + 
-          "ZXJJbmZvEhIKCnNub19raWxsZXIYASABKA0SDgoGcmFyaXR5GAIgASgNEhcK" + 
-          "D3JhcmVfbmFtZV9nYmlkcxgDIAMoBSKuBwoLSGVyb1Byb2ZpbGUSFwoPbW9u" + 
-          "c3RlcnNfa2lsbGVkGAEgASgEEhUKDWVsaXRlc19raWxsZWQYAiABKAQSFgoO" + 
-          "Z29sZF9jb2xsZWN0ZWQYAyABKAQSFQoNaGlnaGVzdF9sZXZlbBgEIAEoDRIa" + 
-          "ChJoaWdoZXN0X2RpZmZpY3VsdHkYBSABKA0SEwoLY3JlYXRlX3RpbWUYBiAB" + 
-          "KA0SFwoIaGFyZGNvcmUYByABKAg6BWZhbHNlEg4KBmF0dGFjaxgIIAEoDRIR" + 
-          "CglwcmVjaXNpb24YCSABKA0SDwoHZGVmZW5zZRgKIAEoDRIQCghzdHJlbmd0" + 
-          "aBgfIAEoDRIRCglkZXh0ZXJpdHkYICABKA0SFAoMaW50ZWxsaWdlbmNlGCEg" + 
-          "ASgNEhAKCHZpdGFsaXR5GAsgASgNEg0KBWFybW9yGAwgASgNEgsKA2RwcxgN" + 
-          "IAEoAhIVCg1yZXNpc3RfYXJjYW5lGA4gASgNEhMKC3Jlc2lzdF9maXJlGA8g" + 
-          "ASgNEhgKEHJlc2lzdF9saWdodG5pbmcYECABKA0SFQoNcmVzaXN0X3BvaXNv" + 
-          "bhgRIAEoDRITCgtyZXNpc3RfY29sZBgSIAEoDRIlCgllcXVpcG1lbnQYEyAB" + 
-          "KAsyEi5EMy5JdGVtcy5JdGVtTGlzdBI2ChFzbm9fYWN0aXZlX3NraWxscxgU" + 
-          "IAEoCzIbLkQzLlByb2ZpbGUuU2tpbGxzV2l0aFJ1bmVzEi0KCnNub190cmFp" + 
-          "dHMYFSABKAsyGS5EMy5Qcm9maWxlLlBhc3NpdmVTa2lsbHMSEgoKZGVhdGhf" + 
-          "dGltZRgWIAEoDRImCgZraWxsZXIYFyABKAsyFi5EMy5HYW1lQmFsYW5jZS5I" + 
-          "YW5kbGUSLQoNa2lsbF9sb2NhdGlvbhgYIAEoCzIWLkQzLkdhbWVCYWxhbmNl" + 
-          "LkhhbmRsZRISCgpzbm9fa2lsbGVyGCMgASgNEisKC2tpbGxlcl9pbmZvGCQg" + 
-          "ASgLMhYuRDMuUHJvZmlsZS5LaWxsZXJJbmZvEhkKEXNub19raWxsX2xvY2F0" + 
-          "aW9uGCIgASgNEg8KB2VwaXRhcGgYGSABKAkSKwoHaGVyb19pZBgaIAEoCzIa" + 
-          "LkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQSFwoPZGFtYWdlX2luY3JlYXNl" + 
-          "GBsgASgCEhMKC2NyaXRfY2hhbmNlGBwgASgCEhgKEGRhbWFnZV9yZWR1Y3Rp" + 
-          "b24YHSABKAISDAoEbGlmZRgeIAEoDSI5Cg9IZXJvUHJvZmlsZUxpc3QSJgoF" + 
-          "aGVyb3MYASADKAsyFy5EMy5Qcm9maWxlLkhlcm9Qcm9maWxlIrgFCg5BY2Nv" + 
-          "dW50UHJvZmlsZRIaChJoaWdoZXN0X2RpZmZpY3VsdHkYASABKA0SIQoZaGln" + 
-          "aGVzdF9ib3NzX2RpZmZpY3VsdHlfMRgCIAEoDRIhChloaWdoZXN0X2Jvc3Nf" + 
-          "ZGlmZmljdWx0eV8yGAMgASgNEiEKGWhpZ2hlc3RfYm9zc19kaWZmaWN1bHR5" + 
-          "XzMYBCABKA0SIQoZaGlnaGVzdF9ib3NzX2RpZmZpY3VsdHlfNBgFIAEoDRIa" + 
-          "Cg9tb25zdGVyc19raWxsZWQYBiABKAQ6ATASGAoNZWxpdGVzX2tpbGxlZBgH" + 
-          "IAEoBDoBMBIZCg5nb2xkX2NvbGxlY3RlZBgIIAEoBDoBMBIeChZoaWdoZXN0" + 
-          "X2hhcmRjb3JlX2xldmVsGAkgASgEEiAKGGhhcmRjb3JlX21vbnN0ZXJzX2tp" + 
-          "bGxlZBgKIAEoBBIuCg9jbGFzc19iYXJiYXJpYW4YCyABKAsyFS5EMy5Qcm9m" + 
-          "aWxlLkNsYXNzSW5mbxIwChFjbGFzc19kZW1vbmh1bnRlchgMIAEoCzIVLkQz" + 
-          "LlByb2ZpbGUuQ2xhc3NJbmZvEikKCmNsYXNzX21vbmsYDSABKAsyFS5EMy5Q" + 
-          "cm9maWxlLkNsYXNzSW5mbxIwChFjbGFzc193aXRjaGRvY3RvchgOIAEoCzIV" + 
-          "LkQzLlByb2ZpbGUuQ2xhc3NJbmZvEisKDGNsYXNzX3dpemFyZBgPIAEoCzIV" + 
-          "LkQzLlByb2ZpbGUuQ2xhc3NJbmZvEikKIWRlcHJlY2F0ZWRfYWNoaWV2ZW1l" + 
-          "bnRfc2hvd2Nhc2VfMBgQIAEoBBIpCiFkZXByZWNhdGVkX2FjaGlldmVtZW50" + 
-          "X3Nob3djYXNlXzEYESABKAQSKQohZGVwcmVjYXRlZF9hY2hpZXZlbWVudF9z" + 
-          "aG93Y2FzZV8yGBIgASgE");
+          "IiMKDVBhc3NpdmVTa2lsbHMSEgoKc25vX3RyYWl0cxgBIAMoDyJNCgpLaWxs" + 
+          "ZXJJbmZvEhYKCnNub19raWxsZXIYASABKAU6Ai0xEg4KBnJhcml0eRgCIAEo" + 
+          "DRIXCg9yYXJlX25hbWVfZ2JpZHMYAyADKAUirgcKC0hlcm9Qcm9maWxlEhcK" + 
+          "D21vbnN0ZXJzX2tpbGxlZBgBIAEoBBIVCg1lbGl0ZXNfa2lsbGVkGAIgASgE" + 
+          "EhYKDmdvbGRfY29sbGVjdGVkGAMgASgEEhUKDWhpZ2hlc3RfbGV2ZWwYBCAB" + 
+          "KA0SGgoSaGlnaGVzdF9kaWZmaWN1bHR5GAUgASgNEhMKC2NyZWF0ZV90aW1l" + 
+          "GAYgASgNEhcKCGhhcmRjb3JlGAcgASgIOgVmYWxzZRIOCgZhdHRhY2sYCCAB" + 
+          "KA0SEQoJcHJlY2lzaW9uGAkgASgNEg8KB2RlZmVuc2UYCiABKA0SEAoIc3Ry" + 
+          "ZW5ndGgYHyABKA0SEQoJZGV4dGVyaXR5GCAgASgNEhQKDGludGVsbGlnZW5j" + 
+          "ZRghIAEoDRIQCgh2aXRhbGl0eRgLIAEoDRINCgVhcm1vchgMIAEoDRILCgNk" + 
+          "cHMYDSABKAISFQoNcmVzaXN0X2FyY2FuZRgOIAEoDRITCgtyZXNpc3RfZmly" + 
+          "ZRgPIAEoDRIYChByZXNpc3RfbGlnaHRuaW5nGBAgASgNEhUKDXJlc2lzdF9w" + 
+          "b2lzb24YESABKA0SEwoLcmVzaXN0X2NvbGQYEiABKA0SJQoJZXF1aXBtZW50" + 
+          "GBMgASgLMhIuRDMuSXRlbXMuSXRlbUxpc3QSNgoRc25vX2FjdGl2ZV9za2ls" + 
+          "bHMYFCABKAsyGy5EMy5Qcm9maWxlLlNraWxsc1dpdGhSdW5lcxItCgpzbm9f" + 
+          "dHJhaXRzGBUgASgLMhkuRDMuUHJvZmlsZS5QYXNzaXZlU2tpbGxzEhIKCmRl" + 
+          "YXRoX3RpbWUYFiABKA0SJgoGa2lsbGVyGBcgASgLMhYuRDMuR2FtZUJhbGFu" + 
+          "Y2UuSGFuZGxlEi0KDWtpbGxfbG9jYXRpb24YGCABKAsyFi5EMy5HYW1lQmFs" + 
+          "YW5jZS5IYW5kbGUSEgoKc25vX2tpbGxlchgjIAEoDRIrCgtraWxsZXJfaW5m" + 
+          "bxgkIAEoCzIWLkQzLlByb2ZpbGUuS2lsbGVySW5mbxIZChFzbm9fa2lsbF9s" + 
+          "b2NhdGlvbhgiIAEoDRIPCgdlcGl0YXBoGBkgASgJEisKB2hlcm9faWQYGiAB" + 
+          "KAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkEhcKD2RhbWFnZV9pbmNy" + 
+          "ZWFzZRgbIAEoAhITCgtjcml0X2NoYW5jZRgcIAEoAhIYChBkYW1hZ2VfcmVk" + 
+          "dWN0aW9uGB0gASgCEgwKBGxpZmUYHiABKA0iOQoPSGVyb1Byb2ZpbGVMaXN0" + 
+          "EiYKBWhlcm9zGAEgAygLMhcuRDMuUHJvZmlsZS5IZXJvUHJvZmlsZSK4BQoO" + 
+          "QWNjb3VudFByb2ZpbGUSGgoSaGlnaGVzdF9kaWZmaWN1bHR5GAEgASgNEiEK" + 
+          "GWhpZ2hlc3RfYm9zc19kaWZmaWN1bHR5XzEYAiABKA0SIQoZaGlnaGVzdF9i" + 
+          "b3NzX2RpZmZpY3VsdHlfMhgDIAEoDRIhChloaWdoZXN0X2Jvc3NfZGlmZmlj" + 
+          "dWx0eV8zGAQgASgNEiEKGWhpZ2hlc3RfYm9zc19kaWZmaWN1bHR5XzQYBSAB" + 
+          "KA0SGgoPbW9uc3RlcnNfa2lsbGVkGAYgASgEOgEwEhgKDWVsaXRlc19raWxs" + 
+          "ZWQYByABKAQ6ATASGQoOZ29sZF9jb2xsZWN0ZWQYCCABKAQ6ATASHgoWaGln" + 
+          "aGVzdF9oYXJkY29yZV9sZXZlbBgJIAEoBBIgChhoYXJkY29yZV9tb25zdGVy" + 
+          "c19raWxsZWQYCiABKAQSLgoPY2xhc3NfYmFyYmFyaWFuGAsgASgLMhUuRDMu" + 
+          "UHJvZmlsZS5DbGFzc0luZm8SMAoRY2xhc3NfZGVtb25odW50ZXIYDCABKAsy" + 
+          "FS5EMy5Qcm9maWxlLkNsYXNzSW5mbxIpCgpjbGFzc19tb25rGA0gASgLMhUu" + 
+          "RDMuUHJvZmlsZS5DbGFzc0luZm8SMAoRY2xhc3Nfd2l0Y2hkb2N0b3IYDiAB" + 
+          "KAsyFS5EMy5Qcm9maWxlLkNsYXNzSW5mbxIrCgxjbGFzc193aXphcmQYDyAB" + 
+          "KAsyFS5EMy5Qcm9maWxlLkNsYXNzSW5mbxIpCiFkZXByZWNhdGVkX2FjaGll" + 
+          "dmVtZW50X3Nob3djYXNlXzAYECABKAQSKQohZGVwcmVjYXRlZF9hY2hpZXZl" + 
+          "bWVudF9zaG93Y2FzZV8xGBEgASgEEikKIWRlcHJlY2F0ZWRfYWNoaWV2ZW1l" + 
+          "bnRfc2hvd2Nhc2VfMhgSIAEoBA==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Profile_ClassInfo__Descriptor = Descriptor.MessageTypes[0];
@@ -1442,11 +1442,11 @@ namespace D3.Profile {
     
     public const int SnoKillerFieldNumber = 1;
     private bool hasSnoKiller;
-    private uint snoKiller_;
+    private int snoKiller_ = -1;
     public bool HasSnoKiller {
       get { return hasSnoKiller; }
     }
-    public uint SnoKiller {
+    public int SnoKiller {
       get { return snoKiller_; }
     }
     
@@ -1482,7 +1482,7 @@ namespace D3.Profile {
       int size = SerializedSize;
       string[] field_names = _killerInfoFieldNames;
       if (hasSnoKiller) {
-        output.WriteUInt32(1, field_names[2], SnoKiller);
+        output.WriteInt32(1, field_names[2], SnoKiller);
       }
       if (hasRarity) {
         output.WriteUInt32(2, field_names[1], Rarity);
@@ -1501,7 +1501,7 @@ namespace D3.Profile {
         
         size = 0;
         if (hasSnoKiller) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(1, SnoKiller);
+          size += pb::CodedOutputStream.ComputeInt32Size(1, SnoKiller);
         }
         if (hasRarity) {
           size += pb::CodedOutputStream.ComputeUInt32Size(2, Rarity);
@@ -1694,7 +1694,7 @@ namespace D3.Profile {
               break;
             }
             case 8: {
-              result.hasSnoKiller = input.ReadUInt32(ref result.snoKiller_);
+              result.hasSnoKiller = input.ReadInt32(ref result.snoKiller_);
               break;
             }
             case 16: {
@@ -1719,11 +1719,11 @@ namespace D3.Profile {
       public bool HasSnoKiller {
         get { return result.hasSnoKiller; }
       }
-      public uint SnoKiller {
+      public int SnoKiller {
         get { return result.SnoKiller; }
         set { SetSnoKiller(value); }
       }
-      public Builder SetSnoKiller(uint value) {
+      public Builder SetSnoKiller(int value) {
         PrepareBuilder();
         result.hasSnoKiller = true;
         result.snoKiller_ = value;
@@ -1732,7 +1732,7 @@ namespace D3.Profile {
       public Builder ClearSnoKiller() {
         PrepareBuilder();
         result.hasSnoKiller = false;
-        result.snoKiller_ = 0;
+        result.snoKiller_ = -1;
         return this;
       }
       

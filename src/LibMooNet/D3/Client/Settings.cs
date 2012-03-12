@@ -43,7 +43,7 @@ namespace D3.Client {
           "ZXR0aW5ncxIYCg11c2VfbGFzdF9oZXJvGAEgASgFOgEwEh0KEnNob3dfb2Zm" + 
           "bGluZV90b2FzdBgCIAEoBToBMBIeChZybXRfbGFzdF91c2VkX2N1cnJlbmN5" + 
           "GAMgASgJEigKHWNvb3BfbGFzdF9jcmVhdGVfZ2FtZV9wcml2YWN5GAQgASgF" + 
-          "OgExIsogCgtQcmVmZXJlbmNlcxIPCgd2ZXJzaW9uGAEgAigFEhAKBWZsYWdz" + 
+          "OgExIqIiCgtQcmVmZXJlbmNlcxIPCgd2ZXJzaW9uGAEgAigFEhAKBWZsYWdz" + 
           "GAIgASgNOgEwEiIKF2l0ZW1zX29uX2dyb3VuZF9zZXR0aW5nGAYgASgNOgEw" + 
           "EjoKGGFjdGlvbl9iaW5kaW5nX2ludmVudG9yeRgKIAEoCzIYLkQzLkNsaWVu" + 
           "dC5BY3Rpb25CaW5kaW5nEjkKF2FjdGlvbl9iaW5kaW5nX2hpcmVsaW5nGAwg" + 
@@ -126,16 +126,21 @@ namespace D3.Client {
           "RiABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI0ChJhY3Rpb25fYmlu" + 
           "ZGluZ19ybWIYRyABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI1ChNh" + 
           "Y3Rpb25fYmluZGluZ193YWxrGEggASgLMhguRDMuQ2xpZW50LkFjdGlvbkJp" + 
-          "bmRpbmcisQMKBUZsYWdzEh0KGVNIT1dfSVRFTV9UT09MVElQX09OX0RST1AQ" + 
-          "ARIYChRTSE9XX01PTlNURVJfSFBfQkFSUxACEhcKE1NIT1dfUExBWUVSX0hQ" + 
-          "X0JBUlMQAxIYChRTSE9XX0lURU1TX09OX0dST1VORBAGEhcKE1NIT1dfREFN" + 
-          "QUdFX05VTUJFUlMQCBISCg5TSE9XX0NSSVRJQ0FMUxAJEhsKF1NIT1dfREVG" + 
-          "RU5TSVZFX01FU1NBR0VTEAoSEgoOSU5WRU5UT1JZX1pPT00QCxIUChBBVVRP" + 
-          "X0VRVUlQX0lURU1TEAwSEgoOU0hPV19UVVRPUklBTFMQDRIUChBTSE9XX0JS" + 
-          "RUFEX0NSVU1CEA4SGAoURElTQUJMRV9PU19TSE9SVENVVFMQERIVChFTSE9X" + 
-          "X0hFQUxfTlVNQkVSUxASEhUKEVNIT1dfUExBWUVSX05BTUVTEBMSFwoTU0hP" + 
-          "V19IUF9CQVJfTlVNQkVSUxAUEg4KClNIT1dfQ0xPQ0sQFRIaChZTSE9XX0FE" + 
-          "VkFOQ0VEX1RPT0xUSVBTEBYSEQoNRUxFQ1RJVkVfTU9ERRAX");
+          "bmRpbmcSGgoPbm90aWZ5X2R1cmF0aW9uGGQgASgNOgEwIu0ECgVGbGFncxId" + 
+          "ChlTSE9XX0lURU1fVE9PTFRJUF9PTl9EUk9QEAESGAoUU0hPV19NT05TVEVS" + 
+          "X0hQX0JBUlMQAhIXChNTSE9XX1BMQVlFUl9IUF9CQVJTEAMSGAoUU0hPV19J" + 
+          "VEVNU19PTl9HUk9VTkQQBhIXChNTSE9XX0RBTUFHRV9OVU1CRVJTEAgSEgoO" + 
+          "U0hPV19DUklUSUNBTFMQCRIbChdTSE9XX0RFRkVOU0lWRV9NRVNTQUdFUxAK" + 
+          "EhIKDklOVkVOVE9SWV9aT09NEAsSFAoQQVVUT19FUVVJUF9JVEVNUxAMEhIK" + 
+          "DlNIT1dfVFVUT1JJQUxTEA0SFAoQU0hPV19CUkVBRF9DUlVNQhAOEhgKFERJ" + 
+          "U0FCTEVfT1NfU0hPUlRDVVRTEBESFQoRU0hPV19IRUFMX05VTUJFUlMQEhIV" + 
+          "ChFTSE9XX1BMQVlFUl9OQU1FUxATEhcKE1NIT1dfSFBfQkFSX05VTUJFUlMQ" + 
+          "FBIOCgpTSE9XX0NMT0NLEBUSGgoWU0hPV19BRFZBTkNFRF9UT09MVElQUxAW" + 
+          "EhEKDUVMRUNUSVZFX01PREUQFxIYChROT1RJRllfRlJJRU5EX09OTElORRAY" + 
+          "EhkKFU5PVElGWV9GUklFTkRfT0ZGTElORRAZEhkKFU5PVElGWV9GUklFTkRf" + 
+          "UkVRVUVTVBAaEh0KGU5PVElGWV9GUklFTkRfQUNISUVWRU1FTlQQGxIZChVO" + 
+          "T1RJRllfRElTUExBWV9XSU5ET1cQHBIaChZNQVRVUkVfTEFOR1VBR0VfRklM" + 
+          "VEVSEB0SFAoQQUxMT1dfUVVJQ0tfSk9JThAe");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Client_ToonSettings__Descriptor = Descriptor.MessageTypes[0];
@@ -153,7 +158,7 @@ namespace D3.Client {
         internal__static_D3_Client_Preferences__Descriptor = Descriptor.MessageTypes[3];
         internal__static_D3_Client_Preferences__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Client.Preferences, global::D3.Client.Preferences.Builder>(internal__static_D3_Client_Preferences__Descriptor,
-                new string[] { "Version", "Flags", "ItemsOnGroundSetting", "ActionBindingInventory", "ActionBindingHireling", "ActionBindingSkills", "ActionBindingQuests", "ActionBindingLore", "ActionBindingSocial", "ActionBindingWorldmap", "ActionBindingHelp", "ActionBindingRecentplayers", "ActionBindingChatlobby", "ActionBindingAchievements", "ActionBindingProfile", "ActionBindingAuctionhouse", "ActionBindingClear", "ActionBindingConsole", "ActionBindingMap", "ActionBindingSkillcycle", "ActionBindingTogglemonsterhpbars", "ActionBindingToggleplayerhpbars", "ActionBindingToggledamagenumbers", "ActionBindingToggleitemsonground", "ActionBindingRewhisper", "ActionBindingWhisperreply", "ActionBindingVoiceptt", "ActionBindingSkill1", "ActionBindingSkill2", "ActionBindingSkill3", "ActionBindingSkill4", "ActionBindingPotion", "ActionBindingBannerdrop", "ActionBindingZoom", "ActionBindingEmotefollow", "ActionBindingEmotegive", "ActionBindingEmotethanks", "ActionBindingEmotesorry", "ActionBindingEmotebye", "ActionBindingEmotedie", "ActionBindingEmoterun", "ActionBindingEmotewait", "ActionBindingEmotego", "ActionBindingEmotehelp", "ActionBindingEmoteyes", "ActionBindingEmoteno", "ActionBindingEmotestay", "ActionBindingEmoteattack", "ActionBindingEmoteretreat", "ActionBindingEmotehold", "ActionBindingEmotetakeobjective", "ActionBindingEmotelaugh", "ActionBindingHoldposition", "ActionBindingSystemmastervolumeup", "ActionBindingSystemmastervolumedown", "ActionBindingSystemtogglemusic", "ActionBindingSystemtogglesound", "ActionBindingSystemscreenshot", "ActionBindingStoneofrecall", "ActionBindingBannerscreen", "ActionBindingLmb", "ActionBindingRmb", "ActionBindingWalk", });
+                new string[] { "Version", "Flags", "ItemsOnGroundSetting", "ActionBindingInventory", "ActionBindingHireling", "ActionBindingSkills", "ActionBindingQuests", "ActionBindingLore", "ActionBindingSocial", "ActionBindingWorldmap", "ActionBindingHelp", "ActionBindingRecentplayers", "ActionBindingChatlobby", "ActionBindingAchievements", "ActionBindingProfile", "ActionBindingAuctionhouse", "ActionBindingClear", "ActionBindingConsole", "ActionBindingMap", "ActionBindingSkillcycle", "ActionBindingTogglemonsterhpbars", "ActionBindingToggleplayerhpbars", "ActionBindingToggledamagenumbers", "ActionBindingToggleitemsonground", "ActionBindingRewhisper", "ActionBindingWhisperreply", "ActionBindingVoiceptt", "ActionBindingSkill1", "ActionBindingSkill2", "ActionBindingSkill3", "ActionBindingSkill4", "ActionBindingPotion", "ActionBindingBannerdrop", "ActionBindingZoom", "ActionBindingEmotefollow", "ActionBindingEmotegive", "ActionBindingEmotethanks", "ActionBindingEmotesorry", "ActionBindingEmotebye", "ActionBindingEmotedie", "ActionBindingEmoterun", "ActionBindingEmotewait", "ActionBindingEmotego", "ActionBindingEmotehelp", "ActionBindingEmoteyes", "ActionBindingEmoteno", "ActionBindingEmotestay", "ActionBindingEmoteattack", "ActionBindingEmoteretreat", "ActionBindingEmotehold", "ActionBindingEmotetakeobjective", "ActionBindingEmotelaugh", "ActionBindingHoldposition", "ActionBindingSystemmastervolumeup", "ActionBindingSystemmastervolumedown", "ActionBindingSystemtogglemusic", "ActionBindingSystemtogglesound", "ActionBindingSystemscreenshot", "ActionBindingStoneofrecall", "ActionBindingBannerscreen", "ActionBindingLmb", "ActionBindingRmb", "ActionBindingWalk", "NotifyDuration", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -1298,8 +1303,8 @@ namespace D3.Client {
   public sealed partial class Preferences : pb::GeneratedMessage<Preferences, Preferences.Builder> {
     private Preferences() { }
     private static readonly Preferences defaultInstance = new Preferences().MakeReadOnly();
-    private static readonly string[] _preferencesFieldNames = new string[] { "action_binding_achievements", "action_binding_auctionhouse", "action_binding_bannerdrop", "action_binding_bannerscreen", "action_binding_chatlobby", "action_binding_clear", "action_binding_console", "action_binding_emoteattack", "action_binding_emotebye", "action_binding_emotedie", "action_binding_emotefollow", "action_binding_emotegive", "action_binding_emotego", "action_binding_emotehelp", "action_binding_emotehold", "action_binding_emotelaugh", "action_binding_emoteno", "action_binding_emoteretreat", "action_binding_emoterun", "action_binding_emotesorry", "action_binding_emotestay", "action_binding_emotetakeobjective", "action_binding_emotethanks", "action_binding_emotewait", "action_binding_emoteyes", "action_binding_help", "action_binding_hireling", "action_binding_holdposition", "action_binding_inventory", "action_binding_lmb", "action_binding_lore", "action_binding_map", "action_binding_potion", "action_binding_profile", "action_binding_quests", "action_binding_recentplayers", "action_binding_rewhisper", "action_binding_rmb", "action_binding_skill1", "action_binding_skill2", "action_binding_skill3", "action_binding_skill4", "action_binding_skillcycle", "action_binding_skills", "action_binding_social", "action_binding_stoneofrecall", "action_binding_systemmastervolumedown", "action_binding_systemmastervolumeup", "action_binding_systemscreenshot", "action_binding_systemtogglemusic", "action_binding_systemtogglesound", "action_binding_toggledamagenumbers", "action_binding_toggleitemsonground", "action_binding_togglemonsterhpbars", "action_binding_toggleplayerhpbars", "action_binding_voiceptt", "action_binding_walk", "action_binding_whisperreply", "action_binding_worldmap", "action_binding_zoom", "flags", "items_on_ground_setting", "version" };
-    private static readonly uint[] _preferencesFieldTags = new uint[] { 178, 194, 338, 554, 170, 202, 210, 458, 386, 394, 354, 362, 418, 426, 474, 490, 442, 466, 402, 378, 450, 482, 370, 410, 434, 146, 98, 498, 82, 562, 122, 218, 330, 186, 114, 162, 274, 570, 298, 306, 314, 322, 226, 106, 130, 546, 514, 506, 538, 522, 530, 258, 266, 234, 250, 290, 578, 282, 138, 346, 16, 48, 8 };
+    private static readonly string[] _preferencesFieldNames = new string[] { "action_binding_achievements", "action_binding_auctionhouse", "action_binding_bannerdrop", "action_binding_bannerscreen", "action_binding_chatlobby", "action_binding_clear", "action_binding_console", "action_binding_emoteattack", "action_binding_emotebye", "action_binding_emotedie", "action_binding_emotefollow", "action_binding_emotegive", "action_binding_emotego", "action_binding_emotehelp", "action_binding_emotehold", "action_binding_emotelaugh", "action_binding_emoteno", "action_binding_emoteretreat", "action_binding_emoterun", "action_binding_emotesorry", "action_binding_emotestay", "action_binding_emotetakeobjective", "action_binding_emotethanks", "action_binding_emotewait", "action_binding_emoteyes", "action_binding_help", "action_binding_hireling", "action_binding_holdposition", "action_binding_inventory", "action_binding_lmb", "action_binding_lore", "action_binding_map", "action_binding_potion", "action_binding_profile", "action_binding_quests", "action_binding_recentplayers", "action_binding_rewhisper", "action_binding_rmb", "action_binding_skill1", "action_binding_skill2", "action_binding_skill3", "action_binding_skill4", "action_binding_skillcycle", "action_binding_skills", "action_binding_social", "action_binding_stoneofrecall", "action_binding_systemmastervolumedown", "action_binding_systemmastervolumeup", "action_binding_systemscreenshot", "action_binding_systemtogglemusic", "action_binding_systemtogglesound", "action_binding_toggledamagenumbers", "action_binding_toggleitemsonground", "action_binding_togglemonsterhpbars", "action_binding_toggleplayerhpbars", "action_binding_voiceptt", "action_binding_walk", "action_binding_whisperreply", "action_binding_worldmap", "action_binding_zoom", "flags", "items_on_ground_setting", "notify_duration", "version" };
+    private static readonly uint[] _preferencesFieldTags = new uint[] { 178, 194, 338, 554, 170, 202, 210, 458, 386, 394, 354, 362, 418, 426, 474, 490, 442, 466, 402, 378, 450, 482, 370, 410, 434, 146, 98, 498, 82, 562, 122, 218, 330, 186, 114, 162, 274, 570, 298, 306, 314, 322, 226, 106, 130, 546, 514, 506, 538, 522, 530, 258, 266, 234, 250, 290, 578, 282, 138, 346, 16, 48, 800, 8 };
     public static Preferences DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1346,6 +1351,13 @@ namespace D3.Client {
         SHOW_CLOCK = 21,
         SHOW_ADVANCED_TOOLTIPS = 22,
         ELECTIVE_MODE = 23,
+        NOTIFY_FRIEND_ONLINE = 24,
+        NOTIFY_FRIEND_OFFLINE = 25,
+        NOTIFY_FRIEND_REQUEST = 26,
+        NOTIFY_FRIEND_ACHIEVEMENT = 27,
+        NOTIFY_DISPLAY_WINDOW = 28,
+        MATURE_LANGUAGE_FILTER = 29,
+        ALLOW_QUICK_JOIN = 30,
       }
       
     }
@@ -1981,6 +1993,16 @@ namespace D3.Client {
       get { return actionBindingWalk_ ?? global::D3.Client.ActionBinding.DefaultInstance; }
     }
     
+    public const int NotifyDurationFieldNumber = 100;
+    private bool hasNotifyDuration;
+    private uint notifyDuration_;
+    public bool HasNotifyDuration {
+      get { return hasNotifyDuration; }
+    }
+    public uint NotifyDuration {
+      get { return notifyDuration_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasVersion) return false;
@@ -2172,7 +2194,7 @@ namespace D3.Client {
       int size = SerializedSize;
       string[] field_names = _preferencesFieldNames;
       if (hasVersion) {
-        output.WriteInt32(1, field_names[62], Version);
+        output.WriteInt32(1, field_names[63], Version);
       }
       if (hasFlags) {
         output.WriteUInt32(2, field_names[60], Flags);
@@ -2359,6 +2381,9 @@ namespace D3.Client {
       }
       if (hasActionBindingWalk) {
         output.WriteMessage(72, field_names[56], ActionBindingWalk);
+      }
+      if (hasNotifyDuration) {
+        output.WriteUInt32(100, field_names[62], NotifyDuration);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2558,6 +2583,9 @@ namespace D3.Client {
         }
         if (hasActionBindingWalk) {
           size += pb::CodedOutputStream.ComputeMessageSize(72, ActionBindingWalk);
+        }
+        if (hasNotifyDuration) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(100, NotifyDuration);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2873,6 +2901,9 @@ namespace D3.Client {
         }
         if (other.HasActionBindingWalk) {
           MergeActionBindingWalk(other.ActionBindingWalk);
+        }
+        if (other.HasNotifyDuration) {
+          NotifyDuration = other.NotifyDuration;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -3467,6 +3498,10 @@ namespace D3.Client {
               }
               input.ReadMessage(subBuilder, extensionRegistry);
               ActionBindingWalk = subBuilder.BuildPartial();
+              break;
+            }
+            case 800: {
+              result.hasNotifyDuration = input.ReadUInt32(ref result.notifyDuration_);
               break;
             }
           }
@@ -5936,6 +5971,26 @@ namespace D3.Client {
         PrepareBuilder();
         result.hasActionBindingWalk = false;
         result.actionBindingWalk_ = null;
+        return this;
+      }
+      
+      public bool HasNotifyDuration {
+        get { return result.hasNotifyDuration; }
+      }
+      public uint NotifyDuration {
+        get { return result.NotifyDuration; }
+        set { SetNotifyDuration(value); }
+      }
+      public Builder SetNotifyDuration(uint value) {
+        PrepareBuilder();
+        result.hasNotifyDuration = true;
+        result.notifyDuration_ = value;
+        return this;
+      }
+      public Builder ClearNotifyDuration() {
+        PrepareBuilder();
+        result.hasNotifyDuration = false;
+        result.notifyDuration_ = 0;
         return this;
       }
     }

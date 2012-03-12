@@ -41,7 +41,7 @@ namespace Mooege.Core.MooNet.Accounts
             = new ByteStringPresenceField<D3.OnlineService.EntityId>(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.GameAccount, 2, 0);
 
         public IntPresenceField ScreenStatusField
-            = new IntPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Channel, 2, 0);
+            = new IntPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Party, 2, 0);
 
         public FourCCPresenceField ProgramField
             = new FourCCPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 3, 0);
@@ -266,7 +266,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             get
             {
-                var builder = D3.Account.Digest.CreateBuilder().SetVersion(106) // 7447=>99, 7728=> 100, 8801=>102, 8296=>105, 8610=>106
+                var builder = D3.Account.Digest.CreateBuilder().SetVersion(106) // 7447=>99, 7728=> 100, 8801=>102, 8296=>105, 8610=>106, 8815=>106
                     .SetBannerConfiguration(this.BannerConfigurationField.Value)
                     .SetFlags(0)
                     .SetLastPlayedHeroId(lastPlayedHeroId);
@@ -389,9 +389,12 @@ namespace Mooege.Core.MooNet.Accounts
                     else if (field.Key.Group == 4 && field.Key.Field == 3) //CallToArmsMessage
                     {
                         returnField.SetValue(field.Value);
-                        //Looks to be the ToonFlags of the party leader/inviter when it is an int, OR the message set in an open to friends game when it is a string /dustinconrad
                     }
                     else if (field.Key.Group == 4 && field.Key.Field == 4) //Party IsFull
+                    {
+                        returnField.SetValue(field.Value);
+                    }
+                    else if (field.Key.Group == 5 && field.Key.Field == 5) //Game IsPrivate
                     {
                         returnField.SetValue(field.Value);
                     }

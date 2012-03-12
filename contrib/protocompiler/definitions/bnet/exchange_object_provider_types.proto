@@ -16,6 +16,7 @@ message ReportAuthorizeRequest
     optional .bnet.protocol.exchange.ActionErrorDetail error_detail = 7;
     optional string avs_result = 8;
     optional string cvv_result = 9;
+    optional .bnet.protocol.exchange.BlobFrom notification_extra_info = 10;
 }
 
 message ReportSettleRequest

@@ -101,6 +101,19 @@ namespace Mooege.Core.MooNet.Authentication
             client.AuthenticationCompleteSignal.Set(); // signal about completion of authentication processes so we can return the response for AuthenticationService:LogonRequest.
         }
 
+        public static void SendAccountSettings(MooNetClient client)
+        {
+            var accset = new bnet.protocol.authentication.AccountSettingsNotification.Builder();
+            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(168));
+            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(184));
+            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(185));
+            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(186));
+            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(187));
+            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(188));
+            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(193));
+            client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).AccountSettings(null, accset.Build(), delegate(bnet.protocol.NO_RESPONSE a) { }));
+        }
+
         private static void ModuleLoadResponse(IMessage response)
         {
             Logger.Trace("ModuleLoadResponse(): {0}", response.ToString());

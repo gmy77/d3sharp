@@ -938,7 +938,7 @@ namespace Mooege.Core.GS.Players
                 Field1 = 0x00000000,
                 Field2 = 0x00000000,
                 Field3 = -1,
-                Gender = Toon.Gender,
+                PlayerFlags = (int)Toon.Flags,
                 PlayerSavedData = this.GetSavedData(),
                 QuestRewardHistoryEntriesCount = 0x00000000,
                 tQuestRewardHistory = QuestRewardHistory,
@@ -948,188 +948,6 @@ namespace Mooege.Core.GS.Players
         #endregion
 
         #region player attribute handling
-        /*
-        public float InitialAttack // Defines the amount of attack points with which a player starts
-        {
-            get
-            {
-                switch (this.Toon.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 10f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.DemonHunter:
-                        return 10f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.Monk:
-                        return 10f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.WitchDoctor:
-                        return 10f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.Wizard:
-                        return 10f + ((this.Toon.Level - 1) * 2);
-                }
-                return 10f + (this.Toon.Level - 1) * 2;
-            }
-        }
-
-        public float InitialPrecision // Defines the amount of precision points with which a player starts
-        {
-            get
-            {
-                switch (this.Toon.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 9f + (this.Toon.Level - 1);
-                    case ToonClass.DemonHunter:
-                        return 11f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.Monk:
-                        return 11f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.WitchDoctor:
-                        return 9f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.Wizard:
-                        return 10f + ((this.Toon.Level - 1) * 2);
-                }
-                return 10f + ((this.Toon.Level - 1) * 2);
-            }
-        }
-
-        public float InitialDefense // Defines the amount of defense points with which a player starts
-        {
-            get
-            {
-                switch (this.Toon.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 11f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.DemonHunter:
-                        // For DH and Wizard, half the levels (starting with the first) give 2 defense => (Level / 2) * 2
-                        // and half give 1 defense => ((Level - 1) / 2) * 1
-                        // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
-                        return 9f + (((this.Toon.Level / 2) * 2) + ((this.Toon.Level - 1) / 2));
-                    case ToonClass.Monk:
-                        return 10f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.WitchDoctor:
-                        return 9f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.Wizard:
-                        return 8f + (((this.Toon.Level / 2) * 2) + ((this.Toon.Level - 1) / 2));
-                }
-                return 10f + ((this.Toon.Level - 1) * 2);
-            }
-        }
-
-        public float InitialVitality // Defines the amount of vitality points with which a player starts
-        {
-            get
-            {
-                switch (this.Toon.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 11f + ((this.Toon.Level - 1) * 2);
-                    case ToonClass.DemonHunter:
-                        // For DH and Wizard, half the levels give 2 vit => ((Level - 1) / 2) * 2
-                        // and half (starting with the first) give 1 vit => (Level / 2) * 1
-                        // Note: We can't cancel the twos in ((Level - 1) / 2) * 2 because of integer divison
-                        return 9f + ((((this.Toon.Level - 1) / 2) * 2) + (this.Toon.Level / 2));
-                    case ToonClass.Monk:
-                        return 9f + (this.Toon.Level - 1);
-                    case ToonClass.WitchDoctor:
-                        return 10f + (this.Toon.Level - 1);
-                    case ToonClass.Wizard:
-                        return 9f + ((((this.Toon.Level - 1) / 2) * 2) + (this.Toon.Level / 2));
-                }
-                return 10f + ((this.Toon.Level - 1) * 2);
-            }
-        }
-        */
-
-        // Notes on attribute increment algorithm:
-        // Precision: Barbarian => +1, else => +2
-        // Defense:   Wizard or Demon Hunter => (lvl+1)%2+1, else => +2
-        // Vitality:  Wizard or Demon Hunter => lvl%2+1, Barbarian => +2, else +1
-        // Attack:    All +2
-        /*
-        public float AttackIncrement
-        {
-            get
-            {
-                switch (this.Toon.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 2f;
-                    case ToonClass.DemonHunter:
-                        return 2f;
-                    case ToonClass.Monk:
-                        return 2f;
-                    case ToonClass.WitchDoctor:
-                        return 2f;
-                    case ToonClass.Wizard:
-                        return 2f;
-                }
-                return 2f;
-            }
-        }
-
-        public float VitalityIncrement
-        {
-            get
-            {
-                switch (this.Toon.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 2f;
-                    case ToonClass.DemonHunter:
-                        return (this.Attributes[GameAttribute.Level] % 2) + 1f;
-                    case ToonClass.Monk:
-                        return 1f;
-                    case ToonClass.WitchDoctor:
-                        return 1f;
-                    case ToonClass.Wizard:
-                        return (this.Attributes[GameAttribute.Level] % 2) + 1f;
-                }
-                return 1f;
-            }
-        }
-
-        public float DefenseIncrement
-        {
-            get
-            {
-                switch (this.Toon.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 2f;
-                    case ToonClass.DemonHunter:
-                        return ((this.Attributes[GameAttribute.Level] + 1) % 2) + 1f;
-                    case ToonClass.Monk:
-                        return 2f;
-                    case ToonClass.WitchDoctor:
-                        return 2f;
-                    case ToonClass.Wizard:
-                        return ((this.Attributes[GameAttribute.Level] + 1) % 2) + 1f;
-                }
-                return 2f;
-            }
-        }
-
-        public float PrecisionIncrement
-        {
-            get
-            {
-                switch (this.Toon.Class)
-                {
-                    case ToonClass.Barbarian:
-                        return 1f;
-                    case ToonClass.DemonHunter:
-                        return 2f;
-                    case ToonClass.Monk:
-                        return 2f;
-                    case ToonClass.WitchDoctor:
-                        return 2f;
-                    case ToonClass.Wizard:
-                        return 2f;
-                }
-                return 2f;
-            }
-        }
-        */
 
         public float Strength
         {
@@ -1140,15 +958,6 @@ namespace Mooege.Core.GS.Players
                     return data.Strength + ((this.Toon.Level - 1) * 3);
                 else
                     return data.Strength + (this.Toon.Level - 1);
-            }
-        }
-
-        //((Strength + Stats_All_Bonus + Strength_Bonus + (Strength_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Strength_Bonus_Percent)) * (1 - Strength_Reduction_Percent)
-        public float StrengthTotal
-        {
-            get
-            {
-                return Strength;
             }
         }
 
@@ -1164,30 +973,12 @@ namespace Mooege.Core.GS.Players
             }
         }
 
-        //((Dexterity + Stats_All_Bonus + Dexterity_Bonus + (Dexterity_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Dexterity_Bonus_Percent)) * (1 - Dexterity_Reduction_Percent)
-        public float DexterityTotal
-        {
-            get
-            {
-                return Dexterity;
-            }
-        }
-
         public float Vitality
         {
             get
             {
                 var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
                 return data.Vitality + ((this.Toon.Level - 1) * 2);
-            }
-        }
-
-        //((Vitality + Stats_All_Bonus + Vitality_Bonus + (Vitality_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Vitality_Bonus_Percent)) * (1 - Vitality_Reduction_Percent)
-        public float VitalityTotal
-        {
-            get
-            {
-                return Vitality;
             }
         }
 
@@ -1203,16 +994,6 @@ namespace Mooege.Core.GS.Players
             }
         }
 
-        //((Intelligence + Stats_All_Bonus + Intelligence_Bonus + (Intelligence_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Intelligence_Bonus_Percent)) * (1 - Intelligence_Reduction_Percent)
-        public float IntelligenceTotal
-        {
-            get
-            {
-                return Intelligence;
-            }
-        }
-
-
         #endregion
 
         #region saved-data
@@ -1222,9 +1003,10 @@ namespace Mooege.Core.GS.Players
             return new PlayerSavedData()
             {
                 HotBarButtons = this.SkillSet.HotBarSkills,
-                HotBarButton = new HotbarButtonData { SNOSkill = -1, ItemGBId = -1 },
+                HotBarButton = new HotbarButtonData { SNOSkill = -1, Field1 = -1, ItemGBId = -1 },
+                Field2 = 0xB4,
                 PlaytimeTotal = (int)this.Toon.TimePlayed,
-                WaypointFlags = 0x7FFFFFFF,
+                WaypointFlags = 0x00000047,
 
                 Field4 = new HirelingSavedData()
                 {
@@ -1233,7 +1015,7 @@ namespace Mooege.Core.GS.Players
                     Field2 = 0x00000002,
                 },
 
-                Field5 = 0x00006A770,
+                Field5 = 0x00000726,
 
                 LearnedLore = this.LearnedLore,
                 ActiveSkills = this.SkillSet.ActiveSkills,
@@ -1295,10 +1077,10 @@ namespace Mooege.Core.GS.Players
 
         public HirelingInfo[] HirelingInfo = new HirelingInfo[4]
         {
-            new HirelingInfo { HirelingIndex = 0x00000000, Field1 = -1, Level = 0x00000000, Field3 = 0x0000, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
-            new HirelingInfo { HirelingIndex = 0x00000001, Field1 = -1, Level = 20, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = 0x000006D3, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
-            new HirelingInfo { HirelingIndex = 0x00000002, Field1 = -1, Level = 25, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
-            new HirelingInfo { HirelingIndex = 0x00000003, Field1 = -1, Level = 30, Field3 = 0x00003C19, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000000, Field1 = -1, Level = 0, Field3 = 0x0000, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000000, Field1 = -1, Level = 0, Field3 = 0x0000, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000000, Field1 = -1, Level = 0, Field3 = 0x0000, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
+            new HirelingInfo { HirelingIndex = 0x00000000, Field1 = -1, Level = 0, Field3 = 0x0000, Field4 = false, Skill1SNOId = -1, Skill2SNOId = -1, Skill3SNOId = -1, Skill4SNOId = -1, },
         };
 
         public SkillKeyMapping[] SkillKeyMappings = new SkillKeyMapping[15]

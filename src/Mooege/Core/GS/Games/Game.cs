@@ -259,7 +259,7 @@ namespace Mooege.Core.GS.Games
             {
                 Field0 = new GameSyncedData
                             {
-                                Field0 = false,
+                                Field0 = 0x0,
                                 Field1 = 0x0,
                                 Field2 = 0x0,
                                 Field3 = 0x0,
@@ -289,7 +289,7 @@ namespace Mooege.Core.GS.Games
                 GameAccountId = new EntityId() { High = (long)joinedPlayer.Toon.GameAccount.BnetEntityId.High, Low = (long)joinedPlayer.Toon.GameAccount.BnetEntityId.Low }, //GameAccount
                 ToonName = joinedPlayer.Toon.Name,
                 Field3 = 0x00000002, //party frame class
-                Field4 = target!=joinedPlayer? 0x2 : 0x4, //party frame level /boyc - may mean something different /raist.
+                Field4 = 0, //target!=joinedPlayer? 0x2 : 0x4, //party frame level /boyc - may mean something different /raist.
                 snoActorPortrait = joinedPlayer.ClassSNO, //party frame portrait
                 Field6 = joinedPlayer.Toon.Level,
                 StateData = joinedPlayer.GetStateData(),

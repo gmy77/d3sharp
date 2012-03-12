@@ -29,6 +29,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public float /* angle */ Field2;
         public bool Field3;
         public int Field4;
+        public int? Field5;
 
         public ACDTranslateSnappedMessage() : base(Opcodes.ACDTranslateSnappedMessage) { }
 
@@ -40,6 +41,10 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             Field2 = buffer.ReadFloat32();
             Field3 = buffer.ReadBool();
             Field4 = buffer.ReadInt(25);
+            if (buffer.ReadBool())
+            {
+                Field5 = buffer.ReadInt(16);
+            }
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -49,6 +54,11 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             buffer.WriteFloat32(Field2);
             buffer.WriteBool(Field3);
             buffer.WriteInt(25, Field4);
+            buffer.WriteBool(Field5.HasValue);
+            if (Field5.HasValue)
+            {
+                buffer.WriteInt(16, Field5.Value);
+            }
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -62,6 +72,10 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.Append(' ', pad); b.AppendLine("Field2: " + Field2.ToString("G"));
             b.Append(' ', pad); b.AppendLine("Field3: " + (Field3 ? "true" : "false"));
             b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
+            if (Field5.HasValue)
+            {
+                b.Append(' ', pad); b.AppendLine("Field5.Value: 0x" + Field5.Value.ToString("X8") + " (" + Field5.Value + ")");
+            }
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
