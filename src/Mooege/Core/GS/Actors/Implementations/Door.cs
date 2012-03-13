@@ -69,7 +69,7 @@ namespace Mooege.Core.GS.Actors.Implementations
 
             this.Attributes[GameAttribute.Gizmo_Has_Been_Operated] = true;
             this.Attributes[GameAttribute.Gizmo_Operator_ACDID] = unchecked((int)player.DynamicID);
-            this.Attributes[GameAttribute.Chest_Open, 0xFFFFFF] = true;
+            this.Attributes[GameAttribute.Gizmo_State] = 1;
             Attributes.BroadcastChangedIfRevealed();
 
             base.OnTargeted(player, message);
