@@ -70,6 +70,16 @@ namespace Mooege.Common.Versions
                 { MooNetClient.ClientPlatform.Mac,"63BC118937E6EA2FAA7B7192676DAEB1B7CA87A9C24ED9F5ACD60E630B4DD7A4".ToByteArray() }
             };
 
+            public static uint Region = 0x5858; //XX
+                //0x5553 //US
+
+            public static class Resources
+            {
+                public static string ProfanityFilterHash = "068fec3c7426b8ba9497225a73437c6dffaa92de962c2b05589b5f46fbe5f5b0";
+                public static string AvailableActs = "89dd44c90f3b7dca32bd7a289d5c09b253c1398b81e7dbf860cd5e635cb4a763";
+                public static string AvailableQuests = "e2aeeb41ad31eadd710f7e3729411b249195123d0a804a1b3bf18883f9011b04";
+            }
+
             public static class Achievements
             {
                 /// <summary>
