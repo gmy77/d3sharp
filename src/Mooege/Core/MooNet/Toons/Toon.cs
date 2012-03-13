@@ -138,8 +138,8 @@ namespace Mooege.Core.MooNet.Toons
             }
             private set
             {
-                _flags = value;
-                this.HeroFlagsField.Value = (int)(this.Flags | ToonFlags.AllUnknowns);
+                _flags = value | ToonFlags.AllUnknowns;
+                this.HeroFlagsField.Value = (int)(value | ToonFlags.AllUnknowns);
             }
         }
 
@@ -560,11 +560,11 @@ namespace Mooege.Core.MooNet.Toons
         Male = 0x00,
         Female = 0x02,
         // TODO: These two need to be figured out still.. /plash
-        Unknown1 = 0x20,
+        //Unknown1 = 0x20,
         Unknown2 = 0x40,
         Unknown3 = 0x80000,
         Unknown4 = 0x2000000,
-        AllUnknowns = Unknown1 | Unknown2 | Unknown3 | Unknown4
+        AllUnknowns = Unknown2 | Unknown3 | Unknown4
     }
     #endregion
 }
