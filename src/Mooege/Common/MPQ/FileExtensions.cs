@@ -30,7 +30,7 @@ namespace Mooege.Common.MPQ
             ".snd", ".sbk", ".stl", ".srf", ".tex", ".trl", ".ui", ".wth",
             ".wrl", ".rcp", "", ".cnd", ".trs", ".acc", ".con", ".tme",
             ".act", ".mat", ".qsr", ".lor", ".rev", ".phm", ".mus", ".tut",
-            ".bos",
+            ".bos", ".ctr"
         };
     }
 }

@@ -39,7 +39,8 @@ message SavedDefinition
     required .D3.AttributeSerializer.SavedAttributes saved_attributes = 3;
     optional .D3.Items.ItemList normal_shared_saved_items = 4;
     optional .D3.Items.ItemList hardcore_shared_saved_items = 5;
-    optional .D3.ItemCrafting.CrafterSavedData crafter_saved_data = 6;
+    optional .D3.ItemCrafting.CrafterSavedData crafter_normal_data = 6;
+    optional .D3.ItemCrafting.CrafterSavedData crafter_hardcore_data = 14;
     optional bytes seen_tutorials = 7;
     optional sfixed64 num_vote_kicks_participated_in = 8;
     optional sfixed64 num_vote_kicks_initiated = 9;

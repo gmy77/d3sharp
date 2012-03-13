@@ -24,6 +24,16 @@ namespace Mooege.Net.GS.Message.Fields
 
         public void AsText(StringBuilder b, int pad)
         {
+            b.Append(' ', pad);
+            b.AppendLine("ActiveSkillSavedData:");
+            b.Append(' ', pad++);
+            b.AppendLine("{");
+            b.Append(' ', pad);
+            b.AppendLine("snoSkill: 0x" + snoSkill.ToString("X8"));
+            b.Append(' ', pad);
+            b.AppendLine("snoRune: " + snoRune);
+            b.Append(' ', --pad);
+            b.AppendLine("}");
         }
     }
 }

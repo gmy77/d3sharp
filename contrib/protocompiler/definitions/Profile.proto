@@ -30,7 +30,7 @@ message PassiveSkills
 
 message KillerInfo
 {
-    optional uint32 sno_killer = 1;
+    optional int32 sno_killer = 1 [default = -1];
     optional uint32 rarity = 2;
     repeated int32 rare_name_gbids = 3;
 }

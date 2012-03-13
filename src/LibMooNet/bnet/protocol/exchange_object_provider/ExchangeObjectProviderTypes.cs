@@ -43,7 +43,7 @@ namespace bnet.protocol.exchange_object_provider {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           "CilibmV0L2V4Y2hhbmdlX29iamVjdF9wcm92aWRlcl90eXBlcy5wcm90bxIm" + 
           "Ym5ldC5wcm90b2NvbC5leGNoYW5nZV9vYmplY3RfcHJvdmlkZXIaEWJuZXQv" + 
-          "ZW50aXR5LnByb3RvGhNibmV0L2V4Y2hhbmdlLnByb3RvIocDChZSZXBvcnRB" + 
+          "ZW50aXR5LnByb3RvGhNibmV0L2V4Y2hhbmdlLnByb3RvIsoDChZSZXBvcnRB" + 
           "dXRob3JpemVSZXF1ZXN0EjkKDHBhcnRpdGlvbl9pZBgBIAIoCzIjLmJuZXQu" + 
           "cHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQSMgoFdG9rZW4YAiACKAsy" + 
           "Iy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBhcnRpdGlvbklkEg4KBnJlc3Vs" + 
@@ -52,46 +52,48 @@ namespace bnet.protocol.exchange_object_provider {
           "KAgSMAoPYm5ldF9hY2NvdW50X2lkGAYgAigLMhcuYm5ldC5wcm90b2NvbC5F" + 
           "bnRpdHlJZBI/CgxlcnJvcl9kZXRhaWwYByABKAsyKS5ibmV0LnByb3RvY29s" + 
           "LmV4Y2hhbmdlLkFjdGlvbkVycm9yRGV0YWlsEhIKCmF2c19yZXN1bHQYCCAB" + 
-          "KAkSEgoKY3Z2X3Jlc3VsdBgJIAEoCSKYAgoTUmVwb3J0U2V0dGxlUmVxdWVz" + 
-          "dBI5CgxwYXJ0aXRpb25faWQYASACKAsyIy5ibmV0LnByb3RvY29sLmV4Y2hh" + 
-          "bmdlLlBhcnRpdGlvbklkEjIKBXRva2VuGAIgAigLMiMuYm5ldC5wcm90b2Nv" + 
-          "bC5leGNoYW5nZS5QYXJ0aXRpb25JZBIOCgZyZXN1bHQYAyACKAQSQQoXbm90" + 
-          "aWZpY2F0aW9uX2V4dHJhX2luZm8YBCABKAsyIC5ibmV0LnByb3RvY29sLmV4" + 
-          "Y2hhbmdlLkJsb2JGcm9tEj8KDGVycm9yX2RldGFpbBgFIAEoCzIpLmJuZXQu" + 
-          "cHJvdG9jb2wuZXhjaGFuZ2UuQWN0aW9uRXJyb3JEZXRhaWwimAIKE1JlcG9y" + 
-          "dENhbmNlbFJlcXVlc3QSOQoMcGFydGl0aW9uX2lkGAEgAigLMiMuYm5ldC5w" + 
-          "cm90b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25JZBIyCgV0b2tlbhgCIAIoCzIj" + 
-          "LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQSDgoGcmVzdWx0" + 
-          "GAMgAigEEkEKF25vdGlmaWNhdGlvbl9leHRyYV9pbmZvGAQgASgLMiAuYm5l" + 
-          "dC5wcm90b2NvbC5leGNoYW5nZS5CbG9iRnJvbRI/CgxlcnJvcl9kZXRhaWwY" + 
-          "BSABKAsyKS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkFjdGlvbkVycm9yRGV0" + 
-          "YWlsIpgCChNSZXBvcnRSZWZ1bmRSZXF1ZXN0EjkKDHBhcnRpdGlvbl9pZBgB" + 
-          "IAIoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQSMgoF" + 
-          "dG9rZW4YAiACKAsyIy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBhcnRpdGlv" + 
-          "bklkEg4KBnJlc3VsdBgDIAIoBBJBChdub3RpZmljYXRpb25fZXh0cmFfaW5m" + 
-          "bxgEIAEoCzIgLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmxvYkZyb20SPwoM" + 
-          "ZXJyb3JfZGV0YWlsGAUgASgLMikuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5B" + 
-          "Y3Rpb25FcnJvckRldGFpbCL5AQoYR2V0UGF5bWVudE1ldGhvZHNSZXF1ZXN0" + 
-          "Ei0KDGJuZXRfYWNjb3VudBgBIAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5" + 
-          "SWQSLQoMZ2FtZV9hY2NvdW50GAIgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRp" + 
-          "dHlJZBIQCghjdXJyZW5jeRgDIAIoCRIYChBjYXNoX2luX291dF9tYXNrGAQg" + 
-          "AigNEisKHHJlZnJlc2hfcGF5bWVudF9tZXRob2RfY2FjaGUYBSABKAg6BWZh" + 
-          "bHNlEiYKF3JlZnJlc2hfZV9iYWxhbmNlX2NhY2hlGAYgASgIOgVmYWxzZSKe" + 
-          "AgoNUGF5bWVudE1ldGhvZBIxCgdhY2NvdW50GAEgAigLMiAuYm5ldC5wcm90" + 
-          "b2NvbC5leGNoYW5nZS5CbG9iRnJvbRITCgtkZXNjcmlwdGlvbhgCIAEoCRIO" + 
-          "CgZhbW91bnQYAyABKAQSGwoQY2FzaF9pbl9vdXRfbWFzaxgEIAEoDToBMxI/" + 
-          "Cg9iaWxsaW5nX2FkZHJlc3MYBSABKAsyJi5ibmV0LnByb3RvY29sLmV4Y2hh" + 
-          "bmdlLkJpbGxpbmdBZGRyZXNzEhEKCXdhbGxldF9pZBgGIAIoBBIXCg9jYXBf" + 
-          "cmVzdHJpY3Rpb24YByABKA0SGQoRYXV0aGVudGljYXRvcl9jYXAYCCABKAQS" + 
-          "EAoIc29mdF9jYXAYCSABKAQiYwoZR2V0UGF5bWVudE1ldGhvZHNSZXNwb25z" + 
-          "ZRJGCgdtZXRob2RzGAEgAygLMjUuYm5ldC5wcm90b2NvbC5leGNoYW5nZV9v" + 
-          "YmplY3RfcHJvdmlkZXIuUGF5bWVudE1ldGhvZEIDgAEA");
+          "KAkSEgoKY3Z2X3Jlc3VsdBgJIAEoCRJBChdub3RpZmljYXRpb25fZXh0cmFf" + 
+          "aW5mbxgKIAEoCzIgLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmxvYkZyb20i" + 
+          "mAIKE1JlcG9ydFNldHRsZVJlcXVlc3QSOQoMcGFydGl0aW9uX2lkGAEgAigL" + 
+          "MiMuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25JZBIyCgV0b2tl" + 
+          "bhgCIAIoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQS" + 
+          "DgoGcmVzdWx0GAMgAigEEkEKF25vdGlmaWNhdGlvbl9leHRyYV9pbmZvGAQg" + 
+          "ASgLMiAuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5CbG9iRnJvbRI/CgxlcnJv" + 
+          "cl9kZXRhaWwYBSABKAsyKS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkFjdGlv" + 
+          "bkVycm9yRGV0YWlsIpgCChNSZXBvcnRDYW5jZWxSZXF1ZXN0EjkKDHBhcnRp" + 
+          "dGlvbl9pZBgBIAIoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0" + 
+          "aW9uSWQSMgoFdG9rZW4YAiACKAsyIy5ibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
+          "LlBhcnRpdGlvbklkEg4KBnJlc3VsdBgDIAIoBBJBChdub3RpZmljYXRpb25f" + 
+          "ZXh0cmFfaW5mbxgEIAEoCzIgLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmxv" + 
+          "YkZyb20SPwoMZXJyb3JfZGV0YWlsGAUgASgLMikuYm5ldC5wcm90b2NvbC5l" + 
+          "eGNoYW5nZS5BY3Rpb25FcnJvckRldGFpbCKYAgoTUmVwb3J0UmVmdW5kUmVx" + 
+          "dWVzdBI5CgxwYXJ0aXRpb25faWQYASACKAsyIy5ibmV0LnByb3RvY29sLmV4" + 
+          "Y2hhbmdlLlBhcnRpdGlvbklkEjIKBXRva2VuGAIgAigLMiMuYm5ldC5wcm90" + 
+          "b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25JZBIOCgZyZXN1bHQYAyACKAQSQQoX" + 
+          "bm90aWZpY2F0aW9uX2V4dHJhX2luZm8YBCABKAsyIC5ibmV0LnByb3RvY29s" + 
+          "LmV4Y2hhbmdlLkJsb2JGcm9tEj8KDGVycm9yX2RldGFpbBgFIAEoCzIpLmJu" + 
+          "ZXQucHJvdG9jb2wuZXhjaGFuZ2UuQWN0aW9uRXJyb3JEZXRhaWwi+QEKGEdl" + 
+          "dFBheW1lbnRNZXRob2RzUmVxdWVzdBItCgxibmV0X2FjY291bnQYASABKAsy" + 
+          "Fy5ibmV0LnByb3RvY29sLkVudGl0eUlkEi0KDGdhbWVfYWNjb3VudBgCIAEo" + 
+          "CzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSEAoIY3VycmVuY3kYAyACKAkS" + 
+          "GAoQY2FzaF9pbl9vdXRfbWFzaxgEIAIoDRIrChxyZWZyZXNoX3BheW1lbnRf" + 
+          "bWV0aG9kX2NhY2hlGAUgASgIOgVmYWxzZRImChdyZWZyZXNoX2VfYmFsYW5j" + 
+          "ZV9jYWNoZRgGIAEoCDoFZmFsc2UingIKDVBheW1lbnRNZXRob2QSMQoHYWNj" + 
+          "b3VudBgBIAIoCzIgLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmxvYkZyb20S" + 
+          "EwoLZGVzY3JpcHRpb24YAiABKAkSDgoGYW1vdW50GAMgASgEEhsKEGNhc2hf" + 
+          "aW5fb3V0X21hc2sYBCABKA06ATMSPwoPYmlsbGluZ19hZGRyZXNzGAUgASgL" + 
+          "MiYuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5CaWxsaW5nQWRkcmVzcxIRCgl3" + 
+          "YWxsZXRfaWQYBiACKAQSFwoPY2FwX3Jlc3RyaWN0aW9uGAcgASgNEhkKEWF1" + 
+          "dGhlbnRpY2F0b3JfY2FwGAggASgEEhAKCHNvZnRfY2FwGAkgASgEImMKGUdl" + 
+          "dFBheW1lbnRNZXRob2RzUmVzcG9uc2USRgoHbWV0aG9kcxgBIAMoCzI1LmJu" + 
+          "ZXQucHJvdG9jb2wuZXhjaGFuZ2Vfb2JqZWN0X3Byb3ZpZGVyLlBheW1lbnRN" + 
+          "ZXRob2RCA4ABAA==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_object_provider_ReportAuthorizeRequest__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_exchange_object_provider_ReportAuthorizeRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_object_provider.ReportAuthorizeRequest, global::bnet.protocol.exchange_object_provider.ReportAuthorizeRequest.Builder>(internal__static_bnet_protocol_exchange_object_provider_ReportAuthorizeRequest__Descriptor,
-                new string[] { "PartitionId", "Token", "Result", "AuthHandle", "DeferDelivery", "BnetAccountId", "ErrorDetail", "AvsResult", "CvvResult", });
+                new string[] { "PartitionId", "Token", "Result", "AuthHandle", "DeferDelivery", "BnetAccountId", "ErrorDetail", "AvsResult", "CvvResult", "NotificationExtraInfo", });
         internal__static_bnet_protocol_exchange_object_provider_ReportSettleRequest__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_exchange_object_provider_ReportSettleRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_object_provider.ReportSettleRequest, global::bnet.protocol.exchange_object_provider.ReportSettleRequest.Builder>(internal__static_bnet_protocol_exchange_object_provider_ReportSettleRequest__Descriptor,
@@ -134,8 +136,8 @@ namespace bnet.protocol.exchange_object_provider {
   public sealed partial class ReportAuthorizeRequest : pb::GeneratedMessage<ReportAuthorizeRequest, ReportAuthorizeRequest.Builder> {
     private ReportAuthorizeRequest() { }
     private static readonly ReportAuthorizeRequest defaultInstance = new ReportAuthorizeRequest().MakeReadOnly();
-    private static readonly string[] _reportAuthorizeRequestFieldNames = new string[] { "auth_handle", "avs_result", "bnet_account_id", "cvv_result", "defer_delivery", "error_detail", "partition_id", "result", "token" };
-    private static readonly uint[] _reportAuthorizeRequestFieldTags = new uint[] { 34, 66, 50, 74, 40, 58, 10, 24, 18 };
+    private static readonly string[] _reportAuthorizeRequestFieldNames = new string[] { "auth_handle", "avs_result", "bnet_account_id", "cvv_result", "defer_delivery", "error_detail", "notification_extra_info", "partition_id", "result", "token" };
+    private static readonly uint[] _reportAuthorizeRequestFieldTags = new uint[] { 34, 66, 50, 74, 40, 58, 82, 10, 24, 18 };
     public static ReportAuthorizeRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -246,6 +248,16 @@ namespace bnet.protocol.exchange_object_provider {
       get { return cvvResult_; }
     }
     
+    public const int NotificationExtraInfoFieldNumber = 10;
+    private bool hasNotificationExtraInfo;
+    private global::bnet.protocol.exchange.BlobFrom notificationExtraInfo_;
+    public bool HasNotificationExtraInfo {
+      get { return hasNotificationExtraInfo; }
+    }
+    public global::bnet.protocol.exchange.BlobFrom NotificationExtraInfo {
+      get { return notificationExtraInfo_ ?? global::bnet.protocol.exchange.BlobFrom.DefaultInstance; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasPartitionId) return false;
@@ -261,6 +273,9 @@ namespace bnet.protocol.exchange_object_provider {
         if (HasErrorDetail) {
           if (!ErrorDetail.IsInitialized) return false;
         }
+        if (HasNotificationExtraInfo) {
+          if (!NotificationExtraInfo.IsInitialized) return false;
+        }
         return true;
       }
     }
@@ -269,13 +284,13 @@ namespace bnet.protocol.exchange_object_provider {
       int size = SerializedSize;
       string[] field_names = _reportAuthorizeRequestFieldNames;
       if (hasPartitionId) {
-        output.WriteMessage(1, field_names[6], PartitionId);
+        output.WriteMessage(1, field_names[7], PartitionId);
       }
       if (hasToken) {
-        output.WriteMessage(2, field_names[8], Token);
+        output.WriteMessage(2, field_names[9], Token);
       }
       if (hasResult) {
-        output.WriteUInt64(3, field_names[7], Result);
+        output.WriteUInt64(3, field_names[8], Result);
       }
       if (hasAuthHandle) {
         output.WriteMessage(4, field_names[0], AuthHandle);
@@ -294,6 +309,9 @@ namespace bnet.protocol.exchange_object_provider {
       }
       if (hasCvvResult) {
         output.WriteString(9, field_names[3], CvvResult);
+      }
+      if (hasNotificationExtraInfo) {
+        output.WriteMessage(10, field_names[6], NotificationExtraInfo);
       }
       UnknownFields.WriteTo(output);
     }
@@ -331,6 +349,9 @@ namespace bnet.protocol.exchange_object_provider {
         }
         if (hasCvvResult) {
           size += pb::CodedOutputStream.ComputeStringSize(9, CvvResult);
+        }
+        if (hasNotificationExtraInfo) {
+          size += pb::CodedOutputStream.ComputeMessageSize(10, NotificationExtraInfo);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -485,6 +506,9 @@ namespace bnet.protocol.exchange_object_provider {
         if (other.HasCvvResult) {
           CvvResult = other.CvvResult;
         }
+        if (other.HasNotificationExtraInfo) {
+          MergeNotificationExtraInfo(other.NotificationExtraInfo);
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -587,6 +611,15 @@ namespace bnet.protocol.exchange_object_provider {
             }
             case 74: {
               result.hasCvvResult = input.ReadString(ref result.cvvResult_);
+              break;
+            }
+            case 82: {
+              global::bnet.protocol.exchange.BlobFrom.Builder subBuilder = global::bnet.protocol.exchange.BlobFrom.CreateBuilder();
+              if (result.hasNotificationExtraInfo) {
+                subBuilder.MergeFrom(NotificationExtraInfo);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              NotificationExtraInfo = subBuilder.BuildPartial();
               break;
             }
           }
@@ -878,6 +911,46 @@ namespace bnet.protocol.exchange_object_provider {
         PrepareBuilder();
         result.hasCvvResult = false;
         result.cvvResult_ = "";
+        return this;
+      }
+      
+      public bool HasNotificationExtraInfo {
+       get { return result.hasNotificationExtraInfo; }
+      }
+      public global::bnet.protocol.exchange.BlobFrom NotificationExtraInfo {
+        get { return result.NotificationExtraInfo; }
+        set { SetNotificationExtraInfo(value); }
+      }
+      public Builder SetNotificationExtraInfo(global::bnet.protocol.exchange.BlobFrom value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasNotificationExtraInfo = true;
+        result.notificationExtraInfo_ = value;
+        return this;
+      }
+      public Builder SetNotificationExtraInfo(global::bnet.protocol.exchange.BlobFrom.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasNotificationExtraInfo = true;
+        result.notificationExtraInfo_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeNotificationExtraInfo(global::bnet.protocol.exchange.BlobFrom value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasNotificationExtraInfo &&
+            result.notificationExtraInfo_ != global::bnet.protocol.exchange.BlobFrom.DefaultInstance) {
+            result.notificationExtraInfo_ = global::bnet.protocol.exchange.BlobFrom.CreateBuilder(result.notificationExtraInfo_).MergeFrom(value).BuildPartial();
+        } else {
+          result.notificationExtraInfo_ = value;
+        }
+        result.hasNotificationExtraInfo = true;
+        return this;
+      }
+      public Builder ClearNotificationExtraInfo() {
+        PrepareBuilder();
+        result.hasNotificationExtraInfo = false;
+        result.notificationExtraInfo_ = null;
         return this;
       }
     }

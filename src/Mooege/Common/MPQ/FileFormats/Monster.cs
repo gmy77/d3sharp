@@ -89,7 +89,6 @@ namespace Mooege.Common.MPQ.FileFormats
         {
             var stream = file.Open();
             this.Header = new Header(stream);
-
             this.I0 = stream.ReadValueS32();
             this.ActorSNO = stream.ReadValueS32();
             this.I2 = stream.ReadValueS32();
@@ -105,8 +104,8 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Level.Hell = stream.ReadValueS32();
             this.Level.Inferno = stream.ReadValueS32();
             // 84 - last 6 of these floats are not in the array actually.
-            Floats = new float[138];
-            for (int i = 0; i < 138; i++)
+            Floats = new float[139];
+            for (int i = 0; i < 139; i++)
             {
                 Floats[i] = stream.ReadValueF32();
             }
@@ -117,13 +116,13 @@ namespace Mooege.Common.MPQ.FileFormats
             F4 = stream.ReadValueF32();
             F5 = stream.ReadValueF32();
 
-            // 660
+            // 664
             this.I4 = stream.ReadValueS32();
             this.HealthDropinfo0 = new HealthDropInfo(stream);
             this.HealthDropinfo1 = new HealthDropInfo(stream);
             this.HealthDropinfo2 = new HealthDropInfo(stream);
             this.HealthDropinfo3 = new HealthDropInfo(stream);
-            // 712
+            // 716
             this.SNOSkillKit = stream.ReadValueS32();
             this.SkillDeclarations = new SkillDeclaration[8];
             for (int i = 0; i < 8; i++)
@@ -135,31 +134,31 @@ namespace Mooege.Common.MPQ.FileFormats
             {
                 this.MonsterSkillDeclarations[i] = new MonsterSkillDeclaration(stream);
             }
-            // 908
+            // 912
             this.SNOTreasureClassFirstKill = stream.ReadValueS32();
             this.SNOTreasureClass = stream.ReadValueS32();
             this.SNOTreasureClassRare = stream.ReadValueS32();
             this.SNOTreasureClassChampion = stream.ReadValueS32();
             this.SNOTreasureClassChampionLight = stream.ReadValueS32();
-            // 928
+            // 932
             this.F6 = stream.ReadValueF32();
             this.F7 = stream.ReadValueF32();
             this.F8 = stream.ReadValueF32();
             this.F9 = stream.ReadValueF32();
-            I5 = stream.ReadValueS32();
-            F10 = stream.ReadValueF32();
-            I6 = stream.ReadValueS32();
-            I7 = stream.ReadValueS32();
-            //960
+            this.I5 = stream.ReadValueS32();
+            this.F10 = stream.ReadValueF32();
+            this.I6 = stream.ReadValueS32();
+            this.I7 = stream.ReadValueS32();
+            //964
             this.SNOInventory = stream.ReadValueS32();
             this.SNOSecondaryInventory = stream.ReadValueS32();
             this.SNOLore = stream.ReadValueS32();
-            AIBehavior = new int[6];
+            this.AIBehavior = new int[6];
             for (int i = 0; i < 6; i++)
             {
                 this.AIBehavior[i] = stream.ReadValueS32();
             }
-            GbidArray0 = new int[8];
+            this.GbidArray0 = new int[8];
             for (int i = 0; i < 8; i++)
             {
                 this.GbidArray0[i] = stream.ReadValueS32();
@@ -179,18 +178,18 @@ namespace Mooege.Common.MPQ.FileFormats
             {
                 this.GbidArray2[i] = stream.ReadValueS32();
             }
-            // 1092
+            // 1096
             this.I8 = stream.ReadValueS32();
             this.I9 = stream.ReadValueS32();
             this.I10 = stream.ReadValueS32();
             this.PowerType = (MonsterPowerType)stream.ReadValueS32();
-
-            stream.Position += (7 * 4);
+            //1112
+            stream.Position += (6 * 4);
             // 1136
             this.TagMap = stream.ReadSerializedItem<TagMap>();
-            stream.Position += (2 * 4);
-            this.I11 = stream.ReadValueS32();
             stream.Position += (3 * 4);
+            this.I11 = stream.ReadValueS32();
+            stream.Position += (2 * 4);
             this.MonsterMinionSpawngroup = stream.ReadSerializedData<MonsterMinionSpawnGroup>();
             this.Name = stream.ReadString(128, true);
             stream.Close();

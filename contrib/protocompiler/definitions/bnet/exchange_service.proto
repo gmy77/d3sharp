@@ -224,6 +224,8 @@ message OfferNotificationRequest
     required .bnet.protocol.exchange.OfferExtended offer = 1;
     required uint32 event = 2;
     optional .bnet.protocol.exchange.BlobFrom extra_info = 3;
+    required uint32 object_type = 4;
+    optional bool last_authorization = 5 [default = false];
 }
 
 message BidNotificationRequest
@@ -231,6 +233,8 @@ message BidNotificationRequest
     required .bnet.protocol.exchange.BidExtended bid = 1;
     required uint32 event = 2;
     optional .bnet.protocol.exchange.BlobFrom extra_info = 3;
+    required uint32 object_type = 4;
+    optional bool last_authorization = 5 [default = false];
 }
 
 message QueryOrdersByAccountForItemRequest

@@ -327,6 +327,8 @@ namespace Mooege.Net.MooNet
             if (this.TLSStream.LocalCertificate != null)
                 Logger.Trace("Local certificate was issued to {0} by {1} and is valid from {2} until {3}.", this.TLSStream.LocalCertificate.Subject, this.TLSStream.LocalCertificate.Issuer, this.TLSStream.LocalCertificate.NotBefore, this.TLSStream.LocalCertificate.NotAfter);
 
+            Mooege.Core.MooNet.Authentication.AuthManager.SendAccountSettings(this);
+
             //if (this.TLSStream.RemoteCertificate != null) // throws exception too, should be fixed /raist.
             // Logger.Warn("Remote certificate was issued to {0} by {1} and is valid from {2} until {3}.", this.TLSStream.RemoteCertificate.Subject, this.TLSStream.RemoteCertificate.Issuer, this.TLSStream.RemoteCertificate.NotBefore, this.TLSStream.RemoteCertificate.NotAfter);
         }

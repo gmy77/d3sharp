@@ -259,7 +259,7 @@ namespace Mooege.Core.GS.Games
             {
                 Field0 = new GameSyncedData
                             {
-                                Field0 = false,
+                                Field0 = 0x0,
                                 Field1 = 0x0,
                                 Field2 = 0x0,
                                 Field3 = 0x0,
