@@ -200,7 +200,7 @@ namespace Mooege.Core.GS.Players
             if (item == null)
                 return;
             // Request to equip item from backpack
-            if (request.Location.EquipmentSlot != 0 && request.Location.EquipmentSlot != (int) EquipmentSlotId.Stash)
+            if (request.Location.EquipmentSlot != 0 && request.Location.EquipmentSlot != (int)EquipmentSlotId.Stash)
             {
                 var sourceGrid = (item.InvLoc.EquipmentSlot == 0 ? _inventoryGrid :
                     item.InvLoc.EquipmentSlot == (int)EquipmentSlotId.Stash ? _stashGrid : null);
@@ -241,10 +241,14 @@ namespace Mooege.Core.GS.Players
                         }
                         else
                         {
+                            // Get original location
+                            int x = item.InventoryLocation.X;
+                            int y = item.InventoryLocation.Y;
                             // equip item and place other item in the backpack
                             sourceGrid.RemoveItem(item);
+                            _equipment.UnequipItem(oldEquipItem);
+                            sourceGrid.AddItem(oldEquipItem, y, x);
                             _equipment.EquipItem(item, targetEquipSlot);
-                            sourceGrid.AddItem(oldEquipItem);
                         }
                         AcceptMoveRequest(item);
                         AcceptMoveRequest(oldEquipItem);
@@ -253,7 +257,6 @@ namespace Mooege.Core.GS.Players
                     SendVisualInventory(this._owner);
                 }
             }
-
             // Request to move an item (from backpack or equipmentslot)
             else
             {
@@ -291,9 +294,28 @@ namespace Mooege.Core.GS.Players
                         sourceGrid.RemoveItem(item);
                     }
                     destGrid.AddItem(item, request.Location.Row, request.Location.Column);
-                    if (item.InvLoc.EquipmentSlot != request.Location.EquipmentSlot) 
+                    if (item.InvLoc.EquipmentSlot != request.Location.EquipmentSlot)
                         AcceptMoveRequest(item);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Handles a request to move an item from stash the inventory and back
+        /// </summary>
+        public void HandleInventoryRequestQuickMoveMessage(InventoryRequestQuickMoveMessage request)
+        {
+            Item item = GetItem(request.ItemID);
+            if (item == null || (request.DestEquipmentSlot != (int)EquipmentSlotId.Stash && request.DestEquipmentSlot != (int)EquipmentSlotId.Inventory))
+                return;
+            // Identify source and destination grids
+            var destinationGrid = request.DestEquipmentSlot == 0 ? _inventoryGrid : _stashGrid;
+            var sourceGrid = request.DestEquipmentSlot == 0 ? _stashGrid : _inventoryGrid;
+
+            if (destinationGrid.HasFreeSpace(request.DestRowStart, request.DestRowEnd, item))
+            {
+                sourceGrid.RemoveItem(item);
+                destinationGrid.AddItem(request.DestRowStart, request.DestRowEnd, item);
             }
         }
 
@@ -321,6 +343,7 @@ namespace Mooege.Core.GS.Players
                         _equipment.UnequipItem(itemOffHand);
                         if (!_inventoryGrid.AddItem(itemOffHand))
                         {
+                            // unequip failed, put back
                             _equipment.EquipItem(itemOffHand, (int)EquipmentSlotId.Off_Hand);
                             return false;
                         }
@@ -421,6 +444,7 @@ namespace Mooege.Core.GS.Players
         public void Consume(GameClient client, GameMessage message)
         {
             if (message is InventoryRequestMoveMessage) HandleInventoryRequestMoveMessage(message as InventoryRequestMoveMessage);
+            else if (message is InventoryRequestQuickMoveMessage) HandleInventoryRequestQuickMoveMessage(message as InventoryRequestQuickMoveMessage);
             else if (message is InventorySplitStackMessage) OnInventorySplitStackMessage(message as InventorySplitStackMessage);
             else if (message is InventoryStackTransferMessage) OnInventoryStackTransferMessage(message as InventoryStackTransferMessage);
             else if (message is InventoryDropItemMessage) OnInventoryDropItemMessage(message as InventoryDropItemMessage);
