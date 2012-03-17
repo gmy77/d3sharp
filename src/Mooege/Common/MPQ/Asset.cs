@@ -18,6 +18,7 @@
 
 using System;
 using Mooege.Core.GS.Common.Types.SNO;
+using Mooege.Common.Logging;
 
 namespace Mooege.Common.MPQ
 {
@@ -30,6 +31,7 @@ namespace Mooege.Common.MPQ
         public Type Parser { get; set; }
 
         protected FileFormat _data = null;
+        protected static readonly Logger Logger = LogManager.CreateLogger();
 
         public FileFormat Data
         {
@@ -37,9 +39,15 @@ namespace Mooege.Common.MPQ
             {
                 if (_data == null && SourceAvailable && Parser != null)
                 {
-                    RunParser();
+                    try
+                    {
+                        RunParser();
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.FatalException(e, "Bad MPQ detected, failed parsing asset: {0}", this.FileName);
+                    }
                 }
-
                 return _data;
             }
         }

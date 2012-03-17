@@ -271,7 +271,9 @@ namespace Mooege.Core.GS.Games
                             }
             });
 
-            joinedPlayer.EnterWorld(this.StartingWorld.StartingPoints.First().Position);
+            //joinedPlayer.EnterWorld(this.StartingWorld.StartingPoints.First().Position);
+            joinedPlayer.EnterWorld(this.StartingWorld.StartingPoints.Find(x => x.ActorSNO.Name == "Start_Location_Team_0").Position);
+
             joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
         }
 
