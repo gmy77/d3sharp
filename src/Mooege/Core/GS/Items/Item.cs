@@ -437,8 +437,6 @@ namespace Mooege.Core.GS.Items
             }
             return base.Unreveal(player);
         }
-
-
     }
 
     public enum ItemState

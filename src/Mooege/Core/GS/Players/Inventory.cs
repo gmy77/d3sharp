@@ -648,6 +648,10 @@ namespace Mooege.Core.GS.Players
             //load everything and make a switch on slot_id
             Item item = null;
             int goldAmount = 0;
+            // Clear already present items
+            // LoadFromDB is called every time World is changed, even entering a dungeon
+            _stashGrid.Clear();
+            _inventoryGrid.Clear();
 
             // first of all load stash size
             var rowsQuery = string.Format("SELECT * FROM inventory WHERE account_id = {0} AND equipment_slot = {1}", _owner.Toon.GameAccount.PersistentID, (int)EquipmentSlotId.StashSize);
@@ -695,18 +699,18 @@ namespace Mooege.Core.GS.Players
                 {
                     var slot = Convert.ToInt32(itemsReader["equipment_slot"]);
                     var gbid = Convert.ToInt32(itemsReader["item_id"]);
-                    if (slot == (int)EquipmentSlotId.Inventory)
+                    if (slot >= (int)EquipmentSlotId.Inventory && slot <= (int)EquipmentSlotId.Neck)
                     {
-                        // load inventory
-                        item = ItemGenerator.CreateItem(_owner, ItemGenerator.GetItemDefinition(gbid));
-                        item.Attributes[GameAttribute.Item_Quality_Level] = 0;
-                        this._inventoryGrid.AddItem(item, Convert.ToInt32(itemsReader["inventory_loc_y"]), Convert.ToInt32(itemsReader["inventory_loc_x"]));
-                    }
-                    else if (slot >= (int)EquipmentSlotId.Helm && slot <= (int)EquipmentSlotId.Neck)
-                    {
-                        // load equipment
                         item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(gbid));
-                        _equipment.EquipItem(item, (int)slot);
+                        item.Attributes[GameAttribute.Item_Quality_Level] = 0;
+                        if (slot == (int)EquipmentSlotId.Inventory)
+                        {
+                            this._inventoryGrid.AddItem(item, Convert.ToInt32(itemsReader["inventory_loc_y"]), Convert.ToInt32(itemsReader["inventory_loc_x"]));
+                        }
+                        else
+                        {
+                            _equipment.EquipItem(item, (int)slot);
+                        }
                     }
                 }
             }

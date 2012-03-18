@@ -43,7 +43,6 @@ namespace Mooege.Core.GS.Common
 
         private readonly Actor _owner; // Used, because most information is not in the item class but Actors managed by the world
         
-
         private struct InventorySize
         {
             public int Width;
@@ -69,6 +68,14 @@ namespace Mooege.Core.GS.Common
             var newBackpack = new uint[rows, columns];
             Array.Copy(_backpack, newBackpack, _backpack.Length);
             _backpack = newBackpack;
+        }
+
+        public void Clear()
+        {
+            Items.Clear();
+            int r = Rows;
+            int c = Columns;
+            this._backpack = new uint[r, c];
         }
 
         // This should be in the database#
