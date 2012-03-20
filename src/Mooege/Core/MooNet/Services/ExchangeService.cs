@@ -298,7 +298,17 @@ namespace Mooege.Core.MooNet.Services
             throw new NotImplementedException();
         }
 
-        public override void GetNotClosedOfferCount(IRpcController controller, bnet.protocol.exchange.GetNotClosedOfferCountRequest request, Action<bnet.protocol.exchange.GetNotClosedOfferCountResponse> done)
+        public override void SubscribeAdvancedOrderStatusChange(IRpcController controller, bnet.protocol.exchange.SubscribeAdvancedOrderStatusChangeRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UnsubscribeAdvancedOrderStatusChange(IRpcController controller, bnet.protocol.exchange.UnsubscribeAdvancedOrderStatusChangeRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void GetOrderCount(IRpcController controller, bnet.protocol.exchange.GetOrderCountRequest request, Action<bnet.protocol.exchange.GetOrderCountResponse> done)
         {
             throw new NotImplementedException();
         }

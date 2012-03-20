@@ -133,6 +133,7 @@ message BidCreation
     optional uint64 auction_duration = 2;
     optional uint64 auction_start_delay = 3;
     optional .bnet.protocol.exchange.BillingAddress billing_address = 4;
+    optional bool fill_or_kill = 5 [default = false];
 }
 
 message OrderExtended
@@ -164,6 +165,7 @@ message QueryOrderFilter
     optional uint32 order_status_mask = 5;
     optional bool rollup = 6 [default = false];
     required .bnet.protocol.exchange.QueryFilterByCreatedTime time_filter = 7;
+    optional uint32 order_book_status = 8;
 }
 
 message Settlement
@@ -197,6 +199,7 @@ message SpecialistConfig
     optional int32 current_unit_price_rule = 9;
     optional int32 maximum_unit_price_rule = 10;
     repeated .bnet.protocol.exchange.CurrencyConfig currency_config = 11;
+    optional int32 fill_or_kill_rule = 12;
 }
 
 message FeeEstimationData
@@ -221,7 +224,7 @@ message FeeDetail
     optional uint64 fee_group_id = 6;
     optional string fee_group_name = 7;
     optional uint64 flat_fee_amount = 8;
-    optional uint64 scaling_fee_amount = 9;
+    optional float scaling_fee_rate = 9;
     optional uint64 max_fee_amount = 10;
     optional string fee_description = 11;
     required bool is_tax = 12;
@@ -236,5 +239,19 @@ message PriceDetail
 {
     required uint64 trade_price = 1;
     required uint64 amount = 2;
+}
+
+message Count
+{
+    required uint32 count = 1;
+    optional uint32 limit = 2;
+}
+
+message AdvancedSubscription
+{
+    optional fixed32 program = 1;
+    optional uint32 action = 2;
+    optional string trans_direction = 3;
+    optional uint32 reason = 4;
 }
 

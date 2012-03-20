@@ -72,17 +72,12 @@ namespace Mooege.Core.MooNet.Services
             throw new NotImplementedException();
         }
 
-        public override void BlockEntity(IRpcController controller, bnet.protocol.user_manager.BlockEntityRequest request, Action<bnet.protocol.user_manager.BlockEntityResponse> done)
+        public override void BlockEntity(IRpcController controller, bnet.protocol.user_manager.BlockEntityRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }
 
-        public override void UnblockEntity(IRpcController controller, bnet.protocol.user_manager.UnblockEntityRequest request, Action<bnet.protocol.user_manager.UnblockEntityResponse> done)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ClearBlockList(IRpcController controller, bnet.protocol.NoData request, Action<bnet.protocol.user_manager.ClearBlockListResponse> done)
+        public override void UnblockEntity(IRpcController controller, bnet.protocol.user_manager.UnblockEntityRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }

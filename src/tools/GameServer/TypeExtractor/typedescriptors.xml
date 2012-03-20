@@ -1867,7 +1867,7 @@
     <Field Name="snoDestLevelArea" Type="DT_SNO#78" Offset="8" Flags="1" EncodedBits="32" SnoType="22" />
     <Field Offset="12" Flags="0" />
   </StructureDescriptor>
-  <GameMessageDescriptor Index="209" Name="ACDClientTranslateMessage" Size="44" NetworkIds="128">
+  <GameMessageDescriptor Index="209" Name="ACDClientTranslateMessage" Size="52" NetworkIds="128">
     <Field Type="RequiredMessageHeader#86" Offset="0" Flags="1" />
     <Field Type="DT_INT#1" Offset="8" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="12" Min="0" Max="12" Flags="17" EncodedBits="4" />
@@ -1876,7 +1876,8 @@
     <Field Type="DT_FLOAT#5" Offset="32" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="36" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="40" Min="-1" Max="1048575" Flags="17" EncodedBits="21" />
-    <Field Offset="44" Flags="0" />
+    <Field Type="DT_OPTIONAL#197" Offset="44" Flags="1" SubType="DT_SNO#78" EncodedBits="32" />
+    <Field Offset="52" Flags="0" />
   </GameMessageDescriptor>
   <GameMessageDescriptor Index="210" Name="ACDTranslateFixedUpdateMessage" Size="36" NetworkIds="127">
     <Field Type="RequiredMessageHeader#86" Offset="0" Flags="1" />
@@ -3333,21 +3334,26 @@
     <Field Type="DT_FLOAT#5" Offset="224" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="228" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="232" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="236" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="240" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="244" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="248" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="236" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="240" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="244" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="248" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="252" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="256" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="260" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="264" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="256" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="260" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="264" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="268" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="272" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="276" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="280" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="284" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="288" Flags="1" SubType="DT_FLOAT#5" ArrayLength="4" EncodedBits="32" />
-    <Field Offset="304" Flags="0" />
+    <Field Type="DT_FLOAT#5" Offset="288" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="292" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="296" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="300" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="304" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="308" Flags="1" SubType="DT_FLOAT#5" ArrayLength="4" EncodedBits="32" />
+    <Field Offset="328" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="400" Name="ActorGroup">
     <Field Name="uHash" Type="DT_INT#1" Offset="0" Flags="0" EncodedBits="32" />
@@ -4097,14 +4103,15 @@
     <Field Name="serSpawnPopulations" Type="SerializeData#2" Offset="9192" Flags="0" />
     <Field Offset="9200" Flags="0" />
   </StructureDescriptor>
-  <StructureDescriptor Index="469" Name="LevelAreaSpawnPopulation" UnkValue="2">
+  <StructureDescriptor Index="469" Name="LevelAreaSpawnPopulation" UnkValue="3">
     <Field Type="DT_CHARARRAY#24" Offset="0" Flags="1" ArrayLength="64" EncodedBits="7" />
     <Field Type="DT_INT#1" Offset="64" Flags="1" EncodedBits="32" />
     <Field Type="DT_FIXEDARRAY#20" Offset="68" Flags="1" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="84" Flags="1" EncodedBits="32" />
-    <Field Type="DT_VARIABLEARRAY#3" Offset="88" Flags="33" SubType="LevelAreaSpawnGroup#470" VariableOffset="8" />
-    <Field Name="serSpawnGroups" Type="SerializeData#2" Offset="96" Flags="0" />
-    <Field Offset="104" Flags="0" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="84" Flags="1" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="100" Flags="1" EncodedBits="32" />
+    <Field Type="DT_VARIABLEARRAY#3" Offset="104" Flags="33" SubType="LevelAreaSpawnGroup#470" VariableOffset="8" />
+    <Field Name="serSpawnGroups" Type="SerializeData#2" Offset="112" Flags="0" />
+    <Field Offset="120" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="470" Name="LevelAreaSpawnGroup" UnkValue="5">
     <Field Type="DT_ENUM#112" Offset="0" Min="0" Max="1" Flags="17" EncodedBits="1">

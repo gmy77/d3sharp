@@ -46,7 +46,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void FindChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.FindChannelRequest request, System.Action<bnet.protocol.channel.FindChannelResponse> done)
         {
-            Logger.Trace("FindChannel(): Filter={0}", request.Filter);
+            Logger.Trace("FindChannel(): Filter={0}", request.Options.AttributeFilter);
             var builder = bnet.protocol.channel.FindChannelResponse.CreateBuilder();
 
             done(builder.Build());

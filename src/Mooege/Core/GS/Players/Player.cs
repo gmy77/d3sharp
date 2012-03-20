@@ -458,7 +458,7 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Immobolize] = true;
             this.Attributes[GameAttribute.Untargetable] = true;
             this.Attributes[GameAttribute.CantStartDisplayedPowers] = true;
-            this.Attributes[GameAttribute.IsTrialActor] = true;
+            this.Attributes[GameAttribute.IsContentRestrictedActor] = true;
             this.Attributes[GameAttribute.Trait, 0x0000CE11] = 1;
             this.Attributes[GameAttribute.TeamID] = 2;
             this.Attributes[GameAttribute.Shared_Stash_Slots] = 14;

@@ -8,14 +8,15 @@ option cc_generic_services = false;
 
 message Challenge
 {
-    required uint32 type = 1;
+    required fixed32 type = 1;
     optional string info = 2;
     optional string answer = 3;
+    optional uint32 retries = 4;
 }
 
 message ChallengePickedRequest
 {
-    required uint32 challenge = 1;
+    required fixed32 challenge = 1;
 }
 
 message ChallengeAnsweredRequest
@@ -28,6 +29,7 @@ message SendChallengeToUserRequest
     optional .bnet.protocol.ProcessId peer_id = 1;
     optional .bnet.protocol.EntityId game_account_id = 2;
     repeated .bnet.protocol.challenge.Challenge challenges = 3;
+    required fixed32 context = 4;
 }
 
 message SendChallengeToUserResponse
@@ -38,6 +40,7 @@ message SendChallengeToUserResponse
 message ChallengeUserRequest
 {
     repeated .bnet.protocol.challenge.Challenge challenges = 1;
+    required fixed32 context = 2;
 }
 
 service ChallengeService
@@ -46,13 +49,17 @@ service ChallengeService
     {
         option (method_id) = 1;
     }
-    rpc ChallengeAnswered(.bnet.protocol.challenge.ChallengeAnsweredRequest) returns(.bnet.protocol.NO_RESPONSE)
+    rpc ChallengeAnswered(.bnet.protocol.challenge.ChallengeAnsweredRequest) returns(.bnet.protocol.NoData)
     {
         option (method_id) = 2;
     }
-    rpc SendChallengeToUser(.bnet.protocol.challenge.SendChallengeToUserRequest) returns(.bnet.protocol.challenge.SendChallengeToUserResponse)
+    rpc ChallengeCancelled(.bnet.protocol.NoData) returns(.bnet.protocol.NO_RESPONSE)
     {
         option (method_id) = 3;
+    }
+    rpc SendChallengeToUser(.bnet.protocol.challenge.SendChallengeToUserRequest) returns(.bnet.protocol.challenge.SendChallengeToUserResponse)
+    {
+        option (method_id) = 4;
     }
 }
 

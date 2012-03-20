@@ -47,7 +47,7 @@ namespace bnet.protocol.exchange {
           "VHlwZRIOCgZzb3VyY2UYASACKAcSDAoEdHlwZRgCIAIoCRIMCgRkYXRhGAMg" + 
           "AigMIkEKEUFjdGlvbkVycm9yRGV0YWlsEhIKCmVycm9yX2NvZGUYASACKA0S" + 
           "GAoQZXh0cmFfZXJyb3JfY29kZRgCIAEoDSJWCg5CaWxsaW5nQWRkcmVzcxIS" + 
-          "Cgpjb3VudHJ5X2lkGAEgAigFEgwKBGNpdHkYAiACKAkSDQoFc3RhdGUYAyAB" + 
+          "Cgpjb3VudHJ5X2lkGAEgAigFEgwKBGNpdHkYAiABKAkSDQoFc3RhdGUYAyAB" + 
           "KAkSEwoLcG9zdGFsX2NvZGUYBCABKAlCA4ABAA==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
@@ -1886,7 +1886,6 @@ namespace bnet.protocol.exchange {
     public override bool IsInitialized {
       get {
         if (!hasCountryId) return false;
-        if (!hasCity) return false;
         return true;
       }
     }

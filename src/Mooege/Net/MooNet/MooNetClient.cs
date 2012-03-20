@@ -102,6 +102,9 @@ namespace Mooege.Net.MooNet
         /// </summary>
         public AuthManager.AuthenticationErrorCodes AuthenticationErrorCode;
 
+        public bool ThumbprintReq = false;
+        public bool PasswordReq = false;
+
         /// <summary>
         /// Callback list for issued client RPCs.
         /// </summary>

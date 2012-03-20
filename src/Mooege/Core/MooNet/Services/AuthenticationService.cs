@@ -19,9 +19,11 @@
 using System;
 using System.Globalization;
 using System.Threading;
+using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Common.Versions;
 using Mooege.Core.MooNet.Authentication;
+using Mooege.Core.Cryptography;
 using Mooege.Core.MooNet.Online;
 using Mooege.Net.MooNet;
 using Mooege.Core.MooNet.Accounts;
@@ -34,8 +36,8 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
-        
-        public override void Logon(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.LogonRequest request, Action<bnet.protocol.authentication.LogonResponse> done)
+
+        public override void Logon(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.LogonRequest request, Action<bnet.protocol.NoData> done)
         {
             Logger.Trace("LogonRequest(): Email={0}", request.Email);
 
@@ -46,29 +48,37 @@ namespace Mooege.Core.MooNet.Services
                 return;
             }
 
+            done(bnet.protocol.NoData.CreateBuilder().Build());
+
             AuthManager.StartAuthentication(this.Client, request);
 
             var authenticationThread = new Thread(() =>
             {
                 this.Client.AuthenticationCompleteSignal.WaitOne(); // wait the signal;
 
+                var logonResponseBuilder = bnet.protocol.authentication.LogonResult.CreateBuilder();
+
                 if(this.Client.AuthenticationErrorCode != AuthManager.AuthenticationErrorCodes.None)
                 {
                     Logger.Info("Authentication failed for {0} because of invalid credentals.", request.Email);
-                    done(bnet.protocol.authentication.LogonResponse.DefaultInstance);
+                    logonResponseBuilder.SetErrorCode(6); //Logon failed, please try again (Error 6)
+                    this.Client.MakeRPC(() =>
+                        bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).LogonComplete(null, logonResponseBuilder.Build(), callback => { }));
+
                     return;
                 }
 
                 Logger.Info("User {0} authenticated successfuly.", request.Email);
-                var logonResponseBuilder = bnet.protocol.authentication.LogonResponse.CreateBuilder()
-                    .SetAccount(this.Client.Account.BnetEntityId);
+                logonResponseBuilder.SetAccount(this.Client.Account.BnetEntityId);
+                logonResponseBuilder.SetErrorCode(0);
 
                 foreach (var gameAccount in this.Client.Account.GameAccounts.Values)
                 {
                     logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
                 }
 
-                done(logonResponseBuilder.Build());
+                this.Client.MakeRPC(() =>
+                    bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).LogonComplete(null, logonResponseBuilder.Build(), callback => { }));
 
                 this.Client.EnableEncryption();
 
@@ -100,7 +110,34 @@ namespace Mooege.Core.MooNet.Services
             Logger.Trace("SelectGameAccount(): {0}", this.Client.Account.CurrentGameAccount);
 
             done(bnet.protocol.NoData.CreateBuilder().Build());
+        }
+
+        public override void ModuleNotify(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.ModuleNotification request, Action<bnet.protocol.NoData> done)
+        {
+            Logger.Trace("ModuleNotify(): ModuleId:{0} Result: {1}", request.ModuleId, request.Result);
+
+            done(bnet.protocol.NoData.CreateBuilder().Build());
+
+            if (this.Client.ThumbprintReq && !this.Client.PasswordReq)
+            {
+                var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
+                    .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
+                    .SetRegion(0x00005858) // XX
+                    .SetUsage(0x61757468) // auth - password.dll
+                    .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AuthModuleHashMap[this.Client.Platform])))
+                    .SetMessage(ByteString.CopyFrom(AuthManager.OngoingAuthentications[this.Client].LogonChallenge))
+                    .Build();
+
+                this.Client.PasswordReq = true;
+                this.Client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
+            }
 
         }
+
+        private static void ModuleLoadResponse(IMessage response)
+        {
+            Logger.Trace("ModuleLoadResponse(): {0}", response.ToString());
+        }
+
     }
 }

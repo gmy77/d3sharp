@@ -37,6 +37,7 @@ message SavedDefinition
     required uint32 version = 1;
     optional .D3.Account.Digest digest = 2;
     required .D3.AttributeSerializer.SavedAttributes saved_attributes = 3;
+    optional .D3.AttributeSerializer.SavedAttributes saved_attributes_hardcore = 15;
     optional .D3.Items.ItemList normal_shared_saved_items = 4;
     optional .D3.Items.ItemList hardcore_shared_saved_items = 5;
     optional .D3.ItemCrafting.CrafterSavedData crafter_normal_data = 6;

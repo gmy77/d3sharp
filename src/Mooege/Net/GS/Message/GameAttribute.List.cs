@@ -288,7 +288,7 @@ namespace Mooege.Net.GS.Message
         public static readonly GameAttributeB Untargetable = new GameAttributeB(231, 0, -1, 1, 1, "", "", "Untargetable", GameAttributeEncoding.IntMinMax, 31, 0, 1, 1);
         public static readonly GameAttributeB Immobolize = new GameAttributeB(232, 0, -1, 1, 1, "", "", "Immobolize", GameAttributeEncoding.IntMinMax, 1, 0, 1, 1);
         public static readonly GameAttributeB Immune_To_Knockback = new GameAttributeB(233, 0, -1, 1, 1, "", "", "Immune_To_Knockback", GameAttributeEncoding.IntMinMax, 0, 0, 1, 1);
-        public static readonly GameAttributeB Power_Immobilize = new GameAttributeB(234, 0, -1, 1, 1, "", "", "Power_Immobilize", GameAttributeEncoding.IntMinMax, 0, 0, 1, 1);
+        public static readonly GameAttributeB Power_Immobilize = new GameAttributeB(234, 0, -1, 1, 1, "", "", "Power_Immobilize", GameAttributeEncoding.IntMinMax, 1, 0, 1, 1);
         public static readonly GameAttributeF Stun_Chance = new GameAttributeF(235, 0, -1, 0, 0, "", "", "Stun_Chance", GameAttributeEncoding.Float16, 9, 0, 0, 16);
         public static readonly GameAttributeF Stun_Length = new GameAttributeF(236, 0, -1, 0, 0, "", "", "Stun_Length", GameAttributeEncoding.Float16, 9, 0, 0, 16);
         public static readonly GameAttributeF Stun_Recovery = new GameAttributeF(237, 0, -1, 0, 0, "", "", "Stun_Recovery", GameAttributeEncoding.Float16, 9, 0, 0, 16);
@@ -765,7 +765,7 @@ namespace Mooege.Net.GS.Message
         public static readonly GameAttributeF Turn_Deccel_Scalar = new GameAttributeF(708, 1065353216, -1, 5, 0, "", "", "Turn_Deccel_Scalar", GameAttributeEncoding.Float16, 31, 0, 0, 16);
         public static readonly GameAttributeB No_Health_Drop = new GameAttributeB(709, 0, -1, 1, 1, "", "", "No_Health_Drop", GameAttributeEncoding.IntMinMax, 0, 0, 1, 1);
         public static readonly GameAttributeB Leader = new GameAttributeB(710, 0, -1, 1, 1, "", "", "Leader", GameAttributeEncoding.IntMinMax, 0, 0, 1, 1);
-        public static readonly GameAttributeB IsTrialActor = new GameAttributeB(711, 0, -1, 1, 1, "", "", "IsTrialActor", GameAttributeEncoding.IntMinMax, 31, 0, 1, 1);
+        public static readonly GameAttributeB IsContentRestrictedActor = new GameAttributeB(711, 0, -1, 1, 1, "", "", "IsContentRestrictedActor", GameAttributeEncoding.IntMinMax, 31, 0, 1, 1);
         public static readonly GameAttributeB InBossEncounter = new GameAttributeB(712, 0, -1, 1, 1, "", "", "InBossEncounter", GameAttributeEncoding.IntMinMax, 1, 0, 1, 1);
         public static readonly GameAttributeB God = new GameAttributeB(713, 0, -1, 1, 1, "", "", "God", GameAttributeEncoding.IntMinMax, 31, 0, 1, 1);
         public static readonly GameAttributeB MinimapActive = new GameAttributeB(714, 0, -1, 1, 1, "", "", "MinimapActive", GameAttributeEncoding.IntMinMax, 31, 0, 1, 1);

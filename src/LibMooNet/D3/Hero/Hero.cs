@@ -89,48 +89,49 @@ namespace D3.Hero {
           "YXllZF9xdWVzdBgOIAIoDxIeChZsYXN0X3BsYXllZF9xdWVzdF9zdGVwGA8g" + 
           "AigREhYKC3RpbWVfcGxheWVkGBAgAigNOgEwEigKHGhpZ2hlc3RfY29tcGxl" + 
           "dGVkX2RpZmZpY3VsdHkYESABKBE6Ai0xEhMKC2NyZWF0ZV90aW1lGBIgASgN" + 
-          "EhgKEGxhc3RfcGxheWVkX3RpbWUYEyABKA0i2QEKCERpZ2VzdFVJEhcKD2xh" + 
+          "EhgKEGxhc3RfcGxheWVkX3RpbWUYEyABKA0i/wEKCERpZ2VzdFVJEhcKD2xh" + 
           "c3RfcGxheWVkX2FjdBgBIAIoERIcChRoaWdoZXN0X3VubG9ja2VkX2FjdBgC" + 
           "IAIoERIeChZsYXN0X3BsYXllZF9kaWZmaWN1bHR5GAMgAigREiMKG2hpZ2hl" + 
           "c3RfdW5sb2NrZWRfZGlmZmljdWx0eRgEIAIoERIZChFsYXN0X3BsYXllZF9x" + 
           "dWVzdBgFIAIoDxIeChZsYXN0X3BsYXllZF9xdWVzdF9zdGVwGAYgAigREhYK" + 
-          "C3RpbWVfcGxheWVkGAcgAigNOgEwIpoBCgpTYXZlZFF1ZXN0EhUKCXNub19x" + 
-          "dWVzdBgBIAIoDzoCLTESFQoKZGlmZmljdWx0eRgCIAIoEToBMBIcChBjdXJy" + 
-          "ZW50X3N0ZXBfdWlkGAMgAigROgItMRIbCg9vYmplY3RpdmVfc3RhdGUYBCAD" + 
-          "KBFCAhABEiMKF2ZhaWx1cmVfY29uZGl0aW9uX3N0YXRlGAUgAygRQgIQASIn" + 
-          "CgtMZWFybmVkTG9yZRIYChBzbm9fbG9yZV9sZWFybmVkGAEgAygPIlwKElNh" + 
-          "dmVkQ29udmVyc2F0aW9ucxIlCh1wbGF5ZWRfY29udmVyc2F0aW9uc19iaXRm" + 
-          "aWVsZBgBIAIoDBIfChdzbm9fc2F2ZWRfY29udmVyc2F0aW9ucxgCIAMoDyJl" + 
-          "ChNTYXZlUG9pbnREYXRhX1Byb3RvEhUKCXNub193b3JsZBgBIAIoDzoCLTES" + 
-          "HAoQc2F2ZXBvaW50X251bWJlchgCIAIoEToCLTESGQoOY3JlYXRlc19wb3J0" + 
-          "YWwYAyACKA06ATAiPQoNU2tpbGxXaXRoUnVuZRIVCglzbm9fc2tpbGwYASAC" + 
-          "KA86Ai0xEhUKCXJ1bmVfdHlwZRgCIAEoEToCLTEisQMKCVNhdmVkRGF0YRIW" + 
-          "Cgt0aW1lX3BsYXllZBgDIAIoDToBMBIeChNhY3RpdmF0ZWRfd2F5cG9pbnRz" + 
-          "GAQgAigNOgEwEjMKE2hpcmVsaW5nX3NhdmVkX2RhdGEYBSACKAsyFi5EMy5I" + 
-          "aXJlbGluZy5TYXZlZERhdGESGgoPbGFzdF9sZXZlbF90aW1lGAYgAigNOgEw" + 
-          "EioKDGxlYXJuZWRfbG9yZRgHIAIoCzIULkQzLkhlcm8uTGVhcm5lZExvcmUS" + 
-          "OAoTc2F2ZWRfY29udmVyc2F0aW9ucxgIIAIoCzIbLkQzLkhlcm8uU2F2ZWRD" + 
-          "b252ZXJzYXRpb25zEhIKCnNub190cmFpdHMYCiADKA8SMAoKc2F2ZV9wb2lu" + 
-          "dBgMIAIoCzIcLkQzLkhlcm8uU2F2ZVBvaW50RGF0YV9Qcm90bxIeChJnYmlk" + 
-          "X3BvdGlvbl9idXR0b24YDSACKA86Ai0xEi0KDWFjdGl2ZV9za2lsbHMYDiAD" + 
-          "KAsyFi5EMy5IZXJvLlNraWxsV2l0aFJ1bmUSIAoYc2tpbGxfc2xvdF9ldmVy" + 
-          "X2Fzc2lnbmVkGA8gAigMIjYKClRpbWVzdGFtcHMSEwoLY3JlYXRlX3RpbWUY" + 
-          "ASACKBISEwoLZGVsZXRlX3RpbWUYAiABKBIiuwIKD1NhdmVkRGVmaW5pdGlv" + 
-          "bhIPCgd2ZXJzaW9uGAEgAigNEh8KBmRpZ2VzdBgCIAEoCzIPLkQzLkhlcm8u" + 
-          "RGlnZXN0EkEKEHNhdmVkX2F0dHJpYnV0ZXMYAyACKAsyJy5EMy5BdHRyaWJ1" + 
-          "dGVTZXJpYWxpemVyLlNhdmVkQXR0cmlidXRlcxImCgpzYXZlZF9kYXRhGAQg" + 
-          "ASgLMhIuRDMuSGVyby5TYXZlZERhdGESKAoLc2F2ZWRfcXVlc3QYBSADKAsy" + 
-          "Ey5EMy5IZXJvLlNhdmVkUXVlc3QSIQoFaXRlbXMYBiABKAsyEi5EMy5JdGVt" + 
-          "cy5JdGVtTGlzdBI+ChRxdWVzdF9yZXdhcmRfaGlzdG9yeRgHIAMoCzIgLkQz" + 
-          "Lkhlcm8uUXVlc3RSZXdhcmRIaXN0b3J5RW50cnkiGAoITmFtZVRleHQSDAoE" + 
-          "bmFtZRgBIAIoCSI4CghIZXJvTGlzdBIsCghoZXJvX2lkcxgBIAMoCzIaLkQz" + 
-          "Lk9ubGluZVNlcnZpY2UuRW50aXR5SWQiLgoKRGlnZXN0TGlzdBIgCgdkaWdl" + 
-          "c3RzGAEgAygLMg8uRDMuSGVyby5EaWdlc3QiRQoQUXVlc3RIaXN0b3J5TGlz" + 
-          "dBIxCg1xdWVzdF9oaXN0b3J5GAEgAygLMhouRDMuSGVyby5RdWVzdEhpc3Rv" + 
-          "cnlFbnRyeSI7Cg5TYXZlZFF1ZXN0TGlzdBIpCgxzYXZlZF9xdWVzdHMYASAD" + 
-          "KAsyEy5EMy5IZXJvLlNhdmVkUXVlc3QiWAoWUXVlc3RSZXdhcmRIaXN0b3J5" + 
-          "TGlzdBI+ChRxdWVzdF9yZXdhcmRfaGlzdG9yeRgBIAMoCzIgLkQzLkhlcm8u" + 
-          "UXVlc3RSZXdhcmRIaXN0b3J5RW50cnk=");
+          "C3RpbWVfcGxheWVkGAcgAigNOgEwEiQKHGhpZ2hlc3RfY29tcGxldGVkX2Rp" + 
+          "ZmZpY3VsdHkYCCABKBEimgEKClNhdmVkUXVlc3QSFQoJc25vX3F1ZXN0GAEg" + 
+          "AigPOgItMRIVCgpkaWZmaWN1bHR5GAIgAigROgEwEhwKEGN1cnJlbnRfc3Rl" + 
+          "cF91aWQYAyACKBE6Ai0xEhsKD29iamVjdGl2ZV9zdGF0ZRgEIAMoEUICEAES" + 
+          "IwoXZmFpbHVyZV9jb25kaXRpb25fc3RhdGUYBSADKBFCAhABIicKC0xlYXJu" + 
+          "ZWRMb3JlEhgKEHNub19sb3JlX2xlYXJuZWQYASADKA8iXAoSU2F2ZWRDb252" + 
+          "ZXJzYXRpb25zEiUKHXBsYXllZF9jb252ZXJzYXRpb25zX2JpdGZpZWxkGAEg" + 
+          "AigMEh8KF3Nub19zYXZlZF9jb252ZXJzYXRpb25zGAIgAygPImUKE1NhdmVQ" + 
+          "b2ludERhdGFfUHJvdG8SFQoJc25vX3dvcmxkGAEgAigPOgItMRIcChBzYXZl" + 
+          "cG9pbnRfbnVtYmVyGAIgAigROgItMRIZCg5jcmVhdGVzX3BvcnRhbBgDIAIo" + 
+          "DToBMCI9Cg1Ta2lsbFdpdGhSdW5lEhUKCXNub19za2lsbBgBIAIoDzoCLTES" + 
+          "FQoJcnVuZV90eXBlGAIgASgROgItMSLLAwoJU2F2ZWREYXRhEhYKC3RpbWVf" + 
+          "cGxheWVkGAMgAigNOgEwEh4KE2FjdGl2YXRlZF93YXlwb2ludHMYBCACKA06" + 
+          "ATASMwoTaGlyZWxpbmdfc2F2ZWRfZGF0YRgFIAIoCzIWLkQzLkhpcmVsaW5n" + 
+          "LlNhdmVkRGF0YRIaCg9sYXN0X2xldmVsX3RpbWUYBiACKA06ATASKgoMbGVh" + 
+          "cm5lZF9sb3JlGAcgAigLMhQuRDMuSGVyby5MZWFybmVkTG9yZRI4ChNzYXZl" + 
+          "ZF9jb252ZXJzYXRpb25zGAggAigLMhsuRDMuSGVyby5TYXZlZENvbnZlcnNh" + 
+          "dGlvbnMSEgoKc25vX3RyYWl0cxgKIAMoDxIwCgpzYXZlX3BvaW50GAwgAigL" + 
+          "MhwuRDMuSGVyby5TYXZlUG9pbnREYXRhX1Byb3RvEh4KEmdiaWRfcG90aW9u" + 
+          "X2J1dHRvbhgNIAIoDzoCLTESLQoNYWN0aXZlX3NraWxscxgOIAMoCzIWLkQz" + 
+          "Lkhlcm8uU2tpbGxXaXRoUnVuZRIgChhza2lsbF9zbG90X2V2ZXJfYXNzaWdu" + 
+          "ZWQYDyACKAwSGAoNc2tpbGxfdmVyc2lvbhgQIAIoDToBMCI2CgpUaW1lc3Rh" + 
+          "bXBzEhMKC2NyZWF0ZV90aW1lGAEgAigSEhMKC2RlbGV0ZV90aW1lGAIgASgS" + 
+          "IrsCCg9TYXZlZERlZmluaXRpb24SDwoHdmVyc2lvbhgBIAIoDRIfCgZkaWdl" + 
+          "c3QYAiABKAsyDy5EMy5IZXJvLkRpZ2VzdBJBChBzYXZlZF9hdHRyaWJ1dGVz" + 
+          "GAMgAigLMicuRDMuQXR0cmlidXRlU2VyaWFsaXplci5TYXZlZEF0dHJpYnV0" + 
+          "ZXMSJgoKc2F2ZWRfZGF0YRgEIAEoCzISLkQzLkhlcm8uU2F2ZWREYXRhEigK" + 
+          "C3NhdmVkX3F1ZXN0GAUgAygLMhMuRDMuSGVyby5TYXZlZFF1ZXN0EiEKBWl0" + 
+          "ZW1zGAYgASgLMhIuRDMuSXRlbXMuSXRlbUxpc3QSPgoUcXVlc3RfcmV3YXJk" + 
+          "X2hpc3RvcnkYByADKAsyIC5EMy5IZXJvLlF1ZXN0UmV3YXJkSGlzdG9yeUVu" + 
+          "dHJ5IhgKCE5hbWVUZXh0EgwKBG5hbWUYASACKAkiOAoISGVyb0xpc3QSLAoI" + 
+          "aGVyb19pZHMYASADKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkIi4K" + 
+          "CkRpZ2VzdExpc3QSIAoHZGlnZXN0cxgBIAMoCzIPLkQzLkhlcm8uRGlnZXN0" + 
+          "IkUKEFF1ZXN0SGlzdG9yeUxpc3QSMQoNcXVlc3RfaGlzdG9yeRgBIAMoCzIa" + 
+          "LkQzLkhlcm8uUXVlc3RIaXN0b3J5RW50cnkiOwoOU2F2ZWRRdWVzdExpc3QS" + 
+          "KQoMc2F2ZWRfcXVlc3RzGAEgAygLMhMuRDMuSGVyby5TYXZlZFF1ZXN0IlgK" + 
+          "FlF1ZXN0UmV3YXJkSGlzdG9yeUxpc3QSPgoUcXVlc3RfcmV3YXJkX2hpc3Rv" + 
+          "cnkYASADKAsyIC5EMy5IZXJvLlF1ZXN0UmV3YXJkSGlzdG9yeUVudHJ5");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Hero_VisualItem__Descriptor = Descriptor.MessageTypes[0];
@@ -156,7 +157,7 @@ namespace D3.Hero {
         internal__static_D3_Hero_DigestUI__Descriptor = Descriptor.MessageTypes[5];
         internal__static_D3_Hero_DigestUI__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.DigestUI, global::D3.Hero.DigestUI.Builder>(internal__static_D3_Hero_DigestUI__Descriptor,
-                new string[] { "LastPlayedAct", "HighestUnlockedAct", "LastPlayedDifficulty", "HighestUnlockedDifficulty", "LastPlayedQuest", "LastPlayedQuestStep", "TimePlayed", });
+                new string[] { "LastPlayedAct", "HighestUnlockedAct", "LastPlayedDifficulty", "HighestUnlockedDifficulty", "LastPlayedQuest", "LastPlayedQuestStep", "TimePlayed", "HighestCompletedDifficulty", });
         internal__static_D3_Hero_SavedQuest__Descriptor = Descriptor.MessageTypes[6];
         internal__static_D3_Hero_SavedQuest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedQuest, global::D3.Hero.SavedQuest.Builder>(internal__static_D3_Hero_SavedQuest__Descriptor,
@@ -180,7 +181,7 @@ namespace D3.Hero {
         internal__static_D3_Hero_SavedData__Descriptor = Descriptor.MessageTypes[11];
         internal__static_D3_Hero_SavedData__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedData, global::D3.Hero.SavedData.Builder>(internal__static_D3_Hero_SavedData__Descriptor,
-                new string[] { "TimePlayed", "ActivatedWaypoints", "HirelingSavedData", "LastLevelTime", "LearnedLore", "SavedConversations", "SnoTraits", "SavePoint", "GbidPotionButton", "ActiveSkills", "SkillSlotEverAssigned", });
+                new string[] { "TimePlayed", "ActivatedWaypoints", "HirelingSavedData", "LastLevelTime", "LearnedLore", "SavedConversations", "SnoTraits", "SavePoint", "GbidPotionButton", "ActiveSkills", "SkillSlotEverAssigned", "SkillVersion", });
         internal__static_D3_Hero_Timestamps__Descriptor = Descriptor.MessageTypes[12];
         internal__static_D3_Hero_Timestamps__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.Timestamps, global::D3.Hero.Timestamps.Builder>(internal__static_D3_Hero_Timestamps__Descriptor,
@@ -204,7 +205,7 @@ namespace D3.Hero {
 /*        internal__static_D3_Hero_QuestHistoryList__Descriptor = Descriptor.MessageTypes[17];
         internal__static_D3_Hero_QuestHistoryList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.QuestHistoryList, global::D3.Hero.QuestHistoryList.Builder>(internal__static_D3_Hero_QuestHistoryList__Descriptor,
-                new string[] { "QuestHistoryProp", });*/
+                new string[] { "QuestHistory", });*/
         internal__static_D3_Hero_SavedQuestList__Descriptor = Descriptor.MessageTypes[18];
         internal__static_D3_Hero_SavedQuestList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedQuestList, global::D3.Hero.SavedQuestList.Builder>(internal__static_D3_Hero_SavedQuestList__Descriptor,
@@ -2762,8 +2763,8 @@ namespace D3.Hero {
   public sealed partial class DigestUI : pb::GeneratedMessage<DigestUI, DigestUI.Builder> {
     private DigestUI() { }
     private static readonly DigestUI defaultInstance = new DigestUI().MakeReadOnly();
-    private static readonly string[] _digestUIFieldNames = new string[] { "highest_unlocked_act", "highest_unlocked_difficulty", "last_played_act", "last_played_difficulty", "last_played_quest", "last_played_quest_step", "time_played" };
-    private static readonly uint[] _digestUIFieldTags = new uint[] { 16, 32, 8, 24, 45, 48, 56 };
+    private static readonly string[] _digestUIFieldNames = new string[] { "highest_completed_difficulty", "highest_unlocked_act", "highest_unlocked_difficulty", "last_played_act", "last_played_difficulty", "last_played_quest", "last_played_quest_step", "time_played" };
+    private static readonly uint[] _digestUIFieldTags = new uint[] { 64, 16, 32, 8, 24, 45, 48, 56 };
     public static DigestUI DefaultInstance {
       get { return defaultInstance; }
     }
@@ -2854,6 +2855,16 @@ namespace D3.Hero {
       get { return timePlayed_; }
     }
     
+    public const int HighestCompletedDifficultyFieldNumber = 8;
+    private bool hasHighestCompletedDifficulty;
+    private int highestCompletedDifficulty_;
+    public bool HasHighestCompletedDifficulty {
+      get { return hasHighestCompletedDifficulty; }
+    }
+    public int HighestCompletedDifficulty {
+      get { return highestCompletedDifficulty_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasLastPlayedAct) return false;
@@ -2871,25 +2882,28 @@ namespace D3.Hero {
       int size = SerializedSize;
       string[] field_names = _digestUIFieldNames;
       if (hasLastPlayedAct) {
-        output.WriteSInt32(1, field_names[2], LastPlayedAct);
+        output.WriteSInt32(1, field_names[3], LastPlayedAct);
       }
       if (hasHighestUnlockedAct) {
-        output.WriteSInt32(2, field_names[0], HighestUnlockedAct);
+        output.WriteSInt32(2, field_names[1], HighestUnlockedAct);
       }
       if (hasLastPlayedDifficulty) {
-        output.WriteSInt32(3, field_names[3], LastPlayedDifficulty);
+        output.WriteSInt32(3, field_names[4], LastPlayedDifficulty);
       }
       if (hasHighestUnlockedDifficulty) {
-        output.WriteSInt32(4, field_names[1], HighestUnlockedDifficulty);
+        output.WriteSInt32(4, field_names[2], HighestUnlockedDifficulty);
       }
       if (hasLastPlayedQuest) {
-        output.WriteSFixed32(5, field_names[4], LastPlayedQuest);
+        output.WriteSFixed32(5, field_names[5], LastPlayedQuest);
       }
       if (hasLastPlayedQuestStep) {
-        output.WriteSInt32(6, field_names[5], LastPlayedQuestStep);
+        output.WriteSInt32(6, field_names[6], LastPlayedQuestStep);
       }
       if (hasTimePlayed) {
-        output.WriteUInt32(7, field_names[6], TimePlayed);
+        output.WriteUInt32(7, field_names[7], TimePlayed);
+      }
+      if (hasHighestCompletedDifficulty) {
+        output.WriteSInt32(8, field_names[0], HighestCompletedDifficulty);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2921,6 +2935,9 @@ namespace D3.Hero {
         }
         if (hasTimePlayed) {
           size += pb::CodedOutputStream.ComputeUInt32Size(7, TimePlayed);
+        }
+        if (hasHighestCompletedDifficulty) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(8, HighestCompletedDifficulty);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -3069,6 +3086,9 @@ namespace D3.Hero {
         if (other.HasTimePlayed) {
           TimePlayed = other.TimePlayed;
         }
+        if (other.HasHighestCompletedDifficulty) {
+          HighestCompletedDifficulty = other.HighestCompletedDifficulty;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -3138,6 +3158,10 @@ namespace D3.Hero {
             }
             case 56: {
               result.hasTimePlayed = input.ReadUInt32(ref result.timePlayed_);
+              break;
+            }
+            case 64: {
+              result.hasHighestCompletedDifficulty = input.ReadSInt32(ref result.highestCompletedDifficulty_);
               break;
             }
           }
@@ -3287,6 +3311,26 @@ namespace D3.Hero {
         PrepareBuilder();
         result.hasTimePlayed = false;
         result.timePlayed_ = 0;
+        return this;
+      }
+      
+      public bool HasHighestCompletedDifficulty {
+        get { return result.hasHighestCompletedDifficulty; }
+      }
+      public int HighestCompletedDifficulty {
+        get { return result.HighestCompletedDifficulty; }
+        set { SetHighestCompletedDifficulty(value); }
+      }
+      public Builder SetHighestCompletedDifficulty(int value) {
+        PrepareBuilder();
+        result.hasHighestCompletedDifficulty = true;
+        result.highestCompletedDifficulty_ = value;
+        return this;
+      }
+      public Builder ClearHighestCompletedDifficulty() {
+        PrepareBuilder();
+        result.hasHighestCompletedDifficulty = false;
+        result.highestCompletedDifficulty_ = 0;
         return this;
       }
     }
@@ -5104,8 +5148,8 @@ namespace D3.Hero {
   public sealed partial class SavedData : pb::GeneratedMessage<SavedData, SavedData.Builder> {
     private SavedData() { }
     private static readonly SavedData defaultInstance = new SavedData().MakeReadOnly();
-    private static readonly string[] _savedDataFieldNames = new string[] { "activated_waypoints", "active_skills", "gbid_potion_button", "hireling_saved_data", "last_level_time", "learned_lore", "save_point", "saved_conversations", "skill_slot_ever_assigned", "sno_traits", "time_played" };
-    private static readonly uint[] _savedDataFieldTags = new uint[] { 32, 114, 109, 42, 48, 58, 98, 66, 122, 85, 24 };
+    private static readonly string[] _savedDataFieldNames = new string[] { "activated_waypoints", "active_skills", "gbid_potion_button", "hireling_saved_data", "last_level_time", "learned_lore", "save_point", "saved_conversations", "skill_slot_ever_assigned", "skill_version", "sno_traits", "time_played" };
+    private static readonly uint[] _savedDataFieldTags = new uint[] { 32, 114, 109, 42, 48, 58, 98, 66, 122, 128, 85, 24 };
     public static SavedData DefaultInstance {
       get { return defaultInstance; }
     }
@@ -5240,6 +5284,16 @@ namespace D3.Hero {
       get { return skillSlotEverAssigned_; }
     }
     
+    public const int SkillVersionFieldNumber = 16;
+    private bool hasSkillVersion;
+    private uint skillVersion_;
+    public bool HasSkillVersion {
+      get { return hasSkillVersion; }
+    }
+    public uint SkillVersion {
+      get { return skillVersion_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasTimePlayed) return false;
@@ -5251,6 +5305,7 @@ namespace D3.Hero {
         if (!hasSavePoint) return false;
         if (!hasGbidPotionButton) return false;
         if (!hasSkillSlotEverAssigned) return false;
+        if (!hasSkillVersion) return false;
         if (!HirelingSavedData.IsInitialized) return false;
         if (!SavedConversations.IsInitialized) return false;
         if (!SavePoint.IsInitialized) return false;
@@ -5265,7 +5320,7 @@ namespace D3.Hero {
       int size = SerializedSize;
       string[] field_names = _savedDataFieldNames;
       if (hasTimePlayed) {
-        output.WriteUInt32(3, field_names[10], TimePlayed);
+        output.WriteUInt32(3, field_names[11], TimePlayed);
       }
       if (hasActivatedWaypoints) {
         output.WriteUInt32(4, field_names[0], ActivatedWaypoints);
@@ -5283,7 +5338,7 @@ namespace D3.Hero {
         output.WriteMessage(8, field_names[7], SavedConversations);
       }
       if (snoTraits_.Count > 0) {
-        output.WriteSFixed32Array(10, field_names[9], snoTraits_);
+        output.WriteSFixed32Array(10, field_names[10], snoTraits_);
       }
       if (hasSavePoint) {
         output.WriteMessage(12, field_names[6], SavePoint);
@@ -5296,6 +5351,9 @@ namespace D3.Hero {
       }
       if (hasSkillSlotEverAssigned) {
         output.WriteBytes(15, field_names[8], SkillSlotEverAssigned);
+      }
+      if (hasSkillVersion) {
+        output.WriteUInt32(16, field_names[9], SkillVersion);
       }
       UnknownFields.WriteTo(output);
     }
@@ -5342,6 +5400,9 @@ namespace D3.Hero {
         }
         if (hasSkillSlotEverAssigned) {
           size += pb::CodedOutputStream.ComputeBytesSize(15, SkillSlotEverAssigned);
+        }
+        if (hasSkillVersion) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(16, SkillVersion);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -5504,6 +5565,9 @@ namespace D3.Hero {
         if (other.HasSkillSlotEverAssigned) {
           SkillSlotEverAssigned = other.SkillSlotEverAssigned;
         }
+        if (other.HasSkillVersion) {
+          SkillVersion = other.SkillVersion;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -5610,6 +5674,10 @@ namespace D3.Hero {
             }
             case 122: {
               result.hasSkillSlotEverAssigned = input.ReadBytes(ref result.skillSlotEverAssigned_);
+              break;
+            }
+            case 128: {
+              result.hasSkillVersion = input.ReadUInt32(ref result.skillVersion_);
               break;
             }
           }
@@ -5954,6 +6022,26 @@ namespace D3.Hero {
         PrepareBuilder();
         result.hasSkillSlotEverAssigned = false;
         result.skillSlotEverAssigned_ = pb::ByteString.Empty;
+        return this;
+      }
+      
+      public bool HasSkillVersion {
+        get { return result.hasSkillVersion; }
+      }
+      public uint SkillVersion {
+        get { return result.SkillVersion; }
+        set { SetSkillVersion(value); }
+      }
+      public Builder SetSkillVersion(uint value) {
+        PrepareBuilder();
+        result.hasSkillVersion = true;
+        result.skillVersion_ = value;
+        return this;
+      }
+      public Builder ClearSkillVersion() {
+        PrepareBuilder();
+        result.hasSkillVersion = false;
+        result.skillVersion_ = 0;
         return this;
       }
     }
