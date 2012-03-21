@@ -88,7 +88,7 @@ namespace Mooege.Core.MooNet.Authentication
                     .Build();
 
                 client.MakeRPC(() =>
-                    bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => { }));
+                    bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => client.AuthenticationComplete()));
                 /*
                 // This file current does not exist - future use maybe? -Egris
                 var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
@@ -113,7 +113,6 @@ namespace Mooege.Core.MooNet.Authentication
             }
              
             OngoingAuthentications.Remove(client);
-            client.AuthenticationComplete(); // signal about completion of authentication processes so we can return the response for AuthenticationService:LogonRequest.
         }
 
         public static void SendAccountSettings(MooNetClient client)
