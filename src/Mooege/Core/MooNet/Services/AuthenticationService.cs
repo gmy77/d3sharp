@@ -51,42 +51,6 @@ namespace Mooege.Core.MooNet.Services
             done(bnet.protocol.NoData.CreateBuilder().Build());
 
             AuthManager.StartAuthentication(this.Client, request);
-
-            var authenticationThread = new Thread(() =>
-            {
-                this.Client.AuthenticationCompleteSignal.WaitOne(); // wait the signal;
-
-                var logonResponseBuilder = bnet.protocol.authentication.LogonResult.CreateBuilder();
-
-                if(this.Client.AuthenticationErrorCode != AuthManager.AuthenticationErrorCodes.None)
-                {
-                    Logger.Info("Authentication failed for {0} because of invalid credentals.", request.Email);
-                    logonResponseBuilder.SetErrorCode(6); //Logon failed, please try again (Error 6)
-                    this.Client.MakeRPC(() =>
-                        bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).LogonComplete(null, logonResponseBuilder.Build(), callback => { }));
-
-                    return;
-                }
-
-                Logger.Info("User {0} authenticated successfuly.", request.Email);
-                logonResponseBuilder.SetAccount(this.Client.Account.BnetEntityId);
-                logonResponseBuilder.SetErrorCode(0);
-
-                foreach (var gameAccount in this.Client.Account.GameAccounts.Values)
-                {
-                    logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
-                }
-
-                this.Client.MakeRPC(() =>
-                    bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).LogonComplete(null, logonResponseBuilder.Build(), callback => { }));
-
-                this.Client.EnableEncryption();
-
-                PlayerManager.PlayerConnected(this.Client);
-
-            }) { IsBackground = true, CurrentCulture = CultureInfo.InvariantCulture }; ;
-
-            authenticationThread.Start();
         }
 
         public override void ModuleMessage(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.authentication.ModuleMessageRequest request, Action<bnet.protocol.NoData> done)

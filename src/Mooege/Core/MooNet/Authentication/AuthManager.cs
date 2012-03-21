@@ -41,12 +41,13 @@ namespace Mooege.Core.MooNet.Authentication
 
         private static void InitAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
+            client.LoginEmail = request.Email;
             var account = AccountManager.GetAccountByEmail(request.Email.ToLower()); // check if account exists.
             
             if (account == null) // we should be returning an error to client /raist.
             {
                 client.AuthenticationErrorCode = AuthenticationErrorCodes.NoGameAccount;
-                client.AuthenticationCompleteSignal.Set();
+                client.AuthenticationComplete();
                 return;
             }
 
@@ -55,18 +56,15 @@ namespace Mooege.Core.MooNet.Authentication
             var srp6a = new SRP6a(account); // create srp6 handler to process the authentication.
             OngoingAuthentications.Add(client, srp6a);
 
-            // request client to load password.dll for authentication.
+            // request client to load thumbprint.dll for authentication.
             var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
                 .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
                     .SetRegion(0x00005858) // XX
                     .SetUsage(0x61757468) // auth - thumbprint.dll
-                    .SetHash(ByteString.CopyFrom("36b27cd911b33c61730a8b82c8b2495fd16e8024fc3b2dde08861c77a852941c".ToByteArray())))
-                    //.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AuthModuleHashMap[client.Platform])))
+                    .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.ThumbprintHashMap[client.Platform])))
                 .SetMessage(ByteString.CopyFrom(thumbprintData))
                 .Build();
 
-            //client.MakeRPCWithListenerId(request.ListenerId, () =>
-            //    bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
             client.ThumbprintReq = true;
             client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, callback => { }));
         }
@@ -91,16 +89,18 @@ namespace Mooege.Core.MooNet.Authentication
 
                 client.MakeRPC(() =>
                     bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => { }));
-
+                /*
+                // This file current does not exist - future use maybe? -Egris
                 var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
                     .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
                         .SetRegion(0x00005858) // XX
-                        .SetUsage(0x61757468) // auth - password.dll
+                        .SetUsage(0x61757468) // auth - ??.dll
                         .SetHash(ByteString.CopyFrom("72dd40a65ccadc04fe4ece1323effd3177f4afb9f88a96905a7a30db42c0ae0f".ToByteArray())))
                     .SetMessage(ByteString.Empty)
                     .Build();
 
                 client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
+                */
 
                 client.Account = AccountManager.GetAccountByEmail(srp6.Account.Email);
                 //if (client.Account.LoggedInClient != null)
@@ -113,7 +113,7 @@ namespace Mooege.Core.MooNet.Authentication
             }
              
             OngoingAuthentications.Remove(client);
-            client.AuthenticationCompleteSignal.Set(); // signal about completion of authentication processes so we can return the response for AuthenticationService:LogonRequest.
+            client.AuthenticationComplete(); // signal about completion of authentication processes so we can return the response for AuthenticationService:LogonRequest.
         }
 
         public static void SendAccountSettings(MooNetClient client)
