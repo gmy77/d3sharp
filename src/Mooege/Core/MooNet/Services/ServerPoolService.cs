@@ -29,6 +29,7 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
+        public uint Status { get; set; }
 
         public override void GetPoolState(IRpcController controller, bnet.protocol.server_pool.PoolStateRequest request, Action<bnet.protocol.server_pool.PoolStateResponse> done)
         {

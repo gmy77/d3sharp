@@ -21,6 +21,7 @@ using System.Linq;
 using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
+using Mooege.Core.MooNet.Helpers;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -30,6 +31,7 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
+        public uint Status { get; set; }
 
         public override void GetConfiguration(IRpcController controller, bnet.protocol.exchange.GetConfigurationRequest request, Action<bnet.protocol.exchange.GetConfigurationResponse> done)
         {
@@ -38,8 +40,6 @@ namespace Mooege.Core.MooNet.Services
             var builder = bnet.protocol.exchange.GetConfigurationResponse.CreateBuilder()
                 .AddConfigs(bnet.protocol.exchange.SpecialistConfig.CreateBuilder()
                     .SetSpecialist(1)
-                    //.AddAuctionDurations(720)
-                    //.AddAuctionDurations(1440)
                     .AddAuctionDurations(2880)
                     .AddAuctionStartDelays(5)
                     .SetAntiSnipingExtensionDelay(1)
@@ -49,13 +49,28 @@ namespace Mooege.Core.MooNet.Services
                     .SetTradeNowUnitPriceRule(1)
                     .SetCurrentUnitPriceRule(2)
                     .SetMaximumUnitPriceRule(2)
+                    .SetFillOrKillRule(0)
                     .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
-                        .SetCurrency("PTR")
+                        .SetCurrency("D3_GOLD")
                         .SetTickSize(1)
                         .SetMinTotalPrice(100)
                         .SetMinUnitPrice(100)
-                        .SetMaxUnitPrice(4294967295)
-                        .SetMaxTotalPrice(281474976710655).Build()))
+                        .SetMaxUnitPrice(100000000000)
+                        .SetMaxTotalPrice(100000000000).Build())
+                    .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
+                        .SetCurrency("D3_GOLD_HC")
+                        .SetTickSize(1)
+                        .SetMinTotalPrice(100)
+                        .SetMinUnitPrice(100)
+                        .SetMaxUnitPrice(100000000000)
+                        .SetMaxTotalPrice(100000000000).Build())
+                    .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
+                        .SetCurrency("PTR")
+                        .SetTickSize(1)
+                        .SetMinTotalPrice(150)
+                        .SetMinUnitPrice(150)
+                        .SetMaxUnitPrice(1000000)
+                        .SetMaxTotalPrice(1000000).Build()))
                 .AddConfigs(bnet.protocol.exchange.SpecialistConfig.CreateBuilder()
                     .SetSpecialist(2)
                     .AddAuctionDurations(2880)
@@ -67,13 +82,28 @@ namespace Mooege.Core.MooNet.Services
                     .SetTradeNowUnitPriceRule(0)
                     .SetCurrentUnitPriceRule(0)
                     .SetMaximumUnitPriceRule(2)
+                    .SetFillOrKillRule(1)
+                    .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
+                        .SetCurrency("D3_GOLD")
+                        .SetTickSize(1)
+                        .SetMinTotalPrice(100)
+                        .SetMinUnitPrice(100)
+                        .SetMaxUnitPrice(100000000000)
+                        .SetMaxTotalPrice(100000000000).Build())
+                    .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
+                        .SetCurrency("D3_GOLD_HC")
+                        .SetTickSize(1)
+                        .SetMinTotalPrice(100)
+                        .SetMinUnitPrice(100)
+                        .SetMaxUnitPrice(100000000000)
+                        .SetMaxTotalPrice(100000000000).Build())
                     .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
                         .SetCurrency("PTR")
                         .SetTickSize(1)
-                        .SetMinUnitPrice(100)
-                        .SetMinTotalPrice(100)
-                        .SetMaxUnitPrice(4294967295)
-                        .SetMaxTotalPrice(281474976710655).Build()));
+                        .SetMinTotalPrice(150)
+                        .SetMinUnitPrice(150)
+                        .SetMaxUnitPrice(1000000)
+                        .SetMaxTotalPrice(1000000).Build()));
 
             done(builder.Build());
         }
@@ -172,27 +202,54 @@ namespace Mooege.Core.MooNet.Services
             Logger.Trace("GetPaymentMethods()");
 
             var builder = bnet.protocol.exchange_object_provider.GetPaymentMethodsResponse.CreateBuilder();
-            var data = new byte[] { 0x6A, 0x04, 0x65, 0x6E, 0x55, 0x53, 0x7A, 0x0A, 0x42, 0x61, 0x74, 0x74, 0x6C, 0x65, 0x43, 0x6F, 0x69, 0x6E };
-            //j\004enUSz\nBattleCoin
-            //data is added to the end of extensionData
-            var extensionData = bnet.protocol.exchange.Extension.CreateBuilder()
-                .SetPartitionId(bnet.protocol.exchange.PartitionId.ParseFrom(this.Client.Account.BnetEntityId.ToByteArray()))
-                .SetOrderBookId(1)
-                .SetOrderId(3)
-                .SetFilledAmount(0)
-                .SetOrderStatus((int)this.Client.Account.BnetEntityId.Low)
-                .SetAuthorizedTime(0)
-                .Build();
+            var method = bnet.protocol.exchange_object_provider.PaymentMethod.CreateBuilder();
 
-            var method = bnet.protocol.exchange_object_provider.PaymentMethod.CreateBuilder()
-                .SetAccount(bnet.protocol.exchange.BlobFrom.CreateBuilder()
-                    .SetSource(1161969996)
-                    .SetData(ByteString.CopyFrom(extensionData.ToByteArray().Concat(data).ToArray())))
-                .SetDescription("BattleCoin")
-                .SetAmount(100000)
-                .SetCashInOutMask(3)
-                .SetWalletId(0)
-                .Build();
+            switch (request.Currency)
+            {
+                case "D3_GOLD":
+                case "D3_GOLD_HC":
+                    var goldExtensionData = "{ kind: GAME_ACCOUNT (2)  id: " + this.Client.Account.CurrentGameAccount.PersistentID + " program: 17459 region: 98 }";
+
+                    method.SetAccount(bnet.protocol.exchange.BlobFrom.CreateBuilder()
+                            .SetSource((uint)FieldKeyHelper.Program.D3)
+                            .SetData(ByteString.CopyFromUtf8(goldExtensionData)))
+                        .SetDescription(request.Currency)
+                        .SetAmount(100000)
+                        .SetWalletId(0)
+                        .Build();
+                    break;
+                case "PTR":
+                    var data = new byte[] { 0x6A, 0x04, 0x65, 0x6E, 0x55, 0x53, 0x7A, 0x0A, 0x42, 0x61, 0x74, 0x74, 0x6C, 0x65, 0x43, 0x6F, 0x69, 0x6E };
+                    //j\004enUSz\nBattleCoin
+                    //data is added to the end of extensionData
+                    var ptrExtensionData = bnet.protocol.exchange.Extension.CreateBuilder()
+                        .SetPartitionId(bnet.protocol.exchange.PartitionId.ParseFrom(this.Client.Account.BnetEntityId.ToByteArray()))
+                        .SetOrderBookId(1)
+                        .SetOrderId(3)
+                        .SetFilledAmount(0)
+                        .SetOrderStatus((int)this.Client.Account.BnetEntityId.Low)
+                        .SetAuthorizedTime(0)
+                        .Build();
+
+                    method.SetAccount(bnet.protocol.exchange.BlobFrom.CreateBuilder()
+                            .SetSource((uint)FieldKeyHelper.Program.D3)
+                            .SetData(ByteString.CopyFrom(ptrExtensionData.ToByteArray().Concat(data).ToArray())))
+                        .SetDescription("BattleCoin")
+                        .SetAmount(100000)
+                        .SetCashInOutMask(3)
+                        .SetBillingAddress(bnet.protocol.exchange.BillingAddress.CreateBuilder()
+                            .SetCountryId(221)
+                            .SetCity("Irvine")
+                            .SetState("CA")
+                            .SetPostalCode("92618"))
+                        .SetWalletId(123456)
+                        .SetCapRestriction(1)
+                        .SetAuthenticatorCap(4294967295)
+                        .SetSoftCap(4294967295)
+                        .Build();
+                    break;
+            }
+
             builder.AddMethods(method);
 
             done(builder.Build());

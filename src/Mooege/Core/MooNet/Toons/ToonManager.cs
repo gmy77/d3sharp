@@ -56,6 +56,11 @@ namespace Mooege.Core.MooNet.Toons
             return (from pair in Toons where pair.Value.PersistentID == id select pair.Value).FirstOrDefault();
         }
 
+        public static Toon GetDeletedToon(GameAccount account)
+        {
+            return (from pair in Toons where pair.Value.Deleted == true && pair.Value.GameAccount.PersistentID == account.PersistentID select pair.Value).FirstOrDefault();
+        }
+
         public static Dictionary<ulong, Toon> GetToonsForGameAccount(GameAccount account)
         {
             return Toons.Where(pair => pair.Value.GameAccount != null).Where(pair => pair.Value.GameAccount.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
