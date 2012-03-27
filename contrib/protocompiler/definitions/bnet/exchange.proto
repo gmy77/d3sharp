@@ -38,7 +38,7 @@ message ActionErrorDetail
 message BillingAddress
 {
     required int32 country_id = 1;
-    required string city = 2;
+    optional string city = 2;
     optional string state = 3;
     optional string postal_code = 4;
 }

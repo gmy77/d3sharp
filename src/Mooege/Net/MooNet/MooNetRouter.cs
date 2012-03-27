@@ -103,7 +103,8 @@ namespace Mooege.Net.MooNet
                 {
                     ((IServerService)service).Client = client;
                     ((IServerService)service).LastCallHeader = packet.Header;
-                    service.CallMethod(method, null, message, (msg => SendRPCResponse(client.Connection, packet.Header.Token, msg)));
+                    ((IServerService)service).Status = 0;
+                    service.CallMethod(method, null, message, (msg => SendRPCResponse(client.Connection, packet.Header.Token, msg, ((IServerService)service).Status)));
                 }
             }
             catch (NotImplementedException)
@@ -125,9 +126,9 @@ namespace Mooege.Net.MooNet
             return (uint)method.Options[bnet.protocol.Rpc.MethodId.Descriptor];
         }
 
-        private static void SendRPCResponse(IConnection connection, uint token, IMessage message)
+        private static void SendRPCResponse(IConnection connection, uint token, IMessage message, uint status)
         {
-            var packet = new PacketOut(ServiceReply, 0x0, token, message);
+            var packet = new PacketOut(ServiceReply, 0x0, token, message, status);
             connection.Send(packet);
         }
     }

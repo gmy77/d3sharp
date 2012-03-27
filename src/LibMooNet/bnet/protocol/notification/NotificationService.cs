@@ -64,10 +64,12 @@ namespace bnet.protocol.notification {
             "ckNsaWVudFJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYAxJx" + 
             "CgpGaW5kQ2xpZW50Ei0uYm5ldC5wcm90b2NvbC5ub3RpZmljYXRpb24uRmlu" + 
             "ZENsaWVudFJlcXVlc3QaLi5ibmV0LnByb3RvY29sLm5vdGlmaWNhdGlvbi5G" + 
-            "aW5kQ2xpZW50UmVzcG9uc2UiBIC1GAQyfAoUTm90aWZpY2F0aW9uTGlzdGVu" + 
-            "ZXISZAoWT25Ob3RpZmljYXRpb25SZWNlaXZlZBIoLmJuZXQucHJvdG9jb2wu" + 
-            "bm90aWZpY2F0aW9uLk5vdGlmaWNhdGlvbhoaLmJuZXQucHJvdG9jb2wuTk9f" + 
-            "UkVTUE9OU0UiBIC1GAFCA4ABAA==");
+            "aW5kQ2xpZW50UmVzcG9uc2UiBIC1GAQy3gEKFE5vdGlmaWNhdGlvbkxpc3Rl" + 
+            "bmVyEmQKFk9uTm90aWZpY2F0aW9uUmVjZWl2ZWQSKC5ibmV0LnByb3RvY29s" + 
+            "Lm5vdGlmaWNhdGlvbi5Ob3RpZmljYXRpb24aGi5ibmV0LnByb3RvY29sLk5P" + 
+            "X1JFU1BPTlNFIgSAtRgBEmAKEk9uTm90aWZpY2F0aW9uU2VudBIoLmJuZXQu" + 
+            "cHJvdG9jb2wubm90aWZpY2F0aW9uLk5vdGlmaWNhdGlvbhoaLmJuZXQucHJv" + 
+            "dG9jb2wuTk9fUkVTUE9OU0UiBIC1GAJCA4ABAA==");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_notification_Notification__Descriptor = Descriptor.MessageTypes[0];
@@ -2201,6 +2203,10 @@ namespace bnet.protocol.notification {
         pb::IRpcController controller,
         global::bnet.protocol.notification.Notification request,
         global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
+    public abstract void OnNotificationSent(
+        pb::IRpcController controller,
+        global::bnet.protocol.notification.Notification request,
+        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
     
     public static pbd::ServiceDescriptor Descriptor {
       get { return Proto.NotificationService.Descriptor.Services[1]; }
@@ -2224,6 +2230,11 @@ namespace bnet.protocol.notification {
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
               done));
           return;
+        case 1:
+          this.OnNotificationSent(controller, (global::bnet.protocol.notification.Notification) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
+              done));
+          return;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2237,6 +2248,8 @@ namespace bnet.protocol.notification {
       switch(method.Index) {
         case 0:
           return global::bnet.protocol.notification.Notification.DefaultInstance;
+        case 1:
+          return global::bnet.protocol.notification.Notification.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2249,6 +2262,8 @@ namespace bnet.protocol.notification {
       }
       switch(method.Index) {
         case 0:
+          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
+        case 1:
           return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -2278,6 +2293,15 @@ namespace bnet.protocol.notification {
           global::bnet.protocol.notification.Notification request,
           global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
         channel.CallMethod(Descriptor.Methods[0],
+            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
+      }
+      
+      public override void OnNotificationSent(
+          pb::IRpcController controller,
+          global::bnet.protocol.notification.Notification request,
+          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
+        channel.CallMethod(Descriptor.Methods[1],
             controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }

@@ -62,6 +62,10 @@ namespace bnet.protocol.exchange {
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.FeeDetail, global::bnet.protocol.exchange.FeeDetail.Builder> internal__static_bnet_protocol_exchange_FeeDetail__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_PriceDetail__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.PriceDetail, global::bnet.protocol.exchange.PriceDetail.Builder> internal__static_bnet_protocol_exchange_PriceDetail__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_Count__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.Count, global::bnet.protocol.exchange.Count.Builder> internal__static_bnet_protocol_exchange_Count__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_AdvancedSubscription__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.AdvancedSubscription, global::bnet.protocol.exchange.AdvancedSubscription.Builder> internal__static_bnet_protocol_exchange_AdvancedSubscription__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -132,54 +136,59 @@ namespace bnet.protocol.exchange {
           "bhIbChNvZmZlcl9vdXRfYmlkX3ByaWNlGAMgASgEEh0KFW9mZmVyX3RyYWRl" + 
           "X25vd19wcmljZRgEIAEoBBIjChtvZmZlcl9jdXJyZW50X3dpbm5pbmdfcHJp" + 
           "Y2UYBSABKAQSHgoWYmlkX2N1cnJlbnRfdW5pdF9wcmljZRgGIAEoBBIaChJi" + 
-          "aWRfbWF4X3VuaXRfcHJpY2UYByABKAQirwEKC0JpZENyZWF0aW9uEigKA2Jp" + 
+          "aWRfbWF4X3VuaXRfcHJpY2UYByABKAQizAEKC0JpZENyZWF0aW9uEigKA2Jp" + 
           "ZBgBIAIoCzIbLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmlkEhgKEGF1Y3Rp" + 
           "b25fZHVyYXRpb24YAiABKAQSGwoTYXVjdGlvbl9zdGFydF9kZWxheRgDIAEo" + 
           "BBI/Cg9iaWxsaW5nX2FkZHJlc3MYBCABKAsyJi5ibmV0LnByb3RvY29sLmV4" + 
-          "Y2hhbmdlLkJpbGxpbmdBZGRyZXNzIp0BCg1PcmRlckV4dGVuZGVkEhIKCm9y" + 
-          "ZGVyX3R5cGUYASACKA0SOQoMYmlkX2V4dGVuZGVkGAIgASgLMiMuYm5ldC5w" + 
-          "cm90b2NvbC5leGNoYW5nZS5CaWRFeHRlbmRlZBI9Cg5vZmZlcl9leHRlbmRl" + 
-          "ZBgDIAEoCzIlLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuT2ZmZXJFeHRlbmRl" + 
-          "ZCJTChRRdWVyeUZpbHRlckJ5T3JkZXJJZBISCgptYXhfcmVzdWx0GAEgAigN" + 
-          "EhQKDHJlZl9vcmRlcl9pZBgCIAEoBBIRCglyZWZfcHJpY2UYAyABKAQiSAoY" + 
-          "UXVlcnlGaWx0ZXJCeUNyZWF0ZWRUaW1lEhIKCm1heF9yZXN1bHQYASACKA0S" + 
-          "GAoQcmVmX2NyZWF0ZWRfdGltZRgCIAEoBCLbAQoQUXVlcnlPcmRlckZpbHRl" + 
-          "chIQCghjdXJyZW5jeRgBIAEoCRISCgpzcGVjaWFsaXN0GAIgASgNEhIKCm9y" + 
-          "ZGVyX3R5cGUYAyABKA0SFAoJY2xhaW1hYmxlGAQgASgNOgEwEhkKEW9yZGVy" + 
-          "X3N0YXR1c19tYXNrGAUgASgNEhUKBnJvbGx1cBgGIAEoCDoFZmFsc2USRQoL" + 
-          "dGltZV9maWx0ZXIYByACKAsyMC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlF1" + 
-          "ZXJ5RmlsdGVyQnlDcmVhdGVkVGltZSJoCgpTZXR0bGVtZW50EhUKDW9yZGVy" + 
-          "X2Jvb2tfaWQYASACKAQSFAoMbW9uZXlfYW1vdW50GAIgAigEEhQKDGl0ZW1z" + 
-          "X2Ftb3VudBgDIAIoBBIXCg9vZmZlcl9zZXR0bGVfaWQYBCACKAQilwEKDkN1" + 
-          "cnJlbmN5Q29uZmlnEhAKCGN1cnJlbmN5GAEgAigJEhEKCXRpY2tfc2l6ZRgC" + 
-          "IAEoBBIWCg5taW5fdW5pdF9wcmljZRgDIAEoBBIWCg5tYXhfdW5pdF9wcmlj" + 
-          "ZRgEIAEoBBIXCg9taW5fdG90YWxfcHJpY2UYBSABKAQSFwoPbWF4X3RvdGFs" + 
-          "X3ByaWNlGAYgASgEIpQDChBTcGVjaWFsaXN0Q29uZmlnEhIKCnNwZWNpYWxp" + 
-          "c3QYASACKAUSHQoRYXVjdGlvbl9kdXJhdGlvbnMYAiADKARCAhABEiAKFGF1" + 
-          "Y3Rpb25fc3RhcnRfZGVsYXlzGAMgAygEQgIQARIkChxhbnRpX3NuaXBpbmdf" + 
-          "ZXh0ZW5zaW9uX2RlbGF5GAQgASgEEhsKEG1heF9pdGVtc19hbW91bnQYBSAB" + 
-          "KAQ6ATASIAoYc3RhcnRpbmdfdW5pdF9wcmljZV9ydWxlGAYgASgFEiAKGHJl" + 
-          "c2VydmVkX3VuaXRfcHJpY2VfcnVsZRgHIAEoBRIhChl0cmFkZV9ub3dfdW5p" + 
-          "dF9wcmljZV9ydWxlGAggASgFEh8KF2N1cnJlbnRfdW5pdF9wcmljZV9ydWxl" + 
-          "GAkgASgFEh8KF21heGltdW1fdW5pdF9wcmljZV9ydWxlGAogASgFEj8KD2N1" + 
-          "cnJlbmN5X2NvbmZpZxgLIAMoCzImLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
-          "Q3VycmVuY3lDb25maWci9QEKEUZlZUVzdGltYXRpb25EYXRhEg8KB3Byb2dy" + 
-          "YW0YASACKAcSEgoKc3BlY2lhbGlzdBgCIAIoBRIQCghjdXJyZW5jeRgDIAIo" + 
-          "CRIOCgZzb3VyY2UYBCACKAcSFAoMbW9uZXlfYW1vdW50GAUgAigEEhMKC2l0" + 
-          "ZW1fYW1vdW50GAYgAigEEi0KDGJuZXRfYWNjb3VudBgHIAEoCzIXLmJuZXQu" + 
-          "cHJvdG9jb2wuRW50aXR5SWQSPwoPYmlsbGluZ19hZGRyZXNzGAggASgLMiYu" + 
-          "Ym5ldC5wcm90b2NvbC5leGNoYW5nZS5CaWxsaW5nQWRkcmVzcyKjAwoJRmVl" + 
-          "RGV0YWlsEg4KBnJvd251bRgBIAIoBBIaChJmZWVfYXV0aF9kZXRhaWxfaWQY" + 
-          "AiACKAQSDgoGZmVlX2lkGAMgASgEEhIKCmZlZV9hbW91bnQYBCABKAQSFwoP" + 
-          "ZGlzY291bnRfYW1vdW50GAUgASgEEhQKDGZlZV9ncm91cF9pZBgGIAEoBBIW" + 
-          "Cg5mZWVfZ3JvdXBfbmFtZRgHIAEoCRIXCg9mbGF0X2ZlZV9hbW91bnQYCCAB" + 
-          "KAQSGgoSc2NhbGluZ19mZWVfYW1vdW50GAkgASgEEhYKDm1heF9mZWVfYW1v" + 
-          "dW50GAogASgEEhcKD2ZlZV9kZXNjcmlwdGlvbhgLIAEoCRIOCgZpc190YXgY" + 
-          "DCACKAgSFgoOY291cG9uX2Jvb2tfaWQYDSABKAQSEwoLY291cG9uX3R5cGUY" + 
-          "DiABKAQSGgoSY291cG9uX2Rlc2NyaXB0aW9uGA8gASgJEh8KF2xlZnRfb3Zl" + 
-          "cl9jb3Vwb25fY3JlZGl0GBAgASgEEh8KF2xlZnRfb3Zlcl9jb3Vwb25fY2hh" + 
-          "cmdlGBEgASgEIjIKC1ByaWNlRGV0YWlsEhMKC3RyYWRlX3ByaWNlGAEgAigE" + 
-          "Eg4KBmFtb3VudBgCIAIoBA==");
+          "Y2hhbmdlLkJpbGxpbmdBZGRyZXNzEhsKDGZpbGxfb3Jfa2lsbBgFIAEoCDoF" + 
+          "ZmFsc2UinQEKDU9yZGVyRXh0ZW5kZWQSEgoKb3JkZXJfdHlwZRgBIAIoDRI5" + 
+          "CgxiaWRfZXh0ZW5kZWQYAiABKAsyIy5ibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
+          "LkJpZEV4dGVuZGVkEj0KDm9mZmVyX2V4dGVuZGVkGAMgASgLMiUuYm5ldC5w" + 
+          "cm90b2NvbC5leGNoYW5nZS5PZmZlckV4dGVuZGVkIlMKFFF1ZXJ5RmlsdGVy" + 
+          "QnlPcmRlcklkEhIKCm1heF9yZXN1bHQYASACKA0SFAoMcmVmX29yZGVyX2lk" + 
+          "GAIgASgEEhEKCXJlZl9wcmljZRgDIAEoBCJIChhRdWVyeUZpbHRlckJ5Q3Jl" + 
+          "YXRlZFRpbWUSEgoKbWF4X3Jlc3VsdBgBIAIoDRIYChByZWZfY3JlYXRlZF90" + 
+          "aW1lGAIgASgEIvYBChBRdWVyeU9yZGVyRmlsdGVyEhAKCGN1cnJlbmN5GAEg" + 
+          "ASgJEhIKCnNwZWNpYWxpc3QYAiABKA0SEgoKb3JkZXJfdHlwZRgDIAEoDRIU" + 
+          "CgljbGFpbWFibGUYBCABKA06ATASGQoRb3JkZXJfc3RhdHVzX21hc2sYBSAB" + 
+          "KA0SFQoGcm9sbHVwGAYgASgIOgVmYWxzZRJFCgt0aW1lX2ZpbHRlchgHIAIo" + 
+          "CzIwLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUXVlcnlGaWx0ZXJCeUNyZWF0" + 
+          "ZWRUaW1lEhkKEW9yZGVyX2Jvb2tfc3RhdHVzGAggASgNImgKClNldHRsZW1l" + 
+          "bnQSFQoNb3JkZXJfYm9va19pZBgBIAIoBBIUCgxtb25leV9hbW91bnQYAiAC" + 
+          "KAQSFAoMaXRlbXNfYW1vdW50GAMgAigEEhcKD29mZmVyX3NldHRsZV9pZBgE" + 
+          "IAIoBCKXAQoOQ3VycmVuY3lDb25maWcSEAoIY3VycmVuY3kYASACKAkSEQoJ" + 
+          "dGlja19zaXplGAIgASgEEhYKDm1pbl91bml0X3ByaWNlGAMgASgEEhYKDm1h" + 
+          "eF91bml0X3ByaWNlGAQgASgEEhcKD21pbl90b3RhbF9wcmljZRgFIAEoBBIX" + 
+          "Cg9tYXhfdG90YWxfcHJpY2UYBiABKAQirwMKEFNwZWNpYWxpc3RDb25maWcS" + 
+          "EgoKc3BlY2lhbGlzdBgBIAIoBRIdChFhdWN0aW9uX2R1cmF0aW9ucxgCIAMo" + 
+          "BEICEAESIAoUYXVjdGlvbl9zdGFydF9kZWxheXMYAyADKARCAhABEiQKHGFu" + 
+          "dGlfc25pcGluZ19leHRlbnNpb25fZGVsYXkYBCABKAQSGwoQbWF4X2l0ZW1z" + 
+          "X2Ftb3VudBgFIAEoBDoBMBIgChhzdGFydGluZ191bml0X3ByaWNlX3J1bGUY" + 
+          "BiABKAUSIAoYcmVzZXJ2ZWRfdW5pdF9wcmljZV9ydWxlGAcgASgFEiEKGXRy" + 
+          "YWRlX25vd191bml0X3ByaWNlX3J1bGUYCCABKAUSHwoXY3VycmVudF91bml0" + 
+          "X3ByaWNlX3J1bGUYCSABKAUSHwoXbWF4aW11bV91bml0X3ByaWNlX3J1bGUY" + 
+          "CiABKAUSPwoPY3VycmVuY3lfY29uZmlnGAsgAygLMiYuYm5ldC5wcm90b2Nv" + 
+          "bC5leGNoYW5nZS5DdXJyZW5jeUNvbmZpZxIZChFmaWxsX29yX2tpbGxfcnVs" + 
+          "ZRgMIAEoBSL1AQoRRmVlRXN0aW1hdGlvbkRhdGESDwoHcHJvZ3JhbRgBIAIo" + 
+          "BxISCgpzcGVjaWFsaXN0GAIgAigFEhAKCGN1cnJlbmN5GAMgAigJEg4KBnNv" + 
+          "dXJjZRgEIAIoBxIUCgxtb25leV9hbW91bnQYBSACKAQSEwoLaXRlbV9hbW91" + 
+          "bnQYBiACKAQSLQoMYm5ldF9hY2NvdW50GAcgASgLMhcuYm5ldC5wcm90b2Nv" + 
+          "bC5FbnRpdHlJZBI/Cg9iaWxsaW5nX2FkZHJlc3MYCCABKAsyJi5ibmV0LnBy" + 
+          "b3RvY29sLmV4Y2hhbmdlLkJpbGxpbmdBZGRyZXNzIqEDCglGZWVEZXRhaWwS" + 
+          "DgoGcm93bnVtGAEgAigEEhoKEmZlZV9hdXRoX2RldGFpbF9pZBgCIAIoBBIO" + 
+          "CgZmZWVfaWQYAyABKAQSEgoKZmVlX2Ftb3VudBgEIAEoBBIXCg9kaXNjb3Vu" + 
+          "dF9hbW91bnQYBSABKAQSFAoMZmVlX2dyb3VwX2lkGAYgASgEEhYKDmZlZV9n" + 
+          "cm91cF9uYW1lGAcgASgJEhcKD2ZsYXRfZmVlX2Ftb3VudBgIIAEoBBIYChBz" + 
+          "Y2FsaW5nX2ZlZV9yYXRlGAkgASgCEhYKDm1heF9mZWVfYW1vdW50GAogASgE" + 
+          "EhcKD2ZlZV9kZXNjcmlwdGlvbhgLIAEoCRIOCgZpc190YXgYDCACKAgSFgoO" + 
+          "Y291cG9uX2Jvb2tfaWQYDSABKAQSEwoLY291cG9uX3R5cGUYDiABKAQSGgoS" + 
+          "Y291cG9uX2Rlc2NyaXB0aW9uGA8gASgJEh8KF2xlZnRfb3Zlcl9jb3Vwb25f" + 
+          "Y3JlZGl0GBAgASgEEh8KF2xlZnRfb3Zlcl9jb3Vwb25fY2hhcmdlGBEgASgE" + 
+          "IjIKC1ByaWNlRGV0YWlsEhMKC3RyYWRlX3ByaWNlGAEgAigEEg4KBmFtb3Vu" + 
+          "dBgCIAIoBCIlCgVDb3VudBINCgVjb3VudBgBIAIoDRINCgVsaW1pdBgCIAEo" + 
+          "DSJgChRBZHZhbmNlZFN1YnNjcmlwdGlvbhIPCgdwcm9ncmFtGAEgASgHEg4K" + 
+          "BmFjdGlvbhgCIAEoDRIXCg90cmFuc19kaXJlY3Rpb24YAyABKAkSDgoGcmVh" + 
+          "c29uGAQgASgN");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_OrderBook__Descriptor = Descriptor.MessageTypes[0];
@@ -229,7 +238,7 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_BidCreation__Descriptor = Descriptor.MessageTypes[11];
         internal__static_bnet_protocol_exchange_BidCreation__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BidCreation, global::bnet.protocol.exchange.BidCreation.Builder>(internal__static_bnet_protocol_exchange_BidCreation__Descriptor,
-                new string[] { "Bid", "AuctionDuration", "AuctionStartDelay", "BillingAddress", });
+                new string[] { "Bid", "AuctionDuration", "AuctionStartDelay", "BillingAddress", "FillOrKill", });
         internal__static_bnet_protocol_exchange_OrderExtended__Descriptor = Descriptor.MessageTypes[12];
         internal__static_bnet_protocol_exchange_OrderExtended__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.OrderExtended, global::bnet.protocol.exchange.OrderExtended.Builder>(internal__static_bnet_protocol_exchange_OrderExtended__Descriptor,
@@ -245,7 +254,7 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_QueryOrderFilter__Descriptor = Descriptor.MessageTypes[15];
         internal__static_bnet_protocol_exchange_QueryOrderFilter__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.QueryOrderFilter, global::bnet.protocol.exchange.QueryOrderFilter.Builder>(internal__static_bnet_protocol_exchange_QueryOrderFilter__Descriptor,
-                new string[] { "Currency", "Specialist", "OrderType", "Claimable", "OrderStatusMask", "Rollup", "TimeFilter", });
+                new string[] { "Currency", "Specialist", "OrderType", "Claimable", "OrderStatusMask", "Rollup", "TimeFilter", "OrderBookStatus", });
         internal__static_bnet_protocol_exchange_Settlement__Descriptor = Descriptor.MessageTypes[16];
         internal__static_bnet_protocol_exchange_Settlement__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.Settlement, global::bnet.protocol.exchange.Settlement.Builder>(internal__static_bnet_protocol_exchange_Settlement__Descriptor,
@@ -257,7 +266,7 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_SpecialistConfig__Descriptor = Descriptor.MessageTypes[18];
         internal__static_bnet_protocol_exchange_SpecialistConfig__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.SpecialistConfig, global::bnet.protocol.exchange.SpecialistConfig.Builder>(internal__static_bnet_protocol_exchange_SpecialistConfig__Descriptor,
-                new string[] { "Specialist", "AuctionDurations", "AuctionStartDelays", "AntiSnipingExtensionDelay", "MaxItemsAmount", "StartingUnitPriceRule", "ReservedUnitPriceRule", "TradeNowUnitPriceRule", "CurrentUnitPriceRule", "MaximumUnitPriceRule", "CurrencyConfig", });
+                new string[] { "Specialist", "AuctionDurations", "AuctionStartDelays", "AntiSnipingExtensionDelay", "MaxItemsAmount", "StartingUnitPriceRule", "ReservedUnitPriceRule", "TradeNowUnitPriceRule", "CurrentUnitPriceRule", "MaximumUnitPriceRule", "CurrencyConfig", "FillOrKillRule", });
         internal__static_bnet_protocol_exchange_FeeEstimationData__Descriptor = Descriptor.MessageTypes[19];
         internal__static_bnet_protocol_exchange_FeeEstimationData__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.FeeEstimationData, global::bnet.protocol.exchange.FeeEstimationData.Builder>(internal__static_bnet_protocol_exchange_FeeEstimationData__Descriptor,
@@ -265,11 +274,19 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_FeeDetail__Descriptor = Descriptor.MessageTypes[20];
         internal__static_bnet_protocol_exchange_FeeDetail__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.FeeDetail, global::bnet.protocol.exchange.FeeDetail.Builder>(internal__static_bnet_protocol_exchange_FeeDetail__Descriptor,
-                new string[] { "Rownum", "FeeAuthDetailId", "FeeId", "FeeAmount", "DiscountAmount", "FeeGroupId", "FeeGroupName", "FlatFeeAmount", "ScalingFeeAmount", "MaxFeeAmount", "FeeDescription", "IsTax", "CouponBookId", "CouponType", "CouponDescription", "LeftOverCouponCredit", "LeftOverCouponCharge", });
+                new string[] { "Rownum", "FeeAuthDetailId", "FeeId", "FeeAmount", "DiscountAmount", "FeeGroupId", "FeeGroupName", "FlatFeeAmount", "ScalingFeeRate", "MaxFeeAmount", "FeeDescription", "IsTax", "CouponBookId", "CouponType", "CouponDescription", "LeftOverCouponCredit", "LeftOverCouponCharge", });
         internal__static_bnet_protocol_exchange_PriceDetail__Descriptor = Descriptor.MessageTypes[21];
         internal__static_bnet_protocol_exchange_PriceDetail__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.PriceDetail, global::bnet.protocol.exchange.PriceDetail.Builder>(internal__static_bnet_protocol_exchange_PriceDetail__Descriptor,
                 new string[] { "TradePrice", "Amount", });
+        internal__static_bnet_protocol_exchange_Count__Descriptor = Descriptor.MessageTypes[22];
+        internal__static_bnet_protocol_exchange_Count__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.Count, global::bnet.protocol.exchange.Count.Builder>(internal__static_bnet_protocol_exchange_Count__Descriptor,
+                new string[] { "Count_", "Limit", });
+        internal__static_bnet_protocol_exchange_AdvancedSubscription__Descriptor = Descriptor.MessageTypes[23];
+        internal__static_bnet_protocol_exchange_AdvancedSubscription__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.AdvancedSubscription, global::bnet.protocol.exchange.AdvancedSubscription.Builder>(internal__static_bnet_protocol_exchange_AdvancedSubscription__Descriptor,
+                new string[] { "Program", "Action", "TransDirection", "Reason", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -6860,8 +6877,8 @@ namespace bnet.protocol.exchange {
   public sealed partial class BidCreation : pb::GeneratedMessage<BidCreation, BidCreation.Builder> {
     private BidCreation() { }
     private static readonly BidCreation defaultInstance = new BidCreation().MakeReadOnly();
-    private static readonly string[] _bidCreationFieldNames = new string[] { "auction_duration", "auction_start_delay", "bid", "billing_address" };
-    private static readonly uint[] _bidCreationFieldTags = new uint[] { 16, 24, 10, 34 };
+    private static readonly string[] _bidCreationFieldNames = new string[] { "auction_duration", "auction_start_delay", "bid", "billing_address", "fill_or_kill" };
+    private static readonly uint[] _bidCreationFieldTags = new uint[] { 16, 24, 10, 34, 40 };
     public static BidCreation DefaultInstance {
       get { return defaultInstance; }
     }
@@ -6922,6 +6939,16 @@ namespace bnet.protocol.exchange {
       get { return billingAddress_ ?? global::bnet.protocol.exchange.BillingAddress.DefaultInstance; }
     }
     
+    public const int FillOrKillFieldNumber = 5;
+    private bool hasFillOrKill;
+    private bool fillOrKill_;
+    public bool HasFillOrKill {
+      get { return hasFillOrKill; }
+    }
+    public bool FillOrKill {
+      get { return fillOrKill_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasBid) return false;
@@ -6948,6 +6975,9 @@ namespace bnet.protocol.exchange {
       if (hasBillingAddress) {
         output.WriteMessage(4, field_names[3], BillingAddress);
       }
+      if (hasFillOrKill) {
+        output.WriteBool(5, field_names[4], FillOrKill);
+      }
       UnknownFields.WriteTo(output);
     }
     
@@ -6969,6 +6999,9 @@ namespace bnet.protocol.exchange {
         }
         if (hasBillingAddress) {
           size += pb::CodedOutputStream.ComputeMessageSize(4, BillingAddress);
+        }
+        if (hasFillOrKill) {
+          size += pb::CodedOutputStream.ComputeBoolSize(5, FillOrKill);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -7108,6 +7141,9 @@ namespace bnet.protocol.exchange {
         if (other.HasBillingAddress) {
           MergeBillingAddress(other.BillingAddress);
         }
+        if (other.HasFillOrKill) {
+          FillOrKill = other.FillOrKill;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -7175,6 +7211,10 @@ namespace bnet.protocol.exchange {
               }
               input.ReadMessage(subBuilder, extensionRegistry);
               BillingAddress = subBuilder.BuildPartial();
+              break;
+            }
+            case 40: {
+              result.hasFillOrKill = input.ReadBool(ref result.fillOrKill_);
               break;
             }
           }
@@ -7304,6 +7344,26 @@ namespace bnet.protocol.exchange {
         PrepareBuilder();
         result.hasBillingAddress = false;
         result.billingAddress_ = null;
+        return this;
+      }
+      
+      public bool HasFillOrKill {
+        get { return result.hasFillOrKill; }
+      }
+      public bool FillOrKill {
+        get { return result.FillOrKill; }
+        set { SetFillOrKill(value); }
+      }
+      public Builder SetFillOrKill(bool value) {
+        PrepareBuilder();
+        result.hasFillOrKill = true;
+        result.fillOrKill_ = value;
+        return this;
+      }
+      public Builder ClearFillOrKill() {
+        PrepareBuilder();
+        result.hasFillOrKill = false;
+        result.fillOrKill_ = false;
         return this;
       }
     }
@@ -8414,8 +8474,8 @@ namespace bnet.protocol.exchange {
   public sealed partial class QueryOrderFilter : pb::GeneratedMessage<QueryOrderFilter, QueryOrderFilter.Builder> {
     private QueryOrderFilter() { }
     private static readonly QueryOrderFilter defaultInstance = new QueryOrderFilter().MakeReadOnly();
-    private static readonly string[] _queryOrderFilterFieldNames = new string[] { "claimable", "currency", "order_status_mask", "order_type", "rollup", "specialist", "time_filter" };
-    private static readonly uint[] _queryOrderFilterFieldTags = new uint[] { 32, 10, 40, 24, 48, 16, 58 };
+    private static readonly string[] _queryOrderFilterFieldNames = new string[] { "claimable", "currency", "order_book_status", "order_status_mask", "order_type", "rollup", "specialist", "time_filter" };
+    private static readonly uint[] _queryOrderFilterFieldTags = new uint[] { 32, 10, 64, 40, 24, 48, 16, 58 };
     public static QueryOrderFilter DefaultInstance {
       get { return defaultInstance; }
     }
@@ -8506,6 +8566,16 @@ namespace bnet.protocol.exchange {
       get { return timeFilter_ ?? global::bnet.protocol.exchange.QueryFilterByCreatedTime.DefaultInstance; }
     }
     
+    public const int OrderBookStatusFieldNumber = 8;
+    private bool hasOrderBookStatus;
+    private uint orderBookStatus_;
+    public bool HasOrderBookStatus {
+      get { return hasOrderBookStatus; }
+    }
+    public uint OrderBookStatus {
+      get { return orderBookStatus_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasTimeFilter) return false;
@@ -8521,22 +8591,25 @@ namespace bnet.protocol.exchange {
         output.WriteString(1, field_names[1], Currency);
       }
       if (hasSpecialist) {
-        output.WriteUInt32(2, field_names[5], Specialist);
+        output.WriteUInt32(2, field_names[6], Specialist);
       }
       if (hasOrderType) {
-        output.WriteUInt32(3, field_names[3], OrderType);
+        output.WriteUInt32(3, field_names[4], OrderType);
       }
       if (hasClaimable) {
         output.WriteUInt32(4, field_names[0], Claimable);
       }
       if (hasOrderStatusMask) {
-        output.WriteUInt32(5, field_names[2], OrderStatusMask);
+        output.WriteUInt32(5, field_names[3], OrderStatusMask);
       }
       if (hasRollup) {
-        output.WriteBool(6, field_names[4], Rollup);
+        output.WriteBool(6, field_names[5], Rollup);
       }
       if (hasTimeFilter) {
-        output.WriteMessage(7, field_names[6], TimeFilter);
+        output.WriteMessage(7, field_names[7], TimeFilter);
+      }
+      if (hasOrderBookStatus) {
+        output.WriteUInt32(8, field_names[2], OrderBookStatus);
       }
       UnknownFields.WriteTo(output);
     }
@@ -8568,6 +8641,9 @@ namespace bnet.protocol.exchange {
         }
         if (hasTimeFilter) {
           size += pb::CodedOutputStream.ComputeMessageSize(7, TimeFilter);
+        }
+        if (hasOrderBookStatus) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(8, OrderBookStatus);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -8716,6 +8792,9 @@ namespace bnet.protocol.exchange {
         if (other.HasTimeFilter) {
           MergeTimeFilter(other.TimeFilter);
         }
+        if (other.HasOrderBookStatus) {
+          OrderBookStatus = other.OrderBookStatus;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -8790,6 +8869,10 @@ namespace bnet.protocol.exchange {
               }
               input.ReadMessage(subBuilder, extensionRegistry);
               TimeFilter = subBuilder.BuildPartial();
+              break;
+            }
+            case 64: {
+              result.hasOrderBookStatus = input.ReadUInt32(ref result.orderBookStatus_);
               break;
             }
           }
@@ -8960,6 +9043,26 @@ namespace bnet.protocol.exchange {
         PrepareBuilder();
         result.hasTimeFilter = false;
         result.timeFilter_ = null;
+        return this;
+      }
+      
+      public bool HasOrderBookStatus {
+        get { return result.hasOrderBookStatus; }
+      }
+      public uint OrderBookStatus {
+        get { return result.OrderBookStatus; }
+        set { SetOrderBookStatus(value); }
+      }
+      public Builder SetOrderBookStatus(uint value) {
+        PrepareBuilder();
+        result.hasOrderBookStatus = true;
+        result.orderBookStatus_ = value;
+        return this;
+      }
+      public Builder ClearOrderBookStatus() {
+        PrepareBuilder();
+        result.hasOrderBookStatus = false;
+        result.orderBookStatus_ = 0;
         return this;
       }
     }
@@ -9872,8 +9975,8 @@ namespace bnet.protocol.exchange {
   public sealed partial class SpecialistConfig : pb::GeneratedMessage<SpecialistConfig, SpecialistConfig.Builder> {
     private SpecialistConfig() { }
     private static readonly SpecialistConfig defaultInstance = new SpecialistConfig().MakeReadOnly();
-    private static readonly string[] _specialistConfigFieldNames = new string[] { "anti_sniping_extension_delay", "auction_durations", "auction_start_delays", "currency_config", "current_unit_price_rule", "max_items_amount", "maximum_unit_price_rule", "reserved_unit_price_rule", "specialist", "starting_unit_price_rule", "trade_now_unit_price_rule" };
-    private static readonly uint[] _specialistConfigFieldTags = new uint[] { 32, 18, 26, 90, 72, 40, 80, 56, 8, 48, 64 };
+    private static readonly string[] _specialistConfigFieldNames = new string[] { "anti_sniping_extension_delay", "auction_durations", "auction_start_delays", "currency_config", "current_unit_price_rule", "fill_or_kill_rule", "max_items_amount", "maximum_unit_price_rule", "reserved_unit_price_rule", "specialist", "starting_unit_price_rule", "trade_now_unit_price_rule" };
+    private static readonly uint[] _specialistConfigFieldTags = new uint[] { 32, 18, 26, 90, 72, 96, 40, 80, 56, 8, 48, 64 };
     public static SpecialistConfig DefaultInstance {
       get { return defaultInstance; }
     }
@@ -10012,6 +10115,16 @@ namespace bnet.protocol.exchange {
       return currencyConfig_[index];
     }
     
+    public const int FillOrKillRuleFieldNumber = 12;
+    private bool hasFillOrKillRule;
+    private int fillOrKillRule_;
+    public bool HasFillOrKillRule {
+      get { return hasFillOrKillRule; }
+    }
+    public int FillOrKillRule {
+      get { return fillOrKillRule_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasSpecialist) return false;
@@ -10026,7 +10139,7 @@ namespace bnet.protocol.exchange {
       int size = SerializedSize;
       string[] field_names = _specialistConfigFieldNames;
       if (hasSpecialist) {
-        output.WriteInt32(1, field_names[8], Specialist);
+        output.WriteInt32(1, field_names[9], Specialist);
       }
       if (auctionDurations_.Count > 0) {
         output.WritePackedUInt64Array(2, field_names[1], auctionDurationsMemoizedSerializedSize, auctionDurations_);
@@ -10038,25 +10151,28 @@ namespace bnet.protocol.exchange {
         output.WriteUInt64(4, field_names[0], AntiSnipingExtensionDelay);
       }
       if (hasMaxItemsAmount) {
-        output.WriteUInt64(5, field_names[5], MaxItemsAmount);
+        output.WriteUInt64(5, field_names[6], MaxItemsAmount);
       }
       if (hasStartingUnitPriceRule) {
-        output.WriteInt32(6, field_names[9], StartingUnitPriceRule);
+        output.WriteInt32(6, field_names[10], StartingUnitPriceRule);
       }
       if (hasReservedUnitPriceRule) {
-        output.WriteInt32(7, field_names[7], ReservedUnitPriceRule);
+        output.WriteInt32(7, field_names[8], ReservedUnitPriceRule);
       }
       if (hasTradeNowUnitPriceRule) {
-        output.WriteInt32(8, field_names[10], TradeNowUnitPriceRule);
+        output.WriteInt32(8, field_names[11], TradeNowUnitPriceRule);
       }
       if (hasCurrentUnitPriceRule) {
         output.WriteInt32(9, field_names[4], CurrentUnitPriceRule);
       }
       if (hasMaximumUnitPriceRule) {
-        output.WriteInt32(10, field_names[6], MaximumUnitPriceRule);
+        output.WriteInt32(10, field_names[7], MaximumUnitPriceRule);
       }
       if (currencyConfig_.Count > 0) {
         output.WriteMessageArray(11, field_names[3], currencyConfig_);
+      }
+      if (hasFillOrKillRule) {
+        output.WriteInt32(12, field_names[5], FillOrKillRule);
       }
       UnknownFields.WriteTo(output);
     }
@@ -10116,6 +10232,9 @@ namespace bnet.protocol.exchange {
         }
         foreach (global::bnet.protocol.exchange.CurrencyConfig element in CurrencyConfigList) {
           size += pb::CodedOutputStream.ComputeMessageSize(11, element);
+        }
+        if (hasFillOrKillRule) {
+          size += pb::CodedOutputStream.ComputeInt32Size(12, FillOrKillRule);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -10279,6 +10398,9 @@ namespace bnet.protocol.exchange {
         if (other.currencyConfig_.Count != 0) {
           result.currencyConfig_.Add(other.currencyConfig_);
         }
+        if (other.HasFillOrKillRule) {
+          FillOrKillRule = other.FillOrKillRule;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -10366,6 +10488,10 @@ namespace bnet.protocol.exchange {
             }
             case 90: {
               input.ReadMessageArray(tag, field_name, result.currencyConfig_, global::bnet.protocol.exchange.CurrencyConfig.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 96: {
+              result.hasFillOrKillRule = input.ReadInt32(ref result.fillOrKillRule_);
               break;
             }
           }
@@ -10639,6 +10765,26 @@ namespace bnet.protocol.exchange {
       public Builder ClearCurrencyConfig() {
         PrepareBuilder();
         result.currencyConfig_.Clear();
+        return this;
+      }
+      
+      public bool HasFillOrKillRule {
+        get { return result.hasFillOrKillRule; }
+      }
+      public int FillOrKillRule {
+        get { return result.FillOrKillRule; }
+        set { SetFillOrKillRule(value); }
+      }
+      public Builder SetFillOrKillRule(int value) {
+        PrepareBuilder();
+        result.hasFillOrKillRule = true;
+        result.fillOrKillRule_ = value;
+        return this;
+      }
+      public Builder ClearFillOrKillRule() {
+        PrepareBuilder();
+        result.hasFillOrKillRule = false;
+        result.fillOrKillRule_ = 0;
         return this;
       }
     }
@@ -11291,8 +11437,8 @@ namespace bnet.protocol.exchange {
   public sealed partial class FeeDetail : pb::GeneratedMessage<FeeDetail, FeeDetail.Builder> {
     private FeeDetail() { }
     private static readonly FeeDetail defaultInstance = new FeeDetail().MakeReadOnly();
-    private static readonly string[] _feeDetailFieldNames = new string[] { "coupon_book_id", "coupon_description", "coupon_type", "discount_amount", "fee_amount", "fee_auth_detail_id", "fee_description", "fee_group_id", "fee_group_name", "fee_id", "flat_fee_amount", "is_tax", "left_over_coupon_charge", "left_over_coupon_credit", "max_fee_amount", "rownum", "scaling_fee_amount" };
-    private static readonly uint[] _feeDetailFieldTags = new uint[] { 104, 122, 112, 40, 32, 16, 90, 48, 58, 24, 64, 96, 136, 128, 80, 8, 72 };
+    private static readonly string[] _feeDetailFieldNames = new string[] { "coupon_book_id", "coupon_description", "coupon_type", "discount_amount", "fee_amount", "fee_auth_detail_id", "fee_description", "fee_group_id", "fee_group_name", "fee_id", "flat_fee_amount", "is_tax", "left_over_coupon_charge", "left_over_coupon_credit", "max_fee_amount", "rownum", "scaling_fee_rate" };
+    private static readonly uint[] _feeDetailFieldTags = new uint[] { 104, 122, 112, 40, 32, 16, 90, 48, 58, 24, 64, 96, 136, 128, 80, 8, 77 };
     public static FeeDetail DefaultInstance {
       get { return defaultInstance; }
     }
@@ -11393,14 +11539,14 @@ namespace bnet.protocol.exchange {
       get { return flatFeeAmount_; }
     }
     
-    public const int ScalingFeeAmountFieldNumber = 9;
-    private bool hasScalingFeeAmount;
-    private ulong scalingFeeAmount_;
-    public bool HasScalingFeeAmount {
-      get { return hasScalingFeeAmount; }
+    public const int ScalingFeeRateFieldNumber = 9;
+    private bool hasScalingFeeRate;
+    private float scalingFeeRate_;
+    public bool HasScalingFeeRate {
+      get { return hasScalingFeeRate; }
     }
-    public ulong ScalingFeeAmount {
-      get { return scalingFeeAmount_; }
+    public float ScalingFeeRate {
+      get { return scalingFeeRate_; }
     }
     
     public const int MaxFeeAmountFieldNumber = 10;
@@ -11519,8 +11665,8 @@ namespace bnet.protocol.exchange {
       if (hasFlatFeeAmount) {
         output.WriteUInt64(8, field_names[10], FlatFeeAmount);
       }
-      if (hasScalingFeeAmount) {
-        output.WriteUInt64(9, field_names[16], ScalingFeeAmount);
+      if (hasScalingFeeRate) {
+        output.WriteFloat(9, field_names[16], ScalingFeeRate);
       }
       if (hasMaxFeeAmount) {
         output.WriteUInt64(10, field_names[14], MaxFeeAmount);
@@ -11580,8 +11726,8 @@ namespace bnet.protocol.exchange {
         if (hasFlatFeeAmount) {
           size += pb::CodedOutputStream.ComputeUInt64Size(8, FlatFeeAmount);
         }
-        if (hasScalingFeeAmount) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(9, ScalingFeeAmount);
+        if (hasScalingFeeRate) {
+          size += pb::CodedOutputStream.ComputeFloatSize(9, ScalingFeeRate);
         }
         if (hasMaxFeeAmount) {
           size += pb::CodedOutputStream.ComputeUInt64Size(10, MaxFeeAmount);
@@ -11757,8 +11903,8 @@ namespace bnet.protocol.exchange {
         if (other.HasFlatFeeAmount) {
           FlatFeeAmount = other.FlatFeeAmount;
         }
-        if (other.HasScalingFeeAmount) {
-          ScalingFeeAmount = other.ScalingFeeAmount;
+        if (other.HasScalingFeeRate) {
+          ScalingFeeRate = other.ScalingFeeRate;
         }
         if (other.HasMaxFeeAmount) {
           MaxFeeAmount = other.MaxFeeAmount;
@@ -11859,8 +12005,8 @@ namespace bnet.protocol.exchange {
               result.hasFlatFeeAmount = input.ReadUInt64(ref result.flatFeeAmount_);
               break;
             }
-            case 72: {
-              result.hasScalingFeeAmount = input.ReadUInt64(ref result.scalingFeeAmount_);
+            case 77: {
+              result.hasScalingFeeRate = input.ReadFloat(ref result.scalingFeeRate_);
               break;
             }
             case 80: {
@@ -12066,23 +12212,23 @@ namespace bnet.protocol.exchange {
         return this;
       }
       
-      public bool HasScalingFeeAmount {
-        get { return result.hasScalingFeeAmount; }
+      public bool HasScalingFeeRate {
+        get { return result.hasScalingFeeRate; }
       }
-      public ulong ScalingFeeAmount {
-        get { return result.ScalingFeeAmount; }
-        set { SetScalingFeeAmount(value); }
+      public float ScalingFeeRate {
+        get { return result.ScalingFeeRate; }
+        set { SetScalingFeeRate(value); }
       }
-      public Builder SetScalingFeeAmount(ulong value) {
+      public Builder SetScalingFeeRate(float value) {
         PrepareBuilder();
-        result.hasScalingFeeAmount = true;
-        result.scalingFeeAmount_ = value;
+        result.hasScalingFeeRate = true;
+        result.scalingFeeRate_ = value;
         return this;
       }
-      public Builder ClearScalingFeeAmount() {
+      public Builder ClearScalingFeeRate() {
         PrepareBuilder();
-        result.hasScalingFeeAmount = false;
-        result.scalingFeeAmount_ = 0UL;
+        result.hasScalingFeeRate = false;
+        result.scalingFeeRate_ = 0F;
         return this;
       }
       
@@ -12568,6 +12714,728 @@ namespace bnet.protocol.exchange {
       }
     }
     static PriceDetail() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.ExchangeTypes.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class Count : pb::GeneratedMessage<Count, Count.Builder> {
+    private Count() { }
+    private static readonly Count defaultInstance = new Count().MakeReadOnly();
+    private static readonly string[] _countFieldNames = new string[] { "count", "limit" };
+    private static readonly uint[] _countFieldTags = new uint[] { 8, 16 };
+    public static Count DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override Count DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override Count ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.ExchangeTypes.internal__static_bnet_protocol_exchange_Count__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<Count, Count.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.ExchangeTypes.internal__static_bnet_protocol_exchange_Count__FieldAccessorTable; }
+    }
+    
+    public const int Count_FieldNumber = 1;
+    private bool hasCount_;
+    private uint count_;
+    public bool HasCount_ {
+      get { return hasCount_; }
+    }
+    public uint Count_ {
+      get { return count_; }
+    }
+    
+    public const int LimitFieldNumber = 2;
+    private bool hasLimit;
+    private uint limit_;
+    public bool HasLimit {
+      get { return hasLimit; }
+    }
+    public uint Limit {
+      get { return limit_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasCount_) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _countFieldNames;
+      if (hasCount_) {
+        output.WriteUInt32(1, field_names[0], Count_);
+      }
+      if (hasLimit) {
+        output.WriteUInt32(2, field_names[1], Limit);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasCount_) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, Count_);
+        }
+        if (hasLimit) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, Limit);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static Count ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static Count ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static Count ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static Count ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static Count ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static Count ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static Count ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static Count ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static Count ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static Count ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private Count MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(Count prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<Count, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(Count cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private Count result;
+      
+      private Count PrepareBuilder() {
+        if (resultIsReadOnly) {
+          Count original = result;
+          result = new Count();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override Count MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.Count.Descriptor; }
+      }
+      
+      public override Count DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.Count.DefaultInstance; }
+      }
+      
+      public override Count BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is Count) {
+          return MergeFrom((Count) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(Count other) {
+        if (other == global::bnet.protocol.exchange.Count.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasCount_) {
+          Count_ = other.Count_;
+        }
+        if (other.HasLimit) {
+          Limit = other.Limit;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_countFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _countFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasCount_ = input.ReadUInt32(ref result.count_);
+              break;
+            }
+            case 16: {
+              result.hasLimit = input.ReadUInt32(ref result.limit_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasCount_ {
+        get { return result.hasCount_; }
+      }
+      public uint Count_ {
+        get { return result.Count_; }
+        set { SetCount_(value); }
+      }
+      public Builder SetCount_(uint value) {
+        PrepareBuilder();
+        result.hasCount_ = true;
+        result.count_ = value;
+        return this;
+      }
+      public Builder ClearCount_() {
+        PrepareBuilder();
+        result.hasCount_ = false;
+        result.count_ = 0;
+        return this;
+      }
+      
+      public bool HasLimit {
+        get { return result.hasLimit; }
+      }
+      public uint Limit {
+        get { return result.Limit; }
+        set { SetLimit(value); }
+      }
+      public Builder SetLimit(uint value) {
+        PrepareBuilder();
+        result.hasLimit = true;
+        result.limit_ = value;
+        return this;
+      }
+      public Builder ClearLimit() {
+        PrepareBuilder();
+        result.hasLimit = false;
+        result.limit_ = 0;
+        return this;
+      }
+    }
+    static Count() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.ExchangeTypes.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class AdvancedSubscription : pb::GeneratedMessage<AdvancedSubscription, AdvancedSubscription.Builder> {
+    private AdvancedSubscription() { }
+    private static readonly AdvancedSubscription defaultInstance = new AdvancedSubscription().MakeReadOnly();
+    private static readonly string[] _advancedSubscriptionFieldNames = new string[] { "action", "program", "reason", "trans_direction" };
+    private static readonly uint[] _advancedSubscriptionFieldTags = new uint[] { 16, 13, 32, 26 };
+    public static AdvancedSubscription DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override AdvancedSubscription DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override AdvancedSubscription ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.ExchangeTypes.internal__static_bnet_protocol_exchange_AdvancedSubscription__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<AdvancedSubscription, AdvancedSubscription.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.ExchangeTypes.internal__static_bnet_protocol_exchange_AdvancedSubscription__FieldAccessorTable; }
+    }
+    
+    public const int ProgramFieldNumber = 1;
+    private bool hasProgram;
+    private uint program_;
+    public bool HasProgram {
+      get { return hasProgram; }
+    }
+    public uint Program {
+      get { return program_; }
+    }
+    
+    public const int ActionFieldNumber = 2;
+    private bool hasAction;
+    private uint action_;
+    public bool HasAction {
+      get { return hasAction; }
+    }
+    public uint Action {
+      get { return action_; }
+    }
+    
+    public const int TransDirectionFieldNumber = 3;
+    private bool hasTransDirection;
+    private string transDirection_ = "";
+    public bool HasTransDirection {
+      get { return hasTransDirection; }
+    }
+    public string TransDirection {
+      get { return transDirection_; }
+    }
+    
+    public const int ReasonFieldNumber = 4;
+    private bool hasReason;
+    private uint reason_;
+    public bool HasReason {
+      get { return hasReason; }
+    }
+    public uint Reason {
+      get { return reason_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _advancedSubscriptionFieldNames;
+      if (hasProgram) {
+        output.WriteFixed32(1, field_names[1], Program);
+      }
+      if (hasAction) {
+        output.WriteUInt32(2, field_names[0], Action);
+      }
+      if (hasTransDirection) {
+        output.WriteString(3, field_names[3], TransDirection);
+      }
+      if (hasReason) {
+        output.WriteUInt32(4, field_names[2], Reason);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasProgram) {
+          size += pb::CodedOutputStream.ComputeFixed32Size(1, Program);
+        }
+        if (hasAction) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, Action);
+        }
+        if (hasTransDirection) {
+          size += pb::CodedOutputStream.ComputeStringSize(3, TransDirection);
+        }
+        if (hasReason) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(4, Reason);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static AdvancedSubscription ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static AdvancedSubscription ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static AdvancedSubscription ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static AdvancedSubscription ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static AdvancedSubscription ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static AdvancedSubscription ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static AdvancedSubscription ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static AdvancedSubscription ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static AdvancedSubscription ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static AdvancedSubscription ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private AdvancedSubscription MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(AdvancedSubscription prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<AdvancedSubscription, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(AdvancedSubscription cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private AdvancedSubscription result;
+      
+      private AdvancedSubscription PrepareBuilder() {
+        if (resultIsReadOnly) {
+          AdvancedSubscription original = result;
+          result = new AdvancedSubscription();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override AdvancedSubscription MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.AdvancedSubscription.Descriptor; }
+      }
+      
+      public override AdvancedSubscription DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.AdvancedSubscription.DefaultInstance; }
+      }
+      
+      public override AdvancedSubscription BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is AdvancedSubscription) {
+          return MergeFrom((AdvancedSubscription) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(AdvancedSubscription other) {
+        if (other == global::bnet.protocol.exchange.AdvancedSubscription.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasProgram) {
+          Program = other.Program;
+        }
+        if (other.HasAction) {
+          Action = other.Action;
+        }
+        if (other.HasTransDirection) {
+          TransDirection = other.TransDirection;
+        }
+        if (other.HasReason) {
+          Reason = other.Reason;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_advancedSubscriptionFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _advancedSubscriptionFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 13: {
+              result.hasProgram = input.ReadFixed32(ref result.program_);
+              break;
+            }
+            case 16: {
+              result.hasAction = input.ReadUInt32(ref result.action_);
+              break;
+            }
+            case 26: {
+              result.hasTransDirection = input.ReadString(ref result.transDirection_);
+              break;
+            }
+            case 32: {
+              result.hasReason = input.ReadUInt32(ref result.reason_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasProgram {
+        get { return result.hasProgram; }
+      }
+      public uint Program {
+        get { return result.Program; }
+        set { SetProgram(value); }
+      }
+      public Builder SetProgram(uint value) {
+        PrepareBuilder();
+        result.hasProgram = true;
+        result.program_ = value;
+        return this;
+      }
+      public Builder ClearProgram() {
+        PrepareBuilder();
+        result.hasProgram = false;
+        result.program_ = 0;
+        return this;
+      }
+      
+      public bool HasAction {
+        get { return result.hasAction; }
+      }
+      public uint Action {
+        get { return result.Action; }
+        set { SetAction(value); }
+      }
+      public Builder SetAction(uint value) {
+        PrepareBuilder();
+        result.hasAction = true;
+        result.action_ = value;
+        return this;
+      }
+      public Builder ClearAction() {
+        PrepareBuilder();
+        result.hasAction = false;
+        result.action_ = 0;
+        return this;
+      }
+      
+      public bool HasTransDirection {
+        get { return result.hasTransDirection; }
+      }
+      public string TransDirection {
+        get { return result.TransDirection; }
+        set { SetTransDirection(value); }
+      }
+      public Builder SetTransDirection(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasTransDirection = true;
+        result.transDirection_ = value;
+        return this;
+      }
+      public Builder ClearTransDirection() {
+        PrepareBuilder();
+        result.hasTransDirection = false;
+        result.transDirection_ = "";
+        return this;
+      }
+      
+      public bool HasReason {
+        get { return result.hasReason; }
+      }
+      public uint Reason {
+        get { return result.Reason; }
+        set { SetReason(value); }
+      }
+      public Builder SetReason(uint value) {
+        PrepareBuilder();
+        result.hasReason = true;
+        result.reason_ = value;
+        return this;
+      }
+      public Builder ClearReason() {
+        PrepareBuilder();
+        result.hasReason = false;
+        result.reason_ = 0;
+        return this;
+      }
+    }
+    static AdvancedSubscription() {
       object.ReferenceEquals(global::bnet.protocol.exchange.ExchangeTypes.Descriptor, null);
     }
   }

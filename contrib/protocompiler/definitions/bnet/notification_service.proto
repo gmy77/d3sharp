@@ -64,5 +64,9 @@ service NotificationListener
     {
         option (method_id) = 1;
     }
+    rpc OnNotificationSent(.bnet.protocol.notification.Notification) returns(.bnet.protocol.NO_RESPONSE)
+    {
+        option (method_id) = 2;
+    }
 }
 

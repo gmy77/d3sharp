@@ -33,6 +33,7 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
+        public uint Status { get; set; }
 
         public override void SubscribeToFriends(IRpcController controller, bnet.protocol.friends.SubscribeToFriendsRequest request, Action<bnet.protocol.friends.SubscribeToFriendsResponse> done)
         {
@@ -70,24 +71,77 @@ namespace Mooege.Core.MooNet.Services
 
         public override void SendInvitation(IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.NoData> done)
         {
-            //TODO: Add battletag invitation -Egris
+
+            /*
+             * Error List:
+             * The friends list is full. (Error 5000)
+             * Too many sent invitations have been sent. (Error 5001)
+             * Too many invitations have been received. (Error 5002)
+             * This player is already a friend. (Error 5003)
+             * This person was already invited to be a friend. (Error 5005)
+             * The friend invitation was removed. (Error 5006)
+             * Your friends list is full. (Error 5015)
+             * The inviter's friends list is full. (Error 5016)
+             * This account is already a friend. (Error 317201)
+             * That friend invitation already exists. (Error 317200)
+             * Unable to add self as a friend. (Error 317202)
+             * The BattleTag does not exist. (Error 317203)
+            */
 
             // somehow protobuf lib doesnt handle this extension, so we're using a workaround to get that channelinfo.
             var extensionBytes = request.Params.UnknownFields.FieldDictionary[103].LengthDelimitedList[0].ToByteArray();
             var friendRequest = bnet.protocol.friends.FriendInvitationParams.ParseFrom(extensionBytes);
 
-            if (friendRequest.TargetEmail.ToLower() == this.Client.Account.Email.ToLower()) return; // don't allow him to invite himself - and we should actually return an error!
-                                                                                                    // also he shouldn't be allowed to invite his current friends - put that check too!. /raist
-            if (friendRequest.TargetBattleTag == this.Client.Account.BattleTag) return;
+            var response = bnet.protocol.NoData.CreateBuilder();
+
+            if (friendRequest.TargetEmail.ToLower() == this.Client.Account.Email.ToLower())
+            {
+                this.Status = 317202; //Unable to add self as a friend.
+                done(response.Build());
+                return;
+            }
+
+            if (friendRequest.TargetBattleTag == this.Client.Account.BattleTag)
+            {
+                this.Status = 317202; //Unable to add self as a friend.
+                done(response.Build());
+                return;
+            }
 
             Account invitee = null;
+
             if (friendRequest.HasTargetEmail)
                 invitee = AccountManager.GetAccountByEmail(friendRequest.TargetEmail);
             else
                 invitee = AccountManager.GetAccountByBattletag(friendRequest.TargetBattleTag);
 
-            if (invitee == null) return; // we need send an error response here /raist.
-            //Header.Status(4) = account does not exist
+            if (invitee == null)
+            {
+                if (friendRequest.HasTargetEmail)
+                    this.Status = 4; //There was an error. Please try again.
+                else
+                    this.Status = 317203; //The BattleTag does not exist.
+                done(response.Build());
+                return;
+            }
+            else if (FriendManager.AreFriends(this.Client.Account, invitee))
+            {
+                if (friendRequest.HasTargetEmail)
+                    this.Status = 317201; //This account is already a friend. email?
+                else
+                    this.Status = 5003; //This player is already a friend. battletag?
+                done(response.Build());
+                return;
+            }
+            else if (FriendManager.InvitationExists(this.Client.Account, invitee))
+            {
+                if (friendRequest.HasTargetEmail)
+                    this.Status = 317200; //That friend invitation already exists. email?
+                else
+                    this.Status = 5005; //This person was already invited to be a friend. battletag?
+                done(response.Build());
+                return;
+            }
 
             Logger.Trace("{0} sent {1} friend invitation.", this.Client.Account, invitee);
 
@@ -101,11 +155,6 @@ namespace Mooege.Core.MooNet.Services
                 .SetCreationTime(DateTime.Now.ToUnixTime())
                 .SetExpirationTime(86400);
 
-            // Response is bnet.protocol.NoData as of 7728. /raist.
-            //var response = bnet.protocol.invitation.SendInvitationResponse.CreateBuilder()
-            //    .SetInvitation(invitation.Clone());
-
-            var response = bnet.protocol.NoData.CreateBuilder();
             done(response.Build());
 
             // notify the invitee on invitation.

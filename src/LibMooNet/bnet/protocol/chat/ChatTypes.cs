@@ -31,16 +31,17 @@ namespace bnet.protocol.chat {
     static ChatTypes() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           "ChVibmV0L2NoYXRfdHlwZXMucHJvdG8SEmJuZXQucHJvdG9jb2wuY2hhdBoY" + 
-          "Ym5ldC9jaGFubmVsX3R5cGVzLnByb3RvIpYBCgxDaGFubmVsU3RhdGUSEAoI" + 
+          "Ym5ldC9jaGFubmVsX3R5cGVzLnByb3RvIsMBCgxDaGFubmVsU3RhdGUSEAoI" + 
           "aWRlbnRpdHkYASABKAkSDwoHcHJvZ3JhbRgCIAEoBxIOCgZsb2NhbGUYAyAB" + 
-          "KAcyUwoEY2hhdBIjLmJuZXQucHJvdG9jb2wuY2hhbm5lbC5DaGFubmVsU3Rh" + 
+          "KAcSFQoGcHVibGljGAQgASgIOgVmYWxzZRIUCgxidWNrZXRfaW5kZXgYBSAB" + 
+          "KA0yUwoEY2hhdBIjLmJuZXQucHJvdG9jb2wuY2hhbm5lbC5DaGFubmVsU3Rh" + 
           "dGUYZCABKAsyIC5ibmV0LnByb3RvY29sLmNoYXQuQ2hhbm5lbFN0YXRl");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_chat_ChannelState__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_chat_ChannelState__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.chat.ChannelState, global::bnet.protocol.chat.ChannelState.Builder>(internal__static_bnet_protocol_chat_ChannelState__Descriptor,
-                new string[] { "Identity", "Program", "Locale", });
+                new string[] { "Identity", "Program", "Locale", "Public", "BucketIndex", });
         global::bnet.protocol.chat.ChannelState.Chat = pb::GeneratedSingleExtension<global::bnet.protocol.chat.ChannelState>.CreateInstance(global::bnet.protocol.chat.ChannelState.Descriptor.Extensions[0]);
         return null;
       };
@@ -59,8 +60,8 @@ namespace bnet.protocol.chat {
   public sealed partial class ChannelState : pb::GeneratedMessage<ChannelState, ChannelState.Builder> {
     private ChannelState() { }
     private static readonly ChannelState defaultInstance = new ChannelState().MakeReadOnly();
-    private static readonly string[] _channelStateFieldNames = new string[] { "identity", "locale", "program" };
-    private static readonly uint[] _channelStateFieldTags = new uint[] { 10, 29, 21 };
+    private static readonly string[] _channelStateFieldNames = new string[] { "bucket_index", "identity", "locale", "program", "public" };
+    private static readonly uint[] _channelStateFieldTags = new uint[] { 40, 10, 29, 21, 32 };
     public static ChannelState DefaultInstance {
       get { return defaultInstance; }
     }
@@ -113,6 +114,26 @@ namespace bnet.protocol.chat {
       get { return locale_; }
     }
     
+    public const int PublicFieldNumber = 4;
+    private bool hasPublic;
+    private bool public_;
+    public bool HasPublic {
+      get { return hasPublic; }
+    }
+    public bool Public {
+      get { return public_; }
+    }
+    
+    public const int BucketIndexFieldNumber = 5;
+    private bool hasBucketIndex;
+    private uint bucketIndex_;
+    public bool HasBucketIndex {
+      get { return hasBucketIndex; }
+    }
+    public uint BucketIndex {
+      get { return bucketIndex_; }
+    }
+    
     public override bool IsInitialized {
       get {
         return true;
@@ -123,13 +144,19 @@ namespace bnet.protocol.chat {
       int size = SerializedSize;
       string[] field_names = _channelStateFieldNames;
       if (hasIdentity) {
-        output.WriteString(1, field_names[0], Identity);
+        output.WriteString(1, field_names[1], Identity);
       }
       if (hasProgram) {
-        output.WriteFixed32(2, field_names[2], Program);
+        output.WriteFixed32(2, field_names[3], Program);
       }
       if (hasLocale) {
-        output.WriteFixed32(3, field_names[1], Locale);
+        output.WriteFixed32(3, field_names[2], Locale);
+      }
+      if (hasPublic) {
+        output.WriteBool(4, field_names[4], Public);
+      }
+      if (hasBucketIndex) {
+        output.WriteUInt32(5, field_names[0], BucketIndex);
       }
       UnknownFields.WriteTo(output);
     }
@@ -149,6 +176,12 @@ namespace bnet.protocol.chat {
         }
         if (hasLocale) {
           size += pb::CodedOutputStream.ComputeFixed32Size(3, Locale);
+        }
+        if (hasPublic) {
+          size += pb::CodedOutputStream.ComputeBoolSize(4, Public);
+        }
+        if (hasBucketIndex) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(5, BucketIndex);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -285,6 +318,12 @@ namespace bnet.protocol.chat {
         if (other.HasLocale) {
           Locale = other.Locale;
         }
+        if (other.HasPublic) {
+          Public = other.Public;
+        }
+        if (other.HasBucketIndex) {
+          BucketIndex = other.BucketIndex;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -338,6 +377,14 @@ namespace bnet.protocol.chat {
             }
             case 29: {
               result.hasLocale = input.ReadFixed32(ref result.locale_);
+              break;
+            }
+            case 32: {
+              result.hasPublic = input.ReadBool(ref result.public_);
+              break;
+            }
+            case 40: {
+              result.hasBucketIndex = input.ReadUInt32(ref result.bucketIndex_);
               break;
             }
           }
@@ -408,6 +455,46 @@ namespace bnet.protocol.chat {
         PrepareBuilder();
         result.hasLocale = false;
         result.locale_ = 0;
+        return this;
+      }
+      
+      public bool HasPublic {
+        get { return result.hasPublic; }
+      }
+      public bool Public {
+        get { return result.Public; }
+        set { SetPublic(value); }
+      }
+      public Builder SetPublic(bool value) {
+        PrepareBuilder();
+        result.hasPublic = true;
+        result.public_ = value;
+        return this;
+      }
+      public Builder ClearPublic() {
+        PrepareBuilder();
+        result.hasPublic = false;
+        result.public_ = false;
+        return this;
+      }
+      
+      public bool HasBucketIndex {
+        get { return result.hasBucketIndex; }
+      }
+      public uint BucketIndex {
+        get { return result.BucketIndex; }
+        set { SetBucketIndex(value); }
+      }
+      public Builder SetBucketIndex(uint value) {
+        PrepareBuilder();
+        result.hasBucketIndex = true;
+        result.bucketIndex_ = value;
+        return this;
+      }
+      public Builder ClearBucketIndex() {
+        PrepareBuilder();
+        result.hasBucketIndex = false;
+        result.bucketIndex_ = 0;
         return this;
       }
     }
