@@ -1,3 +1,5 @@
+   -- Creted with SQLite Expert Personal 3.4.2
+
 CREATE TABLE [accounts] (
   [id] INTEGER  NOT NULL,
   [email] TEXT  NOT NULL,
@@ -6,7 +8,8 @@ CREATE TABLE [accounts] (
   [battletagname] TEXT  NOT NULL,
   [hashCode] INTEGER  NOT NULL,
   [userLevel] INTEGER DEFAULT '0' NOT NULL,
-  [LastSelectedHeroId] INTEGER  NULL);
+  [LastSelectedHeroId] INTEGER, 
+  [LastOnline] INTEGER DEFAULT 0);
 
 
 CREATE TABLE [active_skills] (
@@ -46,8 +49,8 @@ CREATE TABLE [gameaccounts] (
 
 
 CREATE TABLE [inventory] (
-  [toon_id] INTEGER,
-  [inventory_type] TEXT,
+  [account_id] INTEGER, 
+  [toon_id] INTEGER, 
   [inventory_loc_x] INTEGER,
   [inventory_loc_y] INTEGER,
   [equipment_slot] INTEGER,

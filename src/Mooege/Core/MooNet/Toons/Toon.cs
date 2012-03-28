@@ -392,7 +392,7 @@ namespace Mooege.Core.MooNet.Toons
             visualToSlotMapping.Add(9, 7);
             
             //add visual equipment form DB, only the visualizable equipment, not everything
-            var itemQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot <> -1 AND inventory_type = 'equipped' AND item_id <> -1", persistentId);
+            var itemQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot <> -1 AND item_id <> -1", persistentId);
             var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
             var itemReader = itemCmd.ExecuteReader();
             if (itemReader.HasRows)
@@ -484,7 +484,7 @@ namespace Mooege.Core.MooNet.Toons
                 {
                     var query =
                         string.Format(
-                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, experience={5}, accountId={6}, timePlayed={7}, deleted={8} WHERE id={8}",
+                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, experience={5}, accountId={6}, timePlayed={7}, deleted={8} WHERE id={9}",
                             this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.ExperienceNext, this.GameAccount.PersistentID, this.TimePlayed, this.Deleted ? 1 : 0, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
@@ -551,7 +551,7 @@ namespace Mooege.Core.MooNet.Toons
 
         private bool VisualItemExistsInDb(int slot)
         {
-            var query = string.Format("SELECT toon_id FROM inventory WHERE toon_id = {0} AND equipment_slot = {1} AND inventory_type = 'equipped'", this.PersistentID, slot);
+            var query = string.Format("SELECT toon_id FROM inventory WHERE toon_id = {0} AND equipment_slot = {1}", this.PersistentID, slot);
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
