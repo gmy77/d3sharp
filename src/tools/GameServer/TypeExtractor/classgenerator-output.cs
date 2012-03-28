@@ -792,6 +792,7 @@
         public int Field5;
         int _Field6;
         public int Field6 { get { return _Field6; } set { if(value < -1 || value > 0xFFFFF) throw new ArgumentOutOfRangeException(); _Field6 = value; } }
+        public int? Field7;
 
         public override void Parse(GameBitBuffer buffer)
         {
@@ -803,6 +804,8 @@
             Field4 = buffer.ReadFloat32();
             Field5 = buffer.ReadInt(32);
             Field6 = buffer.ReadInt(21) + (-1);
+            if(buffer.ReadBool())
+                Field7 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -814,6 +817,8 @@
             buffer.WriteFloat32(Field4);
             buffer.WriteInt(32, Field5);
             buffer.WriteInt(21, Field6 - (-1));
+            if(Field7.HasValue)
+                buffer.WriteInt(32, Field7.Value);
         }
 
     }

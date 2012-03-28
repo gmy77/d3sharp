@@ -63,6 +63,7 @@ message DigestUI
     required sfixed32 last_played_quest = 5;
     required sint32 last_played_quest_step = 6;
     required uint32 time_played = 7 [default = 0];
+    optional sint32 highest_completed_difficulty = 8;
 }
 
 message SavedQuest
@@ -111,6 +112,7 @@ message SavedData
     required sfixed32 gbid_potion_button = 13 [default = -1];
     repeated .D3.Hero.SkillWithRune active_skills = 14;
     required bytes skill_slot_ever_assigned = 15;
+    required uint32 skill_version = 16 [default = 0];
 }
 
 message Timestamps

@@ -93,14 +93,12 @@ namespace Mooege.Net.MooNet
         public ClientLocale Locale { get; set; }
 
         /// <summary>
-        /// Allows AuthenticationService.LogonResponse to be post-poned until authentication process is done.
-        /// </summary>
-        public readonly AutoResetEvent AuthenticationCompleteSignal = new AutoResetEvent(false);
-
-        /// <summary>
         /// Resulting error code for the authentication process.
         /// </summary>
         public AuthManager.AuthenticationErrorCodes AuthenticationErrorCode;
+
+        public bool ThumbprintReq = false;
+        public bool PasswordReq = false;
 
         /// <summary>
         /// Callback list for issued client RPCs.
@@ -123,6 +121,8 @@ namespace Mooege.Net.MooNet
         /// Listener Id for upcoming rpc.
         /// </summary>
         private ulong _listenerId; // last targeted rpc object.
+
+        public string LoginEmail = "";
 
         public MooNetClient(IConnection connection)
         {
@@ -149,6 +149,26 @@ namespace Mooege.Net.MooNet
             if (toon && this.Account.CurrentGameAccount.CurrentToon != null)
                 Logger.Warn("DEPRECATED: GetIdentity called with toon.");
             return identityBuilder.Build();
+        }
+
+        public void AuthenticationComplete()
+        {
+            var logonResponseBuilder = bnet.protocol.authentication.LogonResult.CreateBuilder();
+
+            if (AuthenticationErrorCode != AuthManager.AuthenticationErrorCodes.None)
+            {
+                Logger.Info("Authentication failed for {0} because of invalid credentals.", LoginEmail);
+                logonResponseBuilder.SetErrorCode(6); //Logon failed, please try again (Error 6)
+
+                this.MakeRPC(() =>
+                    bnet.protocol.authentication.AuthenticationClient.CreateStub(this).LogonComplete(null, logonResponseBuilder.Build(), callback => { }));
+
+                return;
+            }
+
+            Logger.Info("User {0} authenticated successfuly.", LoginEmail);
+
+            this.EnableEncryption();
         }
 
         #region rpc-call mechanism
@@ -326,6 +346,20 @@ namespace Mooege.Net.MooNet
 
             if (this.TLSStream.LocalCertificate != null)
                 Logger.Trace("Local certificate was issued to {0} by {1} and is valid from {2} until {3}.", this.TLSStream.LocalCertificate.Subject, this.TLSStream.LocalCertificate.Issuer, this.TLSStream.LocalCertificate.NotBefore, this.TLSStream.LocalCertificate.NotAfter);
+
+            Logger.Trace("Sending logon response:");
+
+            var logonResponseBuilder = bnet.protocol.authentication.LogonResult.CreateBuilder();
+            logonResponseBuilder.SetAccount(this.Account.BnetEntityId);
+            logonResponseBuilder.SetErrorCode(0);
+            foreach (var gameAccount in this.Account.GameAccounts.Values)
+            {
+                logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
+            }
+            this.MakeRPC(() =>
+                bnet.protocol.authentication.AuthenticationClient.CreateStub(this).LogonComplete(null, logonResponseBuilder.Build(), callback => { }));
+
+            Mooege.Core.MooNet.Online.PlayerManager.PlayerConnected(this);
 
             Mooege.Core.MooNet.Authentication.AuthManager.SendAccountSettings(this);
 

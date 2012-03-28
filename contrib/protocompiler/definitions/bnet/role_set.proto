@@ -2,6 +2,18 @@ import "bnet/attribute.proto";
 
 package bnet.protocol;
 
+message Privilege
+{
+    required string name = 1;
+    required uint32 value = 2;
+}
+
+message RoleSetConfig
+{
+    repeated .bnet.protocol.Privilege privilege = 1;
+    required .bnet.protocol.RoleSet role_set = 2;
+}
+
 message Role
 {
     required uint32 id = 1;

@@ -46,7 +46,7 @@ namespace Mooege.Core.MooNet.Objects
 
             foreach (var id in Value)
             {
-                var Key = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 4, id.High);
+                var Key = FieldKeyHelper.Create(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, _fieldNumber, id.High);
                 var Field = bnet.protocol.presence.Field.CreateBuilder().SetKey(Key).SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetEntityidValue(id).Build()).Build();
                 operationList.Add(bnet.protocol.presence.FieldOperation.CreateBuilder().SetField(Field).Build());
             }

@@ -8,7 +8,8 @@ CREATE TABLE [accounts] (
   [battletagname] TEXT  NOT NULL,
   [hashCode] INTEGER  NOT NULL,
   [userLevel] INTEGER DEFAULT '0' NOT NULL,
-  [LastSelectedHeroId] INTEGER  NULL);
+  [LastSelectedHeroId] INTEGER, 
+  [LastOnline] INTEGER DEFAULT 0);
 
 
 CREATE TABLE [active_skills] (

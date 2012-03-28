@@ -43,35 +43,38 @@ namespace bnet.protocol.challenge {
         byte[] descriptorData = global::System.Convert.FromBase64String(
             "ChxibmV0L2NoYWxsZW5nZV9zZXJ2aWNlLnByb3RvEhdibmV0LnByb3RvY29s" + 
             "LmNoYWxsZW5nZRoUYm5ldC9hdHRyaWJ1dGUucHJvdG8aEWJuZXQvZW50aXR5" + 
-            "LnByb3RvGg5ibmV0L3JwYy5wcm90byI3CglDaGFsbGVuZ2USDAoEdHlwZRgB" + 
-            "IAIoDRIMCgRpbmZvGAIgASgJEg4KBmFuc3dlchgDIAEoCSIrChZDaGFsbGVu" + 
-            "Z2VQaWNrZWRSZXF1ZXN0EhEKCWNoYWxsZW5nZRgBIAIoDSIqChhDaGFsbGVu" + 
-            "Z2VBbnN3ZXJlZFJlcXVlc3QSDgoGYW5zd2VyGAEgAigJIrEBChpTZW5kQ2hh" + 
-            "bGxlbmdlVG9Vc2VyUmVxdWVzdBIpCgdwZWVyX2lkGAEgASgLMhguYm5ldC5w" + 
-            "cm90b2NvbC5Qcm9jZXNzSWQSMAoPZ2FtZV9hY2NvdW50X2lkGAIgASgLMhcu" + 
-            "Ym5ldC5wcm90b2NvbC5FbnRpdHlJZBI2CgpjaGFsbGVuZ2VzGAMgAygLMiIu" + 
-            "Ym5ldC5wcm90b2NvbC5jaGFsbGVuZ2UuQ2hhbGxlbmdlIlQKG1NlbmRDaGFs" + 
-            "bGVuZ2VUb1VzZXJSZXNwb25zZRI1CgljaGFsbGVuZ2UYASACKAsyIi5ibmV0" + 
-            "LnByb3RvY29sLmNoYWxsZW5nZS5DaGFsbGVuZ2UiTgoUQ2hhbGxlbmdlVXNl" + 
-            "clJlcXVlc3QSNgoKY2hhbGxlbmdlcxgBIAMoCzIiLmJuZXQucHJvdG9jb2wu" + 
-            "Y2hhbGxlbmdlLkNoYWxsZW5nZTLrAgoQQ2hhbGxlbmdlU2VydmljZRJkCg9D" + 
-            "aGFsbGVuZ2VQaWNrZWQSLy5ibmV0LnByb3RvY29sLmNoYWxsZW5nZS5DaGFs" + 
-            "bGVuZ2VQaWNrZWRSZXF1ZXN0GhouYm5ldC5wcm90b2NvbC5OT19SRVNQT05T" + 
-            "RSIEgLUYARJoChFDaGFsbGVuZ2VBbnN3ZXJlZBIxLmJuZXQucHJvdG9jb2wu" + 
-            "Y2hhbGxlbmdlLkNoYWxsZW5nZUFuc3dlcmVkUmVxdWVzdBoaLmJuZXQucHJv" + 
-            "dG9jb2wuTk9fUkVTUE9OU0UiBIC1GAIShgEKE1NlbmRDaGFsbGVuZ2VUb1Vz" + 
-            "ZXISMy5ibmV0LnByb3RvY29sLmNoYWxsZW5nZS5TZW5kQ2hhbGxlbmdlVG9V" + 
-            "c2VyUmVxdWVzdBo0LmJuZXQucHJvdG9jb2wuY2hhbGxlbmdlLlNlbmRDaGFs" + 
-            "bGVuZ2VUb1VzZXJSZXNwb25zZSIEgLUYAzJzCg9DaGFsbGVuZ2VOb3RpZnkS" + 
-            "YAoNQ2hhbGxlbmdlVXNlchItLmJuZXQucHJvdG9jb2wuY2hhbGxlbmdlLkNo" + 
-            "YWxsZW5nZVVzZXJSZXF1ZXN0GhouYm5ldC5wcm90b2NvbC5OT19SRVNQT05T" + 
-            "RSIEgLUYAUIDgAEA");
+            "LnByb3RvGg5ibmV0L3JwYy5wcm90byJICglDaGFsbGVuZ2USDAoEdHlwZRgB" + 
+            "IAIoBxIMCgRpbmZvGAIgASgJEg4KBmFuc3dlchgDIAEoCRIPCgdyZXRyaWVz" + 
+            "GAQgASgNIisKFkNoYWxsZW5nZVBpY2tlZFJlcXVlc3QSEQoJY2hhbGxlbmdl" + 
+            "GAEgAigHIioKGENoYWxsZW5nZUFuc3dlcmVkUmVxdWVzdBIOCgZhbnN3ZXIY" + 
+            "ASACKAkiwgEKGlNlbmRDaGFsbGVuZ2VUb1VzZXJSZXF1ZXN0EikKB3BlZXJf" + 
+            "aWQYASABKAsyGC5ibmV0LnByb3RvY29sLlByb2Nlc3NJZBIwCg9nYW1lX2Fj" + 
+            "Y291bnRfaWQYAiABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEjYKCmNo" + 
+            "YWxsZW5nZXMYAyADKAsyIi5ibmV0LnByb3RvY29sLmNoYWxsZW5nZS5DaGFs" + 
+            "bGVuZ2USDwoHY29udGV4dBgEIAIoByJUChtTZW5kQ2hhbGxlbmdlVG9Vc2Vy" + 
+            "UmVzcG9uc2USNQoJY2hhbGxlbmdlGAEgAigLMiIuYm5ldC5wcm90b2NvbC5j" + 
+            "aGFsbGVuZ2UuQ2hhbGxlbmdlIl8KFENoYWxsZW5nZVVzZXJSZXF1ZXN0EjYK" + 
+            "CmNoYWxsZW5nZXMYASADKAsyIi5ibmV0LnByb3RvY29sLmNoYWxsZW5nZS5D" + 
+            "aGFsbGVuZ2USDwoHY29udGV4dBgCIAIoBzK1AwoQQ2hhbGxlbmdlU2Vydmlj" + 
+            "ZRJkCg9DaGFsbGVuZ2VQaWNrZWQSLy5ibmV0LnByb3RvY29sLmNoYWxsZW5n" + 
+            "ZS5DaGFsbGVuZ2VQaWNrZWRSZXF1ZXN0GhouYm5ldC5wcm90b2NvbC5OT19S" + 
+            "RVNQT05TRSIEgLUYARJjChFDaGFsbGVuZ2VBbnN3ZXJlZBIxLmJuZXQucHJv" + 
+            "dG9jb2wuY2hhbGxlbmdlLkNoYWxsZW5nZUFuc3dlcmVkUmVxdWVzdBoVLmJu" + 
+            "ZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgCEk0KEkNoYWxsZW5nZUNhbmNlbGxl" + 
+            "ZBIVLmJuZXQucHJvdG9jb2wuTm9EYXRhGhouYm5ldC5wcm90b2NvbC5OT19S" + 
+            "RVNQT05TRSIEgLUYAxKGAQoTU2VuZENoYWxsZW5nZVRvVXNlchIzLmJuZXQu" + 
+            "cHJvdG9jb2wuY2hhbGxlbmdlLlNlbmRDaGFsbGVuZ2VUb1VzZXJSZXF1ZXN0" + 
+            "GjQuYm5ldC5wcm90b2NvbC5jaGFsbGVuZ2UuU2VuZENoYWxsZW5nZVRvVXNl" + 
+            "clJlc3BvbnNlIgSAtRgEMnMKD0NoYWxsZW5nZU5vdGlmeRJgCg1DaGFsbGVu" + 
+            "Z2VVc2VyEi0uYm5ldC5wcm90b2NvbC5jaGFsbGVuZ2UuQ2hhbGxlbmdlVXNl" + 
+            "clJlcXVlc3QaGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgBQgOA" + 
+            "AQA=");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_challenge_Challenge__Descriptor = Descriptor.MessageTypes[0];
           internal__static_bnet_protocol_challenge_Challenge__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.challenge.Challenge, global::bnet.protocol.challenge.Challenge.Builder>(internal__static_bnet_protocol_challenge_Challenge__Descriptor,
-                  new string[] { "Type", "Info", "Answer", });
+                  new string[] { "Type", "Info", "Answer", "Retries", });
           internal__static_bnet_protocol_challenge_ChallengePickedRequest__Descriptor = Descriptor.MessageTypes[1];
           internal__static_bnet_protocol_challenge_ChallengePickedRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.challenge.ChallengePickedRequest, global::bnet.protocol.challenge.ChallengePickedRequest.Builder>(internal__static_bnet_protocol_challenge_ChallengePickedRequest__Descriptor,
@@ -83,7 +86,7 @@ namespace bnet.protocol.challenge {
           internal__static_bnet_protocol_challenge_SendChallengeToUserRequest__Descriptor = Descriptor.MessageTypes[3];
           internal__static_bnet_protocol_challenge_SendChallengeToUserRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.challenge.SendChallengeToUserRequest, global::bnet.protocol.challenge.SendChallengeToUserRequest.Builder>(internal__static_bnet_protocol_challenge_SendChallengeToUserRequest__Descriptor,
-                  new string[] { "PeerId", "GameAccountId", "Challenges", });
+                  new string[] { "PeerId", "GameAccountId", "Challenges", "Context", });
           internal__static_bnet_protocol_challenge_SendChallengeToUserResponse__Descriptor = Descriptor.MessageTypes[4];
           internal__static_bnet_protocol_challenge_SendChallengeToUserResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.challenge.SendChallengeToUserResponse, global::bnet.protocol.challenge.SendChallengeToUserResponse.Builder>(internal__static_bnet_protocol_challenge_SendChallengeToUserResponse__Descriptor,
@@ -91,7 +94,7 @@ namespace bnet.protocol.challenge {
           internal__static_bnet_protocol_challenge_ChallengeUserRequest__Descriptor = Descriptor.MessageTypes[5];
           internal__static_bnet_protocol_challenge_ChallengeUserRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.challenge.ChallengeUserRequest, global::bnet.protocol.challenge.ChallengeUserRequest.Builder>(internal__static_bnet_protocol_challenge_ChallengeUserRequest__Descriptor,
-                  new string[] { "Challenges", });
+                  new string[] { "Challenges", "Context", });
           pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
           RegisterAllExtensions(registry);
           global::bnet.protocol.attribute.Proto.Attribute.RegisterAllExtensions(registry);
@@ -117,8 +120,8 @@ namespace bnet.protocol.challenge {
   public sealed partial class Challenge : pb::GeneratedMessage<Challenge, Challenge.Builder> {
     private Challenge() { }
     private static readonly Challenge defaultInstance = new Challenge().MakeReadOnly();
-    private static readonly string[] _challengeFieldNames = new string[] { "answer", "info", "type" };
-    private static readonly uint[] _challengeFieldTags = new uint[] { 26, 18, 8 };
+    private static readonly string[] _challengeFieldNames = new string[] { "answer", "info", "retries", "type" };
+    private static readonly uint[] _challengeFieldTags = new uint[] { 26, 18, 32, 13 };
     public static Challenge DefaultInstance {
       get { return defaultInstance; }
     }
@@ -169,6 +172,16 @@ namespace bnet.protocol.challenge {
       get { return answer_; }
     }
     
+    public const int RetriesFieldNumber = 4;
+    private bool hasRetries;
+    private uint retries_;
+    public bool HasRetries {
+      get { return hasRetries; }
+    }
+    public uint Retries {
+      get { return retries_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasType) return false;
@@ -180,13 +193,16 @@ namespace bnet.protocol.challenge {
       int size = SerializedSize;
       string[] field_names = _challengeFieldNames;
       if (hasType) {
-        output.WriteUInt32(1, field_names[2], Type);
+        output.WriteFixed32(1, field_names[3], Type);
       }
       if (hasInfo) {
         output.WriteString(2, field_names[1], Info);
       }
       if (hasAnswer) {
         output.WriteString(3, field_names[0], Answer);
+      }
+      if (hasRetries) {
+        output.WriteUInt32(4, field_names[2], Retries);
       }
       UnknownFields.WriteTo(output);
     }
@@ -199,13 +215,16 @@ namespace bnet.protocol.challenge {
         
         size = 0;
         if (hasType) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(1, Type);
+          size += pb::CodedOutputStream.ComputeFixed32Size(1, Type);
         }
         if (hasInfo) {
           size += pb::CodedOutputStream.ComputeStringSize(2, Info);
         }
         if (hasAnswer) {
           size += pb::CodedOutputStream.ComputeStringSize(3, Answer);
+        }
+        if (hasRetries) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(4, Retries);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -342,6 +361,9 @@ namespace bnet.protocol.challenge {
         if (other.HasAnswer) {
           Answer = other.Answer;
         }
+        if (other.HasRetries) {
+          Retries = other.Retries;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -385,8 +407,8 @@ namespace bnet.protocol.challenge {
               ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
               break;
             }
-            case 8: {
-              result.hasType = input.ReadUInt32(ref result.type_);
+            case 13: {
+              result.hasType = input.ReadFixed32(ref result.type_);
               break;
             }
             case 18: {
@@ -395,6 +417,10 @@ namespace bnet.protocol.challenge {
             }
             case 26: {
               result.hasAnswer = input.ReadString(ref result.answer_);
+              break;
+            }
+            case 32: {
+              result.hasRetries = input.ReadUInt32(ref result.retries_);
               break;
             }
           }
@@ -468,6 +494,26 @@ namespace bnet.protocol.challenge {
         result.answer_ = "";
         return this;
       }
+      
+      public bool HasRetries {
+        get { return result.hasRetries; }
+      }
+      public uint Retries {
+        get { return result.Retries; }
+        set { SetRetries(value); }
+      }
+      public Builder SetRetries(uint value) {
+        PrepareBuilder();
+        result.hasRetries = true;
+        result.retries_ = value;
+        return this;
+      }
+      public Builder ClearRetries() {
+        PrepareBuilder();
+        result.hasRetries = false;
+        result.retries_ = 0;
+        return this;
+      }
     }
     static Challenge() {
       object.ReferenceEquals(global::bnet.protocol.challenge.Proto.ChallengeService.Descriptor, null);
@@ -481,7 +527,7 @@ namespace bnet.protocol.challenge {
     private ChallengePickedRequest() { }
     private static readonly ChallengePickedRequest defaultInstance = new ChallengePickedRequest().MakeReadOnly();
     private static readonly string[] _challengePickedRequestFieldNames = new string[] { "challenge" };
-    private static readonly uint[] _challengePickedRequestFieldTags = new uint[] { 8 };
+    private static readonly uint[] _challengePickedRequestFieldTags = new uint[] { 13 };
     public static ChallengePickedRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -523,7 +569,7 @@ namespace bnet.protocol.challenge {
       int size = SerializedSize;
       string[] field_names = _challengePickedRequestFieldNames;
       if (hasChallenge) {
-        output.WriteUInt32(1, field_names[0], Challenge);
+        output.WriteFixed32(1, field_names[0], Challenge);
       }
       UnknownFields.WriteTo(output);
     }
@@ -536,7 +582,7 @@ namespace bnet.protocol.challenge {
         
         size = 0;
         if (hasChallenge) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(1, Challenge);
+          size += pb::CodedOutputStream.ComputeFixed32Size(1, Challenge);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -710,8 +756,8 @@ namespace bnet.protocol.challenge {
               ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
               break;
             }
-            case 8: {
-              result.hasChallenge = input.ReadUInt32(ref result.challenge_);
+            case 13: {
+              result.hasChallenge = input.ReadFixed32(ref result.challenge_);
               break;
             }
           }
@@ -1031,8 +1077,8 @@ namespace bnet.protocol.challenge {
   public sealed partial class SendChallengeToUserRequest : pb::GeneratedMessage<SendChallengeToUserRequest, SendChallengeToUserRequest.Builder> {
     private SendChallengeToUserRequest() { }
     private static readonly SendChallengeToUserRequest defaultInstance = new SendChallengeToUserRequest().MakeReadOnly();
-    private static readonly string[] _sendChallengeToUserRequestFieldNames = new string[] { "challenges", "game_account_id", "peer_id" };
-    private static readonly uint[] _sendChallengeToUserRequestFieldTags = new uint[] { 26, 18, 10 };
+    private static readonly string[] _sendChallengeToUserRequestFieldNames = new string[] { "challenges", "context", "game_account_id", "peer_id" };
+    private static readonly uint[] _sendChallengeToUserRequestFieldTags = new uint[] { 26, 37, 18, 10 };
     public static SendChallengeToUserRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1085,8 +1131,19 @@ namespace bnet.protocol.challenge {
       return challenges_[index];
     }
     
+    public const int ContextFieldNumber = 4;
+    private bool hasContext;
+    private uint context_;
+    public bool HasContext {
+      get { return hasContext; }
+    }
+    public uint Context {
+      get { return context_; }
+    }
+    
     public override bool IsInitialized {
       get {
+        if (!hasContext) return false;
         if (HasPeerId) {
           if (!PeerId.IsInitialized) return false;
         }
@@ -1104,13 +1161,16 @@ namespace bnet.protocol.challenge {
       int size = SerializedSize;
       string[] field_names = _sendChallengeToUserRequestFieldNames;
       if (hasPeerId) {
-        output.WriteMessage(1, field_names[2], PeerId);
+        output.WriteMessage(1, field_names[3], PeerId);
       }
       if (hasGameAccountId) {
-        output.WriteMessage(2, field_names[1], GameAccountId);
+        output.WriteMessage(2, field_names[2], GameAccountId);
       }
       if (challenges_.Count > 0) {
         output.WriteMessageArray(3, field_names[0], challenges_);
+      }
+      if (hasContext) {
+        output.WriteFixed32(4, field_names[1], Context);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1130,6 +1190,9 @@ namespace bnet.protocol.challenge {
         }
         foreach (global::bnet.protocol.challenge.Challenge element in ChallengesList) {
           size += pb::CodedOutputStream.ComputeMessageSize(3, element);
+        }
+        if (hasContext) {
+          size += pb::CodedOutputStream.ComputeFixed32Size(4, Context);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1267,6 +1330,9 @@ namespace bnet.protocol.challenge {
         if (other.challenges_.Count != 0) {
           result.challenges_.Add(other.challenges_);
         }
+        if (other.HasContext) {
+          Context = other.Context;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1330,6 +1396,10 @@ namespace bnet.protocol.challenge {
             }
             case 26: {
               input.ReadMessageArray(tag, field_name, result.challenges_, global::bnet.protocol.challenge.Challenge.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 37: {
+              result.hasContext = input.ReadFixed32(ref result.context_);
               break;
             }
           }
@@ -1463,6 +1533,26 @@ namespace bnet.protocol.challenge {
       public Builder ClearChallenges() {
         PrepareBuilder();
         result.challenges_.Clear();
+        return this;
+      }
+      
+      public bool HasContext {
+        get { return result.hasContext; }
+      }
+      public uint Context {
+        get { return result.Context; }
+        set { SetContext(value); }
+      }
+      public Builder SetContext(uint value) {
+        PrepareBuilder();
+        result.hasContext = true;
+        result.context_ = value;
+        return this;
+      }
+      public Builder ClearContext() {
+        PrepareBuilder();
+        result.hasContext = false;
+        result.context_ = 0;
         return this;
       }
     }
@@ -1778,8 +1868,8 @@ namespace bnet.protocol.challenge {
   public sealed partial class ChallengeUserRequest : pb::GeneratedMessage<ChallengeUserRequest, ChallengeUserRequest.Builder> {
     private ChallengeUserRequest() { }
     private static readonly ChallengeUserRequest defaultInstance = new ChallengeUserRequest().MakeReadOnly();
-    private static readonly string[] _challengeUserRequestFieldNames = new string[] { "challenges" };
-    private static readonly uint[] _challengeUserRequestFieldTags = new uint[] { 10 };
+    private static readonly string[] _challengeUserRequestFieldNames = new string[] { "challenges", "context" };
+    private static readonly uint[] _challengeUserRequestFieldTags = new uint[] { 10, 21 };
     public static ChallengeUserRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1812,8 +1902,19 @@ namespace bnet.protocol.challenge {
       return challenges_[index];
     }
     
+    public const int ContextFieldNumber = 2;
+    private bool hasContext;
+    private uint context_;
+    public bool HasContext {
+      get { return hasContext; }
+    }
+    public uint Context {
+      get { return context_; }
+    }
+    
     public override bool IsInitialized {
       get {
+        if (!hasContext) return false;
         foreach (global::bnet.protocol.challenge.Challenge element in ChallengesList) {
           if (!element.IsInitialized) return false;
         }
@@ -1827,6 +1928,9 @@ namespace bnet.protocol.challenge {
       if (challenges_.Count > 0) {
         output.WriteMessageArray(1, field_names[0], challenges_);
       }
+      if (hasContext) {
+        output.WriteFixed32(2, field_names[1], Context);
+      }
       UnknownFields.WriteTo(output);
     }
     
@@ -1839,6 +1943,9 @@ namespace bnet.protocol.challenge {
         size = 0;
         foreach (global::bnet.protocol.challenge.Challenge element in ChallengesList) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
+        }
+        if (hasContext) {
+          size += pb::CodedOutputStream.ComputeFixed32Size(2, Context);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1970,6 +2077,9 @@ namespace bnet.protocol.challenge {
         if (other.challenges_.Count != 0) {
           result.challenges_.Add(other.challenges_);
         }
+        if (other.HasContext) {
+          Context = other.Context;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -2015,6 +2125,10 @@ namespace bnet.protocol.challenge {
             }
             case 10: {
               input.ReadMessageArray(tag, field_name, result.challenges_, global::bnet.protocol.challenge.Challenge.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 21: {
+              result.hasContext = input.ReadFixed32(ref result.context_);
               break;
             }
           }
@@ -2070,6 +2184,26 @@ namespace bnet.protocol.challenge {
         result.challenges_.Clear();
         return this;
       }
+      
+      public bool HasContext {
+        get { return result.hasContext; }
+      }
+      public uint Context {
+        get { return result.Context; }
+        set { SetContext(value); }
+      }
+      public Builder SetContext(uint value) {
+        PrepareBuilder();
+        result.hasContext = true;
+        result.context_ = value;
+        return this;
+      }
+      public Builder ClearContext() {
+        PrepareBuilder();
+        result.hasContext = false;
+        result.context_ = 0;
+        return this;
+      }
     }
     static ChallengeUserRequest() {
       object.ReferenceEquals(global::bnet.protocol.challenge.Proto.ChallengeService.Descriptor, null);
@@ -2090,6 +2224,10 @@ namespace bnet.protocol.challenge {
     public abstract void ChallengeAnswered(
         pb::IRpcController controller,
         global::bnet.protocol.challenge.ChallengeAnsweredRequest request,
+        global::System.Action<global::bnet.protocol.NoData> done);
+    public abstract void ChallengeCancelled(
+        pb::IRpcController controller,
+        global::bnet.protocol.NoData request,
         global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
     public abstract void SendChallengeToUser(
         pb::IRpcController controller,
@@ -2120,10 +2258,15 @@ namespace bnet.protocol.challenge {
           return;
         case 1:
           this.ChallengeAnswered(controller, (global::bnet.protocol.challenge.ChallengeAnsweredRequest) request,
-              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
         case 2:
+          this.ChallengeCancelled(controller, (global::bnet.protocol.NoData) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
+              done));
+          return;
+        case 3:
           this.SendChallengeToUser(controller, (global::bnet.protocol.challenge.SendChallengeToUserRequest) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.challenge.SendChallengeToUserResponse>(
               done));
@@ -2144,6 +2287,8 @@ namespace bnet.protocol.challenge {
         case 1:
           return global::bnet.protocol.challenge.ChallengeAnsweredRequest.DefaultInstance;
         case 2:
+          return global::bnet.protocol.NoData.DefaultInstance;
+        case 3:
           return global::bnet.protocol.challenge.SendChallengeToUserRequest.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -2159,8 +2304,10 @@ namespace bnet.protocol.challenge {
         case 0:
           return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         case 1:
-          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
+          return global::bnet.protocol.NoData.DefaultInstance;
         case 2:
+          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
+        case 3:
           return global::bnet.protocol.challenge.SendChallengeToUserResponse.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -2197,8 +2344,17 @@ namespace bnet.protocol.challenge {
       public override void ChallengeAnswered(
           pb::IRpcController controller,
           global::bnet.protocol.challenge.ChallengeAnsweredRequest request,
-          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
+          global::System.Action<global::bnet.protocol.NoData> done) {
         channel.CallMethod(Descriptor.Methods[1],
+            controller, request, global::bnet.protocol.NoData.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
+      }
+      
+      public override void ChallengeCancelled(
+          pb::IRpcController controller,
+          global::bnet.protocol.NoData request,
+          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
+        channel.CallMethod(Descriptor.Methods[2],
             controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }
@@ -2207,7 +2363,7 @@ namespace bnet.protocol.challenge {
           pb::IRpcController controller,
           global::bnet.protocol.challenge.SendChallengeToUserRequest request,
           global::System.Action<global::bnet.protocol.challenge.SendChallengeToUserResponse> done) {
-        channel.CallMethod(Descriptor.Methods[2],
+        channel.CallMethod(Descriptor.Methods[3],
             controller, request, global::bnet.protocol.challenge.SendChallengeToUserResponse.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.challenge.SendChallengeToUserResponse, global::bnet.protocol.challenge.SendChallengeToUserResponse.Builder>(done, global::bnet.protocol.challenge.SendChallengeToUserResponse.DefaultInstance));
       }

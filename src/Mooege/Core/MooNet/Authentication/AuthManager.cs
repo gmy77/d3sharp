@@ -24,6 +24,7 @@ using Mooege.Common.Versions;
 using Mooege.Core.Cryptography;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Net.MooNet;
+using Mooege.Common.Extensions;
 
 namespace Mooege.Core.MooNet.Authentication
 {
@@ -31,7 +32,7 @@ namespace Mooege.Core.MooNet.Authentication
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        private static readonly Dictionary<MooNetClient, SRP6a> OngoingAuthentications = new Dictionary<MooNetClient, SRP6a>();
+        public static readonly Dictionary<MooNetClient, SRP6a> OngoingAuthentications = new Dictionary<MooNetClient, SRP6a>();
 
         public static void StartAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
@@ -40,30 +41,32 @@ namespace Mooege.Core.MooNet.Authentication
 
         private static void InitAuthentication(MooNetClient client, bnet.protocol.authentication.LogonRequest request)
         {
+            client.LoginEmail = request.Email;
             var account = AccountManager.GetAccountByEmail(request.Email.ToLower()); // check if account exists.
             
             if (account == null) // we should be returning an error to client /raist.
             {
                 client.AuthenticationErrorCode = AuthenticationErrorCodes.NoGameAccount;
-                client.AuthenticationCompleteSignal.Set();
+                client.AuthenticationComplete();
                 return;
             }
+
+            var thumbprintData = "f9513183031b3836103ac3a3bb606c0e06fd3b94ae4a6b6e405844085b794e901b0ebb1db650b85bac4b489a38a1ca9dcef2bbd13445d0cd85accfc62d84bc3a8d960b1a7a65cd8d3f72a172f41dca98459015ffbd25d766b02824a42dacb7c4cd64f4b3b9e316de23ec1dbb0153b73a4fa58ffb39c3f484b4b478a660dc8979e16e52f978a0ca2fc4184fa0f69844d73ef99f47e3ccb02cf6a636b4ae9513404eee7e0ad536dcef50cd1699e38195e6afdd3655a3a3529b4e52b33ac5d04f5fa2b15536a2c782c89c0acf133e14eac15af035abf5e44e9e1124a3397dac8f90a4ccb1717540698869fc1ba9037e099d68698ecf17ffdd36f07013176be24269fda1e5d221708181d95474fc1d74bb901062a9f6a3e24aef79e9d583d9126796d63c153a0f75f02da27ecc0971f39a46ec29087c3ae474e08fdf8f65d1445b293399bc495ff651b7d2d7a36216ba5e4400ea7bbc884dc4cf3ed27f14501b8bb7fc0f86b5089880e6889bcd851153e299a337d6c945f710559595e351995341cbef44abac379cf0f845b362d294eec390d50f1a50089d250eae1b1205cea1aff514de076516f467cd077a1fbb759b415dc6c0ea1617f31f7d764a0d60d5b67aa82b4202b2a9455eb9ca3683955ec45aaf56aba42a2f3ae9be5f3eed093a6601816d00e0569bfcb91fb7843945336c99757812d373d510d25744f9480b6cc87e8a".ToByteArray();
 
             var srp6a = new SRP6a(account); // create srp6 handler to process the authentication.
             OngoingAuthentications.Add(client, srp6a);
 
-            // request client to load password.dll for authentication.
+            // request client to load thumbprint.dll for authentication.
             var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
                 .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
-                    .SetRegion(0x00005553) // us
-                    .SetUsage(0x61757468) // auth - password.dll
-                    .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AuthModuleHashMap[client.Platform])))
-                .SetMessage(ByteString.CopyFrom(srp6a.LogonChallenge))
+                    .SetRegion(0x00005858) // XX
+                    .SetUsage(0x61757468) // auth - thumbprint.dll
+                    .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.ThumbprintHashMap[client.Platform])))
+                .SetMessage(ByteString.CopyFrom(thumbprintData))
                 .Build();
 
-            //client.MakeRPCWithListenerId(request.ListenerId, () =>
-            //    bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
-            client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
+            client.ThumbprintReq = true;
+            client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, callback => { }));
         }
 
         public static void HandleAuthResponse(MooNetClient client, int moduleId, byte[] authMessage)
@@ -85,7 +88,19 @@ namespace Mooege.Core.MooNet.Authentication
                     .Build();
 
                 client.MakeRPC(() =>
-                    bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => { }));
+                    bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => client.AuthenticationComplete()));
+                /*
+                // This file current does not exist - future use maybe? -Egris
+                var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
+                    .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
+                        .SetRegion(0x00005858) // XX
+                        .SetUsage(0x61757468) // auth - ??.dll
+                        .SetHash(ByteString.CopyFrom("72dd40a65ccadc04fe4ece1323effd3177f4afb9f88a96905a7a30db42c0ae0f".ToByteArray())))
+                    .SetMessage(ByteString.Empty)
+                    .Build();
+
+                client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
+                */
 
                 client.Account = AccountManager.GetAccountByEmail(srp6.Account.Email);
                 //if (client.Account.LoggedInClient != null)
@@ -98,19 +113,18 @@ namespace Mooege.Core.MooNet.Authentication
             }
              
             OngoingAuthentications.Remove(client);
-            client.AuthenticationCompleteSignal.Set(); // signal about completion of authentication processes so we can return the response for AuthenticationService:LogonRequest.
         }
 
         public static void SendAccountSettings(MooNetClient client)
         {
             var accset = new bnet.protocol.authentication.AccountSettingsNotification.Builder();
-            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(168));
-            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(184));
-            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(185));
-            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(186));
-            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(187));
-            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(188));
-            accset.AddAccountLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(193));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(168));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(184));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(185));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(186));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(187));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(188));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(193));
             client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).AccountSettings(null, accset.Build(), delegate(bnet.protocol.NO_RESPONSE a) { }));
         }
 

@@ -12,8 +12,8 @@ message GetLoadRequest
 message ServerState
 {
     optional float current_load = 1 [default = 1];
-    optional int32 game_count = 2 [default = 0];
-    optional int32 player_count = 3 [default = 0];
+    optional uint32 game_count = 2 [default = 0];
+    optional uint32 player_count = 3 [default = 0];
 }
 
 message ServerInfo

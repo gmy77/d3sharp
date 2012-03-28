@@ -20,6 +20,8 @@ namespace bnet.protocol.channel {
     #region Static variables
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_channel_Message__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.Message, global::bnet.protocol.channel.Message.Builder> internal__static_bnet_protocol_channel_Message__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_channel_FindChannelOptions__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.FindChannelOptions, global::bnet.protocol.channel.FindChannelOptions.Builder> internal__static_bnet_protocol_channel_FindChannelOptions__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_channel_ChannelDescription__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.ChannelDescription, global::bnet.protocol.channel.ChannelDescription.Builder> internal__static_bnet_protocol_channel_ChannelDescription__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_channel_ChannelInfo__Descriptor;
@@ -43,54 +45,63 @@ namespace bnet.protocol.channel {
           "bm5lbBoUYm5ldC9hdHRyaWJ1dGUucHJvdG8aEWJuZXQvZW50aXR5LnByb3Rv" + 
           "GhtibmV0L2ludml0YXRpb25fdHlwZXMucHJvdG8iVQoHTWVzc2FnZRI1Cglh" + 
           "dHRyaWJ1dGUYASADKAsyIi5ibmV0LnByb3RvY29sLmF0dHJpYnV0ZS5BdHRy" + 
-          "aWJ1dGUSDAoEcm9sZRgCIAEoDSoFCGQQkU4ilQEKEkNoYW5uZWxEZXNjcmlw" + 
-          "dGlvbhIrCgpjaGFubmVsX2lkGAEgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRp" + 
-          "dHlJZBIXCg9jdXJyZW50X21lbWJlcnMYAiABKA0SMgoFc3RhdGUYAyABKAsy" + 
-          "Iy5ibmV0LnByb3RvY29sLmNoYW5uZWwuQ2hhbm5lbFN0YXRlKgUIZBCRTiKD" + 
-          "AQoLQ2hhbm5lbEluZm8SPgoLZGVzY3JpcHRpb24YASACKAsyKS5ibmV0LnBy" + 
-          "b3RvY29sLmNoYW5uZWwuQ2hhbm5lbERlc2NyaXB0aW9uEi0KBm1lbWJlchgC" + 
-          "IAMoCzIdLmJuZXQucHJvdG9jb2wuY2hhbm5lbC5NZW1iZXIqBQhkEJFOIp4E" + 
-          "CgxDaGFubmVsU3RhdGUSEwoLbWF4X21lbWJlcnMYASABKA0SEwoLbWluX21l" + 
-          "bWJlcnMYAiABKA0SNQoJYXR0cmlidXRlGAMgAygLMiIuYm5ldC5wcm90b2Nv" + 
-          "bC5hdHRyaWJ1dGUuQXR0cmlidXRlEjgKCmludml0YXRpb24YBCADKAsyJC5i" + 
-          "bmV0LnByb3RvY29sLmludml0YXRpb24uSW52aXRhdGlvbhIXCg9tYXhfaW52" + 
-          "aXRhdGlvbnMYBSABKA0SDgoGcmVhc29uGAYgASgNElsKDXByaXZhY3lfbGV2" + 
-          "ZWwYByABKA4yMC5ibmV0LnByb3RvY29sLmNoYW5uZWwuQ2hhbm5lbFN0YXRl" + 
-          "LlByaXZhY3lMZXZlbDoSUFJJVkFDWV9MRVZFTF9PUEVOEg4KBnB1YmxpYxgI" + 
-          "IAEoCBIMCgRuYW1lGAkgASgJEhUKDWRlbGVnYXRlX25hbWUYCiABKAkSHQoM" + 
-          "Y2hhbm5lbF90eXBlGAsgASgJOgdkZWZhdWx0IpEBCgxQcml2YWN5TGV2ZWwS" + 
-          "FgoSUFJJVkFDWV9MRVZFTF9PUEVOEAESLAooUFJJVkFDWV9MRVZFTF9PUEVO" + 
-          "X0lOVklUQVRJT05fQU5EX0ZSSUVORBACEiEKHVBSSVZBQ1lfTEVWRUxfT1BF" + 
-          "Tl9JTlZJVEFUSU9OEAMSGAoUUFJJVkFDWV9MRVZFTF9DTE9TRUQQBCoFCGQQ" + 
-          "kU4ingEKC01lbWJlclN0YXRlEjUKCWF0dHJpYnV0ZRgBIAMoCzIiLmJuZXQu" + 
-          "cHJvdG9jb2wuYXR0cmlidXRlLkF0dHJpYnV0ZRIQCgRyb2xlGAIgAygNQgIQ" + 
-          "ARIVCgpwcml2aWxlZ2VzGAMgASgEOgEwEigKBGluZm8YBCABKAsyGi5ibmV0" + 
-          "LnByb3RvY29sLkFjY291bnRJbmZvKgUIZBCRTiJmCgZNZW1iZXISKQoIaWRl" + 
-          "bnRpdHkYASACKAsyFy5ibmV0LnByb3RvY29sLklkZW50aXR5EjEKBXN0YXRl" + 
-          "GAIgAigLMiIuYm5ldC5wcm90b2NvbC5jaGFubmVsLk1lbWJlclN0YXRl");
+          "aWJ1dGUSDAoEcm9sZRgCIAEoDSoFCGQQkU4i1gEKEkZpbmRDaGFubmVsT3B0" + 
+          "aW9ucxIWCgtzdGFydF9pbmRleBgBIAEoDToBMBIXCgttYXhfcmVzdWx0cxgC" + 
+          "IAEoDToCMTYSDAoEbmFtZRgDIAEoCRIPCgdwcm9ncmFtGAQgASgHEg4KBmxv" + 
+          "Y2FsZRgFIAEoBxIVCg1jYXBhY2l0eV9mdWxsGAYgASgNEkIKEGF0dHJpYnV0" + 
+          "ZV9maWx0ZXIYByACKAsyKC5ibmV0LnByb3RvY29sLmF0dHJpYnV0ZS5BdHRy" + 
+          "aWJ1dGVGaWx0ZXIqBQhkEJFOIo4BChJDaGFubmVsRGVzY3JpcHRpb24SKwoK" + 
+          "Y2hhbm5lbF9pZBgBIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSFwoP" + 
+          "Y3VycmVudF9tZW1iZXJzGAIgASgNEjIKBXN0YXRlGAMgASgLMiMuYm5ldC5w" + 
+          "cm90b2NvbC5jaGFubmVsLkNoYW5uZWxTdGF0ZSKDAQoLQ2hhbm5lbEluZm8S" + 
+          "PgoLZGVzY3JpcHRpb24YASACKAsyKS5ibmV0LnByb3RvY29sLmNoYW5uZWwu" + 
+          "Q2hhbm5lbERlc2NyaXB0aW9uEi0KBm1lbWJlchgCIAMoCzIdLmJuZXQucHJv" + 
+          "dG9jb2wuY2hhbm5lbC5NZW1iZXIqBQhkEJFOIo4ECgxDaGFubmVsU3RhdGUS" + 
+          "EwoLbWF4X21lbWJlcnMYASABKA0SEwoLbWluX21lbWJlcnMYAiABKA0SNQoJ" + 
+          "YXR0cmlidXRlGAMgAygLMiIuYm5ldC5wcm90b2NvbC5hdHRyaWJ1dGUuQXR0" + 
+          "cmlidXRlEjgKCmludml0YXRpb24YBCADKAsyJC5ibmV0LnByb3RvY29sLmlu" + 
+          "dml0YXRpb24uSW52aXRhdGlvbhIXCg9tYXhfaW52aXRhdGlvbnMYBSABKA0S" + 
+          "DgoGcmVhc29uGAYgASgNElsKDXByaXZhY3lfbGV2ZWwYByABKA4yMC5ibmV0" + 
+          "LnByb3RvY29sLmNoYW5uZWwuQ2hhbm5lbFN0YXRlLlByaXZhY3lMZXZlbDoS" + 
+          "UFJJVkFDWV9MRVZFTF9PUEVOEgwKBG5hbWUYCCABKAkSFQoNZGVsZWdhdGVf" + 
+          "bmFtZRgJIAEoCRIdCgxjaGFubmVsX3R5cGUYCiABKAk6B2RlZmF1bHQikQEK" + 
+          "DFByaXZhY3lMZXZlbBIWChJQUklWQUNZX0xFVkVMX09QRU4QARIsCihQUklW" + 
+          "QUNZX0xFVkVMX09QRU5fSU5WSVRBVElPTl9BTkRfRlJJRU5EEAISIQodUFJJ" + 
+          "VkFDWV9MRVZFTF9PUEVOX0lOVklUQVRJT04QAxIYChRQUklWQUNZX0xFVkVM" + 
+          "X0NMT1NFRBAEKgUIZBCRTiKeAQoLTWVtYmVyU3RhdGUSNQoJYXR0cmlidXRl" + 
+          "GAEgAygLMiIuYm5ldC5wcm90b2NvbC5hdHRyaWJ1dGUuQXR0cmlidXRlEhAK" + 
+          "BHJvbGUYAiADKA1CAhABEhUKCnByaXZpbGVnZXMYAyABKAQ6ATASKAoEaW5m" + 
+          "bxgEIAEoCzIaLmJuZXQucHJvdG9jb2wuQWNjb3VudEluZm8qBQhkEJFOImYK" + 
+          "Bk1lbWJlchIpCghpZGVudGl0eRgBIAIoCzIXLmJuZXQucHJvdG9jb2wuSWRl" + 
+          "bnRpdHkSMQoFc3RhdGUYAiACKAsyIi5ibmV0LnByb3RvY29sLmNoYW5uZWwu" + 
+          "TWVtYmVyU3RhdGU=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_channel_Message__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_channel_Message__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.Message, global::bnet.protocol.channel.Message.Builder>(internal__static_bnet_protocol_channel_Message__Descriptor,
                 new string[] { "Attribute", "Role", });
-        internal__static_bnet_protocol_channel_ChannelDescription__Descriptor = Descriptor.MessageTypes[1];
+        internal__static_bnet_protocol_channel_FindChannelOptions__Descriptor = Descriptor.MessageTypes[1];
+        internal__static_bnet_protocol_channel_FindChannelOptions__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.FindChannelOptions, global::bnet.protocol.channel.FindChannelOptions.Builder>(internal__static_bnet_protocol_channel_FindChannelOptions__Descriptor,
+                new string[] { "StartIndex", "MaxResults", "Name", "Program", "Locale", "CapacityFull", "AttributeFilter", });
+        internal__static_bnet_protocol_channel_ChannelDescription__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_channel_ChannelDescription__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.ChannelDescription, global::bnet.protocol.channel.ChannelDescription.Builder>(internal__static_bnet_protocol_channel_ChannelDescription__Descriptor,
                 new string[] { "ChannelId", "CurrentMembers", "State", });
-        internal__static_bnet_protocol_channel_ChannelInfo__Descriptor = Descriptor.MessageTypes[2];
+        internal__static_bnet_protocol_channel_ChannelInfo__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_channel_ChannelInfo__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.ChannelInfo, global::bnet.protocol.channel.ChannelInfo.Builder>(internal__static_bnet_protocol_channel_ChannelInfo__Descriptor,
                 new string[] { "Description", "Member", });
-        internal__static_bnet_protocol_channel_ChannelState__Descriptor = Descriptor.MessageTypes[3];
+        internal__static_bnet_protocol_channel_ChannelState__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_channel_ChannelState__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.ChannelState, global::bnet.protocol.channel.ChannelState.Builder>(internal__static_bnet_protocol_channel_ChannelState__Descriptor,
-                new string[] { "MaxMembers", "MinMembers", "Attribute", "Invitation", "MaxInvitations", "Reason", "PrivacyLevel", "Public", "Name", "DelegateName", "ChannelType", });
-        internal__static_bnet_protocol_channel_MemberState__Descriptor = Descriptor.MessageTypes[4];
+                new string[] { "MaxMembers", "MinMembers", "Attribute", "Invitation", "MaxInvitations", "Reason", "PrivacyLevel", "Name", "DelegateName", "ChannelType", });
+        internal__static_bnet_protocol_channel_MemberState__Descriptor = Descriptor.MessageTypes[5];
         internal__static_bnet_protocol_channel_MemberState__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.MemberState, global::bnet.protocol.channel.MemberState.Builder>(internal__static_bnet_protocol_channel_MemberState__Descriptor,
                 new string[] { "Attribute", "Role", "Privileges", "Info", });
-        internal__static_bnet_protocol_channel_Member__Descriptor = Descriptor.MessageTypes[5];
+        internal__static_bnet_protocol_channel_Member__Descriptor = Descriptor.MessageTypes[6];
         internal__static_bnet_protocol_channel_Member__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.Member, global::bnet.protocol.channel.Member.Builder>(internal__static_bnet_protocol_channel_Member__Descriptor,
                 new string[] { "Identity", "State", });
@@ -462,7 +473,572 @@ namespace bnet.protocol.channel {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class ChannelDescription : pb::ExtendableMessage<ChannelDescription, ChannelDescription.Builder> {
+  public sealed partial class FindChannelOptions : pb::ExtendableMessage<FindChannelOptions, FindChannelOptions.Builder> {
+    private FindChannelOptions() { }
+    private static readonly FindChannelOptions defaultInstance = new FindChannelOptions().MakeReadOnly();
+    private static readonly string[] _findChannelOptionsFieldNames = new string[] { "attribute_filter", "capacity_full", "locale", "max_results", "name", "program", "start_index" };
+    private static readonly uint[] _findChannelOptionsFieldTags = new uint[] { 58, 48, 45, 16, 26, 37, 8 };
+    public static FindChannelOptions DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override FindChannelOptions DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override FindChannelOptions ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.channel.ChannelTypes.internal__static_bnet_protocol_channel_FindChannelOptions__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<FindChannelOptions, FindChannelOptions.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.channel.ChannelTypes.internal__static_bnet_protocol_channel_FindChannelOptions__FieldAccessorTable; }
+    }
+    
+    public const int StartIndexFieldNumber = 1;
+    private bool hasStartIndex;
+    private uint startIndex_;
+    public bool HasStartIndex {
+      get { return hasStartIndex; }
+    }
+    public uint StartIndex {
+      get { return startIndex_; }
+    }
+    
+    public const int MaxResultsFieldNumber = 2;
+    private bool hasMaxResults;
+    private uint maxResults_ = 16;
+    public bool HasMaxResults {
+      get { return hasMaxResults; }
+    }
+    public uint MaxResults {
+      get { return maxResults_; }
+    }
+    
+    public const int NameFieldNumber = 3;
+    private bool hasName;
+    private string name_ = "";
+    public bool HasName {
+      get { return hasName; }
+    }
+    public string Name {
+      get { return name_; }
+    }
+    
+    public const int ProgramFieldNumber = 4;
+    private bool hasProgram;
+    private uint program_;
+    public bool HasProgram {
+      get { return hasProgram; }
+    }
+    public uint Program {
+      get { return program_; }
+    }
+    
+    public const int LocaleFieldNumber = 5;
+    private bool hasLocale;
+    private uint locale_;
+    public bool HasLocale {
+      get { return hasLocale; }
+    }
+    public uint Locale {
+      get { return locale_; }
+    }
+    
+    public const int CapacityFullFieldNumber = 6;
+    private bool hasCapacityFull;
+    private uint capacityFull_;
+    public bool HasCapacityFull {
+      get { return hasCapacityFull; }
+    }
+    public uint CapacityFull {
+      get { return capacityFull_; }
+    }
+    
+    public const int AttributeFilterFieldNumber = 7;
+    private bool hasAttributeFilter;
+    private global::bnet.protocol.attribute.AttributeFilter attributeFilter_;
+    public bool HasAttributeFilter {
+      get { return hasAttributeFilter; }
+    }
+    public global::bnet.protocol.attribute.AttributeFilter AttributeFilter {
+      get { return attributeFilter_ ?? global::bnet.protocol.attribute.AttributeFilter.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasAttributeFilter) return false;
+        if (!AttributeFilter.IsInitialized) return false;
+        if (!ExtensionsAreInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _findChannelOptionsFieldNames;
+      pb::ExtendableMessage<FindChannelOptions, FindChannelOptions.Builder>.ExtensionWriter extensionWriter = CreateExtensionWriter(this);
+      if (hasStartIndex) {
+        output.WriteUInt32(1, field_names[6], StartIndex);
+      }
+      if (hasMaxResults) {
+        output.WriteUInt32(2, field_names[3], MaxResults);
+      }
+      if (hasName) {
+        output.WriteString(3, field_names[4], Name);
+      }
+      if (hasProgram) {
+        output.WriteFixed32(4, field_names[5], Program);
+      }
+      if (hasLocale) {
+        output.WriteFixed32(5, field_names[2], Locale);
+      }
+      if (hasCapacityFull) {
+        output.WriteUInt32(6, field_names[1], CapacityFull);
+      }
+      if (hasAttributeFilter) {
+        output.WriteMessage(7, field_names[0], AttributeFilter);
+      }
+      extensionWriter.WriteUntil(10001, output);
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasStartIndex) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, StartIndex);
+        }
+        if (hasMaxResults) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, MaxResults);
+        }
+        if (hasName) {
+          size += pb::CodedOutputStream.ComputeStringSize(3, Name);
+        }
+        if (hasProgram) {
+          size += pb::CodedOutputStream.ComputeFixed32Size(4, Program);
+        }
+        if (hasLocale) {
+          size += pb::CodedOutputStream.ComputeFixed32Size(5, Locale);
+        }
+        if (hasCapacityFull) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(6, CapacityFull);
+        }
+        if (hasAttributeFilter) {
+          size += pb::CodedOutputStream.ComputeMessageSize(7, AttributeFilter);
+        }
+        size += ExtensionsSerializedSize;
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static FindChannelOptions ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static FindChannelOptions ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static FindChannelOptions ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static FindChannelOptions ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static FindChannelOptions ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static FindChannelOptions ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static FindChannelOptions ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static FindChannelOptions ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static FindChannelOptions ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static FindChannelOptions ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private FindChannelOptions MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(FindChannelOptions prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::ExtendableBuilder<FindChannelOptions, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(FindChannelOptions cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private FindChannelOptions result;
+      
+      private FindChannelOptions PrepareBuilder() {
+        if (resultIsReadOnly) {
+          FindChannelOptions original = result;
+          result = new FindChannelOptions();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override FindChannelOptions MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.channel.FindChannelOptions.Descriptor; }
+      }
+      
+      public override FindChannelOptions DefaultInstanceForType {
+        get { return global::bnet.protocol.channel.FindChannelOptions.DefaultInstance; }
+      }
+      
+      public override FindChannelOptions BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is FindChannelOptions) {
+          return MergeFrom((FindChannelOptions) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(FindChannelOptions other) {
+        if (other == global::bnet.protocol.channel.FindChannelOptions.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasStartIndex) {
+          StartIndex = other.StartIndex;
+        }
+        if (other.HasMaxResults) {
+          MaxResults = other.MaxResults;
+        }
+        if (other.HasName) {
+          Name = other.Name;
+        }
+        if (other.HasProgram) {
+          Program = other.Program;
+        }
+        if (other.HasLocale) {
+          Locale = other.Locale;
+        }
+        if (other.HasCapacityFull) {
+          CapacityFull = other.CapacityFull;
+        }
+        if (other.HasAttributeFilter) {
+          MergeAttributeFilter(other.AttributeFilter);
+        }
+          this.MergeExtensionFields(other);
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_findChannelOptionsFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _findChannelOptionsFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasStartIndex = input.ReadUInt32(ref result.startIndex_);
+              break;
+            }
+            case 16: {
+              result.hasMaxResults = input.ReadUInt32(ref result.maxResults_);
+              break;
+            }
+            case 26: {
+              result.hasName = input.ReadString(ref result.name_);
+              break;
+            }
+            case 37: {
+              result.hasProgram = input.ReadFixed32(ref result.program_);
+              break;
+            }
+            case 45: {
+              result.hasLocale = input.ReadFixed32(ref result.locale_);
+              break;
+            }
+            case 48: {
+              result.hasCapacityFull = input.ReadUInt32(ref result.capacityFull_);
+              break;
+            }
+            case 58: {
+              global::bnet.protocol.attribute.AttributeFilter.Builder subBuilder = global::bnet.protocol.attribute.AttributeFilter.CreateBuilder();
+              if (result.hasAttributeFilter) {
+                subBuilder.MergeFrom(AttributeFilter);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              AttributeFilter = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasStartIndex {
+        get { return result.hasStartIndex; }
+      }
+      public uint StartIndex {
+        get { return result.StartIndex; }
+        set { SetStartIndex(value); }
+      }
+      public Builder SetStartIndex(uint value) {
+        PrepareBuilder();
+        result.hasStartIndex = true;
+        result.startIndex_ = value;
+        return this;
+      }
+      public Builder ClearStartIndex() {
+        PrepareBuilder();
+        result.hasStartIndex = false;
+        result.startIndex_ = 0;
+        return this;
+      }
+      
+      public bool HasMaxResults {
+        get { return result.hasMaxResults; }
+      }
+      public uint MaxResults {
+        get { return result.MaxResults; }
+        set { SetMaxResults(value); }
+      }
+      public Builder SetMaxResults(uint value) {
+        PrepareBuilder();
+        result.hasMaxResults = true;
+        result.maxResults_ = value;
+        return this;
+      }
+      public Builder ClearMaxResults() {
+        PrepareBuilder();
+        result.hasMaxResults = false;
+        result.maxResults_ = 16;
+        return this;
+      }
+      
+      public bool HasName {
+        get { return result.hasName; }
+      }
+      public string Name {
+        get { return result.Name; }
+        set { SetName(value); }
+      }
+      public Builder SetName(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasName = true;
+        result.name_ = value;
+        return this;
+      }
+      public Builder ClearName() {
+        PrepareBuilder();
+        result.hasName = false;
+        result.name_ = "";
+        return this;
+      }
+      
+      public bool HasProgram {
+        get { return result.hasProgram; }
+      }
+      public uint Program {
+        get { return result.Program; }
+        set { SetProgram(value); }
+      }
+      public Builder SetProgram(uint value) {
+        PrepareBuilder();
+        result.hasProgram = true;
+        result.program_ = value;
+        return this;
+      }
+      public Builder ClearProgram() {
+        PrepareBuilder();
+        result.hasProgram = false;
+        result.program_ = 0;
+        return this;
+      }
+      
+      public bool HasLocale {
+        get { return result.hasLocale; }
+      }
+      public uint Locale {
+        get { return result.Locale; }
+        set { SetLocale(value); }
+      }
+      public Builder SetLocale(uint value) {
+        PrepareBuilder();
+        result.hasLocale = true;
+        result.locale_ = value;
+        return this;
+      }
+      public Builder ClearLocale() {
+        PrepareBuilder();
+        result.hasLocale = false;
+        result.locale_ = 0;
+        return this;
+      }
+      
+      public bool HasCapacityFull {
+        get { return result.hasCapacityFull; }
+      }
+      public uint CapacityFull {
+        get { return result.CapacityFull; }
+        set { SetCapacityFull(value); }
+      }
+      public Builder SetCapacityFull(uint value) {
+        PrepareBuilder();
+        result.hasCapacityFull = true;
+        result.capacityFull_ = value;
+        return this;
+      }
+      public Builder ClearCapacityFull() {
+        PrepareBuilder();
+        result.hasCapacityFull = false;
+        result.capacityFull_ = 0;
+        return this;
+      }
+      
+      public bool HasAttributeFilter {
+       get { return result.hasAttributeFilter; }
+      }
+      public global::bnet.protocol.attribute.AttributeFilter AttributeFilter {
+        get { return result.AttributeFilter; }
+        set { SetAttributeFilter(value); }
+      }
+      public Builder SetAttributeFilter(global::bnet.protocol.attribute.AttributeFilter value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasAttributeFilter = true;
+        result.attributeFilter_ = value;
+        return this;
+      }
+      public Builder SetAttributeFilter(global::bnet.protocol.attribute.AttributeFilter.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasAttributeFilter = true;
+        result.attributeFilter_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeAttributeFilter(global::bnet.protocol.attribute.AttributeFilter value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasAttributeFilter &&
+            result.attributeFilter_ != global::bnet.protocol.attribute.AttributeFilter.DefaultInstance) {
+            result.attributeFilter_ = global::bnet.protocol.attribute.AttributeFilter.CreateBuilder(result.attributeFilter_).MergeFrom(value).BuildPartial();
+        } else {
+          result.attributeFilter_ = value;
+        }
+        result.hasAttributeFilter = true;
+        return this;
+      }
+      public Builder ClearAttributeFilter() {
+        PrepareBuilder();
+        result.hasAttributeFilter = false;
+        result.attributeFilter_ = null;
+        return this;
+      }
+    }
+    static FindChannelOptions() {
+      object.ReferenceEquals(global::bnet.protocol.channel.ChannelTypes.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class ChannelDescription : pb::GeneratedMessage<ChannelDescription, ChannelDescription.Builder> {
     private ChannelDescription() { }
     private static readonly ChannelDescription defaultInstance = new ChannelDescription().MakeReadOnly();
     private static readonly string[] _channelDescriptionFieldNames = new string[] { "channel_id", "current_members", "state" };
@@ -524,7 +1100,6 @@ namespace bnet.protocol.channel {
         if (HasState) {
           if (!State.IsInitialized) return false;
         }
-        if (!ExtensionsAreInitialized) return false;
         return true;
       }
     }
@@ -532,7 +1107,6 @@ namespace bnet.protocol.channel {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _channelDescriptionFieldNames;
-      pb::ExtendableMessage<ChannelDescription, ChannelDescription.Builder>.ExtensionWriter extensionWriter = CreateExtensionWriter(this);
       if (hasChannelId) {
         output.WriteMessage(1, field_names[0], ChannelId);
       }
@@ -542,7 +1116,6 @@ namespace bnet.protocol.channel {
       if (hasState) {
         output.WriteMessage(3, field_names[2], State);
       }
-      extensionWriter.WriteUntil(10001, output);
       UnknownFields.WriteTo(output);
     }
     
@@ -562,7 +1135,6 @@ namespace bnet.protocol.channel {
         if (hasState) {
           size += pb::CodedOutputStream.ComputeMessageSize(3, State);
         }
-        size += ExtensionsSerializedSize;
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
         return size;
@@ -613,7 +1185,7 @@ namespace bnet.protocol.channel {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::ExtendableBuilder<ChannelDescription, Builder> {
+    public sealed partial class Builder : pb::GeneratedBuilder<ChannelDescription, Builder> {
       protected override Builder ThisBuilder {
         get { return this; }
       }
@@ -698,7 +1270,6 @@ namespace bnet.protocol.channel {
         if (other.HasState) {
           MergeState(other.State);
         }
-          this.MergeExtensionFields(other);
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1264,8 +1835,8 @@ namespace bnet.protocol.channel {
   public sealed partial class ChannelState : pb::ExtendableMessage<ChannelState, ChannelState.Builder> {
     private ChannelState() { }
     private static readonly ChannelState defaultInstance = new ChannelState().MakeReadOnly();
-    private static readonly string[] _channelStateFieldNames = new string[] { "attribute", "channel_type", "delegate_name", "invitation", "max_invitations", "max_members", "min_members", "name", "privacy_level", "public", "reason" };
-    private static readonly uint[] _channelStateFieldTags = new uint[] { 26, 90, 82, 34, 40, 8, 16, 74, 56, 64, 48 };
+    private static readonly string[] _channelStateFieldNames = new string[] { "attribute", "channel_type", "delegate_name", "invitation", "max_invitations", "max_members", "min_members", "name", "privacy_level", "reason" };
+    private static readonly uint[] _channelStateFieldTags = new uint[] { 26, 82, 74, 34, 40, 8, 16, 66, 56, 48 };
     public static ChannelState DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1377,17 +1948,7 @@ namespace bnet.protocol.channel {
       get { return privacyLevel_; }
     }
     
-    public const int PublicFieldNumber = 8;
-    private bool hasPublic;
-    private bool public_;
-    public bool HasPublic {
-      get { return hasPublic; }
-    }
-    public bool Public {
-      get { return public_; }
-    }
-    
-    public const int NameFieldNumber = 9;
+    public const int NameFieldNumber = 8;
     private bool hasName;
     private string name_ = "";
     public bool HasName {
@@ -1397,7 +1958,7 @@ namespace bnet.protocol.channel {
       get { return name_; }
     }
     
-    public const int DelegateNameFieldNumber = 10;
+    public const int DelegateNameFieldNumber = 9;
     private bool hasDelegateName;
     private string delegateName_ = "";
     public bool HasDelegateName {
@@ -1407,7 +1968,7 @@ namespace bnet.protocol.channel {
       get { return delegateName_; }
     }
     
-    public const int ChannelTypeFieldNumber = 11;
+    public const int ChannelTypeFieldNumber = 10;
     private bool hasChannelType;
     private string channelType_ = "default";
     public bool HasChannelType {
@@ -1450,22 +2011,19 @@ namespace bnet.protocol.channel {
         output.WriteUInt32(5, field_names[4], MaxInvitations);
       }
       if (hasReason) {
-        output.WriteUInt32(6, field_names[10], Reason);
+        output.WriteUInt32(6, field_names[9], Reason);
       }
       if (hasPrivacyLevel) {
         output.WriteEnum(7, field_names[8], (int) PrivacyLevel, PrivacyLevel);
       }
-      if (hasPublic) {
-        output.WriteBool(8, field_names[9], Public);
-      }
       if (hasName) {
-        output.WriteString(9, field_names[7], Name);
+        output.WriteString(8, field_names[7], Name);
       }
       if (hasDelegateName) {
-        output.WriteString(10, field_names[2], DelegateName);
+        output.WriteString(9, field_names[2], DelegateName);
       }
       if (hasChannelType) {
-        output.WriteString(11, field_names[1], ChannelType);
+        output.WriteString(10, field_names[1], ChannelType);
       }
       extensionWriter.WriteUntil(10001, output);
       UnknownFields.WriteTo(output);
@@ -1499,17 +2057,14 @@ namespace bnet.protocol.channel {
         if (hasPrivacyLevel) {
           size += pb::CodedOutputStream.ComputeEnumSize(7, (int) PrivacyLevel);
         }
-        if (hasPublic) {
-          size += pb::CodedOutputStream.ComputeBoolSize(8, Public);
-        }
         if (hasName) {
-          size += pb::CodedOutputStream.ComputeStringSize(9, Name);
+          size += pb::CodedOutputStream.ComputeStringSize(8, Name);
         }
         if (hasDelegateName) {
-          size += pb::CodedOutputStream.ComputeStringSize(10, DelegateName);
+          size += pb::CodedOutputStream.ComputeStringSize(9, DelegateName);
         }
         if (hasChannelType) {
-          size += pb::CodedOutputStream.ComputeStringSize(11, ChannelType);
+          size += pb::CodedOutputStream.ComputeStringSize(10, ChannelType);
         }
         size += ExtensionsSerializedSize;
         size += UnknownFields.SerializedSize;
@@ -1661,9 +2216,6 @@ namespace bnet.protocol.channel {
         if (other.HasPrivacyLevel) {
           PrivacyLevel = other.PrivacyLevel;
         }
-        if (other.HasPublic) {
-          Public = other.Public;
-        }
         if (other.HasName) {
           Name = other.Name;
         }
@@ -1753,19 +2305,15 @@ namespace bnet.protocol.channel {
               }
               break;
             }
-            case 64: {
-              result.hasPublic = input.ReadBool(ref result.public_);
-              break;
-            }
-            case 74: {
+            case 66: {
               result.hasName = input.ReadString(ref result.name_);
               break;
             }
-            case 82: {
+            case 74: {
               result.hasDelegateName = input.ReadString(ref result.delegateName_);
               break;
             }
-            case 90: {
+            case 82: {
               result.hasChannelType = input.ReadString(ref result.channelType_);
               break;
             }
@@ -1964,26 +2512,6 @@ namespace bnet.protocol.channel {
         PrepareBuilder();
         result.hasPrivacyLevel = false;
         result.privacyLevel_ = global::bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN;
-        return this;
-      }
-      
-      public bool HasPublic {
-        get { return result.hasPublic; }
-      }
-      public bool Public {
-        get { return result.Public; }
-        set { SetPublic(value); }
-      }
-      public Builder SetPublic(bool value) {
-        PrepareBuilder();
-        result.hasPublic = true;
-        result.public_ = value;
-        return this;
-      }
-      public Builder ClearPublic() {
-        PrepareBuilder();
-        result.hasPublic = false;
-        result.public_ = false;
         return this;
       }
       

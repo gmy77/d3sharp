@@ -31,5 +31,10 @@ namespace Mooege.Core.MooNet.Services
         /// Last rpc call's header.
         /// </summary>
         bnet.protocol.Header LastCallHeader {get; set;}
+
+        /// <summary>
+        /// Sets the outgoing header status if needed, default = 0
+        /// </summary>
+        uint Status { get; set; }
     }
 }

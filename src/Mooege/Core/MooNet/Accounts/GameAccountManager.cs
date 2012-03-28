@@ -90,6 +90,7 @@ namespace Mooege.Core.MooNet.Accounts
 
                 var banner = (byte[])reader.GetValue(2);
                 gameAccount.BannerConfiguration = D3.Account.BannerConfiguration.ParseFrom(banner);
+                gameAccount.LastOnlineField.Value = Convert.ToInt64(reader["LastOnline"]);
                 GameAccounts.Add(gameAccountId, gameAccount);
 
                 #endregion

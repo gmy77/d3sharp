@@ -3,6 +3,7 @@ import "bnet/exchange.proto";
 import "bnet/exchange_object_provider_types.proto";
 import "bnet/exchange_risk_types.proto";
 import "bnet/entity.proto";
+import "bnet/account_types.proto";
 import "bnet/exchange_types.proto";
 
 package bnet.protocol.exchange;
@@ -161,6 +162,18 @@ message UnsubscribeOrderStatusChangeRequest
     required uint64 object_id = 2;
 }
 
+message SubscribeAdvancedOrderStatusChangeRequest
+{
+    required uint64 object_id = 1;
+    required .bnet.protocol.exchange.PartitionId min_partition_id = 2;
+    required .bnet.protocol.exchange.PartitionId max_partition_id = 3;
+    repeated .bnet.protocol.exchange.AdvancedSubscription filters = 4;
+}
+
+message UnsubscribeAdvancedOrderStatusChangeRequest
+{
+}
+
 message ClaimRequest
 {
     optional .bnet.protocol.exchange.PartitionId partition_id = 1;
@@ -193,6 +206,7 @@ message GetConfigurationRequest
 message GetConfigurationResponse
 {
     repeated .bnet.protocol.exchange.SpecialistConfig configs = 1;
+    optional .bnet.protocol.account.AccountLicense rmt_restricted_by_license = 2;
 }
 
 message GetOfferFeeEstimationRequest
@@ -321,17 +335,19 @@ message CreateCSTradeRequest
     required uint64 cs_user_id = 11;
 }
 
-message GetNotClosedOfferCountRequest
+message GetOrderCountRequest
 {
     optional string currency = 1;
     optional fixed32 source = 2;
     optional .bnet.protocol.EntityId bnet_account = 3;
+    optional bool not_closed_offer_count = 4 [default = false];
+    optional bool order_with_claimable_count = 5 [default = false];
 }
 
-message GetNotClosedOfferCountResponse
+message GetOrderCountResponse
 {
-    required uint32 count = 1;
-    optional uint32 limit = 2;
+    optional .bnet.protocol.exchange.Count not_closed_offer_count = 1;
+    optional .bnet.protocol.exchange.Count order_with_claimable_count = 2;
 }
 
 service ExchangeService
@@ -492,9 +508,17 @@ service ExchangeService
     {
         option (method_id) = 41;
     }
-    rpc GetNotClosedOfferCount(.bnet.protocol.exchange.GetNotClosedOfferCountRequest) returns(.bnet.protocol.exchange.GetNotClosedOfferCountResponse)
+    rpc GetOrderCount(.bnet.protocol.exchange.GetOrderCountRequest) returns(.bnet.protocol.exchange.GetOrderCountResponse)
     {
         option (method_id) = 42;
+    }
+    rpc SubscribeAdvancedOrderStatusChange(.bnet.protocol.exchange.SubscribeAdvancedOrderStatusChangeRequest) returns(.bnet.protocol.NoData)
+    {
+        option (method_id) = 43;
+    }
+    rpc UnsubscribeAdvancedOrderStatusChange(.bnet.protocol.exchange.UnsubscribeAdvancedOrderStatusChangeRequest) returns(.bnet.protocol.NoData)
+    {
+        option (method_id) = 44;
     }
 }
 

@@ -51,7 +51,7 @@ namespace Mooege.Core.MooNet.Accounts
             = new EntityIdPresenceFieldList(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 3, 0);
 
         public IntPresenceField LastOnlineField
-            = new IntPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 6, 0, 1324923597904795);
+            = new IntPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 6, 0, 0);
 
         public bool IsOnline
         {
@@ -316,8 +316,8 @@ namespace Mooege.Core.MooNet.Accounts
                 {
                     var query =
                         string.Format(
-                            "UPDATE accounts SET email='{0}', salt=@salt, passwordVerifier=@passwordVerifier, battletagname='{1}', hashcode={2}, userLevel={3} WHERE id={4}",
-                            this.Email, this.Name, this.HashCode, (byte)this.UserLevel, this.PersistentID);
+                            "UPDATE accounts SET email='{0}', salt=@salt, passwordVerifier=@passwordVerifier, battletagname='{1}', hashcode={2}, userLevel={3}, LastOnline={4} WHERE id={5}",
+                            this.Email, this.Name, this.HashCode, (byte)this.UserLevel, this.LastOnlineField.Value, this.PersistentID);
 
                     using (var cmd = new SQLiteCommand(query, DBManager.Connection))
                     {

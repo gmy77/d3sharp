@@ -45,7 +45,7 @@ namespace Mooege.Core.GS.Players
         private readonly Player _owner; // Used, because most information is not in the item class but Actors managed by the world
 
         //Values for buying new slots on stash
-        private readonly int[] _stashBuyValue = { 50000, 150000 }; // from Pacth 13, stash is limited to 3 tabs
+        private readonly int[] _stashBuyValue = { 100000, 200000 }; // from Pacth 13, stash is limited to 3 tabs
 
         private Equipment _equipment;
         private InventoryGrid _inventoryGrid;
@@ -684,7 +684,6 @@ namespace Mooege.Core.GS.Players
                     {
                         // load stash
                         item = ItemGenerator.CreateItem(_owner, ItemGenerator.GetItemDefinition(gbid));
-                        item.Attributes[GameAttribute.Item_Quality_Level] = 0;
                         this._stashGrid.AddItem(item, Convert.ToInt32(stashReader["inventory_loc_y"]), Convert.ToInt32(stashReader["inventory_loc_x"]));
                     }
                 }
@@ -702,7 +701,6 @@ namespace Mooege.Core.GS.Players
                     if (slot >= (int)EquipmentSlotId.Inventory && slot <= (int)EquipmentSlotId.Neck)
                     {
                         item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(gbid));
-                        item.Attributes[GameAttribute.Item_Quality_Level] = 0;
                         if (slot == (int)EquipmentSlotId.Inventory)
                         {
                             this._inventoryGrid.AddItem(item, Convert.ToInt32(itemsReader["inventory_loc_y"]), Convert.ToInt32(itemsReader["inventory_loc_x"]));
@@ -720,6 +718,7 @@ namespace Mooege.Core.GS.Players
             this._inventoryGold.SetInventoryLocation((int)EquipmentSlotId.Gold, 0, 0);
         }
 
+        // TODO: change saving at the world OnLeave to saving at every inventory change, without delete and insert
         public void SaveToDB()
         {
             // Changed with a DELETE all and only inserting instead of SELECT and INSERT/UPDATE

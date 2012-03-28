@@ -201,6 +201,11 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F6 { get; private set; }
         public float F7 { get; private set; }
         public float F8 { get; private set; }
+        public float F20 { get; private set; }
+        public float F21 { get; private set; }
+        public float F22 { get; private set; }
+        public int I5 { get; private set; }
+        public float F23 { get; private set; }
         public int I2 { get; private set; }
         public int I3 { get; private set; }
         public int I4 { get; private set; }
@@ -239,6 +244,11 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F6 = stream.ReadValueF32();
             this.F7 = stream.ReadValueF32();
             this.F8 = stream.ReadValueF32();
+            this.F20 = stream.ReadValueF32();
+            this.F21 = stream.ReadValueF32();
+            this.F22 = stream.ReadValueF32();
+            this.I5 = stream.ReadValueS32();
+            this.F23 = stream.ReadValueF32();
             this.I2 = stream.ReadValueS32();
             this.I3 = stream.ReadValueS32();
             this.I4 = stream.ReadValueS32();

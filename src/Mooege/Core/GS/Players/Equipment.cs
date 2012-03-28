@@ -42,7 +42,7 @@ namespace Mooege.Core.GS.Players
 
         public Equipment(Player owner)
         {
-            this._equipment = new uint[System.Enum.GetValues(typeof(EquipmentSlotId)).Length]; // maybe only needed for equipable items
+            this._equipment = new uint[14];// only needed up to Neck
             this._owner = owner;
             this.Items = new Dictionary<uint, Item>();
         }

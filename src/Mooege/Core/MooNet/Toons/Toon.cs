@@ -47,16 +47,31 @@ namespace Mooege.Core.MooNet.Toons
         public StringPresenceField HeroNameField
             = new StringPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 5, 0);
 
-        public IntPresenceField Field6
+        public IntPresenceField HighestUnlockedAct
             = new IntPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 6, 0, 0);
 
-        public IntPresenceField Field7
+        public IntPresenceField HighestUnlockedDifficulty
             = new IntPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 7, 0, 0);
 
         /// <summary>
         /// D3 EntityID encoded id.
         /// </summary>
         public D3.OnlineService.EntityId D3EntityID { get; private set; }
+
+        /// <summary>
+        /// True if toon has been recently deleted;
+        /// </summary>
+        private bool _deleted = false;
+        public bool Deleted {
+            get
+            {
+                return _deleted;
+            }
+            set
+            {
+                _deleted = value;
+            }
+        }
 
         /// <summary>
         /// Toon handle struct.
@@ -350,6 +365,7 @@ namespace Mooege.Core.MooNet.Toons
                 this.ExperienceNext = Convert.ToInt32(sqlReader["experience"]);
                 this.GameAccount = GameAccountManager.GetAccountByPersistentID(Convert.ToUInt64(sqlReader["accountId"]));
                 this.TimePlayed = Convert.ToUInt32(sqlReader["timePlayed"]);
+                this.Deleted = Convert.ToBoolean(sqlReader["deleted"]);
             }
 
             var visualItems = new[]
@@ -425,8 +441,8 @@ namespace Mooege.Core.MooNet.Toons
             operationList.Add(this.HeroVisualEquipmentField.GetFieldOperation());
             operationList.Add(this.HeroFlagsField.GetFieldOperation());
             operationList.Add(this.HeroNameField.GetFieldOperation());
-            operationList.Add(this.Field6.GetFieldOperation());
-            operationList.Add(this.Field7.GetFieldOperation());
+            operationList.Add(this.HighestUnlockedAct.GetFieldOperation());
+            operationList.Add(this.HighestUnlockedDifficulty.GetFieldOperation());
 
             return operationList;
         }
@@ -468,8 +484,8 @@ namespace Mooege.Core.MooNet.Toons
                 {
                     var query =
                         string.Format(
-                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, experience={5}, accountId={6}, timePlayed={7} WHERE id={8}",
-                            this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.ExperienceNext, this.GameAccount.PersistentID, this.TimePlayed, this.PersistentID);
+                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, experience={5}, accountId={6}, timePlayed={7}, deleted={8} WHERE id={9}",
+                            this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.ExperienceNext, this.GameAccount.PersistentID, this.TimePlayed, this.Deleted ? 1 : 0, this.PersistentID);
 
                     var cmd = new SQLiteCommand(query, DBManager.Connection);
                     cmd.ExecuteNonQuery();

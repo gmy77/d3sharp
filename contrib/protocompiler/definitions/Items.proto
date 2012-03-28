@@ -54,27 +54,8 @@ message AuctionAccountInfo
     required .D3.OnlineService.EntityId escrow_id = 2;
 }
 
-message AuctionItem
-{
-    required .D3.OnlineService.ItemId id = 1;
-    required .D3.Items.Generator generator = 2;
-}
-
-message AuctionInfo
-{
-    required .D3.OnlineService.ItemId id = 1;
-    optional .D3.Items.Ownership owner = 2;
-}
-
 message ItemList
 {
     repeated .D3.Items.SavedItem items = 1;
-}
-
-message Ownership
-{
-    required .D3.OnlineService.EntityId owner_entity_id = 1;
-    optional sint64 delete_time = 2;
-    optional .D3.OnlineService.EntityId escrow_id = 3;
 }
 
