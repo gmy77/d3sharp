@@ -24,6 +24,7 @@ using Mooege.Common.Logging;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Items;
 using Mooege.Core.MooNet.Commands;
+using Mooege.Net;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet;
 using Mooege.Core.MooNet.Achievement;
@@ -66,10 +67,14 @@ namespace Mooege
                 return;
             }
 
-            Logger.Info("Item database loaded with a total of {0} item definitions.", ItemGenerator.TotalItems);
+            Logger.Info("Loading item database..");
+            Logger.Trace("Item database loaded with a total of {0} item definitions.", ItemGenerator.TotalItems);
 
-            Logger.Info("Achievement file parsed with a total of {0} achievements and {1} criteria in {2} categories.",
+            Logger.Info("Loading achievements database..");
+            Logger.Trace("Achievement file parsed with a total of {0} achievements and {1} criteria in {2} categories.",
                 AchievementManager.TotalAchievements, AchievementManager.TotalCriteria, AchievementManager.TotalCategories);
+
+            Logger.Info("Type '!commands' for a list of available commands");
 
             StartupServers();
         }
@@ -131,13 +136,14 @@ namespace Mooege
 
         private static void StartupServers()
         {
+            if(NetworkingConfig.Instance.EnableIPv6)
+                Logger.Info("IPv6 enabled!");
+
             StartMooNet();
             StartGS();
 
             if(Net.WebServices.Config.Instance.Enabled)
                 StartWebServices();
-
-           Logger.Info("Type '!commands' for a list of available commands");
 
             while (true)
             {

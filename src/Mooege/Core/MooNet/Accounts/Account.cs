@@ -32,23 +32,26 @@ namespace Mooege.Core.MooNet.Accounts
     {
         //public D3.PartyMessage.ScreenStatus ScreenStatus { get; set; }
 
-        public ByteStringPresenceField<D3.OnlineService.EntityId> SelectedGameAccountField
+        public ByteStringPresenceField<D3.OnlineService.EntityId> LastPlayedGameAccountIdField
             = new ByteStringPresenceField<D3.OnlineService.EntityId>(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Account, 2, 0);
 
         public StringPresenceField RealIDTagField
             = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 1, 0);
 
-        public ByteStringPresenceField<D3.OnlineService.EntityId> LastSelectedHeroField
+        public ByteStringPresenceField<D3.OnlineService.EntityId> LastPlayedHeroIdField
             = new ByteStringPresenceField<D3.OnlineService.EntityId>(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Account, 1, 0);
 
-        public BoolPresenceField AccountOnlineField
-            = new BoolPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 2, 0);
+        //public BoolPresenceField AccountOnlineField
+        //    = new BoolPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 2, 0);
 
         public StringPresenceField AccountBattleTagField
-            = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 5, 0);
+            = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 4, 0);
 
         public EntityIdPresenceFieldList GameAccountListField
-            = new EntityIdPresenceFieldList(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 4, 0);
+            = new EntityIdPresenceFieldList(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 3, 0);
+
+        public IntPresenceField LastOnlineField
+            = new IntPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 6, 0, 0);
 
         public bool IsOnline
         {
@@ -120,7 +123,7 @@ namespace Mooege.Core.MooNet.Accounts
             set
             {
                 this.LastSelectedGameAccount = value.D3GameAccountId;
-                this.SelectedGameAccountField.Value = value.D3GameAccountId;
+                this.LastPlayedGameAccountIdField.Value = value.D3GameAccountId;
                 this._currentGameAccount = value;
             }
         }
@@ -139,14 +142,14 @@ namespace Mooege.Core.MooNet.Accounts
                     var gameAccount = GameAccountManager.GetAccountByPersistentID(this.LastSelectedGameAccount.IdLow);
                     if (gameAccount.Toons.Count > 0)
                         _lastSelectedHero = gameAccount.Toons.First().Value.D3EntityID;
-                    this.LastSelectedHeroField.Value = _lastSelectedHero;
+                    this.LastPlayedHeroIdField.Value = _lastSelectedHero;
                 }
                 return _lastSelectedHero;
             }
             set
             {
                 _lastSelectedHero = value;
-                this.LastSelectedHeroField.Value = value;
+                this.LastPlayedHeroIdField.Value = value;
             }
         }
 
@@ -156,13 +159,13 @@ namespace Mooege.Core.MooNet.Accounts
             get
             {
                 if (_lastSelectedGameAccount == AccountHasNoToons && this.GameAccounts.Count > 0)
-                    _lastSelectedGameAccount = this.SelectedGameAccountField.Value = this.GameAccounts.First().Value.D3GameAccountId;
+                    _lastSelectedGameAccount = this.LastPlayedGameAccountIdField.Value = this.GameAccounts.First().Value.D3GameAccountId;
                 return _lastSelectedGameAccount;
             }
             set
             {
                 _lastSelectedGameAccount = value;
-                this.SelectedGameAccountField.Value = value;
+                this.LastPlayedGameAccountIdField.Value = value;
 
             }
         }
@@ -258,14 +261,13 @@ namespace Mooege.Core.MooNet.Accounts
         //D3, Account,1,0 -> D3.OnlineService.EntityId: Last Played Hero
         //D3, Account,2,0 -> LastSelectedGameAccount
         //Bnet, Account,1,0 -> RealId Name
-        //Bnet, Account,2,0 -> Account Online
-        //Bnet, Account,4,index -> GameAccount EntityIds
-        //Bnet, Account,5,0 -> BattleTag
+        //Bnet, Account,3,index -> GameAccount EntityIds
+        //Bnet, Account,4,0 -> BattleTag
 
         public override List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications()
         {
             //TODO: Create delegate inside Persistence field so IsOnline can be removed
-            this.AccountOnlineField.Value = this.IsOnline;
+            //this.AccountOnlineField.Value = this.IsOnline;
             //TODO: Create delegate-move this out
             this.GameAccountListField.Value.Clear();
             foreach (var pair in this.GameAccounts.Values)
@@ -277,13 +279,14 @@ namespace Mooege.Core.MooNet.Accounts
             var operationList = new List<bnet.protocol.presence.FieldOperation>();
 
             if (this.LastSelectedHero != AccountHasNoToons)
-                operationList.Add(this.LastSelectedHeroField.GetFieldOperation());
+                operationList.Add(this.LastPlayedHeroIdField.GetFieldOperation());
             if (this.LastSelectedGameAccount != AccountHasNoToons)
-                operationList.Add(this.SelectedGameAccountField.GetFieldOperation());
+                operationList.Add(this.LastPlayedGameAccountIdField.GetFieldOperation());
             operationList.Add(this.RealIDTagField.GetFieldOperation());
-            operationList.Add(this.AccountOnlineField.GetFieldOperation());
+            //operationList.Add(this.AccountOnlineField.GetFieldOperation());
             operationList.AddRange(this.GameAccountListField.GetFieldOperationList());
             operationList.Add(this.AccountBattleTagField.GetFieldOperation());
+            operationList.Add(this.LastOnlineField.GetFieldOperation());
 
             return operationList;
         }
@@ -304,18 +307,36 @@ namespace Mooege.Core.MooNet.Accounts
             return calculatedVerifier.SequenceEqual(this.PasswordVerifier);
         }
 
+        #region DB
         public void SaveToDB()
         {
             try
             {
-                var query = string.Format("INSERT INTO accounts (id, email, salt, passwordVerifier, battletagname, hashcode, userLevel) VALUES({0}, '{1}', @salt, @passwordVerifier, '{2}', {3}, {4})",
-                        this.PersistentID, this.Email, this.Name, this.HashCode, (byte)this.UserLevel);
-
-                using (var cmd = new SQLiteCommand(query, DBManager.Connection))
+                if (ExistsInDB())
                 {
-                    cmd.Parameters.Add("@salt", System.Data.DbType.Binary, 32).Value = this.Salt;
-                    cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
-                    cmd.ExecuteNonQuery();
+                    var query =
+                        string.Format(
+                            "UPDATE accounts SET email='{0}', salt=@salt, passwordVerifier=@passwordVerifier, battletagname='{1}', hashcode={2}, userLevel={3}, LastOnline={4} WHERE id={5}",
+                            this.Email, this.Name, this.HashCode, (byte)this.UserLevel, this.LastOnlineField.Value, this.PersistentID);
+
+                    using (var cmd = new SQLiteCommand(query, DBManager.Connection))
+                    {
+                        cmd.Parameters.Add("@salt", System.Data.DbType.Binary, 32).Value = this.Salt;
+                        cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                else
+                {
+                    var query = string.Format("INSERT INTO accounts (id, email, salt, passwordVerifier, battletagname, hashcode, userLevel) VALUES({0}, '{1}', @salt, @passwordVerifier, '{2}', {3}, {4})",
+                            this.PersistentID, this.Email, this.Name, this.HashCode, (byte)this.UserLevel);
+
+                    using (var cmd = new SQLiteCommand(query, DBManager.Connection))
+                    {
+                        cmd.Parameters.Add("@salt", System.Data.DbType.Binary, 32).Value = this.Salt;
+                        cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
             catch (Exception e)
@@ -357,6 +378,17 @@ namespace Mooege.Core.MooNet.Accounts
                 Logger.ErrorException(e, "UpdateUserLevel()");
             }
         }
+
+        private bool ExistsInDB()
+        {
+            var query = string.Format("SELECT id FROM accounts where id={0}", this.PersistentID);
+
+            var cmd = new SQLiteCommand(query, DBManager.Connection);
+            var reader = cmd.ExecuteReader();
+            return reader.HasRows;
+        }
+
+#endregion
 
         public override string ToString()
         {

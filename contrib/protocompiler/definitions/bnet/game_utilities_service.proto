@@ -61,6 +61,18 @@ message VariablesResponse
     repeated float value = 1 [packed=true];
 }
 
+message GameAccountOnlineNotification
+{
+    required .bnet.protocol.EntityId game_account_id = 1;
+    optional .bnet.protocol.ProcessId host = 2;
+}
+
+message GameAccountOfflineNotification
+{
+    required .bnet.protocol.EntityId game_account_id = 1;
+    optional .bnet.protocol.ProcessId host = 2;
+}
+
 service GameUtilities
 {
     rpc ProcessClientRequest(.bnet.protocol.game_utilities.ClientRequest) returns(.bnet.protocol.game_utilities.ClientResponse)
@@ -86,6 +98,14 @@ service GameUtilities
     rpc ProcessServerRequest(.bnet.protocol.game_utilities.ServerRequest) returns(.bnet.protocol.game_utilities.ServerResponse)
     {
         option (method_id) = 6;
+    }
+    rpc NotifyGameAccountOnline(.bnet.protocol.game_utilities.GameAccountOnlineNotification) returns(.bnet.protocol.NO_RESPONSE)
+    {
+        option (method_id) = 7;
+    }
+    rpc NotifyGameAccountOffline(.bnet.protocol.game_utilities.GameAccountOfflineNotification) returns(.bnet.protocol.NO_RESPONSE)
+    {
+        option (method_id) = 8;
     }
 }
 

@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    [Message(Opcodes.BoolDataMessage2)]
+    [Message(new[] { Opcodes.BoolDataMessage2, Opcodes.BoolDataMessage3, Opcodes.BoolDataMessage4, Opcodes.BoolDataMessage5 })]
     public class BoolDataMessage : GameMessage
     {
         public bool Field0;

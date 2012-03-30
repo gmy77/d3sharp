@@ -37,10 +37,9 @@ namespace Mooege.Core.GS.Actors.Implementations
         public DesctructibleLootContainer(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            if(ActorData.TagMap.ContainsKey(ActorKeys.LootTreasureClass))
+            if (ActorData.TagMap.ContainsKey(ActorKeys.LootTreasureClass))
                 TreasureClass = (TreasureClass)ActorData.TagMap[ActorKeys.LootTreasureClass].Target;
         }
-
 
         public void ReceiveDamage(Actor source, float damage /* critical, type */)
         {
@@ -98,6 +97,5 @@ namespace Mooege.Core.GS.Actors.Implementations
         {
             ReceiveDamage(player, 100);
         }
-
     }
 }

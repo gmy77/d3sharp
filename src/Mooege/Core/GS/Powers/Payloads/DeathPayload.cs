@@ -27,6 +27,9 @@ using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Core.GS.Players;
 using Mooege.Core.GS.Common.Types.TagMap;
+using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Net.GS.Message.Definitions.Player;
+using Mooege.Net.GS.Message.Definitions.Trade;
 
 namespace Mooege.Core.GS.Powers.Payloads
 {
@@ -54,10 +57,10 @@ namespace Mooege.Core.GS.Powers.Payloads
                 if (mon.Brain != null)
                     mon.Brain.Kill();
             }
-            
+
             // send this death payload to buffs
             this.Target.World.BuffManager.SendTargetPayload(this.Target, this);
-            
+
             // wtf is this?
             this.Target.World.BroadcastIfRevealed(new Mooege.Net.GS.Message.Definitions.Effect.PlayEffectMessage()
             {

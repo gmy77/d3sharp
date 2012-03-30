@@ -31,6 +31,7 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
+        public uint Status { get; set; }
 
         public override void PostUpdate(IRpcController controller, bnet.protocol.achievements.PostUpdateRequest request, Action<bnet.protocol.achievements.PostUpdateResponse> done)
         {
@@ -40,6 +41,8 @@ namespace Mooege.Core.MooNet.Services
         public override void RegisterWithService(IRpcController controller, bnet.protocol.achievements.RegisterWithServiceRequest request, Action<bnet.protocol.achievements.RegisterWithServiceResponse> done)
         {
             // This should register client with achievement notifier service. -Egris
+            Logger.Trace("Register()");
+
             var snapshot = bnet.protocol.achievements.Snapshot.CreateBuilder();
 
             foreach (var achievement in this.Client.Account.CurrentGameAccount.Achievements)
@@ -56,6 +59,8 @@ namespace Mooege.Core.MooNet.Services
 
         public override void RequestSnapshot(IRpcController controller, bnet.protocol.achievements.RequestSnapshotRequest request, Action<bnet.protocol.achievements.RequestSnapshotResponse> done)
         {
+            Logger.Trace("RequestSnapshot()");
+
             var snapshot = bnet.protocol.achievements.Snapshot.CreateBuilder();
 
             foreach (var achievement in this.Client.Account.CurrentGameAccount.Achievements)
@@ -70,16 +75,27 @@ namespace Mooege.Core.MooNet.Services
 
         public override void UnregisterFromService(IRpcController controller, bnet.protocol.achievements.UnregisterFromServiceRequest request, Action<bnet.protocol.NoData> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("Unregister()");
+
+            var builder = bnet.protocol.NoData.CreateBuilder();
+
+            done(builder.Build());
         }
 
         public override void Initialize(IRpcController controller, bnet.protocol.achievements.InitializeRequest request, Action<bnet.protocol.achievements.InitializeResponse> done)
         {
+            Logger.Trace("Initialize()");
+
             var contentHandle = bnet.protocol.ContentHandle.CreateBuilder()
-                .SetRegion(0x00005553) //US
-                .SetUsage(0x61636876) //achv
+                .SetRegion(VersionInfo.MooNet.Region)
+                .SetUsage(0x61636875) //achu
                 .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.Achievements.AchievementFileHash.ToByteArray()));
-            var reponse = bnet.protocol.achievements.InitializeResponse.CreateBuilder().SetContentHandle(contentHandle);
+            var reponse = bnet.protocol.achievements.InitializeResponse.CreateBuilder().SetContentHandle(contentHandle)
+                .SetMaxRecordsPerUpdate(1)
+                .SetMaxCriteriaPerRecord(2)
+                .SetMaxAchievementsPerRecord(1)
+                .SetMaxRegistrations(512)
+                .SetFlushFrequency(1);
 
             done(reponse.Build());
         }

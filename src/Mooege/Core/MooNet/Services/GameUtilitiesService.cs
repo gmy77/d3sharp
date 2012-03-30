@@ -33,6 +33,7 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
+        public uint Status { get; set; }
 
         public override void ProcessClientRequest(IRpcController controller, bnet.protocol.game_utilities.ClientRequest request, Action<bnet.protocol.game_utilities.ClientResponse> done)
         {
@@ -57,9 +58,8 @@ namespace Mooege.Core.MooNet.Services
                     var newToon = CreateHero(D3.OnlineService.HeroCreateParams.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(newToon).Build());
                     break;
-                case 3: //D3.OnlineService.EntityId -> ?          Why have D3.GameMessage.DeleteHero and not use it?
-                    var deleteToon = DeleteHero(D3.OnlineService.EntityId.ParseFrom(request.GetAttribute(2).Value.MessageValue));
-                    //attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(deleteToon).Build());
+                case 3: //D3.OnlineService.EntityId -> No return        Why have D3.GameMessage.DeleteHero and not use it?
+                    DeleteHero(D3.OnlineService.EntityId.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     break;
                 case 4: //SelectToon() -> D3.OnlineService.EntityId
                     var selectToon = SelectHero(D3.OnlineService.EntityId.ParseFrom(request.GetAttribute(2).Value.MessageValue));
@@ -95,6 +95,9 @@ namespace Mooege.Core.MooNet.Services
                 case 13: //D3.GameMessage.GetAccountItems
                     var accountItems = GetAccountItems(D3.GameMessage.GetAccountItems.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(accountItems).Build());
+                    var attr2 = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("stashSlots");
+                    attr2.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetUintValue(14).Build());
+                    builder.AddAttribute(attr2);
                     break;
                 case 14: //D3.GameMessage.GetAccountProfile -> D3.Profile.AccountProfile
                     var getAccountProfile = GetAccountProfile(D3.GameMessage.GetAccountProfile.ParseFrom(request.GetAttribute(2).Value.MessageValue));
@@ -105,11 +108,28 @@ namespace Mooege.Core.MooNet.Services
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(getHeroProfiles).Build());
                     break;
                 case 16: //? - Client expecting D3.Client.Preferences
-                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(D3.Client.Preferences.CreateBuilder().SetVersion(105).Build().ToByteString()).Build());
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(D3.Client.Preferences.CreateBuilder().SetVersion(106).Build().ToByteString()).Build());
                     break;
                 case 19: //D3.GameMessage.GetHeroIds -> D3.Hero.HeroList
                     var HeroList = GetHeroList(D3.GameMessage.GetHeroIds.ParseFrom(request.GetAttribute(2).Value.MessageValue));
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(HeroList).Build());
+                    break;
+                case 20: //D3.GameMessage.UndeleteHero -> D3.Hero.Digest
+                    var UndeletedHero = UndeleteHero(D3.GameMessage.UndeleteHero.ParseFrom(request.GetAttribute(2).Value.MessageValue));
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(UndeletedHero).Build());
+                    break;
+                case 21: //D3.GameMessage.? (contains GameAccount EntityId) -> empty CustomMessage ByteString and CustomMessage2 ByteString
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(ByteString.Empty).Build());
+                    var CustomMessage2 = bnet.protocol.attribute.Attribute.CreateBuilder().SetName("CustomMessage2");
+                    CustomMessage2.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(ByteString.Empty).Build());
+                    break;
+                case 23: //D3.GameMessage.GetDeletedHero -> D3.Hero.Digest or header status: 395003
+                    var DeletedHero = GetDeletedHero();
+                    if (DeletedHero != ByteString.Empty)
+                        attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(DeletedHero).Build());
+                    else
+                        this.Status = 395003;
+                        //LastCallHeader = LastCallHeader.ToBuilder().SetStatus(395003).Build();
                     break;
                 default:
                     Logger.Warn("Unknown CustomMessageId {0}: {1}", MessageId, request.AttributeCount > 2 ? request.GetAttribute(2).Value.ToString() : "No CustomMessage?");
@@ -149,6 +169,16 @@ namespace Mooege.Core.MooNet.Services
             throw new NotImplementedException();
         }
 
+        public override void NotifyGameAccountOffline(IRpcController controller, bnet.protocol.game_utilities.GameAccountOfflineNotification request, Action<bnet.protocol.NO_RESPONSE> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void NotifyGameAccountOnline(IRpcController controller, bnet.protocol.game_utilities.GameAccountOnlineNotification request, Action<bnet.protocol.NO_RESPONSE> done)
+        {
+            throw new NotImplementedException();
+        }
+
         private ByteString GetHeroDigestList(D3.GameMessage.HeroDigestListRequest request)
         {
             Logger.Trace("GetHeroDigestList()");
@@ -181,19 +211,27 @@ namespace Mooege.Core.MooNet.Services
             var newToon = new Toon(createPrams.Name, hashCode, createPrams.GbidClass, createPrams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account.CurrentGameAccount);
             if (ToonManager.SaveToon(newToon))
             {
-                Logger.Trace("CreateHero() {0}", newToon);
+                Logger.Trace("CreateHero(): {0}", newToon);
                 return newToon.D3EntityID.ToByteString();
             }
             return ByteString.Empty;
         }
 
-        private ByteString DeleteHero(D3.OnlineService.EntityId hero)
+        private void DeleteHero(D3.OnlineService.EntityId hero)
         {
-            var deleteToon = ToonManager.GetToonByLowID(hero.IdLow);
-            ToonManager.DeleteToon(deleteToon);
+            //Permanantly delete previously deleted hero
+            var deleteHero = ToonManager.GetDeletedToon(this.Client.Account.CurrentGameAccount);
+            if (deleteHero != null)
+            {
+                Logger.Trace("Permanantly deleting hero: {0}", deleteHero);
+                ToonManager.DeleteToon(deleteHero);
+            }
+            //Mark hero as deleted
+            var markHero = ToonManager.GetToonByLowID(hero.IdLow);
+            markHero.Deleted = true;
+            markHero.SaveToDB();
 
-            Logger.Trace("DeleteHero() {0}", deleteToon);
-            return ByteString.Empty;
+            Logger.Trace("DeleteHero(): Marked {0} as deleted.", markHero);
         }
 
         private ByteString SelectHero(D3.OnlineService.EntityId hero)
@@ -206,13 +244,14 @@ namespace Mooege.Core.MooNet.Services
             {
                 this.Client.Account.CurrentGameAccount.NotifyUpdate();
                 this.Client.Account.CurrentGameAccount.lastPlayedHeroId = this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID;
+                this.Client.Account.SaveToDB();
             }
             return this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID.ToByteString();
         }
 
         private bool SaveBanner(D3.GameMessage.SaveBannerConfiguration bannerConfig)
         {
-            Logger.Trace("SaveBannerConifuration()");
+            Logger.Trace("SaveBannerConfiguration()");
 
             if (this.Client.Account.CurrentGameAccount.BannerConfigurationField.Value == bannerConfig.Banner)
                 return false;
@@ -228,7 +267,7 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("GetGameAccountSettings()");
 
-            var gameAccount = GameAccountManager.GetAccountByPersistentID(settings.AccountId.IdLow);
+            var gameAccount = this.Client.Account.CurrentGameAccount;
             return gameAccount.Settings.ToByteString();
             //var pref = D3.Client.Preferences.CreateBuilder().SetVersion(105).Build(); //hack since client is expecting this atm -Egris
             //return pref.ToByteString();
@@ -321,10 +360,33 @@ namespace Mooege.Core.MooNet.Services
             var gameAccount = GameAccountManager.GetAccountByPersistentID(heroIds.AccountId.IdLow);
             foreach (var toon in gameAccount.Toons.Values)
             {
-                HeroList.AddHeroIds(toon.D3EntityID);
+                if (!toon.Deleted)
+                    HeroList.AddHeroIds(toon.D3EntityID);
             }
             return HeroList.Build().ToByteString();
         }
 
+        private ByteString UndeleteHero(D3.GameMessage.UndeleteHero heroId)
+        {
+            var toon = ToonManager.GetToonByLowID(heroId.UndeleteHeroId.IdLow);
+            if (toon != null && toon.Deleted)
+            {
+                toon.Deleted = false;
+                toon.SaveToDB();
+                return toon.Digest.ToByteString();
+            }
+            else
+                return ByteString.Empty;
+        }
+        private ByteString GetDeletedHero()
+        {
+            Logger.Trace("GetDeletedHero()");
+            foreach (var toon in this.Client.Account.CurrentGameAccount.Toons.Values)
+            {
+                if (toon.Deleted)
+                    return toon.Digest.ToByteString();
+            }
+            return ByteString.Empty;
+        }
     }
 }

@@ -30,10 +30,6 @@ namespace D3.Hero {
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.Digest, global::D3.Hero.Digest.Builder> internal__static_D3_Hero_Digest__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Hero_DigestUI__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.DigestUI, global::D3.Hero.DigestUI.Builder> internal__static_D3_Hero_DigestUI__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_D3_Hero_HotbarButtonData__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.HotbarButtonData, global::D3.Hero.HotbarButtonData.Builder> internal__static_D3_Hero_HotbarButtonData__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_D3_Hero_SkillKeyMapping__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SkillKeyMapping, global::D3.Hero.SkillKeyMapping.Builder> internal__static_D3_Hero_SkillKeyMapping__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Hero_SavedQuest__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedQuest, global::D3.Hero.SavedQuest.Builder> internal__static_D3_Hero_SavedQuest__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Hero_LearnedLore__Descriptor;
@@ -42,6 +38,8 @@ namespace D3.Hero {
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedConversations, global::D3.Hero.SavedConversations.Builder> internal__static_D3_Hero_SavedConversations__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Hero_SavePointData_Proto__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavePointData_Proto, global::D3.Hero.SavePointData_Proto.Builder> internal__static_D3_Hero_SavePointData_Proto__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_D3_Hero_SkillWithRune__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SkillWithRune, global::D3.Hero.SkillWithRune.Builder> internal__static_D3_Hero_SkillWithRune__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Hero_SavedData__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedData, global::D3.Hero.SavedData.Builder> internal__static_D3_Hero_SavedData__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Hero_Timestamps__Descriptor;
@@ -50,8 +48,6 @@ namespace D3.Hero {
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedDefinition, global::D3.Hero.SavedDefinition.Builder> internal__static_D3_Hero_SavedDefinition__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Hero_NameText__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.NameText, global::D3.Hero.NameText.Builder> internal__static_D3_Hero_NameText__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_D3_Hero_Escrow__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.Escrow, global::D3.Hero.Escrow.Builder> internal__static_D3_Hero_Escrow__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Hero_HeroList__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.HeroList, global::D3.Hero.HeroList.Builder> internal__static_D3_Hero_HeroList__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Hero_DigestList__Descriptor;
@@ -60,6 +56,8 @@ namespace D3.Hero {
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.QuestHistoryList, global::D3.Hero.QuestHistoryList.Builder> internal__static_D3_Hero_QuestHistoryList__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Hero_SavedQuestList__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedQuestList, global::D3.Hero.SavedQuestList.Builder> internal__static_D3_Hero_SavedQuestList__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_D3_Hero_QuestRewardHistoryList__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::D3.Hero.QuestRewardHistoryList, global::D3.Hero.QuestRewardHistoryList.Builder> internal__static_D3_Hero_QuestRewardHistoryList__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -74,67 +72,66 @@ namespace D3.Hero {
           "Y2UucHJvdG8iagoKVmlzdWFsSXRlbRIQCgRnYmlkGAEgASgPOgItMRITCghk" + 
           "eWVfdHlwZRgCIAEoEToBMBIbChBpdGVtX2VmZmVjdF90eXBlGAMgASgROgEw" + 
           "EhgKDGVmZmVjdF9sZXZlbBgEIAEoEToCLTEiOwoPVmlzdWFsRXF1aXBtZW50" + 
-          "EigKC3Zpc3VhbF9pdGVtGAEgAygLMhMuRDMuSGVyby5WaXN1YWxJdGVtIkEK" + 
+          "EigKC3Zpc3VhbF9pdGVtGAEgAygLMhMuRDMuSGVyby5WaXN1YWxJdGVtImgK" + 
           "EVF1ZXN0SGlzdG9yeUVudHJ5EhUKCXNub19xdWVzdBgBIAIoDzoCLTESFQoK" + 
-          "ZGlmZmljdWx0eRgCIAIoEToBMCJdChdRdWVzdFJld2FyZEhpc3RvcnlFbnRy" + 
-          "eRIVCglzbm9fcXVlc3QYASACKA86Ai0xEhQKCHN0ZXBfdWlkGAIgAigROgIt" + 
-          "MRIVCgpkaWZmaWN1bHR5GAMgAigROgEwIsgDCgZEaWdlc3QSDwoHdmVyc2lv" + 
-          "bhgBIAIoDRIrCgdoZXJvX2lkGAIgAigLMhouRDMuT25saW5lU2VydmljZS5F" + 
-          "bnRpdHlJZBIRCgloZXJvX25hbWUYAyABKAkSEgoKZ2JpZF9jbGFzcxgEIAIo" + 
-          "DxINCgVsZXZlbBgFIAIoERIUCgxwbGF5ZXJfZmxhZ3MYBiACKA0SMgoQdmlz" + 
-          "dWFsX2VxdWlwbWVudBgHIAIoCzIYLkQzLkhlcm8uVmlzdWFsRXF1aXBtZW50" + 
-          "EjEKDXF1ZXN0X2hpc3RvcnkYCCADKAsyGi5EMy5IZXJvLlF1ZXN0SGlzdG9y" + 
-          "eUVudHJ5EhcKD2xhc3RfcGxheWVkX2FjdBgKIAIoERIcChRoaWdoZXN0X3Vu" + 
-          "bG9ja2VkX2FjdBgLIAIoERIeChZsYXN0X3BsYXllZF9kaWZmaWN1bHR5GAwg" + 
-          "AigREiMKG2hpZ2hlc3RfdW5sb2NrZWRfZGlmZmljdWx0eRgNIAIoERIZChFs" + 
-          "YXN0X3BsYXllZF9xdWVzdBgOIAIoDxIeChZsYXN0X3BsYXllZF9xdWVzdF9z" + 
-          "dGVwGA8gAigREhYKC3RpbWVfcGxheWVkGBAgAigNOgEwItkBCghEaWdlc3RV" + 
-          "SRIXCg9sYXN0X3BsYXllZF9hY3QYASACKBESHAoUaGlnaGVzdF91bmxvY2tl" + 
-          "ZF9hY3QYAiACKBESHgoWbGFzdF9wbGF5ZWRfZGlmZmljdWx0eRgDIAIoERIj" + 
-          "ChtoaWdoZXN0X3VubG9ja2VkX2RpZmZpY3VsdHkYBCACKBESGQoRbGFzdF9w" + 
-          "bGF5ZWRfcXVlc3QYBSACKA8SHgoWbGFzdF9wbGF5ZWRfcXVlc3Rfc3RlcBgG" + 
-          "IAIoERIWCgt0aW1lX3BsYXllZBgHIAIoDToBMCJAChBIb3RiYXJCdXR0b25E" + 
-          "YXRhEhUKCXNub19wb3dlchgBIAIoDzoCLTESFQoJZ2JpZF9pdGVtGAIgAigP" + 
-          "OgItMSJYCg9Ta2lsbEtleU1hcHBpbmcSFQoJc25vX3Bvd2VyGAEgAigPOgIt" + 
-          "MRIVCglpZF9ob3RrZXkYAiACKBE6Ai0xEhcKDHNraWxsX2J1dHRvbhgDIAIo" + 
-          "EToBMCKaAQoKU2F2ZWRRdWVzdBIVCglzbm9fcXVlc3QYASACKA86Ai0xEhUK" + 
-          "CmRpZmZpY3VsdHkYAiACKBE6ATASHAoQY3VycmVudF9zdGVwX3VpZBgDIAIo" + 
-          "EToCLTESGwoPb2JqZWN0aXZlX3N0YXRlGAQgAygRQgIQARIjChdmYWlsdXJl" + 
-          "X2NvbmRpdGlvbl9zdGF0ZRgFIAMoEUICEAEiJwoLTGVhcm5lZExvcmUSGAoQ" + 
-          "c25vX2xvcmVfbGVhcm5lZBgBIAMoDyJcChJTYXZlZENvbnZlcnNhdGlvbnMS" + 
-          "JQodcGxheWVkX2NvbnZlcnNhdGlvbnNfYml0ZmllbGQYASACKAwSHwoXc25v" + 
-          "X3NhdmVkX2NvbnZlcnNhdGlvbnMYAiADKA8iZQoTU2F2ZVBvaW50RGF0YV9Q" + 
-          "cm90bxIVCglzbm9fd29ybGQYASACKA86Ai0xEhwKEHNhdmVwb2ludF9udW1i" + 
-          "ZXIYAiACKBE6Ai0xEhkKDmNyZWF0ZXNfcG9ydGFsGAMgAigNOgEwIsoDCglT" + 
-          "YXZlZERhdGESPAoZaG90YmFyX2J1dHRvbl9hc3NpZ25tZW50cxgBIAMoCzIZ" + 
-          "LkQzLkhlcm8uSG90YmFyQnV0dG9uRGF0YRIvCg1za2lsbF9rZXlfbWFwGAIg" + 
-          "AygLMhguRDMuSGVyby5Ta2lsbEtleU1hcHBpbmcSFgoLdGltZV9wbGF5ZWQY" + 
-          "AyACKA06ATASHgoTYWN0aXZhdGVkX3dheXBvaW50cxgEIAIoDToBMBIzChNo" + 
-          "aXJlbGluZ19zYXZlZF9kYXRhGAUgAigLMhYuRDMuSGlyZWxpbmcuU2F2ZWRE" + 
-          "YXRhEhoKD2xhc3RfbGV2ZWxfdGltZRgGIAIoDToBMBIqCgxsZWFybmVkX2xv" + 
-          "cmUYByACKAsyFC5EMy5IZXJvLkxlYXJuZWRMb3JlEjgKE3NhdmVkX2NvbnZl" + 
-          "cnNhdGlvbnMYCCACKAsyGy5EMy5IZXJvLlNhdmVkQ29udmVyc2F0aW9ucxIZ" + 
-          "ChFzbm9fYWN0aXZlX3NraWxscxgJIAMoDxISCgpzbm9fdHJhaXRzGAogAygP" + 
-          "EjAKCnNhdmVfcG9pbnQYDCACKAsyHC5EMy5IZXJvLlNhdmVQb2ludERhdGFf" + 
-          "UHJvdG8iNgoKVGltZXN0YW1wcxITCgtjcmVhdGVfdGltZRgBIAIoEhITCgtk" + 
-          "ZWxldGVfdGltZRgCIAEoEiK7AgoPU2F2ZWREZWZpbml0aW9uEg8KB3ZlcnNp" + 
-          "b24YASACKA0SHwoGZGlnZXN0GAIgASgLMg8uRDMuSGVyby5EaWdlc3QSQQoQ" + 
-          "c2F2ZWRfYXR0cmlidXRlcxgDIAIoCzInLkQzLkF0dHJpYnV0ZVNlcmlhbGl6" + 
-          "ZXIuU2F2ZWRBdHRyaWJ1dGVzEiYKCnNhdmVkX2RhdGEYBCABKAsyEi5EMy5I" + 
-          "ZXJvLlNhdmVkRGF0YRIoCgtzYXZlZF9xdWVzdBgFIAMoCzITLkQzLkhlcm8u" + 
-          "U2F2ZWRRdWVzdBIhCgVpdGVtcxgGIAEoCzISLkQzLkl0ZW1zLkl0ZW1MaXN0" + 
-          "Ej4KFHF1ZXN0X3Jld2FyZF9oaXN0b3J5GAcgAygLMiAuRDMuSGVyby5RdWVz" + 
-          "dFJld2FyZEhpc3RvcnlFbnRyeSIYCghOYW1lVGV4dBIMCgRuYW1lGAEgAigJ" + 
-          "IqoBCgZFc2Nyb3cSDwoHdmVyc2lvbhgBIAIoDRImCglnZW5lcmF0b3IYAiAB" + 
-          "KAsyEy5EMy5JdGVtcy5HZW5lcmF0b3ISJQoJaGVyb19kYXRhGAMgASgLMhIu" + 
-          "RDMuSGVyby5TYXZlZERhdGESDQoFc3RhdGUYBCABKA0SMQoPc2VydmljZWRf" + 
-          "dG9rZW5zGAUgAygLMhguRDMuT25saW5lU2VydmljZS5JdGVtSWQiOAoISGVy" + 
-          "b0xpc3QSLAoIaGVyb19pZHMYASADKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVu" + 
-          "dGl0eUlkIi4KCkRpZ2VzdExpc3QSIAoHZGlnZXN0cxgBIAMoCzIPLkQzLkhl" + 
-          "cm8uRGlnZXN0IkUKEFF1ZXN0SGlzdG9yeUxpc3QSMQoNcXVlc3RfaGlzdG9y" + 
-          "eRgBIAMoCzIaLkQzLkhlcm8uUXVlc3RIaXN0b3J5RW50cnkiOwoOU2F2ZWRR" + 
-          "dWVzdExpc3QSKQoMc2F2ZWRfcXVlc3RzGAEgAygLMhMuRDMuSGVyby5TYXZl" + 
-          "ZFF1ZXN0");
+          "ZGlmZmljdWx0eRgCIAIoEToBMBIlChloaWdoZXN0X3BsYXllZF9xdWVzdF9z" + 
+          "dGVwGAMgASgROgItMyJdChdRdWVzdFJld2FyZEhpc3RvcnlFbnRyeRIVCglz" + 
+          "bm9fcXVlc3QYASACKA86Ai0xEhQKCHN0ZXBfdWlkGAIgAigROgItMRIVCgpk" + 
+          "aWZmaWN1bHR5GAMgAigROgEwIqEECgZEaWdlc3QSDwoHdmVyc2lvbhgBIAIo" + 
+          "DRIrCgdoZXJvX2lkGAIgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJ" + 
+          "ZBIRCgloZXJvX25hbWUYAyABKAkSEgoKZ2JpZF9jbGFzcxgEIAIoDxINCgVs" + 
+          "ZXZlbBgFIAIoERIUCgxwbGF5ZXJfZmxhZ3MYBiACKA0SMgoQdmlzdWFsX2Vx" + 
+          "dWlwbWVudBgHIAIoCzIYLkQzLkhlcm8uVmlzdWFsRXF1aXBtZW50EjEKDXF1" + 
+          "ZXN0X2hpc3RvcnkYCCADKAsyGi5EMy5IZXJvLlF1ZXN0SGlzdG9yeUVudHJ5" + 
+          "EhcKD2xhc3RfcGxheWVkX2FjdBgKIAIoERIcChRoaWdoZXN0X3VubG9ja2Vk" + 
+          "X2FjdBgLIAIoERIeChZsYXN0X3BsYXllZF9kaWZmaWN1bHR5GAwgAigREiMK" + 
+          "G2hpZ2hlc3RfdW5sb2NrZWRfZGlmZmljdWx0eRgNIAIoERIZChFsYXN0X3Bs" + 
+          "YXllZF9xdWVzdBgOIAIoDxIeChZsYXN0X3BsYXllZF9xdWVzdF9zdGVwGA8g" + 
+          "AigREhYKC3RpbWVfcGxheWVkGBAgAigNOgEwEigKHGhpZ2hlc3RfY29tcGxl" + 
+          "dGVkX2RpZmZpY3VsdHkYESABKBE6Ai0xEhMKC2NyZWF0ZV90aW1lGBIgASgN" + 
+          "EhgKEGxhc3RfcGxheWVkX3RpbWUYEyABKA0i/wEKCERpZ2VzdFVJEhcKD2xh" + 
+          "c3RfcGxheWVkX2FjdBgBIAIoERIcChRoaWdoZXN0X3VubG9ja2VkX2FjdBgC" + 
+          "IAIoERIeChZsYXN0X3BsYXllZF9kaWZmaWN1bHR5GAMgAigREiMKG2hpZ2hl" + 
+          "c3RfdW5sb2NrZWRfZGlmZmljdWx0eRgEIAIoERIZChFsYXN0X3BsYXllZF9x" + 
+          "dWVzdBgFIAIoDxIeChZsYXN0X3BsYXllZF9xdWVzdF9zdGVwGAYgAigREhYK" + 
+          "C3RpbWVfcGxheWVkGAcgAigNOgEwEiQKHGhpZ2hlc3RfY29tcGxldGVkX2Rp" + 
+          "ZmZpY3VsdHkYCCABKBEimgEKClNhdmVkUXVlc3QSFQoJc25vX3F1ZXN0GAEg" + 
+          "AigPOgItMRIVCgpkaWZmaWN1bHR5GAIgAigROgEwEhwKEGN1cnJlbnRfc3Rl" + 
+          "cF91aWQYAyACKBE6Ai0xEhsKD29iamVjdGl2ZV9zdGF0ZRgEIAMoEUICEAES" + 
+          "IwoXZmFpbHVyZV9jb25kaXRpb25fc3RhdGUYBSADKBFCAhABIicKC0xlYXJu" + 
+          "ZWRMb3JlEhgKEHNub19sb3JlX2xlYXJuZWQYASADKA8iXAoSU2F2ZWRDb252" + 
+          "ZXJzYXRpb25zEiUKHXBsYXllZF9jb252ZXJzYXRpb25zX2JpdGZpZWxkGAEg" + 
+          "AigMEh8KF3Nub19zYXZlZF9jb252ZXJzYXRpb25zGAIgAygPImUKE1NhdmVQ" + 
+          "b2ludERhdGFfUHJvdG8SFQoJc25vX3dvcmxkGAEgAigPOgItMRIcChBzYXZl" + 
+          "cG9pbnRfbnVtYmVyGAIgAigROgItMRIZCg5jcmVhdGVzX3BvcnRhbBgDIAIo" + 
+          "DToBMCI9Cg1Ta2lsbFdpdGhSdW5lEhUKCXNub19za2lsbBgBIAIoDzoCLTES" + 
+          "FQoJcnVuZV90eXBlGAIgASgROgItMSLLAwoJU2F2ZWREYXRhEhYKC3RpbWVf" + 
+          "cGxheWVkGAMgAigNOgEwEh4KE2FjdGl2YXRlZF93YXlwb2ludHMYBCACKA06" + 
+          "ATASMwoTaGlyZWxpbmdfc2F2ZWRfZGF0YRgFIAIoCzIWLkQzLkhpcmVsaW5n" + 
+          "LlNhdmVkRGF0YRIaCg9sYXN0X2xldmVsX3RpbWUYBiACKA06ATASKgoMbGVh" + 
+          "cm5lZF9sb3JlGAcgAigLMhQuRDMuSGVyby5MZWFybmVkTG9yZRI4ChNzYXZl" + 
+          "ZF9jb252ZXJzYXRpb25zGAggAigLMhsuRDMuSGVyby5TYXZlZENvbnZlcnNh" + 
+          "dGlvbnMSEgoKc25vX3RyYWl0cxgKIAMoDxIwCgpzYXZlX3BvaW50GAwgAigL" + 
+          "MhwuRDMuSGVyby5TYXZlUG9pbnREYXRhX1Byb3RvEh4KEmdiaWRfcG90aW9u" + 
+          "X2J1dHRvbhgNIAIoDzoCLTESLQoNYWN0aXZlX3NraWxscxgOIAMoCzIWLkQz" + 
+          "Lkhlcm8uU2tpbGxXaXRoUnVuZRIgChhza2lsbF9zbG90X2V2ZXJfYXNzaWdu" + 
+          "ZWQYDyACKAwSGAoNc2tpbGxfdmVyc2lvbhgQIAIoDToBMCI2CgpUaW1lc3Rh" + 
+          "bXBzEhMKC2NyZWF0ZV90aW1lGAEgAigSEhMKC2RlbGV0ZV90aW1lGAIgASgS" + 
+          "IrsCCg9TYXZlZERlZmluaXRpb24SDwoHdmVyc2lvbhgBIAIoDRIfCgZkaWdl" + 
+          "c3QYAiABKAsyDy5EMy5IZXJvLkRpZ2VzdBJBChBzYXZlZF9hdHRyaWJ1dGVz" + 
+          "GAMgAigLMicuRDMuQXR0cmlidXRlU2VyaWFsaXplci5TYXZlZEF0dHJpYnV0" + 
+          "ZXMSJgoKc2F2ZWRfZGF0YRgEIAEoCzISLkQzLkhlcm8uU2F2ZWREYXRhEigK" + 
+          "C3NhdmVkX3F1ZXN0GAUgAygLMhMuRDMuSGVyby5TYXZlZFF1ZXN0EiEKBWl0" + 
+          "ZW1zGAYgASgLMhIuRDMuSXRlbXMuSXRlbUxpc3QSPgoUcXVlc3RfcmV3YXJk" + 
+          "X2hpc3RvcnkYByADKAsyIC5EMy5IZXJvLlF1ZXN0UmV3YXJkSGlzdG9yeUVu" + 
+          "dHJ5IhgKCE5hbWVUZXh0EgwKBG5hbWUYASACKAkiOAoISGVyb0xpc3QSLAoI" + 
+          "aGVyb19pZHMYASADKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkIi4K" + 
+          "CkRpZ2VzdExpc3QSIAoHZGlnZXN0cxgBIAMoCzIPLkQzLkhlcm8uRGlnZXN0" + 
+          "IkUKEFF1ZXN0SGlzdG9yeUxpc3QSMQoNcXVlc3RfaGlzdG9yeRgBIAMoCzIa" + 
+          "LkQzLkhlcm8uUXVlc3RIaXN0b3J5RW50cnkiOwoOU2F2ZWRRdWVzdExpc3QS" + 
+          "KQoMc2F2ZWRfcXVlc3RzGAEgAygLMhMuRDMuSGVyby5TYXZlZFF1ZXN0IlgK" + 
+          "FlF1ZXN0UmV3YXJkSGlzdG9yeUxpc3QSPgoUcXVlc3RfcmV3YXJkX2hpc3Rv" + 
+          "cnkYASADKAsyIC5EMy5IZXJvLlF1ZXN0UmV3YXJkSGlzdG9yeUVudHJ5");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Hero_VisualItem__Descriptor = Descriptor.MessageTypes[0];
@@ -148,7 +145,7 @@ namespace D3.Hero {
         internal__static_D3_Hero_QuestHistoryEntry__Descriptor = Descriptor.MessageTypes[2];
         internal__static_D3_Hero_QuestHistoryEntry__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.QuestHistoryEntry, global::D3.Hero.QuestHistoryEntry.Builder>(internal__static_D3_Hero_QuestHistoryEntry__Descriptor,
-                new string[] { "SnoQuest", "Difficulty", });
+                new string[] { "SnoQuest", "Difficulty", "HighestPlayedQuestStep", });
         internal__static_D3_Hero_QuestRewardHistoryEntry__Descriptor = Descriptor.MessageTypes[3];
         internal__static_D3_Hero_QuestRewardHistoryEntry__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.QuestRewardHistoryEntry, global::D3.Hero.QuestRewardHistoryEntry.Builder>(internal__static_D3_Hero_QuestRewardHistoryEntry__Descriptor,
@@ -156,71 +153,67 @@ namespace D3.Hero {
         internal__static_D3_Hero_Digest__Descriptor = Descriptor.MessageTypes[4];
         internal__static_D3_Hero_Digest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.Digest, global::D3.Hero.Digest.Builder>(internal__static_D3_Hero_Digest__Descriptor,
-                new string[] { "Version", "HeroId", "HeroName", "GbidClass", "Level", "PlayerFlags", "VisualEquipment", "QuestHistory", "LastPlayedAct", "HighestUnlockedAct", "LastPlayedDifficulty", "HighestUnlockedDifficulty", "LastPlayedQuest", "LastPlayedQuestStep", "TimePlayed", });
+                new string[] { "Version", "HeroId", "HeroName", "GbidClass", "Level", "PlayerFlags", "VisualEquipment", "QuestHistory", "LastPlayedAct", "HighestUnlockedAct", "LastPlayedDifficulty", "HighestUnlockedDifficulty", "LastPlayedQuest", "LastPlayedQuestStep", "TimePlayed", "HighestCompletedDifficulty", "CreateTime", "LastPlayedTime", });
         internal__static_D3_Hero_DigestUI__Descriptor = Descriptor.MessageTypes[5];
         internal__static_D3_Hero_DigestUI__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.DigestUI, global::D3.Hero.DigestUI.Builder>(internal__static_D3_Hero_DigestUI__Descriptor,
-                new string[] { "LastPlayedAct", "HighestUnlockedAct", "LastPlayedDifficulty", "HighestUnlockedDifficulty", "LastPlayedQuest", "LastPlayedQuestStep", "TimePlayed", });
-        internal__static_D3_Hero_HotbarButtonData__Descriptor = Descriptor.MessageTypes[6];
-        internal__static_D3_Hero_HotbarButtonData__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.HotbarButtonData, global::D3.Hero.HotbarButtonData.Builder>(internal__static_D3_Hero_HotbarButtonData__Descriptor,
-                new string[] { "SnoPower", "GbidItem", });
-        internal__static_D3_Hero_SkillKeyMapping__Descriptor = Descriptor.MessageTypes[7];
-        internal__static_D3_Hero_SkillKeyMapping__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SkillKeyMapping, global::D3.Hero.SkillKeyMapping.Builder>(internal__static_D3_Hero_SkillKeyMapping__Descriptor,
-                new string[] { "SnoPower", "IdHotkey", "SkillButton", });
-        internal__static_D3_Hero_SavedQuest__Descriptor = Descriptor.MessageTypes[8];
+                new string[] { "LastPlayedAct", "HighestUnlockedAct", "LastPlayedDifficulty", "HighestUnlockedDifficulty", "LastPlayedQuest", "LastPlayedQuestStep", "TimePlayed", "HighestCompletedDifficulty", });
+        internal__static_D3_Hero_SavedQuest__Descriptor = Descriptor.MessageTypes[6];
         internal__static_D3_Hero_SavedQuest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedQuest, global::D3.Hero.SavedQuest.Builder>(internal__static_D3_Hero_SavedQuest__Descriptor,
                 new string[] { "SnoQuest", "Difficulty", "CurrentStepUid", "ObjectiveState", "FailureConditionState", });
-        internal__static_D3_Hero_LearnedLore__Descriptor = Descriptor.MessageTypes[9];
+        internal__static_D3_Hero_LearnedLore__Descriptor = Descriptor.MessageTypes[7];
         internal__static_D3_Hero_LearnedLore__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.LearnedLore, global::D3.Hero.LearnedLore.Builder>(internal__static_D3_Hero_LearnedLore__Descriptor,
                 new string[] { "SnoLoreLearned", });
-        internal__static_D3_Hero_SavedConversations__Descriptor = Descriptor.MessageTypes[10];
+        internal__static_D3_Hero_SavedConversations__Descriptor = Descriptor.MessageTypes[8];
         internal__static_D3_Hero_SavedConversations__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedConversations, global::D3.Hero.SavedConversations.Builder>(internal__static_D3_Hero_SavedConversations__Descriptor,
                 new string[] { "PlayedConversationsBitfield", "SnoSavedConversations", });
-        internal__static_D3_Hero_SavePointData_Proto__Descriptor = Descriptor.MessageTypes[11];
+        internal__static_D3_Hero_SavePointData_Proto__Descriptor = Descriptor.MessageTypes[9];
         internal__static_D3_Hero_SavePointData_Proto__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavePointData_Proto, global::D3.Hero.SavePointData_Proto.Builder>(internal__static_D3_Hero_SavePointData_Proto__Descriptor,
                 new string[] { "SnoWorld", "SavepointNumber", "CreatesPortal", });
-        internal__static_D3_Hero_SavedData__Descriptor = Descriptor.MessageTypes[12];
+        internal__static_D3_Hero_SkillWithRune__Descriptor = Descriptor.MessageTypes[10];
+        internal__static_D3_Hero_SkillWithRune__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SkillWithRune, global::D3.Hero.SkillWithRune.Builder>(internal__static_D3_Hero_SkillWithRune__Descriptor,
+                new string[] { "SnoSkill", "RuneType", });
+        internal__static_D3_Hero_SavedData__Descriptor = Descriptor.MessageTypes[11];
         internal__static_D3_Hero_SavedData__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedData, global::D3.Hero.SavedData.Builder>(internal__static_D3_Hero_SavedData__Descriptor,
-                new string[] { "HotbarButtonAssignments", "SkillKeyMap", "TimePlayed", "ActivatedWaypoints", "HirelingSavedData", "LastLevelTime", "LearnedLore", "SavedConversations", "SnoActiveSkills", "SnoTraits", "SavePoint", });
-        internal__static_D3_Hero_Timestamps__Descriptor = Descriptor.MessageTypes[13];
+                new string[] { "TimePlayed", "ActivatedWaypoints", "HirelingSavedData", "LastLevelTime", "LearnedLore", "SavedConversations", "SnoTraits", "SavePoint", "GbidPotionButton", "ActiveSkills", "SkillSlotEverAssigned", "SkillVersion", });
+        internal__static_D3_Hero_Timestamps__Descriptor = Descriptor.MessageTypes[12];
         internal__static_D3_Hero_Timestamps__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.Timestamps, global::D3.Hero.Timestamps.Builder>(internal__static_D3_Hero_Timestamps__Descriptor,
                 new string[] { "CreateTime", "DeleteTime", });
-        internal__static_D3_Hero_SavedDefinition__Descriptor = Descriptor.MessageTypes[14];
+        internal__static_D3_Hero_SavedDefinition__Descriptor = Descriptor.MessageTypes[13];
         internal__static_D3_Hero_SavedDefinition__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedDefinition, global::D3.Hero.SavedDefinition.Builder>(internal__static_D3_Hero_SavedDefinition__Descriptor,
                 new string[] { "Version", "Digest", "SavedAttributes", "SavedData", "SavedQuest", "Items", "QuestRewardHistory", });
-        internal__static_D3_Hero_NameText__Descriptor = Descriptor.MessageTypes[15];
+        internal__static_D3_Hero_NameText__Descriptor = Descriptor.MessageTypes[14];
         internal__static_D3_Hero_NameText__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.NameText, global::D3.Hero.NameText.Builder>(internal__static_D3_Hero_NameText__Descriptor,
                 new string[] { "Name", });
-        internal__static_D3_Hero_Escrow__Descriptor = Descriptor.MessageTypes[16];
-        internal__static_D3_Hero_Escrow__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.Escrow, global::D3.Hero.Escrow.Builder>(internal__static_D3_Hero_Escrow__Descriptor,
-                new string[] { "Version", "Generator", "HeroData", "State", "ServicedTokens", });
-        internal__static_D3_Hero_HeroList__Descriptor = Descriptor.MessageTypes[17];
+        internal__static_D3_Hero_HeroList__Descriptor = Descriptor.MessageTypes[15];
         internal__static_D3_Hero_HeroList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.HeroList, global::D3.Hero.HeroList.Builder>(internal__static_D3_Hero_HeroList__Descriptor,
                 new string[] { "HeroIds", });
-        internal__static_D3_Hero_DigestList__Descriptor = Descriptor.MessageTypes[18];
+        internal__static_D3_Hero_DigestList__Descriptor = Descriptor.MessageTypes[16];
         internal__static_D3_Hero_DigestList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.DigestList, global::D3.Hero.DigestList.Builder>(internal__static_D3_Hero_DigestList__Descriptor,
                 new string[] { "Digests", });
-/*        internal__static_D3_Hero_QuestHistoryList__Descriptor = Descriptor.MessageTypes[19];
+/*        internal__static_D3_Hero_QuestHistoryList__Descriptor = Descriptor.MessageTypes[17];
         internal__static_D3_Hero_QuestHistoryList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.QuestHistoryList, global::D3.Hero.QuestHistoryList.Builder>(internal__static_D3_Hero_QuestHistoryList__Descriptor,
                 new string[] { "QuestHistory", });*/
-        internal__static_D3_Hero_SavedQuestList__Descriptor = Descriptor.MessageTypes[20];
+        internal__static_D3_Hero_SavedQuestList__Descriptor = Descriptor.MessageTypes[18];
         internal__static_D3_Hero_SavedQuestList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedQuestList, global::D3.Hero.SavedQuestList.Builder>(internal__static_D3_Hero_SavedQuestList__Descriptor,
                 new string[] { "SavedQuests", });
+/*        internal__static_D3_Hero_QuestRewardHistoryList__Descriptor = Descriptor.MessageTypes[19];
+        internal__static_D3_Hero_QuestRewardHistoryList__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.QuestRewardHistoryList, global::D3.Hero.QuestRewardHistoryList.Builder>(internal__static_D3_Hero_QuestRewardHistoryList__Descriptor,
+                new string[] { "QuestRewardHistory", });*/
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -945,8 +938,8 @@ namespace D3.Hero {
   public sealed partial class QuestHistoryEntry : pb::GeneratedMessage<QuestHistoryEntry, QuestHistoryEntry.Builder> {
     private QuestHistoryEntry() { }
     private static readonly QuestHistoryEntry defaultInstance = new QuestHistoryEntry().MakeReadOnly();
-    private static readonly string[] _questHistoryEntryFieldNames = new string[] { "difficulty", "sno_quest" };
-    private static readonly uint[] _questHistoryEntryFieldTags = new uint[] { 16, 13 };
+    private static readonly string[] _questHistoryEntryFieldNames = new string[] { "difficulty", "highest_played_quest_step", "sno_quest" };
+    private static readonly uint[] _questHistoryEntryFieldTags = new uint[] { 16, 24, 13 };
     public static QuestHistoryEntry DefaultInstance {
       get { return defaultInstance; }
     }
@@ -987,6 +980,16 @@ namespace D3.Hero {
       get { return difficulty_; }
     }
     
+    public const int HighestPlayedQuestStepFieldNumber = 3;
+    private bool hasHighestPlayedQuestStep;
+    private int highestPlayedQuestStep_ = -3;
+    public bool HasHighestPlayedQuestStep {
+      get { return hasHighestPlayedQuestStep; }
+    }
+    public int HighestPlayedQuestStep {
+      get { return highestPlayedQuestStep_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasSnoQuest) return false;
@@ -999,10 +1002,13 @@ namespace D3.Hero {
       int size = SerializedSize;
       string[] field_names = _questHistoryEntryFieldNames;
       if (hasSnoQuest) {
-        output.WriteSFixed32(1, field_names[1], SnoQuest);
+        output.WriteSFixed32(1, field_names[2], SnoQuest);
       }
       if (hasDifficulty) {
         output.WriteSInt32(2, field_names[0], Difficulty);
+      }
+      if (hasHighestPlayedQuestStep) {
+        output.WriteSInt32(3, field_names[1], HighestPlayedQuestStep);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1019,6 +1025,9 @@ namespace D3.Hero {
         }
         if (hasDifficulty) {
           size += pb::CodedOutputStream.ComputeSInt32Size(2, Difficulty);
+        }
+        if (hasHighestPlayedQuestStep) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(3, HighestPlayedQuestStep);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1152,6 +1161,9 @@ namespace D3.Hero {
         if (other.HasDifficulty) {
           Difficulty = other.Difficulty;
         }
+        if (other.HasHighestPlayedQuestStep) {
+          HighestPlayedQuestStep = other.HighestPlayedQuestStep;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1203,6 +1215,10 @@ namespace D3.Hero {
               result.hasDifficulty = input.ReadSInt32(ref result.difficulty_);
               break;
             }
+            case 24: {
+              result.hasHighestPlayedQuestStep = input.ReadSInt32(ref result.highestPlayedQuestStep_);
+              break;
+            }
           }
         }
         
@@ -1250,6 +1266,26 @@ namespace D3.Hero {
         PrepareBuilder();
         result.hasDifficulty = false;
         result.difficulty_ = 0;
+        return this;
+      }
+      
+      public bool HasHighestPlayedQuestStep {
+        get { return result.hasHighestPlayedQuestStep; }
+      }
+      public int HighestPlayedQuestStep {
+        get { return result.HighestPlayedQuestStep; }
+        set { SetHighestPlayedQuestStep(value); }
+      }
+      public Builder SetHighestPlayedQuestStep(int value) {
+        PrepareBuilder();
+        result.hasHighestPlayedQuestStep = true;
+        result.highestPlayedQuestStep_ = value;
+        return this;
+      }
+      public Builder ClearHighestPlayedQuestStep() {
+        PrepareBuilder();
+        result.hasHighestPlayedQuestStep = false;
+        result.highestPlayedQuestStep_ = -3;
         return this;
       }
     }
@@ -1627,8 +1663,8 @@ namespace D3.Hero {
   public sealed partial class Digest : pb::GeneratedMessage<Digest, Digest.Builder> {
     private Digest() { }
     private static readonly Digest defaultInstance = new Digest().MakeReadOnly();
-    private static readonly string[] _digestFieldNames = new string[] { "gbid_class", "hero_id", "hero_name", "highest_unlocked_act", "highest_unlocked_difficulty", "last_played_act", "last_played_difficulty", "last_played_quest", "last_played_quest_step", "level", "player_flags", "quest_history", "time_played", "version", "visual_equipment" };
-    private static readonly uint[] _digestFieldTags = new uint[] { 37, 18, 26, 88, 104, 80, 96, 117, 120, 40, 48, 66, 128, 8, 58 };
+    private static readonly string[] _digestFieldNames = new string[] { "create_time", "gbid_class", "hero_id", "hero_name", "highest_completed_difficulty", "highest_unlocked_act", "highest_unlocked_difficulty", "last_played_act", "last_played_difficulty", "last_played_quest", "last_played_quest_step", "last_played_time", "level", "player_flags", "quest_history", "time_played", "version", "visual_equipment" };
+    private static readonly uint[] _digestFieldTags = new uint[] { 144, 37, 18, 26, 136, 88, 104, 80, 96, 117, 120, 152, 40, 48, 66, 128, 8, 58 };
     public static Digest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1801,6 +1837,36 @@ namespace D3.Hero {
       get { return timePlayed_; }
     }
     
+    public const int HighestCompletedDifficultyFieldNumber = 17;
+    private bool hasHighestCompletedDifficulty;
+    private int highestCompletedDifficulty_ = -1;
+    public bool HasHighestCompletedDifficulty {
+      get { return hasHighestCompletedDifficulty; }
+    }
+    public int HighestCompletedDifficulty {
+      get { return highestCompletedDifficulty_; }
+    }
+    
+    public const int CreateTimeFieldNumber = 18;
+    private bool hasCreateTime;
+    private uint createTime_;
+    public bool HasCreateTime {
+      get { return hasCreateTime; }
+    }
+    public uint CreateTime {
+      get { return createTime_; }
+    }
+    
+    public const int LastPlayedTimeFieldNumber = 19;
+    private bool hasLastPlayedTime;
+    private uint lastPlayedTime_;
+    public bool HasLastPlayedTime {
+      get { return hasLastPlayedTime; }
+    }
+    public uint LastPlayedTime {
+      get { return lastPlayedTime_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasVersion) return false;
@@ -1828,49 +1894,58 @@ namespace D3.Hero {
       int size = SerializedSize;
       string[] field_names = _digestFieldNames;
       if (hasVersion) {
-        output.WriteUInt32(1, field_names[13], Version);
+        output.WriteUInt32(1, field_names[16], Version);
       }
       if (hasHeroId) {
-        output.WriteMessage(2, field_names[1], HeroId);
+        output.WriteMessage(2, field_names[2], HeroId);
       }
       if (hasHeroName) {
-        output.WriteString(3, field_names[2], HeroName);
+        output.WriteString(3, field_names[3], HeroName);
       }
       if (hasGbidClass) {
-        output.WriteSFixed32(4, field_names[0], GbidClass);
+        output.WriteSFixed32(4, field_names[1], GbidClass);
       }
       if (hasLevel) {
-        output.WriteSInt32(5, field_names[9], Level);
+        output.WriteSInt32(5, field_names[12], Level);
       }
       if (hasPlayerFlags) {
-        output.WriteUInt32(6, field_names[10], PlayerFlags);
+        output.WriteUInt32(6, field_names[13], PlayerFlags);
       }
       if (hasVisualEquipment) {
-        output.WriteMessage(7, field_names[14], VisualEquipment);
+        output.WriteMessage(7, field_names[17], VisualEquipment);
       }
       if (questHistory_.Count > 0) {
-        output.WriteMessageArray(8, field_names[11], questHistory_);
+        output.WriteMessageArray(8, field_names[14], questHistory_);
       }
       if (hasLastPlayedAct) {
-        output.WriteSInt32(10, field_names[5], LastPlayedAct);
+        output.WriteSInt32(10, field_names[7], LastPlayedAct);
       }
       if (hasHighestUnlockedAct) {
-        output.WriteSInt32(11, field_names[3], HighestUnlockedAct);
+        output.WriteSInt32(11, field_names[5], HighestUnlockedAct);
       }
       if (hasLastPlayedDifficulty) {
-        output.WriteSInt32(12, field_names[6], LastPlayedDifficulty);
+        output.WriteSInt32(12, field_names[8], LastPlayedDifficulty);
       }
       if (hasHighestUnlockedDifficulty) {
-        output.WriteSInt32(13, field_names[4], HighestUnlockedDifficulty);
+        output.WriteSInt32(13, field_names[6], HighestUnlockedDifficulty);
       }
       if (hasLastPlayedQuest) {
-        output.WriteSFixed32(14, field_names[7], LastPlayedQuest);
+        output.WriteSFixed32(14, field_names[9], LastPlayedQuest);
       }
       if (hasLastPlayedQuestStep) {
-        output.WriteSInt32(15, field_names[8], LastPlayedQuestStep);
+        output.WriteSInt32(15, field_names[10], LastPlayedQuestStep);
       }
       if (hasTimePlayed) {
-        output.WriteUInt32(16, field_names[12], TimePlayed);
+        output.WriteUInt32(16, field_names[15], TimePlayed);
+      }
+      if (hasHighestCompletedDifficulty) {
+        output.WriteSInt32(17, field_names[4], HighestCompletedDifficulty);
+      }
+      if (hasCreateTime) {
+        output.WriteUInt32(18, field_names[0], CreateTime);
+      }
+      if (hasLastPlayedTime) {
+        output.WriteUInt32(19, field_names[11], LastPlayedTime);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1926,6 +2001,15 @@ namespace D3.Hero {
         }
         if (hasTimePlayed) {
           size += pb::CodedOutputStream.ComputeUInt32Size(16, TimePlayed);
+        }
+        if (hasHighestCompletedDifficulty) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(17, HighestCompletedDifficulty);
+        }
+        if (hasCreateTime) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(18, CreateTime);
+        }
+        if (hasLastPlayedTime) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(19, LastPlayedTime);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2099,6 +2183,15 @@ namespace D3.Hero {
         if (other.HasTimePlayed) {
           TimePlayed = other.TimePlayed;
         }
+        if (other.HasHighestCompletedDifficulty) {
+          HighestCompletedDifficulty = other.HighestCompletedDifficulty;
+        }
+        if (other.HasCreateTime) {
+          CreateTime = other.CreateTime;
+        }
+        if (other.HasLastPlayedTime) {
+          LastPlayedTime = other.LastPlayedTime;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -2210,6 +2303,18 @@ namespace D3.Hero {
             }
             case 128: {
               result.hasTimePlayed = input.ReadUInt32(ref result.timePlayed_);
+              break;
+            }
+            case 136: {
+              result.hasHighestCompletedDifficulty = input.ReadSInt32(ref result.highestCompletedDifficulty_);
+              break;
+            }
+            case 144: {
+              result.hasCreateTime = input.ReadUInt32(ref result.createTime_);
+              break;
+            }
+            case 152: {
+              result.hasLastPlayedTime = input.ReadUInt32(ref result.lastPlayedTime_);
               break;
             }
           }
@@ -2586,6 +2691,66 @@ namespace D3.Hero {
         result.timePlayed_ = 0;
         return this;
       }
+      
+      public bool HasHighestCompletedDifficulty {
+        get { return result.hasHighestCompletedDifficulty; }
+      }
+      public int HighestCompletedDifficulty {
+        get { return result.HighestCompletedDifficulty; }
+        set { SetHighestCompletedDifficulty(value); }
+      }
+      public Builder SetHighestCompletedDifficulty(int value) {
+        PrepareBuilder();
+        result.hasHighestCompletedDifficulty = true;
+        result.highestCompletedDifficulty_ = value;
+        return this;
+      }
+      public Builder ClearHighestCompletedDifficulty() {
+        PrepareBuilder();
+        result.hasHighestCompletedDifficulty = false;
+        result.highestCompletedDifficulty_ = -1;
+        return this;
+      }
+      
+      public bool HasCreateTime {
+        get { return result.hasCreateTime; }
+      }
+      public uint CreateTime {
+        get { return result.CreateTime; }
+        set { SetCreateTime(value); }
+      }
+      public Builder SetCreateTime(uint value) {
+        PrepareBuilder();
+        result.hasCreateTime = true;
+        result.createTime_ = value;
+        return this;
+      }
+      public Builder ClearCreateTime() {
+        PrepareBuilder();
+        result.hasCreateTime = false;
+        result.createTime_ = 0;
+        return this;
+      }
+      
+      public bool HasLastPlayedTime {
+        get { return result.hasLastPlayedTime; }
+      }
+      public uint LastPlayedTime {
+        get { return result.LastPlayedTime; }
+        set { SetLastPlayedTime(value); }
+      }
+      public Builder SetLastPlayedTime(uint value) {
+        PrepareBuilder();
+        result.hasLastPlayedTime = true;
+        result.lastPlayedTime_ = value;
+        return this;
+      }
+      public Builder ClearLastPlayedTime() {
+        PrepareBuilder();
+        result.hasLastPlayedTime = false;
+        result.lastPlayedTime_ = 0;
+        return this;
+      }
     }
     static Digest() {
       object.ReferenceEquals(global::D3.Hero.Hero.Descriptor, null);
@@ -2598,8 +2763,8 @@ namespace D3.Hero {
   public sealed partial class DigestUI : pb::GeneratedMessage<DigestUI, DigestUI.Builder> {
     private DigestUI() { }
     private static readonly DigestUI defaultInstance = new DigestUI().MakeReadOnly();
-    private static readonly string[] _digestUIFieldNames = new string[] { "highest_unlocked_act", "highest_unlocked_difficulty", "last_played_act", "last_played_difficulty", "last_played_quest", "last_played_quest_step", "time_played" };
-    private static readonly uint[] _digestUIFieldTags = new uint[] { 16, 32, 8, 24, 45, 48, 56 };
+    private static readonly string[] _digestUIFieldNames = new string[] { "highest_completed_difficulty", "highest_unlocked_act", "highest_unlocked_difficulty", "last_played_act", "last_played_difficulty", "last_played_quest", "last_played_quest_step", "time_played" };
+    private static readonly uint[] _digestUIFieldTags = new uint[] { 64, 16, 32, 8, 24, 45, 48, 56 };
     public static DigestUI DefaultInstance {
       get { return defaultInstance; }
     }
@@ -2690,6 +2855,16 @@ namespace D3.Hero {
       get { return timePlayed_; }
     }
     
+    public const int HighestCompletedDifficultyFieldNumber = 8;
+    private bool hasHighestCompletedDifficulty;
+    private int highestCompletedDifficulty_;
+    public bool HasHighestCompletedDifficulty {
+      get { return hasHighestCompletedDifficulty; }
+    }
+    public int HighestCompletedDifficulty {
+      get { return highestCompletedDifficulty_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasLastPlayedAct) return false;
@@ -2707,25 +2882,28 @@ namespace D3.Hero {
       int size = SerializedSize;
       string[] field_names = _digestUIFieldNames;
       if (hasLastPlayedAct) {
-        output.WriteSInt32(1, field_names[2], LastPlayedAct);
+        output.WriteSInt32(1, field_names[3], LastPlayedAct);
       }
       if (hasHighestUnlockedAct) {
-        output.WriteSInt32(2, field_names[0], HighestUnlockedAct);
+        output.WriteSInt32(2, field_names[1], HighestUnlockedAct);
       }
       if (hasLastPlayedDifficulty) {
-        output.WriteSInt32(3, field_names[3], LastPlayedDifficulty);
+        output.WriteSInt32(3, field_names[4], LastPlayedDifficulty);
       }
       if (hasHighestUnlockedDifficulty) {
-        output.WriteSInt32(4, field_names[1], HighestUnlockedDifficulty);
+        output.WriteSInt32(4, field_names[2], HighestUnlockedDifficulty);
       }
       if (hasLastPlayedQuest) {
-        output.WriteSFixed32(5, field_names[4], LastPlayedQuest);
+        output.WriteSFixed32(5, field_names[5], LastPlayedQuest);
       }
       if (hasLastPlayedQuestStep) {
-        output.WriteSInt32(6, field_names[5], LastPlayedQuestStep);
+        output.WriteSInt32(6, field_names[6], LastPlayedQuestStep);
       }
       if (hasTimePlayed) {
-        output.WriteUInt32(7, field_names[6], TimePlayed);
+        output.WriteUInt32(7, field_names[7], TimePlayed);
+      }
+      if (hasHighestCompletedDifficulty) {
+        output.WriteSInt32(8, field_names[0], HighestCompletedDifficulty);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2757,6 +2935,9 @@ namespace D3.Hero {
         }
         if (hasTimePlayed) {
           size += pb::CodedOutputStream.ComputeUInt32Size(7, TimePlayed);
+        }
+        if (hasHighestCompletedDifficulty) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(8, HighestCompletedDifficulty);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2905,6 +3086,9 @@ namespace D3.Hero {
         if (other.HasTimePlayed) {
           TimePlayed = other.TimePlayed;
         }
+        if (other.HasHighestCompletedDifficulty) {
+          HighestCompletedDifficulty = other.HighestCompletedDifficulty;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -2974,6 +3158,10 @@ namespace D3.Hero {
             }
             case 56: {
               result.hasTimePlayed = input.ReadUInt32(ref result.timePlayed_);
+              break;
+            }
+            case 64: {
+              result.hasHighestCompletedDifficulty = input.ReadSInt32(ref result.highestCompletedDifficulty_);
               break;
             }
           }
@@ -3125,690 +3313,28 @@ namespace D3.Hero {
         result.timePlayed_ = 0;
         return this;
       }
+      
+      public bool HasHighestCompletedDifficulty {
+        get { return result.hasHighestCompletedDifficulty; }
+      }
+      public int HighestCompletedDifficulty {
+        get { return result.HighestCompletedDifficulty; }
+        set { SetHighestCompletedDifficulty(value); }
+      }
+      public Builder SetHighestCompletedDifficulty(int value) {
+        PrepareBuilder();
+        result.hasHighestCompletedDifficulty = true;
+        result.highestCompletedDifficulty_ = value;
+        return this;
+      }
+      public Builder ClearHighestCompletedDifficulty() {
+        PrepareBuilder();
+        result.hasHighestCompletedDifficulty = false;
+        result.highestCompletedDifficulty_ = 0;
+        return this;
+      }
     }
     static DigestUI() {
-      object.ReferenceEquals(global::D3.Hero.Hero.Descriptor, null);
-    }
-  }
-  
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class HotbarButtonData : pb::GeneratedMessage<HotbarButtonData, HotbarButtonData.Builder> {
-    private HotbarButtonData() { }
-    private static readonly HotbarButtonData defaultInstance = new HotbarButtonData().MakeReadOnly();
-    private static readonly string[] _hotbarButtonDataFieldNames = new string[] { "gbid_item", "sno_power" };
-    private static readonly uint[] _hotbarButtonDataFieldTags = new uint[] { 21, 13 };
-    public static HotbarButtonData DefaultInstance {
-      get { return defaultInstance; }
-    }
-    
-    public override HotbarButtonData DefaultInstanceForType {
-      get { return DefaultInstance; }
-    }
-    
-    protected override HotbarButtonData ThisMessage {
-      get { return this; }
-    }
-    
-    public static pbd::MessageDescriptor Descriptor {
-      get { return global::D3.Hero.Hero.internal__static_D3_Hero_HotbarButtonData__Descriptor; }
-    }
-    
-    protected override pb::FieldAccess.FieldAccessorTable<HotbarButtonData, HotbarButtonData.Builder> InternalFieldAccessors {
-      get { return global::D3.Hero.Hero.internal__static_D3_Hero_HotbarButtonData__FieldAccessorTable; }
-    }
-    
-    public const int SnoPowerFieldNumber = 1;
-    private bool hasSnoPower;
-    private int snoPower_ = -1;
-    public bool HasSnoPower {
-      get { return hasSnoPower; }
-    }
-    public int SnoPower {
-      get { return snoPower_; }
-    }
-    
-    public const int GbidItemFieldNumber = 2;
-    private bool hasGbidItem;
-    private int gbidItem_ = -1;
-    public bool HasGbidItem {
-      get { return hasGbidItem; }
-    }
-    public int GbidItem {
-      get { return gbidItem_; }
-    }
-    
-    public override bool IsInitialized {
-      get {
-        if (!hasSnoPower) return false;
-        if (!hasGbidItem) return false;
-        return true;
-      }
-    }
-    
-    public override void WriteTo(pb::ICodedOutputStream output) {
-      int size = SerializedSize;
-      string[] field_names = _hotbarButtonDataFieldNames;
-      if (hasSnoPower) {
-        output.WriteSFixed32(1, field_names[1], SnoPower);
-      }
-      if (hasGbidItem) {
-        output.WriteSFixed32(2, field_names[0], GbidItem);
-      }
-      UnknownFields.WriteTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public override int SerializedSize {
-      get {
-        int size = memoizedSerializedSize;
-        if (size != -1) return size;
-        
-        size = 0;
-        if (hasSnoPower) {
-          size += pb::CodedOutputStream.ComputeSFixed32Size(1, SnoPower);
-        }
-        if (hasGbidItem) {
-          size += pb::CodedOutputStream.ComputeSFixed32Size(2, GbidItem);
-        }
-        size += UnknownFields.SerializedSize;
-        memoizedSerializedSize = size;
-        return size;
-      }
-    }
-    
-    public static HotbarButtonData ParseFrom(pb::ByteString data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static HotbarButtonData ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static HotbarButtonData ParseFrom(byte[] data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static HotbarButtonData ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static HotbarButtonData ParseFrom(global::System.IO.Stream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static HotbarButtonData ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    public static HotbarButtonData ParseDelimitedFrom(global::System.IO.Stream input) {
-      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
-    }
-    public static HotbarButtonData ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
-    }
-    public static HotbarButtonData ParseFrom(pb::ICodedInputStream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static HotbarButtonData ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    private HotbarButtonData MakeReadOnly() {
-      return this;
-    }
-    
-    public static Builder CreateBuilder() { return new Builder(); }
-    public override Builder ToBuilder() { return CreateBuilder(this); }
-    public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(HotbarButtonData prototype) {
-      return new Builder(prototype);
-    }
-    
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<HotbarButtonData, Builder> {
-      protected override Builder ThisBuilder {
-        get { return this; }
-      }
-      public Builder() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-      }
-      internal Builder(HotbarButtonData cloneFrom) {
-        result = cloneFrom;
-        resultIsReadOnly = true;
-      }
-      
-      private bool resultIsReadOnly;
-      private HotbarButtonData result;
-      
-      private HotbarButtonData PrepareBuilder() {
-        if (resultIsReadOnly) {
-          HotbarButtonData original = result;
-          result = new HotbarButtonData();
-          resultIsReadOnly = false;
-          MergeFrom(original);
-        }
-        return result;
-      }
-      
-      public override bool IsInitialized {
-        get { return result.IsInitialized; }
-      }
-      
-      protected override HotbarButtonData MessageBeingBuilt {
-        get { return PrepareBuilder(); }
-      }
-      
-      public override Builder Clear() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-        return this;
-      }
-      
-      public override Builder Clone() {
-        if (resultIsReadOnly) {
-          return new Builder(result);
-        } else {
-          return new Builder().MergeFrom(result);
-        }
-      }
-      
-      public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::D3.Hero.HotbarButtonData.Descriptor; }
-      }
-      
-      public override HotbarButtonData DefaultInstanceForType {
-        get { return global::D3.Hero.HotbarButtonData.DefaultInstance; }
-      }
-      
-      public override HotbarButtonData BuildPartial() {
-        if (resultIsReadOnly) {
-          return result;
-        }
-        resultIsReadOnly = true;
-        return result.MakeReadOnly();
-      }
-      
-      public override Builder MergeFrom(pb::IMessage other) {
-        if (other is HotbarButtonData) {
-          return MergeFrom((HotbarButtonData) other);
-        } else {
-          base.MergeFrom(other);
-          return this;
-        }
-      }
-      
-      public override Builder MergeFrom(HotbarButtonData other) {
-        if (other == global::D3.Hero.HotbarButtonData.DefaultInstance) return this;
-        PrepareBuilder();
-        if (other.HasSnoPower) {
-          SnoPower = other.SnoPower;
-        }
-        if (other.HasGbidItem) {
-          GbidItem = other.GbidItem;
-        }
-        this.MergeUnknownFields(other.UnknownFields);
-        return this;
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input) {
-        return MergeFrom(input, pb::ExtensionRegistry.Empty);
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-        PrepareBuilder();
-        pb::UnknownFieldSet.Builder unknownFields = null;
-        uint tag;
-        string field_name;
-        while (input.ReadTag(out tag, out field_name)) {
-          if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_hotbarButtonDataFieldNames, field_name, global::System.StringComparer.Ordinal);
-            if(field_ordinal >= 0)
-              tag = _hotbarButtonDataFieldTags[field_ordinal];
-            else {
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              continue;
-            }
-          }
-          switch (tag) {
-            case 0: {
-              throw pb::InvalidProtocolBufferException.InvalidTag();
-            }
-            default: {
-              if (pb::WireFormat.IsEndGroupTag(tag)) {
-                if (unknownFields != null) {
-                  this.UnknownFields = unknownFields.Build();
-                }
-                return this;
-              }
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              break;
-            }
-            case 13: {
-              result.hasSnoPower = input.ReadSFixed32(ref result.snoPower_);
-              break;
-            }
-            case 21: {
-              result.hasGbidItem = input.ReadSFixed32(ref result.gbidItem_);
-              break;
-            }
-          }
-        }
-        
-        if (unknownFields != null) {
-          this.UnknownFields = unknownFields.Build();
-        }
-        return this;
-      }
-      
-      
-      public bool HasSnoPower {
-        get { return result.hasSnoPower; }
-      }
-      public int SnoPower {
-        get { return result.SnoPower; }
-        set { SetSnoPower(value); }
-      }
-      public Builder SetSnoPower(int value) {
-        PrepareBuilder();
-        result.hasSnoPower = true;
-        result.snoPower_ = value;
-        return this;
-      }
-      public Builder ClearSnoPower() {
-        PrepareBuilder();
-        result.hasSnoPower = false;
-        result.snoPower_ = -1;
-        return this;
-      }
-      
-      public bool HasGbidItem {
-        get { return result.hasGbidItem; }
-      }
-      public int GbidItem {
-        get { return result.GbidItem; }
-        set { SetGbidItem(value); }
-      }
-      public Builder SetGbidItem(int value) {
-        PrepareBuilder();
-        result.hasGbidItem = true;
-        result.gbidItem_ = value;
-        return this;
-      }
-      public Builder ClearGbidItem() {
-        PrepareBuilder();
-        result.hasGbidItem = false;
-        result.gbidItem_ = -1;
-        return this;
-      }
-    }
-    static HotbarButtonData() {
-      object.ReferenceEquals(global::D3.Hero.Hero.Descriptor, null);
-    }
-  }
-  
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class SkillKeyMapping : pb::GeneratedMessage<SkillKeyMapping, SkillKeyMapping.Builder> {
-    private SkillKeyMapping() { }
-    private static readonly SkillKeyMapping defaultInstance = new SkillKeyMapping().MakeReadOnly();
-    private static readonly string[] _skillKeyMappingFieldNames = new string[] { "id_hotkey", "skill_button", "sno_power" };
-    private static readonly uint[] _skillKeyMappingFieldTags = new uint[] { 16, 24, 13 };
-    public static SkillKeyMapping DefaultInstance {
-      get { return defaultInstance; }
-    }
-    
-    public override SkillKeyMapping DefaultInstanceForType {
-      get { return DefaultInstance; }
-    }
-    
-    protected override SkillKeyMapping ThisMessage {
-      get { return this; }
-    }
-    
-    public static pbd::MessageDescriptor Descriptor {
-      get { return global::D3.Hero.Hero.internal__static_D3_Hero_SkillKeyMapping__Descriptor; }
-    }
-    
-    protected override pb::FieldAccess.FieldAccessorTable<SkillKeyMapping, SkillKeyMapping.Builder> InternalFieldAccessors {
-      get { return global::D3.Hero.Hero.internal__static_D3_Hero_SkillKeyMapping__FieldAccessorTable; }
-    }
-    
-    public const int SnoPowerFieldNumber = 1;
-    private bool hasSnoPower;
-    private int snoPower_ = -1;
-    public bool HasSnoPower {
-      get { return hasSnoPower; }
-    }
-    public int SnoPower {
-      get { return snoPower_; }
-    }
-    
-    public const int IdHotkeyFieldNumber = 2;
-    private bool hasIdHotkey;
-    private int idHotkey_ = -1;
-    public bool HasIdHotkey {
-      get { return hasIdHotkey; }
-    }
-    public int IdHotkey {
-      get { return idHotkey_; }
-    }
-    
-    public const int SkillButtonFieldNumber = 3;
-    private bool hasSkillButton;
-    private int skillButton_;
-    public bool HasSkillButton {
-      get { return hasSkillButton; }
-    }
-    public int SkillButton {
-      get { return skillButton_; }
-    }
-    
-    public override bool IsInitialized {
-      get {
-        if (!hasSnoPower) return false;
-        if (!hasIdHotkey) return false;
-        if (!hasSkillButton) return false;
-        return true;
-      }
-    }
-    
-    public override void WriteTo(pb::ICodedOutputStream output) {
-      int size = SerializedSize;
-      string[] field_names = _skillKeyMappingFieldNames;
-      if (hasSnoPower) {
-        output.WriteSFixed32(1, field_names[2], SnoPower);
-      }
-      if (hasIdHotkey) {
-        output.WriteSInt32(2, field_names[0], IdHotkey);
-      }
-      if (hasSkillButton) {
-        output.WriteSInt32(3, field_names[1], SkillButton);
-      }
-      UnknownFields.WriteTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public override int SerializedSize {
-      get {
-        int size = memoizedSerializedSize;
-        if (size != -1) return size;
-        
-        size = 0;
-        if (hasSnoPower) {
-          size += pb::CodedOutputStream.ComputeSFixed32Size(1, SnoPower);
-        }
-        if (hasIdHotkey) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(2, IdHotkey);
-        }
-        if (hasSkillButton) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(3, SkillButton);
-        }
-        size += UnknownFields.SerializedSize;
-        memoizedSerializedSize = size;
-        return size;
-      }
-    }
-    
-    public static SkillKeyMapping ParseFrom(pb::ByteString data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static SkillKeyMapping ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static SkillKeyMapping ParseFrom(byte[] data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static SkillKeyMapping ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static SkillKeyMapping ParseFrom(global::System.IO.Stream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static SkillKeyMapping ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    public static SkillKeyMapping ParseDelimitedFrom(global::System.IO.Stream input) {
-      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
-    }
-    public static SkillKeyMapping ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
-    }
-    public static SkillKeyMapping ParseFrom(pb::ICodedInputStream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static SkillKeyMapping ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    private SkillKeyMapping MakeReadOnly() {
-      return this;
-    }
-    
-    public static Builder CreateBuilder() { return new Builder(); }
-    public override Builder ToBuilder() { return CreateBuilder(this); }
-    public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(SkillKeyMapping prototype) {
-      return new Builder(prototype);
-    }
-    
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<SkillKeyMapping, Builder> {
-      protected override Builder ThisBuilder {
-        get { return this; }
-      }
-      public Builder() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-      }
-      internal Builder(SkillKeyMapping cloneFrom) {
-        result = cloneFrom;
-        resultIsReadOnly = true;
-      }
-      
-      private bool resultIsReadOnly;
-      private SkillKeyMapping result;
-      
-      private SkillKeyMapping PrepareBuilder() {
-        if (resultIsReadOnly) {
-          SkillKeyMapping original = result;
-          result = new SkillKeyMapping();
-          resultIsReadOnly = false;
-          MergeFrom(original);
-        }
-        return result;
-      }
-      
-      public override bool IsInitialized {
-        get { return result.IsInitialized; }
-      }
-      
-      protected override SkillKeyMapping MessageBeingBuilt {
-        get { return PrepareBuilder(); }
-      }
-      
-      public override Builder Clear() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-        return this;
-      }
-      
-      public override Builder Clone() {
-        if (resultIsReadOnly) {
-          return new Builder(result);
-        } else {
-          return new Builder().MergeFrom(result);
-        }
-      }
-      
-      public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::D3.Hero.SkillKeyMapping.Descriptor; }
-      }
-      
-      public override SkillKeyMapping DefaultInstanceForType {
-        get { return global::D3.Hero.SkillKeyMapping.DefaultInstance; }
-      }
-      
-      public override SkillKeyMapping BuildPartial() {
-        if (resultIsReadOnly) {
-          return result;
-        }
-        resultIsReadOnly = true;
-        return result.MakeReadOnly();
-      }
-      
-      public override Builder MergeFrom(pb::IMessage other) {
-        if (other is SkillKeyMapping) {
-          return MergeFrom((SkillKeyMapping) other);
-        } else {
-          base.MergeFrom(other);
-          return this;
-        }
-      }
-      
-      public override Builder MergeFrom(SkillKeyMapping other) {
-        if (other == global::D3.Hero.SkillKeyMapping.DefaultInstance) return this;
-        PrepareBuilder();
-        if (other.HasSnoPower) {
-          SnoPower = other.SnoPower;
-        }
-        if (other.HasIdHotkey) {
-          IdHotkey = other.IdHotkey;
-        }
-        if (other.HasSkillButton) {
-          SkillButton = other.SkillButton;
-        }
-        this.MergeUnknownFields(other.UnknownFields);
-        return this;
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input) {
-        return MergeFrom(input, pb::ExtensionRegistry.Empty);
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-        PrepareBuilder();
-        pb::UnknownFieldSet.Builder unknownFields = null;
-        uint tag;
-        string field_name;
-        while (input.ReadTag(out tag, out field_name)) {
-          if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_skillKeyMappingFieldNames, field_name, global::System.StringComparer.Ordinal);
-            if(field_ordinal >= 0)
-              tag = _skillKeyMappingFieldTags[field_ordinal];
-            else {
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              continue;
-            }
-          }
-          switch (tag) {
-            case 0: {
-              throw pb::InvalidProtocolBufferException.InvalidTag();
-            }
-            default: {
-              if (pb::WireFormat.IsEndGroupTag(tag)) {
-                if (unknownFields != null) {
-                  this.UnknownFields = unknownFields.Build();
-                }
-                return this;
-              }
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              break;
-            }
-            case 13: {
-              result.hasSnoPower = input.ReadSFixed32(ref result.snoPower_);
-              break;
-            }
-            case 16: {
-              result.hasIdHotkey = input.ReadSInt32(ref result.idHotkey_);
-              break;
-            }
-            case 24: {
-              result.hasSkillButton = input.ReadSInt32(ref result.skillButton_);
-              break;
-            }
-          }
-        }
-        
-        if (unknownFields != null) {
-          this.UnknownFields = unknownFields.Build();
-        }
-        return this;
-      }
-      
-      
-      public bool HasSnoPower {
-        get { return result.hasSnoPower; }
-      }
-      public int SnoPower {
-        get { return result.SnoPower; }
-        set { SetSnoPower(value); }
-      }
-      public Builder SetSnoPower(int value) {
-        PrepareBuilder();
-        result.hasSnoPower = true;
-        result.snoPower_ = value;
-        return this;
-      }
-      public Builder ClearSnoPower() {
-        PrepareBuilder();
-        result.hasSnoPower = false;
-        result.snoPower_ = -1;
-        return this;
-      }
-      
-      public bool HasIdHotkey {
-        get { return result.hasIdHotkey; }
-      }
-      public int IdHotkey {
-        get { return result.IdHotkey; }
-        set { SetIdHotkey(value); }
-      }
-      public Builder SetIdHotkey(int value) {
-        PrepareBuilder();
-        result.hasIdHotkey = true;
-        result.idHotkey_ = value;
-        return this;
-      }
-      public Builder ClearIdHotkey() {
-        PrepareBuilder();
-        result.hasIdHotkey = false;
-        result.idHotkey_ = -1;
-        return this;
-      }
-      
-      public bool HasSkillButton {
-        get { return result.hasSkillButton; }
-      }
-      public int SkillButton {
-        get { return result.SkillButton; }
-        set { SetSkillButton(value); }
-      }
-      public Builder SetSkillButton(int value) {
-        PrepareBuilder();
-        result.hasSkillButton = true;
-        result.skillButton_ = value;
-        return this;
-      }
-      public Builder ClearSkillButton() {
-        PrepareBuilder();
-        result.hasSkillButton = false;
-        result.skillButton_ = 0;
-        return this;
-      }
-    }
-    static SkillKeyMapping() {
       object.ReferenceEquals(global::D3.Hero.Hero.Descriptor, null);
     }
   }
@@ -5301,11 +4827,329 @@ namespace D3.Hero {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class SkillWithRune : pb::GeneratedMessage<SkillWithRune, SkillWithRune.Builder> {
+    private SkillWithRune() { }
+    private static readonly SkillWithRune defaultInstance = new SkillWithRune().MakeReadOnly();
+    private static readonly string[] _skillWithRuneFieldNames = new string[] { "rune_type", "sno_skill" };
+    private static readonly uint[] _skillWithRuneFieldTags = new uint[] { 16, 13 };
+    public static SkillWithRune DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override SkillWithRune DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override SkillWithRune ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::D3.Hero.Hero.internal__static_D3_Hero_SkillWithRune__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<SkillWithRune, SkillWithRune.Builder> InternalFieldAccessors {
+      get { return global::D3.Hero.Hero.internal__static_D3_Hero_SkillWithRune__FieldAccessorTable; }
+    }
+    
+    public const int SnoSkillFieldNumber = 1;
+    private bool hasSnoSkill;
+    private int snoSkill_ = -1;
+    public bool HasSnoSkill {
+      get { return hasSnoSkill; }
+    }
+    public int SnoSkill {
+      get { return snoSkill_; }
+    }
+    
+    public const int RuneTypeFieldNumber = 2;
+    private bool hasRuneType;
+    private int runeType_ = -1;
+    public bool HasRuneType {
+      get { return hasRuneType; }
+    }
+    public int RuneType {
+      get { return runeType_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasSnoSkill) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _skillWithRuneFieldNames;
+      if (hasSnoSkill) {
+        output.WriteSFixed32(1, field_names[1], SnoSkill);
+      }
+      if (hasRuneType) {
+        output.WriteSInt32(2, field_names[0], RuneType);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasSnoSkill) {
+          size += pb::CodedOutputStream.ComputeSFixed32Size(1, SnoSkill);
+        }
+        if (hasRuneType) {
+          size += pb::CodedOutputStream.ComputeSInt32Size(2, RuneType);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static SkillWithRune ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static SkillWithRune ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static SkillWithRune ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static SkillWithRune ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static SkillWithRune ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static SkillWithRune ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static SkillWithRune ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static SkillWithRune ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static SkillWithRune ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static SkillWithRune ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private SkillWithRune MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(SkillWithRune prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<SkillWithRune, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(SkillWithRune cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private SkillWithRune result;
+      
+      private SkillWithRune PrepareBuilder() {
+        if (resultIsReadOnly) {
+          SkillWithRune original = result;
+          result = new SkillWithRune();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override SkillWithRune MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::D3.Hero.SkillWithRune.Descriptor; }
+      }
+      
+      public override SkillWithRune DefaultInstanceForType {
+        get { return global::D3.Hero.SkillWithRune.DefaultInstance; }
+      }
+      
+      public override SkillWithRune BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is SkillWithRune) {
+          return MergeFrom((SkillWithRune) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(SkillWithRune other) {
+        if (other == global::D3.Hero.SkillWithRune.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasSnoSkill) {
+          SnoSkill = other.SnoSkill;
+        }
+        if (other.HasRuneType) {
+          RuneType = other.RuneType;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_skillWithRuneFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _skillWithRuneFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 13: {
+              result.hasSnoSkill = input.ReadSFixed32(ref result.snoSkill_);
+              break;
+            }
+            case 16: {
+              result.hasRuneType = input.ReadSInt32(ref result.runeType_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasSnoSkill {
+        get { return result.hasSnoSkill; }
+      }
+      public int SnoSkill {
+        get { return result.SnoSkill; }
+        set { SetSnoSkill(value); }
+      }
+      public Builder SetSnoSkill(int value) {
+        PrepareBuilder();
+        result.hasSnoSkill = true;
+        result.snoSkill_ = value;
+        return this;
+      }
+      public Builder ClearSnoSkill() {
+        PrepareBuilder();
+        result.hasSnoSkill = false;
+        result.snoSkill_ = -1;
+        return this;
+      }
+      
+      public bool HasRuneType {
+        get { return result.hasRuneType; }
+      }
+      public int RuneType {
+        get { return result.RuneType; }
+        set { SetRuneType(value); }
+      }
+      public Builder SetRuneType(int value) {
+        PrepareBuilder();
+        result.hasRuneType = true;
+        result.runeType_ = value;
+        return this;
+      }
+      public Builder ClearRuneType() {
+        PrepareBuilder();
+        result.hasRuneType = false;
+        result.runeType_ = -1;
+        return this;
+      }
+    }
+    static SkillWithRune() {
+      object.ReferenceEquals(global::D3.Hero.Hero.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
   public sealed partial class SavedData : pb::GeneratedMessage<SavedData, SavedData.Builder> {
     private SavedData() { }
     private static readonly SavedData defaultInstance = new SavedData().MakeReadOnly();
-    private static readonly string[] _savedDataFieldNames = new string[] { "activated_waypoints", "hireling_saved_data", "hotbar_button_assignments", "last_level_time", "learned_lore", "save_point", "saved_conversations", "skill_key_map", "sno_active_skills", "sno_traits", "time_played" };
-    private static readonly uint[] _savedDataFieldTags = new uint[] { 32, 42, 10, 48, 58, 98, 66, 18, 77, 85, 24 };
+    private static readonly string[] _savedDataFieldNames = new string[] { "activated_waypoints", "active_skills", "gbid_potion_button", "hireling_saved_data", "last_level_time", "learned_lore", "save_point", "saved_conversations", "skill_slot_ever_assigned", "skill_version", "sno_traits", "time_played" };
+    private static readonly uint[] _savedDataFieldTags = new uint[] { 32, 114, 109, 42, 48, 58, 98, 66, 122, 128, 85, 24 };
     public static SavedData DefaultInstance {
       get { return defaultInstance; }
     }
@@ -5324,30 +5168,6 @@ namespace D3.Hero {
     
     protected override pb::FieldAccess.FieldAccessorTable<SavedData, SavedData.Builder> InternalFieldAccessors {
       get { return global::D3.Hero.Hero.internal__static_D3_Hero_SavedData__FieldAccessorTable; }
-    }
-    
-    public const int HotbarButtonAssignmentsFieldNumber = 1;
-    private pbc::PopsicleList<global::D3.Hero.HotbarButtonData> hotbarButtonAssignments_ = new pbc::PopsicleList<global::D3.Hero.HotbarButtonData>();
-    public scg::IList<global::D3.Hero.HotbarButtonData> HotbarButtonAssignmentsList {
-      get { return hotbarButtonAssignments_; }
-    }
-    public int HotbarButtonAssignmentsCount {
-      get { return hotbarButtonAssignments_.Count; }
-    }
-    public global::D3.Hero.HotbarButtonData GetHotbarButtonAssignments(int index) {
-      return hotbarButtonAssignments_[index];
-    }
-    
-    public const int SkillKeyMapFieldNumber = 2;
-    private pbc::PopsicleList<global::D3.Hero.SkillKeyMapping> skillKeyMap_ = new pbc::PopsicleList<global::D3.Hero.SkillKeyMapping>();
-    public scg::IList<global::D3.Hero.SkillKeyMapping> SkillKeyMapList {
-      get { return skillKeyMap_; }
-    }
-    public int SkillKeyMapCount {
-      get { return skillKeyMap_.Count; }
-    }
-    public global::D3.Hero.SkillKeyMapping GetSkillKeyMap(int index) {
-      return skillKeyMap_[index];
     }
     
     public const int TimePlayedFieldNumber = 3;
@@ -5410,18 +5230,6 @@ namespace D3.Hero {
       get { return savedConversations_ ?? global::D3.Hero.SavedConversations.DefaultInstance; }
     }
     
-    public const int SnoActiveSkillsFieldNumber = 9;
-    private pbc::PopsicleList<int> snoActiveSkills_ = new pbc::PopsicleList<int>();
-    public scg::IList<int> SnoActiveSkillsList {
-      get { return pbc::Lists.AsReadOnly(snoActiveSkills_); }
-    }
-    public int SnoActiveSkillsCount {
-      get { return snoActiveSkills_.Count; }
-    }
-    public int GetSnoActiveSkills(int index) {
-      return snoActiveSkills_[index];
-    }
-    
     public const int SnoTraitsFieldNumber = 10;
     private pbc::PopsicleList<int> snoTraits_ = new pbc::PopsicleList<int>();
     public scg::IList<int> SnoTraitsList {
@@ -5444,6 +5252,48 @@ namespace D3.Hero {
       get { return savePoint_ ?? global::D3.Hero.SavePointData_Proto.DefaultInstance; }
     }
     
+    public const int GbidPotionButtonFieldNumber = 13;
+    private bool hasGbidPotionButton;
+    private int gbidPotionButton_ = -1;
+    public bool HasGbidPotionButton {
+      get { return hasGbidPotionButton; }
+    }
+    public int GbidPotionButton {
+      get { return gbidPotionButton_; }
+    }
+    
+    public const int ActiveSkillsFieldNumber = 14;
+    private pbc::PopsicleList<global::D3.Hero.SkillWithRune> activeSkills_ = new pbc::PopsicleList<global::D3.Hero.SkillWithRune>();
+    public scg::IList<global::D3.Hero.SkillWithRune> ActiveSkillsList {
+      get { return activeSkills_; }
+    }
+    public int ActiveSkillsCount {
+      get { return activeSkills_.Count; }
+    }
+    public global::D3.Hero.SkillWithRune GetActiveSkills(int index) {
+      return activeSkills_[index];
+    }
+    
+    public const int SkillSlotEverAssignedFieldNumber = 15;
+    private bool hasSkillSlotEverAssigned;
+    private pb::ByteString skillSlotEverAssigned_ = pb::ByteString.Empty;
+    public bool HasSkillSlotEverAssigned {
+      get { return hasSkillSlotEverAssigned; }
+    }
+    public pb::ByteString SkillSlotEverAssigned {
+      get { return skillSlotEverAssigned_; }
+    }
+    
+    public const int SkillVersionFieldNumber = 16;
+    private bool hasSkillVersion;
+    private uint skillVersion_;
+    public bool HasSkillVersion {
+      get { return hasSkillVersion; }
+    }
+    public uint SkillVersion {
+      get { return skillVersion_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasTimePlayed) return false;
@@ -5453,15 +5303,15 @@ namespace D3.Hero {
         if (!hasLearnedLore) return false;
         if (!hasSavedConversations) return false;
         if (!hasSavePoint) return false;
-        foreach (global::D3.Hero.HotbarButtonData element in HotbarButtonAssignmentsList) {
-          if (!element.IsInitialized) return false;
-        }
-        foreach (global::D3.Hero.SkillKeyMapping element in SkillKeyMapList) {
-          if (!element.IsInitialized) return false;
-        }
+        if (!hasGbidPotionButton) return false;
+        if (!hasSkillSlotEverAssigned) return false;
+        if (!hasSkillVersion) return false;
         if (!HirelingSavedData.IsInitialized) return false;
         if (!SavedConversations.IsInitialized) return false;
         if (!SavePoint.IsInitialized) return false;
+        foreach (global::D3.Hero.SkillWithRune element in ActiveSkillsList) {
+          if (!element.IsInitialized) return false;
+        }
         return true;
       }
     }
@@ -5469,38 +5319,41 @@ namespace D3.Hero {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _savedDataFieldNames;
-      if (hotbarButtonAssignments_.Count > 0) {
-        output.WriteMessageArray(1, field_names[2], hotbarButtonAssignments_);
-      }
-      if (skillKeyMap_.Count > 0) {
-        output.WriteMessageArray(2, field_names[7], skillKeyMap_);
-      }
       if (hasTimePlayed) {
-        output.WriteUInt32(3, field_names[10], TimePlayed);
+        output.WriteUInt32(3, field_names[11], TimePlayed);
       }
       if (hasActivatedWaypoints) {
         output.WriteUInt32(4, field_names[0], ActivatedWaypoints);
       }
       if (hasHirelingSavedData) {
-        output.WriteMessage(5, field_names[1], HirelingSavedData);
+        output.WriteMessage(5, field_names[3], HirelingSavedData);
       }
       if (hasLastLevelTime) {
-        output.WriteUInt32(6, field_names[3], LastLevelTime);
+        output.WriteUInt32(6, field_names[4], LastLevelTime);
       }
       if (hasLearnedLore) {
-        output.WriteMessage(7, field_names[4], LearnedLore);
+        output.WriteMessage(7, field_names[5], LearnedLore);
       }
       if (hasSavedConversations) {
-        output.WriteMessage(8, field_names[6], SavedConversations);
-      }
-      if (snoActiveSkills_.Count > 0) {
-        output.WriteSFixed32Array(9, field_names[8], snoActiveSkills_);
+        output.WriteMessage(8, field_names[7], SavedConversations);
       }
       if (snoTraits_.Count > 0) {
-        output.WriteSFixed32Array(10, field_names[9], snoTraits_);
+        output.WriteSFixed32Array(10, field_names[10], snoTraits_);
       }
       if (hasSavePoint) {
-        output.WriteMessage(12, field_names[5], SavePoint);
+        output.WriteMessage(12, field_names[6], SavePoint);
+      }
+      if (hasGbidPotionButton) {
+        output.WriteSFixed32(13, field_names[2], GbidPotionButton);
+      }
+      if (activeSkills_.Count > 0) {
+        output.WriteMessageArray(14, field_names[1], activeSkills_);
+      }
+      if (hasSkillSlotEverAssigned) {
+        output.WriteBytes(15, field_names[8], SkillSlotEverAssigned);
+      }
+      if (hasSkillVersion) {
+        output.WriteUInt32(16, field_names[9], SkillVersion);
       }
       UnknownFields.WriteTo(output);
     }
@@ -5512,12 +5365,6 @@ namespace D3.Hero {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::D3.Hero.HotbarButtonData element in HotbarButtonAssignmentsList) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, element);
-        }
-        foreach (global::D3.Hero.SkillKeyMapping element in SkillKeyMapList) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, element);
-        }
         if (hasTimePlayed) {
           size += pb::CodedOutputStream.ComputeUInt32Size(3, TimePlayed);
         }
@@ -5538,18 +5385,24 @@ namespace D3.Hero {
         }
         {
           int dataSize = 0;
-          dataSize = 4 * snoActiveSkills_.Count;
-          size += dataSize;
-          size += 1 * snoActiveSkills_.Count;
-        }
-        {
-          int dataSize = 0;
           dataSize = 4 * snoTraits_.Count;
           size += dataSize;
           size += 1 * snoTraits_.Count;
         }
         if (hasSavePoint) {
           size += pb::CodedOutputStream.ComputeMessageSize(12, SavePoint);
+        }
+        if (hasGbidPotionButton) {
+          size += pb::CodedOutputStream.ComputeSFixed32Size(13, GbidPotionButton);
+        }
+        foreach (global::D3.Hero.SkillWithRune element in ActiveSkillsList) {
+          size += pb::CodedOutputStream.ComputeMessageSize(14, element);
+        }
+        if (hasSkillSlotEverAssigned) {
+          size += pb::CodedOutputStream.ComputeBytesSize(15, SkillSlotEverAssigned);
+        }
+        if (hasSkillVersion) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(16, SkillVersion);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -5588,10 +5441,8 @@ namespace D3.Hero {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private SavedData MakeReadOnly() {
-      hotbarButtonAssignments_.MakeReadOnly();
-      skillKeyMap_.MakeReadOnly();
-      snoActiveSkills_.MakeReadOnly();
       snoTraits_.MakeReadOnly();
+      activeSkills_.MakeReadOnly();
       return this;
     }
     
@@ -5681,12 +5532,6 @@ namespace D3.Hero {
       public override Builder MergeFrom(SavedData other) {
         if (other == global::D3.Hero.SavedData.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.hotbarButtonAssignments_.Count != 0) {
-          result.hotbarButtonAssignments_.Add(other.hotbarButtonAssignments_);
-        }
-        if (other.skillKeyMap_.Count != 0) {
-          result.skillKeyMap_.Add(other.skillKeyMap_);
-        }
         if (other.HasTimePlayed) {
           TimePlayed = other.TimePlayed;
         }
@@ -5705,14 +5550,23 @@ namespace D3.Hero {
         if (other.HasSavedConversations) {
           MergeSavedConversations(other.SavedConversations);
         }
-        if (other.snoActiveSkills_.Count != 0) {
-          result.snoActiveSkills_.Add(other.snoActiveSkills_);
-        }
         if (other.snoTraits_.Count != 0) {
           result.snoTraits_.Add(other.snoTraits_);
         }
         if (other.HasSavePoint) {
           MergeSavePoint(other.SavePoint);
+        }
+        if (other.HasGbidPotionButton) {
+          GbidPotionButton = other.GbidPotionButton;
+        }
+        if (other.activeSkills_.Count != 0) {
+          result.activeSkills_.Add(other.activeSkills_);
+        }
+        if (other.HasSkillSlotEverAssigned) {
+          SkillSlotEverAssigned = other.SkillSlotEverAssigned;
+        }
+        if (other.HasSkillVersion) {
+          SkillVersion = other.SkillVersion;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -5757,14 +5611,6 @@ namespace D3.Hero {
               ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
               break;
             }
-            case 10: {
-              input.ReadMessageArray(tag, field_name, result.hotbarButtonAssignments_, global::D3.Hero.HotbarButtonData.DefaultInstance, extensionRegistry);
-              break;
-            }
-            case 18: {
-              input.ReadMessageArray(tag, field_name, result.skillKeyMap_, global::D3.Hero.SkillKeyMapping.DefaultInstance, extensionRegistry);
-              break;
-            }
             case 24: {
               result.hasTimePlayed = input.ReadUInt32(ref result.timePlayed_);
               break;
@@ -5804,11 +5650,6 @@ namespace D3.Hero {
               SavedConversations = subBuilder.BuildPartial();
               break;
             }
-            case 74:
-            case 77: {
-              input.ReadSFixed32Array(tag, field_name, result.snoActiveSkills_);
-              break;
-            }
             case 82:
             case 85: {
               input.ReadSFixed32Array(tag, field_name, result.snoTraits_);
@@ -5823,6 +5664,22 @@ namespace D3.Hero {
               SavePoint = subBuilder.BuildPartial();
               break;
             }
+            case 109: {
+              result.hasGbidPotionButton = input.ReadSFixed32(ref result.gbidPotionButton_);
+              break;
+            }
+            case 114: {
+              input.ReadMessageArray(tag, field_name, result.activeSkills_, global::D3.Hero.SkillWithRune.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 122: {
+              result.hasSkillSlotEverAssigned = input.ReadBytes(ref result.skillSlotEverAssigned_);
+              break;
+            }
+            case 128: {
+              result.hasSkillVersion = input.ReadUInt32(ref result.skillVersion_);
+              break;
+            }
           }
         }
         
@@ -5832,94 +5689,6 @@ namespace D3.Hero {
         return this;
       }
       
-      
-      public pbc::IPopsicleList<global::D3.Hero.HotbarButtonData> HotbarButtonAssignmentsList {
-        get { return PrepareBuilder().hotbarButtonAssignments_; }
-      }
-      public int HotbarButtonAssignmentsCount {
-        get { return result.HotbarButtonAssignmentsCount; }
-      }
-      public global::D3.Hero.HotbarButtonData GetHotbarButtonAssignments(int index) {
-        return result.GetHotbarButtonAssignments(index);
-      }
-      public Builder SetHotbarButtonAssignments(int index, global::D3.Hero.HotbarButtonData value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hotbarButtonAssignments_[index] = value;
-        return this;
-      }
-      public Builder SetHotbarButtonAssignments(int index, global::D3.Hero.HotbarButtonData.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hotbarButtonAssignments_[index] = builderForValue.Build();
-        return this;
-      }
-      public Builder AddHotbarButtonAssignments(global::D3.Hero.HotbarButtonData value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hotbarButtonAssignments_.Add(value);
-        return this;
-      }
-      public Builder AddHotbarButtonAssignments(global::D3.Hero.HotbarButtonData.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hotbarButtonAssignments_.Add(builderForValue.Build());
-        return this;
-      }
-      public Builder AddRangeHotbarButtonAssignments(scg::IEnumerable<global::D3.Hero.HotbarButtonData> values) {
-        PrepareBuilder();
-        result.hotbarButtonAssignments_.Add(values);
-        return this;
-      }
-      public Builder ClearHotbarButtonAssignments() {
-        PrepareBuilder();
-        result.hotbarButtonAssignments_.Clear();
-        return this;
-      }
-      
-      public pbc::IPopsicleList<global::D3.Hero.SkillKeyMapping> SkillKeyMapList {
-        get { return PrepareBuilder().skillKeyMap_; }
-      }
-      public int SkillKeyMapCount {
-        get { return result.SkillKeyMapCount; }
-      }
-      public global::D3.Hero.SkillKeyMapping GetSkillKeyMap(int index) {
-        return result.GetSkillKeyMap(index);
-      }
-      public Builder SetSkillKeyMap(int index, global::D3.Hero.SkillKeyMapping value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.skillKeyMap_[index] = value;
-        return this;
-      }
-      public Builder SetSkillKeyMap(int index, global::D3.Hero.SkillKeyMapping.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.skillKeyMap_[index] = builderForValue.Build();
-        return this;
-      }
-      public Builder AddSkillKeyMap(global::D3.Hero.SkillKeyMapping value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.skillKeyMap_.Add(value);
-        return this;
-      }
-      public Builder AddSkillKeyMap(global::D3.Hero.SkillKeyMapping.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.skillKeyMap_.Add(builderForValue.Build());
-        return this;
-      }
-      public Builder AddRangeSkillKeyMap(scg::IEnumerable<global::D3.Hero.SkillKeyMapping> values) {
-        PrepareBuilder();
-        result.skillKeyMap_.Add(values);
-        return this;
-      }
-      public Builder ClearSkillKeyMap() {
-        PrepareBuilder();
-        result.skillKeyMap_.Clear();
-        return this;
-      }
       
       public bool HasTimePlayed {
         get { return result.hasTimePlayed; }
@@ -6101,36 +5870,6 @@ namespace D3.Hero {
         return this;
       }
       
-      public pbc::IPopsicleList<int> SnoActiveSkillsList {
-        get { return PrepareBuilder().snoActiveSkills_; }
-      }
-      public int SnoActiveSkillsCount {
-        get { return result.SnoActiveSkillsCount; }
-      }
-      public int GetSnoActiveSkills(int index) {
-        return result.GetSnoActiveSkills(index);
-      }
-      public Builder SetSnoActiveSkills(int index, int value) {
-        PrepareBuilder();
-        result.snoActiveSkills_[index] = value;
-        return this;
-      }
-      public Builder AddSnoActiveSkills(int value) {
-        PrepareBuilder();
-        result.snoActiveSkills_.Add(value);
-        return this;
-      }
-      public Builder AddRangeSnoActiveSkills(scg::IEnumerable<int> values) {
-        PrepareBuilder();
-        result.snoActiveSkills_.Add(values);
-        return this;
-      }
-      public Builder ClearSnoActiveSkills() {
-        PrepareBuilder();
-        result.snoActiveSkills_.Clear();
-        return this;
-      }
-      
       public pbc::IPopsicleList<int> SnoTraitsList {
         get { return PrepareBuilder().snoTraits_; }
       }
@@ -6198,6 +5937,111 @@ namespace D3.Hero {
         PrepareBuilder();
         result.hasSavePoint = false;
         result.savePoint_ = null;
+        return this;
+      }
+      
+      public bool HasGbidPotionButton {
+        get { return result.hasGbidPotionButton; }
+      }
+      public int GbidPotionButton {
+        get { return result.GbidPotionButton; }
+        set { SetGbidPotionButton(value); }
+      }
+      public Builder SetGbidPotionButton(int value) {
+        PrepareBuilder();
+        result.hasGbidPotionButton = true;
+        result.gbidPotionButton_ = value;
+        return this;
+      }
+      public Builder ClearGbidPotionButton() {
+        PrepareBuilder();
+        result.hasGbidPotionButton = false;
+        result.gbidPotionButton_ = -1;
+        return this;
+      }
+      
+      public pbc::IPopsicleList<global::D3.Hero.SkillWithRune> ActiveSkillsList {
+        get { return PrepareBuilder().activeSkills_; }
+      }
+      public int ActiveSkillsCount {
+        get { return result.ActiveSkillsCount; }
+      }
+      public global::D3.Hero.SkillWithRune GetActiveSkills(int index) {
+        return result.GetActiveSkills(index);
+      }
+      public Builder SetActiveSkills(int index, global::D3.Hero.SkillWithRune value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.activeSkills_[index] = value;
+        return this;
+      }
+      public Builder SetActiveSkills(int index, global::D3.Hero.SkillWithRune.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.activeSkills_[index] = builderForValue.Build();
+        return this;
+      }
+      public Builder AddActiveSkills(global::D3.Hero.SkillWithRune value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.activeSkills_.Add(value);
+        return this;
+      }
+      public Builder AddActiveSkills(global::D3.Hero.SkillWithRune.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.activeSkills_.Add(builderForValue.Build());
+        return this;
+      }
+      public Builder AddRangeActiveSkills(scg::IEnumerable<global::D3.Hero.SkillWithRune> values) {
+        PrepareBuilder();
+        result.activeSkills_.Add(values);
+        return this;
+      }
+      public Builder ClearActiveSkills() {
+        PrepareBuilder();
+        result.activeSkills_.Clear();
+        return this;
+      }
+      
+      public bool HasSkillSlotEverAssigned {
+        get { return result.hasSkillSlotEverAssigned; }
+      }
+      public pb::ByteString SkillSlotEverAssigned {
+        get { return result.SkillSlotEverAssigned; }
+        set { SetSkillSlotEverAssigned(value); }
+      }
+      public Builder SetSkillSlotEverAssigned(pb::ByteString value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasSkillSlotEverAssigned = true;
+        result.skillSlotEverAssigned_ = value;
+        return this;
+      }
+      public Builder ClearSkillSlotEverAssigned() {
+        PrepareBuilder();
+        result.hasSkillSlotEverAssigned = false;
+        result.skillSlotEverAssigned_ = pb::ByteString.Empty;
+        return this;
+      }
+      
+      public bool HasSkillVersion {
+        get { return result.hasSkillVersion; }
+      }
+      public uint SkillVersion {
+        get { return result.SkillVersion; }
+        set { SetSkillVersion(value); }
+      }
+      public Builder SetSkillVersion(uint value) {
+        PrepareBuilder();
+        result.hasSkillVersion = true;
+        result.skillVersion_ = value;
+        return this;
+      }
+      public Builder ClearSkillVersion() {
+        PrepareBuilder();
+        result.hasSkillVersion = false;
+        result.skillVersion_ = 0;
         return this;
       }
     }
@@ -7507,539 +7351,6 @@ namespace D3.Hero {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class Escrow : pb::GeneratedMessage<Escrow, Escrow.Builder> {
-    private Escrow() { }
-    private static readonly Escrow defaultInstance = new Escrow().MakeReadOnly();
-    private static readonly string[] _escrowFieldNames = new string[] { "generator", "hero_data", "serviced_tokens", "state", "version" };
-    private static readonly uint[] _escrowFieldTags = new uint[] { 18, 26, 42, 32, 8 };
-    public static Escrow DefaultInstance {
-      get { return defaultInstance; }
-    }
-    
-    public override Escrow DefaultInstanceForType {
-      get { return DefaultInstance; }
-    }
-    
-    protected override Escrow ThisMessage {
-      get { return this; }
-    }
-    
-    public static pbd::MessageDescriptor Descriptor {
-      get { return global::D3.Hero.Hero.internal__static_D3_Hero_Escrow__Descriptor; }
-    }
-    
-    protected override pb::FieldAccess.FieldAccessorTable<Escrow, Escrow.Builder> InternalFieldAccessors {
-      get { return global::D3.Hero.Hero.internal__static_D3_Hero_Escrow__FieldAccessorTable; }
-    }
-    
-    public const int VersionFieldNumber = 1;
-    private bool hasVersion;
-    private uint version_;
-    public bool HasVersion {
-      get { return hasVersion; }
-    }
-    public uint Version {
-      get { return version_; }
-    }
-    
-    public const int GeneratorFieldNumber = 2;
-    private bool hasGenerator;
-    private global::D3.Items.Generator generator_;
-    public bool HasGenerator {
-      get { return hasGenerator; }
-    }
-    public global::D3.Items.Generator Generator {
-      get { return generator_ ?? global::D3.Items.Generator.DefaultInstance; }
-    }
-    
-    public const int HeroDataFieldNumber = 3;
-    private bool hasHeroData;
-    private global::D3.Hero.SavedData heroData_;
-    public bool HasHeroData {
-      get { return hasHeroData; }
-    }
-    public global::D3.Hero.SavedData HeroData {
-      get { return heroData_ ?? global::D3.Hero.SavedData.DefaultInstance; }
-    }
-    
-    public const int StateFieldNumber = 4;
-    private bool hasState;
-    private uint state_;
-    public bool HasState {
-      get { return hasState; }
-    }
-    public uint State {
-      get { return state_; }
-    }
-    
-    public const int ServicedTokensFieldNumber = 5;
-    private pbc::PopsicleList<global::D3.OnlineService.ItemId> servicedTokens_ = new pbc::PopsicleList<global::D3.OnlineService.ItemId>();
-    public scg::IList<global::D3.OnlineService.ItemId> ServicedTokensList {
-      get { return servicedTokens_; }
-    }
-    public int ServicedTokensCount {
-      get { return servicedTokens_.Count; }
-    }
-    public global::D3.OnlineService.ItemId GetServicedTokens(int index) {
-      return servicedTokens_[index];
-    }
-    
-    public override bool IsInitialized {
-      get {
-        if (!hasVersion) return false;
-        if (HasGenerator) {
-          if (!Generator.IsInitialized) return false;
-        }
-        if (HasHeroData) {
-          if (!HeroData.IsInitialized) return false;
-        }
-        foreach (global::D3.OnlineService.ItemId element in ServicedTokensList) {
-          if (!element.IsInitialized) return false;
-        }
-        return true;
-      }
-    }
-    
-    public override void WriteTo(pb::ICodedOutputStream output) {
-      int size = SerializedSize;
-      string[] field_names = _escrowFieldNames;
-      if (hasVersion) {
-        output.WriteUInt32(1, field_names[4], Version);
-      }
-      if (hasGenerator) {
-        output.WriteMessage(2, field_names[0], Generator);
-      }
-      if (hasHeroData) {
-        output.WriteMessage(3, field_names[1], HeroData);
-      }
-      if (hasState) {
-        output.WriteUInt32(4, field_names[3], State);
-      }
-      if (servicedTokens_.Count > 0) {
-        output.WriteMessageArray(5, field_names[2], servicedTokens_);
-      }
-      UnknownFields.WriteTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public override int SerializedSize {
-      get {
-        int size = memoizedSerializedSize;
-        if (size != -1) return size;
-        
-        size = 0;
-        if (hasVersion) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(1, Version);
-        }
-        if (hasGenerator) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Generator);
-        }
-        if (hasHeroData) {
-          size += pb::CodedOutputStream.ComputeMessageSize(3, HeroData);
-        }
-        if (hasState) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(4, State);
-        }
-        foreach (global::D3.OnlineService.ItemId element in ServicedTokensList) {
-          size += pb::CodedOutputStream.ComputeMessageSize(5, element);
-        }
-        size += UnknownFields.SerializedSize;
-        memoizedSerializedSize = size;
-        return size;
-      }
-    }
-    
-    public static Escrow ParseFrom(pb::ByteString data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static Escrow ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static Escrow ParseFrom(byte[] data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static Escrow ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static Escrow ParseFrom(global::System.IO.Stream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static Escrow ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    public static Escrow ParseDelimitedFrom(global::System.IO.Stream input) {
-      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
-    }
-    public static Escrow ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
-    }
-    public static Escrow ParseFrom(pb::ICodedInputStream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static Escrow ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    private Escrow MakeReadOnly() {
-      servicedTokens_.MakeReadOnly();
-      return this;
-    }
-    
-    public static Builder CreateBuilder() { return new Builder(); }
-    public override Builder ToBuilder() { return CreateBuilder(this); }
-    public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(Escrow prototype) {
-      return new Builder(prototype);
-    }
-    
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<Escrow, Builder> {
-      protected override Builder ThisBuilder {
-        get { return this; }
-      }
-      public Builder() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-      }
-      internal Builder(Escrow cloneFrom) {
-        result = cloneFrom;
-        resultIsReadOnly = true;
-      }
-      
-      private bool resultIsReadOnly;
-      private Escrow result;
-      
-      private Escrow PrepareBuilder() {
-        if (resultIsReadOnly) {
-          Escrow original = result;
-          result = new Escrow();
-          resultIsReadOnly = false;
-          MergeFrom(original);
-        }
-        return result;
-      }
-      
-      public override bool IsInitialized {
-        get { return result.IsInitialized; }
-      }
-      
-      protected override Escrow MessageBeingBuilt {
-        get { return PrepareBuilder(); }
-      }
-      
-      public override Builder Clear() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-        return this;
-      }
-      
-      public override Builder Clone() {
-        if (resultIsReadOnly) {
-          return new Builder(result);
-        } else {
-          return new Builder().MergeFrom(result);
-        }
-      }
-      
-      public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::D3.Hero.Escrow.Descriptor; }
-      }
-      
-      public override Escrow DefaultInstanceForType {
-        get { return global::D3.Hero.Escrow.DefaultInstance; }
-      }
-      
-      public override Escrow BuildPartial() {
-        if (resultIsReadOnly) {
-          return result;
-        }
-        resultIsReadOnly = true;
-        return result.MakeReadOnly();
-      }
-      
-      public override Builder MergeFrom(pb::IMessage other) {
-        if (other is Escrow) {
-          return MergeFrom((Escrow) other);
-        } else {
-          base.MergeFrom(other);
-          return this;
-        }
-      }
-      
-      public override Builder MergeFrom(Escrow other) {
-        if (other == global::D3.Hero.Escrow.DefaultInstance) return this;
-        PrepareBuilder();
-        if (other.HasVersion) {
-          Version = other.Version;
-        }
-        if (other.HasGenerator) {
-          MergeGenerator(other.Generator);
-        }
-        if (other.HasHeroData) {
-          MergeHeroData(other.HeroData);
-        }
-        if (other.HasState) {
-          State = other.State;
-        }
-        if (other.servicedTokens_.Count != 0) {
-          result.servicedTokens_.Add(other.servicedTokens_);
-        }
-        this.MergeUnknownFields(other.UnknownFields);
-        return this;
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input) {
-        return MergeFrom(input, pb::ExtensionRegistry.Empty);
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-        PrepareBuilder();
-        pb::UnknownFieldSet.Builder unknownFields = null;
-        uint tag;
-        string field_name;
-        while (input.ReadTag(out tag, out field_name)) {
-          if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_escrowFieldNames, field_name, global::System.StringComparer.Ordinal);
-            if(field_ordinal >= 0)
-              tag = _escrowFieldTags[field_ordinal];
-            else {
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              continue;
-            }
-          }
-          switch (tag) {
-            case 0: {
-              throw pb::InvalidProtocolBufferException.InvalidTag();
-            }
-            default: {
-              if (pb::WireFormat.IsEndGroupTag(tag)) {
-                if (unknownFields != null) {
-                  this.UnknownFields = unknownFields.Build();
-                }
-                return this;
-              }
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              break;
-            }
-            case 8: {
-              result.hasVersion = input.ReadUInt32(ref result.version_);
-              break;
-            }
-            case 18: {
-              global::D3.Items.Generator.Builder subBuilder = global::D3.Items.Generator.CreateBuilder();
-              if (result.hasGenerator) {
-                subBuilder.MergeFrom(Generator);
-              }
-              input.ReadMessage(subBuilder, extensionRegistry);
-              Generator = subBuilder.BuildPartial();
-              break;
-            }
-            case 26: {
-              global::D3.Hero.SavedData.Builder subBuilder = global::D3.Hero.SavedData.CreateBuilder();
-              if (result.hasHeroData) {
-                subBuilder.MergeFrom(HeroData);
-              }
-              input.ReadMessage(subBuilder, extensionRegistry);
-              HeroData = subBuilder.BuildPartial();
-              break;
-            }
-            case 32: {
-              result.hasState = input.ReadUInt32(ref result.state_);
-              break;
-            }
-            case 42: {
-              input.ReadMessageArray(tag, field_name, result.servicedTokens_, global::D3.OnlineService.ItemId.DefaultInstance, extensionRegistry);
-              break;
-            }
-          }
-        }
-        
-        if (unknownFields != null) {
-          this.UnknownFields = unknownFields.Build();
-        }
-        return this;
-      }
-      
-      
-      public bool HasVersion {
-        get { return result.hasVersion; }
-      }
-      public uint Version {
-        get { return result.Version; }
-        set { SetVersion(value); }
-      }
-      public Builder SetVersion(uint value) {
-        PrepareBuilder();
-        result.hasVersion = true;
-        result.version_ = value;
-        return this;
-      }
-      public Builder ClearVersion() {
-        PrepareBuilder();
-        result.hasVersion = false;
-        result.version_ = 0;
-        return this;
-      }
-      
-      public bool HasGenerator {
-       get { return result.hasGenerator; }
-      }
-      public global::D3.Items.Generator Generator {
-        get { return result.Generator; }
-        set { SetGenerator(value); }
-      }
-      public Builder SetGenerator(global::D3.Items.Generator value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hasGenerator = true;
-        result.generator_ = value;
-        return this;
-      }
-      public Builder SetGenerator(global::D3.Items.Generator.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hasGenerator = true;
-        result.generator_ = builderForValue.Build();
-        return this;
-      }
-      public Builder MergeGenerator(global::D3.Items.Generator value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        if (result.hasGenerator &&
-            result.generator_ != global::D3.Items.Generator.DefaultInstance) {
-            result.generator_ = global::D3.Items.Generator.CreateBuilder(result.generator_).MergeFrom(value).BuildPartial();
-        } else {
-          result.generator_ = value;
-        }
-        result.hasGenerator = true;
-        return this;
-      }
-      public Builder ClearGenerator() {
-        PrepareBuilder();
-        result.hasGenerator = false;
-        result.generator_ = null;
-        return this;
-      }
-      
-      public bool HasHeroData {
-       get { return result.hasHeroData; }
-      }
-      public global::D3.Hero.SavedData HeroData {
-        get { return result.HeroData; }
-        set { SetHeroData(value); }
-      }
-      public Builder SetHeroData(global::D3.Hero.SavedData value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hasHeroData = true;
-        result.heroData_ = value;
-        return this;
-      }
-      public Builder SetHeroData(global::D3.Hero.SavedData.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hasHeroData = true;
-        result.heroData_ = builderForValue.Build();
-        return this;
-      }
-      public Builder MergeHeroData(global::D3.Hero.SavedData value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        if (result.hasHeroData &&
-            result.heroData_ != global::D3.Hero.SavedData.DefaultInstance) {
-            result.heroData_ = global::D3.Hero.SavedData.CreateBuilder(result.heroData_).MergeFrom(value).BuildPartial();
-        } else {
-          result.heroData_ = value;
-        }
-        result.hasHeroData = true;
-        return this;
-      }
-      public Builder ClearHeroData() {
-        PrepareBuilder();
-        result.hasHeroData = false;
-        result.heroData_ = null;
-        return this;
-      }
-      
-      public bool HasState {
-        get { return result.hasState; }
-      }
-      public uint State {
-        get { return result.State; }
-        set { SetState(value); }
-      }
-      public Builder SetState(uint value) {
-        PrepareBuilder();
-        result.hasState = true;
-        result.state_ = value;
-        return this;
-      }
-      public Builder ClearState() {
-        PrepareBuilder();
-        result.hasState = false;
-        result.state_ = 0;
-        return this;
-      }
-      
-      public pbc::IPopsicleList<global::D3.OnlineService.ItemId> ServicedTokensList {
-        get { return PrepareBuilder().servicedTokens_; }
-      }
-      public int ServicedTokensCount {
-        get { return result.ServicedTokensCount; }
-      }
-      public global::D3.OnlineService.ItemId GetServicedTokens(int index) {
-        return result.GetServicedTokens(index);
-      }
-      public Builder SetServicedTokens(int index, global::D3.OnlineService.ItemId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.servicedTokens_[index] = value;
-        return this;
-      }
-      public Builder SetServicedTokens(int index, global::D3.OnlineService.ItemId.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.servicedTokens_[index] = builderForValue.Build();
-        return this;
-      }
-      public Builder AddServicedTokens(global::D3.OnlineService.ItemId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.servicedTokens_.Add(value);
-        return this;
-      }
-      public Builder AddServicedTokens(global::D3.OnlineService.ItemId.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.servicedTokens_.Add(builderForValue.Build());
-        return this;
-      }
-      public Builder AddRangeServicedTokens(scg::IEnumerable<global::D3.OnlineService.ItemId> values) {
-        PrepareBuilder();
-        result.servicedTokens_.Add(values);
-        return this;
-      }
-      public Builder ClearServicedTokens() {
-        PrepareBuilder();
-        result.servicedTokens_.Clear();
-        return this;
-      }
-    }
-    static Escrow() {
-      object.ReferenceEquals(global::D3.Hero.Hero.Descriptor, null);
-    }
-  }
-  
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
   public sealed partial class HeroList : pb::GeneratedMessage<HeroList, HeroList.Builder> {
     private HeroList() { }
     private static readonly HeroList defaultInstance = new HeroList().MakeReadOnly();
@@ -8675,7 +7986,7 @@ namespace D3.Hero {
     
     public const int QuestHistoryFieldNumber = 1;
     private pbc::PopsicleList<global::D3.Hero.QuestHistoryEntry> questHistory_ = new pbc::PopsicleList<global::D3.Hero.QuestHistoryEntry>();
-    public scg::IList<global::D3.Hero.QuestHistoryEntry> QuestHistoryListProp {
+    public scg::IList<global::D3.Hero.QuestHistoryEntry> QuestHistoryPropList {
       get { return questHistory_; }
     }
     public int QuestHistoryCount {
@@ -8687,7 +7998,7 @@ namespace D3.Hero {
     
     public override bool IsInitialized {
       get {
-        foreach (global::D3.Hero.QuestHistoryEntry element in QuestHistoryListProp) {
+        foreach (global::D3.Hero.QuestHistoryEntry element in QuestHistoryPropList) {
           if (!element.IsInitialized) return false;
         }
         return true;
@@ -8710,7 +8021,7 @@ namespace D3.Hero {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::D3.Hero.QuestHistoryEntry element in QuestHistoryListProp) {
+        foreach (global::D3.Hero.QuestHistoryEntry element in QuestHistoryPropList) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
         }
         size += UnknownFields.SerializedSize;
@@ -9249,6 +8560,310 @@ namespace D3.Hero {
       }
     }
     static SavedQuestList() {
+      object.ReferenceEquals(global::D3.Hero.Hero.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class QuestRewardHistoryList : pb::GeneratedMessage<QuestRewardHistoryList, QuestRewardHistoryList.Builder> {
+    private QuestRewardHistoryList() { }
+    private static readonly QuestRewardHistoryList defaultInstance = new QuestRewardHistoryList().MakeReadOnly();
+    private static readonly string[] _questRewardHistoryListFieldNames = new string[] { "quest_reward_history" };
+    private static readonly uint[] _questRewardHistoryListFieldTags = new uint[] { 10 };
+    public static QuestRewardHistoryList DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override QuestRewardHistoryList DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override QuestRewardHistoryList ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::D3.Hero.Hero.internal__static_D3_Hero_QuestRewardHistoryList__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<QuestRewardHistoryList, QuestRewardHistoryList.Builder> InternalFieldAccessors {
+      get { return global::D3.Hero.Hero.internal__static_D3_Hero_QuestRewardHistoryList__FieldAccessorTable; }
+    }
+    
+    public const int QuestRewardHistoryFieldNumber = 1;
+    private pbc::PopsicleList<global::D3.Hero.QuestRewardHistoryEntry> questRewardHistory_ = new pbc::PopsicleList<global::D3.Hero.QuestRewardHistoryEntry>();
+    public scg::IList<global::D3.Hero.QuestRewardHistoryEntry> QuestRewardHistoryPropList {
+      get { return questRewardHistory_; }
+    }
+    public int QuestRewardHistoryCount {
+      get { return questRewardHistory_.Count; }
+    }
+    public global::D3.Hero.QuestRewardHistoryEntry GetQuestRewardHistory(int index) {
+      return questRewardHistory_[index];
+    }
+    
+    public override bool IsInitialized {
+      get {
+        foreach (global::D3.Hero.QuestRewardHistoryEntry element in QuestRewardHistoryPropList) {
+          if (!element.IsInitialized) return false;
+        }
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _questRewardHistoryListFieldNames;
+      if (questRewardHistory_.Count > 0) {
+        output.WriteMessageArray(1, field_names[0], questRewardHistory_);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        foreach (global::D3.Hero.QuestRewardHistoryEntry element in QuestRewardHistoryPropList) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, element);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static QuestRewardHistoryList ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static QuestRewardHistoryList ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static QuestRewardHistoryList ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static QuestRewardHistoryList ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static QuestRewardHistoryList ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static QuestRewardHistoryList ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static QuestRewardHistoryList ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static QuestRewardHistoryList ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static QuestRewardHistoryList ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static QuestRewardHistoryList ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private QuestRewardHistoryList MakeReadOnly() {
+      questRewardHistory_.MakeReadOnly();
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(QuestRewardHistoryList prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<QuestRewardHistoryList, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(QuestRewardHistoryList cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private QuestRewardHistoryList result;
+      
+      private QuestRewardHistoryList PrepareBuilder() {
+        if (resultIsReadOnly) {
+          QuestRewardHistoryList original = result;
+          result = new QuestRewardHistoryList();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override QuestRewardHistoryList MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::D3.Hero.QuestRewardHistoryList.Descriptor; }
+      }
+      
+      public override QuestRewardHistoryList DefaultInstanceForType {
+        get { return global::D3.Hero.QuestRewardHistoryList.DefaultInstance; }
+      }
+      
+      public override QuestRewardHistoryList BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is QuestRewardHistoryList) {
+          return MergeFrom((QuestRewardHistoryList) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(QuestRewardHistoryList other) {
+        if (other == global::D3.Hero.QuestRewardHistoryList.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.questRewardHistory_.Count != 0) {
+          result.questRewardHistory_.Add(other.questRewardHistory_);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_questRewardHistoryListFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _questRewardHistoryListFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              input.ReadMessageArray(tag, field_name, result.questRewardHistory_, global::D3.Hero.QuestRewardHistoryEntry.DefaultInstance, extensionRegistry);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public pbc::IPopsicleList<global::D3.Hero.QuestRewardHistoryEntry> QuestRewardHistoryList {
+        get { return PrepareBuilder().questRewardHistory_; }
+      }
+      public int QuestRewardHistoryCount {
+        get { return result.QuestRewardHistoryCount; }
+      }
+      public global::D3.Hero.QuestRewardHistoryEntry GetQuestRewardHistory(int index) {
+        return result.GetQuestRewardHistory(index);
+      }
+      public Builder SetQuestRewardHistory(int index, global::D3.Hero.QuestRewardHistoryEntry value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.questRewardHistory_[index] = value;
+        return this;
+      }
+      public Builder SetQuestRewardHistory(int index, global::D3.Hero.QuestRewardHistoryEntry.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.questRewardHistory_[index] = builderForValue.Build();
+        return this;
+      }
+      public Builder AddQuestRewardHistory(global::D3.Hero.QuestRewardHistoryEntry value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.questRewardHistory_.Add(value);
+        return this;
+      }
+      public Builder AddQuestRewardHistory(global::D3.Hero.QuestRewardHistoryEntry.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.questRewardHistory_.Add(builderForValue.Build());
+        return this;
+      }
+      public Builder AddRangeQuestRewardHistory(scg::IEnumerable<global::D3.Hero.QuestRewardHistoryEntry> values) {
+        PrepareBuilder();
+        result.questRewardHistory_.Add(values);
+        return this;
+      }
+      public Builder ClearQuestRewardHistory() {
+        PrepareBuilder();
+        result.questRewardHistory_.Clear();
+        return this;
+      }
+    }
+    static QuestRewardHistoryList() {
       object.ReferenceEquals(global::D3.Hero.Hero.Descriptor, null);
     }
   }

@@ -33,22 +33,34 @@ namespace Mooege.Net.MooNet
 
         public static void Route(ConnectionDataEventArgs e)
         {
-            var stream = CodedInputStream.CreateInstance(e.Data.ToArray());
-            while (!stream.IsAtEnd)
+            var client = (MooNetClient)e.Connection.Client;
+            client.IncomingMooNetStream.Append(e.Data.ToArray());
+
+            try
             {
-                Identify(e.Connection, stream);
+                while (client.IncomingMooNetStream.PacketAvaliable())
+                {
+                    Identify(client);
+                }
             }
+            catch (Exception except)
+            {
+                Logger.Error("exception caugth on decoding loop");
+                Logger.Error(except.Message);
+                Logger.Error(except.StackTrace);
+            }
+
+            client.IncomingMooNetStream.Consume();
         }
 
-        public static void Identify(IConnection connection, CodedInputStream stream)
+        public static void Identify(MooNetClient client)
         {
-            var client = (MooNetClient) connection.Client;
-            var packet = new PacketIn(client, stream);
+            var packet = new PacketIn(client, client.IncomingMooNetStream.GetPacketHeader());
 
             if (packet.Header.ServiceId == ServiceReply)
                 ProcessReply(client, packet);
             else
-                ProcessMessage(client, stream, packet);           
+                ProcessMessage(client, packet);
         }
 
         private static void ProcessReply(MooNetClient client, PacketIn packet)
@@ -68,7 +80,7 @@ namespace Mooege.Net.MooNet
             }
         }
 
-        private static void ProcessMessage(MooNetClient client, CodedInputStream stream, PacketIn packet)
+        private static void ProcessMessage(MooNetClient client, PacketIn packet)
         {
             var service = Service.GetByID(packet.Header.ServiceId);
 
@@ -81,7 +93,8 @@ namespace Mooege.Net.MooNet
             var method = service.DescriptorForType.Methods.Single(m => GetMethodId(m) == packet.Header.MethodId);
             var proto = service.GetRequestPrototype(method);
             var builder = proto.WeakCreateBuilderForType();
-            var message = builder.WeakMergeFrom(CodedInputStream.CreateInstance(packet.GetPayload(stream))).WeakBuild(); //var message = packet.ReadMessage(proto.WeakToBuilder()); // this method doesn't seem to work with 7728. /raist.
+            var message = packet.ReadMessage(builder);
+            
             Logger.LogIncoming(message, packet.Header);
 
             try
@@ -90,7 +103,8 @@ namespace Mooege.Net.MooNet
                 {
                     ((IServerService)service).Client = client;
                     ((IServerService)service).LastCallHeader = packet.Header;
-                    service.CallMethod(method, null, message, (msg => SendRPCResponse(client.Connection, packet.Header.Token, msg)));
+                    ((IServerService)service).Status = 0;
+                    service.CallMethod(method, null, message, (msg => SendRPCResponse(client.Connection, packet.Header.Token, msg, ((IServerService)service).Status)));
                 }
             }
             catch (NotImplementedException)
@@ -112,9 +126,9 @@ namespace Mooege.Net.MooNet
             return (uint)method.Options[bnet.protocol.Rpc.MethodId.Descriptor];
         }
 
-        private static void SendRPCResponse(IConnection connection, uint token, IMessage message)
+        private static void SendRPCResponse(IConnection connection, uint token, IMessage message, uint status)
         {
-            var packet = new PacketOut(ServiceReply, 0x0, token, message);
+            var packet = new PacketOut(ServiceReply, 0x0, token, message, status);
             connection.Send(packet);
         }
     }

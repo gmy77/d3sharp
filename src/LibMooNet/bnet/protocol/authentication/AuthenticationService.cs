@@ -20,14 +20,18 @@ namespace bnet.protocol.authentication {
     #region Static variables
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_ModuleLoadRequest__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ModuleLoadRequest, global::bnet.protocol.authentication.ModuleLoadRequest.Builder> internal__static_bnet_protocol_authentication_ModuleLoadRequest__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_ModuleLoadResponse__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ModuleLoadResponse, global::bnet.protocol.authentication.ModuleLoadResponse.Builder> internal__static_bnet_protocol_authentication_ModuleLoadResponse__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_ModuleNotification__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ModuleNotification, global::bnet.protocol.authentication.ModuleNotification.Builder> internal__static_bnet_protocol_authentication_ModuleNotification__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_ModuleMessageRequest__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ModuleMessageRequest, global::bnet.protocol.authentication.ModuleMessageRequest.Builder> internal__static_bnet_protocol_authentication_ModuleMessageRequest__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_LogonRequest__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonRequest, global::bnet.protocol.authentication.LogonRequest.Builder> internal__static_bnet_protocol_authentication_LogonRequest__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_LogonResponse__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonResponse, global::bnet.protocol.authentication.LogonResponse.Builder> internal__static_bnet_protocol_authentication_LogonResponse__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_LogonResult__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonResult, global::bnet.protocol.authentication.LogonResult.Builder> internal__static_bnet_protocol_authentication_LogonResult__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_AccountSettingsNotification__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.AccountSettingsNotification, global::bnet.protocol.authentication.AccountSettingsNotification.Builder> internal__static_bnet_protocol_authentication_AccountSettingsNotification__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_ServerStateChangeRequest__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ServerStateChangeRequest, global::bnet.protocol.authentication.ServerStateChangeRequest.Builder> internal__static_bnet_protocol_authentication_ServerStateChangeRequest__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -38,40 +42,55 @@ namespace bnet.protocol.authentication {
     static AuthenticationService() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           "CiFibmV0L2F1dGhlbnRpY2F0aW9uX3NlcnZpY2UucHJvdG8SHGJuZXQucHJv" + 
-          "dG9jb2wuYXV0aGVudGljYXRpb24aDmJuZXQvcnBjLnByb3RvGhlibmV0L2Nv" + 
-          "bnRlbnRfaGFuZGxlLnByb3RvGhFibmV0L2VudGl0eS5wcm90byJZChFNb2R1" + 
-          "bGVMb2FkUmVxdWVzdBIzCg1tb2R1bGVfaGFuZGxlGAEgAigLMhwuYm5ldC5w" + 
-          "cm90b2NvbC5Db250ZW50SGFuZGxlEg8KB21lc3NhZ2UYAiABKAwiJwoSTW9k" + 
-          "dWxlTG9hZFJlc3BvbnNlEhEKCW1vZHVsZV9pZBgCIAEoBSI6ChRNb2R1bGVN" + 
-          "ZXNzYWdlUmVxdWVzdBIRCgltb2R1bGVfaWQYASACKAUSDwoHbWVzc2FnZRgC" + 
-          "IAEoDCKTAQoMTG9nb25SZXF1ZXN0Eg8KB3Byb2dyYW0YASABKAkSEAoIcGxh" + 
-          "dGZvcm0YAiABKAkSDgoGbG9jYWxlGAMgASgJEg0KBWVtYWlsGAQgASgJEhMK" + 
-          "C2xpc3RlbmVyX2lkGAUgASgEEg8KB3ZlcnNpb24YBiABKAkSGwoTYXBwbGlj" + 
-          "YXRpb25fdmVyc2lvbhgHIAEoBSJoCg1Mb2dvblJlc3BvbnNlEigKB2FjY291" + 
-          "bnQYASACKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEi0KDGdhbWVfYWNj" + 
-          "b3VudBgCIAMoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQy7wEKFEF1dGhl" + 
-          "bnRpY2F0aW9uQ2xpZW50EnUKCk1vZHVsZUxvYWQSLy5ibmV0LnByb3RvY29s" + 
-          "LmF1dGhlbnRpY2F0aW9uLk1vZHVsZUxvYWRSZXF1ZXN0GjAuYm5ldC5wcm90" + 
-          "b2NvbC5hdXRoZW50aWNhdGlvbi5Nb2R1bGVMb2FkUmVzcG9uc2UiBIC1GAES" + 
+          "dG9jb2wuYXV0aGVudGljYXRpb24aGGJuZXQvYWNjb3VudF90eXBlcy5wcm90" + 
+          "bxoOYm5ldC9ycGMucHJvdG8aGWJuZXQvY29udGVudF9oYW5kbGUucHJvdG8a" + 
+          "EWJuZXQvZW50aXR5LnByb3RvIlkKEU1vZHVsZUxvYWRSZXF1ZXN0EjMKDW1v" + 
+          "ZHVsZV9oYW5kbGUYASACKAsyHC5ibmV0LnByb3RvY29sLkNvbnRlbnRIYW5k" + 
+          "bGUSDwoHbWVzc2FnZRgCIAEoDCI3ChJNb2R1bGVOb3RpZmljYXRpb24SEQoJ" + 
+          "bW9kdWxlX2lkGAIgASgFEg4KBnJlc3VsdBgDIAEoDSI6ChRNb2R1bGVNZXNz" + 
+          "YWdlUmVxdWVzdBIRCgltb2R1bGVfaWQYASACKAUSDwoHbWVzc2FnZRgCIAEo" + 
+          "DCJ+CgxMb2dvblJlcXVlc3QSDwoHcHJvZ3JhbRgBIAEoCRIQCghwbGF0Zm9y" + 
+          "bRgCIAEoCRIOCgZsb2NhbGUYAyABKAkSDQoFZW1haWwYBCABKAkSDwoHdmVy" + 
+          "c2lvbhgFIAEoCRIbChNhcHBsaWNhdGlvbl92ZXJzaW9uGAYgASgFInoKC0xv" + 
+          "Z29uUmVzdWx0EhIKCmVycm9yX2NvZGUYASACKA0SKAoHYWNjb3VudBgCIAEo" + 
+          "CzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSLQoMZ2FtZV9hY2NvdW50GAMg" + 
+          "AygLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZCK8AQobQWNjb3VudFNldHRp" + 
+          "bmdzTm90aWZpY2F0aW9uEjcKCGxpY2Vuc2VzGAEgAygLMiUuYm5ldC5wcm90" + 
+          "b2NvbC5hY2NvdW50LkFjY291bnRMaWNlbnNlEhQKDGlzX3VzaW5nX3JpZBgC" + 
+          "IAEoCBIbChNpc19wbGF5aW5nX2Zyb21faWdyGAMgASgIEhkKEWNhbl9yZWNl" + 
+          "aXZlX3ZvaWNlGAQgASgIEhYKDmNhbl9zZW5kX3ZvaWNlGAUgASgIIj0KGFNl" + 
+          "cnZlclN0YXRlQ2hhbmdlUmVxdWVzdBINCgVzdGF0ZRgBIAIoDRISCgpldmVu" + 
+          "dF90aW1lGAIgAigEMpYEChRBdXRoZW50aWNhdGlvbkNsaWVudBJfCgpNb2R1" + 
+          "bGVMb2FkEi8uYm5ldC5wcm90b2NvbC5hdXRoZW50aWNhdGlvbi5Nb2R1bGVM" + 
+          "b2FkUmVxdWVzdBoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAES" + 
           "YAoNTW9kdWxlTWVzc2FnZRIyLmJuZXQucHJvdG9jb2wuYXV0aGVudGljYXRp" + 
           "b24uTW9kdWxlTWVzc2FnZVJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0" + 
-          "YSIEgLUYAjKrAgoUQXV0aGVudGljYXRpb25TZXJ2ZXISZgoFTG9nb24SKi5i" + 
-          "bmV0LnByb3RvY29sLmF1dGhlbnRpY2F0aW9uLkxvZ29uUmVxdWVzdBorLmJu" + 
-          "ZXQucHJvdG9jb2wuYXV0aGVudGljYXRpb24uTG9nb25SZXNwb25zZSIEgLUY" + 
-          "ARJgCg1Nb2R1bGVNZXNzYWdlEjIuYm5ldC5wcm90b2NvbC5hdXRoZW50aWNh" + 
-          "dGlvbi5Nb2R1bGVNZXNzYWdlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9E" + 
-          "YXRhIgSAtRgCEkkKEVNlbGVjdEdhbWVBY2NvdW50EhcuYm5ldC5wcm90b2Nv" + 
-          "bC5FbnRpdHlJZBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgDQgOAAQA=");
+          "YSIEgLUYAhJuCg9BY2NvdW50U2V0dGluZ3MSOS5ibmV0LnByb3RvY29sLmF1" + 
+          "dGhlbnRpY2F0aW9uLkFjY291bnRTZXR0aW5nc05vdGlmaWNhdGlvbhoaLmJu" + 
+          "ZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAMSbQoRU2VydmVyU3RhdGVD" + 
+          "aGFuZ2USNi5ibmV0LnByb3RvY29sLmF1dGhlbnRpY2F0aW9uLlNlcnZlclN0" + 
+          "YXRlQ2hhbmdlUmVxdWVzdBoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0Ui" + 
+          "BIC1GAQSXAoNTG9nb25Db21wbGV0ZRIpLmJuZXQucHJvdG9jb2wuYXV0aGVu" + 
+          "dGljYXRpb24uTG9nb25SZXN1bHQaGi5ibmV0LnByb3RvY29sLk5PX1JFU1BP" + 
+          "TlNFIgSAtRgFMvQCChRBdXRoZW50aWNhdGlvblNlcnZlchJQCgVMb2dvbhIq" + 
+          "LmJuZXQucHJvdG9jb2wuYXV0aGVudGljYXRpb24uTG9nb25SZXF1ZXN0GhUu" + 
+          "Ym5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GAESXQoMTW9kdWxlTm90aWZ5EjAu" + 
+          "Ym5ldC5wcm90b2NvbC5hdXRoZW50aWNhdGlvbi5Nb2R1bGVOb3RpZmljYXRp" + 
+          "b24aFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYAhJgCg1Nb2R1bGVNZXNz" + 
+          "YWdlEjIuYm5ldC5wcm90b2NvbC5hdXRoZW50aWNhdGlvbi5Nb2R1bGVNZXNz" + 
+          "YWdlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgDEkkKEVNl" + 
+          "bGVjdEdhbWVBY2NvdW50EhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBoVLmJu" + 
+          "ZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgEQgOAAQA=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_authentication_ModuleLoadRequest__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_authentication_ModuleLoadRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ModuleLoadRequest, global::bnet.protocol.authentication.ModuleLoadRequest.Builder>(internal__static_bnet_protocol_authentication_ModuleLoadRequest__Descriptor,
                 new string[] { "ModuleHandle", "Message", });
-        internal__static_bnet_protocol_authentication_ModuleLoadResponse__Descriptor = Descriptor.MessageTypes[1];
-        internal__static_bnet_protocol_authentication_ModuleLoadResponse__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ModuleLoadResponse, global::bnet.protocol.authentication.ModuleLoadResponse.Builder>(internal__static_bnet_protocol_authentication_ModuleLoadResponse__Descriptor,
-                new string[] { "ModuleId", });
+        internal__static_bnet_protocol_authentication_ModuleNotification__Descriptor = Descriptor.MessageTypes[1];
+        internal__static_bnet_protocol_authentication_ModuleNotification__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ModuleNotification, global::bnet.protocol.authentication.ModuleNotification.Builder>(internal__static_bnet_protocol_authentication_ModuleNotification__Descriptor,
+                new string[] { "ModuleId", "Result", });
         internal__static_bnet_protocol_authentication_ModuleMessageRequest__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_authentication_ModuleMessageRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ModuleMessageRequest, global::bnet.protocol.authentication.ModuleMessageRequest.Builder>(internal__static_bnet_protocol_authentication_ModuleMessageRequest__Descriptor,
@@ -79,13 +98,22 @@ namespace bnet.protocol.authentication {
         internal__static_bnet_protocol_authentication_LogonRequest__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_authentication_LogonRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonRequest, global::bnet.protocol.authentication.LogonRequest.Builder>(internal__static_bnet_protocol_authentication_LogonRequest__Descriptor,
-                new string[] { "Program", "Platform", "Locale", "Email", "ListenerId", "Version", "ApplicationVersion", });
-        internal__static_bnet_protocol_authentication_LogonResponse__Descriptor = Descriptor.MessageTypes[4];
-        internal__static_bnet_protocol_authentication_LogonResponse__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonResponse, global::bnet.protocol.authentication.LogonResponse.Builder>(internal__static_bnet_protocol_authentication_LogonResponse__Descriptor,
-                new string[] { "Account", "GameAccount", });
+                new string[] { "Program", "Platform", "Locale", "Email", "Version", "ApplicationVersion", });
+        internal__static_bnet_protocol_authentication_LogonResult__Descriptor = Descriptor.MessageTypes[4];
+        internal__static_bnet_protocol_authentication_LogonResult__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonResult, global::bnet.protocol.authentication.LogonResult.Builder>(internal__static_bnet_protocol_authentication_LogonResult__Descriptor,
+                new string[] { "ErrorCode", "Account", "GameAccount", });
+        internal__static_bnet_protocol_authentication_AccountSettingsNotification__Descriptor = Descriptor.MessageTypes[5];
+        internal__static_bnet_protocol_authentication_AccountSettingsNotification__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.AccountSettingsNotification, global::bnet.protocol.authentication.AccountSettingsNotification.Builder>(internal__static_bnet_protocol_authentication_AccountSettingsNotification__Descriptor,
+                new string[] { "Licenses", "IsUsingRid", "IsPlayingFromIgr", "CanReceiveVoice", "CanSendVoice", });
+        internal__static_bnet_protocol_authentication_ServerStateChangeRequest__Descriptor = Descriptor.MessageTypes[6];
+        internal__static_bnet_protocol_authentication_ServerStateChangeRequest__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ServerStateChangeRequest, global::bnet.protocol.authentication.ServerStateChangeRequest.Builder>(internal__static_bnet_protocol_authentication_ServerStateChangeRequest__Descriptor,
+                new string[] { "State", "EventTime", });
         pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
         RegisterAllExtensions(registry);
+        global::bnet.protocol.account.AccountTypes.RegisterAllExtensions(registry);
         global::bnet.protocol.Rpc.RegisterAllExtensions(registry);
         global::bnet.protocol.Proto.ContentHandle.RegisterAllExtensions(registry);
         global::bnet.protocol.Entity.RegisterAllExtensions(registry);
@@ -93,6 +121,7 @@ namespace bnet.protocol.authentication {
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
           new pbd::FileDescriptor[] {
+          global::bnet.protocol.account.AccountTypes.Descriptor, 
           global::bnet.protocol.Rpc.Descriptor, 
           global::bnet.protocol.Proto.ContentHandle.Descriptor, 
           global::bnet.protocol.Entity.Descriptor, 
@@ -450,29 +479,29 @@ namespace bnet.protocol.authentication {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class ModuleLoadResponse : pb::GeneratedMessage<ModuleLoadResponse, ModuleLoadResponse.Builder> {
-    private ModuleLoadResponse() { }
-    private static readonly ModuleLoadResponse defaultInstance = new ModuleLoadResponse().MakeReadOnly();
-    private static readonly string[] _moduleLoadResponseFieldNames = new string[] { "module_id" };
-    private static readonly uint[] _moduleLoadResponseFieldTags = new uint[] { 16 };
-    public static ModuleLoadResponse DefaultInstance {
+  public sealed partial class ModuleNotification : pb::GeneratedMessage<ModuleNotification, ModuleNotification.Builder> {
+    private ModuleNotification() { }
+    private static readonly ModuleNotification defaultInstance = new ModuleNotification().MakeReadOnly();
+    private static readonly string[] _moduleNotificationFieldNames = new string[] { "module_id", "result" };
+    private static readonly uint[] _moduleNotificationFieldTags = new uint[] { 16, 24 };
+    public static ModuleNotification DefaultInstance {
       get { return defaultInstance; }
     }
     
-    public override ModuleLoadResponse DefaultInstanceForType {
+    public override ModuleNotification DefaultInstanceForType {
       get { return DefaultInstance; }
     }
     
-    protected override ModuleLoadResponse ThisMessage {
+    protected override ModuleNotification ThisMessage {
       get { return this; }
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_ModuleLoadResponse__Descriptor; }
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_ModuleNotification__Descriptor; }
     }
     
-    protected override pb::FieldAccess.FieldAccessorTable<ModuleLoadResponse, ModuleLoadResponse.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_ModuleLoadResponse__FieldAccessorTable; }
+    protected override pb::FieldAccess.FieldAccessorTable<ModuleNotification, ModuleNotification.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_ModuleNotification__FieldAccessorTable; }
     }
     
     public const int ModuleIdFieldNumber = 2;
@@ -485,6 +514,16 @@ namespace bnet.protocol.authentication {
       get { return moduleId_; }
     }
     
+    public const int ResultFieldNumber = 3;
+    private bool hasResult;
+    private uint result_;
+    public bool HasResult {
+      get { return hasResult; }
+    }
+    public uint Result {
+      get { return result_; }
+    }
+    
     public override bool IsInitialized {
       get {
         return true;
@@ -493,9 +532,12 @@ namespace bnet.protocol.authentication {
     
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
-      string[] field_names = _moduleLoadResponseFieldNames;
+      string[] field_names = _moduleNotificationFieldNames;
       if (hasModuleId) {
         output.WriteInt32(2, field_names[0], ModuleId);
+      }
+      if (hasResult) {
+        output.WriteUInt32(3, field_names[1], Result);
       }
       UnknownFields.WriteTo(output);
     }
@@ -510,57 +552,60 @@ namespace bnet.protocol.authentication {
         if (hasModuleId) {
           size += pb::CodedOutputStream.ComputeInt32Size(2, ModuleId);
         }
+        if (hasResult) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(3, Result);
+        }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
         return size;
       }
     }
     
-    public static ModuleLoadResponse ParseFrom(pb::ByteString data) {
+    public static ModuleNotification ParseFrom(pb::ByteString data) {
       return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
     }
-    public static ModuleLoadResponse ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+    public static ModuleNotification ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
     }
-    public static ModuleLoadResponse ParseFrom(byte[] data) {
+    public static ModuleNotification ParseFrom(byte[] data) {
       return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
     }
-    public static ModuleLoadResponse ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+    public static ModuleNotification ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
     }
-    public static ModuleLoadResponse ParseFrom(global::System.IO.Stream input) {
+    public static ModuleNotification ParseFrom(global::System.IO.Stream input) {
       return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
     }
-    public static ModuleLoadResponse ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+    public static ModuleNotification ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
-    public static ModuleLoadResponse ParseDelimitedFrom(global::System.IO.Stream input) {
+    public static ModuleNotification ParseDelimitedFrom(global::System.IO.Stream input) {
       return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
     }
-    public static ModuleLoadResponse ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+    public static ModuleNotification ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
       return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
     }
-    public static ModuleLoadResponse ParseFrom(pb::ICodedInputStream input) {
+    public static ModuleNotification ParseFrom(pb::ICodedInputStream input) {
       return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
     }
-    public static ModuleLoadResponse ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+    public static ModuleNotification ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
-    private ModuleLoadResponse MakeReadOnly() {
+    private ModuleNotification MakeReadOnly() {
       return this;
     }
     
     public static Builder CreateBuilder() { return new Builder(); }
     public override Builder ToBuilder() { return CreateBuilder(this); }
     public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(ModuleLoadResponse prototype) {
+    public static Builder CreateBuilder(ModuleNotification prototype) {
       return new Builder(prototype);
     }
     
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<ModuleLoadResponse, Builder> {
+    public sealed partial class Builder : pb::GeneratedBuilder<ModuleNotification, Builder> {
       protected override Builder ThisBuilder {
         get { return this; }
       }
@@ -568,18 +613,18 @@ namespace bnet.protocol.authentication {
         result = DefaultInstance;
         resultIsReadOnly = true;
       }
-      internal Builder(ModuleLoadResponse cloneFrom) {
+      internal Builder(ModuleNotification cloneFrom) {
         result = cloneFrom;
         resultIsReadOnly = true;
       }
       
       private bool resultIsReadOnly;
-      private ModuleLoadResponse result;
+      private ModuleNotification result;
       
-      private ModuleLoadResponse PrepareBuilder() {
+      private ModuleNotification PrepareBuilder() {
         if (resultIsReadOnly) {
-          ModuleLoadResponse original = result;
-          result = new ModuleLoadResponse();
+          ModuleNotification original = result;
+          result = new ModuleNotification();
           resultIsReadOnly = false;
           MergeFrom(original);
         }
@@ -590,7 +635,7 @@ namespace bnet.protocol.authentication {
         get { return result.IsInitialized; }
       }
       
-      protected override ModuleLoadResponse MessageBeingBuilt {
+      protected override ModuleNotification MessageBeingBuilt {
         get { return PrepareBuilder(); }
       }
       
@@ -609,14 +654,14 @@ namespace bnet.protocol.authentication {
       }
       
       public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::bnet.protocol.authentication.ModuleLoadResponse.Descriptor; }
+        get { return global::bnet.protocol.authentication.ModuleNotification.Descriptor; }
       }
       
-      public override ModuleLoadResponse DefaultInstanceForType {
-        get { return global::bnet.protocol.authentication.ModuleLoadResponse.DefaultInstance; }
+      public override ModuleNotification DefaultInstanceForType {
+        get { return global::bnet.protocol.authentication.ModuleNotification.DefaultInstance; }
       }
       
-      public override ModuleLoadResponse BuildPartial() {
+      public override ModuleNotification BuildPartial() {
         if (resultIsReadOnly) {
           return result;
         }
@@ -625,19 +670,22 @@ namespace bnet.protocol.authentication {
       }
       
       public override Builder MergeFrom(pb::IMessage other) {
-        if (other is ModuleLoadResponse) {
-          return MergeFrom((ModuleLoadResponse) other);
+        if (other is ModuleNotification) {
+          return MergeFrom((ModuleNotification) other);
         } else {
           base.MergeFrom(other);
           return this;
         }
       }
       
-      public override Builder MergeFrom(ModuleLoadResponse other) {
-        if (other == global::bnet.protocol.authentication.ModuleLoadResponse.DefaultInstance) return this;
+      public override Builder MergeFrom(ModuleNotification other) {
+        if (other == global::bnet.protocol.authentication.ModuleNotification.DefaultInstance) return this;
         PrepareBuilder();
         if (other.HasModuleId) {
           ModuleId = other.ModuleId;
+        }
+        if (other.HasResult) {
+          Result = other.Result;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -654,9 +702,9 @@ namespace bnet.protocol.authentication {
         string field_name;
         while (input.ReadTag(out tag, out field_name)) {
           if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_moduleLoadResponseFieldNames, field_name, global::System.StringComparer.Ordinal);
+            int field_ordinal = global::System.Array.BinarySearch(_moduleNotificationFieldNames, field_name, global::System.StringComparer.Ordinal);
             if(field_ordinal >= 0)
-              tag = _moduleLoadResponseFieldTags[field_ordinal];
+              tag = _moduleNotificationFieldTags[field_ordinal];
             else {
               if (unknownFields == null) {
                 unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
@@ -684,6 +732,10 @@ namespace bnet.protocol.authentication {
             }
             case 16: {
               result.hasModuleId = input.ReadInt32(ref result.moduleId_);
+              break;
+            }
+            case 24: {
+              result.hasResult = input.ReadUInt32(ref result.result_);
               break;
             }
           }
@@ -715,8 +767,28 @@ namespace bnet.protocol.authentication {
         result.moduleId_ = 0;
         return this;
       }
+      
+      public bool HasResult {
+        get { return result.hasResult; }
+      }
+      public uint Result {
+        get { return result.Result; }
+        set { SetResult(value); }
+      }
+      public Builder SetResult(uint value) {
+        PrepareBuilder();
+        result.hasResult = true;
+        result.result_ = value;
+        return this;
+      }
+      public Builder ClearResult() {
+        PrepareBuilder();
+        result.hasResult = false;
+        result.result_ = 0;
+        return this;
+      }
     }
-    static ModuleLoadResponse() {
+    static ModuleNotification() {
       object.ReferenceEquals(global::bnet.protocol.authentication.AuthenticationService.Descriptor, null);
     }
   }
@@ -1046,8 +1118,8 @@ namespace bnet.protocol.authentication {
   public sealed partial class LogonRequest : pb::GeneratedMessage<LogonRequest, LogonRequest.Builder> {
     private LogonRequest() { }
     private static readonly LogonRequest defaultInstance = new LogonRequest().MakeReadOnly();
-    private static readonly string[] _logonRequestFieldNames = new string[] { "application_version", "email", "listener_id", "locale", "platform", "program", "version" };
-    private static readonly uint[] _logonRequestFieldTags = new uint[] { 56, 34, 40, 26, 18, 10, 50 };
+    private static readonly string[] _logonRequestFieldNames = new string[] { "application_version", "email", "locale", "platform", "program", "version" };
+    private static readonly uint[] _logonRequestFieldTags = new uint[] { 48, 34, 26, 18, 10, 42 };
     public static LogonRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1108,17 +1180,7 @@ namespace bnet.protocol.authentication {
       get { return email_; }
     }
     
-    public const int ListenerIdFieldNumber = 5;
-    private bool hasListenerId;
-    private ulong listenerId_;
-    public bool HasListenerId {
-      get { return hasListenerId; }
-    }
-    public ulong ListenerId {
-      get { return listenerId_; }
-    }
-    
-    public const int VersionFieldNumber = 6;
+    public const int VersionFieldNumber = 5;
     private bool hasVersion;
     private string version_ = "";
     public bool HasVersion {
@@ -1128,7 +1190,7 @@ namespace bnet.protocol.authentication {
       get { return version_; }
     }
     
-    public const int ApplicationVersionFieldNumber = 7;
+    public const int ApplicationVersionFieldNumber = 6;
     private bool hasApplicationVersion;
     private int applicationVersion_;
     public bool HasApplicationVersion {
@@ -1148,25 +1210,22 @@ namespace bnet.protocol.authentication {
       int size = SerializedSize;
       string[] field_names = _logonRequestFieldNames;
       if (hasProgram) {
-        output.WriteString(1, field_names[5], Program);
+        output.WriteString(1, field_names[4], Program);
       }
       if (hasPlatform) {
-        output.WriteString(2, field_names[4], Platform);
+        output.WriteString(2, field_names[3], Platform);
       }
       if (hasLocale) {
-        output.WriteString(3, field_names[3], Locale);
+        output.WriteString(3, field_names[2], Locale);
       }
       if (hasEmail) {
         output.WriteString(4, field_names[1], Email);
       }
-      if (hasListenerId) {
-        output.WriteUInt64(5, field_names[2], ListenerId);
-      }
       if (hasVersion) {
-        output.WriteString(6, field_names[6], Version);
+        output.WriteString(5, field_names[5], Version);
       }
       if (hasApplicationVersion) {
-        output.WriteInt32(7, field_names[0], ApplicationVersion);
+        output.WriteInt32(6, field_names[0], ApplicationVersion);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1190,14 +1249,11 @@ namespace bnet.protocol.authentication {
         if (hasEmail) {
           size += pb::CodedOutputStream.ComputeStringSize(4, Email);
         }
-        if (hasListenerId) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(5, ListenerId);
-        }
         if (hasVersion) {
-          size += pb::CodedOutputStream.ComputeStringSize(6, Version);
+          size += pb::CodedOutputStream.ComputeStringSize(5, Version);
         }
         if (hasApplicationVersion) {
-          size += pb::CodedOutputStream.ComputeInt32Size(7, ApplicationVersion);
+          size += pb::CodedOutputStream.ComputeInt32Size(6, ApplicationVersion);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1337,9 +1393,6 @@ namespace bnet.protocol.authentication {
         if (other.HasEmail) {
           Email = other.Email;
         }
-        if (other.HasListenerId) {
-          ListenerId = other.ListenerId;
-        }
         if (other.HasVersion) {
           Version = other.Version;
         }
@@ -1405,15 +1458,11 @@ namespace bnet.protocol.authentication {
               result.hasEmail = input.ReadString(ref result.email_);
               break;
             }
-            case 40: {
-              result.hasListenerId = input.ReadUInt64(ref result.listenerId_);
-              break;
-            }
-            case 50: {
+            case 42: {
               result.hasVersion = input.ReadString(ref result.version_);
               break;
             }
-            case 56: {
+            case 48: {
               result.hasApplicationVersion = input.ReadInt32(ref result.applicationVersion_);
               break;
             }
@@ -1511,26 +1560,6 @@ namespace bnet.protocol.authentication {
         return this;
       }
       
-      public bool HasListenerId {
-        get { return result.hasListenerId; }
-      }
-      public ulong ListenerId {
-        get { return result.ListenerId; }
-        set { SetListenerId(value); }
-      }
-      public Builder SetListenerId(ulong value) {
-        PrepareBuilder();
-        result.hasListenerId = true;
-        result.listenerId_ = value;
-        return this;
-      }
-      public Builder ClearListenerId() {
-        PrepareBuilder();
-        result.hasListenerId = false;
-        result.listenerId_ = 0UL;
-        return this;
-      }
-      
       public bool HasVersion {
         get { return result.hasVersion; }
       }
@@ -1580,32 +1609,42 @@ namespace bnet.protocol.authentication {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class LogonResponse : pb::GeneratedMessage<LogonResponse, LogonResponse.Builder> {
-    private LogonResponse() { }
-    private static readonly LogonResponse defaultInstance = new LogonResponse().MakeReadOnly();
-    private static readonly string[] _logonResponseFieldNames = new string[] { "account", "game_account" };
-    private static readonly uint[] _logonResponseFieldTags = new uint[] { 10, 18 };
-    public static LogonResponse DefaultInstance {
+  public sealed partial class LogonResult : pb::GeneratedMessage<LogonResult, LogonResult.Builder> {
+    private LogonResult() { }
+    private static readonly LogonResult defaultInstance = new LogonResult().MakeReadOnly();
+    private static readonly string[] _logonResultFieldNames = new string[] { "account", "error_code", "game_account" };
+    private static readonly uint[] _logonResultFieldTags = new uint[] { 18, 8, 26 };
+    public static LogonResult DefaultInstance {
       get { return defaultInstance; }
     }
     
-    public override LogonResponse DefaultInstanceForType {
+    public override LogonResult DefaultInstanceForType {
       get { return DefaultInstance; }
     }
     
-    protected override LogonResponse ThisMessage {
+    protected override LogonResult ThisMessage {
       get { return this; }
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_LogonResponse__Descriptor; }
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_LogonResult__Descriptor; }
     }
     
-    protected override pb::FieldAccess.FieldAccessorTable<LogonResponse, LogonResponse.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_LogonResponse__FieldAccessorTable; }
+    protected override pb::FieldAccess.FieldAccessorTable<LogonResult, LogonResult.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_LogonResult__FieldAccessorTable; }
     }
     
-    public const int AccountFieldNumber = 1;
+    public const int ErrorCodeFieldNumber = 1;
+    private bool hasErrorCode;
+    private uint errorCode_;
+    public bool HasErrorCode {
+      get { return hasErrorCode; }
+    }
+    public uint ErrorCode {
+      get { return errorCode_; }
+    }
+    
+    public const int AccountFieldNumber = 2;
     private bool hasAccount;
     private global::bnet.protocol.EntityId account_;
     public bool HasAccount {
@@ -1615,7 +1654,7 @@ namespace bnet.protocol.authentication {
       get { return account_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
-    public const int GameAccountFieldNumber = 2;
+    public const int GameAccountFieldNumber = 3;
     private pbc::PopsicleList<global::bnet.protocol.EntityId> gameAccount_ = new pbc::PopsicleList<global::bnet.protocol.EntityId>();
     public scg::IList<global::bnet.protocol.EntityId> GameAccountList {
       get { return gameAccount_; }
@@ -1629,8 +1668,10 @@ namespace bnet.protocol.authentication {
     
     public override bool IsInitialized {
       get {
-        if (!hasAccount) return false;
-        if (!Account.IsInitialized) return false;
+        if (!hasErrorCode) return false;
+        if (HasAccount) {
+          if (!Account.IsInitialized) return false;
+        }
         foreach (global::bnet.protocol.EntityId element in GameAccountList) {
           if (!element.IsInitialized) return false;
         }
@@ -1640,12 +1681,15 @@ namespace bnet.protocol.authentication {
     
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
-      string[] field_names = _logonResponseFieldNames;
+      string[] field_names = _logonResultFieldNames;
+      if (hasErrorCode) {
+        output.WriteUInt32(1, field_names[1], ErrorCode);
+      }
       if (hasAccount) {
-        output.WriteMessage(1, field_names[0], Account);
+        output.WriteMessage(2, field_names[0], Account);
       }
       if (gameAccount_.Count > 0) {
-        output.WriteMessageArray(2, field_names[1], gameAccount_);
+        output.WriteMessageArray(3, field_names[2], gameAccount_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1657,11 +1701,14 @@ namespace bnet.protocol.authentication {
         if (size != -1) return size;
         
         size = 0;
+        if (hasErrorCode) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, ErrorCode);
+        }
         if (hasAccount) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Account);
+          size += pb::CodedOutputStream.ComputeMessageSize(2, Account);
         }
         foreach (global::bnet.protocol.EntityId element in GameAccountList) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, element);
+          size += pb::CodedOutputStream.ComputeMessageSize(3, element);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1669,37 +1716,37 @@ namespace bnet.protocol.authentication {
       }
     }
     
-    public static LogonResponse ParseFrom(pb::ByteString data) {
+    public static LogonResult ParseFrom(pb::ByteString data) {
       return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
     }
-    public static LogonResponse ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+    public static LogonResult ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
     }
-    public static LogonResponse ParseFrom(byte[] data) {
+    public static LogonResult ParseFrom(byte[] data) {
       return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
     }
-    public static LogonResponse ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+    public static LogonResult ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
     }
-    public static LogonResponse ParseFrom(global::System.IO.Stream input) {
+    public static LogonResult ParseFrom(global::System.IO.Stream input) {
       return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
     }
-    public static LogonResponse ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+    public static LogonResult ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
-    public static LogonResponse ParseDelimitedFrom(global::System.IO.Stream input) {
+    public static LogonResult ParseDelimitedFrom(global::System.IO.Stream input) {
       return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
     }
-    public static LogonResponse ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+    public static LogonResult ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
       return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
     }
-    public static LogonResponse ParseFrom(pb::ICodedInputStream input) {
+    public static LogonResult ParseFrom(pb::ICodedInputStream input) {
       return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
     }
-    public static LogonResponse ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+    public static LogonResult ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
-    private LogonResponse MakeReadOnly() {
+    private LogonResult MakeReadOnly() {
       gameAccount_.MakeReadOnly();
       return this;
     }
@@ -1707,14 +1754,14 @@ namespace bnet.protocol.authentication {
     public static Builder CreateBuilder() { return new Builder(); }
     public override Builder ToBuilder() { return CreateBuilder(this); }
     public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(LogonResponse prototype) {
+    public static Builder CreateBuilder(LogonResult prototype) {
       return new Builder(prototype);
     }
     
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<LogonResponse, Builder> {
+    public sealed partial class Builder : pb::GeneratedBuilder<LogonResult, Builder> {
       protected override Builder ThisBuilder {
         get { return this; }
       }
@@ -1722,18 +1769,18 @@ namespace bnet.protocol.authentication {
         result = DefaultInstance;
         resultIsReadOnly = true;
       }
-      internal Builder(LogonResponse cloneFrom) {
+      internal Builder(LogonResult cloneFrom) {
         result = cloneFrom;
         resultIsReadOnly = true;
       }
       
       private bool resultIsReadOnly;
-      private LogonResponse result;
+      private LogonResult result;
       
-      private LogonResponse PrepareBuilder() {
+      private LogonResult PrepareBuilder() {
         if (resultIsReadOnly) {
-          LogonResponse original = result;
-          result = new LogonResponse();
+          LogonResult original = result;
+          result = new LogonResult();
           resultIsReadOnly = false;
           MergeFrom(original);
         }
@@ -1744,7 +1791,7 @@ namespace bnet.protocol.authentication {
         get { return result.IsInitialized; }
       }
       
-      protected override LogonResponse MessageBeingBuilt {
+      protected override LogonResult MessageBeingBuilt {
         get { return PrepareBuilder(); }
       }
       
@@ -1763,14 +1810,14 @@ namespace bnet.protocol.authentication {
       }
       
       public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::bnet.protocol.authentication.LogonResponse.Descriptor; }
+        get { return global::bnet.protocol.authentication.LogonResult.Descriptor; }
       }
       
-      public override LogonResponse DefaultInstanceForType {
-        get { return global::bnet.protocol.authentication.LogonResponse.DefaultInstance; }
+      public override LogonResult DefaultInstanceForType {
+        get { return global::bnet.protocol.authentication.LogonResult.DefaultInstance; }
       }
       
-      public override LogonResponse BuildPartial() {
+      public override LogonResult BuildPartial() {
         if (resultIsReadOnly) {
           return result;
         }
@@ -1779,17 +1826,20 @@ namespace bnet.protocol.authentication {
       }
       
       public override Builder MergeFrom(pb::IMessage other) {
-        if (other is LogonResponse) {
-          return MergeFrom((LogonResponse) other);
+        if (other is LogonResult) {
+          return MergeFrom((LogonResult) other);
         } else {
           base.MergeFrom(other);
           return this;
         }
       }
       
-      public override Builder MergeFrom(LogonResponse other) {
-        if (other == global::bnet.protocol.authentication.LogonResponse.DefaultInstance) return this;
+      public override Builder MergeFrom(LogonResult other) {
+        if (other == global::bnet.protocol.authentication.LogonResult.DefaultInstance) return this;
         PrepareBuilder();
+        if (other.HasErrorCode) {
+          ErrorCode = other.ErrorCode;
+        }
         if (other.HasAccount) {
           MergeAccount(other.Account);
         }
@@ -1811,9 +1861,9 @@ namespace bnet.protocol.authentication {
         string field_name;
         while (input.ReadTag(out tag, out field_name)) {
           if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_logonResponseFieldNames, field_name, global::System.StringComparer.Ordinal);
+            int field_ordinal = global::System.Array.BinarySearch(_logonResultFieldNames, field_name, global::System.StringComparer.Ordinal);
             if(field_ordinal >= 0)
-              tag = _logonResponseFieldTags[field_ordinal];
+              tag = _logonResultFieldTags[field_ordinal];
             else {
               if (unknownFields == null) {
                 unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
@@ -1839,7 +1889,11 @@ namespace bnet.protocol.authentication {
               ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
               break;
             }
-            case 10: {
+            case 8: {
+              result.hasErrorCode = input.ReadUInt32(ref result.errorCode_);
+              break;
+            }
+            case 18: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
               if (result.hasAccount) {
                 subBuilder.MergeFrom(Account);
@@ -1848,7 +1902,7 @@ namespace bnet.protocol.authentication {
               Account = subBuilder.BuildPartial();
               break;
             }
-            case 18: {
+            case 26: {
               input.ReadMessageArray(tag, field_name, result.gameAccount_, global::bnet.protocol.EntityId.DefaultInstance, extensionRegistry);
               break;
             }
@@ -1861,6 +1915,26 @@ namespace bnet.protocol.authentication {
         return this;
       }
       
+      
+      public bool HasErrorCode {
+        get { return result.hasErrorCode; }
+      }
+      public uint ErrorCode {
+        get { return result.ErrorCode; }
+        set { SetErrorCode(value); }
+      }
+      public Builder SetErrorCode(uint value) {
+        PrepareBuilder();
+        result.hasErrorCode = true;
+        result.errorCode_ = value;
+        return this;
+      }
+      public Builder ClearErrorCode() {
+        PrepareBuilder();
+        result.hasErrorCode = false;
+        result.errorCode_ = 0;
+        return this;
+      }
       
       public bool HasAccount {
        get { return result.hasAccount; }
@@ -1946,7 +2020,802 @@ namespace bnet.protocol.authentication {
         return this;
       }
     }
-    static LogonResponse() {
+    static LogonResult() {
+      object.ReferenceEquals(global::bnet.protocol.authentication.AuthenticationService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class AccountSettingsNotification : pb::GeneratedMessage<AccountSettingsNotification, AccountSettingsNotification.Builder> {
+    private AccountSettingsNotification() { }
+    private static readonly AccountSettingsNotification defaultInstance = new AccountSettingsNotification().MakeReadOnly();
+    private static readonly string[] _accountSettingsNotificationFieldNames = new string[] { "can_receive_voice", "can_send_voice", "is_playing_from_igr", "is_using_rid", "licenses" };
+    private static readonly uint[] _accountSettingsNotificationFieldTags = new uint[] { 32, 40, 24, 16, 10 };
+    public static AccountSettingsNotification DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override AccountSettingsNotification DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override AccountSettingsNotification ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_AccountSettingsNotification__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<AccountSettingsNotification, AccountSettingsNotification.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_AccountSettingsNotification__FieldAccessorTable; }
+    }
+    
+    public const int LicensesFieldNumber = 1;
+    private pbc::PopsicleList<global::bnet.protocol.account.AccountLicense> licenses_ = new pbc::PopsicleList<global::bnet.protocol.account.AccountLicense>();
+    public scg::IList<global::bnet.protocol.account.AccountLicense> LicensesList {
+      get { return licenses_; }
+    }
+    public int LicensesCount {
+      get { return licenses_.Count; }
+    }
+    public global::bnet.protocol.account.AccountLicense GetLicenses(int index) {
+      return licenses_[index];
+    }
+    
+    public const int IsUsingRidFieldNumber = 2;
+    private bool hasIsUsingRid;
+    private bool isUsingRid_;
+    public bool HasIsUsingRid {
+      get { return hasIsUsingRid; }
+    }
+    public bool IsUsingRid {
+      get { return isUsingRid_; }
+    }
+    
+    public const int IsPlayingFromIgrFieldNumber = 3;
+    private bool hasIsPlayingFromIgr;
+    private bool isPlayingFromIgr_;
+    public bool HasIsPlayingFromIgr {
+      get { return hasIsPlayingFromIgr; }
+    }
+    public bool IsPlayingFromIgr {
+      get { return isPlayingFromIgr_; }
+    }
+    
+    public const int CanReceiveVoiceFieldNumber = 4;
+    private bool hasCanReceiveVoice;
+    private bool canReceiveVoice_;
+    public bool HasCanReceiveVoice {
+      get { return hasCanReceiveVoice; }
+    }
+    public bool CanReceiveVoice {
+      get { return canReceiveVoice_; }
+    }
+    
+    public const int CanSendVoiceFieldNumber = 5;
+    private bool hasCanSendVoice;
+    private bool canSendVoice_;
+    public bool HasCanSendVoice {
+      get { return hasCanSendVoice; }
+    }
+    public bool CanSendVoice {
+      get { return canSendVoice_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        foreach (global::bnet.protocol.account.AccountLicense element in LicensesList) {
+          if (!element.IsInitialized) return false;
+        }
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _accountSettingsNotificationFieldNames;
+      if (licenses_.Count > 0) {
+        output.WriteMessageArray(1, field_names[4], licenses_);
+      }
+      if (hasIsUsingRid) {
+        output.WriteBool(2, field_names[3], IsUsingRid);
+      }
+      if (hasIsPlayingFromIgr) {
+        output.WriteBool(3, field_names[2], IsPlayingFromIgr);
+      }
+      if (hasCanReceiveVoice) {
+        output.WriteBool(4, field_names[0], CanReceiveVoice);
+      }
+      if (hasCanSendVoice) {
+        output.WriteBool(5, field_names[1], CanSendVoice);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        foreach (global::bnet.protocol.account.AccountLicense element in LicensesList) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, element);
+        }
+        if (hasIsUsingRid) {
+          size += pb::CodedOutputStream.ComputeBoolSize(2, IsUsingRid);
+        }
+        if (hasIsPlayingFromIgr) {
+          size += pb::CodedOutputStream.ComputeBoolSize(3, IsPlayingFromIgr);
+        }
+        if (hasCanReceiveVoice) {
+          size += pb::CodedOutputStream.ComputeBoolSize(4, CanReceiveVoice);
+        }
+        if (hasCanSendVoice) {
+          size += pb::CodedOutputStream.ComputeBoolSize(5, CanSendVoice);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static AccountSettingsNotification ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static AccountSettingsNotification ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private AccountSettingsNotification MakeReadOnly() {
+      licenses_.MakeReadOnly();
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(AccountSettingsNotification prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<AccountSettingsNotification, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(AccountSettingsNotification cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private AccountSettingsNotification result;
+      
+      private AccountSettingsNotification PrepareBuilder() {
+        if (resultIsReadOnly) {
+          AccountSettingsNotification original = result;
+          result = new AccountSettingsNotification();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override AccountSettingsNotification MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.authentication.AccountSettingsNotification.Descriptor; }
+      }
+      
+      public override AccountSettingsNotification DefaultInstanceForType {
+        get { return global::bnet.protocol.authentication.AccountSettingsNotification.DefaultInstance; }
+      }
+      
+      public override AccountSettingsNotification BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is AccountSettingsNotification) {
+          return MergeFrom((AccountSettingsNotification) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(AccountSettingsNotification other) {
+        if (other == global::bnet.protocol.authentication.AccountSettingsNotification.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.licenses_.Count != 0) {
+          result.licenses_.Add(other.licenses_);
+        }
+        if (other.HasIsUsingRid) {
+          IsUsingRid = other.IsUsingRid;
+        }
+        if (other.HasIsPlayingFromIgr) {
+          IsPlayingFromIgr = other.IsPlayingFromIgr;
+        }
+        if (other.HasCanReceiveVoice) {
+          CanReceiveVoice = other.CanReceiveVoice;
+        }
+        if (other.HasCanSendVoice) {
+          CanSendVoice = other.CanSendVoice;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_accountSettingsNotificationFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _accountSettingsNotificationFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              input.ReadMessageArray(tag, field_name, result.licenses_, global::bnet.protocol.account.AccountLicense.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 16: {
+              result.hasIsUsingRid = input.ReadBool(ref result.isUsingRid_);
+              break;
+            }
+            case 24: {
+              result.hasIsPlayingFromIgr = input.ReadBool(ref result.isPlayingFromIgr_);
+              break;
+            }
+            case 32: {
+              result.hasCanReceiveVoice = input.ReadBool(ref result.canReceiveVoice_);
+              break;
+            }
+            case 40: {
+              result.hasCanSendVoice = input.ReadBool(ref result.canSendVoice_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public pbc::IPopsicleList<global::bnet.protocol.account.AccountLicense> LicensesList {
+        get { return PrepareBuilder().licenses_; }
+      }
+      public int LicensesCount {
+        get { return result.LicensesCount; }
+      }
+      public global::bnet.protocol.account.AccountLicense GetLicenses(int index) {
+        return result.GetLicenses(index);
+      }
+      public Builder SetLicenses(int index, global::bnet.protocol.account.AccountLicense value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.licenses_[index] = value;
+        return this;
+      }
+      public Builder SetLicenses(int index, global::bnet.protocol.account.AccountLicense.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.licenses_[index] = builderForValue.Build();
+        return this;
+      }
+      public Builder AddLicenses(global::bnet.protocol.account.AccountLicense value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.licenses_.Add(value);
+        return this;
+      }
+      public Builder AddLicenses(global::bnet.protocol.account.AccountLicense.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.licenses_.Add(builderForValue.Build());
+        return this;
+      }
+      public Builder AddRangeLicenses(scg::IEnumerable<global::bnet.protocol.account.AccountLicense> values) {
+        PrepareBuilder();
+        result.licenses_.Add(values);
+        return this;
+      }
+      public Builder ClearLicenses() {
+        PrepareBuilder();
+        result.licenses_.Clear();
+        return this;
+      }
+      
+      public bool HasIsUsingRid {
+        get { return result.hasIsUsingRid; }
+      }
+      public bool IsUsingRid {
+        get { return result.IsUsingRid; }
+        set { SetIsUsingRid(value); }
+      }
+      public Builder SetIsUsingRid(bool value) {
+        PrepareBuilder();
+        result.hasIsUsingRid = true;
+        result.isUsingRid_ = value;
+        return this;
+      }
+      public Builder ClearIsUsingRid() {
+        PrepareBuilder();
+        result.hasIsUsingRid = false;
+        result.isUsingRid_ = false;
+        return this;
+      }
+      
+      public bool HasIsPlayingFromIgr {
+        get { return result.hasIsPlayingFromIgr; }
+      }
+      public bool IsPlayingFromIgr {
+        get { return result.IsPlayingFromIgr; }
+        set { SetIsPlayingFromIgr(value); }
+      }
+      public Builder SetIsPlayingFromIgr(bool value) {
+        PrepareBuilder();
+        result.hasIsPlayingFromIgr = true;
+        result.isPlayingFromIgr_ = value;
+        return this;
+      }
+      public Builder ClearIsPlayingFromIgr() {
+        PrepareBuilder();
+        result.hasIsPlayingFromIgr = false;
+        result.isPlayingFromIgr_ = false;
+        return this;
+      }
+      
+      public bool HasCanReceiveVoice {
+        get { return result.hasCanReceiveVoice; }
+      }
+      public bool CanReceiveVoice {
+        get { return result.CanReceiveVoice; }
+        set { SetCanReceiveVoice(value); }
+      }
+      public Builder SetCanReceiveVoice(bool value) {
+        PrepareBuilder();
+        result.hasCanReceiveVoice = true;
+        result.canReceiveVoice_ = value;
+        return this;
+      }
+      public Builder ClearCanReceiveVoice() {
+        PrepareBuilder();
+        result.hasCanReceiveVoice = false;
+        result.canReceiveVoice_ = false;
+        return this;
+      }
+      
+      public bool HasCanSendVoice {
+        get { return result.hasCanSendVoice; }
+      }
+      public bool CanSendVoice {
+        get { return result.CanSendVoice; }
+        set { SetCanSendVoice(value); }
+      }
+      public Builder SetCanSendVoice(bool value) {
+        PrepareBuilder();
+        result.hasCanSendVoice = true;
+        result.canSendVoice_ = value;
+        return this;
+      }
+      public Builder ClearCanSendVoice() {
+        PrepareBuilder();
+        result.hasCanSendVoice = false;
+        result.canSendVoice_ = false;
+        return this;
+      }
+    }
+    static AccountSettingsNotification() {
+      object.ReferenceEquals(global::bnet.protocol.authentication.AuthenticationService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class ServerStateChangeRequest : pb::GeneratedMessage<ServerStateChangeRequest, ServerStateChangeRequest.Builder> {
+    private ServerStateChangeRequest() { }
+    private static readonly ServerStateChangeRequest defaultInstance = new ServerStateChangeRequest().MakeReadOnly();
+    private static readonly string[] _serverStateChangeRequestFieldNames = new string[] { "event_time", "state" };
+    private static readonly uint[] _serverStateChangeRequestFieldTags = new uint[] { 16, 8 };
+    public static ServerStateChangeRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override ServerStateChangeRequest DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override ServerStateChangeRequest ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_ServerStateChangeRequest__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<ServerStateChangeRequest, ServerStateChangeRequest.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_ServerStateChangeRequest__FieldAccessorTable; }
+    }
+    
+    public const int StateFieldNumber = 1;
+    private bool hasState;
+    private uint state_;
+    public bool HasState {
+      get { return hasState; }
+    }
+    public uint State {
+      get { return state_; }
+    }
+    
+    public const int EventTimeFieldNumber = 2;
+    private bool hasEventTime;
+    private ulong eventTime_;
+    public bool HasEventTime {
+      get { return hasEventTime; }
+    }
+    public ulong EventTime {
+      get { return eventTime_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasState) return false;
+        if (!hasEventTime) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _serverStateChangeRequestFieldNames;
+      if (hasState) {
+        output.WriteUInt32(1, field_names[1], State);
+      }
+      if (hasEventTime) {
+        output.WriteUInt64(2, field_names[0], EventTime);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasState) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, State);
+        }
+        if (hasEventTime) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, EventTime);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static ServerStateChangeRequest ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static ServerStateChangeRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static ServerStateChangeRequest ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static ServerStateChangeRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static ServerStateChangeRequest ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static ServerStateChangeRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static ServerStateChangeRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static ServerStateChangeRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static ServerStateChangeRequest ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static ServerStateChangeRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private ServerStateChangeRequest MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(ServerStateChangeRequest prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<ServerStateChangeRequest, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(ServerStateChangeRequest cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private ServerStateChangeRequest result;
+      
+      private ServerStateChangeRequest PrepareBuilder() {
+        if (resultIsReadOnly) {
+          ServerStateChangeRequest original = result;
+          result = new ServerStateChangeRequest();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override ServerStateChangeRequest MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.authentication.ServerStateChangeRequest.Descriptor; }
+      }
+      
+      public override ServerStateChangeRequest DefaultInstanceForType {
+        get { return global::bnet.protocol.authentication.ServerStateChangeRequest.DefaultInstance; }
+      }
+      
+      public override ServerStateChangeRequest BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is ServerStateChangeRequest) {
+          return MergeFrom((ServerStateChangeRequest) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(ServerStateChangeRequest other) {
+        if (other == global::bnet.protocol.authentication.ServerStateChangeRequest.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasState) {
+          State = other.State;
+        }
+        if (other.HasEventTime) {
+          EventTime = other.EventTime;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_serverStateChangeRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _serverStateChangeRequestFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasState = input.ReadUInt32(ref result.state_);
+              break;
+            }
+            case 16: {
+              result.hasEventTime = input.ReadUInt64(ref result.eventTime_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasState {
+        get { return result.hasState; }
+      }
+      public uint State {
+        get { return result.State; }
+        set { SetState(value); }
+      }
+      public Builder SetState(uint value) {
+        PrepareBuilder();
+        result.hasState = true;
+        result.state_ = value;
+        return this;
+      }
+      public Builder ClearState() {
+        PrepareBuilder();
+        result.hasState = false;
+        result.state_ = 0;
+        return this;
+      }
+      
+      public bool HasEventTime {
+        get { return result.hasEventTime; }
+      }
+      public ulong EventTime {
+        get { return result.EventTime; }
+        set { SetEventTime(value); }
+      }
+      public Builder SetEventTime(ulong value) {
+        PrepareBuilder();
+        result.hasEventTime = true;
+        result.eventTime_ = value;
+        return this;
+      }
+      public Builder ClearEventTime() {
+        PrepareBuilder();
+        result.hasEventTime = false;
+        result.eventTime_ = 0UL;
+        return this;
+      }
+    }
+    static ServerStateChangeRequest() {
       object.ReferenceEquals(global::bnet.protocol.authentication.AuthenticationService.Descriptor, null);
     }
   }
@@ -1961,11 +2830,23 @@ namespace bnet.protocol.authentication {
     public abstract void ModuleLoad(
         pb::IRpcController controller,
         global::bnet.protocol.authentication.ModuleLoadRequest request,
-        global::System.Action<global::bnet.protocol.authentication.ModuleLoadResponse> done);
+        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
     public abstract void ModuleMessage(
         pb::IRpcController controller,
         global::bnet.protocol.authentication.ModuleMessageRequest request,
         global::System.Action<global::bnet.protocol.NoData> done);
+    public abstract void AccountSettings(
+        pb::IRpcController controller,
+        global::bnet.protocol.authentication.AccountSettingsNotification request,
+        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
+    public abstract void ServerStateChange(
+        pb::IRpcController controller,
+        global::bnet.protocol.authentication.ServerStateChangeRequest request,
+        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
+    public abstract void LogonComplete(
+        pb::IRpcController controller,
+        global::bnet.protocol.authentication.LogonResult request,
+        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
     
     public static pbd::ServiceDescriptor Descriptor {
       get { return AuthenticationService.Descriptor.Services[0]; }
@@ -1986,12 +2867,27 @@ namespace bnet.protocol.authentication {
       switch(method.Index) {
         case 0:
           this.ModuleLoad(controller, (global::bnet.protocol.authentication.ModuleLoadRequest) request,
-              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.authentication.ModuleLoadResponse>(
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
               done));
           return;
         case 1:
           this.ModuleMessage(controller, (global::bnet.protocol.authentication.ModuleMessageRequest) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
+              done));
+          return;
+        case 2:
+          this.AccountSettings(controller, (global::bnet.protocol.authentication.AccountSettingsNotification) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
+              done));
+          return;
+        case 3:
+          this.ServerStateChange(controller, (global::bnet.protocol.authentication.ServerStateChangeRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
+              done));
+          return;
+        case 4:
+          this.LogonComplete(controller, (global::bnet.protocol.authentication.LogonResult) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
               done));
           return;
         default:
@@ -2009,6 +2905,12 @@ namespace bnet.protocol.authentication {
           return global::bnet.protocol.authentication.ModuleLoadRequest.DefaultInstance;
         case 1:
           return global::bnet.protocol.authentication.ModuleMessageRequest.DefaultInstance;
+        case 2:
+          return global::bnet.protocol.authentication.AccountSettingsNotification.DefaultInstance;
+        case 3:
+          return global::bnet.protocol.authentication.ServerStateChangeRequest.DefaultInstance;
+        case 4:
+          return global::bnet.protocol.authentication.LogonResult.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2021,9 +2923,15 @@ namespace bnet.protocol.authentication {
       }
       switch(method.Index) {
         case 0:
-          return global::bnet.protocol.authentication.ModuleLoadResponse.DefaultInstance;
+          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         case 1:
           return global::bnet.protocol.NoData.DefaultInstance;
+        case 2:
+          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
+        case 3:
+          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
+        case 4:
+          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2050,10 +2958,10 @@ namespace bnet.protocol.authentication {
       public override void ModuleLoad(
           pb::IRpcController controller,
           global::bnet.protocol.authentication.ModuleLoadRequest request,
-          global::System.Action<global::bnet.protocol.authentication.ModuleLoadResponse> done) {
+          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
         channel.CallMethod(Descriptor.Methods[0],
-            controller, request, global::bnet.protocol.authentication.ModuleLoadResponse.DefaultInstance,
-            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.authentication.ModuleLoadResponse, global::bnet.protocol.authentication.ModuleLoadResponse.Builder>(done, global::bnet.protocol.authentication.ModuleLoadResponse.DefaultInstance));
+            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }
       
       public override void ModuleMessage(
@@ -2064,6 +2972,33 @@ namespace bnet.protocol.authentication {
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
+      
+      public override void AccountSettings(
+          pb::IRpcController controller,
+          global::bnet.protocol.authentication.AccountSettingsNotification request,
+          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
+        channel.CallMethod(Descriptor.Methods[2],
+            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
+      }
+      
+      public override void ServerStateChange(
+          pb::IRpcController controller,
+          global::bnet.protocol.authentication.ServerStateChangeRequest request,
+          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
+        channel.CallMethod(Descriptor.Methods[3],
+            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
+      }
+      
+      public override void LogonComplete(
+          pb::IRpcController controller,
+          global::bnet.protocol.authentication.LogonResult request,
+          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
+        channel.CallMethod(Descriptor.Methods[4],
+            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
+      }
     }
   }
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2073,7 +3008,11 @@ namespace bnet.protocol.authentication {
     public abstract void Logon(
         pb::IRpcController controller,
         global::bnet.protocol.authentication.LogonRequest request,
-        global::System.Action<global::bnet.protocol.authentication.LogonResponse> done);
+        global::System.Action<global::bnet.protocol.NoData> done);
+    public abstract void ModuleNotify(
+        pb::IRpcController controller,
+        global::bnet.protocol.authentication.ModuleNotification request,
+        global::System.Action<global::bnet.protocol.NoData> done);
     public abstract void ModuleMessage(
         pb::IRpcController controller,
         global::bnet.protocol.authentication.ModuleMessageRequest request,
@@ -2102,15 +3041,20 @@ namespace bnet.protocol.authentication {
       switch(method.Index) {
         case 0:
           this.Logon(controller, (global::bnet.protocol.authentication.LogonRequest) request,
-              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.authentication.LogonResponse>(
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
         case 1:
-          this.ModuleMessage(controller, (global::bnet.protocol.authentication.ModuleMessageRequest) request,
+          this.ModuleNotify(controller, (global::bnet.protocol.authentication.ModuleNotification) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
         case 2:
+          this.ModuleMessage(controller, (global::bnet.protocol.authentication.ModuleMessageRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
+              done));
+          return;
+        case 3:
           this.SelectGameAccount(controller, (global::bnet.protocol.EntityId) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
@@ -2129,8 +3073,10 @@ namespace bnet.protocol.authentication {
         case 0:
           return global::bnet.protocol.authentication.LogonRequest.DefaultInstance;
         case 1:
-          return global::bnet.protocol.authentication.ModuleMessageRequest.DefaultInstance;
+          return global::bnet.protocol.authentication.ModuleNotification.DefaultInstance;
         case 2:
+          return global::bnet.protocol.authentication.ModuleMessageRequest.DefaultInstance;
+        case 3:
           return global::bnet.protocol.EntityId.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -2144,10 +3090,12 @@ namespace bnet.protocol.authentication {
       }
       switch(method.Index) {
         case 0:
-          return global::bnet.protocol.authentication.LogonResponse.DefaultInstance;
+          return global::bnet.protocol.NoData.DefaultInstance;
         case 1:
           return global::bnet.protocol.NoData.DefaultInstance;
         case 2:
+          return global::bnet.protocol.NoData.DefaultInstance;
+        case 3:
           return global::bnet.protocol.NoData.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -2175,17 +3123,26 @@ namespace bnet.protocol.authentication {
       public override void Logon(
           pb::IRpcController controller,
           global::bnet.protocol.authentication.LogonRequest request,
-          global::System.Action<global::bnet.protocol.authentication.LogonResponse> done) {
+          global::System.Action<global::bnet.protocol.NoData> done) {
         channel.CallMethod(Descriptor.Methods[0],
-            controller, request, global::bnet.protocol.authentication.LogonResponse.DefaultInstance,
-            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.authentication.LogonResponse, global::bnet.protocol.authentication.LogonResponse.Builder>(done, global::bnet.protocol.authentication.LogonResponse.DefaultInstance));
+            controller, request, global::bnet.protocol.NoData.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
+      }
+      
+      public override void ModuleNotify(
+          pb::IRpcController controller,
+          global::bnet.protocol.authentication.ModuleNotification request,
+          global::System.Action<global::bnet.protocol.NoData> done) {
+        channel.CallMethod(Descriptor.Methods[1],
+            controller, request, global::bnet.protocol.NoData.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
       
       public override void ModuleMessage(
           pb::IRpcController controller,
           global::bnet.protocol.authentication.ModuleMessageRequest request,
           global::System.Action<global::bnet.protocol.NoData> done) {
-        channel.CallMethod(Descriptor.Methods[1],
+        channel.CallMethod(Descriptor.Methods[2],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
@@ -2194,7 +3151,7 @@ namespace bnet.protocol.authentication {
           pb::IRpcController controller,
           global::bnet.protocol.EntityId request,
           global::System.Action<global::bnet.protocol.NoData> done) {
-        channel.CallMethod(Descriptor.Methods[2],
+        channel.CallMethod(Descriptor.Methods[3],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }

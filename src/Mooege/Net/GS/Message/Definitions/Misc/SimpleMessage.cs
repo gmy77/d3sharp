@@ -21,24 +21,29 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Misc
 {
-    [Message(new[]{
+    // Mostly contains messages we don't know yet what they're used for.
+    // When you discover a message's use and implement it (in a new file), please remove the associated opcode below. /raist.
+
+    [Message(
+        new[] {
         Opcodes.SimpleMessage1, Opcodes.SimpleMessage2, Opcodes.SimpleMessage5, Opcodes.SimpleMessage6, Opcodes.SimpleMessage7, Opcodes.SimpleMessage8,
-        Opcodes.SimpleMessage10, Opcodes.SimpleMessage11, Opcodes.SimpleMessage14, Opcodes.SimpleMessage16,
-        Opcodes.SimpleMessage18, Opcodes.SimpleMessage20, Opcodes.SimpleMessage21, Opcodes.SimpleMessage22, Opcodes.SimpleMessage23, Opcodes.SimpleMessage24, 
-        Opcodes.SimpleMessage25, Opcodes.SimpleMessage26, Opcodes.SimpleMessage27, Opcodes.SimpleMessage28, Opcodes.SimpleMessage29, Opcodes.SimpleMessage30, Opcodes.SimpleMessage31,
-        Opcodes.SimpleMessage32, Opcodes.SimpleMessage34, Opcodes.SimpleMessage35, Opcodes.SimpleMessage36, Opcodes.SimpleMessage37, Opcodes.SimpleMessage38, 
-        Opcodes.SimpleMessage39, Opcodes.SimpleMessage40, Opcodes.SimpleMessage42,
-        Opcodes.SimpleMessage47, Opcodes.SimpleMessage48})]
+        Opcodes.SimpleMessage10, Opcodes.SimpleMessage11, Opcodes.SimpleMessage14, Opcodes.SimpleMessage16, Opcodes.SimpleMessage18, Opcodes.SimpleMessage20, 
+        Opcodes.SimpleMessage21, Opcodes.SimpleMessage22, Opcodes.SimpleMessage23, Opcodes.SimpleMessage24, Opcodes.SimpleMessage25, Opcodes.SimpleMessage26, 
+        Opcodes.SimpleMessage27, Opcodes.SimpleMessage28, Opcodes.SimpleMessage29, Opcodes.SimpleMessage30, Opcodes.SimpleMessage31, Opcodes.SimpleMessage32, 
+        Opcodes.SimpleMessage35, Opcodes.SimpleMessage36, Opcodes.SimpleMessage37, Opcodes.SimpleMessage38, Opcodes.SimpleMessage39, 
+        Opcodes.SimpleMessage40, Opcodes.SimpleMessage42, Opcodes.SimpleMessage47, Opcodes.SimpleMessage48,  Opcodes.SimpleMessage49, Opcodes.SimpleMessage50,  
+        Opcodes.SimpleMessage51, Opcodes.SimpleMessage52
+    })]
     public class SimpleMessage : GameMessage
     {
 
         public override void Parse(GameBitBuffer buffer)
         {
+            // do not return back a not-implemented exception! /raist.
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            throw new NotImplementedException();
         }
 
         public override void AsText(StringBuilder b, int pad)

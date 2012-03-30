@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using CrystalMpq;
 using Gibbed.IO;
+using Mooege.Common.Logging;
 using Mooege.Common.Versions;
 using Mooege.Core.GS.Common.Types.SNO;
 using System.Linq;
@@ -38,12 +39,15 @@ namespace Mooege.Common.MPQ
         private readonly List<Task> _tasks = new List<Task>();
         private static readonly SNOGroup[] PatchExceptions = new[] { SNOGroup.TimedEvent, SNOGroup.Script, SNOGroup.AiBehavior, SNOGroup.AiState, SNOGroup.Conductor, SNOGroup.FlagSet, SNOGroup.Code };
 
+        protected static readonly Logger Logger = LogManager.CreateLogger();
+
         public Data()
             : base(VersionInfo.MPQ.RequiredPatchVersion, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
         { }
 
         public void Init()
         {
+            Logger.Info("Reading assets from MPQ data..");
             this.InitCatalog(); // init asset-group dictionaries and parsers.
             this.LoadCatalogs(); // process the assets.
         }
@@ -124,9 +128,9 @@ namespace Mooege.Common.MPQ
             var elapsedTime = DateTime.Now - timerStart;
 
             if(Storage.Config.Instance.LazyLoading)
-                Logger.Info("Found a total of {0} assets from {1} catalog and postponed loading because lazy loading is activated.", assetsCount, fileName);
+                Logger.Trace("Found a total of {0} assets from {1} catalog and postponed loading because lazy loading is activated.", assetsCount, fileName);
             else
-                Logger.Info("Found a total of {0} assets from {1} catalog and parsed {2} of them in {3:c}.", assetsCount, fileName, this._tasks.Count, elapsedTime);
+                Logger.Trace("Found a total of {0} assets from {1} catalog and parsed {2} of them in {3:c}.", assetsCount, fileName, this._tasks.Count, elapsedTime);
         }
 
         /// <summary>
@@ -157,9 +161,9 @@ namespace Mooege.Common.MPQ
             }
 
             if (Storage.Config.Instance.LazyLoading)
-                Logger.Info("Found a total of {0} assets from DB catalog and postponed loading because lazy loading is activated.", assetCount);
+                Logger.Trace("Found a total of {0} assets from DB catalog and postponed loading because lazy loading is activated.", assetCount);
             else
-                Logger.Info("Found a total of {0} assets from DB catalog and parsed {1} of them in {2:c}.", assetCount, this._tasks.Count, DateTime.Now - timerStart);
+                Logger.Trace("Found a total of {0} assets from DB catalog and parsed {1} of them in {2:c}.", assetCount, this._tasks.Count, DateTime.Now - timerStart);
 
         }
 
@@ -209,7 +213,7 @@ namespace Mooege.Common.MPQ
                 var i = 0;
                 foreach (MpqArchive archive in this.FileSystem.Archives)
                 {
-                    if (i++ < 5) continue;
+                    if (i++ < 8) continue;
 
                     file = archive.FindFile(fileName);
                     if (file != null)

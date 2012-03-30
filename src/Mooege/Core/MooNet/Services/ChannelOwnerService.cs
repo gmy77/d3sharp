@@ -29,6 +29,7 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
+        public uint Status { get; set; }
 
         public override void CreateChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.CreateChannelRequest request, System.Action<bnet.protocol.channel.CreateChannelResponse> done)
         {
@@ -46,7 +47,10 @@ namespace Mooege.Core.MooNet.Services
 
         public override void FindChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.FindChannelRequest request, System.Action<bnet.protocol.channel.FindChannelResponse> done)
         {
-            throw new NotImplementedException();
+            Logger.Trace("FindChannel(): Filter={0}", request.Options.AttributeFilter);
+            var builder = bnet.protocol.channel.FindChannelResponse.CreateBuilder();
+
+            done(builder.Build());
         }
 
         public override void GetChannelId(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.GetChannelIdRequest request, System.Action<bnet.protocol.channel.GetChannelIdResponse> done)
@@ -70,7 +74,7 @@ namespace Mooege.Core.MooNet.Services
 
         public override void JoinChannel(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.JoinChannelRequest request, System.Action<bnet.protocol.channel.JoinChannelResponse> done)
         {
-            Logger.Warn("ChannelOwnerService:JoinChannel()");
+            Logger.Trace("ChannelOwnerService:JoinChannel()");
 
             var channel = ChannelManager.GetChannelByEntityId(request.ChannelId);
             channel.Join(this.Client, request.ObjectId);

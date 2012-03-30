@@ -31,17 +31,17 @@ namespace D3.ItemCrafting {
     
     static ItemCrafting() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "ChJJdGVtQ3JhZnRpbmcucHJvdG8SD0QzLkl0ZW1DcmFmdGluZyJfCgtDcmFm" + 
-          "dGVyRGF0YRIPCgdyZWNpcGVzGAEgAygPEhoKEmF2YWlsYWJsZV9lbmNoYW50" + 
-          "cxgCIAMoDxINCgVsZXZlbBgDIAIoBRIUCgxjb29sZG93bl9lbmQYBCACKBAi" + 
-          "RgoQQ3JhZnRlclNhdmVkRGF0YRIyCgxjcmFmdGVyX2RhdGEYASADKAsyHC5E" + 
-          "My5JdGVtQ3JhZnRpbmcuQ3JhZnRlckRhdGE=");
+          "ChJJdGVtQ3JhZnRpbmcucHJvdG8SD0QzLkl0ZW1DcmFmdGluZyJqCgtDcmFm" + 
+          "dGVyRGF0YRIPCgdyZWNpcGVzGAEgAygPEiUKHWRlcHJlY2F0ZWRfYXZhaWxh" + 
+          "YmxlX2VuY2hhbnRzGAIgAygPEg0KBWxldmVsGAMgAigFEhQKDGNvb2xkb3du" + 
+          "X2VuZBgEIAIoECJGChBDcmFmdGVyU2F2ZWREYXRhEjIKDGNyYWZ0ZXJfZGF0" + 
+          "YRgBIAMoCzIcLkQzLkl0ZW1DcmFmdGluZy5DcmFmdGVyRGF0YQ==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_ItemCrafting_CrafterData__Descriptor = Descriptor.MessageTypes[0];
         internal__static_D3_ItemCrafting_CrafterData__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.ItemCrafting.CrafterData, global::D3.ItemCrafting.CrafterData.Builder>(internal__static_D3_ItemCrafting_CrafterData__Descriptor,
-                new string[] { "Recipes", "AvailableEnchants", "Level", "CooldownEnd", });
+                new string[] { "Recipes", "DeprecatedAvailableEnchants", "Level", "CooldownEnd", });
         internal__static_D3_ItemCrafting_CrafterSavedData__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_ItemCrafting_CrafterSavedData__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.ItemCrafting.CrafterSavedData, global::D3.ItemCrafting.CrafterSavedData.Builder>(internal__static_D3_ItemCrafting_CrafterSavedData__Descriptor,
@@ -62,8 +62,8 @@ namespace D3.ItemCrafting {
   public sealed partial class CrafterData : pb::GeneratedMessage<CrafterData, CrafterData.Builder> {
     private CrafterData() { }
     private static readonly CrafterData defaultInstance = new CrafterData().MakeReadOnly();
-    private static readonly string[] _crafterDataFieldNames = new string[] { "available_enchants", "cooldown_end", "level", "recipes" };
-    private static readonly uint[] _crafterDataFieldTags = new uint[] { 21, 33, 24, 13 };
+    private static readonly string[] _crafterDataFieldNames = new string[] { "cooldown_end", "deprecated_available_enchants", "level", "recipes" };
+    private static readonly uint[] _crafterDataFieldTags = new uint[] { 33, 21, 24, 13 };
     public static CrafterData DefaultInstance {
       get { return defaultInstance; }
     }
@@ -96,16 +96,16 @@ namespace D3.ItemCrafting {
       return recipes_[index];
     }
     
-    public const int AvailableEnchantsFieldNumber = 2;
-    private pbc::PopsicleList<int> availableEnchants_ = new pbc::PopsicleList<int>();
-    public scg::IList<int> AvailableEnchantsList {
-      get { return pbc::Lists.AsReadOnly(availableEnchants_); }
+    public const int DeprecatedAvailableEnchantsFieldNumber = 2;
+    private pbc::PopsicleList<int> deprecatedAvailableEnchants_ = new pbc::PopsicleList<int>();
+    public scg::IList<int> DeprecatedAvailableEnchantsList {
+      get { return pbc::Lists.AsReadOnly(deprecatedAvailableEnchants_); }
     }
-    public int AvailableEnchantsCount {
-      get { return availableEnchants_.Count; }
+    public int DeprecatedAvailableEnchantsCount {
+      get { return deprecatedAvailableEnchants_.Count; }
     }
-    public int GetAvailableEnchants(int index) {
-      return availableEnchants_[index];
+    public int GetDeprecatedAvailableEnchants(int index) {
+      return deprecatedAvailableEnchants_[index];
     }
     
     public const int LevelFieldNumber = 3;
@@ -142,14 +142,14 @@ namespace D3.ItemCrafting {
       if (recipes_.Count > 0) {
         output.WriteSFixed32Array(1, field_names[3], recipes_);
       }
-      if (availableEnchants_.Count > 0) {
-        output.WriteSFixed32Array(2, field_names[0], availableEnchants_);
+      if (deprecatedAvailableEnchants_.Count > 0) {
+        output.WriteSFixed32Array(2, field_names[1], deprecatedAvailableEnchants_);
       }
       if (hasLevel) {
         output.WriteInt32(3, field_names[2], Level);
       }
       if (hasCooldownEnd) {
-        output.WriteSFixed64(4, field_names[1], CooldownEnd);
+        output.WriteSFixed64(4, field_names[0], CooldownEnd);
       }
       UnknownFields.WriteTo(output);
     }
@@ -169,9 +169,9 @@ namespace D3.ItemCrafting {
         }
         {
           int dataSize = 0;
-          dataSize = 4 * availableEnchants_.Count;
+          dataSize = 4 * deprecatedAvailableEnchants_.Count;
           size += dataSize;
-          size += 1 * availableEnchants_.Count;
+          size += 1 * deprecatedAvailableEnchants_.Count;
         }
         if (hasLevel) {
           size += pb::CodedOutputStream.ComputeInt32Size(3, Level);
@@ -217,7 +217,7 @@ namespace D3.ItemCrafting {
     }
     private CrafterData MakeReadOnly() {
       recipes_.MakeReadOnly();
-      availableEnchants_.MakeReadOnly();
+      deprecatedAvailableEnchants_.MakeReadOnly();
       return this;
     }
     
@@ -310,8 +310,8 @@ namespace D3.ItemCrafting {
         if (other.recipes_.Count != 0) {
           result.recipes_.Add(other.recipes_);
         }
-        if (other.availableEnchants_.Count != 0) {
-          result.availableEnchants_.Add(other.availableEnchants_);
+        if (other.deprecatedAvailableEnchants_.Count != 0) {
+          result.deprecatedAvailableEnchants_.Add(other.deprecatedAvailableEnchants_);
         }
         if (other.HasLevel) {
           Level = other.Level;
@@ -369,7 +369,7 @@ namespace D3.ItemCrafting {
             }
             case 18:
             case 21: {
-              input.ReadSFixed32Array(tag, field_name, result.availableEnchants_);
+              input.ReadSFixed32Array(tag, field_name, result.deprecatedAvailableEnchants_);
               break;
             }
             case 24: {
@@ -420,33 +420,33 @@ namespace D3.ItemCrafting {
         return this;
       }
       
-      public pbc::IPopsicleList<int> AvailableEnchantsList {
-        get { return PrepareBuilder().availableEnchants_; }
+      public pbc::IPopsicleList<int> DeprecatedAvailableEnchantsList {
+        get { return PrepareBuilder().deprecatedAvailableEnchants_; }
       }
-      public int AvailableEnchantsCount {
-        get { return result.AvailableEnchantsCount; }
+      public int DeprecatedAvailableEnchantsCount {
+        get { return result.DeprecatedAvailableEnchantsCount; }
       }
-      public int GetAvailableEnchants(int index) {
-        return result.GetAvailableEnchants(index);
+      public int GetDeprecatedAvailableEnchants(int index) {
+        return result.GetDeprecatedAvailableEnchants(index);
       }
-      public Builder SetAvailableEnchants(int index, int value) {
+      public Builder SetDeprecatedAvailableEnchants(int index, int value) {
         PrepareBuilder();
-        result.availableEnchants_[index] = value;
+        result.deprecatedAvailableEnchants_[index] = value;
         return this;
       }
-      public Builder AddAvailableEnchants(int value) {
+      public Builder AddDeprecatedAvailableEnchants(int value) {
         PrepareBuilder();
-        result.availableEnchants_.Add(value);
+        result.deprecatedAvailableEnchants_.Add(value);
         return this;
       }
-      public Builder AddRangeAvailableEnchants(scg::IEnumerable<int> values) {
+      public Builder AddRangeDeprecatedAvailableEnchants(scg::IEnumerable<int> values) {
         PrepareBuilder();
-        result.availableEnchants_.Add(values);
+        result.deprecatedAvailableEnchants_.Add(values);
         return this;
       }
-      public Builder ClearAvailableEnchants() {
+      public Builder ClearDeprecatedAvailableEnchants() {
         PrepareBuilder();
-        result.availableEnchants_.Clear();
+        result.deprecatedAvailableEnchants_.Clear();
         return this;
       }
       

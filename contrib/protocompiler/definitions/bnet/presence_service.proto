@@ -14,6 +14,11 @@ message SubscribeRequest
     required uint64 object_id = 3;
 }
 
+message SubscribeNotificationRequest
+{
+    required .bnet.protocol.EntityId entity_id = 1;
+}
+
 message UnsubscribeRequest
 {
     optional .bnet.protocol.EntityId agent_id = 1;
@@ -68,6 +73,10 @@ service PresenceService
     rpc Heal(.bnet.protocol.presence.UpdateRequest) returns(.bnet.protocol.NoData)
     {
         option (method_id) = 6;
+    }
+    rpc SubscribeNotification(.bnet.protocol.presence.SubscribeNotificationRequest) returns(.bnet.protocol.NoData)
+    {
+        option (method_id) = 7;
     }
 }
 

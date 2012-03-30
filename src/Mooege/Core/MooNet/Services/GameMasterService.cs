@@ -33,6 +33,7 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
+        public uint Status { get; set; }
 
         public override void JoinGame(IRpcController controller, bnet.protocol.game_master.JoinGameRequest request, Action<bnet.protocol.game_master.JoinGameResponse> done)
         {
@@ -46,21 +47,26 @@ namespace Mooege.Core.MooNet.Services
             //throw new NotImplementedException();
         }
 
+        public bnet.protocol.attribute.Attribute[] GetFactoryAttributes(int min_players, int max_players, int num_teams, string version, int playergroup, string currentquest, int difficultylevel)
+        {
+            var factoryAttributes = new bnet.protocol.attribute.Attribute[]
+                {
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("min_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(min_players)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("max_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(max_players)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("num_teams").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(num_teams)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(version)).Build(), 
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("PlayerGroup").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(playergroup)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("Game.CurrentQuest").SetValue(bnet.protocol.attribute.Variant.CreateBuilder()).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("DifficultyLevel").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(difficultylevel)).Build(),
+                };
+            return factoryAttributes;
+        }
+
         public override void ListFactories(IRpcController controller, bnet.protocol.game_master.ListFactoriesRequest request, Action<bnet.protocol.game_master.ListFactoriesResponse> done)
         {
             Logger.Trace("ListFactories() {0}", this.Client);
 
-            var description = bnet.protocol.game_master.GameFactoryDescription.CreateBuilder().SetId(14249086168335147635);
-            var attributes = new bnet.protocol.attribute.Attribute[4]
-                {
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("min_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("max_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(4)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("num_teams").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("0.6.0")).Build() //This should be a static string so all versions are the same -Egris
-                };
-
-            description.AddRangeAttribute(attributes);
-            description.AddStatsBucket(bnet.protocol.game_master.GameStatsBucket.CreateBuilder()
+            var statsBucket = bnet.protocol.game_master.GameStatsBucket.CreateBuilder()
                .SetBucketMin(0)
                .SetBucketMax(4267296)
                .SetWaitMilliseconds(1354)
@@ -68,9 +74,62 @@ namespace Mooege.Core.MooNet.Services
                .SetActiveGames(69)
                .SetActivePlayers(75)
                .SetFormingGames(5)
-               .SetWaitingPlayers(0).Build());
+               .SetWaitingPlayers(0).Build();
 
-            var builder = bnet.protocol.game_master.ListFactoriesResponse.CreateBuilder().AddDescription(description).SetTotalResults(1);
+            var factoryDescriptions = new bnet.protocol.game_master.GameFactoryDescription[9];
+            for (var i = 0; i < 4; i++)
+            {
+                var factoryAttributes = GetFactoryAttributes(
+                    min_players: 2,
+                    max_players: 4,
+                    num_teams: 1,
+                    version: Mooege.Common.Versions.VersionInfo.Ingame.MajorVersion,
+                    playergroup: 0,
+                    currentquest: "",
+                    difficultylevel: i
+                    );
+                factoryDescriptions[i] = bnet.protocol.game_master.GameFactoryDescription.CreateBuilder()
+                    .AddRangeAttribute(factoryAttributes)
+                    .SetId(14249086168335147635 + (ulong)i)
+                    .AddStatsBucket(statsBucket)
+                    .Build();
+            }
+            for (var i = 4; i < 8; i++)
+            {
+                var factoryAttributes = GetFactoryAttributes(
+                    min_players: 2,
+                    max_players: 4,
+                    num_teams: 1,
+                    version: Mooege.Common.Versions.VersionInfo.Ingame.MajorVersion,
+                    playergroup: 1,
+                    currentquest: "",
+                    difficultylevel: i - 4
+                    );
+                factoryDescriptions[i] = bnet.protocol.game_master.GameFactoryDescription.CreateBuilder()
+                    .AddRangeAttribute(factoryAttributes)
+                    .SetId(14249086168335147635 + (ulong)i)
+                    .AddStatsBucket(statsBucket)
+                    .Build();
+            }
+            for (int i = 8; i < 9; i++)
+            {
+                var factoryAttributes = GetFactoryAttributes(
+                    min_players: 2,
+                    max_players: 4,
+                    num_teams: 1,
+                    version: Mooege.Common.Versions.VersionInfo.Ingame.MajorVersion,
+                    playergroup: 2,
+                    currentquest: "",
+                    difficultylevel: 0
+                    );
+                factoryDescriptions[i] = bnet.protocol.game_master.GameFactoryDescription.CreateBuilder()
+                    .AddRangeAttribute(factoryAttributes)
+                    .SetId(14249086168335147635 + (ulong)i)
+                    .AddStatsBucket(statsBucket)
+                    .Build();
+            }
+
+            var builder = bnet.protocol.game_master.ListFactoriesResponse.CreateBuilder().AddRangeDescription(factoryDescriptions).SetTotalResults((uint)factoryDescriptions.Length);
             done(builder.Build());
         }
 
@@ -80,22 +139,24 @@ namespace Mooege.Core.MooNet.Services
 
             // find the game.
             var gameFound = GameFactoryManager.FindGame(this.Client, request, ++GameFactoryManager.RequestIdCounter);
+            if (Client.CurrentChannel != null)
+            {
+                //TODO: All these ChannelState updates can be moved to functions someplace else after packet flow is discovered and working -Egris
+                //Send current JoinPermission to client before locking it
+                var channelStatePermission = bnet.protocol.channel.ChannelState.CreateBuilder()
+                    .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder()
+                    .SetName("D3.Party.JoinPermissionPreviousToLock")
+                    .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build())
+                    .Build()).Build();
 
-            //TODO: All these ChannelState updates can be moved to functions someplace else after packet flow is discovered and working -Egris
-            //Send current JoinPermission to client before locking it
-            var channelStatePermission = bnet.protocol.channel.ChannelState.CreateBuilder()
-                .AddAttribute(bnet.protocol.attribute.Attribute.CreateBuilder()
-                .SetName("D3.Party.JoinPermissionPreviousToLock")
-                .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1).Build())
-                .Build()).Build();
+                var notificationPermission = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
+                    .SetAgentId(this.Client.Account.CurrentGameAccount.BnetEntityId)
+                    .SetStateChange(channelStatePermission)
+                    .Build();
 
-            var notificationPermission = bnet.protocol.channel.UpdateChannelStateNotification.CreateBuilder()
-                .SetAgentId(this.Client.Account.CurrentGameAccount.BnetEntityId)
-                .SetStateChange(channelStatePermission)
-                .Build();
-
-            this.Client.MakeTargetedRPC(Client.CurrentChannel, () =>
-                bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notificationPermission, callback => { }));
+                this.Client.MakeTargetedRPC(Client.CurrentChannel, () =>
+                    bnet.protocol.channel.ChannelSubscriber.CreateStub(this.Client).NotifyUpdateChannelState(null, notificationPermission, callback => { }));
+            }
 
             var builder = bnet.protocol.game_master.FindGameResponse.CreateBuilder().SetRequestId(gameFound.RequestId);
             done(builder.Build());
@@ -127,17 +188,17 @@ namespace Mooege.Core.MooNet.Services
 
             if(gameFound.Started)
             {
-                Logger.Warn("Client {0} joining game with FactoryID:{1}", this.Client.Account.CurrentGameAccount.CurrentToon.Name, gameFound.FactoryID);
+                Logger.Info("Client {0} joining game with FactoryID:{1}", this.Client.Account.CurrentGameAccount.CurrentToon.Name, gameFound.FactoryID);
                 gameFound.JoinGame(clients, request.FactoryObjectId);
             }
             else
             {
-                Logger.Warn("Client {0} creating new game", this.Client.Account.CurrentGameAccount.CurrentToon.Name);
+                Logger.Info("Client {0} creating new game", this.Client.Account.CurrentGameAccount.CurrentToon.Name);
                 gameFound.StartGame(clients, request.FactoryObjectId);
             }
         }
 
-        public override void CancelGame(IRpcController controller, bnet.protocol.game_master.CancelGameRequest request, Action<bnet.protocol.NoData> done)
+        public override void CancelGameEntry(IRpcController controller, bnet.protocol.game_master.CancelGameEntryRequest request, Action<bnet.protocol.NoData> done)
         {
             throw new NotImplementedException();
         }

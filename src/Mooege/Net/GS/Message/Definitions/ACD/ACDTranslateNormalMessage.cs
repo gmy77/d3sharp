@@ -32,6 +32,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public int? Field5;
         public int? AnimationTag;   // Animation used while moving, if moving
         public int? Field7;
+        public int? Field8;
+        public int? Field9;
 
         public ACDTranslateNormalMessage() : base(Opcodes.ACDTranslateNormalMessage) { }
 
@@ -66,6 +68,14 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             if (buffer.ReadBool())
             {
                 Field7 = buffer.ReadInt(32);
+            }
+            if (buffer.ReadBool())
+            {
+                Field8 = buffer.ReadInt(32);
+            }
+            if (buffer.ReadBool())
+            {
+                Field9 = buffer.ReadInt(16);
             }
         }
 
@@ -107,6 +117,16 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             {
                 buffer.WriteInt(32, Field7.Value);
             }
+            buffer.WriteBool(Field8.HasValue);
+            if (Field8.HasValue)
+            {
+                buffer.WriteInt(32, Field8.Value);
+            }
+            buffer.WriteBool(Field9.HasValue);
+            if (Field9.HasValue)
+            {
+                buffer.WriteInt(16, Field9.Value);
+            }
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -143,6 +163,14 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             if (Field7.HasValue)
             {
                 b.Append(' ', pad); b.AppendLine("Field7.Value: 0x" + Field7.Value.ToString("X8") + " (" + Field7.Value + ")");
+            }
+            if (Field8.HasValue)
+            {
+                b.Append(' ', pad); b.AppendLine("Field8.Value: 0x" + Field8.Value.ToString("X8") + " (" + Field8.Value + ")");
+            }
+            if (Field9.HasValue)
+            {
+                b.Append(' ', pad); b.AppendLine("Field9.Value: 0x" + Field9.Value.ToString("X8") + " (" + Field9.Value + ")");
             }
             b.Append(' ', --pad);
             b.AppendLine("}");

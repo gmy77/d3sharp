@@ -16,32 +16,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Text;
-using System;
+using Mooege.Common.Config;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net
 {
-    [Message(Opcodes.NephalemAltarWindowClosedMessage)]
-    public class NephalemAltarWindowClosedMessage : GameMessage
+    public sealed class NetworkingConfig : Config
     {
+        public bool EnableIPv6 { get { return this.GetBoolean("EnableIPv6", true); } set { this.Set("EnableIPv6", value); } }
 
-        public override void Parse(GameBitBuffer buffer)
-        {
-        }
-
-        public override void Encode(GameBitBuffer buffer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void AsText(StringBuilder b, int pad)
-        {
-            b.Append(' ', pad);
-            b.AppendLine("NephalemAltarWindowClosedMessage:");
-            b.Append(' ', pad++);
-            b.AppendLine("{");
-            b.Append(' ', --pad);
-            b.AppendLine("}");
-        }
+        private static readonly NetworkingConfig _instance = new NetworkingConfig();
+        public static NetworkingConfig Instance { get { return _instance; } }
+        private NetworkingConfig() : base("Networking") { }
     }
 }

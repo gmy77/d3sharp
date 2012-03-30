@@ -41,38 +41,41 @@ namespace bnet.protocol.notification {
         byte[] descriptorData = global::System.Convert.FromBase64String(
             "Ch9ibmV0L25vdGlmaWNhdGlvbl9zZXJ2aWNlLnByb3RvEhpibmV0LnByb3Rv" + 
             "Y29sLm5vdGlmaWNhdGlvbhoUYm5ldC9hdHRyaWJ1dGUucHJvdG8aEWJuZXQv" + 
-            "ZW50aXR5LnByb3RvGg5ibmV0L3JwYy5wcm90byKTAgoMTm90aWZpY2F0aW9u" + 
+            "ZW50aXR5LnByb3RvGg5ibmV0L3JwYy5wcm90byKuAgoMTm90aWZpY2F0aW9u" + 
             "EioKCXNlbmRlcl9pZBgBIAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQS" + 
             "KgoJdGFyZ2V0X2lkGAIgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBIM" + 
             "CgR0eXBlGAMgAigJEjUKCWF0dHJpYnV0ZRgEIAMoCzIiLmJuZXQucHJvdG9j" + 
             "b2wuYXR0cmlidXRlLkF0dHJpYnV0ZRIyChFzZW5kZXJfYWNjb3VudF9pZBgF" + 
             "IAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSMgoRdGFyZ2V0X2FjY291" + 
-            "bnRfaWQYBiABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkIj8KEUZpbmRD" + 
-            "bGllbnRSZXF1ZXN0EioKCWVudGl0eV9pZBgBIAIoCzIXLmJuZXQucHJvdG9j" + 
-            "b2wuRW50aXR5SWQiWAoSRmluZENsaWVudFJlc3BvbnNlEg0KBWxhYmVsGAEg" + 
-            "AigNEjMKEWNsaWVudF9wcm9jZXNzX2lkGAIgASgLMhguYm5ldC5wcm90b2Nv" + 
-            "bC5Qcm9jZXNzSWQiQwoVUmVnaXN0ZXJDbGllbnRSZXF1ZXN0EioKCWVudGl0" + 
-            "eV9pZBgBIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQiRQoXVW5yZWdp" + 
-            "c3RlckNsaWVudFJlcXVlc3QSKgoJZW50aXR5X2lkGAEgAigLMhcuYm5ldC5w" + 
-            "cm90b2NvbC5FbnRpdHlJZDKrAwoTTm90aWZpY2F0aW9uU2VydmljZRJZChBT" + 
-            "ZW5kTm90aWZpY2F0aW9uEiguYm5ldC5wcm90b2NvbC5ub3RpZmljYXRpb24u" + 
-            "Tm90aWZpY2F0aW9uGhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GAESYAoO" + 
-            "UmVnaXN0ZXJDbGllbnQSMS5ibmV0LnByb3RvY29sLm5vdGlmaWNhdGlvbi5S" + 
-            "ZWdpc3RlckNsaWVudFJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIE" + 
-            "gLUYAhJkChBVbnJlZ2lzdGVyQ2xpZW50EjMuYm5ldC5wcm90b2NvbC5ub3Rp" + 
-            "ZmljYXRpb24uVW5yZWdpc3RlckNsaWVudFJlcXVlc3QaFS5ibmV0LnByb3Rv" + 
-            "Y29sLk5vRGF0YSIEgLUYAxJxCgpGaW5kQ2xpZW50Ei0uYm5ldC5wcm90b2Nv" + 
-            "bC5ub3RpZmljYXRpb24uRmluZENsaWVudFJlcXVlc3QaLi5ibmV0LnByb3Rv" + 
-            "Y29sLm5vdGlmaWNhdGlvbi5GaW5kQ2xpZW50UmVzcG9uc2UiBIC1GAQyfAoU" + 
-            "Tm90aWZpY2F0aW9uTGlzdGVuZXISZAoWT25Ob3RpZmljYXRpb25SZWNlaXZl" + 
-            "ZBIoLmJuZXQucHJvdG9jb2wubm90aWZpY2F0aW9uLk5vdGlmaWNhdGlvbhoa" + 
-            "LmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAFCA4ABAA==");
+            "bnRfaWQYBiABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEhkKEXNlbmRl" + 
+            "cl9iYXR0bGVfdGFnGAcgASgJIj8KEUZpbmRDbGllbnRSZXF1ZXN0EioKCWVu" + 
+            "dGl0eV9pZBgBIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQiWAoSRmlu" + 
+            "ZENsaWVudFJlc3BvbnNlEg0KBWxhYmVsGAEgAigNEjMKEWNsaWVudF9wcm9j" + 
+            "ZXNzX2lkGAIgASgLMhguYm5ldC5wcm90b2NvbC5Qcm9jZXNzSWQiQwoVUmVn" + 
+            "aXN0ZXJDbGllbnRSZXF1ZXN0EioKCWVudGl0eV9pZBgBIAIoCzIXLmJuZXQu" + 
+            "cHJvdG9jb2wuRW50aXR5SWQiRQoXVW5yZWdpc3RlckNsaWVudFJlcXVlc3QS" + 
+            "KgoJZW50aXR5X2lkGAEgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZDKr" + 
+            "AwoTTm90aWZpY2F0aW9uU2VydmljZRJZChBTZW5kTm90aWZpY2F0aW9uEigu" + 
+            "Ym5ldC5wcm90b2NvbC5ub3RpZmljYXRpb24uTm90aWZpY2F0aW9uGhUuYm5l" + 
+            "dC5wcm90b2NvbC5Ob0RhdGEiBIC1GAESYAoOUmVnaXN0ZXJDbGllbnQSMS5i" + 
+            "bmV0LnByb3RvY29sLm5vdGlmaWNhdGlvbi5SZWdpc3RlckNsaWVudFJlcXVl" + 
+            "c3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYAhJkChBVbnJlZ2lzdGVy" + 
+            "Q2xpZW50EjMuYm5ldC5wcm90b2NvbC5ub3RpZmljYXRpb24uVW5yZWdpc3Rl" + 
+            "ckNsaWVudFJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYAxJx" + 
+            "CgpGaW5kQ2xpZW50Ei0uYm5ldC5wcm90b2NvbC5ub3RpZmljYXRpb24uRmlu" + 
+            "ZENsaWVudFJlcXVlc3QaLi5ibmV0LnByb3RvY29sLm5vdGlmaWNhdGlvbi5G" + 
+            "aW5kQ2xpZW50UmVzcG9uc2UiBIC1GAQy3gEKFE5vdGlmaWNhdGlvbkxpc3Rl" + 
+            "bmVyEmQKFk9uTm90aWZpY2F0aW9uUmVjZWl2ZWQSKC5ibmV0LnByb3RvY29s" + 
+            "Lm5vdGlmaWNhdGlvbi5Ob3RpZmljYXRpb24aGi5ibmV0LnByb3RvY29sLk5P" + 
+            "X1JFU1BPTlNFIgSAtRgBEmAKEk9uTm90aWZpY2F0aW9uU2VudBIoLmJuZXQu" + 
+            "cHJvdG9jb2wubm90aWZpY2F0aW9uLk5vdGlmaWNhdGlvbhoaLmJuZXQucHJv" + 
+            "dG9jb2wuTk9fUkVTUE9OU0UiBIC1GAJCA4ABAA==");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_notification_Notification__Descriptor = Descriptor.MessageTypes[0];
           internal__static_bnet_protocol_notification_Notification__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.notification.Notification, global::bnet.protocol.notification.Notification.Builder>(internal__static_bnet_protocol_notification_Notification__Descriptor,
-                  new string[] { "SenderId", "TargetId", "Type", "Attribute", "SenderAccountId", "TargetAccountId", });
+                  new string[] { "SenderId", "TargetId", "Type", "Attribute", "SenderAccountId", "TargetAccountId", "SenderBattleTag", });
           internal__static_bnet_protocol_notification_FindClientRequest__Descriptor = Descriptor.MessageTypes[1];
           internal__static_bnet_protocol_notification_FindClientRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.notification.FindClientRequest, global::bnet.protocol.notification.FindClientRequest.Builder>(internal__static_bnet_protocol_notification_FindClientRequest__Descriptor,
@@ -114,8 +117,8 @@ namespace bnet.protocol.notification {
   public sealed partial class Notification : pb::GeneratedMessage<Notification, Notification.Builder> {
     private Notification() { }
     private static readonly Notification defaultInstance = new Notification().MakeReadOnly();
-    private static readonly string[] _notificationFieldNames = new string[] { "attribute", "sender_account_id", "sender_id", "target_account_id", "target_id", "type" };
-    private static readonly uint[] _notificationFieldTags = new uint[] { 34, 42, 10, 50, 18, 26 };
+    private static readonly string[] _notificationFieldNames = new string[] { "attribute", "sender_account_id", "sender_battle_tag", "sender_id", "target_account_id", "target_id", "type" };
+    private static readonly uint[] _notificationFieldTags = new uint[] { 34, 42, 58, 10, 50, 18, 26 };
     public static Notification DefaultInstance {
       get { return defaultInstance; }
     }
@@ -198,6 +201,16 @@ namespace bnet.protocol.notification {
       get { return targetAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
+    public const int SenderBattleTagFieldNumber = 7;
+    private bool hasSenderBattleTag;
+    private string senderBattleTag_ = "";
+    public bool HasSenderBattleTag {
+      get { return hasSenderBattleTag; }
+    }
+    public string SenderBattleTag {
+      get { return senderBattleTag_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasTargetId) return false;
@@ -223,13 +236,13 @@ namespace bnet.protocol.notification {
       int size = SerializedSize;
       string[] field_names = _notificationFieldNames;
       if (hasSenderId) {
-        output.WriteMessage(1, field_names[2], SenderId);
+        output.WriteMessage(1, field_names[3], SenderId);
       }
       if (hasTargetId) {
-        output.WriteMessage(2, field_names[4], TargetId);
+        output.WriteMessage(2, field_names[5], TargetId);
       }
       if (hasType) {
-        output.WriteString(3, field_names[5], Type);
+        output.WriteString(3, field_names[6], Type);
       }
       if (attribute_.Count > 0) {
         output.WriteMessageArray(4, field_names[0], attribute_);
@@ -238,7 +251,10 @@ namespace bnet.protocol.notification {
         output.WriteMessage(5, field_names[1], SenderAccountId);
       }
       if (hasTargetAccountId) {
-        output.WriteMessage(6, field_names[3], TargetAccountId);
+        output.WriteMessage(6, field_names[4], TargetAccountId);
+      }
+      if (hasSenderBattleTag) {
+        output.WriteString(7, field_names[2], SenderBattleTag);
       }
       UnknownFields.WriteTo(output);
     }
@@ -267,6 +283,9 @@ namespace bnet.protocol.notification {
         }
         if (hasTargetAccountId) {
           size += pb::CodedOutputStream.ComputeMessageSize(6, TargetAccountId);
+        }
+        if (hasSenderBattleTag) {
+          size += pb::CodedOutputStream.ComputeStringSize(7, SenderBattleTag);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -413,6 +432,9 @@ namespace bnet.protocol.notification {
         if (other.HasTargetAccountId) {
           MergeTargetAccountId(other.TargetAccountId);
         }
+        if (other.HasSenderBattleTag) {
+          SenderBattleTag = other.SenderBattleTag;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -498,6 +520,10 @@ namespace bnet.protocol.notification {
               }
               input.ReadMessage(subBuilder, extensionRegistry);
               TargetAccountId = subBuilder.BuildPartial();
+              break;
+            }
+            case 58: {
+              result.hasSenderBattleTag = input.ReadString(ref result.senderBattleTag_);
               break;
             }
           }
@@ -732,6 +758,27 @@ namespace bnet.protocol.notification {
         PrepareBuilder();
         result.hasTargetAccountId = false;
         result.targetAccountId_ = null;
+        return this;
+      }
+      
+      public bool HasSenderBattleTag {
+        get { return result.hasSenderBattleTag; }
+      }
+      public string SenderBattleTag {
+        get { return result.SenderBattleTag; }
+        set { SetSenderBattleTag(value); }
+      }
+      public Builder SetSenderBattleTag(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasSenderBattleTag = true;
+        result.senderBattleTag_ = value;
+        return this;
+      }
+      public Builder ClearSenderBattleTag() {
+        PrepareBuilder();
+        result.hasSenderBattleTag = false;
+        result.senderBattleTag_ = "";
         return this;
       }
     }
@@ -2156,6 +2203,10 @@ namespace bnet.protocol.notification {
         pb::IRpcController controller,
         global::bnet.protocol.notification.Notification request,
         global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
+    public abstract void OnNotificationSent(
+        pb::IRpcController controller,
+        global::bnet.protocol.notification.Notification request,
+        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
     
     public static pbd::ServiceDescriptor Descriptor {
       get { return Proto.NotificationService.Descriptor.Services[1]; }
@@ -2179,6 +2230,11 @@ namespace bnet.protocol.notification {
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
               done));
           return;
+        case 1:
+          this.OnNotificationSent(controller, (global::bnet.protocol.notification.Notification) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
+              done));
+          return;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2192,6 +2248,8 @@ namespace bnet.protocol.notification {
       switch(method.Index) {
         case 0:
           return global::bnet.protocol.notification.Notification.DefaultInstance;
+        case 1:
+          return global::bnet.protocol.notification.Notification.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2204,6 +2262,8 @@ namespace bnet.protocol.notification {
       }
       switch(method.Index) {
         case 0:
+          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
+        case 1:
           return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -2233,6 +2293,15 @@ namespace bnet.protocol.notification {
           global::bnet.protocol.notification.Notification request,
           global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
         channel.CallMethod(Descriptor.Methods[0],
+            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
+      }
+      
+      public override void OnNotificationSent(
+          pb::IRpcController controller,
+          global::bnet.protocol.notification.Notification request,
+          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
+        channel.CallMethod(Descriptor.Methods[1],
             controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }

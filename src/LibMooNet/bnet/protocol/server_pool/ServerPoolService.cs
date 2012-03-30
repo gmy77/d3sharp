@@ -42,8 +42,8 @@ namespace bnet.protocol.server_pool {
             "Ch5ibmV0L3NlcnZlcl9wb29sX3NlcnZpY2UucHJvdG8SGWJuZXQucHJvdG9j" + 
             "b2wuc2VydmVyX3Bvb2waFGJuZXQvYXR0cmlidXRlLnByb3RvGg5ibmV0L3Jw" + 
             "Yy5wcm90byIQCg5HZXRMb2FkUmVxdWVzdCJWCgtTZXJ2ZXJTdGF0ZRIXCgxj" + 
-            "dXJyZW50X2xvYWQYASABKAI6ATESFQoKZ2FtZV9jb3VudBgCIAEoBToBMBIX" + 
-            "CgxwbGF5ZXJfY291bnQYAyABKAU6ATAizgEKClNlcnZlckluZm8SJgoEaG9z" + 
+            "dXJyZW50X2xvYWQYASABKAI6ATESFQoKZ2FtZV9jb3VudBgCIAEoDToBMBIX" + 
+            "CgxwbGF5ZXJfY291bnQYAyABKA06ATAizgEKClNlcnZlckluZm8SJgoEaG9z" + 
             "dBgBIAIoCzIYLmJuZXQucHJvdG9jb2wuUHJvY2Vzc0lkEhYKB3JlcGxhY2UY" + 
             "AiABKAg6BWZhbHNlEjUKBXN0YXRlGAMgASgLMiYuYm5ldC5wcm90b2NvbC5z" + 
             "ZXJ2ZXJfcG9vbC5TZXJ2ZXJTdGF0ZRI1CglhdHRyaWJ1dGUYBCADKAsyIi5i" + 
@@ -364,21 +364,21 @@ namespace bnet.protocol.server_pool {
     
     public const int GameCountFieldNumber = 2;
     private bool hasGameCount;
-    private int gameCount_;
+    private uint gameCount_;
     public bool HasGameCount {
       get { return hasGameCount; }
     }
-    public int GameCount {
+    public uint GameCount {
       get { return gameCount_; }
     }
     
     public const int PlayerCountFieldNumber = 3;
     private bool hasPlayerCount;
-    private int playerCount_;
+    private uint playerCount_;
     public bool HasPlayerCount {
       get { return hasPlayerCount; }
     }
-    public int PlayerCount {
+    public uint PlayerCount {
       get { return playerCount_; }
     }
     
@@ -395,10 +395,10 @@ namespace bnet.protocol.server_pool {
         output.WriteFloat(1, field_names[0], CurrentLoad);
       }
       if (hasGameCount) {
-        output.WriteInt32(2, field_names[1], GameCount);
+        output.WriteUInt32(2, field_names[1], GameCount);
       }
       if (hasPlayerCount) {
-        output.WriteInt32(3, field_names[2], PlayerCount);
+        output.WriteUInt32(3, field_names[2], PlayerCount);
       }
       UnknownFields.WriteTo(output);
     }
@@ -414,10 +414,10 @@ namespace bnet.protocol.server_pool {
           size += pb::CodedOutputStream.ComputeFloatSize(1, CurrentLoad);
         }
         if (hasGameCount) {
-          size += pb::CodedOutputStream.ComputeInt32Size(2, GameCount);
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, GameCount);
         }
         if (hasPlayerCount) {
-          size += pb::CodedOutputStream.ComputeInt32Size(3, PlayerCount);
+          size += pb::CodedOutputStream.ComputeUInt32Size(3, PlayerCount);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -602,11 +602,11 @@ namespace bnet.protocol.server_pool {
               break;
             }
             case 16: {
-              result.hasGameCount = input.ReadInt32(ref result.gameCount_);
+              result.hasGameCount = input.ReadUInt32(ref result.gameCount_);
               break;
             }
             case 24: {
-              result.hasPlayerCount = input.ReadInt32(ref result.playerCount_);
+              result.hasPlayerCount = input.ReadUInt32(ref result.playerCount_);
               break;
             }
           }
@@ -642,11 +642,11 @@ namespace bnet.protocol.server_pool {
       public bool HasGameCount {
         get { return result.hasGameCount; }
       }
-      public int GameCount {
+      public uint GameCount {
         get { return result.GameCount; }
         set { SetGameCount(value); }
       }
-      public Builder SetGameCount(int value) {
+      public Builder SetGameCount(uint value) {
         PrepareBuilder();
         result.hasGameCount = true;
         result.gameCount_ = value;
@@ -662,11 +662,11 @@ namespace bnet.protocol.server_pool {
       public bool HasPlayerCount {
         get { return result.hasPlayerCount; }
       }
-      public int PlayerCount {
+      public uint PlayerCount {
         get { return result.PlayerCount; }
         set { SetPlayerCount(value); }
       }
-      public Builder SetPlayerCount(int value) {
+      public Builder SetPlayerCount(uint value) {
         PrepareBuilder();
         result.hasPlayerCount = true;
         result.playerCount_ = value;

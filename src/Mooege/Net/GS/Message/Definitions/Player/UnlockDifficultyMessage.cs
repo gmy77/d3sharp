@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,38 +18,37 @@
 
 using System.Text;
 
-namespace Mooege.Net.GS.Message.Definitions.Misc
+namespace Mooege.Net.GS.Message.Definitions.Player
 {
-    [Message(Opcodes.SocketSpellMessage, Consumers.Player)]
-    public class SocketSpellMessage : GameMessage
+    [Message(Opcodes.UnlockDifficultyMessage)]
+    public class UnlockDifficultyMessage : GameMessage
     {
-        public int RuneDynamicId;
-        public int PowerSNOId;
+        public int Field0;
+        public bool Field1;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            RuneDynamicId = buffer.ReadInt(32);
-            PowerSNOId = buffer.ReadInt(32);
+            Field0 = buffer.ReadInt(32);
+            Field1 = buffer.ReadBool();
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, RuneDynamicId);
-            buffer.WriteInt(32, PowerSNOId);
+            buffer.WriteInt(32, Field0);
+            buffer.WriteBool(Field1);
         }
 
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("SocketSpellMessage:");
+            b.AppendLine("UnlockDifficultyMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("RuneDynamicId: 0x" + RuneDynamicId.ToString("X8") + " (" + RuneDynamicId + ")");
-            b.Append(' ', pad); b.AppendLine("PowerSNOId: 0x" + PowerSNOId.ToString("X8") + " (" + PowerSNOId + ")");
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Field1: " + (Field1 ? "true" : "false"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
-
 
     }
 }

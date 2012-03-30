@@ -37,25 +37,27 @@ namespace bnet.protocol.friends {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           "ChhibmV0L2ZyaWVuZHNfdHlwZXMucHJvdG8SFWJuZXQucHJvdG9jb2wuZnJp" + 
           "ZW5kcxoUYm5ldC9hdHRyaWJ1dGUucHJvdG8aEWJuZXQvZW50aXR5LnByb3Rv" + 
-          "GhtibmV0L2ludml0YXRpb25fdHlwZXMucHJvdG8ijQEKBkZyaWVuZBIjCgJp" + 
+          "GhtibmV0L2ludml0YXRpb25fdHlwZXMucHJvdG8ipwEKBkZyaWVuZBIjCgJp" + 
           "ZBgBIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSNQoJYXR0cmlidXRl" + 
           "GAIgAygLMiIuYm5ldC5wcm90b2NvbC5hdHRyaWJ1dGUuQXR0cmlidXRlEhAK" + 
-          "BHJvbGUYAyADKA1CAhABEhUKCnByaXZpbGVnZXMYBCABKAQ6ATAirQEKEEZy" + 
-          "aWVuZEludml0YXRpb24SHQoOZmlyc3RfcmVjZWl2ZWQYASABKAg6BWZhbHNl" + 
-          "EhAKBHJvbGUYAiADKA1CAhABMmgKEWZyaWVuZF9pbnZpdGF0aW9uEiQuYm5l" + 
-          "dC5wcm90b2NvbC5pbnZpdGF0aW9uLkludml0YXRpb24YZyABKAsyJy5ibmV0" + 
-          "LnByb3RvY29sLmZyaWVuZHMuRnJpZW5kSW52aXRhdGlvbiLlAQoWRnJpZW5k" + 
-          "SW52aXRhdGlvblBhcmFtcxIUCgx0YXJnZXRfZW1haWwYASABKAkSGQoRdGFy" + 
-          "Z2V0X2JhdHRsZV90YWcYAiABKAkSFgoOZGlzcGxheV9zdHJpbmcYAyABKAkS" + 
-          "EAoEcm9sZRgEIAMoDUICEAEycAoNZnJpZW5kX3BhcmFtcxIqLmJuZXQucHJv" + 
-          "dG9jb2wuaW52aXRhdGlvbi5JbnZpdGF0aW9uUGFyYW1zGGcgASgLMi0uYm5l" + 
-          "dC5wcm90b2NvbC5mcmllbmRzLkZyaWVuZEludml0YXRpb25QYXJhbXM=");
+          "BHJvbGUYAyADKA1CAhABEhUKCnByaXZpbGVnZXMYBCABKAQ6ATASGAoQYXR0" + 
+          "cmlidXRlc19lcG9jaBgFIAEoBCKtAQoQRnJpZW5kSW52aXRhdGlvbhIdCg5m" + 
+          "aXJzdF9yZWNlaXZlZBgBIAEoCDoFZmFsc2USEAoEcm9sZRgCIAMoDUICEAEy" + 
+          "aAoRZnJpZW5kX2ludml0YXRpb24SJC5ibmV0LnByb3RvY29sLmludml0YXRp" + 
+          "b24uSW52aXRhdGlvbhhnIAEoCzInLmJuZXQucHJvdG9jb2wuZnJpZW5kcy5G" + 
+          "cmllbmRJbnZpdGF0aW9uIqICChZGcmllbmRJbnZpdGF0aW9uUGFyYW1zEhQK" + 
+          "DHRhcmdldF9lbWFpbBgBIAEoCRIZChF0YXJnZXRfYmF0dGxlX3RhZxgCIAEo" + 
+          "CRIaChJpbnZpdGVyX2JhdHRsZV90YWcYAyABKAkSGQoRaW52aXRlcl9mdWxs" + 
+          "X25hbWUYBCABKAkSHAoUaW52aXRlZV9kaXNwbGF5X25hbWUYBSABKAkSEAoE" + 
+          "cm9sZRgGIAMoDUICEAEycAoNZnJpZW5kX3BhcmFtcxIqLmJuZXQucHJvdG9j" + 
+          "b2wuaW52aXRhdGlvbi5JbnZpdGF0aW9uUGFyYW1zGGcgASgLMi0uYm5ldC5w" + 
+          "cm90b2NvbC5mcmllbmRzLkZyaWVuZEludml0YXRpb25QYXJhbXM=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_friends_Friend__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_friends_Friend__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.Friend, global::bnet.protocol.friends.Friend.Builder>(internal__static_bnet_protocol_friends_Friend__Descriptor,
-                new string[] { "Id", "Attribute", "Role", "Privileges", });
+                new string[] { "Id", "Attribute", "Role", "Privileges", "AttributesEpoch", });
         internal__static_bnet_protocol_friends_FriendInvitation__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_friends_FriendInvitation__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.FriendInvitation, global::bnet.protocol.friends.FriendInvitation.Builder>(internal__static_bnet_protocol_friends_FriendInvitation__Descriptor,
@@ -64,7 +66,7 @@ namespace bnet.protocol.friends {
         internal__static_bnet_protocol_friends_FriendInvitationParams__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_friends_FriendInvitationParams__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.FriendInvitationParams, global::bnet.protocol.friends.FriendInvitationParams.Builder>(internal__static_bnet_protocol_friends_FriendInvitationParams__Descriptor,
-                new string[] { "TargetEmail", "TargetBattleTag", "DisplayString", "Role", });
+                new string[] { "TargetEmail", "TargetBattleTag", "InviterBattleTag", "InviterFullName", "InviteeDisplayName", "Role", });
         global::bnet.protocol.friends.FriendInvitationParams.FriendParams = pb::GeneratedSingleExtension<global::bnet.protocol.friends.FriendInvitationParams>.CreateInstance(global::bnet.protocol.friends.FriendInvitationParams.Descriptor.Extensions[0]);
         return null;
       };
@@ -85,8 +87,8 @@ namespace bnet.protocol.friends {
   public sealed partial class Friend : pb::GeneratedMessage<Friend, Friend.Builder> {
     private Friend() { }
     private static readonly Friend defaultInstance = new Friend().MakeReadOnly();
-    private static readonly string[] _friendFieldNames = new string[] { "attribute", "id", "privileges", "role" };
-    private static readonly uint[] _friendFieldTags = new uint[] { 18, 10, 32, 26 };
+    private static readonly string[] _friendFieldNames = new string[] { "attribute", "attributes_epoch", "id", "privileges", "role" };
+    private static readonly uint[] _friendFieldTags = new uint[] { 18, 40, 10, 32, 26 };
     public static Friend DefaultInstance {
       get { return defaultInstance; }
     }
@@ -152,6 +154,16 @@ namespace bnet.protocol.friends {
       get { return privileges_; }
     }
     
+    public const int AttributesEpochFieldNumber = 5;
+    private bool hasAttributesEpoch;
+    private ulong attributesEpoch_;
+    public bool HasAttributesEpoch {
+      get { return hasAttributesEpoch; }
+    }
+    public ulong AttributesEpoch {
+      get { return attributesEpoch_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasId) return false;
@@ -167,16 +179,19 @@ namespace bnet.protocol.friends {
       int size = SerializedSize;
       string[] field_names = _friendFieldNames;
       if (hasId) {
-        output.WriteMessage(1, field_names[1], Id);
+        output.WriteMessage(1, field_names[2], Id);
       }
       if (attribute_.Count > 0) {
         output.WriteMessageArray(2, field_names[0], attribute_);
       }
       if (role_.Count > 0) {
-        output.WritePackedUInt32Array(3, field_names[3], roleMemoizedSerializedSize, role_);
+        output.WritePackedUInt32Array(3, field_names[4], roleMemoizedSerializedSize, role_);
       }
       if (hasPrivileges) {
-        output.WriteUInt64(4, field_names[2], Privileges);
+        output.WriteUInt64(4, field_names[3], Privileges);
+      }
+      if (hasAttributesEpoch) {
+        output.WriteUInt64(5, field_names[1], AttributesEpoch);
       }
       UnknownFields.WriteTo(output);
     }
@@ -207,6 +222,9 @@ namespace bnet.protocol.friends {
         }
         if (hasPrivileges) {
           size += pb::CodedOutputStream.ComputeUInt64Size(4, Privileges);
+        }
+        if (hasAttributesEpoch) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(5, AttributesEpoch);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -348,6 +366,9 @@ namespace bnet.protocol.friends {
         if (other.HasPrivileges) {
           Privileges = other.Privileges;
         }
+        if (other.HasAttributesEpoch) {
+          AttributesEpoch = other.AttributesEpoch;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -411,6 +432,10 @@ namespace bnet.protocol.friends {
             }
             case 32: {
               result.hasPrivileges = input.ReadUInt64(ref result.privileges_);
+              break;
+            }
+            case 40: {
+              result.hasAttributesEpoch = input.ReadUInt64(ref result.attributesEpoch_);
               break;
             }
           }
@@ -554,6 +579,26 @@ namespace bnet.protocol.friends {
         PrepareBuilder();
         result.hasPrivileges = false;
         result.privileges_ = 0UL;
+        return this;
+      }
+      
+      public bool HasAttributesEpoch {
+        get { return result.hasAttributesEpoch; }
+      }
+      public ulong AttributesEpoch {
+        get { return result.AttributesEpoch; }
+        set { SetAttributesEpoch(value); }
+      }
+      public Builder SetAttributesEpoch(ulong value) {
+        PrepareBuilder();
+        result.hasAttributesEpoch = true;
+        result.attributesEpoch_ = value;
+        return this;
+      }
+      public Builder ClearAttributesEpoch() {
+        PrepareBuilder();
+        result.hasAttributesEpoch = false;
+        result.attributesEpoch_ = 0UL;
         return this;
       }
     }
@@ -910,8 +955,8 @@ namespace bnet.protocol.friends {
   public sealed partial class FriendInvitationParams : pb::GeneratedMessage<FriendInvitationParams, FriendInvitationParams.Builder> {
     private FriendInvitationParams() { }
     private static readonly FriendInvitationParams defaultInstance = new FriendInvitationParams().MakeReadOnly();
-    private static readonly string[] _friendInvitationParamsFieldNames = new string[] { "display_string", "role", "target_battle_tag", "target_email" };
-    private static readonly uint[] _friendInvitationParamsFieldTags = new uint[] { 26, 34, 18, 10 };
+    private static readonly string[] _friendInvitationParamsFieldNames = new string[] { "invitee_display_name", "inviter_battle_tag", "inviter_full_name", "role", "target_battle_tag", "target_email" };
+    private static readonly uint[] _friendInvitationParamsFieldTags = new uint[] { 42, 26, 34, 50, 18, 10 };
     public static FriendInvitationParams DefaultInstance {
       get { return defaultInstance; }
     }
@@ -954,17 +999,37 @@ namespace bnet.protocol.friends {
       get { return targetBattleTag_; }
     }
     
-    public const int DisplayStringFieldNumber = 3;
-    private bool hasDisplayString;
-    private string displayString_ = "";
-    public bool HasDisplayString {
-      get { return hasDisplayString; }
+    public const int InviterBattleTagFieldNumber = 3;
+    private bool hasInviterBattleTag;
+    private string inviterBattleTag_ = "";
+    public bool HasInviterBattleTag {
+      get { return hasInviterBattleTag; }
     }
-    public string DisplayString {
-      get { return displayString_; }
+    public string InviterBattleTag {
+      get { return inviterBattleTag_; }
     }
     
-    public const int RoleFieldNumber = 4;
+    public const int InviterFullNameFieldNumber = 4;
+    private bool hasInviterFullName;
+    private string inviterFullName_ = "";
+    public bool HasInviterFullName {
+      get { return hasInviterFullName; }
+    }
+    public string InviterFullName {
+      get { return inviterFullName_; }
+    }
+    
+    public const int InviteeDisplayNameFieldNumber = 5;
+    private bool hasInviteeDisplayName;
+    private string inviteeDisplayName_ = "";
+    public bool HasInviteeDisplayName {
+      get { return hasInviteeDisplayName; }
+    }
+    public string InviteeDisplayName {
+      get { return inviteeDisplayName_; }
+    }
+    
+    public const int RoleFieldNumber = 6;
     private int roleMemoizedSerializedSize;
     private pbc::PopsicleList<uint> role_ = new pbc::PopsicleList<uint>();
     public scg::IList<uint> RoleList {
@@ -987,16 +1052,22 @@ namespace bnet.protocol.friends {
       int size = SerializedSize;
       string[] field_names = _friendInvitationParamsFieldNames;
       if (hasTargetEmail) {
-        output.WriteString(1, field_names[3], TargetEmail);
+        output.WriteString(1, field_names[5], TargetEmail);
       }
       if (hasTargetBattleTag) {
-        output.WriteString(2, field_names[2], TargetBattleTag);
+        output.WriteString(2, field_names[4], TargetBattleTag);
       }
-      if (hasDisplayString) {
-        output.WriteString(3, field_names[0], DisplayString);
+      if (hasInviterBattleTag) {
+        output.WriteString(3, field_names[1], InviterBattleTag);
+      }
+      if (hasInviterFullName) {
+        output.WriteString(4, field_names[2], InviterFullName);
+      }
+      if (hasInviteeDisplayName) {
+        output.WriteString(5, field_names[0], InviteeDisplayName);
       }
       if (role_.Count > 0) {
-        output.WritePackedUInt32Array(4, field_names[1], roleMemoizedSerializedSize, role_);
+        output.WritePackedUInt32Array(6, field_names[3], roleMemoizedSerializedSize, role_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1014,8 +1085,14 @@ namespace bnet.protocol.friends {
         if (hasTargetBattleTag) {
           size += pb::CodedOutputStream.ComputeStringSize(2, TargetBattleTag);
         }
-        if (hasDisplayString) {
-          size += pb::CodedOutputStream.ComputeStringSize(3, DisplayString);
+        if (hasInviterBattleTag) {
+          size += pb::CodedOutputStream.ComputeStringSize(3, InviterBattleTag);
+        }
+        if (hasInviterFullName) {
+          size += pb::CodedOutputStream.ComputeStringSize(4, InviterFullName);
+        }
+        if (hasInviteeDisplayName) {
+          size += pb::CodedOutputStream.ComputeStringSize(5, InviteeDisplayName);
         }
         {
           int dataSize = 0;
@@ -1161,8 +1238,14 @@ namespace bnet.protocol.friends {
         if (other.HasTargetBattleTag) {
           TargetBattleTag = other.TargetBattleTag;
         }
-        if (other.HasDisplayString) {
-          DisplayString = other.DisplayString;
+        if (other.HasInviterBattleTag) {
+          InviterBattleTag = other.InviterBattleTag;
+        }
+        if (other.HasInviterFullName) {
+          InviterFullName = other.InviterFullName;
+        }
+        if (other.HasInviteeDisplayName) {
+          InviteeDisplayName = other.InviteeDisplayName;
         }
         if (other.role_.Count != 0) {
           result.role_.Add(other.role_);
@@ -1219,11 +1302,19 @@ namespace bnet.protocol.friends {
               break;
             }
             case 26: {
-              result.hasDisplayString = input.ReadString(ref result.displayString_);
+              result.hasInviterBattleTag = input.ReadString(ref result.inviterBattleTag_);
               break;
             }
-            case 34:
-            case 32: {
+            case 34: {
+              result.hasInviterFullName = input.ReadString(ref result.inviterFullName_);
+              break;
+            }
+            case 42: {
+              result.hasInviteeDisplayName = input.ReadString(ref result.inviteeDisplayName_);
+              break;
+            }
+            case 50:
+            case 48: {
               input.ReadUInt32Array(tag, field_name, result.role_);
               break;
             }
@@ -1279,24 +1370,66 @@ namespace bnet.protocol.friends {
         return this;
       }
       
-      public bool HasDisplayString {
-        get { return result.hasDisplayString; }
+      public bool HasInviterBattleTag {
+        get { return result.hasInviterBattleTag; }
       }
-      public string DisplayString {
-        get { return result.DisplayString; }
-        set { SetDisplayString(value); }
+      public string InviterBattleTag {
+        get { return result.InviterBattleTag; }
+        set { SetInviterBattleTag(value); }
       }
-      public Builder SetDisplayString(string value) {
+      public Builder SetInviterBattleTag(string value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasDisplayString = true;
-        result.displayString_ = value;
+        result.hasInviterBattleTag = true;
+        result.inviterBattleTag_ = value;
         return this;
       }
-      public Builder ClearDisplayString() {
+      public Builder ClearInviterBattleTag() {
         PrepareBuilder();
-        result.hasDisplayString = false;
-        result.displayString_ = "";
+        result.hasInviterBattleTag = false;
+        result.inviterBattleTag_ = "";
+        return this;
+      }
+      
+      public bool HasInviterFullName {
+        get { return result.hasInviterFullName; }
+      }
+      public string InviterFullName {
+        get { return result.InviterFullName; }
+        set { SetInviterFullName(value); }
+      }
+      public Builder SetInviterFullName(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasInviterFullName = true;
+        result.inviterFullName_ = value;
+        return this;
+      }
+      public Builder ClearInviterFullName() {
+        PrepareBuilder();
+        result.hasInviterFullName = false;
+        result.inviterFullName_ = "";
+        return this;
+      }
+      
+      public bool HasInviteeDisplayName {
+        get { return result.hasInviteeDisplayName; }
+      }
+      public string InviteeDisplayName {
+        get { return result.InviteeDisplayName; }
+        set { SetInviteeDisplayName(value); }
+      }
+      public Builder SetInviteeDisplayName(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasInviteeDisplayName = true;
+        result.inviteeDisplayName_ = value;
+        return this;
+      }
+      public Builder ClearInviteeDisplayName() {
+        PrepareBuilder();
+        result.hasInviteeDisplayName = false;
+        result.inviteeDisplayName_ = "";
         return this;
       }
       

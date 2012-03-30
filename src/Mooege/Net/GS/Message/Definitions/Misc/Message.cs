@@ -21,6 +21,7 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Game
 {
+    // which message is this? /raist.
     [Message(Opcodes.Message)]
     class Message : GameMessage
     {

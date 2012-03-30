@@ -85,7 +85,7 @@ namespace Mooege.Core.MooNet.Channels
             this.Roles = new List<Role>();
             AddRoles(roles);
             this.Info = bnet.protocol.AccountInfo.CreateBuilder()
-                .SetAccountStatus(bnet.protocol.AccountInfo.Types.AccountStatus.TRIAL)
+                .SetAccountPaid(true)
                 .SetCountryId(21843)
                 .Build();
         }

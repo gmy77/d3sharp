@@ -43,7 +43,6 @@ namespace Mooege.Core.GS.Common
 
         private readonly Actor _owner; // Used, because most information is not in the item class but Actors managed by the world
         
-
         private struct InventorySize
         {
             public int Width;
@@ -71,12 +70,21 @@ namespace Mooege.Core.GS.Common
             _backpack = newBackpack;
         }
 
+        public void Clear()
+        {
+            Items.Clear();
+            int r = Rows;
+            int c = Columns;
+            this._backpack = new uint[r, c];
+        }
+
         // This should be in the database#
         // Do all items need a rectangual space in diablo 3?
         private InventorySize GetItemInventorySize(Item item)
         {
             if(EquipmentSlot == (int) EquipmentSlotId.Vendor)
                 return new InventorySize() { Width = 1, Height = 1 };
+            // TODO: identify a belt as 1x1, not as generic armour 1x2
             if (Item.IsWeapon(item.ItemType) || Item.IsArmor(item.ItemType) || Item.IsOffhand(item.ItemType))
             {
                 return new InventorySize() { Width = 1, Height = 2 };
@@ -175,7 +183,17 @@ namespace Mooege.Core.GS.Common
         /// <param name="item"></param>
         public bool AddItem(Item item)
         {
-            InventorySlot? slot = FindSlotForItem(item);
+            return AddItem(-1, -1, item);
+        }
+        /// <summary>
+        /// Adds an Item at a free spot to the backpack
+        /// </summary>
+        /// <param name="minRow"></param>
+        /// <param name="maxRow"></param>
+        /// <param name="item"></param>
+        public bool AddItem(int minRow, int maxRow, Item item)
+        {
+            InventorySlot? slot = FindSlotForItem(minRow, maxRow, item);
             if (slot.HasValue)
             {
                 AddItem(item, slot.Value.Row, slot.Value.Column);
@@ -190,7 +208,12 @@ namespace Mooege.Core.GS.Common
 
         public Boolean HasFreeSpace(Item item)
         {
-            return (FindSlotForItem(item) != null);
+            return (FindSlotForItem(-1, -1, item) != null);
+        }
+
+        public Boolean HasFreeSpace(int minRow, int maxRow, Item item)
+        {
+            return (FindSlotForItem(minRow, maxRow, item) != null);
         }
 
         /// <summary>
@@ -210,10 +233,13 @@ namespace Mooege.Core.GS.Common
         /// Find an inventory slot with enough space for an item
         /// </summary>
         /// <returns>Slot or null if there is no space in the backpack</returns>
-        private InventorySlot? FindSlotForItem(Item item)
+        private InventorySlot? FindSlotForItem(int minRow, int maxRow, Item item)
         {
             InventorySize size = GetItemInventorySize(item);
-            for (int r = 0; r <= Rows - size.Height; r++)
+            // If we target a specific tab in stash, we need to specify min and max row to fill
+            int nStartRow = minRow == -1 ? 0 : Math.Min(minRow, Rows); // maybe not needed, because Rows always > minRow
+            int nEndRow = minRow == -1 ? Rows : Math.Min(maxRow, Rows);
+            for (int r = nStartRow; r <= nEndRow - size.Height; r++)
                 for (int c = 0; c <= Columns - size.Width; c++)
                     if (CollectOverlappingItems(item, r, c) == 0)
                         return new InventorySlot() { Row = r, Column = c };

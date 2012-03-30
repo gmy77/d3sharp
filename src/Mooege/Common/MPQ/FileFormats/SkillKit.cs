@@ -61,16 +61,27 @@ namespace Mooege.Common.MPQ.FileFormats
     {
         public int SNOPower { get; private set; }
         public ActiveSkillCategory Category { get; private set; }
+        public int SkillGroup { get; private set; }  // TODO: possible to make an enum for this, like Category has?
         public int ReqLevel { get; private set; }
-        public int I2 { get; private set; }
+        public int RuneNone_ReqLevel { get; private set; }
+        public int RuneA_ReqLevel { get; private set; }
+        public int RuneB_ReqLevel { get; private set; }
+        public int RuneC_ReqLevel { get; private set; }
+        public int RuneD_ReqLevel { get; private set; }
+        public int RuneE_ReqLevel { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
             this.SNOPower = stream.ReadValueS32();
             this.Category = (ActiveSkillCategory)stream.ReadValueS32();
+            this.SkillGroup = stream.ReadValueS32();
             this.ReqLevel = stream.ReadValueS32();
-            this.I2 = stream.ReadValueS32();
-
+            this.RuneNone_ReqLevel = stream.ReadValueS32();
+            this.RuneA_ReqLevel = stream.ReadValueS32();
+            this.RuneB_ReqLevel = stream.ReadValueS32();
+            this.RuneC_ReqLevel = stream.ReadValueS32();
+            this.RuneD_ReqLevel = stream.ReadValueS32();
+            this.RuneE_ReqLevel = stream.ReadValueS32();
         }
     }
 

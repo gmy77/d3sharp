@@ -23,19 +23,21 @@ namespace Mooege.Net.GS.Message.Definitions.Player
     [Message(Opcodes.PlayerLevel)]
     public class PlayerLevel : GameMessage
     {
-        public int Field0;
-        public int Field1;
+        public PlayerLevel() : base(Opcodes.PlayerLevel) { }
+        
+        public int PlayerIndex;
+        public int Level;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(3);
-            Field1 = buffer.ReadInt(7);
+            PlayerIndex = buffer.ReadInt(3);
+            Level = buffer.ReadInt(7);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(3, Field0);
-            buffer.WriteInt(7, Field1);
+            buffer.WriteInt(3, PlayerIndex);
+            buffer.WriteInt(7, Level);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -44,8 +46,8 @@ namespace Mooege.Net.GS.Message.Definitions.Player
             b.AppendLine("PlayerLevel:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("PlayerIndex: 0x" + PlayerIndex.ToString("X8") + " (" + PlayerIndex + ")");
+            b.Append(' ', pad); b.AppendLine("Level: 0x" + Level.ToString("X8") + " (" + Level + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

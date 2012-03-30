@@ -60,6 +60,9 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F12 { get; private set; }
         public float F13 { get; private set; }
         public float F14 { get; private set; }
+        public float F15 { get; private set; }
+        public float F16 { get; private set; }
+        public float F17 { get; private set; }
 
         public Globals(MpqFile file)
         {
@@ -109,6 +112,9 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F12 = stream.ReadValueF32(); //1992
             this.F13 = stream.ReadValueF32(); //1996
             this.F14 = stream.ReadValueF32(); //2000
+            this.F15 = stream.ReadValueF32(); //2004
+            this.F16 = stream.ReadValueF32(); //2008
+            this.F17 = stream.ReadValueF32(); //2012
             stream.Close();
         }
     }
@@ -123,6 +129,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F5 { get; private set; }
         public float F6 { get; private set; }
         public float F7 { get; private set; }
+        public float F8 { get; private set; }
+        public float F9 { get; private set; }
 
         public DifficultyTuningParams(MpqFileStream stream)
         {
@@ -134,6 +142,8 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F5 = stream.ReadValueF32();
             this.F6 = stream.ReadValueF32();
             this.F7 = stream.ReadValueF32();
+            this.F8 = stream.ReadValueF32();
+            this.F9 = stream.ReadValueF32();
         }
     }
 
@@ -191,6 +201,11 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F6 { get; private set; }
         public float F7 { get; private set; }
         public float F8 { get; private set; }
+        public float F20 { get; private set; }
+        public float F21 { get; private set; }
+        public float F22 { get; private set; }
+        public int I5 { get; private set; }
+        public float F23 { get; private set; }
         public int I2 { get; private set; }
         public int I3 { get; private set; }
         public int I4 { get; private set; }
@@ -204,7 +219,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F16 { get; private set; }
         public float F17 { get; private set; }
         public float F18 { get; private set; }
-        public float F19 { get; private set; }
+        public float[] F19 { get; private set; }
 
         public void Read(MpqFileStream stream)
         {
@@ -229,6 +244,11 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F6 = stream.ReadValueF32();
             this.F7 = stream.ReadValueF32();
             this.F8 = stream.ReadValueF32();
+            this.F20 = stream.ReadValueF32();
+            this.F21 = stream.ReadValueF32();
+            this.F22 = stream.ReadValueF32();
+            this.I5 = stream.ReadValueS32();
+            this.F23 = stream.ReadValueF32();
             this.I2 = stream.ReadValueS32();
             this.I3 = stream.ReadValueS32();
             this.I4 = stream.ReadValueS32();
@@ -242,8 +262,9 @@ namespace Mooege.Common.MPQ.FileFormats
             this.F16 = stream.ReadValueF32();
             this.F17 = stream.ReadValueF32();
             this.F18 = stream.ReadValueF32();
-            this.F19 = stream.ReadValueF32();
-            stream.Position += 8;
+            this.F19 = new float[4];
+            for (var i = 0; i < 4; i++)
+                this.F19[i] = stream.ReadValueF32();
         }
     }
 

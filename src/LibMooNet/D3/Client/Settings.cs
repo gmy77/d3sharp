@@ -39,101 +39,109 @@ namespace D3.Client {
           "Cgh1aV9mbGFncxgBIAEoDToBMCKNAQoNQWN0aW9uQmluZGluZxIRCgVrZXlf" + 
           "MRgBIAIoBToCLTESHwoUa2V5X21vZGlmaWVyX2ZsYWdzXzEYAiACKA06ATAS" + 
           "EQoFa2V5XzIYAyACKAU6Ai0xEh8KFGtleV9tb2RpZmllcl9mbGFnc18yGAQg" + 
-          "AigNOgEwEhQKDGlucHV0X2J1dHRvbhgFIAEoDSKYAQoTR2FtZUFjY291bnRT" + 
+          "AigNOgEwEhQKDGlucHV0X2J1dHRvbhgFIAEoDSK4AQoTR2FtZUFjY291bnRT" + 
           "ZXR0aW5ncxIYCg11c2VfbGFzdF9oZXJvGAEgASgFOgEwEh0KEnNob3dfb2Zm" + 
           "bGluZV90b2FzdBgCIAEoBToBMBIeChZybXRfbGFzdF91c2VkX2N1cnJlbmN5" + 
           "GAMgASgJEigKHWNvb3BfbGFzdF9jcmVhdGVfZ2FtZV9wcml2YWN5GAQgASgF" + 
-          "OgExIucfCgtQcmVmZXJlbmNlcxIPCgd2ZXJzaW9uGAEgAigFEhAKBWZsYWdz" + 
-          "GAIgASgNOgEwEiIKF2l0ZW1zX29uX2dyb3VuZF9zZXR0aW5nGAYgASgNOgEw" + 
-          "EjoKGGFjdGlvbl9iaW5kaW5nX2ludmVudG9yeRgKIAEoCzIYLkQzLkNsaWVu" + 
-          "dC5BY3Rpb25CaW5kaW5nEjkKF2FjdGlvbl9iaW5kaW5nX2hpcmVsaW5nGAwg" + 
-          "ASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSNwoVYWN0aW9uX2JpbmRp" + 
-          "bmdfc2tpbGxzGA0gASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSNwoV" + 
-          "YWN0aW9uX2JpbmRpbmdfcXVlc3RzGA4gASgLMhguRDMuQ2xpZW50LkFjdGlv" + 
-          "bkJpbmRpbmcSNQoTYWN0aW9uX2JpbmRpbmdfbG9yZRgPIAEoCzIYLkQzLkNs" + 
-          "aWVudC5BY3Rpb25CaW5kaW5nEjcKFWFjdGlvbl9iaW5kaW5nX3NvY2lhbBgQ" + 
-          "IAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEjkKF2FjdGlvbl9iaW5k" + 
-          "aW5nX3dvcmxkbWFwGBEgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcS" + 
-          "NQoTYWN0aW9uX2JpbmRpbmdfaGVscBgSIAEoCzIYLkQzLkNsaWVudC5BY3Rp" + 
-          "b25CaW5kaW5nEj4KHGFjdGlvbl9iaW5kaW5nX3JlY2VudHBsYXllcnMYFCAB" + 
-          "KAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI6ChhhY3Rpb25fYmluZGlu" + 
-          "Z19jaGF0bG9iYnkYFSABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI9" + 
-          "ChthY3Rpb25fYmluZGluZ19hY2hpZXZlbWVudHMYFiABKAsyGC5EMy5DbGll" + 
-          "bnQuQWN0aW9uQmluZGluZxI4ChZhY3Rpb25fYmluZGluZ19wcm9maWxlGBcg" + 
-          "ASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSPQobYWN0aW9uX2JpbmRp" + 
-          "bmdfYXVjdGlvbmhvdXNlGBggASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRp" + 
-          "bmcSNgoUYWN0aW9uX2JpbmRpbmdfY2xlYXIYGSABKAsyGC5EMy5DbGllbnQu" + 
-          "QWN0aW9uQmluZGluZxI4ChZhY3Rpb25fYmluZGluZ19jb25zb2xlGBogASgL" + 
-          "MhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSNAoSYWN0aW9uX2JpbmRpbmdf" + 
-          "bWFwGBsgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSOwoZYWN0aW9u" + 
-          "X2JpbmRpbmdfc2tpbGxjeWNsZRgcIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25C" + 
-          "aW5kaW5nEkQKImFjdGlvbl9iaW5kaW5nX3RvZ2dsZW1vbnN0ZXJocGJhcnMY" + 
-          "HSABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxJDCiFhY3Rpb25fYmlu" + 
-          "ZGluZ190b2dnbGVwbGF5ZXJocGJhcnMYHyABKAsyGC5EMy5DbGllbnQuQWN0" + 
-          "aW9uQmluZGluZxJECiJhY3Rpb25fYmluZGluZ190b2dnbGVkYW1hZ2VudW1i" + 
-          "ZXJzGCAgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSRAoiYWN0aW9u" + 
-          "X2JpbmRpbmdfdG9nZ2xlaXRlbXNvbmdyb3VuZBghIAEoCzIYLkQzLkNsaWVu" + 
-          "dC5BY3Rpb25CaW5kaW5nEjoKGGFjdGlvbl9iaW5kaW5nX3Jld2hpc3Blchgi" + 
+          "OgExEh4KFnJtdF9wcmVmZXJyZWRfY3VycmVuY3kYBSABKAkioiIKC1ByZWZl" + 
+          "cmVuY2VzEg8KB3ZlcnNpb24YASACKAUSEAoFZmxhZ3MYAiABKA06ATASIgoX" + 
+          "aXRlbXNfb25fZ3JvdW5kX3NldHRpbmcYBiABKA06ATASOgoYYWN0aW9uX2Jp" + 
+          "bmRpbmdfaW52ZW50b3J5GAogASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRp" + 
+          "bmcSOQoXYWN0aW9uX2JpbmRpbmdfaGlyZWxpbmcYDCABKAsyGC5EMy5DbGll" + 
+          "bnQuQWN0aW9uQmluZGluZxI3ChVhY3Rpb25fYmluZGluZ19za2lsbHMYDSAB" + 
+          "KAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI3ChVhY3Rpb25fYmluZGlu" + 
+          "Z19xdWVzdHMYDiABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI1ChNh" + 
+          "Y3Rpb25fYmluZGluZ19sb3JlGA8gASgLMhguRDMuQ2xpZW50LkFjdGlvbkJp" + 
+          "bmRpbmcSNwoVYWN0aW9uX2JpbmRpbmdfc29jaWFsGBAgASgLMhguRDMuQ2xp" + 
+          "ZW50LkFjdGlvbkJpbmRpbmcSOQoXYWN0aW9uX2JpbmRpbmdfd29ybGRtYXAY" + 
+          "ESABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI1ChNhY3Rpb25fYmlu" + 
+          "ZGluZ19oZWxwGBIgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSPgoc" + 
+          "YWN0aW9uX2JpbmRpbmdfcmVjZW50cGxheWVycxgUIAEoCzIYLkQzLkNsaWVu" + 
+          "dC5BY3Rpb25CaW5kaW5nEjoKGGFjdGlvbl9iaW5kaW5nX2NoYXRsb2JieRgV" + 
           "IAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEj0KG2FjdGlvbl9iaW5k" + 
-          "aW5nX3doaXNwZXJyZXBseRgjIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5k" + 
-          "aW5nEjkKF2FjdGlvbl9iaW5kaW5nX3ZvaWNlcHR0GCQgASgLMhguRDMuQ2xp" + 
-          "ZW50LkFjdGlvbkJpbmRpbmcSNwoVYWN0aW9uX2JpbmRpbmdfc2tpbGwxGCUg" + 
-          "ASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSNwoVYWN0aW9uX2JpbmRp" + 
-          "bmdfc2tpbGwyGCYgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSNwoV" + 
-          "YWN0aW9uX2JpbmRpbmdfc2tpbGwzGCcgASgLMhguRDMuQ2xpZW50LkFjdGlv" + 
-          "bkJpbmRpbmcSNwoVYWN0aW9uX2JpbmRpbmdfc2tpbGw0GCggASgLMhguRDMu" + 
-          "Q2xpZW50LkFjdGlvbkJpbmRpbmcSNwoVYWN0aW9uX2JpbmRpbmdfc2tpbGw1" + 
-          "GCkgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSOwoZYWN0aW9uX2Jp" + 
-          "bmRpbmdfYmFubmVyZHJvcBgqIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5k" + 
-          "aW5nEjUKE2FjdGlvbl9iaW5kaW5nX3pvb20YKyABKAsyGC5EMy5DbGllbnQu" + 
-          "QWN0aW9uQmluZGluZxI8ChphY3Rpb25fYmluZGluZ19lbW90ZWZvbGxvdxgs" + 
-          "IAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEjoKGGFjdGlvbl9iaW5k" + 
-          "aW5nX2Vtb3RlZ2l2ZRgtIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5n" + 
-          "EjwKGmFjdGlvbl9iaW5kaW5nX2Vtb3RldGhhbmtzGC4gASgLMhguRDMuQ2xp" + 
-          "ZW50LkFjdGlvbkJpbmRpbmcSOwoZYWN0aW9uX2JpbmRpbmdfZW1vdGVzb3Jy" + 
-          "eRgvIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEjkKF2FjdGlvbl9i" + 
-          "aW5kaW5nX2Vtb3RlYnllGDAgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRp" + 
-          "bmcSOQoXYWN0aW9uX2JpbmRpbmdfZW1vdGVkaWUYMSABKAsyGC5EMy5DbGll" + 
-          "bnQuQWN0aW9uQmluZGluZxI5ChdhY3Rpb25fYmluZGluZ19lbW90ZXJ1bhgy" + 
-          "IAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEjoKGGFjdGlvbl9iaW5k" + 
-          "aW5nX2Vtb3Rld2FpdBgzIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5n" + 
-          "EjgKFmFjdGlvbl9iaW5kaW5nX2Vtb3RlZ28YNCABKAsyGC5EMy5DbGllbnQu" + 
-          "QWN0aW9uQmluZGluZxI6ChhhY3Rpb25fYmluZGluZ19lbW90ZWhlbHAYNSAB" + 
-          "KAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI5ChdhY3Rpb25fYmluZGlu" + 
-          "Z19lbW90ZXllcxg2IAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEjgK" + 
-          "FmFjdGlvbl9iaW5kaW5nX2Vtb3Rlbm8YNyABKAsyGC5EMy5DbGllbnQuQWN0" + 
-          "aW9uQmluZGluZxI6ChhhY3Rpb25fYmluZGluZ19lbW90ZXN0YXkYOCABKAsy" + 
-          "GC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI8ChphY3Rpb25fYmluZGluZ19l" + 
-          "bW90ZWF0dGFjaxg5IAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEj0K" + 
-          "G2FjdGlvbl9iaW5kaW5nX2Vtb3RlcmV0cmVhdBg6IAEoCzIYLkQzLkNsaWVu" + 
-          "dC5BY3Rpb25CaW5kaW5nEjoKGGFjdGlvbl9iaW5kaW5nX2Vtb3RlaG9sZBg7" + 
-          "IAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEkMKIWFjdGlvbl9iaW5k" + 
-          "aW5nX2Vtb3RldGFrZW9iamVjdGl2ZRg8IAEoCzIYLkQzLkNsaWVudC5BY3Rp" + 
-          "b25CaW5kaW5nEjsKGWFjdGlvbl9iaW5kaW5nX2Vtb3RlbGF1Z2gYPSABKAsy" + 
-          "GC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI9ChthY3Rpb25fYmluZGluZ19o" + 
-          "b2xkcG9zaXRpb24YPiABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxJF" + 
-          "CiNhY3Rpb25fYmluZGluZ19zeXN0ZW1tYXN0ZXJ2b2x1bWV1cBg/IAEoCzIY" + 
-          "LkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEkcKJWFjdGlvbl9iaW5kaW5nX3N5" + 
-          "c3RlbW1hc3RlcnZvbHVtZWRvd24YQCABKAsyGC5EMy5DbGllbnQuQWN0aW9u" + 
-          "QmluZGluZxJCCiBhY3Rpb25fYmluZGluZ19zeXN0ZW10b2dnbGVtdXNpYxhB" + 
-          "IAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEkIKIGFjdGlvbl9iaW5k" + 
-          "aW5nX3N5c3RlbXRvZ2dsZXNvdW5kGEIgASgLMhguRDMuQ2xpZW50LkFjdGlv" + 
-          "bkJpbmRpbmcSQQofYWN0aW9uX2JpbmRpbmdfc3lzdGVtc2NyZWVuc2hvdBhD" + 
-          "IAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEj4KHGFjdGlvbl9iaW5k" + 
-          "aW5nX3N0b25lb2ZyZWNhbGwYRCABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmlu" + 
-          "ZGluZxI9ChthY3Rpb25fYmluZGluZ19iYW5uZXJzY3JlZW4YRSABKAsyGC5E" + 
-          "My5DbGllbnQuQWN0aW9uQmluZGluZxI0ChJhY3Rpb25fYmluZGluZ19sbWIY" + 
-          "RiABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI0ChJhY3Rpb25fYmlu" + 
-          "ZGluZ19ybWIYRyABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZyKFAwoF" + 
-          "RmxhZ3MSHQoZU0hPV19JVEVNX1RPT0xUSVBfT05fRFJPUBABEhgKFFNIT1df" + 
-          "TU9OU1RFUl9IUF9CQVJTEAISFwoTU0hPV19QTEFZRVJfSFBfQkFSUxADEhgK" + 
-          "FFNIT1dfSVRFTVNfT05fR1JPVU5EEAYSEQoNTE9DS19TS0lMTEJBUhAHEhcK" + 
-          "E1NIT1dfREFNQUdFX05VTUJFUlMQCBISCg5TSE9XX0NSSVRJQ0FMUxAJEhsK" + 
-          "F1NIT1dfREVGRU5TSVZFX01FU1NBR0VTEAoSEgoOSU5WRU5UT1JZX1pPT00Q" + 
-          "CxIUChBBVVRPX0VRVUlQX0lURU1TEAwSEgoOU0hPV19UVVRPUklBTFMQDRIU" + 
-          "ChBTSE9XX0JSRUFEX0NSVU1CEA4SGAoURElTQUJMRV9PU19TSE9SVENVVFMQ" + 
-          "ERIVChFTSE9XX0hFQUxfTlVNQkVSUxASEhUKEVNIT1dfUExBWUVSX05BTUVT" + 
-          "EBMSFwoTU0hPV19IUF9CQVJfTlVNQkVSUxAU");
+          "aW5nX2FjaGlldmVtZW50cxgWIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5k" + 
+          "aW5nEjgKFmFjdGlvbl9iaW5kaW5nX3Byb2ZpbGUYFyABKAsyGC5EMy5DbGll" + 
+          "bnQuQWN0aW9uQmluZGluZxI9ChthY3Rpb25fYmluZGluZ19hdWN0aW9uaG91" + 
+          "c2UYGCABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI2ChRhY3Rpb25f" + 
+          "YmluZGluZ19jbGVhchgZIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5n" + 
+          "EjgKFmFjdGlvbl9iaW5kaW5nX2NvbnNvbGUYGiABKAsyGC5EMy5DbGllbnQu" + 
+          "QWN0aW9uQmluZGluZxI0ChJhY3Rpb25fYmluZGluZ19tYXAYGyABKAsyGC5E" + 
+          "My5DbGllbnQuQWN0aW9uQmluZGluZxI7ChlhY3Rpb25fYmluZGluZ19za2ls" + 
+          "bGN5Y2xlGBwgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSRAoiYWN0" + 
+          "aW9uX2JpbmRpbmdfdG9nZ2xlbW9uc3RlcmhwYmFycxgdIAEoCzIYLkQzLkNs" + 
+          "aWVudC5BY3Rpb25CaW5kaW5nEkMKIWFjdGlvbl9iaW5kaW5nX3RvZ2dsZXBs" + 
+          "YXllcmhwYmFycxgfIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEkQK" + 
+          "ImFjdGlvbl9iaW5kaW5nX3RvZ2dsZWRhbWFnZW51bWJlcnMYICABKAsyGC5E" + 
+          "My5DbGllbnQuQWN0aW9uQmluZGluZxJECiJhY3Rpb25fYmluZGluZ190b2dn" + 
+          "bGVpdGVtc29uZ3JvdW5kGCEgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRp" + 
+          "bmcSOgoYYWN0aW9uX2JpbmRpbmdfcmV3aGlzcGVyGCIgASgLMhguRDMuQ2xp" + 
+          "ZW50LkFjdGlvbkJpbmRpbmcSPQobYWN0aW9uX2JpbmRpbmdfd2hpc3BlcnJl" + 
+          "cGx5GCMgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSOQoXYWN0aW9u" + 
+          "X2JpbmRpbmdfdm9pY2VwdHQYJCABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmlu" + 
+          "ZGluZxI3ChVhY3Rpb25fYmluZGluZ19za2lsbDEYJSABKAsyGC5EMy5DbGll" + 
+          "bnQuQWN0aW9uQmluZGluZxI3ChVhY3Rpb25fYmluZGluZ19za2lsbDIYJiAB" + 
+          "KAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI3ChVhY3Rpb25fYmluZGlu" + 
+          "Z19za2lsbDMYJyABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI3ChVh" + 
+          "Y3Rpb25fYmluZGluZ19za2lsbDQYKCABKAsyGC5EMy5DbGllbnQuQWN0aW9u" + 
+          "QmluZGluZxI3ChVhY3Rpb25fYmluZGluZ19wb3Rpb24YKSABKAsyGC5EMy5D" + 
+          "bGllbnQuQWN0aW9uQmluZGluZxI7ChlhY3Rpb25fYmluZGluZ19iYW5uZXJk" + 
+          "cm9wGCogASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSNQoTYWN0aW9u" + 
+          "X2JpbmRpbmdfem9vbRgrIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5n" + 
+          "EjwKGmFjdGlvbl9iaW5kaW5nX2Vtb3RlZm9sbG93GCwgASgLMhguRDMuQ2xp" + 
+          "ZW50LkFjdGlvbkJpbmRpbmcSOgoYYWN0aW9uX2JpbmRpbmdfZW1vdGVnaXZl" + 
+          "GC0gASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSPAoaYWN0aW9uX2Jp" + 
+          "bmRpbmdfZW1vdGV0aGFua3MYLiABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmlu" + 
+          "ZGluZxI7ChlhY3Rpb25fYmluZGluZ19lbW90ZXNvcnJ5GC8gASgLMhguRDMu" + 
+          "Q2xpZW50LkFjdGlvbkJpbmRpbmcSOQoXYWN0aW9uX2JpbmRpbmdfZW1vdGVi" + 
+          "eWUYMCABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxI5ChdhY3Rpb25f" + 
+          "YmluZGluZ19lbW90ZWRpZRgxIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5k" + 
+          "aW5nEjkKF2FjdGlvbl9iaW5kaW5nX2Vtb3RlcnVuGDIgASgLMhguRDMuQ2xp" + 
+          "ZW50LkFjdGlvbkJpbmRpbmcSOgoYYWN0aW9uX2JpbmRpbmdfZW1vdGV3YWl0" + 
+          "GDMgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSOAoWYWN0aW9uX2Jp" + 
+          "bmRpbmdfZW1vdGVnbxg0IAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5n" + 
+          "EjoKGGFjdGlvbl9iaW5kaW5nX2Vtb3RlaGVscBg1IAEoCzIYLkQzLkNsaWVu" + 
+          "dC5BY3Rpb25CaW5kaW5nEjkKF2FjdGlvbl9iaW5kaW5nX2Vtb3RleWVzGDYg" + 
+          "ASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSOAoWYWN0aW9uX2JpbmRp" + 
+          "bmdfZW1vdGVubxg3IAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEjoK" + 
+          "GGFjdGlvbl9iaW5kaW5nX2Vtb3Rlc3RheRg4IAEoCzIYLkQzLkNsaWVudC5B" + 
+          "Y3Rpb25CaW5kaW5nEjwKGmFjdGlvbl9iaW5kaW5nX2Vtb3RlYXR0YWNrGDkg" + 
+          "ASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSPQobYWN0aW9uX2JpbmRp" + 
+          "bmdfZW1vdGVyZXRyZWF0GDogASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRp" + 
+          "bmcSOgoYYWN0aW9uX2JpbmRpbmdfZW1vdGVob2xkGDsgASgLMhguRDMuQ2xp" + 
+          "ZW50LkFjdGlvbkJpbmRpbmcSQwohYWN0aW9uX2JpbmRpbmdfZW1vdGV0YWtl" + 
+          "b2JqZWN0aXZlGDwgASgLMhguRDMuQ2xpZW50LkFjdGlvbkJpbmRpbmcSOwoZ" + 
+          "YWN0aW9uX2JpbmRpbmdfZW1vdGVsYXVnaBg9IAEoCzIYLkQzLkNsaWVudC5B" + 
+          "Y3Rpb25CaW5kaW5nEj0KG2FjdGlvbl9iaW5kaW5nX2hvbGRwb3NpdGlvbhg+" + 
+          "IAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEkUKI2FjdGlvbl9iaW5k" + 
+          "aW5nX3N5c3RlbW1hc3RlcnZvbHVtZXVwGD8gASgLMhguRDMuQ2xpZW50LkFj" + 
+          "dGlvbkJpbmRpbmcSRwolYWN0aW9uX2JpbmRpbmdfc3lzdGVtbWFzdGVydm9s" + 
+          "dW1lZG93bhhAIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEkIKIGFj" + 
+          "dGlvbl9iaW5kaW5nX3N5c3RlbXRvZ2dsZW11c2ljGEEgASgLMhguRDMuQ2xp" + 
+          "ZW50LkFjdGlvbkJpbmRpbmcSQgogYWN0aW9uX2JpbmRpbmdfc3lzdGVtdG9n" + 
+          "Z2xlc291bmQYQiABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxJBCh9h" + 
+          "Y3Rpb25fYmluZGluZ19zeXN0ZW1zY3JlZW5zaG90GEMgASgLMhguRDMuQ2xp" + 
+          "ZW50LkFjdGlvbkJpbmRpbmcSPgocYWN0aW9uX2JpbmRpbmdfc3RvbmVvZnJl" + 
+          "Y2FsbBhEIAEoCzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEj0KG2FjdGlv" + 
+          "bl9iaW5kaW5nX2Jhbm5lcnNjcmVlbhhFIAEoCzIYLkQzLkNsaWVudC5BY3Rp" + 
+          "b25CaW5kaW5nEjQKEmFjdGlvbl9iaW5kaW5nX2xtYhhGIAEoCzIYLkQzLkNs" + 
+          "aWVudC5BY3Rpb25CaW5kaW5nEjQKEmFjdGlvbl9iaW5kaW5nX3JtYhhHIAEo" + 
+          "CzIYLkQzLkNsaWVudC5BY3Rpb25CaW5kaW5nEjUKE2FjdGlvbl9iaW5kaW5n" + 
+          "X3dhbGsYSCABKAsyGC5EMy5DbGllbnQuQWN0aW9uQmluZGluZxIaCg9ub3Rp" + 
+          "ZnlfZHVyYXRpb24YZCABKA06ATAi7QQKBUZsYWdzEh0KGVNIT1dfSVRFTV9U" + 
+          "T09MVElQX09OX0RST1AQARIYChRTSE9XX01PTlNURVJfSFBfQkFSUxACEhcK" + 
+          "E1NIT1dfUExBWUVSX0hQX0JBUlMQAxIYChRTSE9XX0lURU1TX09OX0dST1VO" + 
+          "RBAGEhcKE1NIT1dfREFNQUdFX05VTUJFUlMQCBISCg5TSE9XX0NSSVRJQ0FM" + 
+          "UxAJEhsKF1NIT1dfREVGRU5TSVZFX01FU1NBR0VTEAoSEgoOSU5WRU5UT1JZ" + 
+          "X1pPT00QCxIUChBBVVRPX0VRVUlQX0lURU1TEAwSEgoOU0hPV19UVVRPUklB" + 
+          "TFMQDRIUChBTSE9XX0JSRUFEX0NSVU1CEA4SGAoURElTQUJMRV9PU19TSE9S" + 
+          "VENVVFMQERIVChFTSE9XX0hFQUxfTlVNQkVSUxASEhUKEVNIT1dfUExBWUVS" + 
+          "X05BTUVTEBMSFwoTU0hPV19IUF9CQVJfTlVNQkVSUxAUEg4KClNIT1dfQ0xP" + 
+          "Q0sQFRIaChZTSE9XX0FEVkFOQ0VEX1RPT0xUSVBTEBYSEQoNRUxFQ1RJVkVf" + 
+          "TU9ERRAXEhgKFE5PVElGWV9GUklFTkRfT05MSU5FEBgSGQoVTk9USUZZX0ZS" + 
+          "SUVORF9PRkZMSU5FEBkSGQoVTk9USUZZX0ZSSUVORF9SRVFVRVNUEBoSHQoZ" + 
+          "Tk9USUZZX0ZSSUVORF9BQ0hJRVZFTUVOVBAbEhkKFU5PVElGWV9ESVNQTEFZ" + 
+          "X1dJTkRPVxAcEhoKFk1BVFVSRV9MQU5HVUFHRV9GSUxURVIQHRIUChBBTExP" + 
+          "V19RVUlDS19KT0lOEB4=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Client_ToonSettings__Descriptor = Descriptor.MessageTypes[0];
@@ -147,11 +155,11 @@ namespace D3.Client {
         internal__static_D3_Client_GameAccountSettings__Descriptor = Descriptor.MessageTypes[2];
         internal__static_D3_Client_GameAccountSettings__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Client.GameAccountSettings, global::D3.Client.GameAccountSettings.Builder>(internal__static_D3_Client_GameAccountSettings__Descriptor,
-                new string[] { "UseLastHero", "ShowOfflineToast", "RmtLastUsedCurrency", "CoopLastCreateGamePrivacy", });
+                new string[] { "UseLastHero", "ShowOfflineToast", "RmtLastUsedCurrency", "CoopLastCreateGamePrivacy", "RmtPreferredCurrency", });
         internal__static_D3_Client_Preferences__Descriptor = Descriptor.MessageTypes[3];
         internal__static_D3_Client_Preferences__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Client.Preferences, global::D3.Client.Preferences.Builder>(internal__static_D3_Client_Preferences__Descriptor,
-                new string[] { "Version", "Flags", "ItemsOnGroundSetting", "ActionBindingInventory", "ActionBindingHireling", "ActionBindingSkills", "ActionBindingQuests", "ActionBindingLore", "ActionBindingSocial", "ActionBindingWorldmap", "ActionBindingHelp", "ActionBindingRecentplayers", "ActionBindingChatlobby", "ActionBindingAchievements", "ActionBindingProfile", "ActionBindingAuctionhouse", "ActionBindingClear", "ActionBindingConsole", "ActionBindingMap", "ActionBindingSkillcycle", "ActionBindingTogglemonsterhpbars", "ActionBindingToggleplayerhpbars", "ActionBindingToggledamagenumbers", "ActionBindingToggleitemsonground", "ActionBindingRewhisper", "ActionBindingWhisperreply", "ActionBindingVoiceptt", "ActionBindingSkill1", "ActionBindingSkill2", "ActionBindingSkill3", "ActionBindingSkill4", "ActionBindingSkill5", "ActionBindingBannerdrop", "ActionBindingZoom", "ActionBindingEmotefollow", "ActionBindingEmotegive", "ActionBindingEmotethanks", "ActionBindingEmotesorry", "ActionBindingEmotebye", "ActionBindingEmotedie", "ActionBindingEmoterun", "ActionBindingEmotewait", "ActionBindingEmotego", "ActionBindingEmotehelp", "ActionBindingEmoteyes", "ActionBindingEmoteno", "ActionBindingEmotestay", "ActionBindingEmoteattack", "ActionBindingEmoteretreat", "ActionBindingEmotehold", "ActionBindingEmotetakeobjective", "ActionBindingEmotelaugh", "ActionBindingHoldposition", "ActionBindingSystemmastervolumeup", "ActionBindingSystemmastervolumedown", "ActionBindingSystemtogglemusic", "ActionBindingSystemtogglesound", "ActionBindingSystemscreenshot", "ActionBindingStoneofrecall", "ActionBindingBannerscreen", "ActionBindingLmb", "ActionBindingRmb", });
+                new string[] { "Version", "Flags", "ItemsOnGroundSetting", "ActionBindingInventory", "ActionBindingHireling", "ActionBindingSkills", "ActionBindingQuests", "ActionBindingLore", "ActionBindingSocial", "ActionBindingWorldmap", "ActionBindingHelp", "ActionBindingRecentplayers", "ActionBindingChatlobby", "ActionBindingAchievements", "ActionBindingProfile", "ActionBindingAuctionhouse", "ActionBindingClear", "ActionBindingConsole", "ActionBindingMap", "ActionBindingSkillcycle", "ActionBindingTogglemonsterhpbars", "ActionBindingToggleplayerhpbars", "ActionBindingToggledamagenumbers", "ActionBindingToggleitemsonground", "ActionBindingRewhisper", "ActionBindingWhisperreply", "ActionBindingVoiceptt", "ActionBindingSkill1", "ActionBindingSkill2", "ActionBindingSkill3", "ActionBindingSkill4", "ActionBindingPotion", "ActionBindingBannerdrop", "ActionBindingZoom", "ActionBindingEmotefollow", "ActionBindingEmotegive", "ActionBindingEmotethanks", "ActionBindingEmotesorry", "ActionBindingEmotebye", "ActionBindingEmotedie", "ActionBindingEmoterun", "ActionBindingEmotewait", "ActionBindingEmotego", "ActionBindingEmotehelp", "ActionBindingEmoteyes", "ActionBindingEmoteno", "ActionBindingEmotestay", "ActionBindingEmoteattack", "ActionBindingEmoteretreat", "ActionBindingEmotehold", "ActionBindingEmotetakeobjective", "ActionBindingEmotelaugh", "ActionBindingHoldposition", "ActionBindingSystemmastervolumeup", "ActionBindingSystemmastervolumedown", "ActionBindingSystemtogglemusic", "ActionBindingSystemtogglesound", "ActionBindingSystemscreenshot", "ActionBindingStoneofrecall", "ActionBindingBannerscreen", "ActionBindingLmb", "ActionBindingRmb", "ActionBindingWalk", "NotifyDuration", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -892,8 +900,8 @@ namespace D3.Client {
   public sealed partial class GameAccountSettings : pb::GeneratedMessage<GameAccountSettings, GameAccountSettings.Builder> {
     private GameAccountSettings() { }
     private static readonly GameAccountSettings defaultInstance = new GameAccountSettings().MakeReadOnly();
-    private static readonly string[] _gameAccountSettingsFieldNames = new string[] { "coop_last_create_game_privacy", "rmt_last_used_currency", "show_offline_toast", "use_last_hero" };
-    private static readonly uint[] _gameAccountSettingsFieldTags = new uint[] { 32, 26, 16, 8 };
+    private static readonly string[] _gameAccountSettingsFieldNames = new string[] { "coop_last_create_game_privacy", "rmt_last_used_currency", "rmt_preferred_currency", "show_offline_toast", "use_last_hero" };
+    private static readonly uint[] _gameAccountSettingsFieldTags = new uint[] { 32, 26, 42, 16, 8 };
     public static GameAccountSettings DefaultInstance {
       get { return defaultInstance; }
     }
@@ -954,6 +962,16 @@ namespace D3.Client {
       get { return coopLastCreateGamePrivacy_; }
     }
     
+    public const int RmtPreferredCurrencyFieldNumber = 5;
+    private bool hasRmtPreferredCurrency;
+    private string rmtPreferredCurrency_ = "";
+    public bool HasRmtPreferredCurrency {
+      get { return hasRmtPreferredCurrency; }
+    }
+    public string RmtPreferredCurrency {
+      get { return rmtPreferredCurrency_; }
+    }
+    
     public override bool IsInitialized {
       get {
         return true;
@@ -964,16 +982,19 @@ namespace D3.Client {
       int size = SerializedSize;
       string[] field_names = _gameAccountSettingsFieldNames;
       if (hasUseLastHero) {
-        output.WriteInt32(1, field_names[3], UseLastHero);
+        output.WriteInt32(1, field_names[4], UseLastHero);
       }
       if (hasShowOfflineToast) {
-        output.WriteInt32(2, field_names[2], ShowOfflineToast);
+        output.WriteInt32(2, field_names[3], ShowOfflineToast);
       }
       if (hasRmtLastUsedCurrency) {
         output.WriteString(3, field_names[1], RmtLastUsedCurrency);
       }
       if (hasCoopLastCreateGamePrivacy) {
         output.WriteInt32(4, field_names[0], CoopLastCreateGamePrivacy);
+      }
+      if (hasRmtPreferredCurrency) {
+        output.WriteString(5, field_names[2], RmtPreferredCurrency);
       }
       UnknownFields.WriteTo(output);
     }
@@ -996,6 +1017,9 @@ namespace D3.Client {
         }
         if (hasCoopLastCreateGamePrivacy) {
           size += pb::CodedOutputStream.ComputeInt32Size(4, CoopLastCreateGamePrivacy);
+        }
+        if (hasRmtPreferredCurrency) {
+          size += pb::CodedOutputStream.ComputeStringSize(5, RmtPreferredCurrency);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1135,6 +1159,9 @@ namespace D3.Client {
         if (other.HasCoopLastCreateGamePrivacy) {
           CoopLastCreateGamePrivacy = other.CoopLastCreateGamePrivacy;
         }
+        if (other.HasRmtPreferredCurrency) {
+          RmtPreferredCurrency = other.RmtPreferredCurrency;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1192,6 +1219,10 @@ namespace D3.Client {
             }
             case 32: {
               result.hasCoopLastCreateGamePrivacy = input.ReadInt32(ref result.coopLastCreateGamePrivacy_);
+              break;
+            }
+            case 42: {
+              result.hasRmtPreferredCurrency = input.ReadString(ref result.rmtPreferredCurrency_);
               break;
             }
           }
@@ -1284,6 +1315,27 @@ namespace D3.Client {
         result.coopLastCreateGamePrivacy_ = 1;
         return this;
       }
+      
+      public bool HasRmtPreferredCurrency {
+        get { return result.hasRmtPreferredCurrency; }
+      }
+      public string RmtPreferredCurrency {
+        get { return result.RmtPreferredCurrency; }
+        set { SetRmtPreferredCurrency(value); }
+      }
+      public Builder SetRmtPreferredCurrency(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasRmtPreferredCurrency = true;
+        result.rmtPreferredCurrency_ = value;
+        return this;
+      }
+      public Builder ClearRmtPreferredCurrency() {
+        PrepareBuilder();
+        result.hasRmtPreferredCurrency = false;
+        result.rmtPreferredCurrency_ = "";
+        return this;
+      }
     }
     static GameAccountSettings() {
       object.ReferenceEquals(global::D3.Client.Settings.Descriptor, null);
@@ -1296,8 +1348,8 @@ namespace D3.Client {
   public sealed partial class Preferences : pb::GeneratedMessage<Preferences, Preferences.Builder> {
     private Preferences() { }
     private static readonly Preferences defaultInstance = new Preferences().MakeReadOnly();
-    private static readonly string[] _preferencesFieldNames = new string[] { "action_binding_achievements", "action_binding_auctionhouse", "action_binding_bannerdrop", "action_binding_bannerscreen", "action_binding_chatlobby", "action_binding_clear", "action_binding_console", "action_binding_emoteattack", "action_binding_emotebye", "action_binding_emotedie", "action_binding_emotefollow", "action_binding_emotegive", "action_binding_emotego", "action_binding_emotehelp", "action_binding_emotehold", "action_binding_emotelaugh", "action_binding_emoteno", "action_binding_emoteretreat", "action_binding_emoterun", "action_binding_emotesorry", "action_binding_emotestay", "action_binding_emotetakeobjective", "action_binding_emotethanks", "action_binding_emotewait", "action_binding_emoteyes", "action_binding_help", "action_binding_hireling", "action_binding_holdposition", "action_binding_inventory", "action_binding_lmb", "action_binding_lore", "action_binding_map", "action_binding_profile", "action_binding_quests", "action_binding_recentplayers", "action_binding_rewhisper", "action_binding_rmb", "action_binding_skill1", "action_binding_skill2", "action_binding_skill3", "action_binding_skill4", "action_binding_skill5", "action_binding_skillcycle", "action_binding_skills", "action_binding_social", "action_binding_stoneofrecall", "action_binding_systemmastervolumedown", "action_binding_systemmastervolumeup", "action_binding_systemscreenshot", "action_binding_systemtogglemusic", "action_binding_systemtogglesound", "action_binding_toggledamagenumbers", "action_binding_toggleitemsonground", "action_binding_togglemonsterhpbars", "action_binding_toggleplayerhpbars", "action_binding_voiceptt", "action_binding_whisperreply", "action_binding_worldmap", "action_binding_zoom", "flags", "items_on_ground_setting", "version" };
-    private static readonly uint[] _preferencesFieldTags = new uint[] { 178, 194, 338, 554, 170, 202, 210, 458, 386, 394, 354, 362, 418, 426, 474, 490, 442, 466, 402, 378, 450, 482, 370, 410, 434, 146, 98, 498, 82, 562, 122, 218, 186, 114, 162, 274, 570, 298, 306, 314, 322, 330, 226, 106, 130, 546, 514, 506, 538, 522, 530, 258, 266, 234, 250, 290, 282, 138, 346, 16, 48, 8 };
+    private static readonly string[] _preferencesFieldNames = new string[] { "action_binding_achievements", "action_binding_auctionhouse", "action_binding_bannerdrop", "action_binding_bannerscreen", "action_binding_chatlobby", "action_binding_clear", "action_binding_console", "action_binding_emoteattack", "action_binding_emotebye", "action_binding_emotedie", "action_binding_emotefollow", "action_binding_emotegive", "action_binding_emotego", "action_binding_emotehelp", "action_binding_emotehold", "action_binding_emotelaugh", "action_binding_emoteno", "action_binding_emoteretreat", "action_binding_emoterun", "action_binding_emotesorry", "action_binding_emotestay", "action_binding_emotetakeobjective", "action_binding_emotethanks", "action_binding_emotewait", "action_binding_emoteyes", "action_binding_help", "action_binding_hireling", "action_binding_holdposition", "action_binding_inventory", "action_binding_lmb", "action_binding_lore", "action_binding_map", "action_binding_potion", "action_binding_profile", "action_binding_quests", "action_binding_recentplayers", "action_binding_rewhisper", "action_binding_rmb", "action_binding_skill1", "action_binding_skill2", "action_binding_skill3", "action_binding_skill4", "action_binding_skillcycle", "action_binding_skills", "action_binding_social", "action_binding_stoneofrecall", "action_binding_systemmastervolumedown", "action_binding_systemmastervolumeup", "action_binding_systemscreenshot", "action_binding_systemtogglemusic", "action_binding_systemtogglesound", "action_binding_toggledamagenumbers", "action_binding_toggleitemsonground", "action_binding_togglemonsterhpbars", "action_binding_toggleplayerhpbars", "action_binding_voiceptt", "action_binding_walk", "action_binding_whisperreply", "action_binding_worldmap", "action_binding_zoom", "flags", "items_on_ground_setting", "notify_duration", "version" };
+    private static readonly uint[] _preferencesFieldTags = new uint[] { 178, 194, 338, 554, 170, 202, 210, 458, 386, 394, 354, 362, 418, 426, 474, 490, 442, 466, 402, 378, 450, 482, 370, 410, 434, 146, 98, 498, 82, 562, 122, 218, 330, 186, 114, 162, 274, 570, 298, 306, 314, 322, 226, 106, 130, 546, 514, 506, 538, 522, 530, 258, 266, 234, 250, 290, 578, 282, 138, 346, 16, 48, 800, 8 };
     public static Preferences DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1330,7 +1382,6 @@ namespace D3.Client {
         SHOW_MONSTER_HP_BARS = 2,
         SHOW_PLAYER_HP_BARS = 3,
         SHOW_ITEMS_ON_GROUND = 6,
-        LOCK_SKILLBAR = 7,
         SHOW_DAMAGE_NUMBERS = 8,
         SHOW_CRITICALS = 9,
         SHOW_DEFENSIVE_MESSAGES = 10,
@@ -1342,6 +1393,16 @@ namespace D3.Client {
         SHOW_HEAL_NUMBERS = 18,
         SHOW_PLAYER_NAMES = 19,
         SHOW_HP_BAR_NUMBERS = 20,
+        SHOW_CLOCK = 21,
+        SHOW_ADVANCED_TOOLTIPS = 22,
+        ELECTIVE_MODE = 23,
+        NOTIFY_FRIEND_ONLINE = 24,
+        NOTIFY_FRIEND_OFFLINE = 25,
+        NOTIFY_FRIEND_REQUEST = 26,
+        NOTIFY_FRIEND_ACHIEVEMENT = 27,
+        NOTIFY_DISPLAY_WINDOW = 28,
+        MATURE_LANGUAGE_FILTER = 29,
+        ALLOW_QUICK_JOIN = 30,
       }
       
     }
@@ -1657,14 +1718,14 @@ namespace D3.Client {
       get { return actionBindingSkill4_ ?? global::D3.Client.ActionBinding.DefaultInstance; }
     }
     
-    public const int ActionBindingSkill5FieldNumber = 41;
-    private bool hasActionBindingSkill5;
-    private global::D3.Client.ActionBinding actionBindingSkill5_;
-    public bool HasActionBindingSkill5 {
-      get { return hasActionBindingSkill5; }
+    public const int ActionBindingPotionFieldNumber = 41;
+    private bool hasActionBindingPotion;
+    private global::D3.Client.ActionBinding actionBindingPotion_;
+    public bool HasActionBindingPotion {
+      get { return hasActionBindingPotion; }
     }
-    public global::D3.Client.ActionBinding ActionBindingSkill5 {
-      get { return actionBindingSkill5_ ?? global::D3.Client.ActionBinding.DefaultInstance; }
+    public global::D3.Client.ActionBinding ActionBindingPotion {
+      get { return actionBindingPotion_ ?? global::D3.Client.ActionBinding.DefaultInstance; }
     }
     
     public const int ActionBindingBannerdropFieldNumber = 42;
@@ -1967,6 +2028,26 @@ namespace D3.Client {
       get { return actionBindingRmb_ ?? global::D3.Client.ActionBinding.DefaultInstance; }
     }
     
+    public const int ActionBindingWalkFieldNumber = 72;
+    private bool hasActionBindingWalk;
+    private global::D3.Client.ActionBinding actionBindingWalk_;
+    public bool HasActionBindingWalk {
+      get { return hasActionBindingWalk; }
+    }
+    public global::D3.Client.ActionBinding ActionBindingWalk {
+      get { return actionBindingWalk_ ?? global::D3.Client.ActionBinding.DefaultInstance; }
+    }
+    
+    public const int NotifyDurationFieldNumber = 100;
+    private bool hasNotifyDuration;
+    private uint notifyDuration_;
+    public bool HasNotifyDuration {
+      get { return hasNotifyDuration; }
+    }
+    public uint NotifyDuration {
+      get { return notifyDuration_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasVersion) return false;
@@ -2054,8 +2135,8 @@ namespace D3.Client {
         if (HasActionBindingSkill4) {
           if (!ActionBindingSkill4.IsInitialized) return false;
         }
-        if (HasActionBindingSkill5) {
-          if (!ActionBindingSkill5.IsInitialized) return false;
+        if (HasActionBindingPotion) {
+          if (!ActionBindingPotion.IsInitialized) return false;
         }
         if (HasActionBindingBannerdrop) {
           if (!ActionBindingBannerdrop.IsInitialized) return false;
@@ -2147,6 +2228,9 @@ namespace D3.Client {
         if (HasActionBindingRmb) {
           if (!ActionBindingRmb.IsInitialized) return false;
         }
+        if (HasActionBindingWalk) {
+          if (!ActionBindingWalk.IsInitialized) return false;
+        }
         return true;
       }
     }
@@ -2155,13 +2239,13 @@ namespace D3.Client {
       int size = SerializedSize;
       string[] field_names = _preferencesFieldNames;
       if (hasVersion) {
-        output.WriteInt32(1, field_names[61], Version);
+        output.WriteInt32(1, field_names[63], Version);
       }
       if (hasFlags) {
-        output.WriteUInt32(2, field_names[59], Flags);
+        output.WriteUInt32(2, field_names[60], Flags);
       }
       if (hasItemsOnGroundSetting) {
-        output.WriteUInt32(6, field_names[60], ItemsOnGroundSetting);
+        output.WriteUInt32(6, field_names[61], ItemsOnGroundSetting);
       }
       if (hasActionBindingInventory) {
         output.WriteMessage(10, field_names[28], ActionBindingInventory);
@@ -2173,7 +2257,7 @@ namespace D3.Client {
         output.WriteMessage(13, field_names[43], ActionBindingSkills);
       }
       if (hasActionBindingQuests) {
-        output.WriteMessage(14, field_names[33], ActionBindingQuests);
+        output.WriteMessage(14, field_names[34], ActionBindingQuests);
       }
       if (hasActionBindingLore) {
         output.WriteMessage(15, field_names[30], ActionBindingLore);
@@ -2182,13 +2266,13 @@ namespace D3.Client {
         output.WriteMessage(16, field_names[44], ActionBindingSocial);
       }
       if (hasActionBindingWorldmap) {
-        output.WriteMessage(17, field_names[57], ActionBindingWorldmap);
+        output.WriteMessage(17, field_names[58], ActionBindingWorldmap);
       }
       if (hasActionBindingHelp) {
         output.WriteMessage(18, field_names[25], ActionBindingHelp);
       }
       if (hasActionBindingRecentplayers) {
-        output.WriteMessage(20, field_names[34], ActionBindingRecentplayers);
+        output.WriteMessage(20, field_names[35], ActionBindingRecentplayers);
       }
       if (hasActionBindingChatlobby) {
         output.WriteMessage(21, field_names[4], ActionBindingChatlobby);
@@ -2197,7 +2281,7 @@ namespace D3.Client {
         output.WriteMessage(22, field_names[0], ActionBindingAchievements);
       }
       if (hasActionBindingProfile) {
-        output.WriteMessage(23, field_names[32], ActionBindingProfile);
+        output.WriteMessage(23, field_names[33], ActionBindingProfile);
       }
       if (hasActionBindingAuctionhouse) {
         output.WriteMessage(24, field_names[1], ActionBindingAuctionhouse);
@@ -2227,34 +2311,34 @@ namespace D3.Client {
         output.WriteMessage(33, field_names[52], ActionBindingToggleitemsonground);
       }
       if (hasActionBindingRewhisper) {
-        output.WriteMessage(34, field_names[35], ActionBindingRewhisper);
+        output.WriteMessage(34, field_names[36], ActionBindingRewhisper);
       }
       if (hasActionBindingWhisperreply) {
-        output.WriteMessage(35, field_names[56], ActionBindingWhisperreply);
+        output.WriteMessage(35, field_names[57], ActionBindingWhisperreply);
       }
       if (hasActionBindingVoiceptt) {
         output.WriteMessage(36, field_names[55], ActionBindingVoiceptt);
       }
       if (hasActionBindingSkill1) {
-        output.WriteMessage(37, field_names[37], ActionBindingSkill1);
+        output.WriteMessage(37, field_names[38], ActionBindingSkill1);
       }
       if (hasActionBindingSkill2) {
-        output.WriteMessage(38, field_names[38], ActionBindingSkill2);
+        output.WriteMessage(38, field_names[39], ActionBindingSkill2);
       }
       if (hasActionBindingSkill3) {
-        output.WriteMessage(39, field_names[39], ActionBindingSkill3);
+        output.WriteMessage(39, field_names[40], ActionBindingSkill3);
       }
       if (hasActionBindingSkill4) {
-        output.WriteMessage(40, field_names[40], ActionBindingSkill4);
+        output.WriteMessage(40, field_names[41], ActionBindingSkill4);
       }
-      if (hasActionBindingSkill5) {
-        output.WriteMessage(41, field_names[41], ActionBindingSkill5);
+      if (hasActionBindingPotion) {
+        output.WriteMessage(41, field_names[32], ActionBindingPotion);
       }
       if (hasActionBindingBannerdrop) {
         output.WriteMessage(42, field_names[2], ActionBindingBannerdrop);
       }
       if (hasActionBindingZoom) {
-        output.WriteMessage(43, field_names[58], ActionBindingZoom);
+        output.WriteMessage(43, field_names[59], ActionBindingZoom);
       }
       if (hasActionBindingEmotefollow) {
         output.WriteMessage(44, field_names[10], ActionBindingEmotefollow);
@@ -2338,7 +2422,13 @@ namespace D3.Client {
         output.WriteMessage(70, field_names[29], ActionBindingLmb);
       }
       if (hasActionBindingRmb) {
-        output.WriteMessage(71, field_names[36], ActionBindingRmb);
+        output.WriteMessage(71, field_names[37], ActionBindingRmb);
+      }
+      if (hasActionBindingWalk) {
+        output.WriteMessage(72, field_names[56], ActionBindingWalk);
+      }
+      if (hasNotifyDuration) {
+        output.WriteUInt32(100, field_names[62], NotifyDuration);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2443,8 +2533,8 @@ namespace D3.Client {
         if (hasActionBindingSkill4) {
           size += pb::CodedOutputStream.ComputeMessageSize(40, ActionBindingSkill4);
         }
-        if (hasActionBindingSkill5) {
-          size += pb::CodedOutputStream.ComputeMessageSize(41, ActionBindingSkill5);
+        if (hasActionBindingPotion) {
+          size += pb::CodedOutputStream.ComputeMessageSize(41, ActionBindingPotion);
         }
         if (hasActionBindingBannerdrop) {
           size += pb::CodedOutputStream.ComputeMessageSize(42, ActionBindingBannerdrop);
@@ -2535,6 +2625,12 @@ namespace D3.Client {
         }
         if (hasActionBindingRmb) {
           size += pb::CodedOutputStream.ComputeMessageSize(71, ActionBindingRmb);
+        }
+        if (hasActionBindingWalk) {
+          size += pb::CodedOutputStream.ComputeMessageSize(72, ActionBindingWalk);
+        }
+        if (hasNotifyDuration) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(100, NotifyDuration);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2755,8 +2851,8 @@ namespace D3.Client {
         if (other.HasActionBindingSkill4) {
           MergeActionBindingSkill4(other.ActionBindingSkill4);
         }
-        if (other.HasActionBindingSkill5) {
-          MergeActionBindingSkill5(other.ActionBindingSkill5);
+        if (other.HasActionBindingPotion) {
+          MergeActionBindingPotion(other.ActionBindingPotion);
         }
         if (other.HasActionBindingBannerdrop) {
           MergeActionBindingBannerdrop(other.ActionBindingBannerdrop);
@@ -2847,6 +2943,12 @@ namespace D3.Client {
         }
         if (other.HasActionBindingRmb) {
           MergeActionBindingRmb(other.ActionBindingRmb);
+        }
+        if (other.HasActionBindingWalk) {
+          MergeActionBindingWalk(other.ActionBindingWalk);
+        }
+        if (other.HasNotifyDuration) {
+          NotifyDuration = other.NotifyDuration;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -3157,11 +3259,11 @@ namespace D3.Client {
             }
             case 330: {
               global::D3.Client.ActionBinding.Builder subBuilder = global::D3.Client.ActionBinding.CreateBuilder();
-              if (result.hasActionBindingSkill5) {
-                subBuilder.MergeFrom(ActionBindingSkill5);
+              if (result.hasActionBindingPotion) {
+                subBuilder.MergeFrom(ActionBindingPotion);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              ActionBindingSkill5 = subBuilder.BuildPartial();
+              ActionBindingPotion = subBuilder.BuildPartial();
               break;
             }
             case 338: {
@@ -3432,6 +3534,19 @@ namespace D3.Client {
               }
               input.ReadMessage(subBuilder, extensionRegistry);
               ActionBindingRmb = subBuilder.BuildPartial();
+              break;
+            }
+            case 578: {
+              global::D3.Client.ActionBinding.Builder subBuilder = global::D3.Client.ActionBinding.CreateBuilder();
+              if (result.hasActionBindingWalk) {
+                subBuilder.MergeFrom(ActionBindingWalk);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              ActionBindingWalk = subBuilder.BuildPartial();
+              break;
+            }
+            case 800: {
+              result.hasNotifyDuration = input.ReadUInt32(ref result.notifyDuration_);
               break;
             }
           }
@@ -4624,43 +4739,43 @@ namespace D3.Client {
         return this;
       }
       
-      public bool HasActionBindingSkill5 {
-       get { return result.hasActionBindingSkill5; }
+      public bool HasActionBindingPotion {
+       get { return result.hasActionBindingPotion; }
       }
-      public global::D3.Client.ActionBinding ActionBindingSkill5 {
-        get { return result.ActionBindingSkill5; }
-        set { SetActionBindingSkill5(value); }
+      public global::D3.Client.ActionBinding ActionBindingPotion {
+        get { return result.ActionBindingPotion; }
+        set { SetActionBindingPotion(value); }
       }
-      public Builder SetActionBindingSkill5(global::D3.Client.ActionBinding value) {
+      public Builder SetActionBindingPotion(global::D3.Client.ActionBinding value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasActionBindingSkill5 = true;
-        result.actionBindingSkill5_ = value;
+        result.hasActionBindingPotion = true;
+        result.actionBindingPotion_ = value;
         return this;
       }
-      public Builder SetActionBindingSkill5(global::D3.Client.ActionBinding.Builder builderForValue) {
+      public Builder SetActionBindingPotion(global::D3.Client.ActionBinding.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasActionBindingSkill5 = true;
-        result.actionBindingSkill5_ = builderForValue.Build();
+        result.hasActionBindingPotion = true;
+        result.actionBindingPotion_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeActionBindingSkill5(global::D3.Client.ActionBinding value) {
+      public Builder MergeActionBindingPotion(global::D3.Client.ActionBinding value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasActionBindingSkill5 &&
-            result.actionBindingSkill5_ != global::D3.Client.ActionBinding.DefaultInstance) {
-            result.actionBindingSkill5_ = global::D3.Client.ActionBinding.CreateBuilder(result.actionBindingSkill5_).MergeFrom(value).BuildPartial();
+        if (result.hasActionBindingPotion &&
+            result.actionBindingPotion_ != global::D3.Client.ActionBinding.DefaultInstance) {
+            result.actionBindingPotion_ = global::D3.Client.ActionBinding.CreateBuilder(result.actionBindingPotion_).MergeFrom(value).BuildPartial();
         } else {
-          result.actionBindingSkill5_ = value;
+          result.actionBindingPotion_ = value;
         }
-        result.hasActionBindingSkill5 = true;
+        result.hasActionBindingPotion = true;
         return this;
       }
-      public Builder ClearActionBindingSkill5() {
+      public Builder ClearActionBindingPotion() {
         PrepareBuilder();
-        result.hasActionBindingSkill5 = false;
-        result.actionBindingSkill5_ = null;
+        result.hasActionBindingPotion = false;
+        result.actionBindingPotion_ = null;
         return this;
       }
       
@@ -5861,6 +5976,66 @@ namespace D3.Client {
         PrepareBuilder();
         result.hasActionBindingRmb = false;
         result.actionBindingRmb_ = null;
+        return this;
+      }
+      
+      public bool HasActionBindingWalk {
+       get { return result.hasActionBindingWalk; }
+      }
+      public global::D3.Client.ActionBinding ActionBindingWalk {
+        get { return result.ActionBindingWalk; }
+        set { SetActionBindingWalk(value); }
+      }
+      public Builder SetActionBindingWalk(global::D3.Client.ActionBinding value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasActionBindingWalk = true;
+        result.actionBindingWalk_ = value;
+        return this;
+      }
+      public Builder SetActionBindingWalk(global::D3.Client.ActionBinding.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasActionBindingWalk = true;
+        result.actionBindingWalk_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeActionBindingWalk(global::D3.Client.ActionBinding value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasActionBindingWalk &&
+            result.actionBindingWalk_ != global::D3.Client.ActionBinding.DefaultInstance) {
+            result.actionBindingWalk_ = global::D3.Client.ActionBinding.CreateBuilder(result.actionBindingWalk_).MergeFrom(value).BuildPartial();
+        } else {
+          result.actionBindingWalk_ = value;
+        }
+        result.hasActionBindingWalk = true;
+        return this;
+      }
+      public Builder ClearActionBindingWalk() {
+        PrepareBuilder();
+        result.hasActionBindingWalk = false;
+        result.actionBindingWalk_ = null;
+        return this;
+      }
+      
+      public bool HasNotifyDuration {
+        get { return result.hasNotifyDuration; }
+      }
+      public uint NotifyDuration {
+        get { return result.NotifyDuration; }
+        set { SetNotifyDuration(value); }
+      }
+      public Builder SetNotifyDuration(uint value) {
+        PrepareBuilder();
+        result.hasNotifyDuration = true;
+        result.notifyDuration_ = value;
+        return this;
+      }
+      public Builder ClearNotifyDuration() {
+        PrepareBuilder();
+        result.hasNotifyDuration = false;
+        result.notifyDuration_ = 0;
         return this;
       }
     }

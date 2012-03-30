@@ -23,42 +23,39 @@ namespace Mooege.Net.MooNet.Packets
     public class PacketIn
     {
         public MooNetClient Client {get; private set;}
-        public CodedInputStream Stream {get; private set;}
 
         public bnet.protocol.Header Header {get; private set;}
 
-        public PacketIn(MooNetClient client, CodedInputStream stream)
+        public PacketIn(MooNetClient client, bnet.protocol.Header header)
         {
             this.Client = client;
-            this.Stream = stream;
-
-            this.Read();
+            this.Header = header;
         }
        
-        private void Read()
-        {
-            var size = (this.Stream.ReadRawByte() << 8) | this.Stream.ReadRawByte(); // header size.
-            var headerData = this.Stream.ReadRawBytes(size); // header data.
-            this.Header = bnet.protocol.Header.ParseFrom(headerData);  // parse header. 
-        }
+        //private void Read()
+        //{
+        //    this.HeaderSize = (this.Stream.ReadRawByte() << 8) | this.Stream.ReadRawByte(); // header size.
+        //    var headerData = this.Stream.ReadRawBytes(HeaderSize); // header data.
+        //    this.Header = bnet.protocol.Header.ParseFrom(headerData);  // parse header. 
+        //}
 
         public IMessage ReadMessage(IBuilder builder)
         {
-            return builder.WeakMergeFrom(CodedInputStream.CreateInstance(this.GetPayload(Stream))).WeakBuild();
+            byte[] data = Client.IncomingMooNetStream.GetPacketData((int)this.Header.Size);
             
-            // this._stream.ReadMessage(builder, ExtensionRegistry.Empty); // this method doesn't seem to work with 7728. /raist.
-            // return builder.WeakBuild();
+            return builder.WeakMergeFrom(ByteString.CopyFrom(data)).WeakBuild();
         }
 
         public byte[] GetPayload(CodedInputStream stream)
         {
-            return stream.ReadRawBytes((int)this.Header.Size);
+            var data = Client.IncomingMooNetStream.GetPacketData((int)this.Header.Size);
+            return data;
         }
 
         public override string ToString()
         {
-            return this.Header.ToString();
             //return string.Format("[S]: 0x{0}, [M]: 0x{1}, [R]: 0x{2}, [O]: 0x{3}", this.ServiceId.ToString("X2"), this.MethodId.ToString("X2"), this.RequestId.ToString("X2"), this.ObjectId.ToString("X2"));
+            return this.Header.ToString();
         }
     }
 }

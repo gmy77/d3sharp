@@ -49,7 +49,8 @@ message JoinChannelResponse
 
 message FindChannelRequest
 {
-    required .bnet.protocol.attribute.AttributeFilter filter = 1;
+    optional .bnet.protocol.Identity agent_identity = 1;
+    required .bnet.protocol.channel.FindChannelOptions options = 2;
 }
 
 message FindChannelResponse

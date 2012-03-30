@@ -28,14 +28,8 @@ namespace D3.Items {
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Items.SavedItem, global::D3.Items.SavedItem.Builder> internal__static_D3_Items_SavedItem__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Items_AuctionAccountInfo__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Items.AuctionAccountInfo, global::D3.Items.AuctionAccountInfo.Builder> internal__static_D3_Items_AuctionAccountInfo__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_D3_Items_AuctionItem__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::D3.Items.AuctionItem, global::D3.Items.AuctionItem.Builder> internal__static_D3_Items_AuctionItem__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_D3_Items_AuctionInfo__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::D3.Items.AuctionInfo, global::D3.Items.AuctionInfo.Builder> internal__static_D3_Items_AuctionInfo__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_Items_ItemList__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.Items.ItemList, global::D3.Items.ItemList.Builder> internal__static_D3_Items_ItemList__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_D3_Items_Ownership__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::D3.Items.Ownership, global::D3.Items.Ownership.Builder> internal__static_D3_Items_Ownership__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -49,7 +43,7 @@ namespace D3.Items {
           "bmVTZXJ2aWNlLnByb3RvIp4BCgxSYXJlSXRlbU5hbWUSIgoTaXRlbV9uYW1l" + 
           "X2lzX3ByZWZpeBgBIAIoCDoFZmFsc2USIQoVc25vX2FmZml4X3N0cmluZ19s" + 
           "aXN0GAIgAigPOgItMRIjChdhZmZpeF9zdHJpbmdfbGlzdF9pbmRleBgDIAIo" + 
-          "EToCLTESIgoWaXRlbV9zdHJpbmdfbGlzdF9pbmRleBgEIAIoEToCLTEi2gMK" + 
+          "EToCLTESIgoWaXRlbV9zdHJpbmdfbGlzdF9pbmRleBgEIAIoEToCLTEivwMK" + 
           "CUdlbmVyYXRvchIPCgRzZWVkGAEgAigNOgEwEikKCWdiX2hhbmRsZRgCIAIo" + 
           "CzIWLkQzLkdhbWVCYWxhbmNlLkhhbmRsZRIUCgxiYXNlX2FmZml4ZXMYAyAD" + 
           "KA8SLgoOcmFyZV9pdGVtX25hbWUYBCABKAsyFi5EMy5JdGVtcy5SYXJlSXRl" + 
@@ -58,28 +52,21 @@ namespace D3.Items {
           "EhMKCGR5ZV90eXBlGAogASgNOgEwEh0KEml0ZW1fcXVhbGl0eV9sZXZlbBgL" + 
           "IAEoEToBMRIdChJpdGVtX2JpbmRpbmdfbGV2ZWwYDCABKBE6ATASGQoObWF4" + 
           "X2R1cmFiaWxpdHkYDSABKA06ATASLQoIY29udGVudHMYDiADKAsyGy5EMy5J" + 
-          "dGVtcy5FbWJlZGRlZEdlbmVyYXRvchIZCg1hdHR1bmVkX3NraWxsGA8gASgP" + 
-          "OgItMRIgChVpdGVtX3VubG9ja190aW1lc3RhbXAYECABKAQ6ATASHAoRZW5j" + 
-          "aGFudF9yYW5nZV92YWwYESABKA06ATAiYQoRRW1iZWRkZWRHZW5lcmF0b3IS" + 
-          "JAoCaWQYASACKAsyGC5EMy5PbmxpbmVTZXJ2aWNlLkl0ZW1JZBImCglnZW5l" + 
-          "cmF0b3IYAiACKAsyEy5EMy5JdGVtcy5HZW5lcmF0b3IimgIKCVNhdmVkSXRl" + 
-          "bRIkCgJpZBgBIAIoCzIYLkQzLk9ubGluZVNlcnZpY2UuSXRlbUlkEjMKD293" + 
-          "bmVyX2VudGl0eV9pZBgCIAEoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5" + 
-          "SWQSKwoJc29ja2V0X2lkGAMgASgLMhguRDMuT25saW5lU2VydmljZS5JdGVt" + 
-          "SWQSFgoOaGlyZWxpbmdfY2xhc3MYBCACKBESEQoJaXRlbV9zbG90GAUgAigR" + 
-          "EhQKDHNxdWFyZV9pbmRleBgGIAIoERIcChF1c2VkX3NvY2tldF9jb3VudBgH" + 
-          "IAIoDToBMBImCglnZW5lcmF0b3IYCCABKAsyEy5EMy5JdGVtcy5HZW5lcmF0" + 
-          "b3IicwoSQXVjdGlvbkFjY291bnRJbmZvEi4KCmFjY291bnRfaWQYASACKAsy" + 
-          "Gi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkEi0KCWVzY3Jvd19pZBgCIAIo" + 
-          "CzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQiWwoLQXVjdGlvbkl0ZW0S" + 
-          "JAoCaWQYASACKAsyGC5EMy5PbmxpbmVTZXJ2aWNlLkl0ZW1JZBImCglnZW5l" + 
-          "cmF0b3IYAiACKAsyEy5EMy5JdGVtcy5HZW5lcmF0b3IiVwoLQXVjdGlvbklu" + 
-          "Zm8SJAoCaWQYASACKAsyGC5EMy5PbmxpbmVTZXJ2aWNlLkl0ZW1JZBIiCgVv" + 
-          "d25lchgCIAEoCzITLkQzLkl0ZW1zLk93bmVyc2hpcCIuCghJdGVtTGlzdBIi" + 
-          "CgVpdGVtcxgBIAMoCzITLkQzLkl0ZW1zLlNhdmVkSXRlbSKEAQoJT3duZXJz" + 
-          "aGlwEjMKD293bmVyX2VudGl0eV9pZBgBIAIoCzIaLkQzLk9ubGluZVNlcnZp" + 
-          "Y2UuRW50aXR5SWQSEwoLZGVsZXRlX3RpbWUYAiABKBISLQoJZXNjcm93X2lk" + 
-          "GAMgASgLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZA==");
+          "dGVtcy5FbWJlZGRlZEdlbmVyYXRvchIgChVpdGVtX3VubG9ja190aW1lc3Rh" + 
+          "bXAYECABKAQ6ATASHAoRZW5jaGFudF9yYW5nZV92YWwYESABKA06ATAiYQoR" + 
+          "RW1iZWRkZWRHZW5lcmF0b3ISJAoCaWQYASACKAsyGC5EMy5PbmxpbmVTZXJ2" + 
+          "aWNlLkl0ZW1JZBImCglnZW5lcmF0b3IYAiACKAsyEy5EMy5JdGVtcy5HZW5l" + 
+          "cmF0b3IimgIKCVNhdmVkSXRlbRIkCgJpZBgBIAIoCzIYLkQzLk9ubGluZVNl" + 
+          "cnZpY2UuSXRlbUlkEjMKD293bmVyX2VudGl0eV9pZBgCIAEoCzIaLkQzLk9u" + 
+          "bGluZVNlcnZpY2UuRW50aXR5SWQSKwoJc29ja2V0X2lkGAMgASgLMhguRDMu" + 
+          "T25saW5lU2VydmljZS5JdGVtSWQSFgoOaGlyZWxpbmdfY2xhc3MYBCACKBES" + 
+          "EQoJaXRlbV9zbG90GAUgAigREhQKDHNxdWFyZV9pbmRleBgGIAIoERIcChF1" + 
+          "c2VkX3NvY2tldF9jb3VudBgHIAIoDToBMBImCglnZW5lcmF0b3IYCCABKAsy" + 
+          "Ey5EMy5JdGVtcy5HZW5lcmF0b3IicwoSQXVjdGlvbkFjY291bnRJbmZvEi4K" + 
+          "CmFjY291bnRfaWQYASACKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVudGl0eUlk" + 
+          "Ei0KCWVzY3Jvd19pZBgCIAIoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5" + 
+          "SWQiLgoISXRlbUxpc3QSIgoFaXRlbXMYASADKAsyEy5EMy5JdGVtcy5TYXZl" + 
+          "ZEl0ZW0=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Items_RareItemName__Descriptor = Descriptor.MessageTypes[0];
@@ -89,7 +76,7 @@ namespace D3.Items {
         internal__static_D3_Items_Generator__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_Items_Generator__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.Generator, global::D3.Items.Generator.Builder>(internal__static_D3_Items_Generator__Descriptor,
-                new string[] { "Seed", "GbHandle", "BaseAffixes", "RareItemName", "EnchantAffix", "Flags", "Durability", "StackSize", "DyeType", "ItemQualityLevel", "ItemBindingLevel", "MaxDurability", "Contents", "AttunedSkill", "ItemUnlockTimestamp", "EnchantRangeVal", });
+                new string[] { "Seed", "GbHandle", "BaseAffixes", "RareItemName", "EnchantAffix", "Flags", "Durability", "StackSize", "DyeType", "ItemQualityLevel", "ItemBindingLevel", "MaxDurability", "Contents", "ItemUnlockTimestamp", "EnchantRangeVal", });
         internal__static_D3_Items_EmbeddedGenerator__Descriptor = Descriptor.MessageTypes[2];
         internal__static_D3_Items_EmbeddedGenerator__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.EmbeddedGenerator, global::D3.Items.EmbeddedGenerator.Builder>(internal__static_D3_Items_EmbeddedGenerator__Descriptor,
@@ -102,22 +89,10 @@ namespace D3.Items {
         internal__static_D3_Items_AuctionAccountInfo__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.AuctionAccountInfo, global::D3.Items.AuctionAccountInfo.Builder>(internal__static_D3_Items_AuctionAccountInfo__Descriptor,
                 new string[] { "AccountId", "EscrowId", });
-        internal__static_D3_Items_AuctionItem__Descriptor = Descriptor.MessageTypes[5];
-        internal__static_D3_Items_AuctionItem__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::D3.Items.AuctionItem, global::D3.Items.AuctionItem.Builder>(internal__static_D3_Items_AuctionItem__Descriptor,
-                new string[] { "Id", "Generator", });
-        internal__static_D3_Items_AuctionInfo__Descriptor = Descriptor.MessageTypes[6];
-        internal__static_D3_Items_AuctionInfo__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::D3.Items.AuctionInfo, global::D3.Items.AuctionInfo.Builder>(internal__static_D3_Items_AuctionInfo__Descriptor,
-                new string[] { "Id", "Owner", });
-        internal__static_D3_Items_ItemList__Descriptor = Descriptor.MessageTypes[7];
+        internal__static_D3_Items_ItemList__Descriptor = Descriptor.MessageTypes[5];
         internal__static_D3_Items_ItemList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Items.ItemList, global::D3.Items.ItemList.Builder>(internal__static_D3_Items_ItemList__Descriptor,
                 new string[] { "Items", });
-        internal__static_D3_Items_Ownership__Descriptor = Descriptor.MessageTypes[8];
-        internal__static_D3_Items_Ownership__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::D3.Items.Ownership, global::D3.Items.Ownership.Builder>(internal__static_D3_Items_Ownership__Descriptor,
-                new string[] { "OwnerEntityId", "DeleteTime", "EscrowId", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -543,8 +518,8 @@ namespace D3.Items {
   public sealed partial class Generator : pb::GeneratedMessage<Generator, Generator.Builder> {
     private Generator() { }
     private static readonly Generator defaultInstance = new Generator().MakeReadOnly();
-    private static readonly string[] _generatorFieldNames = new string[] { "attuned_skill", "base_affixes", "contents", "durability", "dye_type", "enchant_affix", "enchant_range_val", "flags", "gb_handle", "item_binding_level", "item_quality_level", "item_unlock_timestamp", "max_durability", "rare_item_name", "seed", "stack_size" };
-    private static readonly uint[] _generatorFieldTags = new uint[] { 125, 29, 114, 64, 80, 45, 136, 56, 18, 96, 88, 128, 104, 34, 8, 72 };
+    private static readonly string[] _generatorFieldNames = new string[] { "base_affixes", "contents", "durability", "dye_type", "enchant_affix", "enchant_range_val", "flags", "gb_handle", "item_binding_level", "item_quality_level", "item_unlock_timestamp", "max_durability", "rare_item_name", "seed", "stack_size" };
+    private static readonly uint[] _generatorFieldTags = new uint[] { 29, 114, 64, 80, 45, 136, 56, 18, 96, 88, 128, 104, 34, 8, 72 };
     public static Generator DefaultInstance {
       get { return defaultInstance; }
     }
@@ -699,16 +674,6 @@ namespace D3.Items {
       return contents_[index];
     }
     
-    public const int AttunedSkillFieldNumber = 15;
-    private bool hasAttunedSkill;
-    private int attunedSkill_ = -1;
-    public bool HasAttunedSkill {
-      get { return hasAttunedSkill; }
-    }
-    public int AttunedSkill {
-      get { return attunedSkill_; }
-    }
-    
     public const int ItemUnlockTimestampFieldNumber = 16;
     private bool hasItemUnlockTimestamp;
     private ulong itemUnlockTimestamp_;
@@ -751,52 +716,49 @@ namespace D3.Items {
       int size = SerializedSize;
       string[] field_names = _generatorFieldNames;
       if (hasSeed) {
-        output.WriteUInt32(1, field_names[14], Seed);
+        output.WriteUInt32(1, field_names[13], Seed);
       }
       if (hasGbHandle) {
-        output.WriteMessage(2, field_names[8], GbHandle);
+        output.WriteMessage(2, field_names[7], GbHandle);
       }
       if (baseAffixes_.Count > 0) {
-        output.WriteSFixed32Array(3, field_names[1], baseAffixes_);
+        output.WriteSFixed32Array(3, field_names[0], baseAffixes_);
       }
       if (hasRareItemName) {
-        output.WriteMessage(4, field_names[13], RareItemName);
+        output.WriteMessage(4, field_names[12], RareItemName);
       }
       if (hasEnchantAffix) {
-        output.WriteSFixed32(5, field_names[5], EnchantAffix);
+        output.WriteSFixed32(5, field_names[4], EnchantAffix);
       }
       if (hasFlags) {
-        output.WriteUInt32(7, field_names[7], Flags);
+        output.WriteUInt32(7, field_names[6], Flags);
       }
       if (hasDurability) {
-        output.WriteUInt32(8, field_names[3], Durability);
+        output.WriteUInt32(8, field_names[2], Durability);
       }
       if (hasStackSize) {
-        output.WriteUInt64(9, field_names[15], StackSize);
+        output.WriteUInt64(9, field_names[14], StackSize);
       }
       if (hasDyeType) {
-        output.WriteUInt32(10, field_names[4], DyeType);
+        output.WriteUInt32(10, field_names[3], DyeType);
       }
       if (hasItemQualityLevel) {
-        output.WriteSInt32(11, field_names[10], ItemQualityLevel);
+        output.WriteSInt32(11, field_names[9], ItemQualityLevel);
       }
       if (hasItemBindingLevel) {
-        output.WriteSInt32(12, field_names[9], ItemBindingLevel);
+        output.WriteSInt32(12, field_names[8], ItemBindingLevel);
       }
       if (hasMaxDurability) {
-        output.WriteUInt32(13, field_names[12], MaxDurability);
+        output.WriteUInt32(13, field_names[11], MaxDurability);
       }
       if (contents_.Count > 0) {
-        output.WriteMessageArray(14, field_names[2], contents_);
-      }
-      if (hasAttunedSkill) {
-        output.WriteSFixed32(15, field_names[0], AttunedSkill);
+        output.WriteMessageArray(14, field_names[1], contents_);
       }
       if (hasItemUnlockTimestamp) {
-        output.WriteUInt64(16, field_names[11], ItemUnlockTimestamp);
+        output.WriteUInt64(16, field_names[10], ItemUnlockTimestamp);
       }
       if (hasEnchantRangeVal) {
-        output.WriteUInt32(17, field_names[6], EnchantRangeVal);
+        output.WriteUInt32(17, field_names[5], EnchantRangeVal);
       }
       UnknownFields.WriteTo(output);
     }
@@ -849,9 +811,6 @@ namespace D3.Items {
         }
         foreach (global::D3.Items.EmbeddedGenerator element in ContentsList) {
           size += pb::CodedOutputStream.ComputeMessageSize(14, element);
-        }
-        if (hasAttunedSkill) {
-          size += pb::CodedOutputStream.ComputeSFixed32Size(15, AttunedSkill);
         }
         if (hasItemUnlockTimestamp) {
           size += pb::CodedOutputStream.ComputeUInt64Size(16, ItemUnlockTimestamp);
@@ -1026,9 +985,6 @@ namespace D3.Items {
         if (other.contents_.Count != 0) {
           result.contents_.Add(other.contents_);
         }
-        if (other.HasAttunedSkill) {
-          AttunedSkill = other.AttunedSkill;
-        }
         if (other.HasItemUnlockTimestamp) {
           ItemUnlockTimestamp = other.ItemUnlockTimestamp;
         }
@@ -1139,10 +1095,6 @@ namespace D3.Items {
             }
             case 114: {
               input.ReadMessageArray(tag, field_name, result.contents_, global::D3.Items.EmbeddedGenerator.DefaultInstance, extensionRegistry);
-              break;
-            }
-            case 125: {
-              result.hasAttunedSkill = input.ReadSFixed32(ref result.attunedSkill_);
               break;
             }
             case 128: {
@@ -1494,26 +1446,6 @@ namespace D3.Items {
       public Builder ClearContents() {
         PrepareBuilder();
         result.contents_.Clear();
-        return this;
-      }
-      
-      public bool HasAttunedSkill {
-        get { return result.hasAttunedSkill; }
-      }
-      public int AttunedSkill {
-        get { return result.AttunedSkill; }
-        set { SetAttunedSkill(value); }
-      }
-      public Builder SetAttunedSkill(int value) {
-        PrepareBuilder();
-        result.hasAttunedSkill = true;
-        result.attunedSkill_ = value;
-        return this;
-      }
-      public Builder ClearAttunedSkill() {
-        PrepareBuilder();
-        result.hasAttunedSkill = false;
-        result.attunedSkill_ = -1;
         return this;
       }
       
@@ -2997,749 +2929,6 @@ namespace D3.Items {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class AuctionItem : pb::GeneratedMessage<AuctionItem, AuctionItem.Builder> {
-    private AuctionItem() { }
-    private static readonly AuctionItem defaultInstance = new AuctionItem().MakeReadOnly();
-    private static readonly string[] _auctionItemFieldNames = new string[] { "generator", "id" };
-    private static readonly uint[] _auctionItemFieldTags = new uint[] { 18, 10 };
-    public static AuctionItem DefaultInstance {
-      get { return defaultInstance; }
-    }
-    
-    public override AuctionItem DefaultInstanceForType {
-      get { return DefaultInstance; }
-    }
-    
-    protected override AuctionItem ThisMessage {
-      get { return this; }
-    }
-    
-    public static pbd::MessageDescriptor Descriptor {
-      get { return global::D3.Items.Items.internal__static_D3_Items_AuctionItem__Descriptor; }
-    }
-    
-    protected override pb::FieldAccess.FieldAccessorTable<AuctionItem, AuctionItem.Builder> InternalFieldAccessors {
-      get { return global::D3.Items.Items.internal__static_D3_Items_AuctionItem__FieldAccessorTable; }
-    }
-    
-    public const int IdFieldNumber = 1;
-    private bool hasId;
-    private global::D3.OnlineService.ItemId id_;
-    public bool HasId {
-      get { return hasId; }
-    }
-    public global::D3.OnlineService.ItemId Id {
-      get { return id_ ?? global::D3.OnlineService.ItemId.DefaultInstance; }
-    }
-    
-    public const int GeneratorFieldNumber = 2;
-    private bool hasGenerator;
-    private global::D3.Items.Generator generator_;
-    public bool HasGenerator {
-      get { return hasGenerator; }
-    }
-    public global::D3.Items.Generator Generator {
-      get { return generator_ ?? global::D3.Items.Generator.DefaultInstance; }
-    }
-    
-    public override bool IsInitialized {
-      get {
-        if (!hasId) return false;
-        if (!hasGenerator) return false;
-        if (!Id.IsInitialized) return false;
-        if (!Generator.IsInitialized) return false;
-        return true;
-      }
-    }
-    
-    public override void WriteTo(pb::ICodedOutputStream output) {
-      int size = SerializedSize;
-      string[] field_names = _auctionItemFieldNames;
-      if (hasId) {
-        output.WriteMessage(1, field_names[1], Id);
-      }
-      if (hasGenerator) {
-        output.WriteMessage(2, field_names[0], Generator);
-      }
-      UnknownFields.WriteTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public override int SerializedSize {
-      get {
-        int size = memoizedSerializedSize;
-        if (size != -1) return size;
-        
-        size = 0;
-        if (hasId) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Id);
-        }
-        if (hasGenerator) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Generator);
-        }
-        size += UnknownFields.SerializedSize;
-        memoizedSerializedSize = size;
-        return size;
-      }
-    }
-    
-    public static AuctionItem ParseFrom(pb::ByteString data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static AuctionItem ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static AuctionItem ParseFrom(byte[] data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static AuctionItem ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static AuctionItem ParseFrom(global::System.IO.Stream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static AuctionItem ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    public static AuctionItem ParseDelimitedFrom(global::System.IO.Stream input) {
-      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
-    }
-    public static AuctionItem ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
-    }
-    public static AuctionItem ParseFrom(pb::ICodedInputStream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static AuctionItem ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    private AuctionItem MakeReadOnly() {
-      return this;
-    }
-    
-    public static Builder CreateBuilder() { return new Builder(); }
-    public override Builder ToBuilder() { return CreateBuilder(this); }
-    public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(AuctionItem prototype) {
-      return new Builder(prototype);
-    }
-    
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<AuctionItem, Builder> {
-      protected override Builder ThisBuilder {
-        get { return this; }
-      }
-      public Builder() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-      }
-      internal Builder(AuctionItem cloneFrom) {
-        result = cloneFrom;
-        resultIsReadOnly = true;
-      }
-      
-      private bool resultIsReadOnly;
-      private AuctionItem result;
-      
-      private AuctionItem PrepareBuilder() {
-        if (resultIsReadOnly) {
-          AuctionItem original = result;
-          result = new AuctionItem();
-          resultIsReadOnly = false;
-          MergeFrom(original);
-        }
-        return result;
-      }
-      
-      public override bool IsInitialized {
-        get { return result.IsInitialized; }
-      }
-      
-      protected override AuctionItem MessageBeingBuilt {
-        get { return PrepareBuilder(); }
-      }
-      
-      public override Builder Clear() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-        return this;
-      }
-      
-      public override Builder Clone() {
-        if (resultIsReadOnly) {
-          return new Builder(result);
-        } else {
-          return new Builder().MergeFrom(result);
-        }
-      }
-      
-      public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::D3.Items.AuctionItem.Descriptor; }
-      }
-      
-      public override AuctionItem DefaultInstanceForType {
-        get { return global::D3.Items.AuctionItem.DefaultInstance; }
-      }
-      
-      public override AuctionItem BuildPartial() {
-        if (resultIsReadOnly) {
-          return result;
-        }
-        resultIsReadOnly = true;
-        return result.MakeReadOnly();
-      }
-      
-      public override Builder MergeFrom(pb::IMessage other) {
-        if (other is AuctionItem) {
-          return MergeFrom((AuctionItem) other);
-        } else {
-          base.MergeFrom(other);
-          return this;
-        }
-      }
-      
-      public override Builder MergeFrom(AuctionItem other) {
-        if (other == global::D3.Items.AuctionItem.DefaultInstance) return this;
-        PrepareBuilder();
-        if (other.HasId) {
-          MergeId(other.Id);
-        }
-        if (other.HasGenerator) {
-          MergeGenerator(other.Generator);
-        }
-        this.MergeUnknownFields(other.UnknownFields);
-        return this;
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input) {
-        return MergeFrom(input, pb::ExtensionRegistry.Empty);
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-        PrepareBuilder();
-        pb::UnknownFieldSet.Builder unknownFields = null;
-        uint tag;
-        string field_name;
-        while (input.ReadTag(out tag, out field_name)) {
-          if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_auctionItemFieldNames, field_name, global::System.StringComparer.Ordinal);
-            if(field_ordinal >= 0)
-              tag = _auctionItemFieldTags[field_ordinal];
-            else {
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              continue;
-            }
-          }
-          switch (tag) {
-            case 0: {
-              throw pb::InvalidProtocolBufferException.InvalidTag();
-            }
-            default: {
-              if (pb::WireFormat.IsEndGroupTag(tag)) {
-                if (unknownFields != null) {
-                  this.UnknownFields = unknownFields.Build();
-                }
-                return this;
-              }
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              break;
-            }
-            case 10: {
-              global::D3.OnlineService.ItemId.Builder subBuilder = global::D3.OnlineService.ItemId.CreateBuilder();
-              if (result.hasId) {
-                subBuilder.MergeFrom(Id);
-              }
-              input.ReadMessage(subBuilder, extensionRegistry);
-              Id = subBuilder.BuildPartial();
-              break;
-            }
-            case 18: {
-              global::D3.Items.Generator.Builder subBuilder = global::D3.Items.Generator.CreateBuilder();
-              if (result.hasGenerator) {
-                subBuilder.MergeFrom(Generator);
-              }
-              input.ReadMessage(subBuilder, extensionRegistry);
-              Generator = subBuilder.BuildPartial();
-              break;
-            }
-          }
-        }
-        
-        if (unknownFields != null) {
-          this.UnknownFields = unknownFields.Build();
-        }
-        return this;
-      }
-      
-      
-      public bool HasId {
-       get { return result.hasId; }
-      }
-      public global::D3.OnlineService.ItemId Id {
-        get { return result.Id; }
-        set { SetId(value); }
-      }
-      public Builder SetId(global::D3.OnlineService.ItemId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hasId = true;
-        result.id_ = value;
-        return this;
-      }
-      public Builder SetId(global::D3.OnlineService.ItemId.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hasId = true;
-        result.id_ = builderForValue.Build();
-        return this;
-      }
-      public Builder MergeId(global::D3.OnlineService.ItemId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        if (result.hasId &&
-            result.id_ != global::D3.OnlineService.ItemId.DefaultInstance) {
-            result.id_ = global::D3.OnlineService.ItemId.CreateBuilder(result.id_).MergeFrom(value).BuildPartial();
-        } else {
-          result.id_ = value;
-        }
-        result.hasId = true;
-        return this;
-      }
-      public Builder ClearId() {
-        PrepareBuilder();
-        result.hasId = false;
-        result.id_ = null;
-        return this;
-      }
-      
-      public bool HasGenerator {
-       get { return result.hasGenerator; }
-      }
-      public global::D3.Items.Generator Generator {
-        get { return result.Generator; }
-        set { SetGenerator(value); }
-      }
-      public Builder SetGenerator(global::D3.Items.Generator value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hasGenerator = true;
-        result.generator_ = value;
-        return this;
-      }
-      public Builder SetGenerator(global::D3.Items.Generator.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hasGenerator = true;
-        result.generator_ = builderForValue.Build();
-        return this;
-      }
-      public Builder MergeGenerator(global::D3.Items.Generator value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        if (result.hasGenerator &&
-            result.generator_ != global::D3.Items.Generator.DefaultInstance) {
-            result.generator_ = global::D3.Items.Generator.CreateBuilder(result.generator_).MergeFrom(value).BuildPartial();
-        } else {
-          result.generator_ = value;
-        }
-        result.hasGenerator = true;
-        return this;
-      }
-      public Builder ClearGenerator() {
-        PrepareBuilder();
-        result.hasGenerator = false;
-        result.generator_ = null;
-        return this;
-      }
-    }
-    static AuctionItem() {
-      object.ReferenceEquals(global::D3.Items.Items.Descriptor, null);
-    }
-  }
-  
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class AuctionInfo : pb::GeneratedMessage<AuctionInfo, AuctionInfo.Builder> {
-    private AuctionInfo() { }
-    private static readonly AuctionInfo defaultInstance = new AuctionInfo().MakeReadOnly();
-    private static readonly string[] _auctionInfoFieldNames = new string[] { "id", "owner" };
-    private static readonly uint[] _auctionInfoFieldTags = new uint[] { 10, 18 };
-    public static AuctionInfo DefaultInstance {
-      get { return defaultInstance; }
-    }
-    
-    public override AuctionInfo DefaultInstanceForType {
-      get { return DefaultInstance; }
-    }
-    
-    protected override AuctionInfo ThisMessage {
-      get { return this; }
-    }
-    
-    public static pbd::MessageDescriptor Descriptor {
-      get { return global::D3.Items.Items.internal__static_D3_Items_AuctionInfo__Descriptor; }
-    }
-    
-    protected override pb::FieldAccess.FieldAccessorTable<AuctionInfo, AuctionInfo.Builder> InternalFieldAccessors {
-      get { return global::D3.Items.Items.internal__static_D3_Items_AuctionInfo__FieldAccessorTable; }
-    }
-    
-    public const int IdFieldNumber = 1;
-    private bool hasId;
-    private global::D3.OnlineService.ItemId id_;
-    public bool HasId {
-      get { return hasId; }
-    }
-    public global::D3.OnlineService.ItemId Id {
-      get { return id_ ?? global::D3.OnlineService.ItemId.DefaultInstance; }
-    }
-    
-    public const int OwnerFieldNumber = 2;
-    private bool hasOwner;
-    private global::D3.Items.Ownership owner_;
-    public bool HasOwner {
-      get { return hasOwner; }
-    }
-    public global::D3.Items.Ownership Owner {
-      get { return owner_ ?? global::D3.Items.Ownership.DefaultInstance; }
-    }
-    
-    public override bool IsInitialized {
-      get {
-        if (!hasId) return false;
-        if (!Id.IsInitialized) return false;
-        if (HasOwner) {
-          if (!Owner.IsInitialized) return false;
-        }
-        return true;
-      }
-    }
-    
-    public override void WriteTo(pb::ICodedOutputStream output) {
-      int size = SerializedSize;
-      string[] field_names = _auctionInfoFieldNames;
-      if (hasId) {
-        output.WriteMessage(1, field_names[0], Id);
-      }
-      if (hasOwner) {
-        output.WriteMessage(2, field_names[1], Owner);
-      }
-      UnknownFields.WriteTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public override int SerializedSize {
-      get {
-        int size = memoizedSerializedSize;
-        if (size != -1) return size;
-        
-        size = 0;
-        if (hasId) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Id);
-        }
-        if (hasOwner) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Owner);
-        }
-        size += UnknownFields.SerializedSize;
-        memoizedSerializedSize = size;
-        return size;
-      }
-    }
-    
-    public static AuctionInfo ParseFrom(pb::ByteString data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static AuctionInfo ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static AuctionInfo ParseFrom(byte[] data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static AuctionInfo ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static AuctionInfo ParseFrom(global::System.IO.Stream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static AuctionInfo ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    public static AuctionInfo ParseDelimitedFrom(global::System.IO.Stream input) {
-      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
-    }
-    public static AuctionInfo ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
-    }
-    public static AuctionInfo ParseFrom(pb::ICodedInputStream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static AuctionInfo ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    private AuctionInfo MakeReadOnly() {
-      return this;
-    }
-    
-    public static Builder CreateBuilder() { return new Builder(); }
-    public override Builder ToBuilder() { return CreateBuilder(this); }
-    public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(AuctionInfo prototype) {
-      return new Builder(prototype);
-    }
-    
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<AuctionInfo, Builder> {
-      protected override Builder ThisBuilder {
-        get { return this; }
-      }
-      public Builder() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-      }
-      internal Builder(AuctionInfo cloneFrom) {
-        result = cloneFrom;
-        resultIsReadOnly = true;
-      }
-      
-      private bool resultIsReadOnly;
-      private AuctionInfo result;
-      
-      private AuctionInfo PrepareBuilder() {
-        if (resultIsReadOnly) {
-          AuctionInfo original = result;
-          result = new AuctionInfo();
-          resultIsReadOnly = false;
-          MergeFrom(original);
-        }
-        return result;
-      }
-      
-      public override bool IsInitialized {
-        get { return result.IsInitialized; }
-      }
-      
-      protected override AuctionInfo MessageBeingBuilt {
-        get { return PrepareBuilder(); }
-      }
-      
-      public override Builder Clear() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-        return this;
-      }
-      
-      public override Builder Clone() {
-        if (resultIsReadOnly) {
-          return new Builder(result);
-        } else {
-          return new Builder().MergeFrom(result);
-        }
-      }
-      
-      public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::D3.Items.AuctionInfo.Descriptor; }
-      }
-      
-      public override AuctionInfo DefaultInstanceForType {
-        get { return global::D3.Items.AuctionInfo.DefaultInstance; }
-      }
-      
-      public override AuctionInfo BuildPartial() {
-        if (resultIsReadOnly) {
-          return result;
-        }
-        resultIsReadOnly = true;
-        return result.MakeReadOnly();
-      }
-      
-      public override Builder MergeFrom(pb::IMessage other) {
-        if (other is AuctionInfo) {
-          return MergeFrom((AuctionInfo) other);
-        } else {
-          base.MergeFrom(other);
-          return this;
-        }
-      }
-      
-      public override Builder MergeFrom(AuctionInfo other) {
-        if (other == global::D3.Items.AuctionInfo.DefaultInstance) return this;
-        PrepareBuilder();
-        if (other.HasId) {
-          MergeId(other.Id);
-        }
-        if (other.HasOwner) {
-          MergeOwner(other.Owner);
-        }
-        this.MergeUnknownFields(other.UnknownFields);
-        return this;
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input) {
-        return MergeFrom(input, pb::ExtensionRegistry.Empty);
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-        PrepareBuilder();
-        pb::UnknownFieldSet.Builder unknownFields = null;
-        uint tag;
-        string field_name;
-        while (input.ReadTag(out tag, out field_name)) {
-          if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_auctionInfoFieldNames, field_name, global::System.StringComparer.Ordinal);
-            if(field_ordinal >= 0)
-              tag = _auctionInfoFieldTags[field_ordinal];
-            else {
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              continue;
-            }
-          }
-          switch (tag) {
-            case 0: {
-              throw pb::InvalidProtocolBufferException.InvalidTag();
-            }
-            default: {
-              if (pb::WireFormat.IsEndGroupTag(tag)) {
-                if (unknownFields != null) {
-                  this.UnknownFields = unknownFields.Build();
-                }
-                return this;
-              }
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              break;
-            }
-            case 10: {
-              global::D3.OnlineService.ItemId.Builder subBuilder = global::D3.OnlineService.ItemId.CreateBuilder();
-              if (result.hasId) {
-                subBuilder.MergeFrom(Id);
-              }
-              input.ReadMessage(subBuilder, extensionRegistry);
-              Id = subBuilder.BuildPartial();
-              break;
-            }
-            case 18: {
-              global::D3.Items.Ownership.Builder subBuilder = global::D3.Items.Ownership.CreateBuilder();
-              if (result.hasOwner) {
-                subBuilder.MergeFrom(Owner);
-              }
-              input.ReadMessage(subBuilder, extensionRegistry);
-              Owner = subBuilder.BuildPartial();
-              break;
-            }
-          }
-        }
-        
-        if (unknownFields != null) {
-          this.UnknownFields = unknownFields.Build();
-        }
-        return this;
-      }
-      
-      
-      public bool HasId {
-       get { return result.hasId; }
-      }
-      public global::D3.OnlineService.ItemId Id {
-        get { return result.Id; }
-        set { SetId(value); }
-      }
-      public Builder SetId(global::D3.OnlineService.ItemId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hasId = true;
-        result.id_ = value;
-        return this;
-      }
-      public Builder SetId(global::D3.OnlineService.ItemId.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hasId = true;
-        result.id_ = builderForValue.Build();
-        return this;
-      }
-      public Builder MergeId(global::D3.OnlineService.ItemId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        if (result.hasId &&
-            result.id_ != global::D3.OnlineService.ItemId.DefaultInstance) {
-            result.id_ = global::D3.OnlineService.ItemId.CreateBuilder(result.id_).MergeFrom(value).BuildPartial();
-        } else {
-          result.id_ = value;
-        }
-        result.hasId = true;
-        return this;
-      }
-      public Builder ClearId() {
-        PrepareBuilder();
-        result.hasId = false;
-        result.id_ = null;
-        return this;
-      }
-      
-      public bool HasOwner {
-       get { return result.hasOwner; }
-      }
-      public global::D3.Items.Ownership Owner {
-        get { return result.Owner; }
-        set { SetOwner(value); }
-      }
-      public Builder SetOwner(global::D3.Items.Ownership value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hasOwner = true;
-        result.owner_ = value;
-        return this;
-      }
-      public Builder SetOwner(global::D3.Items.Ownership.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hasOwner = true;
-        result.owner_ = builderForValue.Build();
-        return this;
-      }
-      public Builder MergeOwner(global::D3.Items.Ownership value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        if (result.hasOwner &&
-            result.owner_ != global::D3.Items.Ownership.DefaultInstance) {
-            result.owner_ = global::D3.Items.Ownership.CreateBuilder(result.owner_).MergeFrom(value).BuildPartial();
-        } else {
-          result.owner_ = value;
-        }
-        result.hasOwner = true;
-        return this;
-      }
-      public Builder ClearOwner() {
-        PrepareBuilder();
-        result.hasOwner = false;
-        result.owner_ = null;
-        return this;
-      }
-    }
-    static AuctionInfo() {
-      object.ReferenceEquals(global::D3.Items.Items.Descriptor, null);
-    }
-  }
-  
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
   public sealed partial class ItemList : pb::GeneratedMessage<ItemList, ItemList.Builder> {
     private ItemList() { }
     private static readonly ItemList defaultInstance = new ItemList().MakeReadOnly();
@@ -4037,421 +3226,6 @@ namespace D3.Items {
       }
     }
     static ItemList() {
-      object.ReferenceEquals(global::D3.Items.Items.Descriptor, null);
-    }
-  }
-  
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class Ownership : pb::GeneratedMessage<Ownership, Ownership.Builder> {
-    private Ownership() { }
-    private static readonly Ownership defaultInstance = new Ownership().MakeReadOnly();
-    private static readonly string[] _ownershipFieldNames = new string[] { "delete_time", "escrow_id", "owner_entity_id" };
-    private static readonly uint[] _ownershipFieldTags = new uint[] { 16, 26, 10 };
-    public static Ownership DefaultInstance {
-      get { return defaultInstance; }
-    }
-    
-    public override Ownership DefaultInstanceForType {
-      get { return DefaultInstance; }
-    }
-    
-    protected override Ownership ThisMessage {
-      get { return this; }
-    }
-    
-    public static pbd::MessageDescriptor Descriptor {
-      get { return global::D3.Items.Items.internal__static_D3_Items_Ownership__Descriptor; }
-    }
-    
-    protected override pb::FieldAccess.FieldAccessorTable<Ownership, Ownership.Builder> InternalFieldAccessors {
-      get { return global::D3.Items.Items.internal__static_D3_Items_Ownership__FieldAccessorTable; }
-    }
-    
-    public const int OwnerEntityIdFieldNumber = 1;
-    private bool hasOwnerEntityId;
-    private global::D3.OnlineService.EntityId ownerEntityId_;
-    public bool HasOwnerEntityId {
-      get { return hasOwnerEntityId; }
-    }
-    public global::D3.OnlineService.EntityId OwnerEntityId {
-      get { return ownerEntityId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
-    }
-    
-    public const int DeleteTimeFieldNumber = 2;
-    private bool hasDeleteTime;
-    private long deleteTime_;
-    public bool HasDeleteTime {
-      get { return hasDeleteTime; }
-    }
-    public long DeleteTime {
-      get { return deleteTime_; }
-    }
-    
-    public const int EscrowIdFieldNumber = 3;
-    private bool hasEscrowId;
-    private global::D3.OnlineService.EntityId escrowId_;
-    public bool HasEscrowId {
-      get { return hasEscrowId; }
-    }
-    public global::D3.OnlineService.EntityId EscrowId {
-      get { return escrowId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
-    }
-    
-    public override bool IsInitialized {
-      get {
-        if (!hasOwnerEntityId) return false;
-        if (!OwnerEntityId.IsInitialized) return false;
-        if (HasEscrowId) {
-          if (!EscrowId.IsInitialized) return false;
-        }
-        return true;
-      }
-    }
-    
-    public override void WriteTo(pb::ICodedOutputStream output) {
-      int size = SerializedSize;
-      string[] field_names = _ownershipFieldNames;
-      if (hasOwnerEntityId) {
-        output.WriteMessage(1, field_names[2], OwnerEntityId);
-      }
-      if (hasDeleteTime) {
-        output.WriteSInt64(2, field_names[0], DeleteTime);
-      }
-      if (hasEscrowId) {
-        output.WriteMessage(3, field_names[1], EscrowId);
-      }
-      UnknownFields.WriteTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public override int SerializedSize {
-      get {
-        int size = memoizedSerializedSize;
-        if (size != -1) return size;
-        
-        size = 0;
-        if (hasOwnerEntityId) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, OwnerEntityId);
-        }
-        if (hasDeleteTime) {
-          size += pb::CodedOutputStream.ComputeSInt64Size(2, DeleteTime);
-        }
-        if (hasEscrowId) {
-          size += pb::CodedOutputStream.ComputeMessageSize(3, EscrowId);
-        }
-        size += UnknownFields.SerializedSize;
-        memoizedSerializedSize = size;
-        return size;
-      }
-    }
-    
-    public static Ownership ParseFrom(pb::ByteString data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static Ownership ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static Ownership ParseFrom(byte[] data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static Ownership ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static Ownership ParseFrom(global::System.IO.Stream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static Ownership ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    public static Ownership ParseDelimitedFrom(global::System.IO.Stream input) {
-      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
-    }
-    public static Ownership ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
-    }
-    public static Ownership ParseFrom(pb::ICodedInputStream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static Ownership ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    private Ownership MakeReadOnly() {
-      return this;
-    }
-    
-    public static Builder CreateBuilder() { return new Builder(); }
-    public override Builder ToBuilder() { return CreateBuilder(this); }
-    public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(Ownership prototype) {
-      return new Builder(prototype);
-    }
-    
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<Ownership, Builder> {
-      protected override Builder ThisBuilder {
-        get { return this; }
-      }
-      public Builder() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-      }
-      internal Builder(Ownership cloneFrom) {
-        result = cloneFrom;
-        resultIsReadOnly = true;
-      }
-      
-      private bool resultIsReadOnly;
-      private Ownership result;
-      
-      private Ownership PrepareBuilder() {
-        if (resultIsReadOnly) {
-          Ownership original = result;
-          result = new Ownership();
-          resultIsReadOnly = false;
-          MergeFrom(original);
-        }
-        return result;
-      }
-      
-      public override bool IsInitialized {
-        get { return result.IsInitialized; }
-      }
-      
-      protected override Ownership MessageBeingBuilt {
-        get { return PrepareBuilder(); }
-      }
-      
-      public override Builder Clear() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-        return this;
-      }
-      
-      public override Builder Clone() {
-        if (resultIsReadOnly) {
-          return new Builder(result);
-        } else {
-          return new Builder().MergeFrom(result);
-        }
-      }
-      
-      public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::D3.Items.Ownership.Descriptor; }
-      }
-      
-      public override Ownership DefaultInstanceForType {
-        get { return global::D3.Items.Ownership.DefaultInstance; }
-      }
-      
-      public override Ownership BuildPartial() {
-        if (resultIsReadOnly) {
-          return result;
-        }
-        resultIsReadOnly = true;
-        return result.MakeReadOnly();
-      }
-      
-      public override Builder MergeFrom(pb::IMessage other) {
-        if (other is Ownership) {
-          return MergeFrom((Ownership) other);
-        } else {
-          base.MergeFrom(other);
-          return this;
-        }
-      }
-      
-      public override Builder MergeFrom(Ownership other) {
-        if (other == global::D3.Items.Ownership.DefaultInstance) return this;
-        PrepareBuilder();
-        if (other.HasOwnerEntityId) {
-          MergeOwnerEntityId(other.OwnerEntityId);
-        }
-        if (other.HasDeleteTime) {
-          DeleteTime = other.DeleteTime;
-        }
-        if (other.HasEscrowId) {
-          MergeEscrowId(other.EscrowId);
-        }
-        this.MergeUnknownFields(other.UnknownFields);
-        return this;
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input) {
-        return MergeFrom(input, pb::ExtensionRegistry.Empty);
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-        PrepareBuilder();
-        pb::UnknownFieldSet.Builder unknownFields = null;
-        uint tag;
-        string field_name;
-        while (input.ReadTag(out tag, out field_name)) {
-          if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_ownershipFieldNames, field_name, global::System.StringComparer.Ordinal);
-            if(field_ordinal >= 0)
-              tag = _ownershipFieldTags[field_ordinal];
-            else {
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              continue;
-            }
-          }
-          switch (tag) {
-            case 0: {
-              throw pb::InvalidProtocolBufferException.InvalidTag();
-            }
-            default: {
-              if (pb::WireFormat.IsEndGroupTag(tag)) {
-                if (unknownFields != null) {
-                  this.UnknownFields = unknownFields.Build();
-                }
-                return this;
-              }
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              break;
-            }
-            case 10: {
-              global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasOwnerEntityId) {
-                subBuilder.MergeFrom(OwnerEntityId);
-              }
-              input.ReadMessage(subBuilder, extensionRegistry);
-              OwnerEntityId = subBuilder.BuildPartial();
-              break;
-            }
-            case 16: {
-              result.hasDeleteTime = input.ReadSInt64(ref result.deleteTime_);
-              break;
-            }
-            case 26: {
-              global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
-              if (result.hasEscrowId) {
-                subBuilder.MergeFrom(EscrowId);
-              }
-              input.ReadMessage(subBuilder, extensionRegistry);
-              EscrowId = subBuilder.BuildPartial();
-              break;
-            }
-          }
-        }
-        
-        if (unknownFields != null) {
-          this.UnknownFields = unknownFields.Build();
-        }
-        return this;
-      }
-      
-      
-      public bool HasOwnerEntityId {
-       get { return result.hasOwnerEntityId; }
-      }
-      public global::D3.OnlineService.EntityId OwnerEntityId {
-        get { return result.OwnerEntityId; }
-        set { SetOwnerEntityId(value); }
-      }
-      public Builder SetOwnerEntityId(global::D3.OnlineService.EntityId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hasOwnerEntityId = true;
-        result.ownerEntityId_ = value;
-        return this;
-      }
-      public Builder SetOwnerEntityId(global::D3.OnlineService.EntityId.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hasOwnerEntityId = true;
-        result.ownerEntityId_ = builderForValue.Build();
-        return this;
-      }
-      public Builder MergeOwnerEntityId(global::D3.OnlineService.EntityId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        if (result.hasOwnerEntityId &&
-            result.ownerEntityId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.ownerEntityId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.ownerEntityId_).MergeFrom(value).BuildPartial();
-        } else {
-          result.ownerEntityId_ = value;
-        }
-        result.hasOwnerEntityId = true;
-        return this;
-      }
-      public Builder ClearOwnerEntityId() {
-        PrepareBuilder();
-        result.hasOwnerEntityId = false;
-        result.ownerEntityId_ = null;
-        return this;
-      }
-      
-      public bool HasDeleteTime {
-        get { return result.hasDeleteTime; }
-      }
-      public long DeleteTime {
-        get { return result.DeleteTime; }
-        set { SetDeleteTime(value); }
-      }
-      public Builder SetDeleteTime(long value) {
-        PrepareBuilder();
-        result.hasDeleteTime = true;
-        result.deleteTime_ = value;
-        return this;
-      }
-      public Builder ClearDeleteTime() {
-        PrepareBuilder();
-        result.hasDeleteTime = false;
-        result.deleteTime_ = 0;
-        return this;
-      }
-      
-      public bool HasEscrowId {
-       get { return result.hasEscrowId; }
-      }
-      public global::D3.OnlineService.EntityId EscrowId {
-        get { return result.EscrowId; }
-        set { SetEscrowId(value); }
-      }
-      public Builder SetEscrowId(global::D3.OnlineService.EntityId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hasEscrowId = true;
-        result.escrowId_ = value;
-        return this;
-      }
-      public Builder SetEscrowId(global::D3.OnlineService.EntityId.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hasEscrowId = true;
-        result.escrowId_ = builderForValue.Build();
-        return this;
-      }
-      public Builder MergeEscrowId(global::D3.OnlineService.EntityId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        if (result.hasEscrowId &&
-            result.escrowId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
-            result.escrowId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.escrowId_).MergeFrom(value).BuildPartial();
-        } else {
-          result.escrowId_ = value;
-        }
-        result.hasEscrowId = true;
-        return this;
-      }
-      public Builder ClearEscrowId() {
-        PrepareBuilder();
-        result.hasEscrowId = false;
-        result.escrowId_ = null;
-        return this;
-      }
-    }
-    static Ownership() {
       object.ReferenceEquals(global::D3.Items.Items.Descriptor, null);
     }
   }

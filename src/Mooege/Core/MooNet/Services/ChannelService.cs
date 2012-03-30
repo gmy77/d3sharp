@@ -32,6 +32,7 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
+        public uint Status { get; set; }
 
         public override void AddMember(Google.ProtocolBuffers.IRpcController controller, bnet.protocol.channel.AddMemberRequest request, System.Action<bnet.protocol.NoData> done)
         {
@@ -115,8 +116,8 @@ namespace Mooege.Core.MooNet.Services
                 }
                 else if (attribute.Name == "D3.Party.ScreenStatus")
                 {
-                    //if (!this.Client.MOTDSent)
-                    //    this.Client.SendMOTD(); // send the MOTD to client if we haven't yet so.
+                    if (!this.Client.MOTDSent)
+                        this.Client.SendMOTD(); // send the MOTD to client if we haven't yet so.
 
                     if (!attribute.HasValue || attribute.Value.MessageValue.IsEmpty) //Sometimes not present -Egris
                     {
@@ -136,7 +137,7 @@ namespace Mooege.Core.MooNet.Services
                             .SetName("D3.Party.ScreenStatus")
                             .SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(oldScreen.ToByteString()));
                         channelState.AddAttribute(attr);
-                        Logger.Debug("Client moving to Screen: {0}, with Status: {1}", oldScreen.Screen, oldScreen.Status);
+                        Logger.Trace("Client moving to Screen: {0}, with Status: {1}", oldScreen.Screen, oldScreen.Status);
                     }
                 }
                 else if (attribute.Name == "D3.Party.JoinPermissionPreviousToLock")

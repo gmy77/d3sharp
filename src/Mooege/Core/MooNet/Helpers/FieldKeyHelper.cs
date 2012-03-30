@@ -37,8 +37,8 @@ namespace Mooege.Core.MooNet.Helpers
             Account = 1,
             GameAccount = 2,
             Hero = 3,
-            Channel = 4,
-            Unknown = 5
+            Party = 4,
+            GameSession = 5
         }
 
         public static FieldKey Create(Program program, OriginatingClass originatingClass, uint field, ulong index)

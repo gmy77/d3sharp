@@ -14,6 +14,9 @@ message ReportAuthorizeRequest
     optional bool defer_delivery = 5;
     required .bnet.protocol.EntityId bnet_account_id = 6;
     optional .bnet.protocol.exchange.ActionErrorDetail error_detail = 7;
+    optional string avs_result = 8;
+    optional string cvv_result = 9;
+    optional .bnet.protocol.exchange.BlobFrom notification_extra_info = 10;
 }
 
 message ReportSettleRequest
@@ -61,6 +64,9 @@ message PaymentMethod
     optional uint32 cash_in_out_mask = 4 [default = 3];
     optional .bnet.protocol.exchange.BillingAddress billing_address = 5;
     required uint64 wallet_id = 6;
+    optional uint32 cap_restriction = 7;
+    optional uint64 authenticator_cap = 8;
+    optional uint64 soft_cap = 9;
 }
 
 message GetPaymentMethodsResponse

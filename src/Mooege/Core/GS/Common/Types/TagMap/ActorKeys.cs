@@ -143,7 +143,40 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         QuestLoot = 67, // only Actor\PlacedGold.acr, Gizmo and Actor\Scoundrel_LoreLoot.acr, Gizmo
         Savepoint = 68,
         DungeonStonePortal = 70, // only one actor with that name
-        NephalemAltar = 71
+        //NephalemAltar = 71
     }
+    class DRLGCommandKeys
+    {
+        public static class Group
+        {
+            //    [0]: {851986 = -1}
+            //    [1]: {1015841 = 1}
+            //    [2]: {851987 = -1}
+            //    [3]: {851993 = -1}
+            //    [4]: {1015822 = 0}
+            //    [5]: {851983 = 19780} //19780 LevelArea A1_trDun_Level01
+            public static TagKeySNO Level = new TagKeySNO(851983);
+        }
 
+        public static class AddExit
+        {
+            //[0]: {852000 = -1}    Type SNO (2)
+            //[1]: {851984 = 60713} Type SNO (2) [20:16] (snobot) [1] 60713 Worlds trDun_Cain_Intro, 
+            //[2]: {1020032 = 1}    (0)
+            //[3]: {852050 = 0}     //Starting location? ID (7)
+            //[4]: {1015841 = 1}    (0)
+            //[5]: {852051 = 172}   //Starting location? ID (7)
+            //[6]: {1015814 = 0}    (0)
+            //[7]: {854612 = -1}    Type SNO (2)
+            //[8]: {1015813 = 300}  (0) tiletype (exit)
+            //[9]: {1020416 = 1}    (0)
+            //[10]: {854613 = -1}   (2)
+            //[11]: {1015821 = -1}  (0)
+            public static TagKeySNO ExitWorld = new TagKeySNO(851984);
+            public static TagKeySNO CoordinateX = new TagKeySNO(852050); //??
+            public static TagKeySNO CoordinateY = new TagKeySNO(852051); //??
+            public static TagKeySNO TileType = new TagKeySNO(1015813);
+
+        }
+    }
 }

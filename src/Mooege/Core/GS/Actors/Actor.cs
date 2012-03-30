@@ -130,6 +130,7 @@ namespace Mooege.Core.GS.Actors
         private Mooege.Common.MPQ.FileFormats.QuestRange _questRange;
 
         protected Mooege.Common.MPQ.FileFormats.ConversationList ConversationList;
+        public Vector3D CheckPointPosition { get; set; }
 
         /// <summary>
         /// Returns true if actor has world location.
@@ -201,7 +202,7 @@ namespace Mooege.Core.GS.Actors
             this.NameSNOId = snoId;
             this.Quality = 0;
 
-            if(ActorData.TagMap.ContainsKey(ActorKeys.TeamID))
+            if (ActorData.TagMap.ContainsKey(ActorKeys.TeamID))
                 this.Attributes[GameAttribute.TeamID] = ActorData.TagMap[ActorKeys.TeamID];
             this.Spawned = false;
             this.Size = new Size(1, 1);
@@ -212,8 +213,8 @@ namespace Mooege.Core.GS.Actors
             this.ReadTags();
 
             // Listen for quest progress if the actor has a QuestRange attached to it
-            foreach(var quest in World.Game.Quests)
-                if(_questRange != null)
+            foreach (var quest in World.Game.Quests)
+                if (_questRange != null)
                     quest.OnQuestProgress += new Games.Quest.QuestProgressDelegate(quest_OnQuestProgress);
             UpdateQuestRangeVisbility();
         }
@@ -235,7 +236,7 @@ namespace Mooege.Core.GS.Actors
             if (_questRange != null)
                 foreach (var quest in World.Game.Quests)
                     quest.OnQuestProgress -= quest_OnQuestProgress;
-   
+
             base.Destroy();
         }
 
@@ -248,6 +249,7 @@ namespace Mooege.Core.GS.Actors
                 return;
 
             this.Position = position;
+            this.CheckPointPosition = position;
 
             if (this.World != null) // if actor got into a new world.
                 this.World.Enter(this); // let him enter first.
@@ -281,7 +283,7 @@ namespace Mooege.Core.GS.Actors
                 this.World.Enter(this); // let him enter first.
 
             AfterChangeWorld();
-
+            this.CheckPointPosition = position;
             world.BroadcastIfRevealed(this.ACDWorldPositionMessage, this);
         }
 
@@ -467,7 +469,7 @@ namespace Mooege.Core.GS.Actors
                 ActorID = this.DynamicID,
                 ActorSNOId = this.ActorSNO.Id,
                 Field2 = this.Field2,
-                Field3 =  this.HasWorldLocation ? 0 : 1,
+                Field3 = this.HasWorldLocation ? 0 : 1,
                 WorldLocation = this.HasWorldLocation ? this.WorldLocationMessage : null,
                 InventoryLocation = this.HasWorldLocation ? null : this.InventoryLocationMessage,
                 GBHandle = this.GBHandle,
@@ -512,8 +514,8 @@ namespace Mooege.Core.GS.Actors
             player.InGameClient.SendMessage(new ACDGroupMessage
             {
                 ActorID = DynamicID,
-                Field1 = -1,
-                Field2 = -1,
+                Group1Hash = -1,
+                Group2Hash = -1,
             });
 
             // Reveal actor (creates actor and makes it visible to the player)
@@ -746,8 +748,6 @@ namespace Mooege.Core.GS.Actors
 
             if (this.Tags.ContainsKey(MarkerKeys.TriggeredConversation))
                 snoTriggeredConversation = Tags[MarkerKeys.TriggeredConversation].Id;
-
-
         }
 
         #endregion

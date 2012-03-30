@@ -26,6 +26,7 @@ using Mooege.Core.MooNet.Objects;
 using Mooege.Core.MooNet.Toons;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Net.MooNet;
+using Mooege.Common.Extensions;
 
 namespace Mooege.Core.MooNet.Accounts
 {
@@ -37,29 +38,29 @@ namespace Mooege.Core.MooNet.Accounts
         public ByteStringPresenceField<D3.Account.BannerConfiguration> BannerConfigurationField
             = new ByteStringPresenceField<D3.Account.BannerConfiguration>(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.GameAccount, 1, 0);
 
-        public ByteStringPresenceField<D3.OnlineService.EntityId> CurrentHeroIdField
+        public ByteStringPresenceField<D3.OnlineService.EntityId> LastPlayedHeroEntityIdField
             = new ByteStringPresenceField<D3.OnlineService.EntityId>(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.GameAccount, 2, 0);
 
-        public IntPresenceField ScreenStatusField
-            = new IntPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Channel, 2, 0);
+        public IntPresenceField JoinPermissionField
+            = new IntPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Party, 2, 0);
 
         public FourCCPresenceField ProgramField
-            = new FourCCPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 4, 0);
+            = new FourCCPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 3, 0);
 
         public StringPresenceField BattleTagField
+            = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 5, 0);
+
+        public StringPresenceField GameAccountNameField
             = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 6, 0);
 
-        public StringPresenceField AccountField
-            = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 7, 0);
-
         public ByteStringPresenceField<bnet.protocol.EntityId> OwnerIdField
-            = new ByteStringPresenceField<bnet.protocol.EntityId>(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 8, 0);
+            = new ByteStringPresenceField<bnet.protocol.EntityId>(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 7, 0);
 
         public BoolPresenceField GameAccountStatusField
             = new BoolPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 1, 0, false);
 
-        public IntPresenceField GameAccountStatusIdField
-            = new IntPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 5, 0);
+        public IntPresenceField LastOnlineField
+            = new IntPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.GameAccount, 4, 0, 0);
 
         public FieldKeyHelper.Program Program;
 
@@ -88,8 +89,8 @@ namespace Mooege.Core.MooNet.Accounts
             set
             {
                 _screenstatus = value;
-                this.ScreenStatusField.Value = value.Status;
-                this.ChangedFields.SetPresenceFieldValue(this.ScreenStatusField);
+                this.JoinPermissionField.Value = value.Status;
+                this.ChangedFields.SetPresenceFieldValue(this.JoinPermissionField);
             }
         }
         /// <summary>
@@ -105,10 +106,10 @@ namespace Mooege.Core.MooNet.Accounts
             set
             {
                 this._currentToon = value;
-                this.CurrentHeroIdField.Value = value.D3EntityID;
+                this.LastPlayedHeroEntityIdField.Value = value.D3EntityID;
                 this.Owner.LastSelectedHero = value.D3EntityID;
-                this.ChangedFields.SetPresenceFieldValue(this.Owner.LastSelectedHeroField);
-                this.ChangedFields.SetPresenceFieldValue(this.CurrentHeroIdField);
+                this.ChangedFields.SetPresenceFieldValue(this.Owner.LastPlayedHeroIdField);
+                this.ChangedFields.SetPresenceFieldValue(this.LastPlayedHeroEntityIdField);
                 this.ChangedFields.SetPresenceFieldValue(value.HeroClassField);
                 this.ChangedFields.SetPresenceFieldValue(value.HeroLevelField);
                 this.ChangedFields.SetPresenceFieldValue(value.HeroVisualEquipmentField);
@@ -141,7 +142,7 @@ namespace Mooege.Core.MooNet.Accounts
             {
                 if (_lastPlayedHeroId == AccountHasNoToons && this.Toons.Count > 0 && !this.IsOnline)
                 {
-                    _lastPlayedHeroId = this.CurrentHeroIdField.Value = this.Toons.First().Value.D3EntityID;
+                    _lastPlayedHeroId = this.LastPlayedHeroEntityIdField.Value = this.Toons.First().Value.D3EntityID;
                     this._currentToon = ToonManager.GetToonByLowID(_lastPlayedHeroId.IdLow);
                 }
                 return _lastPlayedHeroId;
@@ -226,7 +227,7 @@ namespace Mooege.Core.MooNet.Accounts
 
             //TODO: Now hardcode all game account notifications to D3
             this.ProgramField.Value = "D3";
-            this.AccountField.Value = Owner.BnetEntityId.Low.ToString() + "#1";
+            this.GameAccountNameField.Value = Owner.BnetEntityId.Low.ToString() + "#1";
             this.BattleTagField.Value = this.Owner.BattleTag;
 
             this.Achievements = new List<bnet.protocol.achievements.AchievementUpdateRecord>();
@@ -249,16 +250,17 @@ namespace Mooege.Core.MooNet.Accounts
                 this._loggedInClient = value;
 
                 this.GameAccountStatusField.Value = this.IsOnline;
-                this.GameAccountStatusIdField.Value = (int)(this.IsOnline == true ? 1324923597904795 : 0);
+                this.LastOnlineField.Value = (long)DateTime.Now.ToExtendedEpoch();
+                this.Owner.LastOnlineField.Value = this.LastOnlineField.Value;
 
                 ChangedFields.SetPresenceFieldValue(this.GameAccountStatusField);
-                ChangedFields.SetPresenceFieldValue(this.GameAccountStatusIdField);
+                ChangedFields.SetPresenceFieldValue(this.LastOnlineField);
 
                 //TODO: Remove this set once delegate for set is added to presence field
-                this.Owner.AccountOnlineField.Value = this.Owner.IsOnline;
-                var operation = this.Owner.AccountOnlineField.GetFieldOperation();
+                //this.Owner.AccountOnlineField.Value = this.Owner.IsOnline;
+                //var operation = this.Owner.AccountOnlineField.GetFieldOperation();
                 this.NotifyUpdate();
-                this.UpdateSubscribers(this.Subscribers, new List<bnet.protocol.presence.FieldOperation>() { operation });
+                //  this.UpdateSubscribers(this.Subscribers, new List<bnet.protocol.presence.FieldOperation>() { operation });
             }
         }
 
@@ -266,7 +268,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             get
             {
-                var builder = D3.Account.Digest.CreateBuilder().SetVersion(105) // 7447=>99, 7728=> 100, 8801=>102, 8296=>105
+                var builder = D3.Account.Digest.CreateBuilder().SetVersion(106) // 7447=>99, 7728=> 100, 8801=>102, 8296=>105, 8610=>106, 8815=>106, 8896=>106
                     .SetBannerConfiguration(this.BannerConfigurationField.Value)
                     .SetFlags(0)
                     .SetLastPlayedHeroId(lastPlayedHeroId);
@@ -288,7 +290,6 @@ namespace Mooege.Core.MooNet.Accounts
         {
             //for now set it here
             this.GameAccountStatusField.Value = this.IsOnline;
-            this.GameAccountStatusIdField.Value = (int)(this.IsOnline == true ? 1324923597904795 : 0);
 
             var operationList = new List<bnet.protocol.presence.FieldOperation>();
 
@@ -300,27 +301,27 @@ namespace Mooege.Core.MooNet.Accounts
             //D3,Hero,3,0 -> D3.Hero.VisualEquipment
             //D3,Hero,4,0 -> Hero's flags
             //D3,Hero,5,0 -> Hero Name
-            //D3,Hero,6,0 -> Unk Int64 (0)
-            //D3,Hero,7,0 -> Unk Int64 (0)
+            //D3,Hero,6,0 -> HighestUnlockedAct
+            //D3,Hero,7,0 -> HighestUnlockedDifficulty
             //Bnet,GameAccount,1,0 -> GameAccount Online
-            //Bnet,GameAccount,4,0 -> FourCC = "D3"
-            //Bnet,GameAccount,5,0 -> Unk Int (0 if GameAccount is Offline)
-            //Bnet,GameAccount,6,0 -> BattleTag
-            //Bnet,GameAccount,7,0 -> Account.Low + "#1"
-            //Bnet,GameAccount,8,0 -> Account.EntityId
+            //Bnet,GameAccount,3,0 -> FourCC = "D3"
+            //Bnet,GameAccount,4,0 -> Unk Int (0 if GameAccount is Offline)
+            //Bnet,GameAccount,5,0 -> BattleTag
+            //Bnet,GameAccount,6,0 -> Account.Low + "#1"
+            //Bnet,GameAccount,7,0 -> Account.EntityId
 
             operationList.Add(BannerConfigurationField.GetFieldOperation());
             if (this.lastPlayedHeroId != AccountHasNoToons)
             {
-                operationList.Add(this.CurrentHeroIdField.GetFieldOperation());
+                operationList.Add(this.LastPlayedHeroEntityIdField.GetFieldOperation());
                 operationList.AddRange(this.CurrentToon.GetSubscriptionNotifications());
             }
 
             operationList.Add(this.GameAccountStatusField.GetFieldOperation());
             operationList.Add(this.ProgramField.GetFieldOperation());
-            operationList.Add(this.GameAccountStatusIdField.GetFieldOperation());
+            operationList.Add(this.LastOnlineField.GetFieldOperation());
             operationList.Add(this.BattleTagField.GetFieldOperation());
-            operationList.Add(this.AccountField.GetFieldOperation());
+            operationList.Add(this.GameAccountNameField.GetFieldOperation());
             operationList.Add(this.OwnerIdField.GetFieldOperation());
 
             return operationList;
@@ -353,7 +354,17 @@ namespace Mooege.Core.MooNet.Accounts
             switch ((FieldKeyHelper.Program)field.Key.Program)
             {
                 case FieldKeyHelper.Program.D3:
-                    if (field.Key.Group == 4 && field.Key.Field == 1)
+                    if (field.Key.Group == 2 && field.Key.Field == 3) //CurrentActivity
+                    {
+                        returnField.SetValue(field.Value);
+                        Logger.Trace("{0} set CurrentActivity to {1}", this, field.Value.IntValue);
+                    }
+                    else if (field.Key.Group == 2 && field.Key.Field == 4) //Unknown bool
+                    {
+                        returnField.SetValue(field.Value);
+                        Logger.Trace("{0} set CurrentActivity to {1}", this, field.Value.BoolValue);
+                    }
+                    else if (field.Key.Group == 4 && field.Key.Field == 1) //PartyId
                     {
                         if (field.Value.HasMessageValue) //7727 Sends empty SET instead of a CLEAR -Egris
                         {
@@ -375,7 +386,7 @@ namespace Mooege.Core.MooNet.Accounts
                             }
                         }
                     }
-                    else if (field.Key.Group == 4 && field.Key.Field == 2)
+                    else if (field.Key.Group == 4 && field.Key.Field == 2) //JoinPermission
                     {
                         //catch to stop Logger.Warn spam on client start and exit
                         // should D3.4.2 int64 Current screen (0=in-menus, 1=in-menus, 3=in-menus); see ScreenStatus sent to ChannelService.UpdateChannelState call /raist
@@ -386,31 +397,42 @@ namespace Mooege.Core.MooNet.Accounts
                             Logger.Trace("{0} set current screen to {1}.", this, field.Value.IntValue);
                         }
                     }
-                    else if (field.Key.Group == 4 && field.Key.Field == 3)
+                    else if (field.Key.Group == 4 && field.Key.Field == 3) //CallToArmsMessage
                     {
                         returnField.SetValue(field.Value);
-                        //Looks to be the ToonFlags of the party leader/inviter when it is an int, OR the message set in an open to friends game when it is a string /dustinconrad
                     }
-                    else if (field.Key.Group == 4 && field.Key.Field == 4)
+                    else if (field.Key.Group == 4 && field.Key.Field == 4) //Party IsFull
                     {
                         returnField.SetValue(field.Value);
-                        //this is some unknown bool
+                    }
+                    else if (field.Key.Group == 5 && field.Key.Field == 5) //Game IsPrivate
+                    {
+                        returnField.SetValue(field.Value);
                     }
                     else
                     {
-                        Logger.Warn("Unknown set-field: {0}, {1}, {2} := {3}", field.Key.Program, field.Key.Group, field.Key.Field, field.Value);
+                        Logger.Warn("GameAccount: Unknown set-field: {0}, {1}, {2} := {3}", field.Key.Program, field.Key.Group, field.Key.Field, field.Value);
                     }
                     break;
                 case FieldKeyHelper.Program.BNet:
-                    if (field.Key.Group == 2 && field.Key.Field == 3) // Away status
+                    if (field.Key.Group == 2 && field.Key.Field == 2) // SocialStatus
                     {
                         this.AwayStatus = (AwayStatusFlag)field.Value.IntValue;
                         returnField.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.AwayStatus).Build());
                         Logger.Trace("{0} set AwayStatus to {1}.", this, this.AwayStatus);
                     }
+                    else if (field.Key.Group == 2 && field.Key.Field == 8)
+                    {
+                        returnField.SetValue((field.Value));
+                    }
+                    else if (field.Key.Group == 2 && field.Key.Field == 10) // AFK
+                    {
+                        returnField.SetValue(field.Value);
+                        Logger.Trace("{0} set AFK to {1}.", this, field.Value.BoolValue);
+                    }
                     else
                     {
-                        Logger.Warn("Unknown set-field: {0}, {1}, {2} := {3}", field.Key.Program, field.Key.Group, field.Key.Field, field.Value);
+                        Logger.Warn("GameAccount: Unknown set-field: {0}, {1}, {2} := {3}", field.Key.Program, field.Key.Group, field.Key.Field, field.Value);
                     }
                     break;
             }
@@ -428,10 +450,10 @@ namespace Mooege.Core.MooNet.Accounts
             switch ((FieldKeyHelper.Program)field.Key.Program)
             {
                 case FieldKeyHelper.Program.D3:
-                    Logger.Warn("Unknown clear-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
+                    Logger.Warn("GameAccount: Unknown clear-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
                     break;
                 case FieldKeyHelper.Program.BNet:
-                    Logger.Warn("Unknown clear-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
+                    Logger.Warn("GameAccount: Unknown clear-field: {0}, {1}, {2}", field.Key.Program, field.Key.Group, field.Key.Field);
                     break;
             }
         }
@@ -451,6 +473,10 @@ namespace Mooege.Core.MooNet.Accounts
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.lastPlayedHeroId.ToByteString()).Build());
                     }
+                    else if (queryKey.Group == 2 && queryKey.Field == 4) //Unknown Bool
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(false).Build());
+                    }
                     else if (queryKey.Group == 3 && queryKey.Field == 1) // Hero's class (GbidClass)
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(this.CurrentToon.ClassID).Build());
@@ -461,7 +487,7 @@ namespace Mooege.Core.MooNet.Accounts
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 3) // Hero's visible equipment
                     {
-                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.CurrentToon.Equipment.ToByteString()).Build());
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.CurrentToon.HeroVisualEquipmentField.Value.ToByteString()).Build());
                     }
                     else if (queryKey.Group == 3 && queryKey.Field == 4) // Hero's flags (gender and such)
                     {
@@ -502,21 +528,25 @@ namespace Mooege.Core.MooNet.Accounts
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.GameAccountStatusField.Value).Build());
                     }
-                    else if (queryKey.Group == 2 && queryKey.Field == 3) // Away status
+                    else if (queryKey.Group == 2 && queryKey.Field == 2) // Away status
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue((long)this.AwayStatus).Build());
                     }
-                    else if (queryKey.Group == 2 && queryKey.Field == 4) // Program - always D3
+                    else if (queryKey.Group == 2 && queryKey.Field == 3) // Program - always D3
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetFourccValue("D3").Build());
                     }
-                    else if (queryKey.Group == 2 && queryKey.Field == 6) // BattleTag
+                    else if (queryKey.Group == 2 && queryKey.Field == 5) // BattleTag
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Owner.BattleTag).Build());
                     }
-                    else if (queryKey.Group == 2 && queryKey.Field == 8) // Account.EntityId
+                    else if (queryKey.Group == 2 && queryKey.Field == 7) // Account.EntityId
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetEntityidValue(this.Owner.BnetEntityId).Build());
+                    }
+                    else if (queryKey.Group == 2 && queryKey.Field == 10) // AFK
+                    {
+                        field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetBoolValue(this.AwayStatus != AwayStatusFlag.Available).Build());
                     }
                     else
                     {
@@ -541,8 +571,8 @@ namespace Mooege.Core.MooNet.Accounts
                 {
                     var query =
                         string.Format(
-                            "UPDATE gameaccounts SET accountId={0}, banner=@banner WHERE id={1}",
-                            this.Owner.PersistentID, this.PersistentID);
+                            "UPDATE gameaccounts SET accountId={0}, banner=@banner, LastOnline={1} WHERE id={2}",
+                            this.Owner.PersistentID, this.LastOnlineField.Value, this.PersistentID);
 
                     using (var cmd = new SQLiteCommand(query, DBManager.Connection))
                     {
@@ -552,10 +582,7 @@ namespace Mooege.Core.MooNet.Accounts
                 }
                 else
                 {
-                    var query =
-                        string.Format(
-                            "INSERT INTO gameaccounts (id, accountId, banner) VALUES({0},{1}, @banner)",
-                            this.PersistentID, this.Owner.PersistentID);
+                    var query = string.Format("INSERT INTO gameaccounts (id, accountId, banner, LastOnline) VALUES({0},{1}, @banner, {2})", this.PersistentID, this.Owner.PersistentID, this.LastOnlineField.Value);
 
                     using (var cmd = new SQLiteCommand(query, DBManager.Connection))
                     {
@@ -591,10 +618,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         private bool ExistsInDB()
         {
-            var query =
-                string.Format(
-                    "SELECT id from gameaccounts where id={0}",
-                    this.PersistentID);
+            var query = string.Format("SELECT id FROM gameaccounts where id={0}", this.PersistentID);
 
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();

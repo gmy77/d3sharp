@@ -44,7 +44,7 @@ namespace Mooege.Net.MooNet
             var client = ((MooNetClient) e.Connection.Client);
 
             Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
-            if (client.Account != null) client.Account.CurrentGameAccount.LoggedInClient = null;
+            if (client.Account != null && client.Account.CurrentGameAccount != null) client.Account.CurrentGameAccount.LoggedInClient = null;
             PlayerManager.PlayerDisconnected((MooNetClient)e.Connection.Client);
         }
         
@@ -54,8 +54,10 @@ namespace Mooege.Net.MooNet
             // so we change our default port and start D3 with a shortcut like so:
             //   "F:\Diablo III Beta\Diablo III.exe" -launch -auroraaddress 127.0.0.1:1345
 
-            if (!this.Listen(Config.Instance.BindIP, Config.Instance.Port)) return;
-            Logger.Info("MooNet-Server is listening on {0}:{1}...", Config.Instance.BindIP, Config.Instance.Port);
+            var bindIP = NetworkingConfig.Instance.EnableIPv6 ? Config.Instance.BindIPv6 : Config.Instance.BindIP;
+
+            if (!this.Listen(bindIP, Config.Instance.Port)) return;
+            Logger.Info("MooNet-Server is listening on {0}:{1}...", bindIP, Config.Instance.Port);
         }
     }
 }

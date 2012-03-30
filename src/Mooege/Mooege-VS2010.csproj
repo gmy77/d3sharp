@@ -54,6 +54,9 @@
     <Externalconsole>true</Externalconsole>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>..\..\Assets\mooege.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AStar">
       <HintPath>..\..\dep\astar\AStar.dll</HintPath>
@@ -105,11 +108,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\GS\Actors\Actions\PowerAction.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Door.cs" />
     <Compile Include="Core\GS\Powers\ActionTimedSkill.cs" />
     <Compile Include="Core\GS\Powers\ActorMover.cs" />
     <Compile Include="Core\GS\Powers\ComboSkill.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\CooldownBuff.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\KnockbackBuff.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\LevelUp.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\Ranged.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\StatusDebuffs.cs" />
     <Compile Include="Core\GS\Powers\Payloads\AttackPayload.cs" />
@@ -185,7 +190,6 @@
     <Compile Include="Core\GS\Actors\Implementations\Healthwell.cs" />
     <Compile Include="Core\GS\Actors\Implementations\ProximityTriggeredGizmo.cs" />
     <Compile Include="Core\GS\Actors\Implementations\DesctructibleLootContainer.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\NephalemAltar.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Savepoint.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Shrine.cs" />
     <Compile Include="Core\GS\Actors\Movement\MoveToPointWithPathfindAction.cs" />
@@ -341,7 +345,6 @@
     <Compile Include="Core\MooNet\Services\SearchService.cs" />
     <Compile Include="Core\MooNet\Services\ServerPoolService.cs" />
     <Compile Include="Core\MooNet\Services\Service.cs" />
-    <Compile Include="Core\MooNet\Services\StorageService.cs" />
     <Compile Include="Core\MooNet\Services\UserManagerService.cs" />
     <Compile Include="Core\GS\Skills\SkillSet.cs" />
     <Compile Include="Core\GS\Skills\Skills.cs" />
@@ -349,6 +352,10 @@
     <Compile Include="Core\MooNet\Toons\Toon.cs" />
     <Compile Include="Core\MooNet\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\MooNet\Toons\ToonManager.cs" />
+    <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateAckMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Player\PlayerKickTimerMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Player\UnlockDifficultyMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Skill\AssignTraitsMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\CancelChanneledSkillMessage.cs" />
     <Compile Include="Common\Logging\LogConfig.cs" />
     <Compile Include="Core\MooNet\Web\AccountWebService.cs" />
@@ -376,10 +383,10 @@
     <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryRequestQuickMoveMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\HeartbeatMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\ShrineActivatedMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\NephalemAltarWindowClosedMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayerBannerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\LoadCompleteMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerTranslateFacingMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Skill\UnassignSkillMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Tutorial\TutorialMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingDismissMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingHireMessage.cs" />
@@ -403,14 +410,16 @@
     <Compile Include="Net\GS\Message\Definitions\Trade\OpenTradeWindow.cs" />
     <Compile Include="Net\GS\Message\Definitions\Tutorial\TutorialShownMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Waypoint\OpenWaypointSelectionWindowMessage.cs" />
+    <Compile Include="Net\GS\Message\Fields\ActiveSkillSavedData.cs" />
     <Compile Include="Net\GS\Message\GameAttribute.List.cs" />
     <Compile Include="Core\GS\Objects\GameAttributeMap.cs" />
+    <Compile Include="Net\GS\Message\ScriptedAttributeInitializer.cs" />
+    <Compile Include="Net\MooNet\MooNetBuffer.cs" />
     <Compile Include="Net\MooNet\MooNetClient.cs" />
     <Compile Include="Net\MooNet\MooNetServer.cs" />
     <Compile Include="Net\MooNet\Config.cs" />
     <Compile Include="Net\GS\ClientManager.cs" />
     <Compile Include="Net\GS\Config.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Skill\AssignPassiveSkillMessage.cs" />
     <Compile Include="Core\GS\Common\Types\Collision\AABB.cs" />
     <Compile Include="Net\GS\Message\Fields\ActiveEvent.cs" />
     <Compile Include="Net\GS\Message\Fields\AnimPreplayData.cs" />
@@ -560,7 +569,6 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\PlayCutsceneMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Effect\PlayEffectMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerActorSetInitialMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Player\PlayerChangeHotbarButtonMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerDeSyncSnapMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerEnterKnownMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerIndexMessage.cs" />
@@ -596,7 +604,6 @@
     <Compile Include="Net\GS\Message\Definitions\Misc\SimpleMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\SNODataMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Misc\SNONameDataMessage.cs" />
-    <Compile Include="Net\GS\Message\Definitions\Misc\SocketSpellMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Conversation\StopConvLineMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Scene\SwapSceneMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\World\TargetMessage.cs" />
@@ -620,6 +627,7 @@
     <Compile Include="Net\MooNet\Packets\PacketOut.cs" />
     <Compile Include="Net\MooNet\RPC\RPCCallback.cs" />
     <Compile Include="Net\NATConfig.cs" />
+    <Compile Include="Net\NetworkingConfig.cs" />
     <Compile Include="Net\Utils.cs" />
     <Compile Include="Net\WebServices\Config.cs" />
     <Compile Include="Net\WebServices\IWebService.cs" />
@@ -713,5 +721,8 @@
       <DependentUpon>WorldVisualizer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Assets\mooege.ico" />
   </ItemGroup>
 </Project>

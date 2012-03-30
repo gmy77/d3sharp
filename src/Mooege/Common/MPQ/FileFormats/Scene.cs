@@ -114,7 +114,7 @@ namespace Mooege.Common.MPQ.FileFormats
                 // Loop thru each NavmeshSquare in the array, and fills the grid
                 for (int i = 0; i < NavMeshSquareCount; i++)
                 {
-                    WalkGrid[i % SquaresCountY, i / SquaresCountY] = (byte)(Squares[i].Flags & Scene.NavCellFlags.AllowWalk);
+                    WalkGrid[i % SquaresCountX, i / SquaresCountY] = (byte)(Squares[i].Flags & Scene.NavCellFlags.AllowWalk);
                    // Set the grid to 0x1 if its walkable, left as 0 if not. - DarkLotus
                 }
 
@@ -186,7 +186,7 @@ namespace Mooege.Common.MPQ.FileFormats
             public NavCellFlags Flags { get; private set; }
             public short NeighbourCount { get; private set; }
             public int NeighborsIndex { get; private set; }
-
+            public System.Windows.Rect Bounds { get { return new System.Windows.Rect(Min.X, Min.Y, Max.X - Min.X, Max.Y - Min.Y); } } 
             public void Read(MpqFileStream stream)
             {
                 this.Min = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());

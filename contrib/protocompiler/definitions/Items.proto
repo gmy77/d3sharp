@@ -26,7 +26,6 @@ message Generator
     optional sint32 item_binding_level = 12 [default = 0];
     optional uint32 max_durability = 13 [default = 0];
     repeated .D3.Items.EmbeddedGenerator contents = 14;
-    optional sfixed32 attuned_skill = 15 [default = -1];
     optional uint64 item_unlock_timestamp = 16 [default = 0];
     optional uint32 enchant_range_val = 17 [default = 0];
 }
@@ -55,27 +54,8 @@ message AuctionAccountInfo
     required .D3.OnlineService.EntityId escrow_id = 2;
 }
 
-message AuctionItem
-{
-    required .D3.OnlineService.ItemId id = 1;
-    required .D3.Items.Generator generator = 2;
-}
-
-message AuctionInfo
-{
-    required .D3.OnlineService.ItemId id = 1;
-    optional .D3.Items.Ownership owner = 2;
-}
-
 message ItemList
 {
     repeated .D3.Items.SavedItem items = 1;
-}
-
-message Ownership
-{
-    required .D3.OnlineService.EntityId owner_entity_id = 1;
-    optional sint64 delete_time = 2;
-    optional .D3.OnlineService.EntityId escrow_id = 3;
 }
 

@@ -70,28 +70,29 @@ namespace bnet.protocol.channel {
             "aXR5SWQihwEKE0pvaW5DaGFubmVsUmVzcG9uc2USEQoJb2JqZWN0X2lkGAEg" + 
             "ASgEEigKGXJlcXVpcmVfZnJpZW5kX3ZhbGlkYXRpb24YAiABKAg6BWZhbHNl" + 
             "EjMKEnByaXZpbGVnZWRfYWNjb3VudBgDIAMoCzIXLmJuZXQucHJvdG9jb2wu" + 
-            "RW50aXR5SWQiTgoSRmluZENoYW5uZWxSZXF1ZXN0EjgKBmZpbHRlchgBIAIo" + 
-            "CzIoLmJuZXQucHJvdG9jb2wuYXR0cmlidXRlLkF0dHJpYnV0ZUZpbHRlciJR" + 
-            "ChNGaW5kQ2hhbm5lbFJlc3BvbnNlEjoKB2NoYW5uZWwYASADKAsyKS5ibmV0" + 
-            "LnByb3RvY29sLmNoYW5uZWwuQ2hhbm5lbERlc2NyaXB0aW9uIm8KFUdldENo" + 
-            "YW5uZWxJbmZvUmVxdWVzdBIpCghhZ2VudF9pZBgBIAEoCzIXLmJuZXQucHJv" + 
-            "dG9jb2wuRW50aXR5SWQSKwoKY2hhbm5lbF9pZBgCIAIoCzIXLmJuZXQucHJv" + 
-            "dG9jb2wuRW50aXR5SWQiUgoWR2V0Q2hhbm5lbEluZm9SZXNwb25zZRI4Cgxj" + 
-            "aGFubmVsX2luZm8YASABKAsyIi5ibmV0LnByb3RvY29sLmNoYW5uZWwuQ2hh" + 
-            "bm5lbEluZm8yvAQKDENoYW5uZWxPd25lchJtCgxHZXRDaGFubmVsSWQSKi5i" + 
-            "bmV0LnByb3RvY29sLmNoYW5uZWwuR2V0Q2hhbm5lbElkUmVxdWVzdBorLmJu" + 
-            "ZXQucHJvdG9jb2wuY2hhbm5lbC5HZXRDaGFubmVsSWRSZXNwb25zZSIEgLUY" + 
-            "ARJwCg1DcmVhdGVDaGFubmVsEisuYm5ldC5wcm90b2NvbC5jaGFubmVsLkNy" + 
-            "ZWF0ZUNoYW5uZWxSZXF1ZXN0GiwuYm5ldC5wcm90b2NvbC5jaGFubmVsLkNy" + 
-            "ZWF0ZUNoYW5uZWxSZXNwb25zZSIEgLUYAhJqCgtKb2luQ2hhbm5lbBIpLmJu" + 
-            "ZXQucHJvdG9jb2wuY2hhbm5lbC5Kb2luQ2hhbm5lbFJlcXVlc3QaKi5ibmV0" + 
-            "LnByb3RvY29sLmNoYW5uZWwuSm9pbkNoYW5uZWxSZXNwb25zZSIEgLUYAxJq" + 
-            "CgtGaW5kQ2hhbm5lbBIpLmJuZXQucHJvdG9jb2wuY2hhbm5lbC5GaW5kQ2hh" + 
-            "bm5lbFJlcXVlc3QaKi5ibmV0LnByb3RvY29sLmNoYW5uZWwuRmluZENoYW5u" + 
-            "ZWxSZXNwb25zZSIEgLUYBBJzCg5HZXRDaGFubmVsSW5mbxIsLmJuZXQucHJv" + 
-            "dG9jb2wuY2hhbm5lbC5HZXRDaGFubmVsSW5mb1JlcXVlc3QaLS5ibmV0LnBy" + 
-            "b3RvY29sLmNoYW5uZWwuR2V0Q2hhbm5lbEluZm9SZXNwb25zZSIEgLUYBUID" + 
-            "gAEA");
+            "RW50aXR5SWQigQEKEkZpbmRDaGFubmVsUmVxdWVzdBIvCg5hZ2VudF9pZGVu" + 
+            "dGl0eRgBIAEoCzIXLmJuZXQucHJvdG9jb2wuSWRlbnRpdHkSOgoHb3B0aW9u" + 
+            "cxgCIAIoCzIpLmJuZXQucHJvdG9jb2wuY2hhbm5lbC5GaW5kQ2hhbm5lbE9w" + 
+            "dGlvbnMiUQoTRmluZENoYW5uZWxSZXNwb25zZRI6CgdjaGFubmVsGAEgAygL" + 
+            "MikuYm5ldC5wcm90b2NvbC5jaGFubmVsLkNoYW5uZWxEZXNjcmlwdGlvbiJv" + 
+            "ChVHZXRDaGFubmVsSW5mb1JlcXVlc3QSKQoIYWdlbnRfaWQYASABKAsyFy5i" + 
+            "bmV0LnByb3RvY29sLkVudGl0eUlkEisKCmNoYW5uZWxfaWQYAiACKAsyFy5i" + 
+            "bmV0LnByb3RvY29sLkVudGl0eUlkIlIKFkdldENoYW5uZWxJbmZvUmVzcG9u" + 
+            "c2USOAoMY2hhbm5lbF9pbmZvGAEgASgLMiIuYm5ldC5wcm90b2NvbC5jaGFu" + 
+            "bmVsLkNoYW5uZWxJbmZvMrwECgxDaGFubmVsT3duZXISbQoMR2V0Q2hhbm5l" + 
+            "bElkEiouYm5ldC5wcm90b2NvbC5jaGFubmVsLkdldENoYW5uZWxJZFJlcXVl" + 
+            "c3QaKy5ibmV0LnByb3RvY29sLmNoYW5uZWwuR2V0Q2hhbm5lbElkUmVzcG9u" + 
+            "c2UiBIC1GAEScAoNQ3JlYXRlQ2hhbm5lbBIrLmJuZXQucHJvdG9jb2wuY2hh" + 
+            "bm5lbC5DcmVhdGVDaGFubmVsUmVxdWVzdBosLmJuZXQucHJvdG9jb2wuY2hh" + 
+            "bm5lbC5DcmVhdGVDaGFubmVsUmVzcG9uc2UiBIC1GAISagoLSm9pbkNoYW5u" + 
+            "ZWwSKS5ibmV0LnByb3RvY29sLmNoYW5uZWwuSm9pbkNoYW5uZWxSZXF1ZXN0" + 
+            "GiouYm5ldC5wcm90b2NvbC5jaGFubmVsLkpvaW5DaGFubmVsUmVzcG9uc2Ui" + 
+            "BIC1GAMSagoLRmluZENoYW5uZWwSKS5ibmV0LnByb3RvY29sLmNoYW5uZWwu" + 
+            "RmluZENoYW5uZWxSZXF1ZXN0GiouYm5ldC5wcm90b2NvbC5jaGFubmVsLkZp" + 
+            "bmRDaGFubmVsUmVzcG9uc2UiBIC1GAQScwoOR2V0Q2hhbm5lbEluZm8SLC5i" + 
+            "bmV0LnByb3RvY29sLmNoYW5uZWwuR2V0Q2hhbm5lbEluZm9SZXF1ZXN0Gi0u" + 
+            "Ym5ldC5wcm90b2NvbC5jaGFubmVsLkdldENoYW5uZWxJbmZvUmVzcG9uc2Ui" + 
+            "BIC1GAVCA4ABAA==");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_channel_GetChannelIdRequest__Descriptor = Descriptor.MessageTypes[0];
@@ -121,7 +122,7 @@ namespace bnet.protocol.channel {
           internal__static_bnet_protocol_channel_FindChannelRequest__Descriptor = Descriptor.MessageTypes[6];
           internal__static_bnet_protocol_channel_FindChannelRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.FindChannelRequest, global::bnet.protocol.channel.FindChannelRequest.Builder>(internal__static_bnet_protocol_channel_FindChannelRequest__Descriptor,
-                  new string[] { "Filter", });
+                  new string[] { "AgentIdentity", "Options", });
           internal__static_bnet_protocol_channel_FindChannelResponse__Descriptor = Descriptor.MessageTypes[7];
           internal__static_bnet_protocol_channel_FindChannelResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel.FindChannelResponse, global::bnet.protocol.channel.FindChannelResponse.Builder>(internal__static_bnet_protocol_channel_FindChannelResponse__Descriptor,
@@ -2548,8 +2549,8 @@ namespace bnet.protocol.channel {
   public sealed partial class FindChannelRequest : pb::GeneratedMessage<FindChannelRequest, FindChannelRequest.Builder> {
     private FindChannelRequest() { }
     private static readonly FindChannelRequest defaultInstance = new FindChannelRequest().MakeReadOnly();
-    private static readonly string[] _findChannelRequestFieldNames = new string[] { "filter" };
-    private static readonly uint[] _findChannelRequestFieldTags = new uint[] { 10 };
+    private static readonly string[] _findChannelRequestFieldNames = new string[] { "agent_identity", "options" };
+    private static readonly uint[] _findChannelRequestFieldTags = new uint[] { 10, 18 };
     public static FindChannelRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -2570,20 +2571,33 @@ namespace bnet.protocol.channel {
       get { return global::bnet.protocol.channel.Proto.ChannelOwner.internal__static_bnet_protocol_channel_FindChannelRequest__FieldAccessorTable; }
     }
     
-    public const int FilterFieldNumber = 1;
-    private bool hasFilter;
-    private global::bnet.protocol.attribute.AttributeFilter filter_;
-    public bool HasFilter {
-      get { return hasFilter; }
+    public const int AgentIdentityFieldNumber = 1;
+    private bool hasAgentIdentity;
+    private global::bnet.protocol.Identity agentIdentity_;
+    public bool HasAgentIdentity {
+      get { return hasAgentIdentity; }
     }
-    public global::bnet.protocol.attribute.AttributeFilter Filter {
-      get { return filter_ ?? global::bnet.protocol.attribute.AttributeFilter.DefaultInstance; }
+    public global::bnet.protocol.Identity AgentIdentity {
+      get { return agentIdentity_ ?? global::bnet.protocol.Identity.DefaultInstance; }
+    }
+    
+    public const int OptionsFieldNumber = 2;
+    private bool hasOptions;
+    private global::bnet.protocol.channel.FindChannelOptions options_;
+    public bool HasOptions {
+      get { return hasOptions; }
+    }
+    public global::bnet.protocol.channel.FindChannelOptions Options {
+      get { return options_ ?? global::bnet.protocol.channel.FindChannelOptions.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasFilter) return false;
-        if (!Filter.IsInitialized) return false;
+        if (!hasOptions) return false;
+        if (HasAgentIdentity) {
+          if (!AgentIdentity.IsInitialized) return false;
+        }
+        if (!Options.IsInitialized) return false;
         return true;
       }
     }
@@ -2591,8 +2605,11 @@ namespace bnet.protocol.channel {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _findChannelRequestFieldNames;
-      if (hasFilter) {
-        output.WriteMessage(1, field_names[0], Filter);
+      if (hasAgentIdentity) {
+        output.WriteMessage(1, field_names[0], AgentIdentity);
+      }
+      if (hasOptions) {
+        output.WriteMessage(2, field_names[1], Options);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2604,8 +2621,11 @@ namespace bnet.protocol.channel {
         if (size != -1) return size;
         
         size = 0;
-        if (hasFilter) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Filter);
+        if (hasAgentIdentity) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AgentIdentity);
+        }
+        if (hasOptions) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, Options);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2733,8 +2753,11 @@ namespace bnet.protocol.channel {
       public override Builder MergeFrom(FindChannelRequest other) {
         if (other == global::bnet.protocol.channel.FindChannelRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasFilter) {
-          MergeFilter(other.Filter);
+        if (other.HasAgentIdentity) {
+          MergeAgentIdentity(other.AgentIdentity);
+        }
+        if (other.HasOptions) {
+          MergeOptions(other.Options);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -2780,12 +2803,21 @@ namespace bnet.protocol.channel {
               break;
             }
             case 10: {
-              global::bnet.protocol.attribute.AttributeFilter.Builder subBuilder = global::bnet.protocol.attribute.AttributeFilter.CreateBuilder();
-              if (result.hasFilter) {
-                subBuilder.MergeFrom(Filter);
+              global::bnet.protocol.Identity.Builder subBuilder = global::bnet.protocol.Identity.CreateBuilder();
+              if (result.hasAgentIdentity) {
+                subBuilder.MergeFrom(AgentIdentity);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Filter = subBuilder.BuildPartial();
+              AgentIdentity = subBuilder.BuildPartial();
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.channel.FindChannelOptions.Builder subBuilder = global::bnet.protocol.channel.FindChannelOptions.CreateBuilder();
+              if (result.hasOptions) {
+                subBuilder.MergeFrom(Options);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              Options = subBuilder.BuildPartial();
               break;
             }
           }
@@ -2798,43 +2830,83 @@ namespace bnet.protocol.channel {
       }
       
       
-      public bool HasFilter {
-       get { return result.hasFilter; }
+      public bool HasAgentIdentity {
+       get { return result.hasAgentIdentity; }
       }
-      public global::bnet.protocol.attribute.AttributeFilter Filter {
-        get { return result.Filter; }
-        set { SetFilter(value); }
+      public global::bnet.protocol.Identity AgentIdentity {
+        get { return result.AgentIdentity; }
+        set { SetAgentIdentity(value); }
       }
-      public Builder SetFilter(global::bnet.protocol.attribute.AttributeFilter value) {
+      public Builder SetAgentIdentity(global::bnet.protocol.Identity value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasFilter = true;
-        result.filter_ = value;
+        result.hasAgentIdentity = true;
+        result.agentIdentity_ = value;
         return this;
       }
-      public Builder SetFilter(global::bnet.protocol.attribute.AttributeFilter.Builder builderForValue) {
+      public Builder SetAgentIdentity(global::bnet.protocol.Identity.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasFilter = true;
-        result.filter_ = builderForValue.Build();
+        result.hasAgentIdentity = true;
+        result.agentIdentity_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeFilter(global::bnet.protocol.attribute.AttributeFilter value) {
+      public Builder MergeAgentIdentity(global::bnet.protocol.Identity value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasFilter &&
-            result.filter_ != global::bnet.protocol.attribute.AttributeFilter.DefaultInstance) {
-            result.filter_ = global::bnet.protocol.attribute.AttributeFilter.CreateBuilder(result.filter_).MergeFrom(value).BuildPartial();
+        if (result.hasAgentIdentity &&
+            result.agentIdentity_ != global::bnet.protocol.Identity.DefaultInstance) {
+            result.agentIdentity_ = global::bnet.protocol.Identity.CreateBuilder(result.agentIdentity_).MergeFrom(value).BuildPartial();
         } else {
-          result.filter_ = value;
+          result.agentIdentity_ = value;
         }
-        result.hasFilter = true;
+        result.hasAgentIdentity = true;
         return this;
       }
-      public Builder ClearFilter() {
+      public Builder ClearAgentIdentity() {
         PrepareBuilder();
-        result.hasFilter = false;
-        result.filter_ = null;
+        result.hasAgentIdentity = false;
+        result.agentIdentity_ = null;
+        return this;
+      }
+      
+      public bool HasOptions {
+       get { return result.hasOptions; }
+      }
+      public global::bnet.protocol.channel.FindChannelOptions Options {
+        get { return result.Options; }
+        set { SetOptions(value); }
+      }
+      public Builder SetOptions(global::bnet.protocol.channel.FindChannelOptions value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasOptions = true;
+        result.options_ = value;
+        return this;
+      }
+      public Builder SetOptions(global::bnet.protocol.channel.FindChannelOptions.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasOptions = true;
+        result.options_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeOptions(global::bnet.protocol.channel.FindChannelOptions value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasOptions &&
+            result.options_ != global::bnet.protocol.channel.FindChannelOptions.DefaultInstance) {
+            result.options_ = global::bnet.protocol.channel.FindChannelOptions.CreateBuilder(result.options_).MergeFrom(value).BuildPartial();
+        } else {
+          result.options_ = value;
+        }
+        result.hasOptions = true;
+        return this;
+      }
+      public Builder ClearOptions() {
+        PrepareBuilder();
+        result.hasOptions = false;
+        result.options_ = null;
         return this;
       }
     }

@@ -48,6 +48,25 @@ namespace Mooege.Core.MooNet.Friends
             LoadFriendships();
         }
 
+        public static bool AreFriends(Account account1, Account account2)
+        {
+            foreach (var friend in Friends[account1.BnetEntityId.Low])
+            {
+                if (friend.Id.Low == account2.BnetEntityId.Low)
+                    return true;
+            }
+            return false;
+        }
+
+        public static bool InvitationExists(Account inviter, Account invitee)
+        {
+            foreach (var invitation in OnGoingInvitations.Values)
+            {
+                if ((invitation.InviterIdentity.AccountId == inviter.BnetEntityId) && (invitation.InviteeIdentity.AccountId == invitee.BnetEntityId))
+                    return true;
+            }
+            return false;
+        }
         public static void HandleInvitation(MooNetClient client, bnet.protocol.invitation.Invitation invitation)
         {
             var invitee = AccountManager.GetAccountByPersistentID(invitation.InviteeIdentity.AccountId.Low);
@@ -65,7 +84,9 @@ namespace Mooege.Core.MooNet.Friends
 
             if (invitee.IsOnline)
             {
-                var notification = bnet.protocol.friends.InvitationNotification.CreateBuilder().SetInvitation(invitation);
+                var inviter = AccountManager.GetAccountByPersistentID(invitation.InviterIdentity.AccountId.Low);
+
+                var notification = bnet.protocol.friends.InvitationNotification.CreateBuilder().SetInvitation(invitation).SetGameAccountId(inviter.CurrentGameAccount.BnetEntityId);
 
                 invitee.CurrentGameAccount.LoggedInClient.MakeTargetedRPC(FriendManager.Instance, () =>
                     bnet.protocol.friends.FriendsNotify.CreateStub(invitee.CurrentGameAccount.LoggedInClient).NotifyReceivedInvitationAdded(null, notification.Build(), callback => { }));
@@ -83,11 +104,13 @@ namespace Mooege.Core.MooNet.Friends
             var inviterAsFriend = bnet.protocol.friends.Friend.CreateBuilder().SetId(invitation.InviterIdentity.AccountId).Build();
 
             var notificationToInviter = bnet.protocol.friends.InvitationNotification.CreateBuilder()
+                .SetGameAccountId(invitee.BnetEntityId)
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Accepted) // success?
                 .Build();
 
             var notificationToInvitee = bnet.protocol.friends.InvitationNotification.CreateBuilder()
+                .SetGameAccountId(inviter.BnetEntityId)
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Accepted) // success?
                 .Build();
@@ -97,8 +120,8 @@ namespace Mooege.Core.MooNet.Friends
             AddFriendshipToDB(inviter,invitee);
 
             // send friend added notifications
-            var friendAddedNotificationToInviter = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviteeAsFriend).Build();
-            var friendAddedNotificationToInvitee = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviterAsFriend).Build();
+            var friendAddedNotificationToInviter = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviteeAsFriend).SetGameAccountId(invitee.BnetEntityId).Build();
+            var friendAddedNotificationToInvitee = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviterAsFriend).SetGameAccountId(inviter.BnetEntityId).Build();
 
             var inviterGameAccounts = GameAccountManager.GetGameAccountsForAccount(inviter).Values;
             var inviteeGameAccounts = GameAccountManager.GetGameAccountsForAccount(invitee).Values;
@@ -226,7 +249,7 @@ namespace Mooege.Core.MooNet.Friends
 
         private static void LoadFriendships() // load friends from database.
         {
-            const string query = "SELECT * from friends";
+            const string query = "SELECT * FROM friends";
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
 
@@ -237,9 +260,9 @@ namespace Mooege.Core.MooNet.Friends
                 var friend =
                     bnet.protocol.friends.Friend.CreateBuilder().SetId(
                         bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).
-                            SetLow((ulong)reader.GetInt64(1))).Build();
+                            SetLow(Convert.ToUInt64(reader["friendId"]))).Build();
 
-                Friends.Add((ulong)reader.GetInt64(0), friend);
+                Friends.Add(Convert.ToUInt64(reader["accountId"]), friend);
             }
         }
     }

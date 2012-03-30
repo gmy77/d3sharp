@@ -97,10 +97,6 @@ namespace Mooege.Core.GS.Items
             }
         }
 
-
-            
-
-
         public override bool HasWorldLocation
         {
             get { return this.Owner == null; }
@@ -163,9 +159,9 @@ namespace Mooege.Core.GS.Items
             // Attributes[GameAttribute.Requirement, 38] = definition.RequiredLevel;
 
             Attributes[GameAttribute.Item_Quality_Level] = 1;
-            if (Item.IsArmor(this.ItemType) || Item.IsWeapon(this.ItemType)|| Item.IsOffhand(this.ItemType))
+            if (Item.IsArmor(this.ItemType) || Item.IsWeapon(this.ItemType) || Item.IsOffhand(this.ItemType))
                 Attributes[GameAttribute.Item_Quality_Level] = RandomHelper.Next(6);
-            if(this.ItemType.Flags.HasFlag(ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
+            if (this.ItemType.Flags.HasFlag(ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
                 Attributes[GameAttribute.Item_Quality_Level] = 3;
 
             Attributes[GameAttribute.ItemStackQuantityLo] = 1;
@@ -194,21 +190,21 @@ namespace Mooege.Core.GS.Items
             if (definition.WeaponDamageMin > 0)
             {
                 Attributes[GameAttribute.Attacks_Per_Second_Item] += definition.AttacksPerSecond;
-                Attributes[GameAttribute.Attacks_Per_Second_Item_Subtotal] += definition.AttacksPerSecond;
-                Attributes[GameAttribute.Attacks_Per_Second_Item_Total] += definition.AttacksPerSecond;
+                //scripted //Attributes[GameAttribute.Attacks_Per_Second_Item_Subtotal] += definition.AttacksPerSecond;
+                //scripted //Attributes[GameAttribute.Attacks_Per_Second_Item_Total] += definition.AttacksPerSecond;
 
                 Attributes[GameAttribute.Damage_Weapon_Min, 0] += definition.WeaponDamageMin;
-                Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] += definition.WeaponDamageMin;
+                //scripted //Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] += definition.WeaponDamageMin;
 
                 Attributes[GameAttribute.Damage_Weapon_Delta, 0] += definition.WeaponDamageDelta;
-                Attributes[GameAttribute.Damage_Weapon_Delta_SubTotal, 0] += definition.WeaponDamageDelta;
-                Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] += definition.WeaponDamageDelta;
+                //scripted //Attributes[GameAttribute.Damage_Weapon_Delta_SubTotal, 0] += definition.WeaponDamageDelta;
+                //scripted //Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] += definition.WeaponDamageDelta;
 
-                Attributes[GameAttribute.Damage_Weapon_Max, 0] += Attributes[GameAttribute.Damage_Weapon_Min, 0] + Attributes[GameAttribute.Damage_Weapon_Delta, 0];
-                Attributes[GameAttribute.Damage_Weapon_Max_Total, 0] += Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] + Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0];
+                //scripted //Attributes[GameAttribute.Damage_Weapon_Max, 0] += Attributes[GameAttribute.Damage_Weapon_Min, 0] + Attributes[GameAttribute.Damage_Weapon_Delta, 0];
+                //scripted //Attributes[GameAttribute.Damage_Weapon_Max_Total, 0] += Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] + Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0];
 
-                Attributes[GameAttribute.Damage_Weapon_Min_Total_All] = definition.WeaponDamageMin;
-                Attributes[GameAttribute.Damage_Weapon_Delta_Total_All] = definition.WeaponDamageDelta;
+                //scripted //Attributes[GameAttribute.Damage_Weapon_Min_Total_All] = definition.WeaponDamageMin;
+                //scripted //Attributes[GameAttribute.Damage_Weapon_Delta_Total_All] = definition.WeaponDamageDelta;
             }
         }
 
@@ -217,8 +213,8 @@ namespace Mooege.Core.GS.Items
             if (definition.ArmorValue > 0)
             {
                 Attributes[GameAttribute.Armor_Item] += definition.ArmorValue;
-                Attributes[GameAttribute.Armor_Item_SubTotal] += definition.ArmorValue;
-                Attributes[GameAttribute.Armor_Item_Total] += definition.ArmorValue;
+                //scripted //Attributes[GameAttribute.Armor_Item_SubTotal] += definition.ArmorValue;
+                //scripted //Attributes[GameAttribute.Armor_Item_Total] += definition.ArmorValue;
             }
         }
 
@@ -293,6 +289,18 @@ namespace Mooege.Core.GS.Items
             };
         }
 
+        //TODO: Move to proper D3.Hero.Visual item classes
+        public D3.Hero.VisualItem GetVisualItem()
+        {
+            var visualItem = D3.Hero.VisualItem.CreateBuilder()
+                .SetGbid(this.GBHandle.GBID)
+                .SetDyeType(Attributes[GameAttribute.DyeType])
+                .SetEffectLevel(0)
+                .SetItemEffectType(-1)
+                .Build();
+            return visualItem;
+        }
+
         #region Is*
         public static bool IsHealthGlobe(ItemTypeTable itemType)
         {
@@ -316,14 +324,12 @@ namespace Mooege.Core.GS.Items
 
         public static bool IsRuneOrJewel(ItemTypeTable itemType)
         {
-            return ItemGroup.IsSubType(itemType, "Gem") ||
-                ItemGroup.IsSubType(itemType, "SpellRune");
+            return ItemGroup.IsSubType(itemType, "Gem") || ItemGroup.IsSubType(itemType, "SpellRune");
         }
 
         public static bool IsJournalOrScroll(ItemTypeTable itemType)
         {
-            return ItemGroup.IsSubType(itemType, "Scroll") ||
-                ItemGroup.IsSubType(itemType, "Book");
+            return ItemGroup.IsSubType(itemType, "Scroll") || ItemGroup.IsSubType(itemType, "Book");
         }
 
         public static bool IsDye(ItemTypeTable itemType)
@@ -431,8 +437,6 @@ namespace Mooege.Core.GS.Items
             }
             return base.Unreveal(player);
         }
-
-
     }
 
     public enum ItemState

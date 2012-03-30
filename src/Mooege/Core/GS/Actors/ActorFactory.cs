@@ -44,96 +44,90 @@ namespace Mooege.Core.GS.Actors
             if (!MPQStorage.Data.Assets[SNOGroup.Actor].ContainsKey(snoId))
                 return null;
 
-            var actorAsset = MPQStorage.Data.Assets[SNOGroup.Actor][snoId];            
+            var actorAsset = MPQStorage.Data.Assets[SNOGroup.Actor][snoId];
             var actorData = actorAsset.Data as Mooege.Common.MPQ.FileFormats.Actor;
             if (actorData == null) return null;
 
-            if (actorData.Type == ActorType.Invalid) 
+            if (actorData.Type == ActorType.Invalid)
                 return null;
 
             // see if we have an implementation for actor.
             if (SNOHandlers.ContainsKey(snoId))
-                return (Actor) Activator.CreateInstance(SNOHandlers[snoId], new object[] {world, snoId, tags});
-           
+                return (Actor)Activator.CreateInstance(SNOHandlers[snoId], new object[] { world, snoId, tags });
+
             switch (actorData.Type)
             {
                 case ActorType.Monster:
-                    if(tags.ContainsKey(MarkerKeys.ConversationList))
+                    if (tags.ContainsKey(MarkerKeys.ConversationList))
                         return new InteractiveNPC(world, snoId, tags);
                     else
                         if (!MPQStorage.Data.Assets[SNOGroup.Monster].ContainsKey(actorData.MonsterSNO))
-                        return null;
+                            return null;
 
-                        var monsterAsset = MPQStorage.Data.Assets[SNOGroup.Monster][actorData.MonsterSNO];
-                        var monsterData = monsterAsset.Data as Mooege.Common.MPQ.FileFormats.Monster;
-                        if (monsterData.Type == Mooege.Common.MPQ.FileFormats.Monster.MonsterType.Ally ||
-                            monsterData.Type == Mooege.Common.MPQ.FileFormats.Monster.MonsterType.Helper)
-                            return new NPC(world, snoId, tags);
-                        else
-                            return new Monster(world, snoId, tags);
+                    var monsterAsset = MPQStorage.Data.Assets[SNOGroup.Monster][actorData.MonsterSNO];
+                    var monsterData = monsterAsset.Data as Mooege.Common.MPQ.FileFormats.Monster;
+                    if (monsterData.Type == Mooege.Common.MPQ.FileFormats.Monster.MonsterType.Ally ||
+                        monsterData.Type == Mooege.Common.MPQ.FileFormats.Monster.MonsterType.Helper)
+                        return new NPC(world, snoId, tags);
+                    else
+                        return new Monster(world, snoId, tags);
                 case ActorType.Gizmo:
+                    switch (actorData.TagMap[ActorKeys.GizmoGroup])
+                    {
+                        case GizmoGroup.LootContainer:
+                            return new LootContainer(world, snoId, tags);
+                        case GizmoGroup.Door:
+                            return new Door(world, snoId, tags);
+                        case GizmoGroup.DestructibleLootContainer:
+                        case GizmoGroup.Barricade:
+                            return new DesctructibleLootContainer(world, snoId, tags);
+                        case GizmoGroup.Portal:
+                            return new Portal(world, snoId, tags);
+                        case GizmoGroup.BossPortal:
+                            Logger.Warn("Skipping loading of boss portals");
+                            return null;
+                        case GizmoGroup.CheckPoint:
+                            return new Checkpoint(world, snoId, tags);
+                        case GizmoGroup.Waypoint:
+                            return new Waypoint(world, snoId, tags);
+                        case GizmoGroup.Savepoint:
+                            return new Savepoint(world, snoId, tags);
+                        case GizmoGroup.ProximityTriggered:
+                            return new ProximityTriggeredGizmo(world, snoId, tags);
+                        case GizmoGroup.Shrine:
+                            return new Shrine(world, snoId, tags);
+                        case GizmoGroup.Healthwell:
+                            return new Healthwell(world, snoId, tags);
+                        case GizmoGroup.StartLocations:
+                            return new StartingPoint(world, snoId, tags);
 
-                        switch (actorData.TagMap[ActorKeys.GizmoGroup])
-                        {
-                            case GizmoGroup.LootContainer:
-                                return new LootContainer(world, snoId, tags);
-                            case GizmoGroup.DestructibleLootContainer:
-                                return new DesctructibleLootContainer(world, snoId, tags);
-                            case GizmoGroup.Portal:
-                                return new Portal(world, snoId, tags);
-                            case GizmoGroup.BossPortal:
-                                Logger.Warn("Skipping loading of boss portals");
-                                return null;
-                            case GizmoGroup.CheckPoint:
-                                return new Checkpoint(world, snoId, tags);
-                            case GizmoGroup.Waypoint:
-                                return new Waypoint(world, snoId, tags);
-                            case GizmoGroup.Savepoint:
-                                return new Savepoint(world, snoId, tags);
-                            case GizmoGroup.ProximityTriggered:
-                                return new ProximityTriggeredGizmo(world, snoId, tags);
-                            case GizmoGroup.Shrine:
-                                return new Shrine(world, snoId, tags);
-                            case GizmoGroup.Healthwell:
-                                return new Healthwell(world, snoId, tags);
-                            case GizmoGroup.StartLocations:
-                                return new StartingPoint(world, snoId, tags);
-
-
-                            case GizmoGroup.ActChangeTempObject:
-                            case GizmoGroup.Banner:
-                            case GizmoGroup.Barricade:
-                            case GizmoGroup.CathedralIdol:
-                            case GizmoGroup.Destructible:
-                            case GizmoGroup.Door:
-                            case GizmoGroup.DungeonStonePortal:
-                            case GizmoGroup.Headstone:
-                            case GizmoGroup.HearthPortal:
-                            case GizmoGroup.NephalemAltar:
-                            case GizmoGroup.Passive:
-                            case GizmoGroup.PlayerSharedStash:
-                            case GizmoGroup.QuestLoot:
-                            case GizmoGroup.Readable:
-                            case GizmoGroup.ServerProp:
-                            case GizmoGroup.Sign:
-                            case GizmoGroup.Spawner:
-                            case GizmoGroup.TownPortal:
-                            case GizmoGroup.Trigger:
-                            case GizmoGroup.WeirdGroup57:
-                                //Logger.Info("GizmoGroup {0} has no proper implementation, using default gizmo instead", actorData.TagMap[ActorKeys.GizmoGroup]);
-                                return CreateGizmo(world, snoId, tags);
-
-                            default:
-                                Logger.Warn("Unknown gizmo group {0}", actorData.TagMap[ActorKeys.GizmoGroup]);
-                                return CreateGizmo(world, snoId, tags);
-                        }
-
-
+                        case GizmoGroup.ActChangeTempObject:
+                        case GizmoGroup.Banner:
+                        case GizmoGroup.CathedralIdol:
+                        case GizmoGroup.Destructible:
+                        case GizmoGroup.DungeonStonePortal:
+                        case GizmoGroup.Headstone:
+                        case GizmoGroup.HearthPortal:
+                        //case GizmoGroup.NephalemAltar:
+                        case GizmoGroup.Passive:
+                        case GizmoGroup.PlayerSharedStash:
+                        case GizmoGroup.QuestLoot:
+                        case GizmoGroup.Readable:
+                        case GizmoGroup.ServerProp:
+                        case GizmoGroup.Sign:
+                        case GizmoGroup.Spawner:
+                        case GizmoGroup.TownPortal:
+                        case GizmoGroup.Trigger:
+                        case GizmoGroup.WeirdGroup57:
+                            //Logger.Info("GizmoGroup {0} has no proper implementation, using default gizmo instead", actorData.TagMap[ActorKeys.GizmoGroup]);
+                            return CreateGizmo(world, snoId, tags);
+                        default:
+                            Logger.Warn("Unknown gizmo group {0}", actorData.TagMap[ActorKeys.GizmoGroup]);
+                            return CreateGizmo(world, snoId, tags);
+                    }
                 case ActorType.ServerProp:
                     return new ServerProp(world, snoId, tags);
-
             }
-
             return null;
         }
 
@@ -149,14 +143,15 @@ namespace Mooege.Core.GS.Actors
         {
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                if (!type.IsSubclassOf(typeof (Actor))) continue;
+                if (!type.IsSubclassOf(typeof(Actor))) continue;
 
-                var attributes = (HandledSNOAttribute[]) type.GetCustomAttributes(typeof (HandledSNOAttribute), true);
+                var attributes = (HandledSNOAttribute[])type.GetCustomAttributes(typeof(HandledSNOAttribute), true);
                 if (attributes.Length == 0) continue;
 
                 foreach (var sno in attributes.First().SNOIds)
                 {
-                    SNOHandlers.Add(sno, type);
+                    if (!SNOHandlers.ContainsKey(sno))
+                        SNOHandlers.Add(sno, type);
                 }
             }
         }
