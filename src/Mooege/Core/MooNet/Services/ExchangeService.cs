@@ -108,16 +108,16 @@ namespace Mooege.Core.MooNet.Services
             done(builder.Build());
         }
 
-        public override void SubscribeOrderStatusChange(IRpcController controller, bnet.protocol.exchange.SubscribeOrderStatusChangeRequest request, Action<bnet.protocol.NoData> done)
+        public override void SubscribeOrderUpdate(IRpcController controller, bnet.protocol.exchange.SubscribeOrderUpdateRequest request, Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("SubscribeOrderStatusChange() Stub");
+            Logger.Trace("SubscribeOrderUpdate() Stub");
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
 
-        public override void UnsubscribeOrderStatusChange(IRpcController controller, bnet.protocol.exchange.UnsubscribeOrderStatusChangeRequest request, Action<bnet.protocol.NoData> done)
+        public override void UnsubscribeOrderUpdate(IRpcController controller, bnet.protocol.exchange.UnsubscribeOrderUpdateRequest request, Action<bnet.protocol.NoData> done)
         {
-            Logger.Trace("UnsubscribeOrderStatusChange() Stub");
+            Logger.Trace("UnsubscribeOrderUpdate() Stub");
             var builder = bnet.protocol.NoData.CreateBuilder();
             done(builder.Build());
         }
@@ -355,17 +355,27 @@ namespace Mooege.Core.MooNet.Services
             throw new NotImplementedException();
         }
 
-        public override void SubscribeAdvancedOrderStatusChange(IRpcController controller, bnet.protocol.exchange.SubscribeAdvancedOrderStatusChangeRequest request, Action<bnet.protocol.NoData> done)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void UnsubscribeAdvancedOrderStatusChange(IRpcController controller, bnet.protocol.exchange.UnsubscribeAdvancedOrderStatusChangeRequest request, Action<bnet.protocol.NoData> done)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void GetOrderCount(IRpcController controller, bnet.protocol.exchange.GetOrderCountRequest request, Action<bnet.protocol.exchange.GetOrderCountResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SubscribeAdvancedOrderUpdate(IRpcController controller, bnet.protocol.exchange.SubscribeAdvancedOrderUpdateRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UnsubscribeAdvancedOrderUpdate(IRpcController controller, bnet.protocol.exchange.UnsubscribeAdvancedOrderUpdateRequest request, Action<bnet.protocol.NoData> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SettleHistoriesForCS(IRpcController controller, bnet.protocol.exchange.HistoriesForCSRequest request, Action<bnet.protocol.exchange.HistoriesForCSResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void CancelHistoriesForCS(IRpcController controller, bnet.protocol.exchange.HistoriesForCSRequest request, Action<bnet.protocol.exchange.HistoriesForCSResponse> done)
         {
             throw new NotImplementedException();
         }

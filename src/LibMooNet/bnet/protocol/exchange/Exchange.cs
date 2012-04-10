@@ -26,8 +26,8 @@ namespace bnet.protocol.exchange {
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BlobOfType, global::bnet.protocol.exchange.BlobOfType.Builder> internal__static_bnet_protocol_exchange_BlobOfType__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_BlobFromOfType__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BlobFromOfType, global::bnet.protocol.exchange.BlobFromOfType.Builder> internal__static_bnet_protocol_exchange_BlobFromOfType__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_ActionErrorDetail__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.ActionErrorDetail, global::bnet.protocol.exchange.ActionErrorDetail.Builder> internal__static_bnet_protocol_exchange_ActionErrorDetail__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_ActionResultDetail__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.ActionResultDetail, global::bnet.protocol.exchange.ActionResultDetail.Builder> internal__static_bnet_protocol_exchange_ActionResultDetail__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_BillingAddress__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BillingAddress, global::bnet.protocol.exchange.BillingAddress.Builder> internal__static_bnet_protocol_exchange_BillingAddress__FieldAccessorTable;
     #endregion
@@ -45,10 +45,10 @@ namespace bnet.protocol.exchange {
           "dHJhX2RhdGEYAyABKAwiPAoKQmxvYk9mVHlwZRIMCgR0eXBlGAEgAigJEgwK" + 
           "BGRhdGEYAiABKAwSEgoKZXh0cmFfZGF0YRgDIAEoDCI8Cg5CbG9iRnJvbU9m" + 
           "VHlwZRIOCgZzb3VyY2UYASACKAcSDAoEdHlwZRgCIAIoCRIMCgRkYXRhGAMg" + 
-          "AigMIkEKEUFjdGlvbkVycm9yRGV0YWlsEhIKCmVycm9yX2NvZGUYASACKA0S" + 
-          "GAoQZXh0cmFfZXJyb3JfY29kZRgCIAEoDSJWCg5CaWxsaW5nQWRkcmVzcxIS" + 
-          "Cgpjb3VudHJ5X2lkGAEgAigFEgwKBGNpdHkYAiABKAkSDQoFc3RhdGUYAyAB" + 
-          "KAkSEwoLcG9zdGFsX2NvZGUYBCABKAlCA4ABAA==");
+          "AigMIj0KEkFjdGlvblJlc3VsdERldGFpbBIQCghjYXRlZ29yeRgBIAIoDRIV" + 
+          "Cg1yZXN1bHRfcmVhc29uGAIgASgNIlYKDkJpbGxpbmdBZGRyZXNzEhIKCmNv" + 
+          "dW50cnlfaWQYASACKAUSDAoEY2l0eRgCIAEoCRINCgVzdGF0ZRgDIAEoCRIT" + 
+          "Cgtwb3N0YWxfY29kZRgEIAEoCUIDgAEA");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_PartitionId__Descriptor = Descriptor.MessageTypes[0];
@@ -67,10 +67,10 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_BlobFromOfType__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BlobFromOfType, global::bnet.protocol.exchange.BlobFromOfType.Builder>(internal__static_bnet_protocol_exchange_BlobFromOfType__Descriptor,
                 new string[] { "Source", "Type", "Data", });
-        internal__static_bnet_protocol_exchange_ActionErrorDetail__Descriptor = Descriptor.MessageTypes[4];
-        internal__static_bnet_protocol_exchange_ActionErrorDetail__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.ActionErrorDetail, global::bnet.protocol.exchange.ActionErrorDetail.Builder>(internal__static_bnet_protocol_exchange_ActionErrorDetail__Descriptor,
-                new string[] { "ErrorCode", "ExtraErrorCode", });
+        internal__static_bnet_protocol_exchange_ActionResultDetail__Descriptor = Descriptor.MessageTypes[4];
+        internal__static_bnet_protocol_exchange_ActionResultDetail__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.ActionResultDetail, global::bnet.protocol.exchange.ActionResultDetail.Builder>(internal__static_bnet_protocol_exchange_ActionResultDetail__Descriptor,
+                new string[] { "Category", "ResultReason", });
         internal__static_bnet_protocol_exchange_BillingAddress__Descriptor = Descriptor.MessageTypes[5];
         internal__static_bnet_protocol_exchange_BillingAddress__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.BillingAddress, global::bnet.protocol.exchange.BillingAddress.Builder>(internal__static_bnet_protocol_exchange_BillingAddress__Descriptor,
@@ -1500,66 +1500,66 @@ namespace bnet.protocol.exchange {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class ActionErrorDetail : pb::GeneratedMessage<ActionErrorDetail, ActionErrorDetail.Builder> {
-    private ActionErrorDetail() { }
-    private static readonly ActionErrorDetail defaultInstance = new ActionErrorDetail().MakeReadOnly();
-    private static readonly string[] _actionErrorDetailFieldNames = new string[] { "error_code", "extra_error_code" };
-    private static readonly uint[] _actionErrorDetailFieldTags = new uint[] { 8, 16 };
-    public static ActionErrorDetail DefaultInstance {
+  public sealed partial class ActionResultDetail : pb::GeneratedMessage<ActionResultDetail, ActionResultDetail.Builder> {
+    private ActionResultDetail() { }
+    private static readonly ActionResultDetail defaultInstance = new ActionResultDetail().MakeReadOnly();
+    private static readonly string[] _actionResultDetailFieldNames = new string[] { "category", "result_reason" };
+    private static readonly uint[] _actionResultDetailFieldTags = new uint[] { 8, 16 };
+    public static ActionResultDetail DefaultInstance {
       get { return defaultInstance; }
     }
     
-    public override ActionErrorDetail DefaultInstanceForType {
+    public override ActionResultDetail DefaultInstanceForType {
       get { return DefaultInstance; }
     }
     
-    protected override ActionErrorDetail ThisMessage {
+    protected override ActionResultDetail ThisMessage {
       get { return this; }
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.exchange.Exchange.internal__static_bnet_protocol_exchange_ActionErrorDetail__Descriptor; }
+      get { return global::bnet.protocol.exchange.Exchange.internal__static_bnet_protocol_exchange_ActionResultDetail__Descriptor; }
     }
     
-    protected override pb::FieldAccess.FieldAccessorTable<ActionErrorDetail, ActionErrorDetail.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.exchange.Exchange.internal__static_bnet_protocol_exchange_ActionErrorDetail__FieldAccessorTable; }
+    protected override pb::FieldAccess.FieldAccessorTable<ActionResultDetail, ActionResultDetail.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Exchange.internal__static_bnet_protocol_exchange_ActionResultDetail__FieldAccessorTable; }
     }
     
-    public const int ErrorCodeFieldNumber = 1;
-    private bool hasErrorCode;
-    private uint errorCode_;
-    public bool HasErrorCode {
-      get { return hasErrorCode; }
+    public const int CategoryFieldNumber = 1;
+    private bool hasCategory;
+    private uint category_;
+    public bool HasCategory {
+      get { return hasCategory; }
     }
-    public uint ErrorCode {
-      get { return errorCode_; }
+    public uint Category {
+      get { return category_; }
     }
     
-    public const int ExtraErrorCodeFieldNumber = 2;
-    private bool hasExtraErrorCode;
-    private uint extraErrorCode_;
-    public bool HasExtraErrorCode {
-      get { return hasExtraErrorCode; }
+    public const int ResultReasonFieldNumber = 2;
+    private bool hasResultReason;
+    private uint resultReason_;
+    public bool HasResultReason {
+      get { return hasResultReason; }
     }
-    public uint ExtraErrorCode {
-      get { return extraErrorCode_; }
+    public uint ResultReason {
+      get { return resultReason_; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasErrorCode) return false;
+        if (!hasCategory) return false;
         return true;
       }
     }
     
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
-      string[] field_names = _actionErrorDetailFieldNames;
-      if (hasErrorCode) {
-        output.WriteUInt32(1, field_names[0], ErrorCode);
+      string[] field_names = _actionResultDetailFieldNames;
+      if (hasCategory) {
+        output.WriteUInt32(1, field_names[0], Category);
       }
-      if (hasExtraErrorCode) {
-        output.WriteUInt32(2, field_names[1], ExtraErrorCode);
+      if (hasResultReason) {
+        output.WriteUInt32(2, field_names[1], ResultReason);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1571,11 +1571,11 @@ namespace bnet.protocol.exchange {
         if (size != -1) return size;
         
         size = 0;
-        if (hasErrorCode) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(1, ErrorCode);
+        if (hasCategory) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, Category);
         }
-        if (hasExtraErrorCode) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(2, ExtraErrorCode);
+        if (hasResultReason) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, ResultReason);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1583,51 +1583,51 @@ namespace bnet.protocol.exchange {
       }
     }
     
-    public static ActionErrorDetail ParseFrom(pb::ByteString data) {
+    public static ActionResultDetail ParseFrom(pb::ByteString data) {
       return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
     }
-    public static ActionErrorDetail ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+    public static ActionResultDetail ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
     }
-    public static ActionErrorDetail ParseFrom(byte[] data) {
+    public static ActionResultDetail ParseFrom(byte[] data) {
       return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
     }
-    public static ActionErrorDetail ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+    public static ActionResultDetail ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
     }
-    public static ActionErrorDetail ParseFrom(global::System.IO.Stream input) {
+    public static ActionResultDetail ParseFrom(global::System.IO.Stream input) {
       return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
     }
-    public static ActionErrorDetail ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+    public static ActionResultDetail ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
-    public static ActionErrorDetail ParseDelimitedFrom(global::System.IO.Stream input) {
+    public static ActionResultDetail ParseDelimitedFrom(global::System.IO.Stream input) {
       return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
     }
-    public static ActionErrorDetail ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+    public static ActionResultDetail ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
       return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
     }
-    public static ActionErrorDetail ParseFrom(pb::ICodedInputStream input) {
+    public static ActionResultDetail ParseFrom(pb::ICodedInputStream input) {
       return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
     }
-    public static ActionErrorDetail ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+    public static ActionResultDetail ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
-    private ActionErrorDetail MakeReadOnly() {
+    private ActionResultDetail MakeReadOnly() {
       return this;
     }
     
     public static Builder CreateBuilder() { return new Builder(); }
     public override Builder ToBuilder() { return CreateBuilder(this); }
     public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(ActionErrorDetail prototype) {
+    public static Builder CreateBuilder(ActionResultDetail prototype) {
       return new Builder(prototype);
     }
     
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<ActionErrorDetail, Builder> {
+    public sealed partial class Builder : pb::GeneratedBuilder<ActionResultDetail, Builder> {
       protected override Builder ThisBuilder {
         get { return this; }
       }
@@ -1635,18 +1635,18 @@ namespace bnet.protocol.exchange {
         result = DefaultInstance;
         resultIsReadOnly = true;
       }
-      internal Builder(ActionErrorDetail cloneFrom) {
+      internal Builder(ActionResultDetail cloneFrom) {
         result = cloneFrom;
         resultIsReadOnly = true;
       }
       
       private bool resultIsReadOnly;
-      private ActionErrorDetail result;
+      private ActionResultDetail result;
       
-      private ActionErrorDetail PrepareBuilder() {
+      private ActionResultDetail PrepareBuilder() {
         if (resultIsReadOnly) {
-          ActionErrorDetail original = result;
-          result = new ActionErrorDetail();
+          ActionResultDetail original = result;
+          result = new ActionResultDetail();
           resultIsReadOnly = false;
           MergeFrom(original);
         }
@@ -1657,7 +1657,7 @@ namespace bnet.protocol.exchange {
         get { return result.IsInitialized; }
       }
       
-      protected override ActionErrorDetail MessageBeingBuilt {
+      protected override ActionResultDetail MessageBeingBuilt {
         get { return PrepareBuilder(); }
       }
       
@@ -1676,14 +1676,14 @@ namespace bnet.protocol.exchange {
       }
       
       public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::bnet.protocol.exchange.ActionErrorDetail.Descriptor; }
+        get { return global::bnet.protocol.exchange.ActionResultDetail.Descriptor; }
       }
       
-      public override ActionErrorDetail DefaultInstanceForType {
-        get { return global::bnet.protocol.exchange.ActionErrorDetail.DefaultInstance; }
+      public override ActionResultDetail DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.ActionResultDetail.DefaultInstance; }
       }
       
-      public override ActionErrorDetail BuildPartial() {
+      public override ActionResultDetail BuildPartial() {
         if (resultIsReadOnly) {
           return result;
         }
@@ -1692,22 +1692,22 @@ namespace bnet.protocol.exchange {
       }
       
       public override Builder MergeFrom(pb::IMessage other) {
-        if (other is ActionErrorDetail) {
-          return MergeFrom((ActionErrorDetail) other);
+        if (other is ActionResultDetail) {
+          return MergeFrom((ActionResultDetail) other);
         } else {
           base.MergeFrom(other);
           return this;
         }
       }
       
-      public override Builder MergeFrom(ActionErrorDetail other) {
-        if (other == global::bnet.protocol.exchange.ActionErrorDetail.DefaultInstance) return this;
+      public override Builder MergeFrom(ActionResultDetail other) {
+        if (other == global::bnet.protocol.exchange.ActionResultDetail.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasErrorCode) {
-          ErrorCode = other.ErrorCode;
+        if (other.HasCategory) {
+          Category = other.Category;
         }
-        if (other.HasExtraErrorCode) {
-          ExtraErrorCode = other.ExtraErrorCode;
+        if (other.HasResultReason) {
+          ResultReason = other.ResultReason;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1724,9 +1724,9 @@ namespace bnet.protocol.exchange {
         string field_name;
         while (input.ReadTag(out tag, out field_name)) {
           if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_actionErrorDetailFieldNames, field_name, global::System.StringComparer.Ordinal);
+            int field_ordinal = global::System.Array.BinarySearch(_actionResultDetailFieldNames, field_name, global::System.StringComparer.Ordinal);
             if(field_ordinal >= 0)
-              tag = _actionErrorDetailFieldTags[field_ordinal];
+              tag = _actionResultDetailFieldTags[field_ordinal];
             else {
               if (unknownFields == null) {
                 unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
@@ -1753,11 +1753,11 @@ namespace bnet.protocol.exchange {
               break;
             }
             case 8: {
-              result.hasErrorCode = input.ReadUInt32(ref result.errorCode_);
+              result.hasCategory = input.ReadUInt32(ref result.category_);
               break;
             }
             case 16: {
-              result.hasExtraErrorCode = input.ReadUInt32(ref result.extraErrorCode_);
+              result.hasResultReason = input.ReadUInt32(ref result.resultReason_);
               break;
             }
           }
@@ -1770,47 +1770,47 @@ namespace bnet.protocol.exchange {
       }
       
       
-      public bool HasErrorCode {
-        get { return result.hasErrorCode; }
+      public bool HasCategory {
+        get { return result.hasCategory; }
       }
-      public uint ErrorCode {
-        get { return result.ErrorCode; }
-        set { SetErrorCode(value); }
+      public uint Category {
+        get { return result.Category; }
+        set { SetCategory(value); }
       }
-      public Builder SetErrorCode(uint value) {
+      public Builder SetCategory(uint value) {
         PrepareBuilder();
-        result.hasErrorCode = true;
-        result.errorCode_ = value;
+        result.hasCategory = true;
+        result.category_ = value;
         return this;
       }
-      public Builder ClearErrorCode() {
+      public Builder ClearCategory() {
         PrepareBuilder();
-        result.hasErrorCode = false;
-        result.errorCode_ = 0;
+        result.hasCategory = false;
+        result.category_ = 0;
         return this;
       }
       
-      public bool HasExtraErrorCode {
-        get { return result.hasExtraErrorCode; }
+      public bool HasResultReason {
+        get { return result.hasResultReason; }
       }
-      public uint ExtraErrorCode {
-        get { return result.ExtraErrorCode; }
-        set { SetExtraErrorCode(value); }
+      public uint ResultReason {
+        get { return result.ResultReason; }
+        set { SetResultReason(value); }
       }
-      public Builder SetExtraErrorCode(uint value) {
+      public Builder SetResultReason(uint value) {
         PrepareBuilder();
-        result.hasExtraErrorCode = true;
-        result.extraErrorCode_ = value;
+        result.hasResultReason = true;
+        result.resultReason_ = value;
         return this;
       }
-      public Builder ClearExtraErrorCode() {
+      public Builder ClearResultReason() {
         PrepareBuilder();
-        result.hasExtraErrorCode = false;
-        result.extraErrorCode_ = 0;
+        result.hasResultReason = false;
+        result.resultReason_ = 0;
         return this;
       }
     }
-    static ActionErrorDetail() {
+    static ActionResultDetail() {
       object.ReferenceEquals(global::bnet.protocol.exchange.Exchange.Descriptor, null);
     }
   }

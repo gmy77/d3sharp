@@ -1,3 +1,4 @@
+import "bnet/content_handle.proto";
 import "bnet/rpc.proto";
 
 package bnet.protocol.connection;
@@ -10,12 +11,18 @@ message ConnectRequest
     optional .bnet.protocol.connection.BindRequest bind_request = 2;
 }
 
+message ConnectionMeteringContentHandles
+{
+    repeated .bnet.protocol.ContentHandle content_handle = 1;
+}
+
 message ConnectResponse
 {
     required .bnet.protocol.ProcessId server_id = 1;
     optional .bnet.protocol.ProcessId client_id = 2;
     optional uint32 bind_result = 3;
     optional .bnet.protocol.connection.BindResponse bind_response = 4;
+    optional .bnet.protocol.connection.ConnectionMeteringContentHandles content_handle_array = 5;
 }
 
 message BoundService

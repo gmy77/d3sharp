@@ -168,14 +168,6 @@ message QueryOrderFilter
     optional uint32 order_book_status = 8;
 }
 
-message Settlement
-{
-    required uint64 order_book_id = 1;
-    required uint64 money_amount = 2;
-    required uint64 items_amount = 3;
-    required uint64 offer_settle_id = 4;
-}
-
 message CurrencyConfig
 {
     required string currency = 1;
@@ -249,9 +241,42 @@ message Count
 
 message AdvancedSubscription
 {
-    optional fixed32 program = 1;
-    optional uint32 action = 2;
-    optional string trans_direction = 3;
-    optional uint32 reason = 4;
+    required fixed32 program = 1;
+    required uint32 event = 2;
+    repeated uint32 reason = 3;
+}
+
+message HistoryData
+{
+    required uint64 order_book_id = 1;
+    required .bnet.protocol.exchange.PartitionId partition_id = 2;
+    required uint64 action_id = 3;
+    optional uint64 parent_settle_id = 4;
+    optional bool parent_settled = 5;
+    required uint64 authorized_amount = 6;
+    optional uint64 authorized_fee_amount = 7;
+    required uint64 amount = 8;
+    optional uint64 fee_amount = 9;
+    required bool deferred = 10;
+    required bool has_been_deferred = 11;
+    required uint64 progress = 12;
+    required uint64 created = 13;
+    optional uint64 risk_completed = 14;
+    optional uint64 risk_result = 15;
+    optional uint64 risk_verdict = 16;
+    optional uint64 completed = 17;
+    optional uint64 result_code = 18;
+    required .bnet.protocol.exchange.BlobFrom account_for_item = 19;
+    required .bnet.protocol.exchange.BlobFrom account_for_money = 20;
+    required uint32 order_type = 21;
+    required uint64 order_id = 22;
+    required uint64 auth_id = 23;
+    required uint32 auth_object_type = 24;
+    required string trans_direction = 25;
+    required uint64 auth_complete_progress = 26;
+    required uint64 auth_filled_progress = 27;
+    required uint64 auth_total_progress = 28;
+    required .bnet.protocol.exchange.BlobFromOfType auth_handle = 29;
+    required bool auth_deferred = 30;
 }
 

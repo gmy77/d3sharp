@@ -15,7 +15,7 @@ message ClassInfo
 message SkillWithRune
 {
     required sfixed32 skill = 1 [default = -1];
-    optional sint32 rune_type = 3 [default = -1];
+    optional sint32 rune_type = 2 [default = -1];
 }
 
 message SkillsWithRunes
@@ -44,12 +44,9 @@ message HeroProfile
     optional uint32 highest_difficulty = 5;
     optional uint32 create_time = 6;
     optional bool hardcore = 7 [default = false];
-    optional uint32 attack = 8;
-    optional uint32 precision = 9;
-    optional uint32 defense = 10;
-    optional uint32 strength = 31;
-    optional uint32 dexterity = 32;
-    optional uint32 intelligence = 33;
+    optional uint32 strength = 8;
+    optional uint32 dexterity = 9;
+    optional uint32 intelligence = 10;
     optional uint32 vitality = 11;
     optional uint32 armor = 12;
     optional float dps = 13;
@@ -62,17 +59,13 @@ message HeroProfile
     optional .D3.Profile.SkillsWithRunes sno_active_skills = 20;
     optional .D3.Profile.PassiveSkills sno_traits = 21;
     optional uint32 death_time = 22;
-    optional .D3.GameBalance.Handle killer = 23;
-    optional .D3.GameBalance.Handle kill_location = 24;
-    optional uint32 sno_killer = 35;
-    optional .D3.Profile.KillerInfo killer_info = 36;
-    optional uint32 sno_kill_location = 34;
-    optional string epitaph = 25;
-    optional .D3.OnlineService.EntityId hero_id = 26;
-    optional float damage_increase = 27;
-    optional float crit_chance = 28;
-    optional float damage_reduction = 29;
-    optional uint32 life = 30;
+    optional .D3.Profile.KillerInfo killer_info = 23;
+    optional uint32 sno_kill_location = 24;
+    optional .D3.OnlineService.EntityId hero_id = 27;
+    optional float damage_increase = 28;
+    optional float crit_chance = 29;
+    optional float damage_reduction = 30;
+    optional uint32 life = 31;
 }
 
 message HeroProfileList
@@ -97,8 +90,5 @@ message AccountProfile
     optional .D3.Profile.ClassInfo class_monk = 13;
     optional .D3.Profile.ClassInfo class_witchdoctor = 14;
     optional .D3.Profile.ClassInfo class_wizard = 15;
-    optional uint64 deprecated_achievement_showcase_0 = 16;
-    optional uint64 deprecated_achievement_showcase_1 = 17;
-    optional uint64 deprecated_achievement_showcase_2 = 18;
 }
 

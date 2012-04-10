@@ -22,6 +22,8 @@ namespace bnet.protocol.connection {
       #region Static variables
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_connection_ConnectRequest__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.ConnectRequest, global::bnet.protocol.connection.ConnectRequest.Builder> internal__static_bnet_protocol_connection_ConnectRequest__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_connection_ConnectionMeteringContentHandles__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.ConnectionMeteringContentHandles, global::bnet.protocol.connection.ConnectionMeteringContentHandles.Builder> internal__static_bnet_protocol_connection_ConnectionMeteringContentHandles__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_connection_ConnectResponse__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.ConnectResponse, global::bnet.protocol.connection.ConnectResponse.Builder> internal__static_bnet_protocol_connection_ConnectResponse__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_connection_BoundService__Descriptor;
@@ -52,93 +54,103 @@ namespace bnet.protocol.connection {
       static ConnectionService() {
         byte[] descriptorData = global::System.Convert.FromBase64String(
             "Ch1ibmV0L2Nvbm5lY3Rpb25fc2VydmljZS5wcm90bxIYYm5ldC5wcm90b2Nv" + 
-            "bC5jb25uZWN0aW9uGg5ibmV0L3JwYy5wcm90byJ6Cg5Db25uZWN0UmVxdWVz" + 
-            "dBIrCgljbGllbnRfaWQYASABKAsyGC5ibmV0LnByb3RvY29sLlByb2Nlc3NJ" + 
-            "ZBI7CgxiaW5kX3JlcXVlc3QYAiABKAsyJS5ibmV0LnByb3RvY29sLmNvbm5l" + 
-            "Y3Rpb24uQmluZFJlcXVlc3QivwEKD0Nvbm5lY3RSZXNwb25zZRIrCglzZXJ2" + 
-            "ZXJfaWQYASACKAsyGC5ibmV0LnByb3RvY29sLlByb2Nlc3NJZBIrCgljbGll" + 
-            "bnRfaWQYAiABKAsyGC5ibmV0LnByb3RvY29sLlByb2Nlc3NJZBITCgtiaW5k" + 
-            "X3Jlc3VsdBgDIAEoDRI9Cg1iaW5kX3Jlc3BvbnNlGAQgASgLMiYuYm5ldC5w" + 
-            "cm90b2NvbC5jb25uZWN0aW9uLkJpbmRSZXNwb25zZSIoCgxCb3VuZFNlcnZp" + 
-            "Y2USDAoEaGFzaBgBIAIoBxIKCgJpZBgCIAIoDSJyCgtCaW5kUmVxdWVzdBIh" + 
-            "ChVpbXBvcnRlZF9zZXJ2aWNlX2hhc2gYASADKAdCAhABEkAKEGV4cG9ydGVk" + 
-            "X3NlcnZpY2UYAiADKAsyJi5ibmV0LnByb3RvY29sLmNvbm5lY3Rpb24uQm91" + 
-            "bmRTZXJ2aWNlIi8KDEJpbmRSZXNwb25zZRIfChNpbXBvcnRlZF9zZXJ2aWNl" + 
-            "X2lkGAEgAygNQgIQASJJCgtFY2hvUmVxdWVzdBIMCgR0aW1lGAEgASgGEhsK" + 
-            "DG5ldHdvcmtfb25seRgCIAEoCDoFZmFsc2USDwoHcGF5bG9hZBgDIAEoDCIt" + 
-            "CgxFY2hvUmVzcG9uc2USDAoEdGltZRgBIAEoBhIPCgdwYXlsb2FkGAIgASgM" + 
-            "IicKEURpc2Nvbm5lY3RSZXF1ZXN0EhIKCmVycm9yX2NvZGUYASACKA0iPAoW" + 
-            "RGlzY29ubmVjdE5vdGlmaWNhdGlvbhISCgplcnJvcl9jb2RlGAEgAigNEg4K" + 
-            "BnJlYXNvbhgCIAEoCSINCgtOdWxsUmVxdWVzdCIQCg5FbmNyeXB0UmVxdWVz" + 
-            "dDKhBQoRQ29ubmVjdGlvblNlcnZpY2USZAoHQ29ubmVjdBIoLmJuZXQucHJv" + 
-            "dG9jb2wuY29ubmVjdGlvbi5Db25uZWN0UmVxdWVzdBopLmJuZXQucHJvdG9j" + 
-            "b2wuY29ubmVjdGlvbi5Db25uZWN0UmVzcG9uc2UiBIC1GAESWwoEQmluZBIl" + 
-            "LmJuZXQucHJvdG9jb2wuY29ubmVjdGlvbi5CaW5kUmVxdWVzdBomLmJuZXQu" + 
-            "cHJvdG9jb2wuY29ubmVjdGlvbi5CaW5kUmVzcG9uc2UiBIC1GAISWwoERWNo" + 
-            "bxIlLmJuZXQucHJvdG9jb2wuY29ubmVjdGlvbi5FY2hvUmVxdWVzdBomLmJu" + 
-            "ZXQucHJvdG9jb2wuY29ubmVjdGlvbi5FY2hvUmVzcG9uc2UiBIC1GAMSZQoP" + 
-            "Rm9yY2VEaXNjb25uZWN0EjAuYm5ldC5wcm90b2NvbC5jb25uZWN0aW9uLkRp" + 
-            "c2Nvbm5lY3ROb3RpZmljYXRpb24aGi5ibmV0LnByb3RvY29sLk5PX1JFU1BP" + 
-            "TlNFIgSAtRgEEk8KBE51bGwSJS5ibmV0LnByb3RvY29sLmNvbm5lY3Rpb24u" + 
-            "TnVsbFJlcXVlc3QaGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgF" + 
-            "ElAKB0VuY3J5cHQSKC5ibmV0LnByb3RvY29sLmNvbm5lY3Rpb24uRW5jcnlw" + 
-            "dFJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYBhJiChFSZXF1" + 
-            "ZXN0RGlzY29ubmVjdBIrLmJuZXQucHJvdG9jb2wuY29ubmVjdGlvbi5EaXNj" + 
-            "b25uZWN0UmVxdWVzdBoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1" + 
-            "GAdCA4ABAA==");
+            "bC5jb25uZWN0aW9uGhlibmV0L2NvbnRlbnRfaGFuZGxlLnByb3RvGg5ibmV0" + 
+            "L3JwYy5wcm90byJ6Cg5Db25uZWN0UmVxdWVzdBIrCgljbGllbnRfaWQYASAB" + 
+            "KAsyGC5ibmV0LnByb3RvY29sLlByb2Nlc3NJZBI7CgxiaW5kX3JlcXVlc3QY" + 
+            "AiABKAsyJS5ibmV0LnByb3RvY29sLmNvbm5lY3Rpb24uQmluZFJlcXVlc3Qi" + 
+            "WAogQ29ubmVjdGlvbk1ldGVyaW5nQ29udGVudEhhbmRsZXMSNAoOY29udGVu" + 
+            "dF9oYW5kbGUYASADKAsyHC5ibmV0LnByb3RvY29sLkNvbnRlbnRIYW5kbGUi" + 
+            "mQIKD0Nvbm5lY3RSZXNwb25zZRIrCglzZXJ2ZXJfaWQYASACKAsyGC5ibmV0" + 
+            "LnByb3RvY29sLlByb2Nlc3NJZBIrCgljbGllbnRfaWQYAiABKAsyGC5ibmV0" + 
+            "LnByb3RvY29sLlByb2Nlc3NJZBITCgtiaW5kX3Jlc3VsdBgDIAEoDRI9Cg1i" + 
+            "aW5kX3Jlc3BvbnNlGAQgASgLMiYuYm5ldC5wcm90b2NvbC5jb25uZWN0aW9u" + 
+            "LkJpbmRSZXNwb25zZRJYChRjb250ZW50X2hhbmRsZV9hcnJheRgFIAEoCzI6" + 
+            "LmJuZXQucHJvdG9jb2wuY29ubmVjdGlvbi5Db25uZWN0aW9uTWV0ZXJpbmdD" + 
+            "b250ZW50SGFuZGxlcyIoCgxCb3VuZFNlcnZpY2USDAoEaGFzaBgBIAIoBxIK" + 
+            "CgJpZBgCIAIoDSJyCgtCaW5kUmVxdWVzdBIhChVpbXBvcnRlZF9zZXJ2aWNl" + 
+            "X2hhc2gYASADKAdCAhABEkAKEGV4cG9ydGVkX3NlcnZpY2UYAiADKAsyJi5i" + 
+            "bmV0LnByb3RvY29sLmNvbm5lY3Rpb24uQm91bmRTZXJ2aWNlIi8KDEJpbmRS" + 
+            "ZXNwb25zZRIfChNpbXBvcnRlZF9zZXJ2aWNlX2lkGAEgAygNQgIQASJJCgtF" + 
+            "Y2hvUmVxdWVzdBIMCgR0aW1lGAEgASgGEhsKDG5ldHdvcmtfb25seRgCIAEo" + 
+            "CDoFZmFsc2USDwoHcGF5bG9hZBgDIAEoDCItCgxFY2hvUmVzcG9uc2USDAoE" + 
+            "dGltZRgBIAEoBhIPCgdwYXlsb2FkGAIgASgMIicKEURpc2Nvbm5lY3RSZXF1" + 
+            "ZXN0EhIKCmVycm9yX2NvZGUYASACKA0iPAoWRGlzY29ubmVjdE5vdGlmaWNh" + 
+            "dGlvbhISCgplcnJvcl9jb2RlGAEgAigNEg4KBnJlYXNvbhgCIAEoCSINCgtO" + 
+            "dWxsUmVxdWVzdCIQCg5FbmNyeXB0UmVxdWVzdDKhBQoRQ29ubmVjdGlvblNl" + 
+            "cnZpY2USZAoHQ29ubmVjdBIoLmJuZXQucHJvdG9jb2wuY29ubmVjdGlvbi5D" + 
+            "b25uZWN0UmVxdWVzdBopLmJuZXQucHJvdG9jb2wuY29ubmVjdGlvbi5Db25u" + 
+            "ZWN0UmVzcG9uc2UiBIC1GAESWwoEQmluZBIlLmJuZXQucHJvdG9jb2wuY29u" + 
+            "bmVjdGlvbi5CaW5kUmVxdWVzdBomLmJuZXQucHJvdG9jb2wuY29ubmVjdGlv" + 
+            "bi5CaW5kUmVzcG9uc2UiBIC1GAISWwoERWNobxIlLmJuZXQucHJvdG9jb2wu" + 
+            "Y29ubmVjdGlvbi5FY2hvUmVxdWVzdBomLmJuZXQucHJvdG9jb2wuY29ubmVj" + 
+            "dGlvbi5FY2hvUmVzcG9uc2UiBIC1GAMSZQoPRm9yY2VEaXNjb25uZWN0EjAu" + 
+            "Ym5ldC5wcm90b2NvbC5jb25uZWN0aW9uLkRpc2Nvbm5lY3ROb3RpZmljYXRp" + 
+            "b24aGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgEEk8KBE51bGwS" + 
+            "JS5ibmV0LnByb3RvY29sLmNvbm5lY3Rpb24uTnVsbFJlcXVlc3QaGi5ibmV0" + 
+            "LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgFElAKB0VuY3J5cHQSKC5ibmV0" + 
+            "LnByb3RvY29sLmNvbm5lY3Rpb24uRW5jcnlwdFJlcXVlc3QaFS5ibmV0LnBy" + 
+            "b3RvY29sLk5vRGF0YSIEgLUYBhJiChFSZXF1ZXN0RGlzY29ubmVjdBIrLmJu" + 
+            "ZXQucHJvdG9jb2wuY29ubmVjdGlvbi5EaXNjb25uZWN0UmVxdWVzdBoaLmJu" + 
+            "ZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAdCA4ABAA==");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_connection_ConnectRequest__Descriptor = Descriptor.MessageTypes[0];
           internal__static_bnet_protocol_connection_ConnectRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.ConnectRequest, global::bnet.protocol.connection.ConnectRequest.Builder>(internal__static_bnet_protocol_connection_ConnectRequest__Descriptor,
                   new string[] { "ClientId", "BindRequest", });
-          internal__static_bnet_protocol_connection_ConnectResponse__Descriptor = Descriptor.MessageTypes[1];
+          internal__static_bnet_protocol_connection_ConnectionMeteringContentHandles__Descriptor = Descriptor.MessageTypes[1];
+          internal__static_bnet_protocol_connection_ConnectionMeteringContentHandles__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.ConnectionMeteringContentHandles, global::bnet.protocol.connection.ConnectionMeteringContentHandles.Builder>(internal__static_bnet_protocol_connection_ConnectionMeteringContentHandles__Descriptor,
+                  new string[] { "ContentHandle", });
+          internal__static_bnet_protocol_connection_ConnectResponse__Descriptor = Descriptor.MessageTypes[2];
           internal__static_bnet_protocol_connection_ConnectResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.ConnectResponse, global::bnet.protocol.connection.ConnectResponse.Builder>(internal__static_bnet_protocol_connection_ConnectResponse__Descriptor,
-                  new string[] { "ServerId", "ClientId", "BindResult", "BindResponse", });
-          internal__static_bnet_protocol_connection_BoundService__Descriptor = Descriptor.MessageTypes[2];
+                  new string[] { "ServerId", "ClientId", "BindResult", "BindResponse", "ContentHandleArray", });
+          internal__static_bnet_protocol_connection_BoundService__Descriptor = Descriptor.MessageTypes[3];
           internal__static_bnet_protocol_connection_BoundService__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.BoundService, global::bnet.protocol.connection.BoundService.Builder>(internal__static_bnet_protocol_connection_BoundService__Descriptor,
                   new string[] { "Hash", "Id", });
-          internal__static_bnet_protocol_connection_BindRequest__Descriptor = Descriptor.MessageTypes[3];
+          internal__static_bnet_protocol_connection_BindRequest__Descriptor = Descriptor.MessageTypes[4];
           internal__static_bnet_protocol_connection_BindRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.BindRequest, global::bnet.protocol.connection.BindRequest.Builder>(internal__static_bnet_protocol_connection_BindRequest__Descriptor,
                   new string[] { "ImportedServiceHash", "ExportedService", });
-          internal__static_bnet_protocol_connection_BindResponse__Descriptor = Descriptor.MessageTypes[4];
+          internal__static_bnet_protocol_connection_BindResponse__Descriptor = Descriptor.MessageTypes[5];
           internal__static_bnet_protocol_connection_BindResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.BindResponse, global::bnet.protocol.connection.BindResponse.Builder>(internal__static_bnet_protocol_connection_BindResponse__Descriptor,
                   new string[] { "ImportedServiceId", });
-          internal__static_bnet_protocol_connection_EchoRequest__Descriptor = Descriptor.MessageTypes[5];
+          internal__static_bnet_protocol_connection_EchoRequest__Descriptor = Descriptor.MessageTypes[6];
           internal__static_bnet_protocol_connection_EchoRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.EchoRequest, global::bnet.protocol.connection.EchoRequest.Builder>(internal__static_bnet_protocol_connection_EchoRequest__Descriptor,
                   new string[] { "Time", "NetworkOnly", "Payload", });
-          internal__static_bnet_protocol_connection_EchoResponse__Descriptor = Descriptor.MessageTypes[6];
+          internal__static_bnet_protocol_connection_EchoResponse__Descriptor = Descriptor.MessageTypes[7];
           internal__static_bnet_protocol_connection_EchoResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.EchoResponse, global::bnet.protocol.connection.EchoResponse.Builder>(internal__static_bnet_protocol_connection_EchoResponse__Descriptor,
                   new string[] { "Time", "Payload", });
-          internal__static_bnet_protocol_connection_DisconnectRequest__Descriptor = Descriptor.MessageTypes[7];
+          internal__static_bnet_protocol_connection_DisconnectRequest__Descriptor = Descriptor.MessageTypes[8];
           internal__static_bnet_protocol_connection_DisconnectRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.DisconnectRequest, global::bnet.protocol.connection.DisconnectRequest.Builder>(internal__static_bnet_protocol_connection_DisconnectRequest__Descriptor,
                   new string[] { "ErrorCode", });
-          internal__static_bnet_protocol_connection_DisconnectNotification__Descriptor = Descriptor.MessageTypes[8];
+          internal__static_bnet_protocol_connection_DisconnectNotification__Descriptor = Descriptor.MessageTypes[9];
           internal__static_bnet_protocol_connection_DisconnectNotification__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.DisconnectNotification, global::bnet.protocol.connection.DisconnectNotification.Builder>(internal__static_bnet_protocol_connection_DisconnectNotification__Descriptor,
                   new string[] { "ErrorCode", "Reason", });
-          internal__static_bnet_protocol_connection_NullRequest__Descriptor = Descriptor.MessageTypes[9];
+          internal__static_bnet_protocol_connection_NullRequest__Descriptor = Descriptor.MessageTypes[10];
           internal__static_bnet_protocol_connection_NullRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.NullRequest, global::bnet.protocol.connection.NullRequest.Builder>(internal__static_bnet_protocol_connection_NullRequest__Descriptor,
                   new string[] { });
-          internal__static_bnet_protocol_connection_EncryptRequest__Descriptor = Descriptor.MessageTypes[10];
+          internal__static_bnet_protocol_connection_EncryptRequest__Descriptor = Descriptor.MessageTypes[11];
           internal__static_bnet_protocol_connection_EncryptRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.connection.EncryptRequest, global::bnet.protocol.connection.EncryptRequest.Builder>(internal__static_bnet_protocol_connection_EncryptRequest__Descriptor,
                   new string[] { });
           pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
           RegisterAllExtensions(registry);
+          global::bnet.protocol.Proto.ContentHandle.RegisterAllExtensions(registry);
           global::bnet.protocol.Rpc.RegisterAllExtensions(registry);
           return registry;
         };
         pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
             new pbd::FileDescriptor[] {
+            global::bnet.protocol.Proto.ContentHandle.Descriptor, 
             global::bnet.protocol.Rpc.Descriptor, 
             }, assigner);
       }
@@ -523,11 +535,315 @@ namespace bnet.protocol.connection {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class ConnectionMeteringContentHandles : pb::GeneratedMessage<ConnectionMeteringContentHandles, ConnectionMeteringContentHandles.Builder> {
+    private ConnectionMeteringContentHandles() { }
+    private static readonly ConnectionMeteringContentHandles defaultInstance = new ConnectionMeteringContentHandles().MakeReadOnly();
+    private static readonly string[] _connectionMeteringContentHandlesFieldNames = new string[] { "content_handle" };
+    private static readonly uint[] _connectionMeteringContentHandlesFieldTags = new uint[] { 10 };
+    public static ConnectionMeteringContentHandles DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override ConnectionMeteringContentHandles DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override ConnectionMeteringContentHandles ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.connection.Proto.ConnectionService.internal__static_bnet_protocol_connection_ConnectionMeteringContentHandles__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<ConnectionMeteringContentHandles, ConnectionMeteringContentHandles.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.connection.Proto.ConnectionService.internal__static_bnet_protocol_connection_ConnectionMeteringContentHandles__FieldAccessorTable; }
+    }
+    
+    public const int ContentHandleFieldNumber = 1;
+    private pbc::PopsicleList<global::bnet.protocol.ContentHandle> contentHandle_ = new pbc::PopsicleList<global::bnet.protocol.ContentHandle>();
+    public scg::IList<global::bnet.protocol.ContentHandle> ContentHandleList {
+      get { return contentHandle_; }
+    }
+    public int ContentHandleCount {
+      get { return contentHandle_.Count; }
+    }
+    public global::bnet.protocol.ContentHandle GetContentHandle(int index) {
+      return contentHandle_[index];
+    }
+    
+    public override bool IsInitialized {
+      get {
+        foreach (global::bnet.protocol.ContentHandle element in ContentHandleList) {
+          if (!element.IsInitialized) return false;
+        }
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _connectionMeteringContentHandlesFieldNames;
+      if (contentHandle_.Count > 0) {
+        output.WriteMessageArray(1, field_names[0], contentHandle_);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        foreach (global::bnet.protocol.ContentHandle element in ContentHandleList) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, element);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static ConnectionMeteringContentHandles ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static ConnectionMeteringContentHandles ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static ConnectionMeteringContentHandles ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static ConnectionMeteringContentHandles ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static ConnectionMeteringContentHandles ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static ConnectionMeteringContentHandles ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static ConnectionMeteringContentHandles ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static ConnectionMeteringContentHandles ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static ConnectionMeteringContentHandles ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static ConnectionMeteringContentHandles ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private ConnectionMeteringContentHandles MakeReadOnly() {
+      contentHandle_.MakeReadOnly();
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(ConnectionMeteringContentHandles prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<ConnectionMeteringContentHandles, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(ConnectionMeteringContentHandles cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private ConnectionMeteringContentHandles result;
+      
+      private ConnectionMeteringContentHandles PrepareBuilder() {
+        if (resultIsReadOnly) {
+          ConnectionMeteringContentHandles original = result;
+          result = new ConnectionMeteringContentHandles();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override ConnectionMeteringContentHandles MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.connection.ConnectionMeteringContentHandles.Descriptor; }
+      }
+      
+      public override ConnectionMeteringContentHandles DefaultInstanceForType {
+        get { return global::bnet.protocol.connection.ConnectionMeteringContentHandles.DefaultInstance; }
+      }
+      
+      public override ConnectionMeteringContentHandles BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is ConnectionMeteringContentHandles) {
+          return MergeFrom((ConnectionMeteringContentHandles) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(ConnectionMeteringContentHandles other) {
+        if (other == global::bnet.protocol.connection.ConnectionMeteringContentHandles.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.contentHandle_.Count != 0) {
+          result.contentHandle_.Add(other.contentHandle_);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_connectionMeteringContentHandlesFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _connectionMeteringContentHandlesFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              input.ReadMessageArray(tag, field_name, result.contentHandle_, global::bnet.protocol.ContentHandle.DefaultInstance, extensionRegistry);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public pbc::IPopsicleList<global::bnet.protocol.ContentHandle> ContentHandleList {
+        get { return PrepareBuilder().contentHandle_; }
+      }
+      public int ContentHandleCount {
+        get { return result.ContentHandleCount; }
+      }
+      public global::bnet.protocol.ContentHandle GetContentHandle(int index) {
+        return result.GetContentHandle(index);
+      }
+      public Builder SetContentHandle(int index, global::bnet.protocol.ContentHandle value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.contentHandle_[index] = value;
+        return this;
+      }
+      public Builder SetContentHandle(int index, global::bnet.protocol.ContentHandle.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.contentHandle_[index] = builderForValue.Build();
+        return this;
+      }
+      public Builder AddContentHandle(global::bnet.protocol.ContentHandle value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.contentHandle_.Add(value);
+        return this;
+      }
+      public Builder AddContentHandle(global::bnet.protocol.ContentHandle.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.contentHandle_.Add(builderForValue.Build());
+        return this;
+      }
+      public Builder AddRangeContentHandle(scg::IEnumerable<global::bnet.protocol.ContentHandle> values) {
+        PrepareBuilder();
+        result.contentHandle_.Add(values);
+        return this;
+      }
+      public Builder ClearContentHandle() {
+        PrepareBuilder();
+        result.contentHandle_.Clear();
+        return this;
+      }
+    }
+    static ConnectionMeteringContentHandles() {
+      object.ReferenceEquals(global::bnet.protocol.connection.Proto.ConnectionService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
   public sealed partial class ConnectResponse : pb::GeneratedMessage<ConnectResponse, ConnectResponse.Builder> {
     private ConnectResponse() { }
     private static readonly ConnectResponse defaultInstance = new ConnectResponse().MakeReadOnly();
-    private static readonly string[] _connectResponseFieldNames = new string[] { "bind_response", "bind_result", "client_id", "server_id" };
-    private static readonly uint[] _connectResponseFieldTags = new uint[] { 34, 24, 18, 10 };
+    private static readonly string[] _connectResponseFieldNames = new string[] { "bind_response", "bind_result", "client_id", "content_handle_array", "server_id" };
+    private static readonly uint[] _connectResponseFieldTags = new uint[] { 34, 24, 18, 42, 10 };
     public static ConnectResponse DefaultInstance {
       get { return defaultInstance; }
     }
@@ -588,12 +904,25 @@ namespace bnet.protocol.connection {
       get { return bindResponse_ ?? global::bnet.protocol.connection.BindResponse.DefaultInstance; }
     }
     
+    public const int ContentHandleArrayFieldNumber = 5;
+    private bool hasContentHandleArray;
+    private global::bnet.protocol.connection.ConnectionMeteringContentHandles contentHandleArray_;
+    public bool HasContentHandleArray {
+      get { return hasContentHandleArray; }
+    }
+    public global::bnet.protocol.connection.ConnectionMeteringContentHandles ContentHandleArray {
+      get { return contentHandleArray_ ?? global::bnet.protocol.connection.ConnectionMeteringContentHandles.DefaultInstance; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasServerId) return false;
         if (!ServerId.IsInitialized) return false;
         if (HasClientId) {
           if (!ClientId.IsInitialized) return false;
+        }
+        if (HasContentHandleArray) {
+          if (!ContentHandleArray.IsInitialized) return false;
         }
         return true;
       }
@@ -603,7 +932,7 @@ namespace bnet.protocol.connection {
       int size = SerializedSize;
       string[] field_names = _connectResponseFieldNames;
       if (hasServerId) {
-        output.WriteMessage(1, field_names[3], ServerId);
+        output.WriteMessage(1, field_names[4], ServerId);
       }
       if (hasClientId) {
         output.WriteMessage(2, field_names[2], ClientId);
@@ -613,6 +942,9 @@ namespace bnet.protocol.connection {
       }
       if (hasBindResponse) {
         output.WriteMessage(4, field_names[0], BindResponse);
+      }
+      if (hasContentHandleArray) {
+        output.WriteMessage(5, field_names[3], ContentHandleArray);
       }
       UnknownFields.WriteTo(output);
     }
@@ -635,6 +967,9 @@ namespace bnet.protocol.connection {
         }
         if (hasBindResponse) {
           size += pb::CodedOutputStream.ComputeMessageSize(4, BindResponse);
+        }
+        if (hasContentHandleArray) {
+          size += pb::CodedOutputStream.ComputeMessageSize(5, ContentHandleArray);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -774,6 +1109,9 @@ namespace bnet.protocol.connection {
         if (other.HasBindResponse) {
           MergeBindResponse(other.BindResponse);
         }
+        if (other.HasContentHandleArray) {
+          MergeContentHandleArray(other.ContentHandleArray);
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -846,6 +1184,15 @@ namespace bnet.protocol.connection {
               }
               input.ReadMessage(subBuilder, extensionRegistry);
               BindResponse = subBuilder.BuildPartial();
+              break;
+            }
+            case 42: {
+              global::bnet.protocol.connection.ConnectionMeteringContentHandles.Builder subBuilder = global::bnet.protocol.connection.ConnectionMeteringContentHandles.CreateBuilder();
+              if (result.hasContentHandleArray) {
+                subBuilder.MergeFrom(ContentHandleArray);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              ContentHandleArray = subBuilder.BuildPartial();
               break;
             }
           }
@@ -995,6 +1342,46 @@ namespace bnet.protocol.connection {
         PrepareBuilder();
         result.hasBindResponse = false;
         result.bindResponse_ = null;
+        return this;
+      }
+      
+      public bool HasContentHandleArray {
+       get { return result.hasContentHandleArray; }
+      }
+      public global::bnet.protocol.connection.ConnectionMeteringContentHandles ContentHandleArray {
+        get { return result.ContentHandleArray; }
+        set { SetContentHandleArray(value); }
+      }
+      public Builder SetContentHandleArray(global::bnet.protocol.connection.ConnectionMeteringContentHandles value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasContentHandleArray = true;
+        result.contentHandleArray_ = value;
+        return this;
+      }
+      public Builder SetContentHandleArray(global::bnet.protocol.connection.ConnectionMeteringContentHandles.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasContentHandleArray = true;
+        result.contentHandleArray_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeContentHandleArray(global::bnet.protocol.connection.ConnectionMeteringContentHandles value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasContentHandleArray &&
+            result.contentHandleArray_ != global::bnet.protocol.connection.ConnectionMeteringContentHandles.DefaultInstance) {
+            result.contentHandleArray_ = global::bnet.protocol.connection.ConnectionMeteringContentHandles.CreateBuilder(result.contentHandleArray_).MergeFrom(value).BuildPartial();
+        } else {
+          result.contentHandleArray_ = value;
+        }
+        result.hasContentHandleArray = true;
+        return this;
+      }
+      public Builder ClearContentHandleArray() {
+        PrepareBuilder();
+        result.hasContentHandleArray = false;
+        result.contentHandleArray_ = null;
         return this;
       }
     }
