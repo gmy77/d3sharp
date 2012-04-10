@@ -83,13 +83,13 @@ namespace D3.Hero {
           "ZXZlbBgFIAIoERIUCgxwbGF5ZXJfZmxhZ3MYBiACKA0SMgoQdmlzdWFsX2Vx" + 
           "dWlwbWVudBgHIAIoCzIYLkQzLkhlcm8uVmlzdWFsRXF1aXBtZW50EjEKDXF1" + 
           "ZXN0X2hpc3RvcnkYCCADKAsyGi5EMy5IZXJvLlF1ZXN0SGlzdG9yeUVudHJ5" + 
-          "EhcKD2xhc3RfcGxheWVkX2FjdBgKIAIoERIcChRoaWdoZXN0X3VubG9ja2Vk" + 
-          "X2FjdBgLIAIoERIeChZsYXN0X3BsYXllZF9kaWZmaWN1bHR5GAwgAigREiMK" + 
-          "G2hpZ2hlc3RfdW5sb2NrZWRfZGlmZmljdWx0eRgNIAIoERIZChFsYXN0X3Bs" + 
-          "YXllZF9xdWVzdBgOIAIoDxIeChZsYXN0X3BsYXllZF9xdWVzdF9zdGVwGA8g" + 
-          "AigREhYKC3RpbWVfcGxheWVkGBAgAigNOgEwEigKHGhpZ2hlc3RfY29tcGxl" + 
-          "dGVkX2RpZmZpY3VsdHkYESABKBE6Ai0xEhMKC2NyZWF0ZV90aW1lGBIgASgN" + 
-          "EhgKEGxhc3RfcGxheWVkX3RpbWUYEyABKA0i/wEKCERpZ2VzdFVJEhcKD2xh" + 
+          "EhcKD2xhc3RfcGxheWVkX2FjdBgJIAIoERIcChRoaWdoZXN0X3VubG9ja2Vk" + 
+          "X2FjdBgKIAIoERIeChZsYXN0X3BsYXllZF9kaWZmaWN1bHR5GAsgAigREiMK" + 
+          "G2hpZ2hlc3RfdW5sb2NrZWRfZGlmZmljdWx0eRgMIAIoERIZChFsYXN0X3Bs" + 
+          "YXllZF9xdWVzdBgNIAIoDxIeChZsYXN0X3BsYXllZF9xdWVzdF9zdGVwGA4g" + 
+          "AigREhYKC3RpbWVfcGxheWVkGA8gAigNOgEwEigKHGhpZ2hlc3RfY29tcGxl" + 
+          "dGVkX2RpZmZpY3VsdHkYECABKBE6Ai0xEhMKC2NyZWF0ZV90aW1lGBEgASgN" + 
+          "EhgKEGxhc3RfcGxheWVkX3RpbWUYEiABKA0i/wEKCERpZ2VzdFVJEhcKD2xh" + 
           "c3RfcGxheWVkX2FjdBgBIAIoERIcChRoaWdoZXN0X3VubG9ja2VkX2FjdBgC" + 
           "IAIoERIeChZsYXN0X3BsYXllZF9kaWZmaWN1bHR5GAMgAigREiMKG2hpZ2hl" + 
           "c3RfdW5sb2NrZWRfZGlmZmljdWx0eRgEIAIoERIZChFsYXN0X3BsYXllZF9x" + 
@@ -106,16 +106,16 @@ namespace D3.Hero {
           "cG9pbnRfbnVtYmVyGAIgAigROgItMRIZCg5jcmVhdGVzX3BvcnRhbBgDIAIo" + 
           "DToBMCI9Cg1Ta2lsbFdpdGhSdW5lEhUKCXNub19za2lsbBgBIAIoDzoCLTES" + 
           "FQoJcnVuZV90eXBlGAIgASgROgItMSLLAwoJU2F2ZWREYXRhEhYKC3RpbWVf" + 
-          "cGxheWVkGAMgAigNOgEwEh4KE2FjdGl2YXRlZF93YXlwb2ludHMYBCACKA06" + 
-          "ATASMwoTaGlyZWxpbmdfc2F2ZWRfZGF0YRgFIAIoCzIWLkQzLkhpcmVsaW5n" + 
-          "LlNhdmVkRGF0YRIaCg9sYXN0X2xldmVsX3RpbWUYBiACKA06ATASKgoMbGVh" + 
-          "cm5lZF9sb3JlGAcgAigLMhQuRDMuSGVyby5MZWFybmVkTG9yZRI4ChNzYXZl" + 
-          "ZF9jb252ZXJzYXRpb25zGAggAigLMhsuRDMuSGVyby5TYXZlZENvbnZlcnNh" + 
-          "dGlvbnMSEgoKc25vX3RyYWl0cxgKIAMoDxIwCgpzYXZlX3BvaW50GAwgAigL" + 
+          "cGxheWVkGAEgAigNOgEwEh4KE2FjdGl2YXRlZF93YXlwb2ludHMYAiACKA06" + 
+          "ATASMwoTaGlyZWxpbmdfc2F2ZWRfZGF0YRgDIAIoCzIWLkQzLkhpcmVsaW5n" + 
+          "LlNhdmVkRGF0YRIaCg9sYXN0X2xldmVsX3RpbWUYBCACKA06ATASKgoMbGVh" + 
+          "cm5lZF9sb3JlGAUgAigLMhQuRDMuSGVyby5MZWFybmVkTG9yZRI4ChNzYXZl" + 
+          "ZF9jb252ZXJzYXRpb25zGAYgAigLMhsuRDMuSGVyby5TYXZlZENvbnZlcnNh" + 
+          "dGlvbnMSEgoKc25vX3RyYWl0cxgHIAMoDxIwCgpzYXZlX3BvaW50GAggAigL" + 
           "MhwuRDMuSGVyby5TYXZlUG9pbnREYXRhX1Byb3RvEh4KEmdiaWRfcG90aW9u" + 
-          "X2J1dHRvbhgNIAIoDzoCLTESLQoNYWN0aXZlX3NraWxscxgOIAMoCzIWLkQz" + 
+          "X2J1dHRvbhgJIAIoDzoCLTESLQoNYWN0aXZlX3NraWxscxgKIAMoCzIWLkQz" + 
           "Lkhlcm8uU2tpbGxXaXRoUnVuZRIgChhza2lsbF9zbG90X2V2ZXJfYXNzaWdu" + 
-          "ZWQYDyACKAwSGAoNc2tpbGxfdmVyc2lvbhgQIAIoDToBMCI2CgpUaW1lc3Rh" + 
+          "ZWQYCyACKAwSGAoNc2tpbGxfdmVyc2lvbhgMIAIoDToBMCI2CgpUaW1lc3Rh" + 
           "bXBzEhMKC2NyZWF0ZV90aW1lGAEgAigSEhMKC2RlbGV0ZV90aW1lGAIgASgS" + 
           "IrsCCg9TYXZlZERlZmluaXRpb24SDwoHdmVyc2lvbhgBIAIoDRIfCgZkaWdl" + 
           "c3QYAiABKAsyDy5EMy5IZXJvLkRpZ2VzdBJBChBzYXZlZF9hdHRyaWJ1dGVz" + 
@@ -1664,7 +1664,7 @@ namespace D3.Hero {
     private Digest() { }
     private static readonly Digest defaultInstance = new Digest().MakeReadOnly();
     private static readonly string[] _digestFieldNames = new string[] { "create_time", "gbid_class", "hero_id", "hero_name", "highest_completed_difficulty", "highest_unlocked_act", "highest_unlocked_difficulty", "last_played_act", "last_played_difficulty", "last_played_quest", "last_played_quest_step", "last_played_time", "level", "player_flags", "quest_history", "time_played", "version", "visual_equipment" };
-    private static readonly uint[] _digestFieldTags = new uint[] { 144, 37, 18, 26, 136, 88, 104, 80, 96, 117, 120, 152, 40, 48, 66, 128, 8, 58 };
+    private static readonly uint[] _digestFieldTags = new uint[] { 136, 37, 18, 26, 128, 80, 96, 72, 88, 109, 112, 144, 40, 48, 66, 120, 8, 58 };
     public static Digest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1767,7 +1767,7 @@ namespace D3.Hero {
       return questHistory_[index];
     }
     
-    public const int LastPlayedActFieldNumber = 10;
+    public const int LastPlayedActFieldNumber = 9;
     private bool hasLastPlayedAct;
     private int lastPlayedAct_;
     public bool HasLastPlayedAct {
@@ -1777,7 +1777,7 @@ namespace D3.Hero {
       get { return lastPlayedAct_; }
     }
     
-    public const int HighestUnlockedActFieldNumber = 11;
+    public const int HighestUnlockedActFieldNumber = 10;
     private bool hasHighestUnlockedAct;
     private int highestUnlockedAct_;
     public bool HasHighestUnlockedAct {
@@ -1787,7 +1787,7 @@ namespace D3.Hero {
       get { return highestUnlockedAct_; }
     }
     
-    public const int LastPlayedDifficultyFieldNumber = 12;
+    public const int LastPlayedDifficultyFieldNumber = 11;
     private bool hasLastPlayedDifficulty;
     private int lastPlayedDifficulty_;
     public bool HasLastPlayedDifficulty {
@@ -1797,7 +1797,7 @@ namespace D3.Hero {
       get { return lastPlayedDifficulty_; }
     }
     
-    public const int HighestUnlockedDifficultyFieldNumber = 13;
+    public const int HighestUnlockedDifficultyFieldNumber = 12;
     private bool hasHighestUnlockedDifficulty;
     private int highestUnlockedDifficulty_;
     public bool HasHighestUnlockedDifficulty {
@@ -1807,7 +1807,7 @@ namespace D3.Hero {
       get { return highestUnlockedDifficulty_; }
     }
     
-    public const int LastPlayedQuestFieldNumber = 14;
+    public const int LastPlayedQuestFieldNumber = 13;
     private bool hasLastPlayedQuest;
     private int lastPlayedQuest_;
     public bool HasLastPlayedQuest {
@@ -1817,7 +1817,7 @@ namespace D3.Hero {
       get { return lastPlayedQuest_; }
     }
     
-    public const int LastPlayedQuestStepFieldNumber = 15;
+    public const int LastPlayedQuestStepFieldNumber = 14;
     private bool hasLastPlayedQuestStep;
     private int lastPlayedQuestStep_;
     public bool HasLastPlayedQuestStep {
@@ -1827,7 +1827,7 @@ namespace D3.Hero {
       get { return lastPlayedQuestStep_; }
     }
     
-    public const int TimePlayedFieldNumber = 16;
+    public const int TimePlayedFieldNumber = 15;
     private bool hasTimePlayed;
     private uint timePlayed_;
     public bool HasTimePlayed {
@@ -1837,7 +1837,7 @@ namespace D3.Hero {
       get { return timePlayed_; }
     }
     
-    public const int HighestCompletedDifficultyFieldNumber = 17;
+    public const int HighestCompletedDifficultyFieldNumber = 16;
     private bool hasHighestCompletedDifficulty;
     private int highestCompletedDifficulty_ = -1;
     public bool HasHighestCompletedDifficulty {
@@ -1847,7 +1847,7 @@ namespace D3.Hero {
       get { return highestCompletedDifficulty_; }
     }
     
-    public const int CreateTimeFieldNumber = 18;
+    public const int CreateTimeFieldNumber = 17;
     private bool hasCreateTime;
     private uint createTime_;
     public bool HasCreateTime {
@@ -1857,7 +1857,7 @@ namespace D3.Hero {
       get { return createTime_; }
     }
     
-    public const int LastPlayedTimeFieldNumber = 19;
+    public const int LastPlayedTimeFieldNumber = 18;
     private bool hasLastPlayedTime;
     private uint lastPlayedTime_;
     public bool HasLastPlayedTime {
@@ -1918,34 +1918,34 @@ namespace D3.Hero {
         output.WriteMessageArray(8, field_names[14], questHistory_);
       }
       if (hasLastPlayedAct) {
-        output.WriteSInt32(10, field_names[7], LastPlayedAct);
+        output.WriteSInt32(9, field_names[7], LastPlayedAct);
       }
       if (hasHighestUnlockedAct) {
-        output.WriteSInt32(11, field_names[5], HighestUnlockedAct);
+        output.WriteSInt32(10, field_names[5], HighestUnlockedAct);
       }
       if (hasLastPlayedDifficulty) {
-        output.WriteSInt32(12, field_names[8], LastPlayedDifficulty);
+        output.WriteSInt32(11, field_names[8], LastPlayedDifficulty);
       }
       if (hasHighestUnlockedDifficulty) {
-        output.WriteSInt32(13, field_names[6], HighestUnlockedDifficulty);
+        output.WriteSInt32(12, field_names[6], HighestUnlockedDifficulty);
       }
       if (hasLastPlayedQuest) {
-        output.WriteSFixed32(14, field_names[9], LastPlayedQuest);
+        output.WriteSFixed32(13, field_names[9], LastPlayedQuest);
       }
       if (hasLastPlayedQuestStep) {
-        output.WriteSInt32(15, field_names[10], LastPlayedQuestStep);
+        output.WriteSInt32(14, field_names[10], LastPlayedQuestStep);
       }
       if (hasTimePlayed) {
-        output.WriteUInt32(16, field_names[15], TimePlayed);
+        output.WriteUInt32(15, field_names[15], TimePlayed);
       }
       if (hasHighestCompletedDifficulty) {
-        output.WriteSInt32(17, field_names[4], HighestCompletedDifficulty);
+        output.WriteSInt32(16, field_names[4], HighestCompletedDifficulty);
       }
       if (hasCreateTime) {
-        output.WriteUInt32(18, field_names[0], CreateTime);
+        output.WriteUInt32(17, field_names[0], CreateTime);
       }
       if (hasLastPlayedTime) {
-        output.WriteUInt32(19, field_names[11], LastPlayedTime);
+        output.WriteUInt32(18, field_names[11], LastPlayedTime);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1982,34 +1982,34 @@ namespace D3.Hero {
           size += pb::CodedOutputStream.ComputeMessageSize(8, element);
         }
         if (hasLastPlayedAct) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(10, LastPlayedAct);
+          size += pb::CodedOutputStream.ComputeSInt32Size(9, LastPlayedAct);
         }
         if (hasHighestUnlockedAct) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(11, HighestUnlockedAct);
+          size += pb::CodedOutputStream.ComputeSInt32Size(10, HighestUnlockedAct);
         }
         if (hasLastPlayedDifficulty) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(12, LastPlayedDifficulty);
+          size += pb::CodedOutputStream.ComputeSInt32Size(11, LastPlayedDifficulty);
         }
         if (hasHighestUnlockedDifficulty) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(13, HighestUnlockedDifficulty);
+          size += pb::CodedOutputStream.ComputeSInt32Size(12, HighestUnlockedDifficulty);
         }
         if (hasLastPlayedQuest) {
-          size += pb::CodedOutputStream.ComputeSFixed32Size(14, LastPlayedQuest);
+          size += pb::CodedOutputStream.ComputeSFixed32Size(13, LastPlayedQuest);
         }
         if (hasLastPlayedQuestStep) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(15, LastPlayedQuestStep);
+          size += pb::CodedOutputStream.ComputeSInt32Size(14, LastPlayedQuestStep);
         }
         if (hasTimePlayed) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(16, TimePlayed);
+          size += pb::CodedOutputStream.ComputeUInt32Size(15, TimePlayed);
         }
         if (hasHighestCompletedDifficulty) {
-          size += pb::CodedOutputStream.ComputeSInt32Size(17, HighestCompletedDifficulty);
+          size += pb::CodedOutputStream.ComputeSInt32Size(16, HighestCompletedDifficulty);
         }
         if (hasCreateTime) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(18, CreateTime);
+          size += pb::CodedOutputStream.ComputeUInt32Size(17, CreateTime);
         }
         if (hasLastPlayedTime) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(19, LastPlayedTime);
+          size += pb::CodedOutputStream.ComputeUInt32Size(18, LastPlayedTime);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2277,43 +2277,43 @@ namespace D3.Hero {
               input.ReadMessageArray(tag, field_name, result.questHistory_, global::D3.Hero.QuestHistoryEntry.DefaultInstance, extensionRegistry);
               break;
             }
-            case 80: {
+            case 72: {
               result.hasLastPlayedAct = input.ReadSInt32(ref result.lastPlayedAct_);
               break;
             }
-            case 88: {
+            case 80: {
               result.hasHighestUnlockedAct = input.ReadSInt32(ref result.highestUnlockedAct_);
               break;
             }
-            case 96: {
+            case 88: {
               result.hasLastPlayedDifficulty = input.ReadSInt32(ref result.lastPlayedDifficulty_);
               break;
             }
-            case 104: {
+            case 96: {
               result.hasHighestUnlockedDifficulty = input.ReadSInt32(ref result.highestUnlockedDifficulty_);
               break;
             }
-            case 117: {
+            case 109: {
               result.hasLastPlayedQuest = input.ReadSFixed32(ref result.lastPlayedQuest_);
               break;
             }
-            case 120: {
+            case 112: {
               result.hasLastPlayedQuestStep = input.ReadSInt32(ref result.lastPlayedQuestStep_);
               break;
             }
-            case 128: {
+            case 120: {
               result.hasTimePlayed = input.ReadUInt32(ref result.timePlayed_);
               break;
             }
-            case 136: {
+            case 128: {
               result.hasHighestCompletedDifficulty = input.ReadSInt32(ref result.highestCompletedDifficulty_);
               break;
             }
-            case 144: {
+            case 136: {
               result.hasCreateTime = input.ReadUInt32(ref result.createTime_);
               break;
             }
-            case 152: {
+            case 144: {
               result.hasLastPlayedTime = input.ReadUInt32(ref result.lastPlayedTime_);
               break;
             }
@@ -5149,7 +5149,7 @@ namespace D3.Hero {
     private SavedData() { }
     private static readonly SavedData defaultInstance = new SavedData().MakeReadOnly();
     private static readonly string[] _savedDataFieldNames = new string[] { "activated_waypoints", "active_skills", "gbid_potion_button", "hireling_saved_data", "last_level_time", "learned_lore", "save_point", "saved_conversations", "skill_slot_ever_assigned", "skill_version", "sno_traits", "time_played" };
-    private static readonly uint[] _savedDataFieldTags = new uint[] { 32, 114, 109, 42, 48, 58, 98, 66, 122, 128, 85, 24 };
+    private static readonly uint[] _savedDataFieldTags = new uint[] { 16, 82, 77, 26, 32, 42, 66, 50, 90, 96, 61, 8 };
     public static SavedData DefaultInstance {
       get { return defaultInstance; }
     }
@@ -5170,7 +5170,7 @@ namespace D3.Hero {
       get { return global::D3.Hero.Hero.internal__static_D3_Hero_SavedData__FieldAccessorTable; }
     }
     
-    public const int TimePlayedFieldNumber = 3;
+    public const int TimePlayedFieldNumber = 1;
     private bool hasTimePlayed;
     private uint timePlayed_;
     public bool HasTimePlayed {
@@ -5180,7 +5180,7 @@ namespace D3.Hero {
       get { return timePlayed_; }
     }
     
-    public const int ActivatedWaypointsFieldNumber = 4;
+    public const int ActivatedWaypointsFieldNumber = 2;
     private bool hasActivatedWaypoints;
     private uint activatedWaypoints_;
     public bool HasActivatedWaypoints {
@@ -5190,7 +5190,7 @@ namespace D3.Hero {
       get { return activatedWaypoints_; }
     }
     
-    public const int HirelingSavedDataFieldNumber = 5;
+    public const int HirelingSavedDataFieldNumber = 3;
     private bool hasHirelingSavedData;
     private global::D3.Hireling.SavedData hirelingSavedData_;
     public bool HasHirelingSavedData {
@@ -5200,7 +5200,7 @@ namespace D3.Hero {
       get { return hirelingSavedData_ ?? global::D3.Hireling.SavedData.DefaultInstance; }
     }
     
-    public const int LastLevelTimeFieldNumber = 6;
+    public const int LastLevelTimeFieldNumber = 4;
     private bool hasLastLevelTime;
     private uint lastLevelTime_;
     public bool HasLastLevelTime {
@@ -5210,7 +5210,7 @@ namespace D3.Hero {
       get { return lastLevelTime_; }
     }
     
-    public const int LearnedLoreFieldNumber = 7;
+    public const int LearnedLoreFieldNumber = 5;
     private bool hasLearnedLore;
     private global::D3.Hero.LearnedLore learnedLore_;
     public bool HasLearnedLore {
@@ -5220,7 +5220,7 @@ namespace D3.Hero {
       get { return learnedLore_ ?? global::D3.Hero.LearnedLore.DefaultInstance; }
     }
     
-    public const int SavedConversationsFieldNumber = 8;
+    public const int SavedConversationsFieldNumber = 6;
     private bool hasSavedConversations;
     private global::D3.Hero.SavedConversations savedConversations_;
     public bool HasSavedConversations {
@@ -5230,7 +5230,7 @@ namespace D3.Hero {
       get { return savedConversations_ ?? global::D3.Hero.SavedConversations.DefaultInstance; }
     }
     
-    public const int SnoTraitsFieldNumber = 10;
+    public const int SnoTraitsFieldNumber = 7;
     private pbc::PopsicleList<int> snoTraits_ = new pbc::PopsicleList<int>();
     public scg::IList<int> SnoTraitsList {
       get { return pbc::Lists.AsReadOnly(snoTraits_); }
@@ -5242,7 +5242,7 @@ namespace D3.Hero {
       return snoTraits_[index];
     }
     
-    public const int SavePointFieldNumber = 12;
+    public const int SavePointFieldNumber = 8;
     private bool hasSavePoint;
     private global::D3.Hero.SavePointData_Proto savePoint_;
     public bool HasSavePoint {
@@ -5252,7 +5252,7 @@ namespace D3.Hero {
       get { return savePoint_ ?? global::D3.Hero.SavePointData_Proto.DefaultInstance; }
     }
     
-    public const int GbidPotionButtonFieldNumber = 13;
+    public const int GbidPotionButtonFieldNumber = 9;
     private bool hasGbidPotionButton;
     private int gbidPotionButton_ = -1;
     public bool HasGbidPotionButton {
@@ -5262,7 +5262,7 @@ namespace D3.Hero {
       get { return gbidPotionButton_; }
     }
     
-    public const int ActiveSkillsFieldNumber = 14;
+    public const int ActiveSkillsFieldNumber = 10;
     private pbc::PopsicleList<global::D3.Hero.SkillWithRune> activeSkills_ = new pbc::PopsicleList<global::D3.Hero.SkillWithRune>();
     public scg::IList<global::D3.Hero.SkillWithRune> ActiveSkillsList {
       get { return activeSkills_; }
@@ -5274,7 +5274,7 @@ namespace D3.Hero {
       return activeSkills_[index];
     }
     
-    public const int SkillSlotEverAssignedFieldNumber = 15;
+    public const int SkillSlotEverAssignedFieldNumber = 11;
     private bool hasSkillSlotEverAssigned;
     private pb::ByteString skillSlotEverAssigned_ = pb::ByteString.Empty;
     public bool HasSkillSlotEverAssigned {
@@ -5284,7 +5284,7 @@ namespace D3.Hero {
       get { return skillSlotEverAssigned_; }
     }
     
-    public const int SkillVersionFieldNumber = 16;
+    public const int SkillVersionFieldNumber = 12;
     private bool hasSkillVersion;
     private uint skillVersion_;
     public bool HasSkillVersion {
@@ -5320,40 +5320,40 @@ namespace D3.Hero {
       int size = SerializedSize;
       string[] field_names = _savedDataFieldNames;
       if (hasTimePlayed) {
-        output.WriteUInt32(3, field_names[11], TimePlayed);
+        output.WriteUInt32(1, field_names[11], TimePlayed);
       }
       if (hasActivatedWaypoints) {
-        output.WriteUInt32(4, field_names[0], ActivatedWaypoints);
+        output.WriteUInt32(2, field_names[0], ActivatedWaypoints);
       }
       if (hasHirelingSavedData) {
-        output.WriteMessage(5, field_names[3], HirelingSavedData);
+        output.WriteMessage(3, field_names[3], HirelingSavedData);
       }
       if (hasLastLevelTime) {
-        output.WriteUInt32(6, field_names[4], LastLevelTime);
+        output.WriteUInt32(4, field_names[4], LastLevelTime);
       }
       if (hasLearnedLore) {
-        output.WriteMessage(7, field_names[5], LearnedLore);
+        output.WriteMessage(5, field_names[5], LearnedLore);
       }
       if (hasSavedConversations) {
-        output.WriteMessage(8, field_names[7], SavedConversations);
+        output.WriteMessage(6, field_names[7], SavedConversations);
       }
       if (snoTraits_.Count > 0) {
-        output.WriteSFixed32Array(10, field_names[10], snoTraits_);
+        output.WriteSFixed32Array(7, field_names[10], snoTraits_);
       }
       if (hasSavePoint) {
-        output.WriteMessage(12, field_names[6], SavePoint);
+        output.WriteMessage(8, field_names[6], SavePoint);
       }
       if (hasGbidPotionButton) {
-        output.WriteSFixed32(13, field_names[2], GbidPotionButton);
+        output.WriteSFixed32(9, field_names[2], GbidPotionButton);
       }
       if (activeSkills_.Count > 0) {
-        output.WriteMessageArray(14, field_names[1], activeSkills_);
+        output.WriteMessageArray(10, field_names[1], activeSkills_);
       }
       if (hasSkillSlotEverAssigned) {
-        output.WriteBytes(15, field_names[8], SkillSlotEverAssigned);
+        output.WriteBytes(11, field_names[8], SkillSlotEverAssigned);
       }
       if (hasSkillVersion) {
-        output.WriteUInt32(16, field_names[9], SkillVersion);
+        output.WriteUInt32(12, field_names[9], SkillVersion);
       }
       UnknownFields.WriteTo(output);
     }
@@ -5366,22 +5366,22 @@ namespace D3.Hero {
         
         size = 0;
         if (hasTimePlayed) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(3, TimePlayed);
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, TimePlayed);
         }
         if (hasActivatedWaypoints) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(4, ActivatedWaypoints);
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, ActivatedWaypoints);
         }
         if (hasHirelingSavedData) {
-          size += pb::CodedOutputStream.ComputeMessageSize(5, HirelingSavedData);
+          size += pb::CodedOutputStream.ComputeMessageSize(3, HirelingSavedData);
         }
         if (hasLastLevelTime) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(6, LastLevelTime);
+          size += pb::CodedOutputStream.ComputeUInt32Size(4, LastLevelTime);
         }
         if (hasLearnedLore) {
-          size += pb::CodedOutputStream.ComputeMessageSize(7, LearnedLore);
+          size += pb::CodedOutputStream.ComputeMessageSize(5, LearnedLore);
         }
         if (hasSavedConversations) {
-          size += pb::CodedOutputStream.ComputeMessageSize(8, SavedConversations);
+          size += pb::CodedOutputStream.ComputeMessageSize(6, SavedConversations);
         }
         {
           int dataSize = 0;
@@ -5390,19 +5390,19 @@ namespace D3.Hero {
           size += 1 * snoTraits_.Count;
         }
         if (hasSavePoint) {
-          size += pb::CodedOutputStream.ComputeMessageSize(12, SavePoint);
+          size += pb::CodedOutputStream.ComputeMessageSize(8, SavePoint);
         }
         if (hasGbidPotionButton) {
-          size += pb::CodedOutputStream.ComputeSFixed32Size(13, GbidPotionButton);
+          size += pb::CodedOutputStream.ComputeSFixed32Size(9, GbidPotionButton);
         }
         foreach (global::D3.Hero.SkillWithRune element in ActiveSkillsList) {
-          size += pb::CodedOutputStream.ComputeMessageSize(14, element);
+          size += pb::CodedOutputStream.ComputeMessageSize(10, element);
         }
         if (hasSkillSlotEverAssigned) {
-          size += pb::CodedOutputStream.ComputeBytesSize(15, SkillSlotEverAssigned);
+          size += pb::CodedOutputStream.ComputeBytesSize(11, SkillSlotEverAssigned);
         }
         if (hasSkillVersion) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(16, SkillVersion);
+          size += pb::CodedOutputStream.ComputeUInt32Size(12, SkillVersion);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -5611,15 +5611,15 @@ namespace D3.Hero {
               ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
               break;
             }
-            case 24: {
+            case 8: {
               result.hasTimePlayed = input.ReadUInt32(ref result.timePlayed_);
               break;
             }
-            case 32: {
+            case 16: {
               result.hasActivatedWaypoints = input.ReadUInt32(ref result.activatedWaypoints_);
               break;
             }
-            case 42: {
+            case 26: {
               global::D3.Hireling.SavedData.Builder subBuilder = global::D3.Hireling.SavedData.CreateBuilder();
               if (result.hasHirelingSavedData) {
                 subBuilder.MergeFrom(HirelingSavedData);
@@ -5628,11 +5628,11 @@ namespace D3.Hero {
               HirelingSavedData = subBuilder.BuildPartial();
               break;
             }
-            case 48: {
+            case 32: {
               result.hasLastLevelTime = input.ReadUInt32(ref result.lastLevelTime_);
               break;
             }
-            case 58: {
+            case 42: {
               global::D3.Hero.LearnedLore.Builder subBuilder = global::D3.Hero.LearnedLore.CreateBuilder();
               if (result.hasLearnedLore) {
                 subBuilder.MergeFrom(LearnedLore);
@@ -5641,7 +5641,7 @@ namespace D3.Hero {
               LearnedLore = subBuilder.BuildPartial();
               break;
             }
-            case 66: {
+            case 50: {
               global::D3.Hero.SavedConversations.Builder subBuilder = global::D3.Hero.SavedConversations.CreateBuilder();
               if (result.hasSavedConversations) {
                 subBuilder.MergeFrom(SavedConversations);
@@ -5650,12 +5650,12 @@ namespace D3.Hero {
               SavedConversations = subBuilder.BuildPartial();
               break;
             }
-            case 82:
-            case 85: {
+            case 58:
+            case 61: {
               input.ReadSFixed32Array(tag, field_name, result.snoTraits_);
               break;
             }
-            case 98: {
+            case 66: {
               global::D3.Hero.SavePointData_Proto.Builder subBuilder = global::D3.Hero.SavePointData_Proto.CreateBuilder();
               if (result.hasSavePoint) {
                 subBuilder.MergeFrom(SavePoint);
@@ -5664,19 +5664,19 @@ namespace D3.Hero {
               SavePoint = subBuilder.BuildPartial();
               break;
             }
-            case 109: {
+            case 77: {
               result.hasGbidPotionButton = input.ReadSFixed32(ref result.gbidPotionButton_);
               break;
             }
-            case 114: {
+            case 82: {
               input.ReadMessageArray(tag, field_name, result.activeSkills_, global::D3.Hero.SkillWithRune.DefaultInstance, extensionRegistry);
               break;
             }
-            case 122: {
+            case 90: {
               result.hasSkillSlotEverAssigned = input.ReadBytes(ref result.skillSlotEverAssigned_);
               break;
             }
-            case 128: {
+            case 96: {
               result.hasSkillVersion = input.ReadUInt32(ref result.skillVersion_);
               break;
             }

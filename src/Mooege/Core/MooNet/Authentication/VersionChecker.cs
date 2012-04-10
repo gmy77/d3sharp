@@ -68,7 +68,8 @@ namespace Mooege.Core.MooNet.Authentication
             Logger.Trace("Client Info: user: {0} program: {1}  platform: {2} locale: {3} version: {4} [{5}]  app_version: {6}.",
                 request.Email, request.Program, request.Platform, request.Locale, versionMatch != -1 ? versionMatch.ToString() : "Unknown", request.Version,request.ApplicationVersion);
 
-            return versionMatch == VersionInfo.MooNet.RequiredClientVersion; // see if the client fits our required version.
+            //return versionMatch == VersionInfo.MooNet.RequiredClientVersion; // see if the client fits our required version.
+            return request.ApplicationVersion == VersionInfo.MooNet.RequiredClientVersion;
         }
     }
 }

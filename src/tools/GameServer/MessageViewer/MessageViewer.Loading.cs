@@ -237,7 +237,7 @@ namespace GameMessageViewer
             {
                 try
                 {
-                    var packet = new PacketIn(null, stream);
+                    var packet = new PacketIn(null, null);
 
                     if (packet.Header.ServiceId == 0xFE /*ServiceReply*/)
                     {

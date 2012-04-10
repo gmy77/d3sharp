@@ -22,6 +22,10 @@ namespace D3.PartyMessage {
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.PartyMessage.ScreenStatus, global::D3.PartyMessage.ScreenStatus.Builder> internal__static_D3_PartyMessage_ScreenStatus__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_D3_PartyMessage_SearchForPublicGameParams__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::D3.PartyMessage.SearchForPublicGameParams, global::D3.PartyMessage.SearchForPublicGameParams.Builder> internal__static_D3_PartyMessage_SearchForPublicGameParams__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_D3_PartyMessage_EnterGamePartyMember__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::D3.PartyMessage.EnterGamePartyMember, global::D3.PartyMessage.EnterGamePartyMember.Builder> internal__static_D3_PartyMessage_EnterGamePartyMember__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_D3_PartyMessage_EnterGamePartyMemberList__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::D3.PartyMessage.EnterGamePartyMemberList, global::D3.PartyMessage.EnterGamePartyMemberList.Builder> internal__static_D3_PartyMessage_EnterGamePartyMemberList__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -36,7 +40,12 @@ namespace D3.PartyMessage {
           "Eg4KBnN0YXR1cxgCIAIoBSKaAQoZU2VhcmNoRm9yUHVibGljR2FtZVBhcmFt" + 
           "cxISCgpzdGFydF90aW1lGAEgASgSEhkKEXNlY29uZHNfdG9fc2VhcmNoGAIg" + 
           "ASgNEjcKC2dhbWVfcGFyYW1zGAMgASgLMiIuRDMuT25saW5lU2VydmljZS5H" + 
-          "YW1lQ3JlYXRlUGFyYW1zEhUKDXJlbW92ZV9yZWFzb24YBCABKAU=");
+          "YW1lQ3JlYXRlUGFyYW1zEhUKDXJlbW92ZV9yZWFzb24YBCABKAUicwoURW50" + 
+          "ZXJHYW1lUGFydHlNZW1iZXISLgoKYWNjb3VudF9pZBgBIAIoCzIaLkQzLk9u" + 
+          "bGluZVNlcnZpY2UuRW50aXR5SWQSKwoHaGVyb19pZBgCIAIoCzIaLkQzLk9u" + 
+          "bGluZVNlcnZpY2UuRW50aXR5SWQiagoYRW50ZXJHYW1lUGFydHlNZW1iZXJM" + 
+          "aXN0EjUKBm1lbWJlchgBIAMoCzIlLkQzLlBhcnR5TWVzc2FnZS5FbnRlckdh" + 
+          "bWVQYXJ0eU1lbWJlchIXCg9yZXF1ZXN0ZXJfaW5kZXgYAiABKAU=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_PartyMessage_ScreenStatus__Descriptor = Descriptor.MessageTypes[0];
@@ -47,6 +56,14 @@ namespace D3.PartyMessage {
         internal__static_D3_PartyMessage_SearchForPublicGameParams__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.PartyMessage.SearchForPublicGameParams, global::D3.PartyMessage.SearchForPublicGameParams.Builder>(internal__static_D3_PartyMessage_SearchForPublicGameParams__Descriptor,
                 new string[] { "StartTime", "SecondsToSearch", "GameParams", "RemoveReason", });
+        internal__static_D3_PartyMessage_EnterGamePartyMember__Descriptor = Descriptor.MessageTypes[2];
+        internal__static_D3_PartyMessage_EnterGamePartyMember__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::D3.PartyMessage.EnterGamePartyMember, global::D3.PartyMessage.EnterGamePartyMember.Builder>(internal__static_D3_PartyMessage_EnterGamePartyMember__Descriptor,
+                new string[] { "AccountId", "HeroId", });
+        internal__static_D3_PartyMessage_EnterGamePartyMemberList__Descriptor = Descriptor.MessageTypes[3];
+        internal__static_D3_PartyMessage_EnterGamePartyMemberList__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::D3.PartyMessage.EnterGamePartyMemberList, global::D3.PartyMessage.EnterGamePartyMemberList.Builder>(internal__static_D3_PartyMessage_EnterGamePartyMemberList__Descriptor,
+                new string[] { "Member", "RequesterIndex", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -804,6 +821,724 @@ namespace D3.PartyMessage {
       }
     }
     static SearchForPublicGameParams() {
+      object.ReferenceEquals(global::D3.PartyMessage.PartyMessage.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class EnterGamePartyMember : pb::GeneratedMessage<EnterGamePartyMember, EnterGamePartyMember.Builder> {
+    private EnterGamePartyMember() { }
+    private static readonly EnterGamePartyMember defaultInstance = new EnterGamePartyMember().MakeReadOnly();
+    private static readonly string[] _enterGamePartyMemberFieldNames = new string[] { "account_id", "hero_id" };
+    private static readonly uint[] _enterGamePartyMemberFieldTags = new uint[] { 10, 18 };
+    public static EnterGamePartyMember DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override EnterGamePartyMember DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override EnterGamePartyMember ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::D3.PartyMessage.PartyMessage.internal__static_D3_PartyMessage_EnterGamePartyMember__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<EnterGamePartyMember, EnterGamePartyMember.Builder> InternalFieldAccessors {
+      get { return global::D3.PartyMessage.PartyMessage.internal__static_D3_PartyMessage_EnterGamePartyMember__FieldAccessorTable; }
+    }
+    
+    public const int AccountIdFieldNumber = 1;
+    private bool hasAccountId;
+    private global::D3.OnlineService.EntityId accountId_;
+    public bool HasAccountId {
+      get { return hasAccountId; }
+    }
+    public global::D3.OnlineService.EntityId AccountId {
+      get { return accountId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    }
+    
+    public const int HeroIdFieldNumber = 2;
+    private bool hasHeroId;
+    private global::D3.OnlineService.EntityId heroId_;
+    public bool HasHeroId {
+      get { return hasHeroId; }
+    }
+    public global::D3.OnlineService.EntityId HeroId {
+      get { return heroId_ ?? global::D3.OnlineService.EntityId.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasAccountId) return false;
+        if (!hasHeroId) return false;
+        if (!AccountId.IsInitialized) return false;
+        if (!HeroId.IsInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _enterGamePartyMemberFieldNames;
+      if (hasAccountId) {
+        output.WriteMessage(1, field_names[0], AccountId);
+      }
+      if (hasHeroId) {
+        output.WriteMessage(2, field_names[1], HeroId);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AccountId);
+        }
+        if (hasHeroId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, HeroId);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static EnterGamePartyMember ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static EnterGamePartyMember ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static EnterGamePartyMember ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static EnterGamePartyMember ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static EnterGamePartyMember ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static EnterGamePartyMember ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static EnterGamePartyMember ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static EnterGamePartyMember ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static EnterGamePartyMember ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static EnterGamePartyMember ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private EnterGamePartyMember MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(EnterGamePartyMember prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<EnterGamePartyMember, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(EnterGamePartyMember cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private EnterGamePartyMember result;
+      
+      private EnterGamePartyMember PrepareBuilder() {
+        if (resultIsReadOnly) {
+          EnterGamePartyMember original = result;
+          result = new EnterGamePartyMember();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override EnterGamePartyMember MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::D3.PartyMessage.EnterGamePartyMember.Descriptor; }
+      }
+      
+      public override EnterGamePartyMember DefaultInstanceForType {
+        get { return global::D3.PartyMessage.EnterGamePartyMember.DefaultInstance; }
+      }
+      
+      public override EnterGamePartyMember BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is EnterGamePartyMember) {
+          return MergeFrom((EnterGamePartyMember) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(EnterGamePartyMember other) {
+        if (other == global::D3.PartyMessage.EnterGamePartyMember.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasAccountId) {
+          MergeAccountId(other.AccountId);
+        }
+        if (other.HasHeroId) {
+          MergeHeroId(other.HeroId);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_enterGamePartyMemberFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _enterGamePartyMemberFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
+              if (result.hasAccountId) {
+                subBuilder.MergeFrom(AccountId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              AccountId = subBuilder.BuildPartial();
+              break;
+            }
+            case 18: {
+              global::D3.OnlineService.EntityId.Builder subBuilder = global::D3.OnlineService.EntityId.CreateBuilder();
+              if (result.hasHeroId) {
+                subBuilder.MergeFrom(HeroId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              HeroId = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasAccountId {
+       get { return result.hasAccountId; }
+      }
+      public global::D3.OnlineService.EntityId AccountId {
+        get { return result.AccountId; }
+        set { SetAccountId(value); }
+      }
+      public Builder SetAccountId(global::D3.OnlineService.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasAccountId = true;
+        result.accountId_ = value;
+        return this;
+      }
+      public Builder SetAccountId(global::D3.OnlineService.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasAccountId = true;
+        result.accountId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeAccountId(global::D3.OnlineService.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasAccountId &&
+            result.accountId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.accountId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.accountId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.accountId_ = value;
+        }
+        result.hasAccountId = true;
+        return this;
+      }
+      public Builder ClearAccountId() {
+        PrepareBuilder();
+        result.hasAccountId = false;
+        result.accountId_ = null;
+        return this;
+      }
+      
+      public bool HasHeroId {
+       get { return result.hasHeroId; }
+      }
+      public global::D3.OnlineService.EntityId HeroId {
+        get { return result.HeroId; }
+        set { SetHeroId(value); }
+      }
+      public Builder SetHeroId(global::D3.OnlineService.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasHeroId = true;
+        result.heroId_ = value;
+        return this;
+      }
+      public Builder SetHeroId(global::D3.OnlineService.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasHeroId = true;
+        result.heroId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeHeroId(global::D3.OnlineService.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasHeroId &&
+            result.heroId_ != global::D3.OnlineService.EntityId.DefaultInstance) {
+            result.heroId_ = global::D3.OnlineService.EntityId.CreateBuilder(result.heroId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.heroId_ = value;
+        }
+        result.hasHeroId = true;
+        return this;
+      }
+      public Builder ClearHeroId() {
+        PrepareBuilder();
+        result.hasHeroId = false;
+        result.heroId_ = null;
+        return this;
+      }
+    }
+    static EnterGamePartyMember() {
+      object.ReferenceEquals(global::D3.PartyMessage.PartyMessage.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class EnterGamePartyMemberList : pb::GeneratedMessage<EnterGamePartyMemberList, EnterGamePartyMemberList.Builder> {
+    private EnterGamePartyMemberList() { }
+    private static readonly EnterGamePartyMemberList defaultInstance = new EnterGamePartyMemberList().MakeReadOnly();
+    private static readonly string[] _enterGamePartyMemberListFieldNames = new string[] { "member", "requester_index" };
+    private static readonly uint[] _enterGamePartyMemberListFieldTags = new uint[] { 10, 16 };
+    public static EnterGamePartyMemberList DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override EnterGamePartyMemberList DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override EnterGamePartyMemberList ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::D3.PartyMessage.PartyMessage.internal__static_D3_PartyMessage_EnterGamePartyMemberList__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<EnterGamePartyMemberList, EnterGamePartyMemberList.Builder> InternalFieldAccessors {
+      get { return global::D3.PartyMessage.PartyMessage.internal__static_D3_PartyMessage_EnterGamePartyMemberList__FieldAccessorTable; }
+    }
+    
+    public const int MemberFieldNumber = 1;
+    private pbc::PopsicleList<global::D3.PartyMessage.EnterGamePartyMember> member_ = new pbc::PopsicleList<global::D3.PartyMessage.EnterGamePartyMember>();
+    public scg::IList<global::D3.PartyMessage.EnterGamePartyMember> MemberList {
+      get { return member_; }
+    }
+    public int MemberCount {
+      get { return member_.Count; }
+    }
+    public global::D3.PartyMessage.EnterGamePartyMember GetMember(int index) {
+      return member_[index];
+    }
+    
+    public const int RequesterIndexFieldNumber = 2;
+    private bool hasRequesterIndex;
+    private int requesterIndex_;
+    public bool HasRequesterIndex {
+      get { return hasRequesterIndex; }
+    }
+    public int RequesterIndex {
+      get { return requesterIndex_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        foreach (global::D3.PartyMessage.EnterGamePartyMember element in MemberList) {
+          if (!element.IsInitialized) return false;
+        }
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _enterGamePartyMemberListFieldNames;
+      if (member_.Count > 0) {
+        output.WriteMessageArray(1, field_names[0], member_);
+      }
+      if (hasRequesterIndex) {
+        output.WriteInt32(2, field_names[1], RequesterIndex);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        foreach (global::D3.PartyMessage.EnterGamePartyMember element in MemberList) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, element);
+        }
+        if (hasRequesterIndex) {
+          size += pb::CodedOutputStream.ComputeInt32Size(2, RequesterIndex);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static EnterGamePartyMemberList ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static EnterGamePartyMemberList ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static EnterGamePartyMemberList ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static EnterGamePartyMemberList ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static EnterGamePartyMemberList ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static EnterGamePartyMemberList ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static EnterGamePartyMemberList ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static EnterGamePartyMemberList ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static EnterGamePartyMemberList ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static EnterGamePartyMemberList ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private EnterGamePartyMemberList MakeReadOnly() {
+      member_.MakeReadOnly();
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(EnterGamePartyMemberList prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<EnterGamePartyMemberList, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(EnterGamePartyMemberList cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private EnterGamePartyMemberList result;
+      
+      private EnterGamePartyMemberList PrepareBuilder() {
+        if (resultIsReadOnly) {
+          EnterGamePartyMemberList original = result;
+          result = new EnterGamePartyMemberList();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override EnterGamePartyMemberList MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::D3.PartyMessage.EnterGamePartyMemberList.Descriptor; }
+      }
+      
+      public override EnterGamePartyMemberList DefaultInstanceForType {
+        get { return global::D3.PartyMessage.EnterGamePartyMemberList.DefaultInstance; }
+      }
+      
+      public override EnterGamePartyMemberList BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is EnterGamePartyMemberList) {
+          return MergeFrom((EnterGamePartyMemberList) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(EnterGamePartyMemberList other) {
+        if (other == global::D3.PartyMessage.EnterGamePartyMemberList.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.member_.Count != 0) {
+          result.member_.Add(other.member_);
+        }
+        if (other.HasRequesterIndex) {
+          RequesterIndex = other.RequesterIndex;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_enterGamePartyMemberListFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _enterGamePartyMemberListFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              input.ReadMessageArray(tag, field_name, result.member_, global::D3.PartyMessage.EnterGamePartyMember.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 16: {
+              result.hasRequesterIndex = input.ReadInt32(ref result.requesterIndex_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public pbc::IPopsicleList<global::D3.PartyMessage.EnterGamePartyMember> MemberList {
+        get { return PrepareBuilder().member_; }
+      }
+      public int MemberCount {
+        get { return result.MemberCount; }
+      }
+      public global::D3.PartyMessage.EnterGamePartyMember GetMember(int index) {
+        return result.GetMember(index);
+      }
+      public Builder SetMember(int index, global::D3.PartyMessage.EnterGamePartyMember value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.member_[index] = value;
+        return this;
+      }
+      public Builder SetMember(int index, global::D3.PartyMessage.EnterGamePartyMember.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.member_[index] = builderForValue.Build();
+        return this;
+      }
+      public Builder AddMember(global::D3.PartyMessage.EnterGamePartyMember value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.member_.Add(value);
+        return this;
+      }
+      public Builder AddMember(global::D3.PartyMessage.EnterGamePartyMember.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.member_.Add(builderForValue.Build());
+        return this;
+      }
+      public Builder AddRangeMember(scg::IEnumerable<global::D3.PartyMessage.EnterGamePartyMember> values) {
+        PrepareBuilder();
+        result.member_.Add(values);
+        return this;
+      }
+      public Builder ClearMember() {
+        PrepareBuilder();
+        result.member_.Clear();
+        return this;
+      }
+      
+      public bool HasRequesterIndex {
+        get { return result.hasRequesterIndex; }
+      }
+      public int RequesterIndex {
+        get { return result.RequesterIndex; }
+        set { SetRequesterIndex(value); }
+      }
+      public Builder SetRequesterIndex(int value) {
+        PrepareBuilder();
+        result.hasRequesterIndex = true;
+        result.requesterIndex_ = value;
+        return this;
+      }
+      public Builder ClearRequesterIndex() {
+        PrepareBuilder();
+        result.hasRequesterIndex = false;
+        result.requesterIndex_ = 0;
+        return this;
+      }
+    }
+    static EnterGamePartyMemberList() {
       object.ReferenceEquals(global::D3.PartyMessage.PartyMessage.Descriptor, null);
     }
   }

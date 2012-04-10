@@ -66,52 +66,52 @@ namespace bnet.protocol.user_manager {
             "ZFJlY2VudFBsYXllcnNSZXNwb25zZRI/Cg1wbGF5ZXJzX2FkZGVkGAEgAygL" + 
             "MiguYm5ldC5wcm90b2NvbC51c2VyX21hbmFnZXIuUmVjZW50UGxheWVyEhcK" + 
             "D3BsYXllcnNfcmVtb3ZlZBgDIAMoByI1ChpDbGVhclJlY2VudFBsYXllcnNS" + 
-            "ZXNwb25zZRIXCg9wbGF5ZXJzX3JlbW92ZWQYASADKAciawoSQmxvY2tFbnRp" + 
+            "ZXNwb25zZRIXCg9wbGF5ZXJzX3JlbW92ZWQYASADKAcieQoSQmxvY2tFbnRp" + 
             "dHlSZXF1ZXN0EikKCGFnZW50X2lkGAEgASgLMhcuYm5ldC5wcm90b2NvbC5F" + 
             "bnRpdHlJZBIqCgl0YXJnZXRfaWQYAiACKAsyFy5ibmV0LnByb3RvY29sLkVu" + 
-            "dGl0eUlkIm0KFFVuYmxvY2tFbnRpdHlSZXF1ZXN0EikKCGFnZW50X2lkGAEg" + 
-            "ASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBIqCgl0YXJnZXRfaWQYAiAC" + 
-            "KAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkIpABChlFbnRpdHlCbG9ja2Vk" + 
-            "Tm90aWZpY2F0aW9uEkEKDmJsb2NrZWRfZW50aXR5GAEgAigLMikuYm5ldC5w" + 
-            "cm90b2NvbC51c2VyX21hbmFnZXIuQmxvY2tlZEVudGl0eRIwCg9nYW1lX2Fj" + 
-            "Y291bnRfaWQYAiABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkIpQBChtF" + 
-            "bnRpdHlVbmJsb2NrZWROb3RpZmljYXRpb24SQwoQdW5ibG9ja2VkX2VudGl0" + 
-            "eRgBIAIoCzIpLmJuZXQucHJvdG9jb2wudXNlcl9tYW5hZ2VyLkJsb2NrZWRF" + 
-            "bnRpdHkSMAoPZ2FtZV9hY2NvdW50X2lkGAIgASgLMhcuYm5ldC5wcm90b2Nv" + 
-            "bC5FbnRpdHlJZCJhCh5SZWNlbnRQbGF5ZXJzQWRkZWROb3RpZmljYXRpb24S" + 
-            "PwoNYWRkZWRfcGxheWVycxgBIAMoCzIoLmJuZXQucHJvdG9jb2wudXNlcl9t" + 
-            "YW5hZ2VyLlJlY2VudFBsYXllciJlCiBSZWNlbnRQbGF5ZXJzUmVtb3ZlZE5v" + 
-            "dGlmaWNhdGlvbhJBCg9yZW1vdmVkX3BsYXllcnMYASADKAsyKC5ibmV0LnBy" + 
-            "b3RvY29sLnVzZXJfbWFuYWdlci5SZWNlbnRQbGF5ZXIyhgYKElVzZXJNYW5h" + 
-            "Z2VyU2VydmljZRKVAQoWU3Vic2NyaWJlVG9Vc2VyTWFuYWdlchI5LmJuZXQu" + 
-            "cHJvdG9jb2wudXNlcl9tYW5hZ2VyLlN1YnNjcmliZVRvVXNlck1hbmFnZXJS" + 
-            "ZXF1ZXN0GjouYm5ldC5wcm90b2NvbC51c2VyX21hbmFnZXIuU3Vic2NyaWJl" + 
-            "VG9Vc2VyTWFuYWdlclJlc3BvbnNlIgSAtRgBEoMBChBBZGRSZWNlbnRQbGF5" + 
-            "ZXJzEjMuYm5ldC5wcm90b2NvbC51c2VyX21hbmFnZXIuQWRkUmVjZW50UGxh" + 
-            "eWVyc1JlcXVlc3QaNC5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdlci5BZGRS" + 
-            "ZWNlbnRQbGF5ZXJzUmVzcG9uc2UiBIC1GAoSaQoSQ2xlYXJSZWNlbnRQbGF5" + 
-            "ZXJzEhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEaNi5ibmV0LnByb3RvY29sLnVz" + 
-            "ZXJfbWFuYWdlci5DbGVhclJlY2VudFBsYXllcnNSZXNwb25zZSIEgLUYCxJa" + 
-            "CgtCbG9ja0VudGl0eRIuLmJuZXQucHJvdG9jb2wudXNlcl9tYW5hZ2VyLkJs" + 
-            "b2NrRW50aXR5UmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgU" + 
-            "El4KDVVuYmxvY2tFbnRpdHkSMC5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdl" + 
-            "ci5VbmJsb2NrRW50aXR5UmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRh" + 
-            "IgSAtRgVEmQKFUJsb2NrRW50aXR5Rm9yU2Vzc2lvbhIuLmJuZXQucHJvdG9j" + 
-            "b2wudXNlcl9tYW5hZ2VyLkJsb2NrRW50aXR5UmVxdWVzdBoVLmJuZXQucHJv" + 
-            "dG9jb2wuTm9EYXRhIgSAtRgoEkUKDUxvYWRCbG9ja0xpc3QSFy5ibmV0LnBy" + 
-            "b3RvY29sLkVudGl0eUlkGhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GDIy" + 
-            "7wMKEVVzZXJNYW5hZ2VyTm90aWZ5Em4KE05vdGlmeUVudGl0eUJsb2NrZWQS" + 
-            "NS5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdlci5FbnRpdHlCbG9ja2VkTm90" + 
-            "aWZpY2F0aW9uGhouYm5ldC5wcm90b2NvbC5OT19SRVNQT05TRSIEgLUYARJy" + 
-            "ChVOb3RpZnlFbnRpdHlVbmJsb2NrZWQSNy5ibmV0LnByb3RvY29sLnVzZXJf" + 
-            "bWFuYWdlci5FbnRpdHlVbmJsb2NrZWROb3RpZmljYXRpb24aGi5ibmV0LnBy" + 
-            "b3RvY29sLk5PX1JFU1BPTlNFIgSAtRgCEngKGE5vdGlmeVJlY2VudFBsYXll" + 
-            "cnNBZGRlZBI6LmJuZXQucHJvdG9jb2wudXNlcl9tYW5hZ2VyLlJlY2VudFBs" + 
-            "YXllcnNBZGRlZE5vdGlmaWNhdGlvbhoaLmJuZXQucHJvdG9jb2wuTk9fUkVT" + 
-            "UE9OU0UiBIC1GAsSfAoaTm90aWZ5UmVjZW50UGxheWVyc1JlbW92ZWQSPC5i" + 
-            "bmV0LnByb3RvY29sLnVzZXJfbWFuYWdlci5SZWNlbnRQbGF5ZXJzUmVtb3Zl" + 
-            "ZE5vdGlmaWNhdGlvbhoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1" + 
-            "GAxCA4ABAA==");
+            "dGl0eUlkEgwKBHJvbGUYAyABKA0ibQoUVW5ibG9ja0VudGl0eVJlcXVlc3QS" + 
+            "KQoIYWdlbnRfaWQYASABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEioK" + 
+            "CXRhcmdldF9pZBgCIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQikAEK" + 
+            "GUVudGl0eUJsb2NrZWROb3RpZmljYXRpb24SQQoOYmxvY2tlZF9lbnRpdHkY" + 
+            "ASACKAsyKS5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdlci5CbG9ja2VkRW50" + 
+            "aXR5EjAKD2dhbWVfYWNjb3VudF9pZBgCIAEoCzIXLmJuZXQucHJvdG9jb2wu" + 
+            "RW50aXR5SWQilAEKG0VudGl0eVVuYmxvY2tlZE5vdGlmaWNhdGlvbhJDChB1" + 
+            "bmJsb2NrZWRfZW50aXR5GAEgAigLMikuYm5ldC5wcm90b2NvbC51c2VyX21h" + 
+            "bmFnZXIuQmxvY2tlZEVudGl0eRIwCg9nYW1lX2FjY291bnRfaWQYAiABKAsy" + 
+            "Fy5ibmV0LnByb3RvY29sLkVudGl0eUlkImEKHlJlY2VudFBsYXllcnNBZGRl" + 
+            "ZE5vdGlmaWNhdGlvbhI/Cg1hZGRlZF9wbGF5ZXJzGAEgAygLMiguYm5ldC5w" + 
+            "cm90b2NvbC51c2VyX21hbmFnZXIuUmVjZW50UGxheWVyImUKIFJlY2VudFBs" + 
+            "YXllcnNSZW1vdmVkTm90aWZpY2F0aW9uEkEKD3JlbW92ZWRfcGxheWVycxgB" + 
+            "IAMoCzIoLmJuZXQucHJvdG9jb2wudXNlcl9tYW5hZ2VyLlJlY2VudFBsYXll" + 
+            "cjKGBgoSVXNlck1hbmFnZXJTZXJ2aWNlEpUBChZTdWJzY3JpYmVUb1VzZXJN" + 
+            "YW5hZ2VyEjkuYm5ldC5wcm90b2NvbC51c2VyX21hbmFnZXIuU3Vic2NyaWJl" + 
+            "VG9Vc2VyTWFuYWdlclJlcXVlc3QaOi5ibmV0LnByb3RvY29sLnVzZXJfbWFu" + 
+            "YWdlci5TdWJzY3JpYmVUb1VzZXJNYW5hZ2VyUmVzcG9uc2UiBIC1GAESgwEK" + 
+            "EEFkZFJlY2VudFBsYXllcnMSMy5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdl" + 
+            "ci5BZGRSZWNlbnRQbGF5ZXJzUmVxdWVzdBo0LmJuZXQucHJvdG9jb2wudXNl" + 
+            "cl9tYW5hZ2VyLkFkZFJlY2VudFBsYXllcnNSZXNwb25zZSIEgLUYChJpChJD" + 
+            "bGVhclJlY2VudFBsYXllcnMSFS5ibmV0LnByb3RvY29sLk5vRGF0YRo2LmJu" + 
+            "ZXQucHJvdG9jb2wudXNlcl9tYW5hZ2VyLkNsZWFyUmVjZW50UGxheWVyc1Jl" + 
+            "c3BvbnNlIgSAtRgLEloKC0Jsb2NrRW50aXR5Ei4uYm5ldC5wcm90b2NvbC51" + 
+            "c2VyX21hbmFnZXIuQmxvY2tFbnRpdHlSZXF1ZXN0GhUuYm5ldC5wcm90b2Nv" + 
+            "bC5Ob0RhdGEiBIC1GBQSXgoNVW5ibG9ja0VudGl0eRIwLmJuZXQucHJvdG9j" + 
+            "b2wudXNlcl9tYW5hZ2VyLlVuYmxvY2tFbnRpdHlSZXF1ZXN0GhUuYm5ldC5w" + 
+            "cm90b2NvbC5Ob0RhdGEiBIC1GBUSZAoVQmxvY2tFbnRpdHlGb3JTZXNzaW9u" + 
+            "Ei4uYm5ldC5wcm90b2NvbC51c2VyX21hbmFnZXIuQmxvY2tFbnRpdHlSZXF1" + 
+            "ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GCgSRQoNTG9hZEJsb2Nr" + 
+            "TGlzdBIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQaFS5ibmV0LnByb3RvY29s" + 
+            "Lk5vRGF0YSIEgLUYMjLvAwoRVXNlck1hbmFnZXJOb3RpZnkSbgoTTm90aWZ5" + 
+            "RW50aXR5QmxvY2tlZBI1LmJuZXQucHJvdG9jb2wudXNlcl9tYW5hZ2VyLkVu" + 
+            "dGl0eUJsb2NrZWROb3RpZmljYXRpb24aGi5ibmV0LnByb3RvY29sLk5PX1JF" + 
+            "U1BPTlNFIgSAtRgBEnIKFU5vdGlmeUVudGl0eVVuYmxvY2tlZBI3LmJuZXQu" + 
+            "cHJvdG9jb2wudXNlcl9tYW5hZ2VyLkVudGl0eVVuYmxvY2tlZE5vdGlmaWNh" + 
+            "dGlvbhoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAISeAoYTm90" + 
+            "aWZ5UmVjZW50UGxheWVyc0FkZGVkEjouYm5ldC5wcm90b2NvbC51c2VyX21h" + 
+            "bmFnZXIuUmVjZW50UGxheWVyc0FkZGVkTm90aWZpY2F0aW9uGhouYm5ldC5w" + 
+            "cm90b2NvbC5OT19SRVNQT05TRSIEgLUYCxJ8ChpOb3RpZnlSZWNlbnRQbGF5" + 
+            "ZXJzUmVtb3ZlZBI8LmJuZXQucHJvdG9jb2wudXNlcl9tYW5hZ2VyLlJlY2Vu" + 
+            "dFBsYXllcnNSZW1vdmVkTm90aWZpY2F0aW9uGhouYm5ldC5wcm90b2NvbC5O" + 
+            "T19SRVNQT05TRSIEgLUYDEIDgAEA");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_user_manager_SubscribeToUserManagerRequest__Descriptor = Descriptor.MessageTypes[0];
@@ -137,7 +137,7 @@ namespace bnet.protocol.user_manager {
           internal__static_bnet_protocol_user_manager_BlockEntityRequest__Descriptor = Descriptor.MessageTypes[5];
           internal__static_bnet_protocol_user_manager_BlockEntityRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.BlockEntityRequest, global::bnet.protocol.user_manager.BlockEntityRequest.Builder>(internal__static_bnet_protocol_user_manager_BlockEntityRequest__Descriptor,
-                  new string[] { "AgentId", "TargetId", });
+                  new string[] { "AgentId", "TargetId", "Role", });
           internal__static_bnet_protocol_user_manager_UnblockEntityRequest__Descriptor = Descriptor.MessageTypes[6];
           internal__static_bnet_protocol_user_manager_UnblockEntityRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.UnblockEntityRequest, global::bnet.protocol.user_manager.UnblockEntityRequest.Builder>(internal__static_bnet_protocol_user_manager_UnblockEntityRequest__Descriptor,
@@ -1940,8 +1940,8 @@ namespace bnet.protocol.user_manager {
   public sealed partial class BlockEntityRequest : pb::GeneratedMessage<BlockEntityRequest, BlockEntityRequest.Builder> {
     private BlockEntityRequest() { }
     private static readonly BlockEntityRequest defaultInstance = new BlockEntityRequest().MakeReadOnly();
-    private static readonly string[] _blockEntityRequestFieldNames = new string[] { "agent_id", "target_id" };
-    private static readonly uint[] _blockEntityRequestFieldTags = new uint[] { 10, 18 };
+    private static readonly string[] _blockEntityRequestFieldNames = new string[] { "agent_id", "role", "target_id" };
+    private static readonly uint[] _blockEntityRequestFieldTags = new uint[] { 10, 24, 18 };
     public static BlockEntityRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1982,6 +1982,16 @@ namespace bnet.protocol.user_manager {
       get { return targetId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
+    public const int RoleFieldNumber = 3;
+    private bool hasRole;
+    private uint role_;
+    public bool HasRole {
+      get { return hasRole; }
+    }
+    public uint Role {
+      get { return role_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasTargetId) return false;
@@ -2000,7 +2010,10 @@ namespace bnet.protocol.user_manager {
         output.WriteMessage(1, field_names[0], AgentId);
       }
       if (hasTargetId) {
-        output.WriteMessage(2, field_names[1], TargetId);
+        output.WriteMessage(2, field_names[2], TargetId);
+      }
+      if (hasRole) {
+        output.WriteUInt32(3, field_names[1], Role);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2017,6 +2030,9 @@ namespace bnet.protocol.user_manager {
         }
         if (hasTargetId) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, TargetId);
+        }
+        if (hasRole) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(3, Role);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2150,6 +2166,9 @@ namespace bnet.protocol.user_manager {
         if (other.HasTargetId) {
           MergeTargetId(other.TargetId);
         }
+        if (other.HasRole) {
+          Role = other.Role;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -2209,6 +2228,10 @@ namespace bnet.protocol.user_manager {
               }
               input.ReadMessage(subBuilder, extensionRegistry);
               TargetId = subBuilder.BuildPartial();
+              break;
+            }
+            case 24: {
+              result.hasRole = input.ReadUInt32(ref result.role_);
               break;
             }
           }
@@ -2298,6 +2321,26 @@ namespace bnet.protocol.user_manager {
         PrepareBuilder();
         result.hasTargetId = false;
         result.targetId_ = null;
+        return this;
+      }
+      
+      public bool HasRole {
+        get { return result.hasRole; }
+      }
+      public uint Role {
+        get { return result.Role; }
+        set { SetRole(value); }
+      }
+      public Builder SetRole(uint value) {
+        PrepareBuilder();
+        result.hasRole = true;
+        result.role_ = value;
+        return this;
+      }
+      public Builder ClearRole() {
+        PrepareBuilder();
+        result.hasRole = false;
+        result.role_ = 0;
         return this;
       }
     }
