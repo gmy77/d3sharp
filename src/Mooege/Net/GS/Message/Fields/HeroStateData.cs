@@ -26,7 +26,7 @@ namespace Mooege.Net.GS.Message.Fields
         public int Field1;
         public int Field2;
         public int Field3;
-        public int Gender;
+        public int PlayerFlags;
         public PlayerSavedData PlayerSavedData;
         public int QuestRewardHistoryEntriesCount;
         // MaxLength = 100
@@ -38,7 +38,7 @@ namespace Mooege.Net.GS.Message.Fields
             Field1 = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(32);
             Field3 = buffer.ReadInt(32);
-            Gender = buffer.ReadInt(30);
+            PlayerFlags = buffer.ReadInt(30);
             PlayerSavedData = new PlayerSavedData();
             PlayerSavedData.Parse(buffer);
             QuestRewardHistoryEntriesCount = buffer.ReadInt(32);
@@ -56,7 +56,7 @@ namespace Mooege.Net.GS.Message.Fields
             buffer.WriteInt(32, Field1);
             buffer.WriteInt(32, Field2);
             buffer.WriteInt(32, Field3);
-            buffer.WriteInt(30, Gender);
+            buffer.WriteInt(30, PlayerFlags);
             PlayerSavedData.Encode(buffer);
             buffer.WriteInt(32, QuestRewardHistoryEntriesCount);
             buffer.WriteInt(7, tQuestRewardHistory.Length);
@@ -81,7 +81,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
             b.Append(' ', pad);
-            b.AppendLine("Gender: 0x" + Gender.ToString("X8") + " (" + Gender + ")");
+            b.AppendLine("PlayerFlags: 0x" + PlayerFlags.ToString("X8") + " (" + PlayerFlags + ")");
             PlayerSavedData.AsText(b, pad);
             b.Append(' ', pad);
             b.AppendLine("QuestRewardHistoryEntriesCount: 0x" + QuestRewardHistoryEntriesCount.ToString("X8") + " (" + QuestRewardHistoryEntriesCount + ")");

@@ -56,8 +56,9 @@ message GenericRequest
     optional .bnet.protocol.EntityId agent_id = 1;
     optional .bnet.protocol.EntityId target_id = 2;
     required fixed64 invitation_id = 3;
-    optional string display_name = 4;
-    repeated uint32 previous_role = 5 [packed=true];
-    repeated uint32 desired_role = 6 [packed=true];
+    optional string invitee_name = 4;
+    optional string inviter_name = 5;
+    repeated uint32 previous_role = 6 [packed=true];
+    repeated uint32 desired_role = 7 [packed=true];
 }
 

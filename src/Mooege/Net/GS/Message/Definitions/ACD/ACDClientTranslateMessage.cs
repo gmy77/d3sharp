@@ -31,6 +31,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public float Speed;
         public int AnimationTag;
         public int Field6;
+        public int? Field7;
 
         public override void Parse(GameBitBuffer buffer)
         {
@@ -42,6 +43,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             Speed = buffer.ReadFloat32();
             AnimationTag = buffer.ReadInt(32);
             Field6 = buffer.ReadInt(21) + (-1);
+            if(buffer.ReadBool())
+                Field7 = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -53,6 +56,8 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             buffer.WriteFloat32(Speed);
             buffer.WriteInt(32, AnimationTag);
             buffer.WriteInt(21, Field6 - (-1));
+            if(Field7.HasValue)
+                buffer.WriteInt(32, Field7.Value);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -68,6 +73,10 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.Append(' ', pad); b.AppendLine("Field4: " + Speed.ToString("G"));
             b.Append(' ', pad); b.AppendLine("Field5: 0x" + AnimationTag.ToString("X8") + " (" + AnimationTag + ")");
             b.Append(' ', pad); b.AppendLine("Field6: 0x" + Field6.ToString("X8") + " (" + Field6 + ")");
+            if (Field7.HasValue)
+            {
+                b.Append(' ', pad); b.AppendLine("Field7.Value: 0x" + Field7.Value.ToString("X8") + " (" + Field7.Value + ")");
+            }
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

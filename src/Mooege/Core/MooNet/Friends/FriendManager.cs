@@ -48,6 +48,25 @@ namespace Mooege.Core.MooNet.Friends
             LoadFriendships();
         }
 
+        public static bool AreFriends(Account account1, Account account2)
+        {
+            foreach (var friend in Friends[account1.BnetEntityId.Low])
+            {
+                if (friend.Id.Low == account2.BnetEntityId.Low)
+                    return true;
+            }
+            return false;
+        }
+
+        public static bool InvitationExists(Account inviter, Account invitee)
+        {
+            foreach (var invitation in OnGoingInvitations.Values)
+            {
+                if ((invitation.InviterIdentity.AccountId == inviter.BnetEntityId) && (invitation.InviteeIdentity.AccountId == invitee.BnetEntityId))
+                    return true;
+            }
+            return false;
+        }
         public static void HandleInvitation(MooNetClient client, bnet.protocol.invitation.Invitation invitation)
         {
             var invitee = AccountManager.GetAccountByPersistentID(invitation.InviteeIdentity.AccountId.Low);

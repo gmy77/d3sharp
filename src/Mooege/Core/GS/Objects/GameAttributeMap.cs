@@ -67,8 +67,6 @@ namespace Mooege.Core.GS.Objects
             _parent = parent;
         }
 
-
-
         #region message broadcasting
 
         public void SendMessage(GameClient client)

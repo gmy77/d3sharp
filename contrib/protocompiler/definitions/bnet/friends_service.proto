@@ -76,19 +76,19 @@ message UpdateFriendStateRequest
 message FriendNotification
 {
     required .bnet.protocol.friends.Friend target = 1;
-    required .bnet.protocol.EntityId game_account_id = 2;
+    optional .bnet.protocol.EntityId game_account_id = 2;
 }
 
 message UpdateFriendStateNotification
 {
     required .bnet.protocol.friends.Friend changed_friend = 1;
-    required .bnet.protocol.EntityId game_account_id = 2;
+    optional .bnet.protocol.EntityId game_account_id = 2;
 }
 
 message InvitationNotification
 {
     required .bnet.protocol.invitation.Invitation invitation = 1;
-    required .bnet.protocol.EntityId game_account_id = 2;
+    optional .bnet.protocol.EntityId game_account_id = 2;
     optional uint32 reason = 3 [default = 0];
 }
 

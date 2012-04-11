@@ -27,16 +27,24 @@ namespace Mooege.Net.MooNet.Packets
         public byte[] Data { get; private set; }
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        public PacketOut(byte serviceId, uint methodId, uint token, IMessage message)
-            : this(serviceId, methodId, token, 0x0, message)
+        public PacketOut(byte serviceId, uint methodId, uint token, IMessage message, uint status)
+            : this(serviceId, methodId, token, 0x0, message, status)
         {
         }
 
-        public PacketOut(byte serviceId, uint methodId, uint token, ulong objectId, IMessage message)
+        public PacketOut(byte serviceId, uint methodId, uint token, ulong objectId, IMessage message, uint status = 0)
         {
-            var builder = bnet.protocol.Header.CreateBuilder()
-                .SetServiceId(serviceId)
-                .SetToken(token) // requestId.
+            var builder = bnet.protocol.Header.CreateBuilder();
+
+            if (status > 0)
+            {
+                builder.SetServiceId(MooNetRouter.ServiceReply)
+                    .SetStatus(status);
+            }
+            else
+                builder.SetServiceId(serviceId);
+
+            builder.SetToken(token) // requestId.
                 .SetSize((uint)message.SerializedSize);
 
             if (serviceId != MooNetRouter.ServiceReply)

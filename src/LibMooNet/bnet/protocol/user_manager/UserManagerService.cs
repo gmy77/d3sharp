@@ -20,8 +20,6 @@ namespace bnet.protocol.user_manager {
       }
       #endregion
       #region Static variables
-      internal static pbd::MessageDescriptor internal__static_bnet_protocol_user_manager_RecentPlayer__Descriptor;
-      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.RecentPlayer, global::bnet.protocol.user_manager.RecentPlayer.Builder> internal__static_bnet_protocol_user_manager_RecentPlayer__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_user_manager_SubscribeToUserManagerRequest__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.SubscribeToUserManagerRequest, global::bnet.protocol.user_manager.SubscribeToUserManagerRequest.Builder> internal__static_bnet_protocol_user_manager_SubscribeToUserManagerRequest__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_user_manager_SubscribeToUserManagerResponse__Descriptor;
@@ -34,14 +32,8 @@ namespace bnet.protocol.user_manager {
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.ClearRecentPlayersResponse, global::bnet.protocol.user_manager.ClearRecentPlayersResponse.Builder> internal__static_bnet_protocol_user_manager_ClearRecentPlayersResponse__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_user_manager_BlockEntityRequest__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.BlockEntityRequest, global::bnet.protocol.user_manager.BlockEntityRequest.Builder> internal__static_bnet_protocol_user_manager_BlockEntityRequest__FieldAccessorTable;
-      internal static pbd::MessageDescriptor internal__static_bnet_protocol_user_manager_BlockEntityResponse__Descriptor;
-      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.BlockEntityResponse, global::bnet.protocol.user_manager.BlockEntityResponse.Builder> internal__static_bnet_protocol_user_manager_BlockEntityResponse__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_user_manager_UnblockEntityRequest__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.UnblockEntityRequest, global::bnet.protocol.user_manager.UnblockEntityRequest.Builder> internal__static_bnet_protocol_user_manager_UnblockEntityRequest__FieldAccessorTable;
-      internal static pbd::MessageDescriptor internal__static_bnet_protocol_user_manager_UnblockEntityResponse__Descriptor;
-      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.UnblockEntityResponse, global::bnet.protocol.user_manager.UnblockEntityResponse.Builder> internal__static_bnet_protocol_user_manager_UnblockEntityResponse__FieldAccessorTable;
-      internal static pbd::MessageDescriptor internal__static_bnet_protocol_user_manager_ClearBlockListResponse__Descriptor;
-      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.ClearBlockListResponse, global::bnet.protocol.user_manager.ClearBlockListResponse.Builder> internal__static_bnet_protocol_user_manager_ClearBlockListResponse__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_user_manager_EntityBlockedNotification__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.EntityBlockedNotification, global::bnet.protocol.user_manager.EntityBlockedNotification.Builder> internal__static_bnet_protocol_user_manager_EntityBlockedNotification__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_user_manager_EntityUnblockedNotification__Descriptor;
@@ -60,143 +52,125 @@ namespace bnet.protocol.user_manager {
       static UserManagerService() {
         byte[] descriptorData = global::System.Convert.FromBase64String(
             "Ch9ibmV0L3VzZXJfbWFuYWdlcl9zZXJ2aWNlLnByb3RvEhpibmV0LnByb3Rv" + 
-            "Y29sLnVzZXJfbWFuYWdlchoUYm5ldC9hdHRyaWJ1dGUucHJvdG8aEWJuZXQv" + 
-            "ZW50aXR5LnByb3RvGg5ibmV0L3JwYy5wcm90byLAAQoMUmVjZW50UGxheWVy" + 
-            "EicKBmVudGl0eRgBIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSEgoK" + 
-            "cHJvZ3JhbV9pZBgCIAEoCRIYChB0aW1lc3RhbXBfcGxheWVkGAMgASgGEjYK" + 
-            "CmF0dHJpYnV0ZXMYBCADKAsyIi5ibmV0LnByb3RvY29sLmF0dHJpYnV0ZS5B" + 
-            "dHRyaWJ1dGUSDQoCaWQYBSABKAc6ATASEgoHY291bnRlchgGIAEoBzoBMCIy" + 
-            "Ch1TdWJzY3JpYmVUb1VzZXJNYW5hZ2VyUmVxdWVzdBIRCglvYmplY3RfaWQY" + 
-            "ASACKAQiiwEKHlN1YnNjcmliZVRvVXNlck1hbmFnZXJSZXNwb25zZRInCgZi" + 
-            "bG9ja3MYASADKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEkAKDnJlY2Vu" + 
-            "dF9wbGF5ZXJzGAIgAygLMiguYm5ldC5wcm90b2NvbC51c2VyX21hbmFnZXIu" + 
-            "UmVjZW50UGxheWVyIlQKF0FkZFJlY2VudFBsYXllcnNSZXF1ZXN0EjkKB3Bs" + 
-            "YXllcnMYASADKAsyKC5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdlci5SZWNl" + 
-            "bnRQbGF5ZXIidAoYQWRkUmVjZW50UGxheWVyc1Jlc3BvbnNlEj8KDXBsYXll" + 
-            "cnNfYWRkZWQYASADKAsyKC5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdlci5S" + 
-            "ZWNlbnRQbGF5ZXISFwoPcGxheWVyc19yZW1vdmVkGAMgAygHIjUKGkNsZWFy" + 
-            "UmVjZW50UGxheWVyc1Jlc3BvbnNlEhcKD3BsYXllcnNfcmVtb3ZlZBgBIAMo" + 
-            "ByI9ChJCbG9ja0VudGl0eVJlcXVlc3QSJwoGZW50aXR5GAEgAigLMhcuYm5l" + 
-            "dC5wcm90b2NvbC5FbnRpdHlJZCJGChNCbG9ja0VudGl0eVJlc3BvbnNlEi8K" + 
-            "DmJsb2NrZWRfZW50aXR5GAEgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJ" + 
-            "ZCI/ChRVbmJsb2NrRW50aXR5UmVxdWVzdBInCgZlbnRpdHkYASACKAsyFy5i" + 
-            "bmV0LnByb3RvY29sLkVudGl0eUlkIkoKFVVuYmxvY2tFbnRpdHlSZXNwb25z" + 
-            "ZRIxChB1bmJsb2NrZWRfZW50aXR5GAEgASgLMhcuYm5ldC5wcm90b2NvbC5F" + 
-            "bnRpdHlJZCJLChZDbGVhckJsb2NrTGlzdFJlc3BvbnNlEjEKEHVuYmxvY2tl" + 
-            "ZF9lbnRpdHkYASADKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkIk4KGUVu" + 
-            "dGl0eUJsb2NrZWROb3RpZmljYXRpb24SMQoQYmxvY2tlZF9lbnRpdGllcxgB" + 
-            "IAMoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQiUgobRW50aXR5VW5ibG9j" + 
-            "a2VkTm90aWZpY2F0aW9uEjMKEnVuYmxvY2tlZF9lbnRpdGllcxgBIAMoCzIX" + 
-            "LmJuZXQucHJvdG9jb2wuRW50aXR5SWQiYQoeUmVjZW50UGxheWVyc0FkZGVk" + 
-            "Tm90aWZpY2F0aW9uEj8KDWFkZGVkX3BsYXllcnMYASADKAsyKC5ibmV0LnBy" + 
-            "b3RvY29sLnVzZXJfbWFuYWdlci5SZWNlbnRQbGF5ZXIiZQogUmVjZW50UGxh" + 
-            "eWVyc1JlbW92ZWROb3RpZmljYXRpb24SQQoPcmVtb3ZlZF9wbGF5ZXJzGAEg" + 
-            "AygLMiguYm5ldC5wcm90b2NvbC51c2VyX21hbmFnZXIuUmVjZW50UGxheWVy" + 
-            "Mp8HChJVc2VyTWFuYWdlclNlcnZpY2USlQEKFlN1YnNjcmliZVRvVXNlck1h" + 
-            "bmFnZXISOS5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdlci5TdWJzY3JpYmVU" + 
-            "b1VzZXJNYW5hZ2VyUmVxdWVzdBo6LmJuZXQucHJvdG9jb2wudXNlcl9tYW5h" + 
-            "Z2VyLlN1YnNjcmliZVRvVXNlck1hbmFnZXJSZXNwb25zZSIEgLUYARKDAQoQ" + 
-            "QWRkUmVjZW50UGxheWVycxIzLmJuZXQucHJvdG9jb2wudXNlcl9tYW5hZ2Vy" + 
-            "LkFkZFJlY2VudFBsYXllcnNSZXF1ZXN0GjQuYm5ldC5wcm90b2NvbC51c2Vy" + 
-            "X21hbmFnZXIuQWRkUmVjZW50UGxheWVyc1Jlc3BvbnNlIgSAtRgKEmkKEkNs" + 
-            "ZWFyUmVjZW50UGxheWVycxIVLmJuZXQucHJvdG9jb2wuTm9EYXRhGjYuYm5l" + 
-            "dC5wcm90b2NvbC51c2VyX21hbmFnZXIuQ2xlYXJSZWNlbnRQbGF5ZXJzUmVz" + 
-            "cG9uc2UiBIC1GAsSdAoLQmxvY2tFbnRpdHkSLi5ibmV0LnByb3RvY29sLnVz" + 
-            "ZXJfbWFuYWdlci5CbG9ja0VudGl0eVJlcXVlc3QaLy5ibmV0LnByb3RvY29s" + 
-            "LnVzZXJfbWFuYWdlci5CbG9ja0VudGl0eVJlc3BvbnNlIgSAtRgUEnoKDVVu" + 
-            "YmxvY2tFbnRpdHkSMC5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdlci5VbmJs" + 
-            "b2NrRW50aXR5UmVxdWVzdBoxLmJuZXQucHJvdG9jb2wudXNlcl9tYW5hZ2Vy" + 
-            "LlVuYmxvY2tFbnRpdHlSZXNwb25zZSIEgLUYFRJhCg5DbGVhckJsb2NrTGlz" + 
-            "dBIVLmJuZXQucHJvdG9jb2wuTm9EYXRhGjIuYm5ldC5wcm90b2NvbC51c2Vy" + 
-            "X21hbmFnZXIuQ2xlYXJCbG9ja0xpc3RSZXNwb25zZSIEgLUYFhJkChVCbG9j" + 
-            "a0VudGl0eUZvclNlc3Npb24SLi5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdl" + 
-            "ci5CbG9ja0VudGl0eVJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIE" + 
-            "gLUYKBJFCg1Mb2FkQmxvY2tMaXN0EhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJ" + 
-            "ZBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgyMu8DChFVc2VyTWFuYWdl" + 
-            "ck5vdGlmeRJuChNOb3RpZnlFbnRpdHlCbG9ja2VkEjUuYm5ldC5wcm90b2Nv" + 
-            "bC51c2VyX21hbmFnZXIuRW50aXR5QmxvY2tlZE5vdGlmaWNhdGlvbhoaLmJu" + 
-            "ZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAEScgoVTm90aWZ5RW50aXR5" + 
-            "VW5ibG9ja2VkEjcuYm5ldC5wcm90b2NvbC51c2VyX21hbmFnZXIuRW50aXR5" + 
-            "VW5ibG9ja2VkTm90aWZpY2F0aW9uGhouYm5ldC5wcm90b2NvbC5OT19SRVNQ" + 
-            "T05TRSIEgLUYAhJ4ChhOb3RpZnlSZWNlbnRQbGF5ZXJzQWRkZWQSOi5ibmV0" + 
-            "LnByb3RvY29sLnVzZXJfbWFuYWdlci5SZWNlbnRQbGF5ZXJzQWRkZWROb3Rp" + 
-            "ZmljYXRpb24aGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgLEnwK" + 
-            "Gk5vdGlmeVJlY2VudFBsYXllcnNSZW1vdmVkEjwuYm5ldC5wcm90b2NvbC51" + 
-            "c2VyX21hbmFnZXIuUmVjZW50UGxheWVyc1JlbW92ZWROb3RpZmljYXRpb24a" + 
-            "Gi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgMQgOAAQA=");
+            "Y29sLnVzZXJfbWFuYWdlchodYm5ldC91c2VyX21hbmFnZXJfdHlwZXMucHJv" + 
+            "dG8aEWJuZXQvZW50aXR5LnByb3RvGhNibmV0L3JvbGVfc2V0LnByb3RvGg5i" + 
+            "bmV0L3JwYy5wcm90byJdCh1TdWJzY3JpYmVUb1VzZXJNYW5hZ2VyUmVxdWVz" + 
+            "dBIpCghhZ2VudF9pZBgBIAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQS" + 
+            "EQoJb2JqZWN0X2lkGAIgAigEIsoBCh5TdWJzY3JpYmVUb1VzZXJNYW5hZ2Vy" + 
+            "UmVzcG9uc2USQwoQYmxvY2tlZF9lbnRpdGllcxgBIAMoCzIpLmJuZXQucHJv" + 
+            "dG9jb2wudXNlcl9tYW5hZ2VyLkJsb2NrZWRFbnRpdHkSQAoOcmVjZW50X3Bs" + 
+            "YXllcnMYAiADKAsyKC5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdlci5SZWNl" + 
+            "bnRQbGF5ZXISIQoEcm9sZRgDIAMoCzITLmJuZXQucHJvdG9jb2wuUm9sZSJU" + 
+            "ChdBZGRSZWNlbnRQbGF5ZXJzUmVxdWVzdBI5CgdwbGF5ZXJzGAEgAygLMigu" + 
+            "Ym5ldC5wcm90b2NvbC51c2VyX21hbmFnZXIuUmVjZW50UGxheWVyInQKGEFk" + 
+            "ZFJlY2VudFBsYXllcnNSZXNwb25zZRI/Cg1wbGF5ZXJzX2FkZGVkGAEgAygL" + 
+            "MiguYm5ldC5wcm90b2NvbC51c2VyX21hbmFnZXIuUmVjZW50UGxheWVyEhcK" + 
+            "D3BsYXllcnNfcmVtb3ZlZBgDIAMoByI1ChpDbGVhclJlY2VudFBsYXllcnNS" + 
+            "ZXNwb25zZRIXCg9wbGF5ZXJzX3JlbW92ZWQYASADKAcieQoSQmxvY2tFbnRp" + 
+            "dHlSZXF1ZXN0EikKCGFnZW50X2lkGAEgASgLMhcuYm5ldC5wcm90b2NvbC5F" + 
+            "bnRpdHlJZBIqCgl0YXJnZXRfaWQYAiACKAsyFy5ibmV0LnByb3RvY29sLkVu" + 
+            "dGl0eUlkEgwKBHJvbGUYAyABKA0ibQoUVW5ibG9ja0VudGl0eVJlcXVlc3QS" + 
+            "KQoIYWdlbnRfaWQYASABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEioK" + 
+            "CXRhcmdldF9pZBgCIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQikAEK" + 
+            "GUVudGl0eUJsb2NrZWROb3RpZmljYXRpb24SQQoOYmxvY2tlZF9lbnRpdHkY" + 
+            "ASACKAsyKS5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdlci5CbG9ja2VkRW50" + 
+            "aXR5EjAKD2dhbWVfYWNjb3VudF9pZBgCIAEoCzIXLmJuZXQucHJvdG9jb2wu" + 
+            "RW50aXR5SWQilAEKG0VudGl0eVVuYmxvY2tlZE5vdGlmaWNhdGlvbhJDChB1" + 
+            "bmJsb2NrZWRfZW50aXR5GAEgAigLMikuYm5ldC5wcm90b2NvbC51c2VyX21h" + 
+            "bmFnZXIuQmxvY2tlZEVudGl0eRIwCg9nYW1lX2FjY291bnRfaWQYAiABKAsy" + 
+            "Fy5ibmV0LnByb3RvY29sLkVudGl0eUlkImEKHlJlY2VudFBsYXllcnNBZGRl" + 
+            "ZE5vdGlmaWNhdGlvbhI/Cg1hZGRlZF9wbGF5ZXJzGAEgAygLMiguYm5ldC5w" + 
+            "cm90b2NvbC51c2VyX21hbmFnZXIuUmVjZW50UGxheWVyImUKIFJlY2VudFBs" + 
+            "YXllcnNSZW1vdmVkTm90aWZpY2F0aW9uEkEKD3JlbW92ZWRfcGxheWVycxgB" + 
+            "IAMoCzIoLmJuZXQucHJvdG9jb2wudXNlcl9tYW5hZ2VyLlJlY2VudFBsYXll" + 
+            "cjKGBgoSVXNlck1hbmFnZXJTZXJ2aWNlEpUBChZTdWJzY3JpYmVUb1VzZXJN" + 
+            "YW5hZ2VyEjkuYm5ldC5wcm90b2NvbC51c2VyX21hbmFnZXIuU3Vic2NyaWJl" + 
+            "VG9Vc2VyTWFuYWdlclJlcXVlc3QaOi5ibmV0LnByb3RvY29sLnVzZXJfbWFu" + 
+            "YWdlci5TdWJzY3JpYmVUb1VzZXJNYW5hZ2VyUmVzcG9uc2UiBIC1GAESgwEK" + 
+            "EEFkZFJlY2VudFBsYXllcnMSMy5ibmV0LnByb3RvY29sLnVzZXJfbWFuYWdl" + 
+            "ci5BZGRSZWNlbnRQbGF5ZXJzUmVxdWVzdBo0LmJuZXQucHJvdG9jb2wudXNl" + 
+            "cl9tYW5hZ2VyLkFkZFJlY2VudFBsYXllcnNSZXNwb25zZSIEgLUYChJpChJD" + 
+            "bGVhclJlY2VudFBsYXllcnMSFS5ibmV0LnByb3RvY29sLk5vRGF0YRo2LmJu" + 
+            "ZXQucHJvdG9jb2wudXNlcl9tYW5hZ2VyLkNsZWFyUmVjZW50UGxheWVyc1Jl" + 
+            "c3BvbnNlIgSAtRgLEloKC0Jsb2NrRW50aXR5Ei4uYm5ldC5wcm90b2NvbC51" + 
+            "c2VyX21hbmFnZXIuQmxvY2tFbnRpdHlSZXF1ZXN0GhUuYm5ldC5wcm90b2Nv" + 
+            "bC5Ob0RhdGEiBIC1GBQSXgoNVW5ibG9ja0VudGl0eRIwLmJuZXQucHJvdG9j" + 
+            "b2wudXNlcl9tYW5hZ2VyLlVuYmxvY2tFbnRpdHlSZXF1ZXN0GhUuYm5ldC5w" + 
+            "cm90b2NvbC5Ob0RhdGEiBIC1GBUSZAoVQmxvY2tFbnRpdHlGb3JTZXNzaW9u" + 
+            "Ei4uYm5ldC5wcm90b2NvbC51c2VyX21hbmFnZXIuQmxvY2tFbnRpdHlSZXF1" + 
+            "ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GCgSRQoNTG9hZEJsb2Nr" + 
+            "TGlzdBIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQaFS5ibmV0LnByb3RvY29s" + 
+            "Lk5vRGF0YSIEgLUYMjLvAwoRVXNlck1hbmFnZXJOb3RpZnkSbgoTTm90aWZ5" + 
+            "RW50aXR5QmxvY2tlZBI1LmJuZXQucHJvdG9jb2wudXNlcl9tYW5hZ2VyLkVu" + 
+            "dGl0eUJsb2NrZWROb3RpZmljYXRpb24aGi5ibmV0LnByb3RvY29sLk5PX1JF" + 
+            "U1BPTlNFIgSAtRgBEnIKFU5vdGlmeUVudGl0eVVuYmxvY2tlZBI3LmJuZXQu" + 
+            "cHJvdG9jb2wudXNlcl9tYW5hZ2VyLkVudGl0eVVuYmxvY2tlZE5vdGlmaWNh" + 
+            "dGlvbhoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAISeAoYTm90" + 
+            "aWZ5UmVjZW50UGxheWVyc0FkZGVkEjouYm5ldC5wcm90b2NvbC51c2VyX21h" + 
+            "bmFnZXIuUmVjZW50UGxheWVyc0FkZGVkTm90aWZpY2F0aW9uGhouYm5ldC5w" + 
+            "cm90b2NvbC5OT19SRVNQT05TRSIEgLUYCxJ8ChpOb3RpZnlSZWNlbnRQbGF5" + 
+            "ZXJzUmVtb3ZlZBI8LmJuZXQucHJvdG9jb2wudXNlcl9tYW5hZ2VyLlJlY2Vu" + 
+            "dFBsYXllcnNSZW1vdmVkTm90aWZpY2F0aW9uGhouYm5ldC5wcm90b2NvbC5O" + 
+            "T19SRVNQT05TRSIEgLUYDEIDgAEA");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
-          internal__static_bnet_protocol_user_manager_RecentPlayer__Descriptor = Descriptor.MessageTypes[0];
-          internal__static_bnet_protocol_user_manager_RecentPlayer__FieldAccessorTable = 
-              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.RecentPlayer, global::bnet.protocol.user_manager.RecentPlayer.Builder>(internal__static_bnet_protocol_user_manager_RecentPlayer__Descriptor,
-                  new string[] { "Entity", "ProgramId", "TimestampPlayed", "Attributes", "Id", "Counter", });
-          internal__static_bnet_protocol_user_manager_SubscribeToUserManagerRequest__Descriptor = Descriptor.MessageTypes[1];
+          internal__static_bnet_protocol_user_manager_SubscribeToUserManagerRequest__Descriptor = Descriptor.MessageTypes[0];
           internal__static_bnet_protocol_user_manager_SubscribeToUserManagerRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.SubscribeToUserManagerRequest, global::bnet.protocol.user_manager.SubscribeToUserManagerRequest.Builder>(internal__static_bnet_protocol_user_manager_SubscribeToUserManagerRequest__Descriptor,
-                  new string[] { "ObjectId", });
-          internal__static_bnet_protocol_user_manager_SubscribeToUserManagerResponse__Descriptor = Descriptor.MessageTypes[2];
+                  new string[] { "AgentId", "ObjectId", });
+          internal__static_bnet_protocol_user_manager_SubscribeToUserManagerResponse__Descriptor = Descriptor.MessageTypes[1];
           internal__static_bnet_protocol_user_manager_SubscribeToUserManagerResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.SubscribeToUserManagerResponse, global::bnet.protocol.user_manager.SubscribeToUserManagerResponse.Builder>(internal__static_bnet_protocol_user_manager_SubscribeToUserManagerResponse__Descriptor,
-                  new string[] { "Blocks", "RecentPlayers", });
-          internal__static_bnet_protocol_user_manager_AddRecentPlayersRequest__Descriptor = Descriptor.MessageTypes[3];
+                  new string[] { "BlockedEntities", "RecentPlayers", "Role", });
+          internal__static_bnet_protocol_user_manager_AddRecentPlayersRequest__Descriptor = Descriptor.MessageTypes[2];
           internal__static_bnet_protocol_user_manager_AddRecentPlayersRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.AddRecentPlayersRequest, global::bnet.protocol.user_manager.AddRecentPlayersRequest.Builder>(internal__static_bnet_protocol_user_manager_AddRecentPlayersRequest__Descriptor,
                   new string[] { "Players", });
-          internal__static_bnet_protocol_user_manager_AddRecentPlayersResponse__Descriptor = Descriptor.MessageTypes[4];
+          internal__static_bnet_protocol_user_manager_AddRecentPlayersResponse__Descriptor = Descriptor.MessageTypes[3];
           internal__static_bnet_protocol_user_manager_AddRecentPlayersResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.AddRecentPlayersResponse, global::bnet.protocol.user_manager.AddRecentPlayersResponse.Builder>(internal__static_bnet_protocol_user_manager_AddRecentPlayersResponse__Descriptor,
                   new string[] { "PlayersAdded", "PlayersRemoved", });
-          internal__static_bnet_protocol_user_manager_ClearRecentPlayersResponse__Descriptor = Descriptor.MessageTypes[5];
+          internal__static_bnet_protocol_user_manager_ClearRecentPlayersResponse__Descriptor = Descriptor.MessageTypes[4];
           internal__static_bnet_protocol_user_manager_ClearRecentPlayersResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.ClearRecentPlayersResponse, global::bnet.protocol.user_manager.ClearRecentPlayersResponse.Builder>(internal__static_bnet_protocol_user_manager_ClearRecentPlayersResponse__Descriptor,
                   new string[] { "PlayersRemoved", });
-          internal__static_bnet_protocol_user_manager_BlockEntityRequest__Descriptor = Descriptor.MessageTypes[6];
+          internal__static_bnet_protocol_user_manager_BlockEntityRequest__Descriptor = Descriptor.MessageTypes[5];
           internal__static_bnet_protocol_user_manager_BlockEntityRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.BlockEntityRequest, global::bnet.protocol.user_manager.BlockEntityRequest.Builder>(internal__static_bnet_protocol_user_manager_BlockEntityRequest__Descriptor,
-                  new string[] { "Entity", });
-          internal__static_bnet_protocol_user_manager_BlockEntityResponse__Descriptor = Descriptor.MessageTypes[7];
-          internal__static_bnet_protocol_user_manager_BlockEntityResponse__FieldAccessorTable = 
-              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.BlockEntityResponse, global::bnet.protocol.user_manager.BlockEntityResponse.Builder>(internal__static_bnet_protocol_user_manager_BlockEntityResponse__Descriptor,
-                  new string[] { "BlockedEntity", });
-          internal__static_bnet_protocol_user_manager_UnblockEntityRequest__Descriptor = Descriptor.MessageTypes[8];
+                  new string[] { "AgentId", "TargetId", "Role", });
+          internal__static_bnet_protocol_user_manager_UnblockEntityRequest__Descriptor = Descriptor.MessageTypes[6];
           internal__static_bnet_protocol_user_manager_UnblockEntityRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.UnblockEntityRequest, global::bnet.protocol.user_manager.UnblockEntityRequest.Builder>(internal__static_bnet_protocol_user_manager_UnblockEntityRequest__Descriptor,
-                  new string[] { "Entity", });
-          internal__static_bnet_protocol_user_manager_UnblockEntityResponse__Descriptor = Descriptor.MessageTypes[9];
-          internal__static_bnet_protocol_user_manager_UnblockEntityResponse__FieldAccessorTable = 
-              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.UnblockEntityResponse, global::bnet.protocol.user_manager.UnblockEntityResponse.Builder>(internal__static_bnet_protocol_user_manager_UnblockEntityResponse__Descriptor,
-                  new string[] { "UnblockedEntity", });
-          internal__static_bnet_protocol_user_manager_ClearBlockListResponse__Descriptor = Descriptor.MessageTypes[10];
-          internal__static_bnet_protocol_user_manager_ClearBlockListResponse__FieldAccessorTable = 
-              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.ClearBlockListResponse, global::bnet.protocol.user_manager.ClearBlockListResponse.Builder>(internal__static_bnet_protocol_user_manager_ClearBlockListResponse__Descriptor,
-                  new string[] { "UnblockedEntity", });
-          internal__static_bnet_protocol_user_manager_EntityBlockedNotification__Descriptor = Descriptor.MessageTypes[11];
+                  new string[] { "AgentId", "TargetId", });
+          internal__static_bnet_protocol_user_manager_EntityBlockedNotification__Descriptor = Descriptor.MessageTypes[7];
           internal__static_bnet_protocol_user_manager_EntityBlockedNotification__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.EntityBlockedNotification, global::bnet.protocol.user_manager.EntityBlockedNotification.Builder>(internal__static_bnet_protocol_user_manager_EntityBlockedNotification__Descriptor,
-                  new string[] { "BlockedEntities", });
-          internal__static_bnet_protocol_user_manager_EntityUnblockedNotification__Descriptor = Descriptor.MessageTypes[12];
+                  new string[] { "BlockedEntity", "GameAccountId", });
+          internal__static_bnet_protocol_user_manager_EntityUnblockedNotification__Descriptor = Descriptor.MessageTypes[8];
           internal__static_bnet_protocol_user_manager_EntityUnblockedNotification__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.EntityUnblockedNotification, global::bnet.protocol.user_manager.EntityUnblockedNotification.Builder>(internal__static_bnet_protocol_user_manager_EntityUnblockedNotification__Descriptor,
-                  new string[] { "UnblockedEntities", });
-          internal__static_bnet_protocol_user_manager_RecentPlayersAddedNotification__Descriptor = Descriptor.MessageTypes[13];
+                  new string[] { "UnblockedEntity", "GameAccountId", });
+          internal__static_bnet_protocol_user_manager_RecentPlayersAddedNotification__Descriptor = Descriptor.MessageTypes[9];
           internal__static_bnet_protocol_user_manager_RecentPlayersAddedNotification__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.RecentPlayersAddedNotification, global::bnet.protocol.user_manager.RecentPlayersAddedNotification.Builder>(internal__static_bnet_protocol_user_manager_RecentPlayersAddedNotification__Descriptor,
                   new string[] { "AddedPlayers", });
-          internal__static_bnet_protocol_user_manager_RecentPlayersRemovedNotification__Descriptor = Descriptor.MessageTypes[14];
+          internal__static_bnet_protocol_user_manager_RecentPlayersRemovedNotification__Descriptor = Descriptor.MessageTypes[10];
           internal__static_bnet_protocol_user_manager_RecentPlayersRemovedNotification__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.user_manager.RecentPlayersRemovedNotification, global::bnet.protocol.user_manager.RecentPlayersRemovedNotification.Builder>(internal__static_bnet_protocol_user_manager_RecentPlayersRemovedNotification__Descriptor,
                   new string[] { "RemovedPlayers", });
           pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
           RegisterAllExtensions(registry);
-          global::bnet.protocol.attribute.Proto.Attribute.RegisterAllExtensions(registry);
+          global::bnet.protocol.user_manager.UserManagerTypes.RegisterAllExtensions(registry);
           global::bnet.protocol.Entity.RegisterAllExtensions(registry);
+          global::bnet.protocol.Proto.RoleSet.RegisterAllExtensions(registry);
           global::bnet.protocol.Rpc.RegisterAllExtensions(registry);
           return registry;
         };
         pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
             new pbd::FileDescriptor[] {
-            global::bnet.protocol.attribute.Proto.Attribute.Descriptor, 
+            global::bnet.protocol.user_manager.UserManagerTypes.Descriptor, 
             global::bnet.protocol.Entity.Descriptor, 
+            global::bnet.protocol.Proto.RoleSet.Descriptor, 
             global::bnet.protocol.Rpc.Descriptor, 
             }, assigner);
       }
@@ -208,558 +182,11 @@ namespace bnet.protocol.user_manager {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class RecentPlayer : pb::GeneratedMessage<RecentPlayer, RecentPlayer.Builder> {
-    private RecentPlayer() { }
-    private static readonly RecentPlayer defaultInstance = new RecentPlayer().MakeReadOnly();
-    private static readonly string[] _recentPlayerFieldNames = new string[] { "attributes", "counter", "entity", "id", "program_id", "timestamp_played" };
-    private static readonly uint[] _recentPlayerFieldTags = new uint[] { 34, 53, 10, 45, 18, 25 };
-    public static RecentPlayer DefaultInstance {
-      get { return defaultInstance; }
-    }
-    
-    public override RecentPlayer DefaultInstanceForType {
-      get { return DefaultInstance; }
-    }
-    
-    protected override RecentPlayer ThisMessage {
-      get { return this; }
-    }
-    
-    public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_RecentPlayer__Descriptor; }
-    }
-    
-    protected override pb::FieldAccess.FieldAccessorTable<RecentPlayer, RecentPlayer.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_RecentPlayer__FieldAccessorTable; }
-    }
-    
-    public const int EntityFieldNumber = 1;
-    private bool hasEntity;
-    private global::bnet.protocol.EntityId entity_;
-    public bool HasEntity {
-      get { return hasEntity; }
-    }
-    public global::bnet.protocol.EntityId Entity {
-      get { return entity_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
-    }
-    
-    public const int ProgramIdFieldNumber = 2;
-    private bool hasProgramId;
-    private string programId_ = "";
-    public bool HasProgramId {
-      get { return hasProgramId; }
-    }
-    public string ProgramId {
-      get { return programId_; }
-    }
-    
-    public const int TimestampPlayedFieldNumber = 3;
-    private bool hasTimestampPlayed;
-    private ulong timestampPlayed_;
-    public bool HasTimestampPlayed {
-      get { return hasTimestampPlayed; }
-    }
-    public ulong TimestampPlayed {
-      get { return timestampPlayed_; }
-    }
-    
-    public const int AttributesFieldNumber = 4;
-    private pbc::PopsicleList<global::bnet.protocol.attribute.Attribute> attributes_ = new pbc::PopsicleList<global::bnet.protocol.attribute.Attribute>();
-    public scg::IList<global::bnet.protocol.attribute.Attribute> AttributesList {
-      get { return attributes_; }
-    }
-    public int AttributesCount {
-      get { return attributes_.Count; }
-    }
-    public global::bnet.protocol.attribute.Attribute GetAttributes(int index) {
-      return attributes_[index];
-    }
-    
-    public const int IdFieldNumber = 5;
-    private bool hasId;
-    private uint id_;
-    public bool HasId {
-      get { return hasId; }
-    }
-    public uint Id {
-      get { return id_; }
-    }
-    
-    public const int CounterFieldNumber = 6;
-    private bool hasCounter;
-    private uint counter_;
-    public bool HasCounter {
-      get { return hasCounter; }
-    }
-    public uint Counter {
-      get { return counter_; }
-    }
-    
-    public override bool IsInitialized {
-      get {
-        if (!hasEntity) return false;
-        if (!Entity.IsInitialized) return false;
-        foreach (global::bnet.protocol.attribute.Attribute element in AttributesList) {
-          if (!element.IsInitialized) return false;
-        }
-        return true;
-      }
-    }
-    
-    public override void WriteTo(pb::ICodedOutputStream output) {
-      int size = SerializedSize;
-      string[] field_names = _recentPlayerFieldNames;
-      if (hasEntity) {
-        output.WriteMessage(1, field_names[2], Entity);
-      }
-      if (hasProgramId) {
-        output.WriteString(2, field_names[4], ProgramId);
-      }
-      if (hasTimestampPlayed) {
-        output.WriteFixed64(3, field_names[5], TimestampPlayed);
-      }
-      if (attributes_.Count > 0) {
-        output.WriteMessageArray(4, field_names[0], attributes_);
-      }
-      if (hasId) {
-        output.WriteFixed32(5, field_names[3], Id);
-      }
-      if (hasCounter) {
-        output.WriteFixed32(6, field_names[1], Counter);
-      }
-      UnknownFields.WriteTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public override int SerializedSize {
-      get {
-        int size = memoizedSerializedSize;
-        if (size != -1) return size;
-        
-        size = 0;
-        if (hasEntity) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Entity);
-        }
-        if (hasProgramId) {
-          size += pb::CodedOutputStream.ComputeStringSize(2, ProgramId);
-        }
-        if (hasTimestampPlayed) {
-          size += pb::CodedOutputStream.ComputeFixed64Size(3, TimestampPlayed);
-        }
-        foreach (global::bnet.protocol.attribute.Attribute element in AttributesList) {
-          size += pb::CodedOutputStream.ComputeMessageSize(4, element);
-        }
-        if (hasId) {
-          size += pb::CodedOutputStream.ComputeFixed32Size(5, Id);
-        }
-        if (hasCounter) {
-          size += pb::CodedOutputStream.ComputeFixed32Size(6, Counter);
-        }
-        size += UnknownFields.SerializedSize;
-        memoizedSerializedSize = size;
-        return size;
-      }
-    }
-    
-    public static RecentPlayer ParseFrom(pb::ByteString data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static RecentPlayer ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static RecentPlayer ParseFrom(byte[] data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static RecentPlayer ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static RecentPlayer ParseFrom(global::System.IO.Stream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static RecentPlayer ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    public static RecentPlayer ParseDelimitedFrom(global::System.IO.Stream input) {
-      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
-    }
-    public static RecentPlayer ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
-    }
-    public static RecentPlayer ParseFrom(pb::ICodedInputStream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static RecentPlayer ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    private RecentPlayer MakeReadOnly() {
-      attributes_.MakeReadOnly();
-      return this;
-    }
-    
-    public static Builder CreateBuilder() { return new Builder(); }
-    public override Builder ToBuilder() { return CreateBuilder(this); }
-    public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(RecentPlayer prototype) {
-      return new Builder(prototype);
-    }
-    
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<RecentPlayer, Builder> {
-      protected override Builder ThisBuilder {
-        get { return this; }
-      }
-      public Builder() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-      }
-      internal Builder(RecentPlayer cloneFrom) {
-        result = cloneFrom;
-        resultIsReadOnly = true;
-      }
-      
-      private bool resultIsReadOnly;
-      private RecentPlayer result;
-      
-      private RecentPlayer PrepareBuilder() {
-        if (resultIsReadOnly) {
-          RecentPlayer original = result;
-          result = new RecentPlayer();
-          resultIsReadOnly = false;
-          MergeFrom(original);
-        }
-        return result;
-      }
-      
-      public override bool IsInitialized {
-        get { return result.IsInitialized; }
-      }
-      
-      protected override RecentPlayer MessageBeingBuilt {
-        get { return PrepareBuilder(); }
-      }
-      
-      public override Builder Clear() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-        return this;
-      }
-      
-      public override Builder Clone() {
-        if (resultIsReadOnly) {
-          return new Builder(result);
-        } else {
-          return new Builder().MergeFrom(result);
-        }
-      }
-      
-      public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::bnet.protocol.user_manager.RecentPlayer.Descriptor; }
-      }
-      
-      public override RecentPlayer DefaultInstanceForType {
-        get { return global::bnet.protocol.user_manager.RecentPlayer.DefaultInstance; }
-      }
-      
-      public override RecentPlayer BuildPartial() {
-        if (resultIsReadOnly) {
-          return result;
-        }
-        resultIsReadOnly = true;
-        return result.MakeReadOnly();
-      }
-      
-      public override Builder MergeFrom(pb::IMessage other) {
-        if (other is RecentPlayer) {
-          return MergeFrom((RecentPlayer) other);
-        } else {
-          base.MergeFrom(other);
-          return this;
-        }
-      }
-      
-      public override Builder MergeFrom(RecentPlayer other) {
-        if (other == global::bnet.protocol.user_manager.RecentPlayer.DefaultInstance) return this;
-        PrepareBuilder();
-        if (other.HasEntity) {
-          MergeEntity(other.Entity);
-        }
-        if (other.HasProgramId) {
-          ProgramId = other.ProgramId;
-        }
-        if (other.HasTimestampPlayed) {
-          TimestampPlayed = other.TimestampPlayed;
-        }
-        if (other.attributes_.Count != 0) {
-          result.attributes_.Add(other.attributes_);
-        }
-        if (other.HasId) {
-          Id = other.Id;
-        }
-        if (other.HasCounter) {
-          Counter = other.Counter;
-        }
-        this.MergeUnknownFields(other.UnknownFields);
-        return this;
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input) {
-        return MergeFrom(input, pb::ExtensionRegistry.Empty);
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-        PrepareBuilder();
-        pb::UnknownFieldSet.Builder unknownFields = null;
-        uint tag;
-        string field_name;
-        while (input.ReadTag(out tag, out field_name)) {
-          if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_recentPlayerFieldNames, field_name, global::System.StringComparer.Ordinal);
-            if(field_ordinal >= 0)
-              tag = _recentPlayerFieldTags[field_ordinal];
-            else {
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              continue;
-            }
-          }
-          switch (tag) {
-            case 0: {
-              throw pb::InvalidProtocolBufferException.InvalidTag();
-            }
-            default: {
-              if (pb::WireFormat.IsEndGroupTag(tag)) {
-                if (unknownFields != null) {
-                  this.UnknownFields = unknownFields.Build();
-                }
-                return this;
-              }
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              break;
-            }
-            case 10: {
-              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasEntity) {
-                subBuilder.MergeFrom(Entity);
-              }
-              input.ReadMessage(subBuilder, extensionRegistry);
-              Entity = subBuilder.BuildPartial();
-              break;
-            }
-            case 18: {
-              result.hasProgramId = input.ReadString(ref result.programId_);
-              break;
-            }
-            case 25: {
-              result.hasTimestampPlayed = input.ReadFixed64(ref result.timestampPlayed_);
-              break;
-            }
-            case 34: {
-              input.ReadMessageArray(tag, field_name, result.attributes_, global::bnet.protocol.attribute.Attribute.DefaultInstance, extensionRegistry);
-              break;
-            }
-            case 45: {
-              result.hasId = input.ReadFixed32(ref result.id_);
-              break;
-            }
-            case 53: {
-              result.hasCounter = input.ReadFixed32(ref result.counter_);
-              break;
-            }
-          }
-        }
-        
-        if (unknownFields != null) {
-          this.UnknownFields = unknownFields.Build();
-        }
-        return this;
-      }
-      
-      
-      public bool HasEntity {
-       get { return result.hasEntity; }
-      }
-      public global::bnet.protocol.EntityId Entity {
-        get { return result.Entity; }
-        set { SetEntity(value); }
-      }
-      public Builder SetEntity(global::bnet.protocol.EntityId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hasEntity = true;
-        result.entity_ = value;
-        return this;
-      }
-      public Builder SetEntity(global::bnet.protocol.EntityId.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hasEntity = true;
-        result.entity_ = builderForValue.Build();
-        return this;
-      }
-      public Builder MergeEntity(global::bnet.protocol.EntityId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        if (result.hasEntity &&
-            result.entity_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.entity_ = global::bnet.protocol.EntityId.CreateBuilder(result.entity_).MergeFrom(value).BuildPartial();
-        } else {
-          result.entity_ = value;
-        }
-        result.hasEntity = true;
-        return this;
-      }
-      public Builder ClearEntity() {
-        PrepareBuilder();
-        result.hasEntity = false;
-        result.entity_ = null;
-        return this;
-      }
-      
-      public bool HasProgramId {
-        get { return result.hasProgramId; }
-      }
-      public string ProgramId {
-        get { return result.ProgramId; }
-        set { SetProgramId(value); }
-      }
-      public Builder SetProgramId(string value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hasProgramId = true;
-        result.programId_ = value;
-        return this;
-      }
-      public Builder ClearProgramId() {
-        PrepareBuilder();
-        result.hasProgramId = false;
-        result.programId_ = "";
-        return this;
-      }
-      
-      public bool HasTimestampPlayed {
-        get { return result.hasTimestampPlayed; }
-      }
-      public ulong TimestampPlayed {
-        get { return result.TimestampPlayed; }
-        set { SetTimestampPlayed(value); }
-      }
-      public Builder SetTimestampPlayed(ulong value) {
-        PrepareBuilder();
-        result.hasTimestampPlayed = true;
-        result.timestampPlayed_ = value;
-        return this;
-      }
-      public Builder ClearTimestampPlayed() {
-        PrepareBuilder();
-        result.hasTimestampPlayed = false;
-        result.timestampPlayed_ = 0;
-        return this;
-      }
-      
-      public pbc::IPopsicleList<global::bnet.protocol.attribute.Attribute> AttributesList {
-        get { return PrepareBuilder().attributes_; }
-      }
-      public int AttributesCount {
-        get { return result.AttributesCount; }
-      }
-      public global::bnet.protocol.attribute.Attribute GetAttributes(int index) {
-        return result.GetAttributes(index);
-      }
-      public Builder SetAttributes(int index, global::bnet.protocol.attribute.Attribute value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.attributes_[index] = value;
-        return this;
-      }
-      public Builder SetAttributes(int index, global::bnet.protocol.attribute.Attribute.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.attributes_[index] = builderForValue.Build();
-        return this;
-      }
-      public Builder AddAttributes(global::bnet.protocol.attribute.Attribute value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.attributes_.Add(value);
-        return this;
-      }
-      public Builder AddAttributes(global::bnet.protocol.attribute.Attribute.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.attributes_.Add(builderForValue.Build());
-        return this;
-      }
-      public Builder AddRangeAttributes(scg::IEnumerable<global::bnet.protocol.attribute.Attribute> values) {
-        PrepareBuilder();
-        result.attributes_.Add(values);
-        return this;
-      }
-      public Builder ClearAttributes() {
-        PrepareBuilder();
-        result.attributes_.Clear();
-        return this;
-      }
-      
-      public bool HasId {
-        get { return result.hasId; }
-      }
-      public uint Id {
-        get { return result.Id; }
-        set { SetId(value); }
-      }
-      public Builder SetId(uint value) {
-        PrepareBuilder();
-        result.hasId = true;
-        result.id_ = value;
-        return this;
-      }
-      public Builder ClearId() {
-        PrepareBuilder();
-        result.hasId = false;
-        result.id_ = 0;
-        return this;
-      }
-      
-      public bool HasCounter {
-        get { return result.hasCounter; }
-      }
-      public uint Counter {
-        get { return result.Counter; }
-        set { SetCounter(value); }
-      }
-      public Builder SetCounter(uint value) {
-        PrepareBuilder();
-        result.hasCounter = true;
-        result.counter_ = value;
-        return this;
-      }
-      public Builder ClearCounter() {
-        PrepareBuilder();
-        result.hasCounter = false;
-        result.counter_ = 0;
-        return this;
-      }
-    }
-    static RecentPlayer() {
-      object.ReferenceEquals(global::bnet.protocol.user_manager.Proto.UserManagerService.Descriptor, null);
-    }
-  }
-  
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
   public sealed partial class SubscribeToUserManagerRequest : pb::GeneratedMessage<SubscribeToUserManagerRequest, SubscribeToUserManagerRequest.Builder> {
     private SubscribeToUserManagerRequest() { }
     private static readonly SubscribeToUserManagerRequest defaultInstance = new SubscribeToUserManagerRequest().MakeReadOnly();
-    private static readonly string[] _subscribeToUserManagerRequestFieldNames = new string[] { "object_id" };
-    private static readonly uint[] _subscribeToUserManagerRequestFieldTags = new uint[] { 8 };
+    private static readonly string[] _subscribeToUserManagerRequestFieldNames = new string[] { "agent_id", "object_id" };
+    private static readonly uint[] _subscribeToUserManagerRequestFieldTags = new uint[] { 10, 16 };
     public static SubscribeToUserManagerRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -780,7 +207,17 @@ namespace bnet.protocol.user_manager {
       get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_SubscribeToUserManagerRequest__FieldAccessorTable; }
     }
     
-    public const int ObjectIdFieldNumber = 1;
+    public const int AgentIdFieldNumber = 1;
+    private bool hasAgentId;
+    private global::bnet.protocol.EntityId agentId_;
+    public bool HasAgentId {
+      get { return hasAgentId; }
+    }
+    public global::bnet.protocol.EntityId AgentId {
+      get { return agentId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int ObjectIdFieldNumber = 2;
     private bool hasObjectId;
     private ulong objectId_;
     public bool HasObjectId {
@@ -793,6 +230,9 @@ namespace bnet.protocol.user_manager {
     public override bool IsInitialized {
       get {
         if (!hasObjectId) return false;
+        if (HasAgentId) {
+          if (!AgentId.IsInitialized) return false;
+        }
         return true;
       }
     }
@@ -800,8 +240,11 @@ namespace bnet.protocol.user_manager {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _subscribeToUserManagerRequestFieldNames;
+      if (hasAgentId) {
+        output.WriteMessage(1, field_names[0], AgentId);
+      }
       if (hasObjectId) {
-        output.WriteUInt64(1, field_names[0], ObjectId);
+        output.WriteUInt64(2, field_names[1], ObjectId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -813,8 +256,11 @@ namespace bnet.protocol.user_manager {
         if (size != -1) return size;
         
         size = 0;
+        if (hasAgentId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AgentId);
+        }
         if (hasObjectId) {
-          size += pb::CodedOutputStream.ComputeUInt64Size(1, ObjectId);
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, ObjectId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -942,6 +388,9 @@ namespace bnet.protocol.user_manager {
       public override Builder MergeFrom(SubscribeToUserManagerRequest other) {
         if (other == global::bnet.protocol.user_manager.SubscribeToUserManagerRequest.DefaultInstance) return this;
         PrepareBuilder();
+        if (other.HasAgentId) {
+          MergeAgentId(other.AgentId);
+        }
         if (other.HasObjectId) {
           ObjectId = other.ObjectId;
         }
@@ -988,7 +437,16 @@ namespace bnet.protocol.user_manager {
               ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
               break;
             }
-            case 8: {
+            case 10: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasAgentId) {
+                subBuilder.MergeFrom(AgentId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              AgentId = subBuilder.BuildPartial();
+              break;
+            }
+            case 16: {
               result.hasObjectId = input.ReadUInt64(ref result.objectId_);
               break;
             }
@@ -1001,6 +459,46 @@ namespace bnet.protocol.user_manager {
         return this;
       }
       
+      
+      public bool HasAgentId {
+       get { return result.hasAgentId; }
+      }
+      public global::bnet.protocol.EntityId AgentId {
+        get { return result.AgentId; }
+        set { SetAgentId(value); }
+      }
+      public Builder SetAgentId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasAgentId = true;
+        result.agentId_ = value;
+        return this;
+      }
+      public Builder SetAgentId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasAgentId = true;
+        result.agentId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeAgentId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasAgentId &&
+            result.agentId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.agentId_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.agentId_ = value;
+        }
+        result.hasAgentId = true;
+        return this;
+      }
+      public Builder ClearAgentId() {
+        PrepareBuilder();
+        result.hasAgentId = false;
+        result.agentId_ = null;
+        return this;
+      }
       
       public bool HasObjectId {
         get { return result.hasObjectId; }
@@ -1033,8 +531,8 @@ namespace bnet.protocol.user_manager {
   public sealed partial class SubscribeToUserManagerResponse : pb::GeneratedMessage<SubscribeToUserManagerResponse, SubscribeToUserManagerResponse.Builder> {
     private SubscribeToUserManagerResponse() { }
     private static readonly SubscribeToUserManagerResponse defaultInstance = new SubscribeToUserManagerResponse().MakeReadOnly();
-    private static readonly string[] _subscribeToUserManagerResponseFieldNames = new string[] { "blocks", "recent_players" };
-    private static readonly uint[] _subscribeToUserManagerResponseFieldTags = new uint[] { 10, 18 };
+    private static readonly string[] _subscribeToUserManagerResponseFieldNames = new string[] { "blocked_entities", "recent_players", "role" };
+    private static readonly uint[] _subscribeToUserManagerResponseFieldTags = new uint[] { 10, 18, 26 };
     public static SubscribeToUserManagerResponse DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1055,16 +553,16 @@ namespace bnet.protocol.user_manager {
       get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_SubscribeToUserManagerResponse__FieldAccessorTable; }
     }
     
-    public const int BlocksFieldNumber = 1;
-    private pbc::PopsicleList<global::bnet.protocol.EntityId> blocks_ = new pbc::PopsicleList<global::bnet.protocol.EntityId>();
-    public scg::IList<global::bnet.protocol.EntityId> BlocksList {
-      get { return blocks_; }
+    public const int BlockedEntitiesFieldNumber = 1;
+    private pbc::PopsicleList<global::bnet.protocol.user_manager.BlockedEntity> blockedEntities_ = new pbc::PopsicleList<global::bnet.protocol.user_manager.BlockedEntity>();
+    public scg::IList<global::bnet.protocol.user_manager.BlockedEntity> BlockedEntitiesList {
+      get { return blockedEntities_; }
     }
-    public int BlocksCount {
-      get { return blocks_.Count; }
+    public int BlockedEntitiesCount {
+      get { return blockedEntities_.Count; }
     }
-    public global::bnet.protocol.EntityId GetBlocks(int index) {
-      return blocks_[index];
+    public global::bnet.protocol.user_manager.BlockedEntity GetBlockedEntities(int index) {
+      return blockedEntities_[index];
     }
     
     public const int RecentPlayersFieldNumber = 2;
@@ -1079,12 +577,27 @@ namespace bnet.protocol.user_manager {
       return recentPlayers_[index];
     }
     
+    public const int RoleFieldNumber = 3;
+    private pbc::PopsicleList<global::bnet.protocol.Role> role_ = new pbc::PopsicleList<global::bnet.protocol.Role>();
+    public scg::IList<global::bnet.protocol.Role> RoleList {
+      get { return role_; }
+    }
+    public int RoleCount {
+      get { return role_.Count; }
+    }
+    public global::bnet.protocol.Role GetRole(int index) {
+      return role_[index];
+    }
+    
     public override bool IsInitialized {
       get {
-        foreach (global::bnet.protocol.EntityId element in BlocksList) {
+        foreach (global::bnet.protocol.user_manager.BlockedEntity element in BlockedEntitiesList) {
           if (!element.IsInitialized) return false;
         }
         foreach (global::bnet.protocol.user_manager.RecentPlayer element in RecentPlayersList) {
+          if (!element.IsInitialized) return false;
+        }
+        foreach (global::bnet.protocol.Role element in RoleList) {
           if (!element.IsInitialized) return false;
         }
         return true;
@@ -1094,11 +607,14 @@ namespace bnet.protocol.user_manager {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _subscribeToUserManagerResponseFieldNames;
-      if (blocks_.Count > 0) {
-        output.WriteMessageArray(1, field_names[0], blocks_);
+      if (blockedEntities_.Count > 0) {
+        output.WriteMessageArray(1, field_names[0], blockedEntities_);
       }
       if (recentPlayers_.Count > 0) {
         output.WriteMessageArray(2, field_names[1], recentPlayers_);
+      }
+      if (role_.Count > 0) {
+        output.WriteMessageArray(3, field_names[2], role_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1110,11 +626,14 @@ namespace bnet.protocol.user_manager {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::bnet.protocol.EntityId element in BlocksList) {
+        foreach (global::bnet.protocol.user_manager.BlockedEntity element in BlockedEntitiesList) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
         }
         foreach (global::bnet.protocol.user_manager.RecentPlayer element in RecentPlayersList) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, element);
+        }
+        foreach (global::bnet.protocol.Role element in RoleList) {
+          size += pb::CodedOutputStream.ComputeMessageSize(3, element);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1153,8 +672,9 @@ namespace bnet.protocol.user_manager {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private SubscribeToUserManagerResponse MakeReadOnly() {
-      blocks_.MakeReadOnly();
+      blockedEntities_.MakeReadOnly();
       recentPlayers_.MakeReadOnly();
+      role_.MakeReadOnly();
       return this;
     }
     
@@ -1244,11 +764,14 @@ namespace bnet.protocol.user_manager {
       public override Builder MergeFrom(SubscribeToUserManagerResponse other) {
         if (other == global::bnet.protocol.user_manager.SubscribeToUserManagerResponse.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.blocks_.Count != 0) {
-          result.blocks_.Add(other.blocks_);
+        if (other.blockedEntities_.Count != 0) {
+          result.blockedEntities_.Add(other.blockedEntities_);
         }
         if (other.recentPlayers_.Count != 0) {
           result.recentPlayers_.Add(other.recentPlayers_);
+        }
+        if (other.role_.Count != 0) {
+          result.role_.Add(other.role_);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1294,11 +817,15 @@ namespace bnet.protocol.user_manager {
               break;
             }
             case 10: {
-              input.ReadMessageArray(tag, field_name, result.blocks_, global::bnet.protocol.EntityId.DefaultInstance, extensionRegistry);
+              input.ReadMessageArray(tag, field_name, result.blockedEntities_, global::bnet.protocol.user_manager.BlockedEntity.DefaultInstance, extensionRegistry);
               break;
             }
             case 18: {
               input.ReadMessageArray(tag, field_name, result.recentPlayers_, global::bnet.protocol.user_manager.RecentPlayer.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 26: {
+              input.ReadMessageArray(tag, field_name, result.role_, global::bnet.protocol.Role.DefaultInstance, extensionRegistry);
               break;
             }
           }
@@ -1311,47 +838,47 @@ namespace bnet.protocol.user_manager {
       }
       
       
-      public pbc::IPopsicleList<global::bnet.protocol.EntityId> BlocksList {
-        get { return PrepareBuilder().blocks_; }
+      public pbc::IPopsicleList<global::bnet.protocol.user_manager.BlockedEntity> BlockedEntitiesList {
+        get { return PrepareBuilder().blockedEntities_; }
       }
-      public int BlocksCount {
-        get { return result.BlocksCount; }
+      public int BlockedEntitiesCount {
+        get { return result.BlockedEntitiesCount; }
       }
-      public global::bnet.protocol.EntityId GetBlocks(int index) {
-        return result.GetBlocks(index);
+      public global::bnet.protocol.user_manager.BlockedEntity GetBlockedEntities(int index) {
+        return result.GetBlockedEntities(index);
       }
-      public Builder SetBlocks(int index, global::bnet.protocol.EntityId value) {
+      public Builder SetBlockedEntities(int index, global::bnet.protocol.user_manager.BlockedEntity value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.blocks_[index] = value;
+        result.blockedEntities_[index] = value;
         return this;
       }
-      public Builder SetBlocks(int index, global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetBlockedEntities(int index, global::bnet.protocol.user_manager.BlockedEntity.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.blocks_[index] = builderForValue.Build();
+        result.blockedEntities_[index] = builderForValue.Build();
         return this;
       }
-      public Builder AddBlocks(global::bnet.protocol.EntityId value) {
+      public Builder AddBlockedEntities(global::bnet.protocol.user_manager.BlockedEntity value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.blocks_.Add(value);
+        result.blockedEntities_.Add(value);
         return this;
       }
-      public Builder AddBlocks(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder AddBlockedEntities(global::bnet.protocol.user_manager.BlockedEntity.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.blocks_.Add(builderForValue.Build());
+        result.blockedEntities_.Add(builderForValue.Build());
         return this;
       }
-      public Builder AddRangeBlocks(scg::IEnumerable<global::bnet.protocol.EntityId> values) {
+      public Builder AddRangeBlockedEntities(scg::IEnumerable<global::bnet.protocol.user_manager.BlockedEntity> values) {
         PrepareBuilder();
-        result.blocks_.Add(values);
+        result.blockedEntities_.Add(values);
         return this;
       }
-      public Builder ClearBlocks() {
+      public Builder ClearBlockedEntities() {
         PrepareBuilder();
-        result.blocks_.Clear();
+        result.blockedEntities_.Clear();
         return this;
       }
       
@@ -1396,6 +923,50 @@ namespace bnet.protocol.user_manager {
       public Builder ClearRecentPlayers() {
         PrepareBuilder();
         result.recentPlayers_.Clear();
+        return this;
+      }
+      
+      public pbc::IPopsicleList<global::bnet.protocol.Role> RoleList {
+        get { return PrepareBuilder().role_; }
+      }
+      public int RoleCount {
+        get { return result.RoleCount; }
+      }
+      public global::bnet.protocol.Role GetRole(int index) {
+        return result.GetRole(index);
+      }
+      public Builder SetRole(int index, global::bnet.protocol.Role value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.role_[index] = value;
+        return this;
+      }
+      public Builder SetRole(int index, global::bnet.protocol.Role.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.role_[index] = builderForValue.Build();
+        return this;
+      }
+      public Builder AddRole(global::bnet.protocol.Role value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.role_.Add(value);
+        return this;
+      }
+      public Builder AddRole(global::bnet.protocol.Role.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.role_.Add(builderForValue.Build());
+        return this;
+      }
+      public Builder AddRangeRole(scg::IEnumerable<global::bnet.protocol.Role> values) {
+        PrepareBuilder();
+        result.role_.Add(values);
+        return this;
+      }
+      public Builder ClearRole() {
+        PrepareBuilder();
+        result.role_.Clear();
         return this;
       }
     }
@@ -2369,8 +1940,8 @@ namespace bnet.protocol.user_manager {
   public sealed partial class BlockEntityRequest : pb::GeneratedMessage<BlockEntityRequest, BlockEntityRequest.Builder> {
     private BlockEntityRequest() { }
     private static readonly BlockEntityRequest defaultInstance = new BlockEntityRequest().MakeReadOnly();
-    private static readonly string[] _blockEntityRequestFieldNames = new string[] { "entity" };
-    private static readonly uint[] _blockEntityRequestFieldTags = new uint[] { 10 };
+    private static readonly string[] _blockEntityRequestFieldNames = new string[] { "agent_id", "role", "target_id" };
+    private static readonly uint[] _blockEntityRequestFieldTags = new uint[] { 10, 24, 18 };
     public static BlockEntityRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -2391,20 +1962,43 @@ namespace bnet.protocol.user_manager {
       get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_BlockEntityRequest__FieldAccessorTable; }
     }
     
-    public const int EntityFieldNumber = 1;
-    private bool hasEntity;
-    private global::bnet.protocol.EntityId entity_;
-    public bool HasEntity {
-      get { return hasEntity; }
+    public const int AgentIdFieldNumber = 1;
+    private bool hasAgentId;
+    private global::bnet.protocol.EntityId agentId_;
+    public bool HasAgentId {
+      get { return hasAgentId; }
     }
-    public global::bnet.protocol.EntityId Entity {
-      get { return entity_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId AgentId {
+      get { return agentId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int TargetIdFieldNumber = 2;
+    private bool hasTargetId;
+    private global::bnet.protocol.EntityId targetId_;
+    public bool HasTargetId {
+      get { return hasTargetId; }
+    }
+    public global::bnet.protocol.EntityId TargetId {
+      get { return targetId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int RoleFieldNumber = 3;
+    private bool hasRole;
+    private uint role_;
+    public bool HasRole {
+      get { return hasRole; }
+    }
+    public uint Role {
+      get { return role_; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasEntity) return false;
-        if (!Entity.IsInitialized) return false;
+        if (!hasTargetId) return false;
+        if (HasAgentId) {
+          if (!AgentId.IsInitialized) return false;
+        }
+        if (!TargetId.IsInitialized) return false;
         return true;
       }
     }
@@ -2412,8 +2006,14 @@ namespace bnet.protocol.user_manager {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _blockEntityRequestFieldNames;
-      if (hasEntity) {
-        output.WriteMessage(1, field_names[0], Entity);
+      if (hasAgentId) {
+        output.WriteMessage(1, field_names[0], AgentId);
+      }
+      if (hasTargetId) {
+        output.WriteMessage(2, field_names[2], TargetId);
+      }
+      if (hasRole) {
+        output.WriteUInt32(3, field_names[1], Role);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2425,8 +2025,14 @@ namespace bnet.protocol.user_manager {
         if (size != -1) return size;
         
         size = 0;
-        if (hasEntity) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Entity);
+        if (hasAgentId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AgentId);
+        }
+        if (hasTargetId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, TargetId);
+        }
+        if (hasRole) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(3, Role);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2554,8 +2160,14 @@ namespace bnet.protocol.user_manager {
       public override Builder MergeFrom(BlockEntityRequest other) {
         if (other == global::bnet.protocol.user_manager.BlockEntityRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasEntity) {
-          MergeEntity(other.Entity);
+        if (other.HasAgentId) {
+          MergeAgentId(other.AgentId);
+        }
+        if (other.HasTargetId) {
+          MergeTargetId(other.TargetId);
+        }
+        if (other.HasRole) {
+          Role = other.Role;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -2602,11 +2214,24 @@ namespace bnet.protocol.user_manager {
             }
             case 10: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasEntity) {
-                subBuilder.MergeFrom(Entity);
+              if (result.hasAgentId) {
+                subBuilder.MergeFrom(AgentId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Entity = subBuilder.BuildPartial();
+              AgentId = subBuilder.BuildPartial();
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasTargetId) {
+                subBuilder.MergeFrom(TargetId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              TargetId = subBuilder.BuildPartial();
+              break;
+            }
+            case 24: {
+              result.hasRole = input.ReadUInt32(ref result.role_);
               break;
             }
           }
@@ -2619,43 +2244,103 @@ namespace bnet.protocol.user_manager {
       }
       
       
-      public bool HasEntity {
-       get { return result.hasEntity; }
+      public bool HasAgentId {
+       get { return result.hasAgentId; }
       }
-      public global::bnet.protocol.EntityId Entity {
-        get { return result.Entity; }
-        set { SetEntity(value); }
+      public global::bnet.protocol.EntityId AgentId {
+        get { return result.AgentId; }
+        set { SetAgentId(value); }
       }
-      public Builder SetEntity(global::bnet.protocol.EntityId value) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasEntity = true;
-        result.entity_ = value;
+        result.hasAgentId = true;
+        result.agentId_ = value;
         return this;
       }
-      public Builder SetEntity(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasEntity = true;
-        result.entity_ = builderForValue.Build();
+        result.hasAgentId = true;
+        result.agentId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeEntity(global::bnet.protocol.EntityId value) {
+      public Builder MergeAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasEntity &&
-            result.entity_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.entity_ = global::bnet.protocol.EntityId.CreateBuilder(result.entity_).MergeFrom(value).BuildPartial();
+        if (result.hasAgentId &&
+            result.agentId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.agentId_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentId_).MergeFrom(value).BuildPartial();
         } else {
-          result.entity_ = value;
+          result.agentId_ = value;
         }
-        result.hasEntity = true;
+        result.hasAgentId = true;
         return this;
       }
-      public Builder ClearEntity() {
+      public Builder ClearAgentId() {
         PrepareBuilder();
-        result.hasEntity = false;
-        result.entity_ = null;
+        result.hasAgentId = false;
+        result.agentId_ = null;
+        return this;
+      }
+      
+      public bool HasTargetId {
+       get { return result.hasTargetId; }
+      }
+      public global::bnet.protocol.EntityId TargetId {
+        get { return result.TargetId; }
+        set { SetTargetId(value); }
+      }
+      public Builder SetTargetId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasTargetId = true;
+        result.targetId_ = value;
+        return this;
+      }
+      public Builder SetTargetId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasTargetId = true;
+        result.targetId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeTargetId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasTargetId &&
+            result.targetId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.targetId_ = global::bnet.protocol.EntityId.CreateBuilder(result.targetId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.targetId_ = value;
+        }
+        result.hasTargetId = true;
+        return this;
+      }
+      public Builder ClearTargetId() {
+        PrepareBuilder();
+        result.hasTargetId = false;
+        result.targetId_ = null;
+        return this;
+      }
+      
+      public bool HasRole {
+        get { return result.hasRole; }
+      }
+      public uint Role {
+        get { return result.Role; }
+        set { SetRole(value); }
+      }
+      public Builder SetRole(uint value) {
+        PrepareBuilder();
+        result.hasRole = true;
+        result.role_ = value;
+        return this;
+      }
+      public Builder ClearRole() {
+        PrepareBuilder();
+        result.hasRole = false;
+        result.role_ = 0;
         return this;
       }
     }
@@ -2667,313 +2352,11 @@ namespace bnet.protocol.user_manager {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class BlockEntityResponse : pb::GeneratedMessage<BlockEntityResponse, BlockEntityResponse.Builder> {
-    private BlockEntityResponse() { }
-    private static readonly BlockEntityResponse defaultInstance = new BlockEntityResponse().MakeReadOnly();
-    private static readonly string[] _blockEntityResponseFieldNames = new string[] { "blocked_entity" };
-    private static readonly uint[] _blockEntityResponseFieldTags = new uint[] { 10 };
-    public static BlockEntityResponse DefaultInstance {
-      get { return defaultInstance; }
-    }
-    
-    public override BlockEntityResponse DefaultInstanceForType {
-      get { return DefaultInstance; }
-    }
-    
-    protected override BlockEntityResponse ThisMessage {
-      get { return this; }
-    }
-    
-    public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_BlockEntityResponse__Descriptor; }
-    }
-    
-    protected override pb::FieldAccess.FieldAccessorTable<BlockEntityResponse, BlockEntityResponse.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_BlockEntityResponse__FieldAccessorTable; }
-    }
-    
-    public const int BlockedEntityFieldNumber = 1;
-    private bool hasBlockedEntity;
-    private global::bnet.protocol.EntityId blockedEntity_;
-    public bool HasBlockedEntity {
-      get { return hasBlockedEntity; }
-    }
-    public global::bnet.protocol.EntityId BlockedEntity {
-      get { return blockedEntity_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
-    }
-    
-    public override bool IsInitialized {
-      get {
-        if (HasBlockedEntity) {
-          if (!BlockedEntity.IsInitialized) return false;
-        }
-        return true;
-      }
-    }
-    
-    public override void WriteTo(pb::ICodedOutputStream output) {
-      int size = SerializedSize;
-      string[] field_names = _blockEntityResponseFieldNames;
-      if (hasBlockedEntity) {
-        output.WriteMessage(1, field_names[0], BlockedEntity);
-      }
-      UnknownFields.WriteTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public override int SerializedSize {
-      get {
-        int size = memoizedSerializedSize;
-        if (size != -1) return size;
-        
-        size = 0;
-        if (hasBlockedEntity) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, BlockedEntity);
-        }
-        size += UnknownFields.SerializedSize;
-        memoizedSerializedSize = size;
-        return size;
-      }
-    }
-    
-    public static BlockEntityResponse ParseFrom(pb::ByteString data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static BlockEntityResponse ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static BlockEntityResponse ParseFrom(byte[] data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static BlockEntityResponse ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static BlockEntityResponse ParseFrom(global::System.IO.Stream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static BlockEntityResponse ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    public static BlockEntityResponse ParseDelimitedFrom(global::System.IO.Stream input) {
-      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
-    }
-    public static BlockEntityResponse ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
-    }
-    public static BlockEntityResponse ParseFrom(pb::ICodedInputStream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static BlockEntityResponse ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    private BlockEntityResponse MakeReadOnly() {
-      return this;
-    }
-    
-    public static Builder CreateBuilder() { return new Builder(); }
-    public override Builder ToBuilder() { return CreateBuilder(this); }
-    public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(BlockEntityResponse prototype) {
-      return new Builder(prototype);
-    }
-    
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<BlockEntityResponse, Builder> {
-      protected override Builder ThisBuilder {
-        get { return this; }
-      }
-      public Builder() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-      }
-      internal Builder(BlockEntityResponse cloneFrom) {
-        result = cloneFrom;
-        resultIsReadOnly = true;
-      }
-      
-      private bool resultIsReadOnly;
-      private BlockEntityResponse result;
-      
-      private BlockEntityResponse PrepareBuilder() {
-        if (resultIsReadOnly) {
-          BlockEntityResponse original = result;
-          result = new BlockEntityResponse();
-          resultIsReadOnly = false;
-          MergeFrom(original);
-        }
-        return result;
-      }
-      
-      public override bool IsInitialized {
-        get { return result.IsInitialized; }
-      }
-      
-      protected override BlockEntityResponse MessageBeingBuilt {
-        get { return PrepareBuilder(); }
-      }
-      
-      public override Builder Clear() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-        return this;
-      }
-      
-      public override Builder Clone() {
-        if (resultIsReadOnly) {
-          return new Builder(result);
-        } else {
-          return new Builder().MergeFrom(result);
-        }
-      }
-      
-      public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::bnet.protocol.user_manager.BlockEntityResponse.Descriptor; }
-      }
-      
-      public override BlockEntityResponse DefaultInstanceForType {
-        get { return global::bnet.protocol.user_manager.BlockEntityResponse.DefaultInstance; }
-      }
-      
-      public override BlockEntityResponse BuildPartial() {
-        if (resultIsReadOnly) {
-          return result;
-        }
-        resultIsReadOnly = true;
-        return result.MakeReadOnly();
-      }
-      
-      public override Builder MergeFrom(pb::IMessage other) {
-        if (other is BlockEntityResponse) {
-          return MergeFrom((BlockEntityResponse) other);
-        } else {
-          base.MergeFrom(other);
-          return this;
-        }
-      }
-      
-      public override Builder MergeFrom(BlockEntityResponse other) {
-        if (other == global::bnet.protocol.user_manager.BlockEntityResponse.DefaultInstance) return this;
-        PrepareBuilder();
-        if (other.HasBlockedEntity) {
-          MergeBlockedEntity(other.BlockedEntity);
-        }
-        this.MergeUnknownFields(other.UnknownFields);
-        return this;
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input) {
-        return MergeFrom(input, pb::ExtensionRegistry.Empty);
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-        PrepareBuilder();
-        pb::UnknownFieldSet.Builder unknownFields = null;
-        uint tag;
-        string field_name;
-        while (input.ReadTag(out tag, out field_name)) {
-          if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_blockEntityResponseFieldNames, field_name, global::System.StringComparer.Ordinal);
-            if(field_ordinal >= 0)
-              tag = _blockEntityResponseFieldTags[field_ordinal];
-            else {
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              continue;
-            }
-          }
-          switch (tag) {
-            case 0: {
-              throw pb::InvalidProtocolBufferException.InvalidTag();
-            }
-            default: {
-              if (pb::WireFormat.IsEndGroupTag(tag)) {
-                if (unknownFields != null) {
-                  this.UnknownFields = unknownFields.Build();
-                }
-                return this;
-              }
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              break;
-            }
-            case 10: {
-              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasBlockedEntity) {
-                subBuilder.MergeFrom(BlockedEntity);
-              }
-              input.ReadMessage(subBuilder, extensionRegistry);
-              BlockedEntity = subBuilder.BuildPartial();
-              break;
-            }
-          }
-        }
-        
-        if (unknownFields != null) {
-          this.UnknownFields = unknownFields.Build();
-        }
-        return this;
-      }
-      
-      
-      public bool HasBlockedEntity {
-       get { return result.hasBlockedEntity; }
-      }
-      public global::bnet.protocol.EntityId BlockedEntity {
-        get { return result.BlockedEntity; }
-        set { SetBlockedEntity(value); }
-      }
-      public Builder SetBlockedEntity(global::bnet.protocol.EntityId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hasBlockedEntity = true;
-        result.blockedEntity_ = value;
-        return this;
-      }
-      public Builder SetBlockedEntity(global::bnet.protocol.EntityId.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hasBlockedEntity = true;
-        result.blockedEntity_ = builderForValue.Build();
-        return this;
-      }
-      public Builder MergeBlockedEntity(global::bnet.protocol.EntityId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        if (result.hasBlockedEntity &&
-            result.blockedEntity_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.blockedEntity_ = global::bnet.protocol.EntityId.CreateBuilder(result.blockedEntity_).MergeFrom(value).BuildPartial();
-        } else {
-          result.blockedEntity_ = value;
-        }
-        result.hasBlockedEntity = true;
-        return this;
-      }
-      public Builder ClearBlockedEntity() {
-        PrepareBuilder();
-        result.hasBlockedEntity = false;
-        result.blockedEntity_ = null;
-        return this;
-      }
-    }
-    static BlockEntityResponse() {
-      object.ReferenceEquals(global::bnet.protocol.user_manager.Proto.UserManagerService.Descriptor, null);
-    }
-  }
-  
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
   public sealed partial class UnblockEntityRequest : pb::GeneratedMessage<UnblockEntityRequest, UnblockEntityRequest.Builder> {
     private UnblockEntityRequest() { }
     private static readonly UnblockEntityRequest defaultInstance = new UnblockEntityRequest().MakeReadOnly();
-    private static readonly string[] _unblockEntityRequestFieldNames = new string[] { "entity" };
-    private static readonly uint[] _unblockEntityRequestFieldTags = new uint[] { 10 };
+    private static readonly string[] _unblockEntityRequestFieldNames = new string[] { "agent_id", "target_id" };
+    private static readonly uint[] _unblockEntityRequestFieldTags = new uint[] { 10, 18 };
     public static UnblockEntityRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -2994,20 +2377,33 @@ namespace bnet.protocol.user_manager {
       get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_UnblockEntityRequest__FieldAccessorTable; }
     }
     
-    public const int EntityFieldNumber = 1;
-    private bool hasEntity;
-    private global::bnet.protocol.EntityId entity_;
-    public bool HasEntity {
-      get { return hasEntity; }
+    public const int AgentIdFieldNumber = 1;
+    private bool hasAgentId;
+    private global::bnet.protocol.EntityId agentId_;
+    public bool HasAgentId {
+      get { return hasAgentId; }
     }
-    public global::bnet.protocol.EntityId Entity {
-      get { return entity_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    public global::bnet.protocol.EntityId AgentId {
+      get { return agentId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int TargetIdFieldNumber = 2;
+    private bool hasTargetId;
+    private global::bnet.protocol.EntityId targetId_;
+    public bool HasTargetId {
+      get { return hasTargetId; }
+    }
+    public global::bnet.protocol.EntityId TargetId {
+      get { return targetId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        if (!hasEntity) return false;
-        if (!Entity.IsInitialized) return false;
+        if (!hasTargetId) return false;
+        if (HasAgentId) {
+          if (!AgentId.IsInitialized) return false;
+        }
+        if (!TargetId.IsInitialized) return false;
         return true;
       }
     }
@@ -3015,8 +2411,11 @@ namespace bnet.protocol.user_manager {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _unblockEntityRequestFieldNames;
-      if (hasEntity) {
-        output.WriteMessage(1, field_names[0], Entity);
+      if (hasAgentId) {
+        output.WriteMessage(1, field_names[0], AgentId);
+      }
+      if (hasTargetId) {
+        output.WriteMessage(2, field_names[1], TargetId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -3028,8 +2427,11 @@ namespace bnet.protocol.user_manager {
         if (size != -1) return size;
         
         size = 0;
-        if (hasEntity) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, Entity);
+        if (hasAgentId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, AgentId);
+        }
+        if (hasTargetId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, TargetId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -3157,8 +2559,11 @@ namespace bnet.protocol.user_manager {
       public override Builder MergeFrom(UnblockEntityRequest other) {
         if (other == global::bnet.protocol.user_manager.UnblockEntityRequest.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasEntity) {
-          MergeEntity(other.Entity);
+        if (other.HasAgentId) {
+          MergeAgentId(other.AgentId);
+        }
+        if (other.HasTargetId) {
+          MergeTargetId(other.TargetId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -3205,11 +2610,20 @@ namespace bnet.protocol.user_manager {
             }
             case 10: {
               global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasEntity) {
-                subBuilder.MergeFrom(Entity);
+              if (result.hasAgentId) {
+                subBuilder.MergeFrom(AgentId);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Entity = subBuilder.BuildPartial();
+              AgentId = subBuilder.BuildPartial();
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasTargetId) {
+                subBuilder.MergeFrom(TargetId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              TargetId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -3222,43 +2636,83 @@ namespace bnet.protocol.user_manager {
       }
       
       
-      public bool HasEntity {
-       get { return result.hasEntity; }
+      public bool HasAgentId {
+       get { return result.hasAgentId; }
       }
-      public global::bnet.protocol.EntityId Entity {
-        get { return result.Entity; }
-        set { SetEntity(value); }
+      public global::bnet.protocol.EntityId AgentId {
+        get { return result.AgentId; }
+        set { SetAgentId(value); }
       }
-      public Builder SetEntity(global::bnet.protocol.EntityId value) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasEntity = true;
-        result.entity_ = value;
+        result.hasAgentId = true;
+        result.agentId_ = value;
         return this;
       }
-      public Builder SetEntity(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetAgentId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasEntity = true;
-        result.entity_ = builderForValue.Build();
+        result.hasAgentId = true;
+        result.agentId_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeEntity(global::bnet.protocol.EntityId value) {
+      public Builder MergeAgentId(global::bnet.protocol.EntityId value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasEntity &&
-            result.entity_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.entity_ = global::bnet.protocol.EntityId.CreateBuilder(result.entity_).MergeFrom(value).BuildPartial();
+        if (result.hasAgentId &&
+            result.agentId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.agentId_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentId_).MergeFrom(value).BuildPartial();
         } else {
-          result.entity_ = value;
+          result.agentId_ = value;
         }
-        result.hasEntity = true;
+        result.hasAgentId = true;
         return this;
       }
-      public Builder ClearEntity() {
+      public Builder ClearAgentId() {
         PrepareBuilder();
-        result.hasEntity = false;
-        result.entity_ = null;
+        result.hasAgentId = false;
+        result.agentId_ = null;
+        return this;
+      }
+      
+      public bool HasTargetId {
+       get { return result.hasTargetId; }
+      }
+      public global::bnet.protocol.EntityId TargetId {
+        get { return result.TargetId; }
+        set { SetTargetId(value); }
+      }
+      public Builder SetTargetId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasTargetId = true;
+        result.targetId_ = value;
+        return this;
+      }
+      public Builder SetTargetId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasTargetId = true;
+        result.targetId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeTargetId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasTargetId &&
+            result.targetId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.targetId_ = global::bnet.protocol.EntityId.CreateBuilder(result.targetId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.targetId_ = value;
+        }
+        result.hasTargetId = true;
+        return this;
+      }
+      public Builder ClearTargetId() {
+        PrepareBuilder();
+        result.hasTargetId = false;
+        result.targetId_ = null;
         return this;
       }
     }
@@ -3270,617 +2724,11 @@ namespace bnet.protocol.user_manager {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class UnblockEntityResponse : pb::GeneratedMessage<UnblockEntityResponse, UnblockEntityResponse.Builder> {
-    private UnblockEntityResponse() { }
-    private static readonly UnblockEntityResponse defaultInstance = new UnblockEntityResponse().MakeReadOnly();
-    private static readonly string[] _unblockEntityResponseFieldNames = new string[] { "unblocked_entity" };
-    private static readonly uint[] _unblockEntityResponseFieldTags = new uint[] { 10 };
-    public static UnblockEntityResponse DefaultInstance {
-      get { return defaultInstance; }
-    }
-    
-    public override UnblockEntityResponse DefaultInstanceForType {
-      get { return DefaultInstance; }
-    }
-    
-    protected override UnblockEntityResponse ThisMessage {
-      get { return this; }
-    }
-    
-    public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_UnblockEntityResponse__Descriptor; }
-    }
-    
-    protected override pb::FieldAccess.FieldAccessorTable<UnblockEntityResponse, UnblockEntityResponse.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_UnblockEntityResponse__FieldAccessorTable; }
-    }
-    
-    public const int UnblockedEntityFieldNumber = 1;
-    private bool hasUnblockedEntity;
-    private global::bnet.protocol.EntityId unblockedEntity_;
-    public bool HasUnblockedEntity {
-      get { return hasUnblockedEntity; }
-    }
-    public global::bnet.protocol.EntityId UnblockedEntity {
-      get { return unblockedEntity_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
-    }
-    
-    public override bool IsInitialized {
-      get {
-        if (HasUnblockedEntity) {
-          if (!UnblockedEntity.IsInitialized) return false;
-        }
-        return true;
-      }
-    }
-    
-    public override void WriteTo(pb::ICodedOutputStream output) {
-      int size = SerializedSize;
-      string[] field_names = _unblockEntityResponseFieldNames;
-      if (hasUnblockedEntity) {
-        output.WriteMessage(1, field_names[0], UnblockedEntity);
-      }
-      UnknownFields.WriteTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public override int SerializedSize {
-      get {
-        int size = memoizedSerializedSize;
-        if (size != -1) return size;
-        
-        size = 0;
-        if (hasUnblockedEntity) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, UnblockedEntity);
-        }
-        size += UnknownFields.SerializedSize;
-        memoizedSerializedSize = size;
-        return size;
-      }
-    }
-    
-    public static UnblockEntityResponse ParseFrom(pb::ByteString data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static UnblockEntityResponse ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static UnblockEntityResponse ParseFrom(byte[] data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static UnblockEntityResponse ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static UnblockEntityResponse ParseFrom(global::System.IO.Stream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static UnblockEntityResponse ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    public static UnblockEntityResponse ParseDelimitedFrom(global::System.IO.Stream input) {
-      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
-    }
-    public static UnblockEntityResponse ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
-    }
-    public static UnblockEntityResponse ParseFrom(pb::ICodedInputStream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static UnblockEntityResponse ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    private UnblockEntityResponse MakeReadOnly() {
-      return this;
-    }
-    
-    public static Builder CreateBuilder() { return new Builder(); }
-    public override Builder ToBuilder() { return CreateBuilder(this); }
-    public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(UnblockEntityResponse prototype) {
-      return new Builder(prototype);
-    }
-    
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<UnblockEntityResponse, Builder> {
-      protected override Builder ThisBuilder {
-        get { return this; }
-      }
-      public Builder() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-      }
-      internal Builder(UnblockEntityResponse cloneFrom) {
-        result = cloneFrom;
-        resultIsReadOnly = true;
-      }
-      
-      private bool resultIsReadOnly;
-      private UnblockEntityResponse result;
-      
-      private UnblockEntityResponse PrepareBuilder() {
-        if (resultIsReadOnly) {
-          UnblockEntityResponse original = result;
-          result = new UnblockEntityResponse();
-          resultIsReadOnly = false;
-          MergeFrom(original);
-        }
-        return result;
-      }
-      
-      public override bool IsInitialized {
-        get { return result.IsInitialized; }
-      }
-      
-      protected override UnblockEntityResponse MessageBeingBuilt {
-        get { return PrepareBuilder(); }
-      }
-      
-      public override Builder Clear() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-        return this;
-      }
-      
-      public override Builder Clone() {
-        if (resultIsReadOnly) {
-          return new Builder(result);
-        } else {
-          return new Builder().MergeFrom(result);
-        }
-      }
-      
-      public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::bnet.protocol.user_manager.UnblockEntityResponse.Descriptor; }
-      }
-      
-      public override UnblockEntityResponse DefaultInstanceForType {
-        get { return global::bnet.protocol.user_manager.UnblockEntityResponse.DefaultInstance; }
-      }
-      
-      public override UnblockEntityResponse BuildPartial() {
-        if (resultIsReadOnly) {
-          return result;
-        }
-        resultIsReadOnly = true;
-        return result.MakeReadOnly();
-      }
-      
-      public override Builder MergeFrom(pb::IMessage other) {
-        if (other is UnblockEntityResponse) {
-          return MergeFrom((UnblockEntityResponse) other);
-        } else {
-          base.MergeFrom(other);
-          return this;
-        }
-      }
-      
-      public override Builder MergeFrom(UnblockEntityResponse other) {
-        if (other == global::bnet.protocol.user_manager.UnblockEntityResponse.DefaultInstance) return this;
-        PrepareBuilder();
-        if (other.HasUnblockedEntity) {
-          MergeUnblockedEntity(other.UnblockedEntity);
-        }
-        this.MergeUnknownFields(other.UnknownFields);
-        return this;
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input) {
-        return MergeFrom(input, pb::ExtensionRegistry.Empty);
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-        PrepareBuilder();
-        pb::UnknownFieldSet.Builder unknownFields = null;
-        uint tag;
-        string field_name;
-        while (input.ReadTag(out tag, out field_name)) {
-          if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_unblockEntityResponseFieldNames, field_name, global::System.StringComparer.Ordinal);
-            if(field_ordinal >= 0)
-              tag = _unblockEntityResponseFieldTags[field_ordinal];
-            else {
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              continue;
-            }
-          }
-          switch (tag) {
-            case 0: {
-              throw pb::InvalidProtocolBufferException.InvalidTag();
-            }
-            default: {
-              if (pb::WireFormat.IsEndGroupTag(tag)) {
-                if (unknownFields != null) {
-                  this.UnknownFields = unknownFields.Build();
-                }
-                return this;
-              }
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              break;
-            }
-            case 10: {
-              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
-              if (result.hasUnblockedEntity) {
-                subBuilder.MergeFrom(UnblockedEntity);
-              }
-              input.ReadMessage(subBuilder, extensionRegistry);
-              UnblockedEntity = subBuilder.BuildPartial();
-              break;
-            }
-          }
-        }
-        
-        if (unknownFields != null) {
-          this.UnknownFields = unknownFields.Build();
-        }
-        return this;
-      }
-      
-      
-      public bool HasUnblockedEntity {
-       get { return result.hasUnblockedEntity; }
-      }
-      public global::bnet.protocol.EntityId UnblockedEntity {
-        get { return result.UnblockedEntity; }
-        set { SetUnblockedEntity(value); }
-      }
-      public Builder SetUnblockedEntity(global::bnet.protocol.EntityId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.hasUnblockedEntity = true;
-        result.unblockedEntity_ = value;
-        return this;
-      }
-      public Builder SetUnblockedEntity(global::bnet.protocol.EntityId.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.hasUnblockedEntity = true;
-        result.unblockedEntity_ = builderForValue.Build();
-        return this;
-      }
-      public Builder MergeUnblockedEntity(global::bnet.protocol.EntityId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        if (result.hasUnblockedEntity &&
-            result.unblockedEntity_ != global::bnet.protocol.EntityId.DefaultInstance) {
-            result.unblockedEntity_ = global::bnet.protocol.EntityId.CreateBuilder(result.unblockedEntity_).MergeFrom(value).BuildPartial();
-        } else {
-          result.unblockedEntity_ = value;
-        }
-        result.hasUnblockedEntity = true;
-        return this;
-      }
-      public Builder ClearUnblockedEntity() {
-        PrepareBuilder();
-        result.hasUnblockedEntity = false;
-        result.unblockedEntity_ = null;
-        return this;
-      }
-    }
-    static UnblockEntityResponse() {
-      object.ReferenceEquals(global::bnet.protocol.user_manager.Proto.UserManagerService.Descriptor, null);
-    }
-  }
-  
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public sealed partial class ClearBlockListResponse : pb::GeneratedMessage<ClearBlockListResponse, ClearBlockListResponse.Builder> {
-    private ClearBlockListResponse() { }
-    private static readonly ClearBlockListResponse defaultInstance = new ClearBlockListResponse().MakeReadOnly();
-    private static readonly string[] _clearBlockListResponseFieldNames = new string[] { "unblocked_entity" };
-    private static readonly uint[] _clearBlockListResponseFieldTags = new uint[] { 10 };
-    public static ClearBlockListResponse DefaultInstance {
-      get { return defaultInstance; }
-    }
-    
-    public override ClearBlockListResponse DefaultInstanceForType {
-      get { return DefaultInstance; }
-    }
-    
-    protected override ClearBlockListResponse ThisMessage {
-      get { return this; }
-    }
-    
-    public static pbd::MessageDescriptor Descriptor {
-      get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_ClearBlockListResponse__Descriptor; }
-    }
-    
-    protected override pb::FieldAccess.FieldAccessorTable<ClearBlockListResponse, ClearBlockListResponse.Builder> InternalFieldAccessors {
-      get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_ClearBlockListResponse__FieldAccessorTable; }
-    }
-    
-    public const int UnblockedEntityFieldNumber = 1;
-    private pbc::PopsicleList<global::bnet.protocol.EntityId> unblockedEntity_ = new pbc::PopsicleList<global::bnet.protocol.EntityId>();
-    public scg::IList<global::bnet.protocol.EntityId> UnblockedEntityList {
-      get { return unblockedEntity_; }
-    }
-    public int UnblockedEntityCount {
-      get { return unblockedEntity_.Count; }
-    }
-    public global::bnet.protocol.EntityId GetUnblockedEntity(int index) {
-      return unblockedEntity_[index];
-    }
-    
-    public override bool IsInitialized {
-      get {
-        foreach (global::bnet.protocol.EntityId element in UnblockedEntityList) {
-          if (!element.IsInitialized) return false;
-        }
-        return true;
-      }
-    }
-    
-    public override void WriteTo(pb::ICodedOutputStream output) {
-      int size = SerializedSize;
-      string[] field_names = _clearBlockListResponseFieldNames;
-      if (unblockedEntity_.Count > 0) {
-        output.WriteMessageArray(1, field_names[0], unblockedEntity_);
-      }
-      UnknownFields.WriteTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public override int SerializedSize {
-      get {
-        int size = memoizedSerializedSize;
-        if (size != -1) return size;
-        
-        size = 0;
-        foreach (global::bnet.protocol.EntityId element in UnblockedEntityList) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, element);
-        }
-        size += UnknownFields.SerializedSize;
-        memoizedSerializedSize = size;
-        return size;
-      }
-    }
-    
-    public static ClearBlockListResponse ParseFrom(pb::ByteString data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static ClearBlockListResponse ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static ClearBlockListResponse ParseFrom(byte[] data) {
-      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
-    }
-    public static ClearBlockListResponse ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
-    }
-    public static ClearBlockListResponse ParseFrom(global::System.IO.Stream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static ClearBlockListResponse ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    public static ClearBlockListResponse ParseDelimitedFrom(global::System.IO.Stream input) {
-      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
-    }
-    public static ClearBlockListResponse ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
-      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
-    }
-    public static ClearBlockListResponse ParseFrom(pb::ICodedInputStream input) {
-      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
-    }
-    public static ClearBlockListResponse ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
-    }
-    private ClearBlockListResponse MakeReadOnly() {
-      unblockedEntity_.MakeReadOnly();
-      return this;
-    }
-    
-    public static Builder CreateBuilder() { return new Builder(); }
-    public override Builder ToBuilder() { return CreateBuilder(this); }
-    public override Builder CreateBuilderForType() { return new Builder(); }
-    public static Builder CreateBuilder(ClearBlockListResponse prototype) {
-      return new Builder(prototype);
-    }
-    
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-    public sealed partial class Builder : pb::GeneratedBuilder<ClearBlockListResponse, Builder> {
-      protected override Builder ThisBuilder {
-        get { return this; }
-      }
-      public Builder() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-      }
-      internal Builder(ClearBlockListResponse cloneFrom) {
-        result = cloneFrom;
-        resultIsReadOnly = true;
-      }
-      
-      private bool resultIsReadOnly;
-      private ClearBlockListResponse result;
-      
-      private ClearBlockListResponse PrepareBuilder() {
-        if (resultIsReadOnly) {
-          ClearBlockListResponse original = result;
-          result = new ClearBlockListResponse();
-          resultIsReadOnly = false;
-          MergeFrom(original);
-        }
-        return result;
-      }
-      
-      public override bool IsInitialized {
-        get { return result.IsInitialized; }
-      }
-      
-      protected override ClearBlockListResponse MessageBeingBuilt {
-        get { return PrepareBuilder(); }
-      }
-      
-      public override Builder Clear() {
-        result = DefaultInstance;
-        resultIsReadOnly = true;
-        return this;
-      }
-      
-      public override Builder Clone() {
-        if (resultIsReadOnly) {
-          return new Builder(result);
-        } else {
-          return new Builder().MergeFrom(result);
-        }
-      }
-      
-      public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::bnet.protocol.user_manager.ClearBlockListResponse.Descriptor; }
-      }
-      
-      public override ClearBlockListResponse DefaultInstanceForType {
-        get { return global::bnet.protocol.user_manager.ClearBlockListResponse.DefaultInstance; }
-      }
-      
-      public override ClearBlockListResponse BuildPartial() {
-        if (resultIsReadOnly) {
-          return result;
-        }
-        resultIsReadOnly = true;
-        return result.MakeReadOnly();
-      }
-      
-      public override Builder MergeFrom(pb::IMessage other) {
-        if (other is ClearBlockListResponse) {
-          return MergeFrom((ClearBlockListResponse) other);
-        } else {
-          base.MergeFrom(other);
-          return this;
-        }
-      }
-      
-      public override Builder MergeFrom(ClearBlockListResponse other) {
-        if (other == global::bnet.protocol.user_manager.ClearBlockListResponse.DefaultInstance) return this;
-        PrepareBuilder();
-        if (other.unblockedEntity_.Count != 0) {
-          result.unblockedEntity_.Add(other.unblockedEntity_);
-        }
-        this.MergeUnknownFields(other.UnknownFields);
-        return this;
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input) {
-        return MergeFrom(input, pb::ExtensionRegistry.Empty);
-      }
-      
-      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
-        PrepareBuilder();
-        pb::UnknownFieldSet.Builder unknownFields = null;
-        uint tag;
-        string field_name;
-        while (input.ReadTag(out tag, out field_name)) {
-          if(tag == 0 && field_name != null) {
-            int field_ordinal = global::System.Array.BinarySearch(_clearBlockListResponseFieldNames, field_name, global::System.StringComparer.Ordinal);
-            if(field_ordinal >= 0)
-              tag = _clearBlockListResponseFieldTags[field_ordinal];
-            else {
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              continue;
-            }
-          }
-          switch (tag) {
-            case 0: {
-              throw pb::InvalidProtocolBufferException.InvalidTag();
-            }
-            default: {
-              if (pb::WireFormat.IsEndGroupTag(tag)) {
-                if (unknownFields != null) {
-                  this.UnknownFields = unknownFields.Build();
-                }
-                return this;
-              }
-              if (unknownFields == null) {
-                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
-              }
-              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
-              break;
-            }
-            case 10: {
-              input.ReadMessageArray(tag, field_name, result.unblockedEntity_, global::bnet.protocol.EntityId.DefaultInstance, extensionRegistry);
-              break;
-            }
-          }
-        }
-        
-        if (unknownFields != null) {
-          this.UnknownFields = unknownFields.Build();
-        }
-        return this;
-      }
-      
-      
-      public pbc::IPopsicleList<global::bnet.protocol.EntityId> UnblockedEntityList {
-        get { return PrepareBuilder().unblockedEntity_; }
-      }
-      public int UnblockedEntityCount {
-        get { return result.UnblockedEntityCount; }
-      }
-      public global::bnet.protocol.EntityId GetUnblockedEntity(int index) {
-        return result.GetUnblockedEntity(index);
-      }
-      public Builder SetUnblockedEntity(int index, global::bnet.protocol.EntityId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.unblockedEntity_[index] = value;
-        return this;
-      }
-      public Builder SetUnblockedEntity(int index, global::bnet.protocol.EntityId.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.unblockedEntity_[index] = builderForValue.Build();
-        return this;
-      }
-      public Builder AddUnblockedEntity(global::bnet.protocol.EntityId value) {
-        pb::ThrowHelper.ThrowIfNull(value, "value");
-        PrepareBuilder();
-        result.unblockedEntity_.Add(value);
-        return this;
-      }
-      public Builder AddUnblockedEntity(global::bnet.protocol.EntityId.Builder builderForValue) {
-        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
-        PrepareBuilder();
-        result.unblockedEntity_.Add(builderForValue.Build());
-        return this;
-      }
-      public Builder AddRangeUnblockedEntity(scg::IEnumerable<global::bnet.protocol.EntityId> values) {
-        PrepareBuilder();
-        result.unblockedEntity_.Add(values);
-        return this;
-      }
-      public Builder ClearUnblockedEntity() {
-        PrepareBuilder();
-        result.unblockedEntity_.Clear();
-        return this;
-      }
-    }
-    static ClearBlockListResponse() {
-      object.ReferenceEquals(global::bnet.protocol.user_manager.Proto.UserManagerService.Descriptor, null);
-    }
-  }
-  
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
   public sealed partial class EntityBlockedNotification : pb::GeneratedMessage<EntityBlockedNotification, EntityBlockedNotification.Builder> {
     private EntityBlockedNotification() { }
     private static readonly EntityBlockedNotification defaultInstance = new EntityBlockedNotification().MakeReadOnly();
-    private static readonly string[] _entityBlockedNotificationFieldNames = new string[] { "blocked_entities" };
-    private static readonly uint[] _entityBlockedNotificationFieldTags = new uint[] { 10 };
+    private static readonly string[] _entityBlockedNotificationFieldNames = new string[] { "blocked_entity", "game_account_id" };
+    private static readonly uint[] _entityBlockedNotificationFieldTags = new uint[] { 10, 18 };
     public static EntityBlockedNotification DefaultInstance {
       get { return defaultInstance; }
     }
@@ -3901,22 +2749,32 @@ namespace bnet.protocol.user_manager {
       get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_EntityBlockedNotification__FieldAccessorTable; }
     }
     
-    public const int BlockedEntitiesFieldNumber = 1;
-    private pbc::PopsicleList<global::bnet.protocol.EntityId> blockedEntities_ = new pbc::PopsicleList<global::bnet.protocol.EntityId>();
-    public scg::IList<global::bnet.protocol.EntityId> BlockedEntitiesList {
-      get { return blockedEntities_; }
+    public const int BlockedEntityFieldNumber = 1;
+    private bool hasBlockedEntity;
+    private global::bnet.protocol.user_manager.BlockedEntity blockedEntity_;
+    public bool HasBlockedEntity {
+      get { return hasBlockedEntity; }
     }
-    public int BlockedEntitiesCount {
-      get { return blockedEntities_.Count; }
+    public global::bnet.protocol.user_manager.BlockedEntity BlockedEntity {
+      get { return blockedEntity_ ?? global::bnet.protocol.user_manager.BlockedEntity.DefaultInstance; }
     }
-    public global::bnet.protocol.EntityId GetBlockedEntities(int index) {
-      return blockedEntities_[index];
+    
+    public const int GameAccountIdFieldNumber = 2;
+    private bool hasGameAccountId;
+    private global::bnet.protocol.EntityId gameAccountId_;
+    public bool HasGameAccountId {
+      get { return hasGameAccountId; }
+    }
+    public global::bnet.protocol.EntityId GameAccountId {
+      get { return gameAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        foreach (global::bnet.protocol.EntityId element in BlockedEntitiesList) {
-          if (!element.IsInitialized) return false;
+        if (!hasBlockedEntity) return false;
+        if (!BlockedEntity.IsInitialized) return false;
+        if (HasGameAccountId) {
+          if (!GameAccountId.IsInitialized) return false;
         }
         return true;
       }
@@ -3925,8 +2783,11 @@ namespace bnet.protocol.user_manager {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _entityBlockedNotificationFieldNames;
-      if (blockedEntities_.Count > 0) {
-        output.WriteMessageArray(1, field_names[0], blockedEntities_);
+      if (hasBlockedEntity) {
+        output.WriteMessage(1, field_names[0], BlockedEntity);
+      }
+      if (hasGameAccountId) {
+        output.WriteMessage(2, field_names[1], GameAccountId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -3938,8 +2799,11 @@ namespace bnet.protocol.user_manager {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::bnet.protocol.EntityId element in BlockedEntitiesList) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, element);
+        if (hasBlockedEntity) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, BlockedEntity);
+        }
+        if (hasGameAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, GameAccountId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -3978,7 +2842,6 @@ namespace bnet.protocol.user_manager {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private EntityBlockedNotification MakeReadOnly() {
-      blockedEntities_.MakeReadOnly();
       return this;
     }
     
@@ -4068,8 +2931,11 @@ namespace bnet.protocol.user_manager {
       public override Builder MergeFrom(EntityBlockedNotification other) {
         if (other == global::bnet.protocol.user_manager.EntityBlockedNotification.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.blockedEntities_.Count != 0) {
-          result.blockedEntities_.Add(other.blockedEntities_);
+        if (other.HasBlockedEntity) {
+          MergeBlockedEntity(other.BlockedEntity);
+        }
+        if (other.HasGameAccountId) {
+          MergeGameAccountId(other.GameAccountId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -4115,7 +2981,21 @@ namespace bnet.protocol.user_manager {
               break;
             }
             case 10: {
-              input.ReadMessageArray(tag, field_name, result.blockedEntities_, global::bnet.protocol.EntityId.DefaultInstance, extensionRegistry);
+              global::bnet.protocol.user_manager.BlockedEntity.Builder subBuilder = global::bnet.protocol.user_manager.BlockedEntity.CreateBuilder();
+              if (result.hasBlockedEntity) {
+                subBuilder.MergeFrom(BlockedEntity);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              BlockedEntity = subBuilder.BuildPartial();
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasGameAccountId) {
+                subBuilder.MergeFrom(GameAccountId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              GameAccountId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -4128,47 +3008,83 @@ namespace bnet.protocol.user_manager {
       }
       
       
-      public pbc::IPopsicleList<global::bnet.protocol.EntityId> BlockedEntitiesList {
-        get { return PrepareBuilder().blockedEntities_; }
+      public bool HasBlockedEntity {
+       get { return result.hasBlockedEntity; }
       }
-      public int BlockedEntitiesCount {
-        get { return result.BlockedEntitiesCount; }
+      public global::bnet.protocol.user_manager.BlockedEntity BlockedEntity {
+        get { return result.BlockedEntity; }
+        set { SetBlockedEntity(value); }
       }
-      public global::bnet.protocol.EntityId GetBlockedEntities(int index) {
-        return result.GetBlockedEntities(index);
-      }
-      public Builder SetBlockedEntities(int index, global::bnet.protocol.EntityId value) {
+      public Builder SetBlockedEntity(global::bnet.protocol.user_manager.BlockedEntity value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.blockedEntities_[index] = value;
+        result.hasBlockedEntity = true;
+        result.blockedEntity_ = value;
         return this;
       }
-      public Builder SetBlockedEntities(int index, global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetBlockedEntity(global::bnet.protocol.user_manager.BlockedEntity.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.blockedEntities_[index] = builderForValue.Build();
+        result.hasBlockedEntity = true;
+        result.blockedEntity_ = builderForValue.Build();
         return this;
       }
-      public Builder AddBlockedEntities(global::bnet.protocol.EntityId value) {
+      public Builder MergeBlockedEntity(global::bnet.protocol.user_manager.BlockedEntity value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.blockedEntities_.Add(value);
+        if (result.hasBlockedEntity &&
+            result.blockedEntity_ != global::bnet.protocol.user_manager.BlockedEntity.DefaultInstance) {
+            result.blockedEntity_ = global::bnet.protocol.user_manager.BlockedEntity.CreateBuilder(result.blockedEntity_).MergeFrom(value).BuildPartial();
+        } else {
+          result.blockedEntity_ = value;
+        }
+        result.hasBlockedEntity = true;
         return this;
       }
-      public Builder AddBlockedEntities(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder ClearBlockedEntity() {
+        PrepareBuilder();
+        result.hasBlockedEntity = false;
+        result.blockedEntity_ = null;
+        return this;
+      }
+      
+      public bool HasGameAccountId {
+       get { return result.hasGameAccountId; }
+      }
+      public global::bnet.protocol.EntityId GameAccountId {
+        get { return result.GameAccountId; }
+        set { SetGameAccountId(value); }
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = value;
+        return this;
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.blockedEntities_.Add(builderForValue.Build());
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = builderForValue.Build();
         return this;
       }
-      public Builder AddRangeBlockedEntities(scg::IEnumerable<global::bnet.protocol.EntityId> values) {
+      public Builder MergeGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.blockedEntities_.Add(values);
+        if (result.hasGameAccountId &&
+            result.gameAccountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.gameAccountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccountId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.gameAccountId_ = value;
+        }
+        result.hasGameAccountId = true;
         return this;
       }
-      public Builder ClearBlockedEntities() {
+      public Builder ClearGameAccountId() {
         PrepareBuilder();
-        result.blockedEntities_.Clear();
+        result.hasGameAccountId = false;
+        result.gameAccountId_ = null;
         return this;
       }
     }
@@ -4183,8 +3099,8 @@ namespace bnet.protocol.user_manager {
   public sealed partial class EntityUnblockedNotification : pb::GeneratedMessage<EntityUnblockedNotification, EntityUnblockedNotification.Builder> {
     private EntityUnblockedNotification() { }
     private static readonly EntityUnblockedNotification defaultInstance = new EntityUnblockedNotification().MakeReadOnly();
-    private static readonly string[] _entityUnblockedNotificationFieldNames = new string[] { "unblocked_entities" };
-    private static readonly uint[] _entityUnblockedNotificationFieldTags = new uint[] { 10 };
+    private static readonly string[] _entityUnblockedNotificationFieldNames = new string[] { "game_account_id", "unblocked_entity" };
+    private static readonly uint[] _entityUnblockedNotificationFieldTags = new uint[] { 18, 10 };
     public static EntityUnblockedNotification DefaultInstance {
       get { return defaultInstance; }
     }
@@ -4205,22 +3121,32 @@ namespace bnet.protocol.user_manager {
       get { return global::bnet.protocol.user_manager.Proto.UserManagerService.internal__static_bnet_protocol_user_manager_EntityUnblockedNotification__FieldAccessorTable; }
     }
     
-    public const int UnblockedEntitiesFieldNumber = 1;
-    private pbc::PopsicleList<global::bnet.protocol.EntityId> unblockedEntities_ = new pbc::PopsicleList<global::bnet.protocol.EntityId>();
-    public scg::IList<global::bnet.protocol.EntityId> UnblockedEntitiesList {
-      get { return unblockedEntities_; }
+    public const int UnblockedEntityFieldNumber = 1;
+    private bool hasUnblockedEntity;
+    private global::bnet.protocol.user_manager.BlockedEntity unblockedEntity_;
+    public bool HasUnblockedEntity {
+      get { return hasUnblockedEntity; }
     }
-    public int UnblockedEntitiesCount {
-      get { return unblockedEntities_.Count; }
+    public global::bnet.protocol.user_manager.BlockedEntity UnblockedEntity {
+      get { return unblockedEntity_ ?? global::bnet.protocol.user_manager.BlockedEntity.DefaultInstance; }
     }
-    public global::bnet.protocol.EntityId GetUnblockedEntities(int index) {
-      return unblockedEntities_[index];
+    
+    public const int GameAccountIdFieldNumber = 2;
+    private bool hasGameAccountId;
+    private global::bnet.protocol.EntityId gameAccountId_;
+    public bool HasGameAccountId {
+      get { return hasGameAccountId; }
+    }
+    public global::bnet.protocol.EntityId GameAccountId {
+      get { return gameAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
     public override bool IsInitialized {
       get {
-        foreach (global::bnet.protocol.EntityId element in UnblockedEntitiesList) {
-          if (!element.IsInitialized) return false;
+        if (!hasUnblockedEntity) return false;
+        if (!UnblockedEntity.IsInitialized) return false;
+        if (HasGameAccountId) {
+          if (!GameAccountId.IsInitialized) return false;
         }
         return true;
       }
@@ -4229,8 +3155,11 @@ namespace bnet.protocol.user_manager {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _entityUnblockedNotificationFieldNames;
-      if (unblockedEntities_.Count > 0) {
-        output.WriteMessageArray(1, field_names[0], unblockedEntities_);
+      if (hasUnblockedEntity) {
+        output.WriteMessage(1, field_names[1], UnblockedEntity);
+      }
+      if (hasGameAccountId) {
+        output.WriteMessage(2, field_names[0], GameAccountId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -4242,8 +3171,11 @@ namespace bnet.protocol.user_manager {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::bnet.protocol.EntityId element in UnblockedEntitiesList) {
-          size += pb::CodedOutputStream.ComputeMessageSize(1, element);
+        if (hasUnblockedEntity) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, UnblockedEntity);
+        }
+        if (hasGameAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, GameAccountId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -4282,7 +3214,6 @@ namespace bnet.protocol.user_manager {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private EntityUnblockedNotification MakeReadOnly() {
-      unblockedEntities_.MakeReadOnly();
       return this;
     }
     
@@ -4372,8 +3303,11 @@ namespace bnet.protocol.user_manager {
       public override Builder MergeFrom(EntityUnblockedNotification other) {
         if (other == global::bnet.protocol.user_manager.EntityUnblockedNotification.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.unblockedEntities_.Count != 0) {
-          result.unblockedEntities_.Add(other.unblockedEntities_);
+        if (other.HasUnblockedEntity) {
+          MergeUnblockedEntity(other.UnblockedEntity);
+        }
+        if (other.HasGameAccountId) {
+          MergeGameAccountId(other.GameAccountId);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -4419,7 +3353,21 @@ namespace bnet.protocol.user_manager {
               break;
             }
             case 10: {
-              input.ReadMessageArray(tag, field_name, result.unblockedEntities_, global::bnet.protocol.EntityId.DefaultInstance, extensionRegistry);
+              global::bnet.protocol.user_manager.BlockedEntity.Builder subBuilder = global::bnet.protocol.user_manager.BlockedEntity.CreateBuilder();
+              if (result.hasUnblockedEntity) {
+                subBuilder.MergeFrom(UnblockedEntity);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              UnblockedEntity = subBuilder.BuildPartial();
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasGameAccountId) {
+                subBuilder.MergeFrom(GameAccountId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              GameAccountId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -4432,47 +3380,83 @@ namespace bnet.protocol.user_manager {
       }
       
       
-      public pbc::IPopsicleList<global::bnet.protocol.EntityId> UnblockedEntitiesList {
-        get { return PrepareBuilder().unblockedEntities_; }
+      public bool HasUnblockedEntity {
+       get { return result.hasUnblockedEntity; }
       }
-      public int UnblockedEntitiesCount {
-        get { return result.UnblockedEntitiesCount; }
+      public global::bnet.protocol.user_manager.BlockedEntity UnblockedEntity {
+        get { return result.UnblockedEntity; }
+        set { SetUnblockedEntity(value); }
       }
-      public global::bnet.protocol.EntityId GetUnblockedEntities(int index) {
-        return result.GetUnblockedEntities(index);
-      }
-      public Builder SetUnblockedEntities(int index, global::bnet.protocol.EntityId value) {
+      public Builder SetUnblockedEntity(global::bnet.protocol.user_manager.BlockedEntity value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.unblockedEntities_[index] = value;
+        result.hasUnblockedEntity = true;
+        result.unblockedEntity_ = value;
         return this;
       }
-      public Builder SetUnblockedEntities(int index, global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder SetUnblockedEntity(global::bnet.protocol.user_manager.BlockedEntity.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.unblockedEntities_[index] = builderForValue.Build();
+        result.hasUnblockedEntity = true;
+        result.unblockedEntity_ = builderForValue.Build();
         return this;
       }
-      public Builder AddUnblockedEntities(global::bnet.protocol.EntityId value) {
+      public Builder MergeUnblockedEntity(global::bnet.protocol.user_manager.BlockedEntity value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.unblockedEntities_.Add(value);
+        if (result.hasUnblockedEntity &&
+            result.unblockedEntity_ != global::bnet.protocol.user_manager.BlockedEntity.DefaultInstance) {
+            result.unblockedEntity_ = global::bnet.protocol.user_manager.BlockedEntity.CreateBuilder(result.unblockedEntity_).MergeFrom(value).BuildPartial();
+        } else {
+          result.unblockedEntity_ = value;
+        }
+        result.hasUnblockedEntity = true;
         return this;
       }
-      public Builder AddUnblockedEntities(global::bnet.protocol.EntityId.Builder builderForValue) {
+      public Builder ClearUnblockedEntity() {
+        PrepareBuilder();
+        result.hasUnblockedEntity = false;
+        result.unblockedEntity_ = null;
+        return this;
+      }
+      
+      public bool HasGameAccountId {
+       get { return result.hasGameAccountId; }
+      }
+      public global::bnet.protocol.EntityId GameAccountId {
+        get { return result.GameAccountId; }
+        set { SetGameAccountId(value); }
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = value;
+        return this;
+      }
+      public Builder SetGameAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.unblockedEntities_.Add(builderForValue.Build());
+        result.hasGameAccountId = true;
+        result.gameAccountId_ = builderForValue.Build();
         return this;
       }
-      public Builder AddRangeUnblockedEntities(scg::IEnumerable<global::bnet.protocol.EntityId> values) {
+      public Builder MergeGameAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.unblockedEntities_.Add(values);
+        if (result.hasGameAccountId &&
+            result.gameAccountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.gameAccountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccountId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.gameAccountId_ = value;
+        }
+        result.hasGameAccountId = true;
         return this;
       }
-      public Builder ClearUnblockedEntities() {
+      public Builder ClearGameAccountId() {
         PrepareBuilder();
-        result.unblockedEntities_.Clear();
+        result.hasGameAccountId = false;
+        result.gameAccountId_ = null;
         return this;
       }
     }
@@ -5111,15 +4095,11 @@ namespace bnet.protocol.user_manager {
     public abstract void BlockEntity(
         pb::IRpcController controller,
         global::bnet.protocol.user_manager.BlockEntityRequest request,
-        global::System.Action<global::bnet.protocol.user_manager.BlockEntityResponse> done);
+        global::System.Action<global::bnet.protocol.NoData> done);
     public abstract void UnblockEntity(
         pb::IRpcController controller,
         global::bnet.protocol.user_manager.UnblockEntityRequest request,
-        global::System.Action<global::bnet.protocol.user_manager.UnblockEntityResponse> done);
-    public abstract void ClearBlockList(
-        pb::IRpcController controller,
-        global::bnet.protocol.NoData request,
-        global::System.Action<global::bnet.protocol.user_manager.ClearBlockListResponse> done);
+        global::System.Action<global::bnet.protocol.NoData> done);
     public abstract void BlockEntityForSession(
         pb::IRpcController controller,
         global::bnet.protocol.user_manager.BlockEntityRequest request,
@@ -5163,25 +4143,20 @@ namespace bnet.protocol.user_manager {
           return;
         case 3:
           this.BlockEntity(controller, (global::bnet.protocol.user_manager.BlockEntityRequest) request,
-              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.user_manager.BlockEntityResponse>(
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
         case 4:
           this.UnblockEntity(controller, (global::bnet.protocol.user_manager.UnblockEntityRequest) request,
-              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.user_manager.UnblockEntityResponse>(
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
         case 5:
-          this.ClearBlockList(controller, (global::bnet.protocol.NoData) request,
-              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.user_manager.ClearBlockListResponse>(
-              done));
-          return;
-        case 6:
           this.BlockEntityForSession(controller, (global::bnet.protocol.user_manager.BlockEntityRequest) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
           return;
-        case 7:
+        case 6:
           this.LoadBlockList(controller, (global::bnet.protocol.EntityId) request,
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
               done));
@@ -5208,10 +4183,8 @@ namespace bnet.protocol.user_manager {
         case 4:
           return global::bnet.protocol.user_manager.UnblockEntityRequest.DefaultInstance;
         case 5:
-          return global::bnet.protocol.NoData.DefaultInstance;
-        case 6:
           return global::bnet.protocol.user_manager.BlockEntityRequest.DefaultInstance;
-        case 7:
+        case 6:
           return global::bnet.protocol.EntityId.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -5231,14 +4204,12 @@ namespace bnet.protocol.user_manager {
         case 2:
           return global::bnet.protocol.user_manager.ClearRecentPlayersResponse.DefaultInstance;
         case 3:
-          return global::bnet.protocol.user_manager.BlockEntityResponse.DefaultInstance;
-        case 4:
-          return global::bnet.protocol.user_manager.UnblockEntityResponse.DefaultInstance;
-        case 5:
-          return global::bnet.protocol.user_manager.ClearBlockListResponse.DefaultInstance;
-        case 6:
           return global::bnet.protocol.NoData.DefaultInstance;
-        case 7:
+        case 4:
+          return global::bnet.protocol.NoData.DefaultInstance;
+        case 5:
+          return global::bnet.protocol.NoData.DefaultInstance;
+        case 6:
           return global::bnet.protocol.NoData.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -5293,35 +4264,26 @@ namespace bnet.protocol.user_manager {
       public override void BlockEntity(
           pb::IRpcController controller,
           global::bnet.protocol.user_manager.BlockEntityRequest request,
-          global::System.Action<global::bnet.protocol.user_manager.BlockEntityResponse> done) {
+          global::System.Action<global::bnet.protocol.NoData> done) {
         channel.CallMethod(Descriptor.Methods[3],
-            controller, request, global::bnet.protocol.user_manager.BlockEntityResponse.DefaultInstance,
-            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.user_manager.BlockEntityResponse, global::bnet.protocol.user_manager.BlockEntityResponse.Builder>(done, global::bnet.protocol.user_manager.BlockEntityResponse.DefaultInstance));
+            controller, request, global::bnet.protocol.NoData.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
       
       public override void UnblockEntity(
           pb::IRpcController controller,
           global::bnet.protocol.user_manager.UnblockEntityRequest request,
-          global::System.Action<global::bnet.protocol.user_manager.UnblockEntityResponse> done) {
+          global::System.Action<global::bnet.protocol.NoData> done) {
         channel.CallMethod(Descriptor.Methods[4],
-            controller, request, global::bnet.protocol.user_manager.UnblockEntityResponse.DefaultInstance,
-            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.user_manager.UnblockEntityResponse, global::bnet.protocol.user_manager.UnblockEntityResponse.Builder>(done, global::bnet.protocol.user_manager.UnblockEntityResponse.DefaultInstance));
-      }
-      
-      public override void ClearBlockList(
-          pb::IRpcController controller,
-          global::bnet.protocol.NoData request,
-          global::System.Action<global::bnet.protocol.user_manager.ClearBlockListResponse> done) {
-        channel.CallMethod(Descriptor.Methods[5],
-            controller, request, global::bnet.protocol.user_manager.ClearBlockListResponse.DefaultInstance,
-            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.user_manager.ClearBlockListResponse, global::bnet.protocol.user_manager.ClearBlockListResponse.Builder>(done, global::bnet.protocol.user_manager.ClearBlockListResponse.DefaultInstance));
+            controller, request, global::bnet.protocol.NoData.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
       
       public override void BlockEntityForSession(
           pb::IRpcController controller,
           global::bnet.protocol.user_manager.BlockEntityRequest request,
           global::System.Action<global::bnet.protocol.NoData> done) {
-        channel.CallMethod(Descriptor.Methods[6],
+        channel.CallMethod(Descriptor.Methods[5],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
@@ -5330,7 +4292,7 @@ namespace bnet.protocol.user_manager {
           pb::IRpcController controller,
           global::bnet.protocol.EntityId request,
           global::System.Action<global::bnet.protocol.NoData> done) {
-        channel.CallMethod(Descriptor.Methods[7],
+        channel.CallMethod(Descriptor.Methods[6],
             controller, request, global::bnet.protocol.NoData.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }

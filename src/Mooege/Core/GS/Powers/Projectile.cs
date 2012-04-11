@@ -84,6 +84,8 @@ namespace Mooege.Core.GS.Powers
         public void Launch(Vector3D targetPosition, float speed)
         {
             this.TranslateFacing(targetPosition, true);
+            targetPosition = new Vector3D(targetPosition);
+            targetPosition.Z += this.ActorData.Cylinder.Ax1 - this.ActorData.Cylinder.Position.Z;
             if (!_spawned)
             {
                 this.EnterWorld(this.Position);

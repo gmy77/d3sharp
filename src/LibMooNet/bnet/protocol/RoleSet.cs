@@ -20,6 +20,10 @@ namespace bnet.protocol {
       }
       #endregion
       #region Static variables
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_Privilege__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.Privilege, global::bnet.protocol.Privilege.Builder> internal__static_bnet_protocol_Privilege__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_RoleSetConfig__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.RoleSetConfig, global::bnet.protocol.RoleSetConfig.Builder> internal__static_bnet_protocol_RoleSetConfig__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_Role__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.Role, global::bnet.protocol.Role.Builder> internal__static_bnet_protocol_Role__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_RoleSet__Descriptor;
@@ -34,23 +38,34 @@ namespace bnet.protocol {
       static RoleSet() {
         byte[] descriptorData = global::System.Convert.FromBase64String(
             "ChNibmV0L3JvbGVfc2V0LnByb3RvEg1ibmV0LnByb3RvY29sGhRibmV0L2F0" + 
-            "dHJpYnV0ZS5wcm90byLQAQoEUm9sZRIKCgJpZBgBIAIoDRIMCgRuYW1lGAIg" + 
-            "AigJEhEKCXByaXZpbGVnZRgDIAMoCRIbCg9hc3NpZ25hYmxlX3JvbGUYBCAD" + 
-            "KA1CAhABEhcKCHJlcXVpcmVkGAUgASgIOgVmYWxzZRIVCgZ1bmlxdWUYBiAB" + 
-            "KAg6BWZhbHNlEhcKD3JlbGVnYXRpb25fcm9sZRgHIAEoDRI1CglhdHRyaWJ1" + 
-            "dGUYCCADKAsyIi5ibmV0LnByb3RvY29sLmF0dHJpYnV0ZS5BdHRyaWJ1dGUi" + 
-            "zgEKB1JvbGVTZXQSDwoHcHJvZ3JhbRgBIAIoCRIPCgdzZXJ2aWNlGAIgAigJ" + 
-            "EhgKB3N1YnR5cGUYAyABKAk6B2RlZmF1bHQSIQoEcm9sZRgEIAMoCzITLmJu" + 
-            "ZXQucHJvdG9jb2wuUm9sZRIYCgxkZWZhdWx0X3JvbGUYBSADKA1CAhABEhMK" + 
-            "C21heF9tZW1iZXJzGAYgASgFEjUKCWF0dHJpYnV0ZRgHIAMoCzIiLmJuZXQu" + 
-            "cHJvdG9jb2wuYXR0cmlidXRlLkF0dHJpYnV0ZQ==");
+            "dHJpYnV0ZS5wcm90byIoCglQcml2aWxlZ2USDAoEbmFtZRgBIAIoCRINCgV2" + 
+            "YWx1ZRgCIAIoDSJmCg1Sb2xlU2V0Q29uZmlnEisKCXByaXZpbGVnZRgBIAMo" + 
+            "CzIYLmJuZXQucHJvdG9jb2wuUHJpdmlsZWdlEigKCHJvbGVfc2V0GAIgAigL" + 
+            "MhYuYm5ldC5wcm90b2NvbC5Sb2xlU2V0ItABCgRSb2xlEgoKAmlkGAEgAigN" + 
+            "EgwKBG5hbWUYAiACKAkSEQoJcHJpdmlsZWdlGAMgAygJEhsKD2Fzc2lnbmFi" + 
+            "bGVfcm9sZRgEIAMoDUICEAESFwoIcmVxdWlyZWQYBSABKAg6BWZhbHNlEhUK" + 
+            "BnVuaXF1ZRgGIAEoCDoFZmFsc2USFwoPcmVsZWdhdGlvbl9yb2xlGAcgASgN" + 
+            "EjUKCWF0dHJpYnV0ZRgIIAMoCzIiLmJuZXQucHJvdG9jb2wuYXR0cmlidXRl" + 
+            "LkF0dHJpYnV0ZSLOAQoHUm9sZVNldBIPCgdwcm9ncmFtGAEgAigJEg8KB3Nl" + 
+            "cnZpY2UYAiACKAkSGAoHc3VidHlwZRgDIAEoCToHZGVmYXVsdBIhCgRyb2xl" + 
+            "GAQgAygLMhMuYm5ldC5wcm90b2NvbC5Sb2xlEhgKDGRlZmF1bHRfcm9sZRgF" + 
+            "IAMoDUICEAESEwoLbWF4X21lbWJlcnMYBiABKAUSNQoJYXR0cmlidXRlGAcg" + 
+            "AygLMiIuYm5ldC5wcm90b2NvbC5hdHRyaWJ1dGUuQXR0cmlidXRl");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
-          internal__static_bnet_protocol_Role__Descriptor = Descriptor.MessageTypes[0];
+          internal__static_bnet_protocol_Privilege__Descriptor = Descriptor.MessageTypes[0];
+          internal__static_bnet_protocol_Privilege__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.Privilege, global::bnet.protocol.Privilege.Builder>(internal__static_bnet_protocol_Privilege__Descriptor,
+                  new string[] { "Name", "Value", });
+          internal__static_bnet_protocol_RoleSetConfig__Descriptor = Descriptor.MessageTypes[1];
+          internal__static_bnet_protocol_RoleSetConfig__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.RoleSetConfig, global::bnet.protocol.RoleSetConfig.Builder>(internal__static_bnet_protocol_RoleSetConfig__Descriptor,
+                  new string[] { "Privilege", "RoleSet", });
+          internal__static_bnet_protocol_Role__Descriptor = Descriptor.MessageTypes[2];
           internal__static_bnet_protocol_Role__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.Role, global::bnet.protocol.Role.Builder>(internal__static_bnet_protocol_Role__Descriptor,
                   new string[] { "Id", "Name", "Privilege", "AssignableRole", "Required", "Unique", "RelegationRole", "Attribute", });
-          internal__static_bnet_protocol_RoleSet__Descriptor = Descriptor.MessageTypes[1];
+          internal__static_bnet_protocol_RoleSet__Descriptor = Descriptor.MessageTypes[3];
           internal__static_bnet_protocol_RoleSet__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.RoleSet, global::bnet.protocol.RoleSet.Builder>(internal__static_bnet_protocol_RoleSet__Descriptor,
                   new string[] { "Program", "Service", "Subtype", "Role", "DefaultRole", "MaxMembers", "Attribute", });
@@ -66,6 +81,700 @@ namespace bnet.protocol {
     }
   }
   #region Messages
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class Privilege : pb::GeneratedMessage<Privilege, Privilege.Builder> {
+    private Privilege() { }
+    private static readonly Privilege defaultInstance = new Privilege().MakeReadOnly();
+    private static readonly string[] _privilegeFieldNames = new string[] { "name", "value" };
+    private static readonly uint[] _privilegeFieldTags = new uint[] { 10, 16 };
+    public static Privilege DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override Privilege DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override Privilege ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.Proto.RoleSet.internal__static_bnet_protocol_Privilege__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<Privilege, Privilege.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.Proto.RoleSet.internal__static_bnet_protocol_Privilege__FieldAccessorTable; }
+    }
+    
+    public const int NameFieldNumber = 1;
+    private bool hasName;
+    private string name_ = "";
+    public bool HasName {
+      get { return hasName; }
+    }
+    public string Name {
+      get { return name_; }
+    }
+    
+    public const int ValueFieldNumber = 2;
+    private bool hasValue;
+    private uint value_;
+    public bool HasValue {
+      get { return hasValue; }
+    }
+    public uint Value {
+      get { return value_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasName) return false;
+        if (!hasValue) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _privilegeFieldNames;
+      if (hasName) {
+        output.WriteString(1, field_names[0], Name);
+      }
+      if (hasValue) {
+        output.WriteUInt32(2, field_names[1], Value);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasName) {
+          size += pb::CodedOutputStream.ComputeStringSize(1, Name);
+        }
+        if (hasValue) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, Value);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static Privilege ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static Privilege ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static Privilege ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static Privilege ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static Privilege ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static Privilege ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static Privilege ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static Privilege ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static Privilege ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static Privilege ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private Privilege MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(Privilege prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<Privilege, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(Privilege cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private Privilege result;
+      
+      private Privilege PrepareBuilder() {
+        if (resultIsReadOnly) {
+          Privilege original = result;
+          result = new Privilege();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override Privilege MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.Privilege.Descriptor; }
+      }
+      
+      public override Privilege DefaultInstanceForType {
+        get { return global::bnet.protocol.Privilege.DefaultInstance; }
+      }
+      
+      public override Privilege BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is Privilege) {
+          return MergeFrom((Privilege) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(Privilege other) {
+        if (other == global::bnet.protocol.Privilege.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasName) {
+          Name = other.Name;
+        }
+        if (other.HasValue) {
+          Value = other.Value;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_privilegeFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _privilegeFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              result.hasName = input.ReadString(ref result.name_);
+              break;
+            }
+            case 16: {
+              result.hasValue = input.ReadUInt32(ref result.value_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasName {
+        get { return result.hasName; }
+      }
+      public string Name {
+        get { return result.Name; }
+        set { SetName(value); }
+      }
+      public Builder SetName(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasName = true;
+        result.name_ = value;
+        return this;
+      }
+      public Builder ClearName() {
+        PrepareBuilder();
+        result.hasName = false;
+        result.name_ = "";
+        return this;
+      }
+      
+      public bool HasValue {
+        get { return result.hasValue; }
+      }
+      public uint Value {
+        get { return result.Value; }
+        set { SetValue(value); }
+      }
+      public Builder SetValue(uint value) {
+        PrepareBuilder();
+        result.hasValue = true;
+        result.value_ = value;
+        return this;
+      }
+      public Builder ClearValue() {
+        PrepareBuilder();
+        result.hasValue = false;
+        result.value_ = 0;
+        return this;
+      }
+    }
+    static Privilege() {
+      object.ReferenceEquals(global::bnet.protocol.Proto.RoleSet.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class RoleSetConfig : pb::GeneratedMessage<RoleSetConfig, RoleSetConfig.Builder> {
+    private RoleSetConfig() { }
+    private static readonly RoleSetConfig defaultInstance = new RoleSetConfig().MakeReadOnly();
+    private static readonly string[] _roleSetConfigFieldNames = new string[] { "privilege", "role_set" };
+    private static readonly uint[] _roleSetConfigFieldTags = new uint[] { 10, 18 };
+    public static RoleSetConfig DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override RoleSetConfig DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override RoleSetConfig ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.Proto.RoleSet.internal__static_bnet_protocol_RoleSetConfig__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<RoleSetConfig, RoleSetConfig.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.Proto.RoleSet.internal__static_bnet_protocol_RoleSetConfig__FieldAccessorTable; }
+    }
+    
+    public const int PrivilegeFieldNumber = 1;
+    private pbc::PopsicleList<global::bnet.protocol.Privilege> privilege_ = new pbc::PopsicleList<global::bnet.protocol.Privilege>();
+    public scg::IList<global::bnet.protocol.Privilege> PrivilegeList {
+      get { return privilege_; }
+    }
+    public int PrivilegeCount {
+      get { return privilege_.Count; }
+    }
+    public global::bnet.protocol.Privilege GetPrivilege(int index) {
+      return privilege_[index];
+    }
+    
+    public const int RoleSetFieldNumber = 2;
+    private bool hasRoleSet;
+    private global::bnet.protocol.RoleSet roleSet_;
+    public bool HasRoleSet {
+      get { return hasRoleSet; }
+    }
+    public global::bnet.protocol.RoleSet RoleSet {
+      get { return roleSet_ ?? global::bnet.protocol.RoleSet.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasRoleSet) return false;
+        foreach (global::bnet.protocol.Privilege element in PrivilegeList) {
+          if (!element.IsInitialized) return false;
+        }
+        if (!RoleSet.IsInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _roleSetConfigFieldNames;
+      if (privilege_.Count > 0) {
+        output.WriteMessageArray(1, field_names[0], privilege_);
+      }
+      if (hasRoleSet) {
+        output.WriteMessage(2, field_names[1], RoleSet);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        foreach (global::bnet.protocol.Privilege element in PrivilegeList) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, element);
+        }
+        if (hasRoleSet) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, RoleSet);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static RoleSetConfig ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static RoleSetConfig ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static RoleSetConfig ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static RoleSetConfig ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static RoleSetConfig ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static RoleSetConfig ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static RoleSetConfig ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static RoleSetConfig ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static RoleSetConfig ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static RoleSetConfig ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private RoleSetConfig MakeReadOnly() {
+      privilege_.MakeReadOnly();
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(RoleSetConfig prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<RoleSetConfig, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(RoleSetConfig cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private RoleSetConfig result;
+      
+      private RoleSetConfig PrepareBuilder() {
+        if (resultIsReadOnly) {
+          RoleSetConfig original = result;
+          result = new RoleSetConfig();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override RoleSetConfig MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.RoleSetConfig.Descriptor; }
+      }
+      
+      public override RoleSetConfig DefaultInstanceForType {
+        get { return global::bnet.protocol.RoleSetConfig.DefaultInstance; }
+      }
+      
+      public override RoleSetConfig BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is RoleSetConfig) {
+          return MergeFrom((RoleSetConfig) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(RoleSetConfig other) {
+        if (other == global::bnet.protocol.RoleSetConfig.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.privilege_.Count != 0) {
+          result.privilege_.Add(other.privilege_);
+        }
+        if (other.HasRoleSet) {
+          MergeRoleSet(other.RoleSet);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_roleSetConfigFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _roleSetConfigFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              input.ReadMessageArray(tag, field_name, result.privilege_, global::bnet.protocol.Privilege.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.RoleSet.Builder subBuilder = global::bnet.protocol.RoleSet.CreateBuilder();
+              if (result.hasRoleSet) {
+                subBuilder.MergeFrom(RoleSet);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              RoleSet = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public pbc::IPopsicleList<global::bnet.protocol.Privilege> PrivilegeList {
+        get { return PrepareBuilder().privilege_; }
+      }
+      public int PrivilegeCount {
+        get { return result.PrivilegeCount; }
+      }
+      public global::bnet.protocol.Privilege GetPrivilege(int index) {
+        return result.GetPrivilege(index);
+      }
+      public Builder SetPrivilege(int index, global::bnet.protocol.Privilege value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.privilege_[index] = value;
+        return this;
+      }
+      public Builder SetPrivilege(int index, global::bnet.protocol.Privilege.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.privilege_[index] = builderForValue.Build();
+        return this;
+      }
+      public Builder AddPrivilege(global::bnet.protocol.Privilege value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.privilege_.Add(value);
+        return this;
+      }
+      public Builder AddPrivilege(global::bnet.protocol.Privilege.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.privilege_.Add(builderForValue.Build());
+        return this;
+      }
+      public Builder AddRangePrivilege(scg::IEnumerable<global::bnet.protocol.Privilege> values) {
+        PrepareBuilder();
+        result.privilege_.Add(values);
+        return this;
+      }
+      public Builder ClearPrivilege() {
+        PrepareBuilder();
+        result.privilege_.Clear();
+        return this;
+      }
+      
+      public bool HasRoleSet {
+       get { return result.hasRoleSet; }
+      }
+      public global::bnet.protocol.RoleSet RoleSet {
+        get { return result.RoleSet; }
+        set { SetRoleSet(value); }
+      }
+      public Builder SetRoleSet(global::bnet.protocol.RoleSet value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasRoleSet = true;
+        result.roleSet_ = value;
+        return this;
+      }
+      public Builder SetRoleSet(global::bnet.protocol.RoleSet.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasRoleSet = true;
+        result.roleSet_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeRoleSet(global::bnet.protocol.RoleSet value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasRoleSet &&
+            result.roleSet_ != global::bnet.protocol.RoleSet.DefaultInstance) {
+            result.roleSet_ = global::bnet.protocol.RoleSet.CreateBuilder(result.roleSet_).MergeFrom(value).BuildPartial();
+        } else {
+          result.roleSet_ = value;
+        }
+        result.hasRoleSet = true;
+        return this;
+      }
+      public Builder ClearRoleSet() {
+        PrepareBuilder();
+        result.hasRoleSet = false;
+        result.roleSet_ = null;
+        return this;
+      }
+    }
+    static RoleSetConfig() {
+      object.ReferenceEquals(global::bnet.protocol.Proto.RoleSet.Descriptor, null);
+    }
+  }
+  
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]

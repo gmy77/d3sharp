@@ -53,7 +53,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         {
             ActorID = buffer.ReadUInt(32);
             ActorSNOId = buffer.ReadInt(32);
-            Field2 = buffer.ReadInt(5);
+            Field2 = buffer.ReadInt(6);
             Field3 = buffer.ReadInt(2) + (-1);
             if (buffer.ReadBool())
             {
@@ -89,7 +89,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         {
             buffer.WriteUInt(32, ActorID);
             buffer.WriteInt(32, ActorSNOId);
-            buffer.WriteInt(5, Field2);
+            buffer.WriteInt(6, Field2);
             buffer.WriteInt(2, Field3 - (-1));
             buffer.WriteBool(WorldLocation != null);
             if (WorldLocation != null)

@@ -83,5 +83,6 @@ namespace Mooege.Core.GS.Common.Types.SNO
         Music = 62,
         Tutorial = 63,
         BossEncounter = 64,
+        ControlScheme = 65,
     }
 }

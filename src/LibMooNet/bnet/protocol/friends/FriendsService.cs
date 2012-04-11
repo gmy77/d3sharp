@@ -88,13 +88,13 @@ namespace bnet.protocol.friends {
             "NQoJYXR0cmlidXRlGAMgAygLMiIuYm5ldC5wcm90b2NvbC5hdHRyaWJ1dGUu" + 
             "QXR0cmlidXRlEhgKEGF0dHJpYnV0ZXNfZXBvY2gYBCABKAQidQoSRnJpZW5k" + 
             "Tm90aWZpY2F0aW9uEi0KBnRhcmdldBgBIAIoCzIdLmJuZXQucHJvdG9jb2wu" + 
-            "ZnJpZW5kcy5GcmllbmQSMAoPZ2FtZV9hY2NvdW50X2lkGAIgAigLMhcuYm5l" + 
+            "ZnJpZW5kcy5GcmllbmQSMAoPZ2FtZV9hY2NvdW50X2lkGAIgASgLMhcuYm5l" + 
             "dC5wcm90b2NvbC5FbnRpdHlJZCKIAQodVXBkYXRlRnJpZW5kU3RhdGVOb3Rp" + 
             "ZmljYXRpb24SNQoOY2hhbmdlZF9mcmllbmQYASACKAsyHS5ibmV0LnByb3Rv" + 
-            "Y29sLmZyaWVuZHMuRnJpZW5kEjAKD2dhbWVfYWNjb3VudF9pZBgCIAIoCzIX" + 
+            "Y29sLmZyaWVuZHMuRnJpZW5kEjAKD2dhbWVfYWNjb3VudF9pZBgCIAEoCzIX" + 
             "LmJuZXQucHJvdG9jb2wuRW50aXR5SWQilwEKFkludml0YXRpb25Ob3RpZmlj" + 
             "YXRpb24SOAoKaW52aXRhdGlvbhgBIAIoCzIkLmJuZXQucHJvdG9jb2wuaW52" + 
-            "aXRhdGlvbi5JbnZpdGF0aW9uEjAKD2dhbWVfYWNjb3VudF9pZBgCIAIoCzIX" + 
+            "aXRhdGlvbi5JbnZpdGF0aW9uEjAKD2dhbWVfYWNjb3VudF9pZBgCIAEoCzIX" + 
             "LmJuZXQucHJvdG9jb2wuRW50aXR5SWQSEQoGcmVhc29uGAMgASgNOgEwMtwI" + 
             "Cg5GcmllbmRzU2VydmljZRJ/ChJTdWJzY3JpYmVUb0ZyaWVuZHMSMC5ibmV0" + 
             "LnByb3RvY29sLmZyaWVuZHMuU3Vic2NyaWJlVG9GcmllbmRzUmVxdWVzdBox" + 
@@ -4079,9 +4079,10 @@ namespace bnet.protocol.friends {
     public override bool IsInitialized {
       get {
         if (!hasTarget) return false;
-        if (!hasGameAccountId) return false;
         if (!Target.IsInitialized) return false;
-        if (!GameAccountId.IsInitialized) return false;
+        if (HasGameAccountId) {
+          if (!GameAccountId.IsInitialized) return false;
+        }
         return true;
       }
     }
@@ -4450,9 +4451,10 @@ namespace bnet.protocol.friends {
     public override bool IsInitialized {
       get {
         if (!hasChangedFriend) return false;
-        if (!hasGameAccountId) return false;
         if (!ChangedFriend.IsInitialized) return false;
-        if (!GameAccountId.IsInitialized) return false;
+        if (HasGameAccountId) {
+          if (!GameAccountId.IsInitialized) return false;
+        }
         return true;
       }
     }
@@ -4831,9 +4833,10 @@ namespace bnet.protocol.friends {
     public override bool IsInitialized {
       get {
         if (!hasInvitation) return false;
-        if (!hasGameAccountId) return false;
         if (!Invitation.IsInitialized) return false;
-        if (!GameAccountId.IsInitialized) return false;
+        if (HasGameAccountId) {
+          if (!GameAccountId.IsInitialized) return false;
+        }
         return true;
       }
     }

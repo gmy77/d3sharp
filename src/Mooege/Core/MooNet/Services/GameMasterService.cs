@@ -33,6 +33,7 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
+        public uint Status { get; set; }
 
         public override void JoinGame(IRpcController controller, bnet.protocol.game_master.JoinGameRequest request, Action<bnet.protocol.game_master.JoinGameResponse> done)
         {
@@ -44,6 +45,21 @@ namespace Mooege.Core.MooNet.Services
 
             done(builder.Build());
             //throw new NotImplementedException();
+        }
+
+        public bnet.protocol.attribute.Attribute[] GetFactoryAttributes(int min_players, int max_players, int num_teams, string version, int playergroup, string currentquest, int difficultylevel)
+        {
+            var factoryAttributes = new bnet.protocol.attribute.Attribute[]
+                {
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("min_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(min_players)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("max_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(max_players)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("num_teams").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(num_teams)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(version)).Build(), 
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("PlayerGroup").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(playergroup)).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("Game.CurrentQuest").SetValue(bnet.protocol.attribute.Variant.CreateBuilder()).Build(),
+                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("DifficultyLevel").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(difficultylevel)).Build(),
+                };
+            return factoryAttributes;
         }
 
         public override void ListFactories(IRpcController controller, bnet.protocol.game_master.ListFactoriesRequest request, Action<bnet.protocol.game_master.ListFactoriesResponse> done)
@@ -60,21 +76,52 @@ namespace Mooege.Core.MooNet.Services
                .SetFormingGames(5)
                .SetWaitingPlayers(0).Build();
 
-            var factoryDescriptions = new bnet.protocol.game_master.GameFactoryDescription[4];
-            for (var i = 0; i < factoryDescriptions.Length; i++)
+            var factoryDescriptions = new bnet.protocol.game_master.GameFactoryDescription[9];
+            for (var i = 0; i < 4; i++)
             {
-                var factoryAttributes = new bnet.protocol.attribute.Attribute[]
-                {
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("min_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("max_players").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(4)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("num_teams").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("version").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue("0.7.0")).Build(), //This should be a static string so all versions are the same -Egris
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("PlayerGroup").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(0)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("PlayerGroup").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(1)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("PlayerGroup").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(2)).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("Game.CurrentQuest").SetValue(bnet.protocol.attribute.Variant.CreateBuilder()).Build(),
-                    bnet.protocol.attribute.Attribute.CreateBuilder().SetName("DifficultyLevel").SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetIntValue(i)).Build(),
-                };
+                var factoryAttributes = GetFactoryAttributes(
+                    min_players: 2,
+                    max_players: 4,
+                    num_teams: 1,
+                    version: Mooege.Common.Versions.VersionInfo.Ingame.MajorVersion,
+                    playergroup: 0,
+                    currentquest: "",
+                    difficultylevel: i
+                    );
+                factoryDescriptions[i] = bnet.protocol.game_master.GameFactoryDescription.CreateBuilder()
+                    .AddRangeAttribute(factoryAttributes)
+                    .SetId(14249086168335147635 + (ulong)i)
+                    .AddStatsBucket(statsBucket)
+                    .Build();
+            }
+            for (var i = 4; i < 8; i++)
+            {
+                var factoryAttributes = GetFactoryAttributes(
+                    min_players: 2,
+                    max_players: 4,
+                    num_teams: 1,
+                    version: Mooege.Common.Versions.VersionInfo.Ingame.MajorVersion,
+                    playergroup: 1,
+                    currentquest: "",
+                    difficultylevel: i - 4
+                    );
+                factoryDescriptions[i] = bnet.protocol.game_master.GameFactoryDescription.CreateBuilder()
+                    .AddRangeAttribute(factoryAttributes)
+                    .SetId(14249086168335147635 + (ulong)i)
+                    .AddStatsBucket(statsBucket)
+                    .Build();
+            }
+            for (int i = 8; i < 9; i++)
+            {
+                var factoryAttributes = GetFactoryAttributes(
+                    min_players: 2,
+                    max_players: 4,
+                    num_teams: 1,
+                    version: Mooege.Common.Versions.VersionInfo.Ingame.MajorVersion,
+                    playergroup: 2,
+                    currentquest: "",
+                    difficultylevel: 0
+                    );
                 factoryDescriptions[i] = bnet.protocol.game_master.GameFactoryDescription.CreateBuilder()
                     .AddRangeAttribute(factoryAttributes)
                     .SetId(14249086168335147635 + (ulong)i)

@@ -99,19 +99,58 @@ namespace D3TypeDump
         //const int Attribute_Float16Or32 = 0X122FF2C; //D3 .rdata
         #endregion
 
-        #region build 8296 addresses
-        const int OpcodeSwitch_Address = 0x008BEA00;
+        #region build 8610 addresses
+        //const int OpcodeSwitch_Address = 0x008BEA00;
 
-        const int TypeDescriptorsAddress = 0x016BAF60;
+        //const int TypeDescriptorsAddress = 0x016BAF60;
+        //const int TypeDescriptorsOffset = 40;
+
+        //const int AttributesAddress = 0x01482338;
+        //const int AttributeCount = 819;
+        //const int Attribute_Int = 0X1288354;
+        //const int Attribute_IntMinMax = 0X128835C;
+        //const int Attribute_FloatMinMax = 0X1288364;
+        //const int Attribute_Float16 = 0X128836C;
+        //const int Attribute_Float16Or32 = 0X1288374;
+        #endregion
+
+        #region build 8815 addresses
+        //const int OpcodeSwitch_Address = 0x008C1350;
+        //const int TypeDescriptorsAddress = 0x016EFEB0;
+        //const int TypeDescriptorsOffset = 40;
+        //const int AttributesAddress = 0x14A3340;
+        //const int AttributeCount = 823;
+        //const int Attribute_Int         = 0X12A2BD4;
+        //const int Attribute_IntMinMax   = 0X12A2BDC;
+        //const int Attribute_FloatMinMax = 0X12A2BE4;
+        //const int Attribute_Float16     = 0X12A2BEC;
+        //const int Attribute_Float16Or32 = 0X12A2BF4;
+        #endregion
+
+        #region build 8896 addresses
+        //const int OpcodeSwitch_Address = 0x008C0A10;
+        //const int TypeDescriptorsAddress = 0x014E561C;
+        //const int TypeDescriptorsOffset = 40;
+        //const int AttributesAddress = 0x14C95A8;
+        //const int AttributeCount = 823;
+        //const int Attribute_Int = 0X12C3004;
+        //const int Attribute_IntMinMax = 0X12C300C;
+        //const int Attribute_FloatMinMax = 0X12C3014;
+        //const int Attribute_Float16 = 0X12C301C;
+        //const int Attribute_Float16Or32 = 0X12C3024;
+        #endregion
+
+        #region build 9183 addresses
+        const int OpcodeSwitch_Address = 0x008C0770;
+        const int TypeDescriptorsAddress = 0x0151628C;
         const int TypeDescriptorsOffset = 40;
-
-        const int AttributesAddress = 0x01482338;
-        const int AttributeCount = 819;
-        const int Attribute_Int = 0X1288354;
-        const int Attribute_IntMinMax = 0X128835C;
-        const int Attribute_FloatMinMax = 0X1288364;
-        const int Attribute_Float16 = 0X128836C;
-        const int Attribute_Float16Or32 = 0X1288374;
+        const int AttributesAddress = 0x014FA3D0;
+        const int AttributeCount = 823;
+        const int Attribute_Int = 0x012ED0C4;
+        const int Attribute_IntMinMax = 0x012ED0CC;
+        const int Attribute_FloatMinMax = 0x012ED0D4;
+        const int Attribute_Float16 = 0x012ED0DC;
+        const int Attribute_Float16Or32 = 0x012ED0E4;
         #endregion
 
         // TODO: Add patterns

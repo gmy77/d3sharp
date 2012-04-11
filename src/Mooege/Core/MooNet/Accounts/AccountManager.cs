@@ -119,6 +119,7 @@ namespace Mooege.Core.MooNet.Accounts
                 var userLevel = Convert.ToByte(reader["userLevel"]);
 
                 var account = new Account(accountId, email, salt, passwordVerifier, battleTagName, hashCode, (Account.UserLevels)userLevel);
+                account.LastOnlineField.Value = Convert.ToInt64(reader["LastOnline"]);
                 Accounts.Add(email, account);
             }
         }

@@ -112,7 +112,7 @@ namespace Mooege.Core.GS.Powers
         {
             Vector3D dir_normal = PowerMath.Normalize(new Vector3D(destination.X - this.Target.Position.X,
                                                                    destination.Y - this.Target.Position.Y,
-                                                                   0f));  // were not moving in 3d for now
+                                                                   destination.Z - this.Target.Position.Z));
 
             this.Velocity = new Vector3D(dir_normal.X * speed,
                                          dir_normal.Y * speed,

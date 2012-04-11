@@ -21,6 +21,8 @@ using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
 using Mooege.Common.Extensions;
+using Mooege.Common.Versions;
+using Mooege.Core.MooNet.Helpers;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -30,23 +32,45 @@ namespace Mooege.Core.MooNet.Services
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
         public bnet.protocol.Header LastCallHeader { get; set; }
+        public uint Status { get; set; }
 
         public override void GetContentHandle(IRpcController controller, bnet.protocol.resources.ContentHandleRequest request, Action<bnet.protocol.ContentHandle> done)
         {
             Logger.Trace("GetContentHandle(): ProgramId: 0x{0:X8} StreamId: 0x{1:X8} Locale: 0x{2:X8}", request.ProgramId, request.StreamId, request.Locale);
-            if (request.ProgramId == 16947)
+            if (request.ProgramId == (uint)FieldKeyHelper.Program.BNet)
             {
                 var builder = bnet.protocol.ContentHandle.CreateBuilder()
-                    .SetRegion(22616)
-                    .SetUsage(1346786393)
-                    .SetHash(ByteString.CopyFrom("068FEC3C7426B8BA9497225A73437C6DFFAA92DE962C2B05589B5F46FBE5F5B0".ToByteArray()));
+                    .SetRegion(VersionInfo.MooNet.Region)
+                    .SetUsage(0x70667479) //pfty - ProfanityFilter
+                    .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.Resources.ProfanityFilterHash.ToByteArray()));
 
                 done(builder.Build());
             }
-            //Beta this returns status 4, no payload
+            else if (request.ProgramId == (uint)FieldKeyHelper.Program.D3)
+            {
+                var builder = bnet.protocol.ContentHandle.CreateBuilder()
+                    .SetRegion(VersionInfo.MooNet.Region)
+                    .SetUsage(0x643373); //d3s - d3 Schema
+                switch (request.StreamId)
+                {
+                    case 0x61637473: //acts - Available Acts
+                        builder.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.Resources.AvailableActs.ToByteArray()));
+                        break;
+                    case 0x71756573: //ques - Available Quests
+                        builder.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.Resources.AvailableQuests.ToByteArray()));
+                        break;
+                    case 0x72707273: //rprs - RichPresence
+                        builder.SetHash(ByteString.CopyFrom("3c2d2031f603f912b9963cc6c8deb810ee207efbadbd3fbe01eb2edb905ae507".ToByteArray()));
+                        break;
+                    default:
+                        Logger.Warn("Unknown StreamId: 0x{0:X8}", request.StreamId);
+                        break;
+                }
+                if (!builder.HasHash)
+                    Status = 4;
 
-            throw new NotImplementedException();
-
+                done(builder.Build());
+            }
         }
     }
 }
