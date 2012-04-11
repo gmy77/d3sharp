@@ -31,7 +31,7 @@ namespace Mooege.Net.GS.Message.Definitions.Skill
         {
             SNOSkill = buffer.ReadInt(32);
             RuneIndex = buffer.ReadInt(3) + (-1);
-            SkillIndex = buffer.ReadInt(5);
+            SkillIndex = buffer.ReadInt(3);
         }
 
         public override void Encode(GameBitBuffer buffer)
