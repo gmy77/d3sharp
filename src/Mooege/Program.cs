@@ -117,7 +117,7 @@ namespace Mooege
 
         private static void PrintLicense()
         {
-            Console.WriteLine("Copyright (C) 2011 mooege project");
+            Console.WriteLine("Copyright (C) 2011 - 2012, mooege project");
             Console.WriteLine("mooege comes with ABSOLUTELY NO WARRANTY.");
             Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
             Console.WriteLine();
