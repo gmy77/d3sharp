@@ -52,6 +52,8 @@ namespace bnet.protocol.achievements {
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.ValidateStaticDataRequest, global::bnet.protocol.achievements.ValidateStaticDataRequest.Builder> internal__static_bnet_protocol_achievements_ValidateStaticDataRequest__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_achievements_SnapshotUpdateNotification__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.SnapshotUpdateNotification, global::bnet.protocol.achievements.SnapshotUpdateNotification.Builder> internal__static_bnet_protocol_achievements_SnapshotUpdateNotification__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_achievements_FlushFrequencyUpdateNotification__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.FlushFrequencyUpdateNotification, global::bnet.protocol.achievements.FlushFrequencyUpdateNotification.Builder> internal__static_bnet_protocol_achievements_FlushFrequencyUpdateNotification__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_achievements_AchievementStats__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.AchievementStats, global::bnet.protocol.achievements.AchievementStats.Builder> internal__static_bnet_protocol_achievements_AchievementStats__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_achievements_GetAchievementStatsRequest__Descriptor;
@@ -72,6 +74,8 @@ namespace bnet.protocol.achievements {
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.GrantAchievementRequest, global::bnet.protocol.achievements.GrantAchievementRequest.Builder> internal__static_bnet_protocol_achievements_GrantAchievementRequest__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_achievements_GrantAchievementResponse__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.GrantAchievementResponse, global::bnet.protocol.achievements.GrantAchievementResponse.Builder> internal__static_bnet_protocol_achievements_GrantAchievementResponse__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_achievements_CacheKillRequest__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.CacheKillRequest, global::bnet.protocol.achievements.CacheKillRequest.Builder> internal__static_bnet_protocol_achievements_CacheKillRequest__FieldAccessorTable;
       #endregion
       #region Descriptor
       public static pbd::FileDescriptor Descriptor {
@@ -98,83 +102,91 @@ namespace bnet.protocol.achievements {
             "aFNlcnZpY2VSZXF1ZXN0EioKCXRhcmdldF9pZBgBIAIoCzIXLmJuZXQucHJv" + 
             "dG9jb2wuRW50aXR5SWQSEQoJb2JqZWN0X2lkGAIgAigEEhoKEnJlZ2lzdHJh" + 
             "dGlvbl9mbGFncxgDIAEoDRIVCgpwcm9ncmFtX2lkGAQgASgHOgEwEhEKBmF0" + 
-            "aV9pZBgFIAEoDToBMCJVChtSZWdpc3RlcldpdGhTZXJ2aWNlUmVzcG9uc2US" + 
+            "aV9pZBgFIAEoDToBMCJxChtSZWdpc3RlcldpdGhTZXJ2aWNlUmVzcG9uc2US" + 
             "NgoIc25hcHNob3QYASABKAsyJC5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50" + 
-            "cy5TbmFwc2hvdCJwChxVbnJlZ2lzdGVyRnJvbVNlcnZpY2VSZXF1ZXN0EioK" + 
-            "CXRhcmdldF9pZBgBIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSEQoJ" + 
-            "b2JqZWN0X2lkGAIgAigEEhEKBmF0aV9pZBgDIAEoDToBMCKqAQoIU25hcHNo" + 
-            "b3QSUQoUYWNoaWV2ZW1lbnRfc25hcHNob3QYASADKAsyMy5ibmV0LnByb3Rv" + 
-            "Y29sLmFjaGlldmVtZW50cy5BY2hpZXZlbWVudFVwZGF0ZVJlY29yZBJLChFj" + 
-            "cml0ZXJpYV9zbmFwc2hvdBgCIAMoCzIwLmJuZXQucHJvdG9jb2wuYWNoaWV2" + 
-            "ZW1lbnRzLkNyaXRlcmlhVXBkYXRlUmVjb3JkImsKFlJlcXVlc3RTbmFwc2hv" + 
-            "dFJlcXVlc3QSKgoJZW50aXR5X2lkGAEgAigLMhcuYm5ldC5wcm90b2NvbC5F" + 
-            "bnRpdHlJZBIOCgZmaWx0ZXIYAiACKA0SFQoKcHJvZ3JhbV9pZBgDIAEoBzoB" + 
-            "MCJRChdSZXF1ZXN0U25hcHNob3RSZXNwb25zZRI2CghzbmFwc2hvdBgBIAEo" + 
-            "CzIkLmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1lbnRzLlNuYXBzaG90IioKEUlu" + 
-            "aXRpYWxpemVSZXF1ZXN0EhUKCnByb2dyYW1faWQYASABKAc6ATAi8wEKEklu" + 
-            "aXRpYWxpemVSZXNwb25zZRI0Cg5jb250ZW50X2hhbmRsZRgBIAIoCzIcLmJu" + 
-            "ZXQucHJvdG9jb2wuQ29udGVudEhhbmRsZRIhChZtYXhfcmVjb3Jkc19wZXJf" + 
-            "dXBkYXRlGAIgASgNOgEwEiIKF21heF9jcml0ZXJpYV9wZXJfcmVjb3JkGAMg" + 
-            "ASgNOgEwEiYKG21heF9hY2hpZXZlbWVudHNfcGVyX3JlY29yZBgEIAEoDToB" + 
-            "MBIcChFtYXhfcmVnaXN0cmF0aW9ucxgFIAEoDToBMBIaCg9mbHVzaF9mcmVx" + 
-            "dWVuY3kYBiABKAQ6ATAiMgoOU3RhdGljRGF0YUhhc2gSEgoKcHJvZ3JhbV9p" + 
-            "ZBgBIAIoBxIMCgRoYXNoGAIgAigJImEKGVZhbGlkYXRlU3RhdGljRGF0YVJl" + 
-            "cXVlc3QSRAoQc3RhdGljX2RhdGFfaGFzaBgBIAMoCzIqLmJuZXQucHJvdG9j" + 
-            "b2wuYWNoaWV2ZW1lbnRzLlN0YXRpY0RhdGFIYXNoIoABChpTbmFwc2hvdFVw" + 
-            "ZGF0ZU5vdGlmaWNhdGlvbhIqCgl0YXJnZXRfaWQYASACKAsyFy5ibmV0LnBy" + 
-            "b3RvY29sLkVudGl0eUlkEjYKCHNuYXBzaG90GAIgAigLMiQuYm5ldC5wcm90" + 
-            "b2NvbC5hY2hpZXZlbWVudHMuU25hcHNob3QiLQoQQWNoaWV2ZW1lbnRTdGF0" + 
-            "cxIKCgJpZBgBIAIoBBINCgVjb3VudBgCIAIoBCIwChpHZXRBY2hpZXZlbWVu" + 
-            "dFN0YXRzUmVxdWVzdBISCgpwcm9ncmFtX2lkGAEgAigHIloKG0dldEFjaGll" + 
-            "dmVtZW50U3RhdHNSZXNwb25zZRI7CgVzdGF0cxgBIAMoCzIsLmJuZXQucHJv" + 
-            "dG9jb2wuYWNoaWV2ZW1lbnRzLkFjaGlldmVtZW50U3RhdHMiLQoXR2V0Q3Jp" + 
-            "dGVyaWFTdGF0c1JlcXVlc3QSEgoKcHJvZ3JhbV9pZBgBIAIoByJXChhHZXRD" + 
-            "cml0ZXJpYVN0YXRzUmVzcG9uc2USOwoFc3RhdHMYASADKAsyLC5ibmV0LnBy" + 
-            "b3RvY29sLmFjaGlldmVtZW50cy5BY2hpZXZlbWVudFN0YXRzIlIKGFJldm9r" + 
-            "ZUFjaGlldmVtZW50UmVxdWVzdBIqCgllbnRpdHlfaWQYASACKAsyFy5ibmV0" + 
-            "LnByb3RvY29sLkVudGl0eUlkEgoKAmlkGAIgAigEIjUKGVJldm9rZUFjaGll" + 
-            "dmVtZW50UmVzcG9uc2USGAoNcmV2b2tlZF9jb3VudBgBIAEoDToBMCJzChVV" + 
-            "cGRhdGVDcml0ZXJpYVJlcXVlc3QSKgoJZW50aXR5X2lkGAEgAigLMhcuYm5l" + 
-            "dC5wcm90b2NvbC5FbnRpdHlJZBIKCgJpZBgCIAIoBBIQCghxdWFudGl0eRgD" + 
-            "IAIoBBIQCgVmbGFncxgEIAEoDToBMCJRChdHcmFudEFjaGlldmVtZW50UmVx" + 
-            "dWVzdBIqCgllbnRpdHlfaWQYASACKAsyFy5ibmV0LnByb3RvY29sLkVudGl0" + 
-            "eUlkEgoKAmlkGAIgAigEIjQKGEdyYW50QWNoaWV2ZW1lbnRSZXNwb25zZRIY" + 
-            "Cg1ncmFudGVkX2NvdW50GAEgASgNOgEwMucFChNBY2hpZXZlbWVudHNTZXJ2" + 
-            "aWNlEnEKClBvc3RVcGRhdGUSLS5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50" + 
-            "cy5Qb3N0VXBkYXRlUmVxdWVzdBouLmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1l" + 
-            "bnRzLlBvc3RVcGRhdGVSZXNwb25zZSIEgLUYARKMAQoTUmVnaXN0ZXJXaXRo" + 
-            "U2VydmljZRI2LmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1lbnRzLlJlZ2lzdGVy" + 
-            "V2l0aFNlcnZpY2VSZXF1ZXN0GjcuYm5ldC5wcm90b2NvbC5hY2hpZXZlbWVu" + 
-            "dHMuUmVnaXN0ZXJXaXRoU2VydmljZVJlc3BvbnNlIgSAtRgCEoABCg9SZXF1" + 
-            "ZXN0U25hcHNob3QSMi5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5SZXF1" + 
-            "ZXN0U25hcHNob3RSZXF1ZXN0GjMuYm5ldC5wcm90b2NvbC5hY2hpZXZlbWVu" + 
-            "dHMuUmVxdWVzdFNuYXBzaG90UmVzcG9uc2UiBIC1GAMSbgoVVW5yZWdpc3Rl" + 
-            "ckZyb21TZXJ2aWNlEjguYm5ldC5wcm90b2NvbC5hY2hpZXZlbWVudHMuVW5y" + 
-            "ZWdpc3RlckZyb21TZXJ2aWNlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9E" + 
-            "YXRhIgSAtRgEEnEKCkluaXRpYWxpemUSLS5ibmV0LnByb3RvY29sLmFjaGll" + 
-            "dmVtZW50cy5Jbml0aWFsaXplUmVxdWVzdBouLmJuZXQucHJvdG9jb2wuYWNo" + 
-            "aWV2ZW1lbnRzLkluaXRpYWxpemVSZXNwb25zZSIEgLUYBRJoChJWYWxpZGF0" + 
-            "ZVN0YXRpY0RhdGESNS5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5WYWxp" + 
-            "ZGF0ZVN0YXRpY0RhdGFSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEi" + 
-            "BIC1GAYyhgEKEkFjaGlldmVtZW50c05vdGlmeRJwChROb3RpZnlTbmFwc2hv" + 
-            "dFVwZGF0ZRI2LmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1lbnRzLlNuYXBzaG90" + 
-            "VXBkYXRlTm90aWZpY2F0aW9uGhouYm5ldC5wcm90b2NvbC5OT19SRVNQT05T" + 
-            "RSIEgLUYATKZBQoRQWNoaWV2ZW1lbnRzVXRpbHMSjAEKE0dldEFjaGlldmVt" + 
-            "ZW50U3RhdHMSNi5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5HZXRBY2hp" + 
-            "ZXZlbWVudFN0YXRzUmVxdWVzdBo3LmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1l" + 
-            "bnRzLkdldEFjaGlldmVtZW50U3RhdHNSZXNwb25zZSIEgLUYARKDAQoQR2V0" + 
-            "Q3JpdGVyaWFTdGF0cxIzLmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1lbnRzLkdl" + 
-            "dENyaXRlcmlhU3RhdHNSZXF1ZXN0GjQuYm5ldC5wcm90b2NvbC5hY2hpZXZl" + 
-            "bWVudHMuR2V0Q3JpdGVyaWFTdGF0c1Jlc3BvbnNlIgSAtRgCEoYBChFSZXZv" + 
-            "a2VBY2hpZXZlbWVudBI0LmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1lbnRzLlJl" + 
-            "dm9rZUFjaGlldmVtZW50UmVxdWVzdBo1LmJuZXQucHJvdG9jb2wuYWNoaWV2" + 
-            "ZW1lbnRzLlJldm9rZUFjaGlldmVtZW50UmVzcG9uc2UiBIC1GAMSYAoOVXBk" + 
-            "YXRlQ3JpdGVyaWESMS5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5VcGRh" + 
-            "dGVDcml0ZXJpYVJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUY" + 
-            "BBKDAQoQR3JhbnRBY2hpZXZlbWVudBIzLmJuZXQucHJvdG9jb2wuYWNoaWV2" + 
-            "ZW1lbnRzLkdyYW50QWNoaWV2ZW1lbnRSZXF1ZXN0GjQuYm5ldC5wcm90b2Nv" + 
-            "bC5hY2hpZXZlbWVudHMuR3JhbnRBY2hpZXZlbWVudFJlc3BvbnNlIgSAtRgF" + 
-            "QgOAAQA=");
+            "cy5TbmFwc2hvdBIaChJyZWdpc3RyYXRpb25fZmxhZ3MYAiABKA0icAocVW5y" + 
+            "ZWdpc3RlckZyb21TZXJ2aWNlUmVxdWVzdBIqCgl0YXJnZXRfaWQYASACKAsy" + 
+            "Fy5ibmV0LnByb3RvY29sLkVudGl0eUlkEhEKCW9iamVjdF9pZBgCIAIoBBIR" + 
+            "CgZhdGlfaWQYAyABKA06ATAiqgEKCFNuYXBzaG90ElEKFGFjaGlldmVtZW50" + 
+            "X3NuYXBzaG90GAEgAygLMjMuYm5ldC5wcm90b2NvbC5hY2hpZXZlbWVudHMu" + 
+            "QWNoaWV2ZW1lbnRVcGRhdGVSZWNvcmQSSwoRY3JpdGVyaWFfc25hcHNob3QY" + 
+            "AiADKAsyMC5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5Dcml0ZXJpYVVw" + 
+            "ZGF0ZVJlY29yZCJrChZSZXF1ZXN0U25hcHNob3RSZXF1ZXN0EioKCWVudGl0" + 
+            "eV9pZBgBIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSDgoGZmlsdGVy" + 
+            "GAIgAigNEhUKCnByb2dyYW1faWQYAyABKAc6ATAiUQoXUmVxdWVzdFNuYXBz" + 
+            "aG90UmVzcG9uc2USNgoIc25hcHNob3QYASABKAsyJC5ibmV0LnByb3RvY29s" + 
+            "LmFjaGlldmVtZW50cy5TbmFwc2hvdCI9ChFJbml0aWFsaXplUmVxdWVzdBIV" + 
+            "Cgpwcm9ncmFtX2lkGAEgASgHOgEwEhEKCW9iamVjdF9pZBgCIAIoBCLzAQoS" + 
+            "SW5pdGlhbGl6ZVJlc3BvbnNlEjQKDmNvbnRlbnRfaGFuZGxlGAEgAigLMhwu" + 
+            "Ym5ldC5wcm90b2NvbC5Db250ZW50SGFuZGxlEiEKFm1heF9yZWNvcmRzX3Bl" + 
+            "cl91cGRhdGUYAiABKA06ATASIgoXbWF4X2NyaXRlcmlhX3Blcl9yZWNvcmQY" + 
+            "AyABKA06ATASJgobbWF4X2FjaGlldmVtZW50c19wZXJfcmVjb3JkGAQgASgN" + 
+            "OgEwEhwKEW1heF9yZWdpc3RyYXRpb25zGAUgASgNOgEwEhoKD2ZsdXNoX2Zy" + 
+            "ZXF1ZW5jeRgGIAEoBDoBMCIyCg5TdGF0aWNEYXRhSGFzaBISCgpwcm9ncmFt" + 
+            "X2lkGAEgAigHEgwKBGhhc2gYAiACKAkiYQoZVmFsaWRhdGVTdGF0aWNEYXRh" + 
+            "UmVxdWVzdBJEChBzdGF0aWNfZGF0YV9oYXNoGAEgAygLMiouYm5ldC5wcm90" + 
+            "b2NvbC5hY2hpZXZlbWVudHMuU3RhdGljRGF0YUhhc2gigAEKGlNuYXBzaG90" + 
+            "VXBkYXRlTm90aWZpY2F0aW9uEioKCXRhcmdldF9pZBgBIAIoCzIXLmJuZXQu" + 
+            "cHJvdG9jb2wuRW50aXR5SWQSNgoIc25hcHNob3QYAiACKAsyJC5ibmV0LnBy" + 
+            "b3RvY29sLmFjaGlldmVtZW50cy5TbmFwc2hvdCI7CiBGbHVzaEZyZXF1ZW5j" + 
+            "eVVwZGF0ZU5vdGlmaWNhdGlvbhIXCg9mbHVzaF9mcmVxdWVuY3kYASACKAQi" + 
+            "LQoQQWNoaWV2ZW1lbnRTdGF0cxIKCgJpZBgBIAIoBBINCgVjb3VudBgCIAIo" + 
+            "BCIwChpHZXRBY2hpZXZlbWVudFN0YXRzUmVxdWVzdBISCgpwcm9ncmFtX2lk" + 
+            "GAEgAigHIloKG0dldEFjaGlldmVtZW50U3RhdHNSZXNwb25zZRI7CgVzdGF0" + 
+            "cxgBIAMoCzIsLmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1lbnRzLkFjaGlldmVt" + 
+            "ZW50U3RhdHMiLQoXR2V0Q3JpdGVyaWFTdGF0c1JlcXVlc3QSEgoKcHJvZ3Jh" + 
+            "bV9pZBgBIAIoByJXChhHZXRDcml0ZXJpYVN0YXRzUmVzcG9uc2USOwoFc3Rh" + 
+            "dHMYASADKAsyLC5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5BY2hpZXZl" + 
+            "bWVudFN0YXRzIlIKGFJldm9rZUFjaGlldmVtZW50UmVxdWVzdBIqCgllbnRp" + 
+            "dHlfaWQYASACKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEgoKAmlkGAIg" + 
+            "AigEIjUKGVJldm9rZUFjaGlldmVtZW50UmVzcG9uc2USGAoNcmV2b2tlZF9j" + 
+            "b3VudBgBIAEoDToBMCJzChVVcGRhdGVDcml0ZXJpYVJlcXVlc3QSKgoJZW50" + 
+            "aXR5X2lkGAEgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBIKCgJpZBgC" + 
+            "IAIoBBIQCghxdWFudGl0eRgDIAIoBBIQCgVmbGFncxgEIAEoDToBMCJRChdH" + 
+            "cmFudEFjaGlldmVtZW50UmVxdWVzdBIqCgllbnRpdHlfaWQYASACKAsyFy5i" + 
+            "bmV0LnByb3RvY29sLkVudGl0eUlkEgoKAmlkGAIgAigEIjQKGEdyYW50QWNo" + 
+            "aWV2ZW1lbnRSZXNwb25zZRIYCg1ncmFudGVkX2NvdW50GAEgASgNOgEwIj4K" + 
+            "EENhY2hlS2lsbFJlcXVlc3QSKgoJZW50aXR5X2lkGAEgASgLMhcuYm5ldC5w" + 
+            "cm90b2NvbC5FbnRpdHlJZDLnBQoTQWNoaWV2ZW1lbnRzU2VydmljZRJxCgpQ" + 
+            "b3N0VXBkYXRlEi0uYm5ldC5wcm90b2NvbC5hY2hpZXZlbWVudHMuUG9zdFVw" + 
+            "ZGF0ZVJlcXVlc3QaLi5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5Qb3N0" + 
+            "VXBkYXRlUmVzcG9uc2UiBIC1GAESjAEKE1JlZ2lzdGVyV2l0aFNlcnZpY2US" + 
+            "Ni5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5SZWdpc3RlcldpdGhTZXJ2" + 
+            "aWNlUmVxdWVzdBo3LmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1lbnRzLlJlZ2lz" + 
+            "dGVyV2l0aFNlcnZpY2VSZXNwb25zZSIEgLUYAhKAAQoPUmVxdWVzdFNuYXBz" + 
+            "aG90EjIuYm5ldC5wcm90b2NvbC5hY2hpZXZlbWVudHMuUmVxdWVzdFNuYXBz" + 
+            "aG90UmVxdWVzdBozLmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1lbnRzLlJlcXVl" + 
+            "c3RTbmFwc2hvdFJlc3BvbnNlIgSAtRgDEm4KFVVucmVnaXN0ZXJGcm9tU2Vy" + 
+            "dmljZRI4LmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1lbnRzLlVucmVnaXN0ZXJG" + 
+            "cm9tU2VydmljZVJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUY" + 
+            "BBJxCgpJbml0aWFsaXplEi0uYm5ldC5wcm90b2NvbC5hY2hpZXZlbWVudHMu" + 
+            "SW5pdGlhbGl6ZVJlcXVlc3QaLi5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50" + 
+            "cy5Jbml0aWFsaXplUmVzcG9uc2UiBIC1GAUSaAoSVmFsaWRhdGVTdGF0aWNE" + 
+            "YXRhEjUuYm5ldC5wcm90b2NvbC5hY2hpZXZlbWVudHMuVmFsaWRhdGVTdGF0" + 
+            "aWNEYXRhUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgGMoQC" + 
+            "ChJBY2hpZXZlbWVudHNOb3RpZnkScAoUTm90aWZ5U25hcHNob3RVcGRhdGUS" + 
+            "Ni5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5TbmFwc2hvdFVwZGF0ZU5v" + 
+            "dGlmaWNhdGlvbhoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAES" + 
+            "fAoaTm90aWZ5Rmx1c2hGcmVxdWVuY3lVcGRhdGUSPC5ibmV0LnByb3RvY29s" + 
+            "LmFjaGlldmVtZW50cy5GbHVzaEZyZXF1ZW5jeVVwZGF0ZU5vdGlmaWNhdGlv" + 
+            "bhoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAIy8QUKEUFjaGll" + 
+            "dmVtZW50c1V0aWxzEowBChNHZXRBY2hpZXZlbWVudFN0YXRzEjYuYm5ldC5w" + 
+            "cm90b2NvbC5hY2hpZXZlbWVudHMuR2V0QWNoaWV2ZW1lbnRTdGF0c1JlcXVl" + 
+            "c3QaNy5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5HZXRBY2hpZXZlbWVu" + 
+            "dFN0YXRzUmVzcG9uc2UiBIC1GAESgwEKEEdldENyaXRlcmlhU3RhdHMSMy5i" + 
+            "bmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5HZXRDcml0ZXJpYVN0YXRzUmVx" + 
+            "dWVzdBo0LmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1lbnRzLkdldENyaXRlcmlh" + 
+            "U3RhdHNSZXNwb25zZSIEgLUYAhKGAQoRUmV2b2tlQWNoaWV2ZW1lbnQSNC5i" + 
+            "bmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5SZXZva2VBY2hpZXZlbWVudFJl" + 
+            "cXVlc3QaNS5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5SZXZva2VBY2hp" + 
+            "ZXZlbWVudFJlc3BvbnNlIgSAtRgDEmAKDlVwZGF0ZUNyaXRlcmlhEjEuYm5l" + 
+            "dC5wcm90b2NvbC5hY2hpZXZlbWVudHMuVXBkYXRlQ3JpdGVyaWFSZXF1ZXN0" + 
+            "GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GAQSgwEKEEdyYW50QWNoaWV2" + 
+            "ZW1lbnQSMy5ibmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5HcmFudEFjaGll" + 
+            "dmVtZW50UmVxdWVzdBo0LmJuZXQucHJvdG9jb2wuYWNoaWV2ZW1lbnRzLkdy" + 
+            "YW50QWNoaWV2ZW1lbnRSZXNwb25zZSIEgLUYBRJWCglDYWNoZUtpbGwSLC5i" + 
+            "bmV0LnByb3RvY29sLmFjaGlldmVtZW50cy5DYWNoZUtpbGxSZXF1ZXN0GhUu" + 
+            "Ym5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GAZCA4ABAA==");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_achievements_AchievementUpdateRecord__Descriptor = Descriptor.MessageTypes[0];
@@ -204,7 +216,7 @@ namespace bnet.protocol.achievements {
           internal__static_bnet_protocol_achievements_RegisterWithServiceResponse__Descriptor = Descriptor.MessageTypes[6];
           internal__static_bnet_protocol_achievements_RegisterWithServiceResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.RegisterWithServiceResponse, global::bnet.protocol.achievements.RegisterWithServiceResponse.Builder>(internal__static_bnet_protocol_achievements_RegisterWithServiceResponse__Descriptor,
-                  new string[] { "Snapshot", });
+                  new string[] { "Snapshot", "RegistrationFlags", });
           internal__static_bnet_protocol_achievements_UnregisterFromServiceRequest__Descriptor = Descriptor.MessageTypes[7];
           internal__static_bnet_protocol_achievements_UnregisterFromServiceRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.UnregisterFromServiceRequest, global::bnet.protocol.achievements.UnregisterFromServiceRequest.Builder>(internal__static_bnet_protocol_achievements_UnregisterFromServiceRequest__Descriptor,
@@ -224,7 +236,7 @@ namespace bnet.protocol.achievements {
           internal__static_bnet_protocol_achievements_InitializeRequest__Descriptor = Descriptor.MessageTypes[11];
           internal__static_bnet_protocol_achievements_InitializeRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.InitializeRequest, global::bnet.protocol.achievements.InitializeRequest.Builder>(internal__static_bnet_protocol_achievements_InitializeRequest__Descriptor,
-                  new string[] { "ProgramId", });
+                  new string[] { "ProgramId", "ObjectId", });
           internal__static_bnet_protocol_achievements_InitializeResponse__Descriptor = Descriptor.MessageTypes[12];
           internal__static_bnet_protocol_achievements_InitializeResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.InitializeResponse, global::bnet.protocol.achievements.InitializeResponse.Builder>(internal__static_bnet_protocol_achievements_InitializeResponse__Descriptor,
@@ -241,46 +253,54 @@ namespace bnet.protocol.achievements {
           internal__static_bnet_protocol_achievements_SnapshotUpdateNotification__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.SnapshotUpdateNotification, global::bnet.protocol.achievements.SnapshotUpdateNotification.Builder>(internal__static_bnet_protocol_achievements_SnapshotUpdateNotification__Descriptor,
                   new string[] { "TargetId", "Snapshot", });
-          internal__static_bnet_protocol_achievements_AchievementStats__Descriptor = Descriptor.MessageTypes[16];
+          internal__static_bnet_protocol_achievements_FlushFrequencyUpdateNotification__Descriptor = Descriptor.MessageTypes[16];
+          internal__static_bnet_protocol_achievements_FlushFrequencyUpdateNotification__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.FlushFrequencyUpdateNotification, global::bnet.protocol.achievements.FlushFrequencyUpdateNotification.Builder>(internal__static_bnet_protocol_achievements_FlushFrequencyUpdateNotification__Descriptor,
+                  new string[] { "FlushFrequency", });
+          internal__static_bnet_protocol_achievements_AchievementStats__Descriptor = Descriptor.MessageTypes[17];
           internal__static_bnet_protocol_achievements_AchievementStats__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.AchievementStats, global::bnet.protocol.achievements.AchievementStats.Builder>(internal__static_bnet_protocol_achievements_AchievementStats__Descriptor,
                   new string[] { "Id", "Count", });
-          internal__static_bnet_protocol_achievements_GetAchievementStatsRequest__Descriptor = Descriptor.MessageTypes[17];
+          internal__static_bnet_protocol_achievements_GetAchievementStatsRequest__Descriptor = Descriptor.MessageTypes[18];
           internal__static_bnet_protocol_achievements_GetAchievementStatsRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.GetAchievementStatsRequest, global::bnet.protocol.achievements.GetAchievementStatsRequest.Builder>(internal__static_bnet_protocol_achievements_GetAchievementStatsRequest__Descriptor,
                   new string[] { "ProgramId", });
-          internal__static_bnet_protocol_achievements_GetAchievementStatsResponse__Descriptor = Descriptor.MessageTypes[18];
+          internal__static_bnet_protocol_achievements_GetAchievementStatsResponse__Descriptor = Descriptor.MessageTypes[19];
           internal__static_bnet_protocol_achievements_GetAchievementStatsResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.GetAchievementStatsResponse, global::bnet.protocol.achievements.GetAchievementStatsResponse.Builder>(internal__static_bnet_protocol_achievements_GetAchievementStatsResponse__Descriptor,
                   new string[] { "Stats", });
-          internal__static_bnet_protocol_achievements_GetCriteriaStatsRequest__Descriptor = Descriptor.MessageTypes[19];
+          internal__static_bnet_protocol_achievements_GetCriteriaStatsRequest__Descriptor = Descriptor.MessageTypes[20];
           internal__static_bnet_protocol_achievements_GetCriteriaStatsRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.GetCriteriaStatsRequest, global::bnet.protocol.achievements.GetCriteriaStatsRequest.Builder>(internal__static_bnet_protocol_achievements_GetCriteriaStatsRequest__Descriptor,
                   new string[] { "ProgramId", });
-          internal__static_bnet_protocol_achievements_GetCriteriaStatsResponse__Descriptor = Descriptor.MessageTypes[20];
+          internal__static_bnet_protocol_achievements_GetCriteriaStatsResponse__Descriptor = Descriptor.MessageTypes[21];
           internal__static_bnet_protocol_achievements_GetCriteriaStatsResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.GetCriteriaStatsResponse, global::bnet.protocol.achievements.GetCriteriaStatsResponse.Builder>(internal__static_bnet_protocol_achievements_GetCriteriaStatsResponse__Descriptor,
                   new string[] { "Stats", });
-          internal__static_bnet_protocol_achievements_RevokeAchievementRequest__Descriptor = Descriptor.MessageTypes[21];
+          internal__static_bnet_protocol_achievements_RevokeAchievementRequest__Descriptor = Descriptor.MessageTypes[22];
           internal__static_bnet_protocol_achievements_RevokeAchievementRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.RevokeAchievementRequest, global::bnet.protocol.achievements.RevokeAchievementRequest.Builder>(internal__static_bnet_protocol_achievements_RevokeAchievementRequest__Descriptor,
                   new string[] { "EntityId", "Id", });
-          internal__static_bnet_protocol_achievements_RevokeAchievementResponse__Descriptor = Descriptor.MessageTypes[22];
+          internal__static_bnet_protocol_achievements_RevokeAchievementResponse__Descriptor = Descriptor.MessageTypes[23];
           internal__static_bnet_protocol_achievements_RevokeAchievementResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.RevokeAchievementResponse, global::bnet.protocol.achievements.RevokeAchievementResponse.Builder>(internal__static_bnet_protocol_achievements_RevokeAchievementResponse__Descriptor,
                   new string[] { "RevokedCount", });
-          internal__static_bnet_protocol_achievements_UpdateCriteriaRequest__Descriptor = Descriptor.MessageTypes[23];
+          internal__static_bnet_protocol_achievements_UpdateCriteriaRequest__Descriptor = Descriptor.MessageTypes[24];
           internal__static_bnet_protocol_achievements_UpdateCriteriaRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.UpdateCriteriaRequest, global::bnet.protocol.achievements.UpdateCriteriaRequest.Builder>(internal__static_bnet_protocol_achievements_UpdateCriteriaRequest__Descriptor,
                   new string[] { "EntityId", "Id", "Quantity", "Flags", });
-          internal__static_bnet_protocol_achievements_GrantAchievementRequest__Descriptor = Descriptor.MessageTypes[24];
+          internal__static_bnet_protocol_achievements_GrantAchievementRequest__Descriptor = Descriptor.MessageTypes[25];
           internal__static_bnet_protocol_achievements_GrantAchievementRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.GrantAchievementRequest, global::bnet.protocol.achievements.GrantAchievementRequest.Builder>(internal__static_bnet_protocol_achievements_GrantAchievementRequest__Descriptor,
                   new string[] { "EntityId", "Id", });
-          internal__static_bnet_protocol_achievements_GrantAchievementResponse__Descriptor = Descriptor.MessageTypes[25];
+          internal__static_bnet_protocol_achievements_GrantAchievementResponse__Descriptor = Descriptor.MessageTypes[26];
           internal__static_bnet_protocol_achievements_GrantAchievementResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.GrantAchievementResponse, global::bnet.protocol.achievements.GrantAchievementResponse.Builder>(internal__static_bnet_protocol_achievements_GrantAchievementResponse__Descriptor,
                   new string[] { "GrantedCount", });
+          internal__static_bnet_protocol_achievements_CacheKillRequest__Descriptor = Descriptor.MessageTypes[27];
+          internal__static_bnet_protocol_achievements_CacheKillRequest__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.achievements.CacheKillRequest, global::bnet.protocol.achievements.CacheKillRequest.Builder>(internal__static_bnet_protocol_achievements_CacheKillRequest__Descriptor,
+                  new string[] { "EntityId", });
           pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
           RegisterAllExtensions(registry);
           global::bnet.protocol.Rpc.RegisterAllExtensions(registry);
@@ -2560,8 +2580,8 @@ namespace bnet.protocol.achievements {
   public sealed partial class RegisterWithServiceResponse : pb::GeneratedMessage<RegisterWithServiceResponse, RegisterWithServiceResponse.Builder> {
     private RegisterWithServiceResponse() { }
     private static readonly RegisterWithServiceResponse defaultInstance = new RegisterWithServiceResponse().MakeReadOnly();
-    private static readonly string[] _registerWithServiceResponseFieldNames = new string[] { "snapshot" };
-    private static readonly uint[] _registerWithServiceResponseFieldTags = new uint[] { 10 };
+    private static readonly string[] _registerWithServiceResponseFieldNames = new string[] { "registration_flags", "snapshot" };
+    private static readonly uint[] _registerWithServiceResponseFieldTags = new uint[] { 16, 10 };
     public static RegisterWithServiceResponse DefaultInstance {
       get { return defaultInstance; }
     }
@@ -2592,6 +2612,16 @@ namespace bnet.protocol.achievements {
       get { return snapshot_ ?? global::bnet.protocol.achievements.Snapshot.DefaultInstance; }
     }
     
+    public const int RegistrationFlagsFieldNumber = 2;
+    private bool hasRegistrationFlags;
+    private uint registrationFlags_;
+    public bool HasRegistrationFlags {
+      get { return hasRegistrationFlags; }
+    }
+    public uint RegistrationFlags {
+      get { return registrationFlags_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (HasSnapshot) {
@@ -2605,7 +2635,10 @@ namespace bnet.protocol.achievements {
       int size = SerializedSize;
       string[] field_names = _registerWithServiceResponseFieldNames;
       if (hasSnapshot) {
-        output.WriteMessage(1, field_names[0], Snapshot);
+        output.WriteMessage(1, field_names[1], Snapshot);
+      }
+      if (hasRegistrationFlags) {
+        output.WriteUInt32(2, field_names[0], RegistrationFlags);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2619,6 +2652,9 @@ namespace bnet.protocol.achievements {
         size = 0;
         if (hasSnapshot) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, Snapshot);
+        }
+        if (hasRegistrationFlags) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(2, RegistrationFlags);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2749,6 +2785,9 @@ namespace bnet.protocol.achievements {
         if (other.HasSnapshot) {
           MergeSnapshot(other.Snapshot);
         }
+        if (other.HasRegistrationFlags) {
+          RegistrationFlags = other.RegistrationFlags;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -2801,6 +2840,10 @@ namespace bnet.protocol.achievements {
               Snapshot = subBuilder.BuildPartial();
               break;
             }
+            case 16: {
+              result.hasRegistrationFlags = input.ReadUInt32(ref result.registrationFlags_);
+              break;
+            }
           }
         }
         
@@ -2848,6 +2891,26 @@ namespace bnet.protocol.achievements {
         PrepareBuilder();
         result.hasSnapshot = false;
         result.snapshot_ = null;
+        return this;
+      }
+      
+      public bool HasRegistrationFlags {
+        get { return result.hasRegistrationFlags; }
+      }
+      public uint RegistrationFlags {
+        get { return result.RegistrationFlags; }
+        set { SetRegistrationFlags(value); }
+      }
+      public Builder SetRegistrationFlags(uint value) {
+        PrepareBuilder();
+        result.hasRegistrationFlags = true;
+        result.registrationFlags_ = value;
+        return this;
+      }
+      public Builder ClearRegistrationFlags() {
+        PrepareBuilder();
+        result.hasRegistrationFlags = false;
+        result.registrationFlags_ = 0;
         return this;
       }
     }
@@ -4317,8 +4380,8 @@ namespace bnet.protocol.achievements {
   public sealed partial class InitializeRequest : pb::GeneratedMessage<InitializeRequest, InitializeRequest.Builder> {
     private InitializeRequest() { }
     private static readonly InitializeRequest defaultInstance = new InitializeRequest().MakeReadOnly();
-    private static readonly string[] _initializeRequestFieldNames = new string[] { "program_id" };
-    private static readonly uint[] _initializeRequestFieldTags = new uint[] { 13 };
+    private static readonly string[] _initializeRequestFieldNames = new string[] { "object_id", "program_id" };
+    private static readonly uint[] _initializeRequestFieldTags = new uint[] { 16, 13 };
     public static InitializeRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -4349,8 +4412,19 @@ namespace bnet.protocol.achievements {
       get { return programId_; }
     }
     
+    public const int ObjectIdFieldNumber = 2;
+    private bool hasObjectId;
+    private ulong objectId_;
+    public bool HasObjectId {
+      get { return hasObjectId; }
+    }
+    public ulong ObjectId {
+      get { return objectId_; }
+    }
+    
     public override bool IsInitialized {
       get {
+        if (!hasObjectId) return false;
         return true;
       }
     }
@@ -4359,7 +4433,10 @@ namespace bnet.protocol.achievements {
       int size = SerializedSize;
       string[] field_names = _initializeRequestFieldNames;
       if (hasProgramId) {
-        output.WriteFixed32(1, field_names[0], ProgramId);
+        output.WriteFixed32(1, field_names[1], ProgramId);
+      }
+      if (hasObjectId) {
+        output.WriteUInt64(2, field_names[0], ObjectId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -4373,6 +4450,9 @@ namespace bnet.protocol.achievements {
         size = 0;
         if (hasProgramId) {
           size += pb::CodedOutputStream.ComputeFixed32Size(1, ProgramId);
+        }
+        if (hasObjectId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(2, ObjectId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -4503,6 +4583,9 @@ namespace bnet.protocol.achievements {
         if (other.HasProgramId) {
           ProgramId = other.ProgramId;
         }
+        if (other.HasObjectId) {
+          ObjectId = other.ObjectId;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -4550,6 +4633,10 @@ namespace bnet.protocol.achievements {
               result.hasProgramId = input.ReadFixed32(ref result.programId_);
               break;
             }
+            case 16: {
+              result.hasObjectId = input.ReadUInt64(ref result.objectId_);
+              break;
+            }
           }
         }
         
@@ -4577,6 +4664,26 @@ namespace bnet.protocol.achievements {
         PrepareBuilder();
         result.hasProgramId = false;
         result.programId_ = 0;
+        return this;
+      }
+      
+      public bool HasObjectId {
+        get { return result.hasObjectId; }
+      }
+      public ulong ObjectId {
+        get { return result.ObjectId; }
+        set { SetObjectId(value); }
+      }
+      public Builder SetObjectId(ulong value) {
+        PrepareBuilder();
+        result.hasObjectId = true;
+        result.objectId_ = value;
+        return this;
+      }
+      public Builder ClearObjectId() {
+        PrepareBuilder();
+        result.hasObjectId = false;
+        result.objectId_ = 0UL;
         return this;
       }
     }
@@ -6092,6 +6199,281 @@ namespace bnet.protocol.achievements {
       }
     }
     static SnapshotUpdateNotification() {
+      object.ReferenceEquals(global::bnet.protocol.achievements.Proto.AchievementsService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class FlushFrequencyUpdateNotification : pb::GeneratedMessage<FlushFrequencyUpdateNotification, FlushFrequencyUpdateNotification.Builder> {
+    private FlushFrequencyUpdateNotification() { }
+    private static readonly FlushFrequencyUpdateNotification defaultInstance = new FlushFrequencyUpdateNotification().MakeReadOnly();
+    private static readonly string[] _flushFrequencyUpdateNotificationFieldNames = new string[] { "flush_frequency" };
+    private static readonly uint[] _flushFrequencyUpdateNotificationFieldTags = new uint[] { 8 };
+    public static FlushFrequencyUpdateNotification DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override FlushFrequencyUpdateNotification DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override FlushFrequencyUpdateNotification ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.achievements.Proto.AchievementsService.internal__static_bnet_protocol_achievements_FlushFrequencyUpdateNotification__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<FlushFrequencyUpdateNotification, FlushFrequencyUpdateNotification.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.achievements.Proto.AchievementsService.internal__static_bnet_protocol_achievements_FlushFrequencyUpdateNotification__FieldAccessorTable; }
+    }
+    
+    public const int FlushFrequencyFieldNumber = 1;
+    private bool hasFlushFrequency;
+    private ulong flushFrequency_;
+    public bool HasFlushFrequency {
+      get { return hasFlushFrequency; }
+    }
+    public ulong FlushFrequency {
+      get { return flushFrequency_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasFlushFrequency) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _flushFrequencyUpdateNotificationFieldNames;
+      if (hasFlushFrequency) {
+        output.WriteUInt64(1, field_names[0], FlushFrequency);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasFlushFrequency) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(1, FlushFrequency);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static FlushFrequencyUpdateNotification ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static FlushFrequencyUpdateNotification ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static FlushFrequencyUpdateNotification ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static FlushFrequencyUpdateNotification ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static FlushFrequencyUpdateNotification ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static FlushFrequencyUpdateNotification ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static FlushFrequencyUpdateNotification ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static FlushFrequencyUpdateNotification ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static FlushFrequencyUpdateNotification ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static FlushFrequencyUpdateNotification ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private FlushFrequencyUpdateNotification MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(FlushFrequencyUpdateNotification prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<FlushFrequencyUpdateNotification, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(FlushFrequencyUpdateNotification cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private FlushFrequencyUpdateNotification result;
+      
+      private FlushFrequencyUpdateNotification PrepareBuilder() {
+        if (resultIsReadOnly) {
+          FlushFrequencyUpdateNotification original = result;
+          result = new FlushFrequencyUpdateNotification();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override FlushFrequencyUpdateNotification MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.achievements.FlushFrequencyUpdateNotification.Descriptor; }
+      }
+      
+      public override FlushFrequencyUpdateNotification DefaultInstanceForType {
+        get { return global::bnet.protocol.achievements.FlushFrequencyUpdateNotification.DefaultInstance; }
+      }
+      
+      public override FlushFrequencyUpdateNotification BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is FlushFrequencyUpdateNotification) {
+          return MergeFrom((FlushFrequencyUpdateNotification) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(FlushFrequencyUpdateNotification other) {
+        if (other == global::bnet.protocol.achievements.FlushFrequencyUpdateNotification.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasFlushFrequency) {
+          FlushFrequency = other.FlushFrequency;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_flushFrequencyUpdateNotificationFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _flushFrequencyUpdateNotificationFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasFlushFrequency = input.ReadUInt64(ref result.flushFrequency_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasFlushFrequency {
+        get { return result.hasFlushFrequency; }
+      }
+      public ulong FlushFrequency {
+        get { return result.FlushFrequency; }
+        set { SetFlushFrequency(value); }
+      }
+      public Builder SetFlushFrequency(ulong value) {
+        PrepareBuilder();
+        result.hasFlushFrequency = true;
+        result.flushFrequency_ = value;
+        return this;
+      }
+      public Builder ClearFlushFrequency() {
+        PrepareBuilder();
+        result.hasFlushFrequency = false;
+        result.flushFrequency_ = 0UL;
+        return this;
+      }
+    }
+    static FlushFrequencyUpdateNotification() {
       object.ReferenceEquals(global::bnet.protocol.achievements.Proto.AchievementsService.Descriptor, null);
     }
   }
@@ -9243,6 +9625,308 @@ namespace bnet.protocol.achievements {
     }
   }
   
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class CacheKillRequest : pb::GeneratedMessage<CacheKillRequest, CacheKillRequest.Builder> {
+    private CacheKillRequest() { }
+    private static readonly CacheKillRequest defaultInstance = new CacheKillRequest().MakeReadOnly();
+    private static readonly string[] _cacheKillRequestFieldNames = new string[] { "entity_id" };
+    private static readonly uint[] _cacheKillRequestFieldTags = new uint[] { 10 };
+    public static CacheKillRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override CacheKillRequest DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override CacheKillRequest ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.achievements.Proto.AchievementsService.internal__static_bnet_protocol_achievements_CacheKillRequest__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<CacheKillRequest, CacheKillRequest.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.achievements.Proto.AchievementsService.internal__static_bnet_protocol_achievements_CacheKillRequest__FieldAccessorTable; }
+    }
+    
+    public const int EntityIdFieldNumber = 1;
+    private bool hasEntityId;
+    private global::bnet.protocol.EntityId entityId_;
+    public bool HasEntityId {
+      get { return hasEntityId; }
+    }
+    public global::bnet.protocol.EntityId EntityId {
+      get { return entityId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (HasEntityId) {
+          if (!EntityId.IsInitialized) return false;
+        }
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _cacheKillRequestFieldNames;
+      if (hasEntityId) {
+        output.WriteMessage(1, field_names[0], EntityId);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasEntityId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, EntityId);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static CacheKillRequest ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static CacheKillRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static CacheKillRequest ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static CacheKillRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static CacheKillRequest ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static CacheKillRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static CacheKillRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static CacheKillRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static CacheKillRequest ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static CacheKillRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private CacheKillRequest MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(CacheKillRequest prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<CacheKillRequest, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(CacheKillRequest cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private CacheKillRequest result;
+      
+      private CacheKillRequest PrepareBuilder() {
+        if (resultIsReadOnly) {
+          CacheKillRequest original = result;
+          result = new CacheKillRequest();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override CacheKillRequest MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.achievements.CacheKillRequest.Descriptor; }
+      }
+      
+      public override CacheKillRequest DefaultInstanceForType {
+        get { return global::bnet.protocol.achievements.CacheKillRequest.DefaultInstance; }
+      }
+      
+      public override CacheKillRequest BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is CacheKillRequest) {
+          return MergeFrom((CacheKillRequest) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(CacheKillRequest other) {
+        if (other == global::bnet.protocol.achievements.CacheKillRequest.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasEntityId) {
+          MergeEntityId(other.EntityId);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_cacheKillRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _cacheKillRequestFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasEntityId) {
+                subBuilder.MergeFrom(EntityId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              EntityId = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasEntityId {
+       get { return result.hasEntityId; }
+      }
+      public global::bnet.protocol.EntityId EntityId {
+        get { return result.EntityId; }
+        set { SetEntityId(value); }
+      }
+      public Builder SetEntityId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasEntityId = true;
+        result.entityId_ = value;
+        return this;
+      }
+      public Builder SetEntityId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasEntityId = true;
+        result.entityId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeEntityId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasEntityId &&
+            result.entityId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.entityId_ = global::bnet.protocol.EntityId.CreateBuilder(result.entityId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.entityId_ = value;
+        }
+        result.hasEntityId = true;
+        return this;
+      }
+      public Builder ClearEntityId() {
+        PrepareBuilder();
+        result.hasEntityId = false;
+        result.entityId_ = null;
+        return this;
+      }
+    }
+    static CacheKillRequest() {
+      object.ReferenceEquals(global::bnet.protocol.achievements.Proto.AchievementsService.Descriptor, null);
+    }
+  }
+  
   #endregion
   
   #region Services
@@ -9454,6 +10138,10 @@ namespace bnet.protocol.achievements {
         pb::IRpcController controller,
         global::bnet.protocol.achievements.SnapshotUpdateNotification request,
         global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
+    public abstract void NotifyFlushFrequencyUpdate(
+        pb::IRpcController controller,
+        global::bnet.protocol.achievements.FlushFrequencyUpdateNotification request,
+        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
     
     public static pbd::ServiceDescriptor Descriptor {
       get { return Proto.AchievementsService.Descriptor.Services[1]; }
@@ -9477,6 +10165,11 @@ namespace bnet.protocol.achievements {
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
               done));
           return;
+        case 1:
+          this.NotifyFlushFrequencyUpdate(controller, (global::bnet.protocol.achievements.FlushFrequencyUpdateNotification) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
+              done));
+          return;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -9490,6 +10183,8 @@ namespace bnet.protocol.achievements {
       switch(method.Index) {
         case 0:
           return global::bnet.protocol.achievements.SnapshotUpdateNotification.DefaultInstance;
+        case 1:
+          return global::bnet.protocol.achievements.FlushFrequencyUpdateNotification.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -9502,6 +10197,8 @@ namespace bnet.protocol.achievements {
       }
       switch(method.Index) {
         case 0:
+          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
+        case 1:
           return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
@@ -9534,6 +10231,15 @@ namespace bnet.protocol.achievements {
             controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }
+      
+      public override void NotifyFlushFrequencyUpdate(
+          pb::IRpcController controller,
+          global::bnet.protocol.achievements.FlushFrequencyUpdateNotification request,
+          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
+        channel.CallMethod(Descriptor.Methods[1],
+            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
+      }
     }
   }
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -9560,6 +10266,10 @@ namespace bnet.protocol.achievements {
         pb::IRpcController controller,
         global::bnet.protocol.achievements.GrantAchievementRequest request,
         global::System.Action<global::bnet.protocol.achievements.GrantAchievementResponse> done);
+    public abstract void CacheKill(
+        pb::IRpcController controller,
+        global::bnet.protocol.achievements.CacheKillRequest request,
+        global::System.Action<global::bnet.protocol.NoData> done);
     
     public static pbd::ServiceDescriptor Descriptor {
       get { return Proto.AchievementsService.Descriptor.Services[2]; }
@@ -9603,6 +10313,11 @@ namespace bnet.protocol.achievements {
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.achievements.GrantAchievementResponse>(
               done));
           return;
+        case 5:
+          this.CacheKill(controller, (global::bnet.protocol.achievements.CacheKillRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NoData>(
+              done));
+          return;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -9624,6 +10339,8 @@ namespace bnet.protocol.achievements {
           return global::bnet.protocol.achievements.UpdateCriteriaRequest.DefaultInstance;
         case 4:
           return global::bnet.protocol.achievements.GrantAchievementRequest.DefaultInstance;
+        case 5:
+          return global::bnet.protocol.achievements.CacheKillRequest.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -9645,6 +10362,8 @@ namespace bnet.protocol.achievements {
           return global::bnet.protocol.NoData.DefaultInstance;
         case 4:
           return global::bnet.protocol.achievements.GrantAchievementResponse.DefaultInstance;
+        case 5:
+          return global::bnet.protocol.NoData.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -9711,6 +10430,15 @@ namespace bnet.protocol.achievements {
         channel.CallMethod(Descriptor.Methods[4],
             controller, request, global::bnet.protocol.achievements.GrantAchievementResponse.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.achievements.GrantAchievementResponse, global::bnet.protocol.achievements.GrantAchievementResponse.Builder>(done, global::bnet.protocol.achievements.GrantAchievementResponse.DefaultInstance));
+      }
+      
+      public override void CacheKill(
+          pb::IRpcController controller,
+          global::bnet.protocol.achievements.CacheKillRequest request,
+          global::System.Action<global::bnet.protocol.NoData> done) {
+        channel.CallMethod(Descriptor.Methods[5],
+            controller, request, global::bnet.protocol.NoData.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NoData, global::bnet.protocol.NoData.Builder>(done, global::bnet.protocol.NoData.DefaultInstance));
       }
     }
   }
