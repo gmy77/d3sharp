@@ -109,6 +109,11 @@ namespace Mooege.Core.GS.Powers
             return _buffs[target].Where(b => b != null).ToArray();
         }
 
+        public bool HasBuff<T>(Actor target) where T : Buff
+        {
+            return GetFirstBuff<T>(target) != null;
+        }
+
         public void SendTargetPayload(Actor target, Payloads.Payload payload)
         {
             if (_buffs.ContainsKey(target))

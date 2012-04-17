@@ -132,7 +132,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("PlayerMovementMessage:");
+            b.AppendLine("ACDTranslateNormalMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("ActorId: 0x" + ActorId.ToString("X8"));
