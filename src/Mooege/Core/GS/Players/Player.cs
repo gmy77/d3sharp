@@ -718,7 +718,6 @@ namespace Mooege.Core.GS.Players
                 Angle = message.Angle,
                 TurnImmediately = false,
                 Speed = message.Speed,
-                //Field5 = message.Field5,  // TODO: don't even know what this is, might be message.Field6 now?
                 AnimationTag = message.AnimationTag
             };
 
