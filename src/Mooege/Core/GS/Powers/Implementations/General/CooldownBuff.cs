@@ -30,11 +30,25 @@ namespace Mooege.Core.GS.Powers.Implementations
     public class CooldownBuff : PowerBuff
     {
         public int TargetPowerSNO;
+        private float? _seconds;
 
         public CooldownBuff(int targetPowerSNO, TickTimer timeout)
         {
             TargetPowerSNO = targetPowerSNO;
             Timeout = timeout;
+        }
+
+        public CooldownBuff(int targetPowerSNO, float seconds)
+        {
+            TargetPowerSNO = targetPowerSNO;
+            _seconds = seconds;
+        }
+
+        public override void Init()
+        {
+            base.Init();
+            if (_seconds.HasValue)
+                Timeout = WaitSeconds(_seconds.Value);
         }
 
         public override bool Apply()
