@@ -141,18 +141,30 @@ namespace D3TypeDump
         #endregion
 
         #region build 9183 addresses
-        const int OpcodeSwitch_Address = 0x008C0770;
-        const int TypeDescriptorsAddress = 0x0151628C;
-        const int TypeDescriptorsOffset = 40;
-        const int AttributesAddress = 0x014FA3D0;
-        const int AttributeCount = 823;
-        const int Attribute_Int = 0x012ED0C4;
-        const int Attribute_IntMinMax = 0x012ED0CC;
-        const int Attribute_FloatMinMax = 0x012ED0D4;
-        const int Attribute_Float16 = 0x012ED0DC;
-        const int Attribute_Float16Or32 = 0x012ED0E4;
+        //const int OpcodeSwitch_Address = 0x008C0770;
+        //const int TypeDescriptorsAddress = 0x0151628C;
+        //const int TypeDescriptorsOffset = 40;
+        //const int AttributesAddress = 0x014FA3D0;
+        //const int AttributeCount = 823;
+        //const int Attribute_Int = 0x012ED0C4;
+        //const int Attribute_IntMinMax = 0x012ED0CC;
+        //const int Attribute_FloatMinMax = 0x012ED0D4;
+        //const int Attribute_Float16 = 0x012ED0DC;
+        //const int Attribute_Float16Or32 = 0x012ED0E4;
         #endregion
 
+        #region build 9327 addresses
+        const int OpcodeSwitch_Address = 0x008C0B00;
+        const int TypeDescriptorsAddress = 0x0151828C;
+        const int TypeDescriptorsOffset = 40;
+        const int AttributesAddress = 0x014FC3D0;
+        const int AttributeCount = 823;
+        const int Attribute_Int = 0x012EF0F4;
+        const int Attribute_IntMinMax = 0x012EF0FC;
+        const int Attribute_FloatMinMax = 0x012EF104;
+        const int Attribute_Float16 = 0x012EF10C;
+        const int Attribute_Float16Or32 = 0x012EF114;
+        #endregion
         // TODO: Add patterns
 
         class GameMessageInfo

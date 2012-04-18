@@ -185,7 +185,7 @@ namespace bnet.protocol.exchange {
           "EwoLdHJhZGVfcHJpY2UYASACKAQSDgoGYW1vdW50GAIgAigEIiUKBUNvdW50" + 
           "Eg0KBWNvdW50GAEgAigNEg0KBWxpbWl0GAIgASgNIkYKFEFkdmFuY2VkU3Vi" + 
           "c2NyaXB0aW9uEg8KB3Byb2dyYW0YASACKAcSDQoFZXZlbnQYAiACKA0SDgoG" + 
-          "cmVhc29uGAMgAygNIs8GCgtIaXN0b3J5RGF0YRIVCg1vcmRlcl9ib29rX2lk" + 
+          "cmVhc29uGAMgAygNIoMHCgtIaXN0b3J5RGF0YRIVCg1vcmRlcl9ib29rX2lk" + 
           "GAEgAigEEjkKDHBhcnRpdGlvbl9pZBgCIAIoCzIjLmJuZXQucHJvdG9jb2wu" + 
           "ZXhjaGFuZ2UuUGFydGl0aW9uSWQSEQoJYWN0aW9uX2lkGAMgAigEEhgKEHBh" + 
           "cmVudF9zZXR0bGVfaWQYBCABKAQSFgoOcGFyZW50X3NldHRsZWQYBSABKAgS" + 
@@ -204,7 +204,8 @@ namespace bnet.protocol.exchange {
           "HAoUYXV0aF9maWxsZWRfcHJvZ3Jlc3MYGyACKAQSGwoTYXV0aF90b3RhbF9w" + 
           "cm9ncmVzcxgcIAIoBBI7CgthdXRoX2hhbmRsZRgdIAIoCzImLmJuZXQucHJv" + 
           "dG9jb2wuZXhjaGFuZ2UuQmxvYkZyb21PZlR5cGUSFQoNYXV0aF9kZWZlcnJl" + 
-          "ZBgeIAIoCA==");
+          "ZBgeIAIoCBIyCgV0b2tlbhgfIAIoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFu" + 
+          "Z2UuUGFydGl0aW9uSWQ=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_OrderBook__Descriptor = Descriptor.MessageTypes[0];
@@ -302,7 +303,7 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_HistoryData__Descriptor = Descriptor.MessageTypes[23];
         internal__static_bnet_protocol_exchange_HistoryData__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.HistoryData, global::bnet.protocol.exchange.HistoryData.Builder>(internal__static_bnet_protocol_exchange_HistoryData__Descriptor,
-                new string[] { "OrderBookId", "PartitionId", "ActionId", "ParentSettleId", "ParentSettled", "AuthorizedAmount", "AuthorizedFeeAmount", "Amount", "FeeAmount", "Deferred", "HasBeenDeferred", "Progress", "Created", "RiskCompleted", "RiskResult", "RiskVerdict", "Completed", "ResultCode", "AccountForItem", "AccountForMoney", "OrderType", "OrderId", "AuthId", "AuthObjectType", "TransDirection", "AuthCompleteProgress", "AuthFilledProgress", "AuthTotalProgress", "AuthHandle", "AuthDeferred", });
+                new string[] { "OrderBookId", "PartitionId", "ActionId", "ParentSettleId", "ParentSettled", "AuthorizedAmount", "AuthorizedFeeAmount", "Amount", "FeeAmount", "Deferred", "HasBeenDeferred", "Progress", "Created", "RiskCompleted", "RiskResult", "RiskVerdict", "Completed", "ResultCode", "AccountForItem", "AccountForMoney", "OrderType", "OrderId", "AuthId", "AuthObjectType", "TransDirection", "AuthCompleteProgress", "AuthFilledProgress", "AuthTotalProgress", "AuthHandle", "AuthDeferred", "Token", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -13032,8 +13033,8 @@ namespace bnet.protocol.exchange {
   public sealed partial class HistoryData : pb::GeneratedMessage<HistoryData, HistoryData.Builder> {
     private HistoryData() { }
     private static readonly HistoryData defaultInstance = new HistoryData().MakeReadOnly();
-    private static readonly string[] _historyDataFieldNames = new string[] { "account_for_item", "account_for_money", "action_id", "amount", "auth_complete_progress", "auth_deferred", "auth_filled_progress", "auth_handle", "auth_id", "auth_object_type", "auth_total_progress", "authorized_amount", "authorized_fee_amount", "completed", "created", "deferred", "fee_amount", "has_been_deferred", "order_book_id", "order_id", "order_type", "parent_settle_id", "parent_settled", "partition_id", "progress", "result_code", "risk_completed", "risk_result", "risk_verdict", "trans_direction" };
-    private static readonly uint[] _historyDataFieldTags = new uint[] { 154, 162, 24, 64, 208, 240, 216, 234, 184, 192, 224, 48, 56, 136, 104, 80, 72, 88, 8, 176, 168, 32, 40, 18, 96, 144, 112, 120, 128, 202 };
+    private static readonly string[] _historyDataFieldNames = new string[] { "account_for_item", "account_for_money", "action_id", "amount", "auth_complete_progress", "auth_deferred", "auth_filled_progress", "auth_handle", "auth_id", "auth_object_type", "auth_total_progress", "authorized_amount", "authorized_fee_amount", "completed", "created", "deferred", "fee_amount", "has_been_deferred", "order_book_id", "order_id", "order_type", "parent_settle_id", "parent_settled", "partition_id", "progress", "result_code", "risk_completed", "risk_result", "risk_verdict", "token", "trans_direction" };
+    private static readonly uint[] _historyDataFieldTags = new uint[] { 154, 162, 24, 64, 208, 240, 216, 234, 184, 192, 224, 48, 56, 136, 104, 80, 72, 88, 8, 176, 168, 32, 40, 18, 96, 144, 112, 120, 128, 250, 202 };
     public static HistoryData DefaultInstance {
       get { return defaultInstance; }
     }
@@ -13354,6 +13355,16 @@ namespace bnet.protocol.exchange {
       get { return authDeferred_; }
     }
     
+    public const int TokenFieldNumber = 31;
+    private bool hasToken;
+    private global::bnet.protocol.exchange.PartitionId token_;
+    public bool HasToken {
+      get { return hasToken; }
+    }
+    public global::bnet.protocol.exchange.PartitionId Token {
+      get { return token_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasOrderBookId) return false;
@@ -13377,10 +13388,12 @@ namespace bnet.protocol.exchange {
         if (!hasAuthTotalProgress) return false;
         if (!hasAuthHandle) return false;
         if (!hasAuthDeferred) return false;
+        if (!hasToken) return false;
         if (!PartitionId.IsInitialized) return false;
         if (!AccountForItem.IsInitialized) return false;
         if (!AccountForMoney.IsInitialized) return false;
         if (!AuthHandle.IsInitialized) return false;
+        if (!Token.IsInitialized) return false;
         return true;
       }
     }
@@ -13461,7 +13474,7 @@ namespace bnet.protocol.exchange {
         output.WriteUInt32(24, field_names[9], AuthObjectType);
       }
       if (hasTransDirection) {
-        output.WriteString(25, field_names[29], TransDirection);
+        output.WriteString(25, field_names[30], TransDirection);
       }
       if (hasAuthCompleteProgress) {
         output.WriteUInt64(26, field_names[4], AuthCompleteProgress);
@@ -13477,6 +13490,9 @@ namespace bnet.protocol.exchange {
       }
       if (hasAuthDeferred) {
         output.WriteBool(30, field_names[5], AuthDeferred);
+      }
+      if (hasToken) {
+        output.WriteMessage(31, field_names[29], Token);
       }
       UnknownFields.WriteTo(output);
     }
@@ -13577,6 +13593,9 @@ namespace bnet.protocol.exchange {
         }
         if (hasAuthDeferred) {
           size += pb::CodedOutputStream.ComputeBoolSize(30, AuthDeferred);
+        }
+        if (hasToken) {
+          size += pb::CodedOutputStream.ComputeMessageSize(31, Token);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -13794,6 +13813,9 @@ namespace bnet.protocol.exchange {
         if (other.HasAuthDeferred) {
           AuthDeferred = other.AuthDeferred;
         }
+        if (other.HasToken) {
+          MergeToken(other.Token);
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -13975,6 +13997,15 @@ namespace bnet.protocol.exchange {
             }
             case 240: {
               result.hasAuthDeferred = input.ReadBool(ref result.authDeferred_);
+              break;
+            }
+            case 250: {
+              global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
+              if (result.hasToken) {
+                subBuilder.MergeFrom(Token);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              Token = subBuilder.BuildPartial();
               break;
             }
           }
@@ -14665,6 +14696,46 @@ namespace bnet.protocol.exchange {
         PrepareBuilder();
         result.hasAuthDeferred = false;
         result.authDeferred_ = false;
+        return this;
+      }
+      
+      public bool HasToken {
+       get { return result.hasToken; }
+      }
+      public global::bnet.protocol.exchange.PartitionId Token {
+        get { return result.Token; }
+        set { SetToken(value); }
+      }
+      public Builder SetToken(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasToken = true;
+        result.token_ = value;
+        return this;
+      }
+      public Builder SetToken(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasToken = true;
+        result.token_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeToken(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasToken &&
+            result.token_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.token_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.token_).MergeFrom(value).BuildPartial();
+        } else {
+          result.token_ = value;
+        }
+        result.hasToken = true;
+        return this;
+      }
+      public Builder ClearToken() {
+        PrepareBuilder();
+        result.hasToken = false;
+        result.token_ = null;
         return this;
       }
     }
