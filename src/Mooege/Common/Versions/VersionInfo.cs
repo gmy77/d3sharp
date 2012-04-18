@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.9183.*";
+            public const string Version = "1.9327.*";
         }
 
         /// <summary>
@@ -47,10 +47,11 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 9183;
+            public const int RequiredClientVersion = 9327;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
+                {"Aurora 8eac7d44dc_public", 9327},
                 {"Aurora _public", 9183},
                 {"Aurora bcd3e50524_public", 8896},
                 {"Aurora 4a39a60e1b_public", 8815},
@@ -124,7 +125,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 9183;
+            public const int RequiredPatchVersion = 9327;
         }
 
         /// <summary>
@@ -138,7 +139,7 @@ namespace Mooege.Common.Versions
             public const int ProtocolHash = 0x33CABB38;
 
             // old hashes
-            // 0x33CABB38                   // 9183
+            // 0x33CABB38                   // 9183, 9327
             // unchecked((int)0x9726E2E3)   // 8896
             // 0x375AE194                   // 8815
             // unchecked((int)0xA8F17EC5)   // 8610
@@ -150,11 +151,12 @@ namespace Mooege.Common.Versions
             // 0x21EEE08D                   // 7446
 
             //This is the server version sent in VersionsMessage
-            public const string MajorVersion = "0.10.0";
-            public const string ServerBuild = "9236";
+            public const string MajorVersion = "0.11.0";
+            public const string ServerBuild = "9327";
             public const string VersionString = MajorVersion + ServerBuild;
 
             // old version strings.
+            // 0.11.0.9327  // 9327 patch 17
             // 0.10.0.9236  // 9183 patch 16
             // 0.9.0.8922   // 8896 patch 15
             // 0.8.0.8834   // 8815 patch 14

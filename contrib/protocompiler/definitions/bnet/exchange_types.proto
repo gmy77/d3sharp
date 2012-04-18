@@ -278,5 +278,6 @@ message HistoryData
     required uint64 auth_total_progress = 28;
     required .bnet.protocol.exchange.BlobFromOfType auth_handle = 29;
     required bool auth_deferred = 30;
+    required .bnet.protocol.exchange.PartitionId token = 31;
 }
 

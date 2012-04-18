@@ -90,12 +90,11 @@ namespace Mooege.Core.MooNet.Authentication
                 client.MakeRPC(() =>
                     bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => client.AuthenticationComplete()));
                 /*
-                // This file current does not exist - future use maybe? -Egris
                 var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
                     .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
                         .SetRegion(0x00005858) // XX
-                        .SetUsage(0x61757468) // auth - ??.dll
-                        .SetHash(ByteString.CopyFrom("72dd40a65ccadc04fe4ece1323effd3177f4afb9f88a96905a7a30db42c0ae0f".ToByteArray())))
+                        .SetUsage(0x61757468) // auth - RiskFingerprint.dll
+                        .SetHash(ByteString.CopyFrom("bcfa324ab555fc66614976011d018d2be2b9dc23d0b54d94a3bd7d12472aa107".ToByteArray())))
                     .SetMessage(ByteString.Empty)
                     .Build();
 
