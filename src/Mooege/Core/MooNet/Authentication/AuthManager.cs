@@ -109,6 +109,8 @@ namespace Mooege.Core.MooNet.Authentication
             else // authentication failed because of invalid credentals.
             {
                 client.AuthenticationErrorCode = AuthenticationErrorCodes.InvalidCredentials;
+                //end authentication
+                client.AuthenticationComplete();
             }
              
             OngoingAuthentications.Remove(client);
