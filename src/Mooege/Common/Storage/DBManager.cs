@@ -18,6 +18,7 @@
 
 using System;
 using System.Data.SQLite;
+using System.IO;
 using Mooege.Common.Helpers.IO;
 using Mooege.Common.Logging;
 
@@ -40,10 +41,10 @@ namespace Mooege.Common.Storage
         {
             try
             {
-                var dataDirectory = String.Format(@"{0}\{1}", FileHelpers.AssemblyRoot, Config.Instance.Root);
+                var dataDirectory = String.Format(@"{0}/{1}", FileHelpers.AssemblyRoot, Config.Instance.Root);
 
-                if (Config.Instance.Root.Contains(":"))
-                    //Root contains ':' so it must cointain a drive-letter... dont use assemblyRoot, as its absolute path.
+                if (Path.IsPathRooted(Config.Instance.Root))
+                    //Path is rooted... dont use assemblyRoot, as its absolute path.
                     dataDirectory = Config.Instance.Root;
 
                 Connection = new SQLiteConnection(String.Format("Data Source={0}/account.db", dataDirectory));
