@@ -18,6 +18,7 @@
 
 using System;
 using System.Data.SQLite;
+using System.IO;
 using Mooege.Common.Helpers.IO;
 using Mooege.Common.Logging;
 
@@ -33,17 +34,23 @@ namespace Mooege.Common.Storage
 
         static DBManager()
         {
-            Connect();            
+            Connect();
         }
 
         private static void Connect()
         {
             try
             {
-                Connection = new SQLiteConnection(String.Format("Data Source={0}/{1}/account.db", FileHelpers.AssemblyRoot, Config.Instance.Root));
+                var dataDirectory = String.Format(@"{0}/{1}", FileHelpers.AssemblyRoot, Config.Instance.Root);
+
+                if (Path.IsPathRooted(Config.Instance.Root))
+                    //Path is rooted... dont use assemblyRoot, as its absolute path.
+                    dataDirectory = Config.Instance.Root;
+
+                Connection = new SQLiteConnection(String.Format("Data Source={0}/account.db", dataDirectory));
                 Connection.Open();
 
-                MPQMirror = new SQLiteConnection(String.Format("Data Source={0}/{1}/mpqdata.db", FileHelpers.AssemblyRoot, Config.Instance.Root));
+                MPQMirror = new SQLiteConnection(String.Format("Data Source={0}/mpqdata.db", dataDirectory));
                 MPQMirror.Open();
             }
             catch (Exception e)
