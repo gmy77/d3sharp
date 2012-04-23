@@ -244,7 +244,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Run()
         {
             UsePrimaryResource(25f);
-            StartCooldown(WaitSeconds(15f));
+            StartCooldown(15f);
 
             yield return WaitSeconds(0.350f); // wait for wizard to land
             User.PlayEffectGroup(19356);
@@ -314,7 +314,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override IEnumerable<TickTimer> Run()
         {
-            StartCooldown(WaitSeconds(12f));
+            StartCooldown(12f);
 
             SpawnEffect(FrostNova_Emitter, User.Position);
 

@@ -24,7 +24,7 @@ using Mooege.Common.Versions;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle("mooege")]
-[assembly: AssemblyDescription("mooege")]
+[assembly: AssemblyDescription("mooege - an educational game server emulator.")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else
@@ -32,7 +32,7 @@ using Mooege.Common.Versions;
 #endif
 [assembly: AssemblyCompany("mooege.org")]
 [assembly: AssemblyProduct("mooege")]
-[assembly: AssemblyCopyright("Copyright ©  2011, mooege")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2012, mooege project.")]
 [assembly: AssemblyTrademark("mooege")]
 [assembly: AssemblyCulture("")]
 
@@ -40,6 +40,7 @@ using Mooege.Common.Versions;
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
+// Set the assembly version from VersionInfo.cs file.
 [assembly: AssemblyVersion(VersionInfo.Assembly.Version)]
 
 // The following attributes are used to specify the signing key for the assembly, 

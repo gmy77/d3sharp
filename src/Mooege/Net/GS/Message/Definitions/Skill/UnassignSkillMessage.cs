@@ -27,7 +27,7 @@ namespace Mooege.Net.GS.Message.Definitions.Skill
 
         public override void Parse(GameBitBuffer buffer)
         {
-            SkillIndex = buffer.ReadInt(5);
+            SkillIndex = buffer.ReadInt(3);
         }
 
         public override void Encode(GameBitBuffer buffer)

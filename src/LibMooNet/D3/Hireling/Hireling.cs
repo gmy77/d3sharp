@@ -34,7 +34,7 @@ namespace D3.Hireling {
           "Cg5IaXJlbGluZy5wcm90bxILRDMuSGlyZWxpbmcikgEKBEluZm8SGQoOaGly" + 
           "ZWxpbmdfY2xhc3MYASACKBE6ATASFQoJZ2JpZF9uYW1lGAIgAigPOgItMRIN" + 
           "CgVsZXZlbBgDIAIoERIhChlhdHRyaWJ1dGVfZXhwZXJpZW5jZV9uZXh0GAQg" + 
-          "AigNEhgKEHBvd2VyX2tleV9wYXJhbXMYCyADKBESDAoEZGVhZBgMIAIoCCJ2" + 
+          "AigNEhgKEHBvd2VyX2tleV9wYXJhbXMYBSADKBESDAoEZGVhZBgGIAIoCCJ2" + 
           "CglTYXZlZERhdGESJAoJaGlyZWxpbmdzGAEgAygLMhEuRDMuSGlyZWxpbmcu" + 
           "SW5mbxIaCg9hY3RpdmVfaGlyZWxpbmcYAiACKA06ATASJwocYXZhaWxhYmxl" + 
           "X2hpcmVsaW5nc19iaXRmaWVsZBgDIAIoDToBMA==");
@@ -65,7 +65,7 @@ namespace D3.Hireling {
     private Info() { }
     private static readonly Info defaultInstance = new Info().MakeReadOnly();
     private static readonly string[] _infoFieldNames = new string[] { "attribute_experience_next", "dead", "gbid_name", "hireling_class", "level", "power_key_params" };
-    private static readonly uint[] _infoFieldTags = new uint[] { 32, 96, 21, 8, 24, 88 };
+    private static readonly uint[] _infoFieldTags = new uint[] { 32, 48, 21, 8, 24, 40 };
     public static Info DefaultInstance {
       get { return defaultInstance; }
     }
@@ -126,7 +126,7 @@ namespace D3.Hireling {
       get { return attributeExperienceNext_; }
     }
     
-    public const int PowerKeyParamsFieldNumber = 11;
+    public const int PowerKeyParamsFieldNumber = 5;
     private pbc::PopsicleList<int> powerKeyParams_ = new pbc::PopsicleList<int>();
     public scg::IList<int> PowerKeyParamsList {
       get { return pbc::Lists.AsReadOnly(powerKeyParams_); }
@@ -138,7 +138,7 @@ namespace D3.Hireling {
       return powerKeyParams_[index];
     }
     
-    public const int DeadFieldNumber = 12;
+    public const int DeadFieldNumber = 6;
     private bool hasDead;
     private bool dead_;
     public bool HasDead {
@@ -175,10 +175,10 @@ namespace D3.Hireling {
         output.WriteUInt32(4, field_names[0], AttributeExperienceNext);
       }
       if (powerKeyParams_.Count > 0) {
-        output.WriteSInt32Array(11, field_names[5], powerKeyParams_);
+        output.WriteSInt32Array(5, field_names[5], powerKeyParams_);
       }
       if (hasDead) {
-        output.WriteBool(12, field_names[1], Dead);
+        output.WriteBool(6, field_names[1], Dead);
       }
       UnknownFields.WriteTo(output);
     }
@@ -211,7 +211,7 @@ namespace D3.Hireling {
           size += 1 * powerKeyParams_.Count;
         }
         if (hasDead) {
-          size += pb::CodedOutputStream.ComputeBoolSize(12, Dead);
+          size += pb::CodedOutputStream.ComputeBoolSize(6, Dead);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -417,12 +417,12 @@ namespace D3.Hireling {
               result.hasAttributeExperienceNext = input.ReadUInt32(ref result.attributeExperienceNext_);
               break;
             }
-            case 90:
-            case 88: {
+            case 42:
+            case 40: {
               input.ReadSInt32Array(tag, field_name, result.powerKeyParams_);
               break;
             }
-            case 96: {
+            case 48: {
               result.hasDead = input.ReadBool(ref result.dead_);
               break;
             }

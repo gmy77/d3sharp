@@ -161,7 +161,7 @@ namespace Mooege.Net.GS.Message
         public static readonly GameAttributeF Hitpoints_Factor_Vitality = new GameAttributeF(104, 0, -1, 0, 0, "", "", "Hitpoints_Factor_Vitality", GameAttributeEncoding.Float16Or32, 31, 0, 0, 0);
         public static readonly GameAttributeF Hitpoints_Total_From_Vitality = new GameAttributeF(105, 0, -1, 0, 0, "", "Vitality_Total * Hitpoints_Factor_Vitality", "Hitpoints_Total_From_Vitality", GameAttributeEncoding.Float16Or32, 31, 0, 0, 0);
         public static readonly GameAttributeF Hitpoints_Total_From_Level = new GameAttributeF(106, 0, -1, 0, 0, "", "(Level - 1) * Hitpoints_Factor_Level", "Hitpoints_Total_From_Level", GameAttributeEncoding.Float16Or32, 31, 0, 0, 0);
-        public static readonly GameAttributeF Hitpoints_Granted = new GameAttributeF(107, 0, -1, 0, 0, "", "", "Hitpoints_Granted", GameAttributeEncoding.Float16Or32, 31, 0, 0, 0);
+        public static readonly GameAttributeF Hitpoints_Granted = new GameAttributeF(107, 0, -1, 0, 0, "", "", "Hitpoints_Granted", GameAttributeEncoding.Float32, 31, 0, 0, 32);
         public static readonly GameAttributeI Hitpoints_Granted_Duration = new GameAttributeI(108, 0, -1, 0, 1, "", "", "Hitpoints_Granted_Duration", GameAttributeEncoding.IntMinMax, 31, 0, 16777215, 24);
         public static readonly GameAttributeF Hitpoints_Max = new GameAttributeF(109, 0, -1, 0, 0, "", "", "Hitpoints_Max", GameAttributeEncoding.Float16Or32, 31, 0, 0, 0);
         public static readonly GameAttributeF Hitpoints_Max_Bonus = new GameAttributeF(110, 0, -1, 0, 0, "", "", "Hitpoints_Max_Bonus", GameAttributeEncoding.Float16Or32, 31, 0, 0, 0);
@@ -790,8 +790,8 @@ namespace Mooege.Net.GS.Message
         public static readonly GameAttributeF On_Hit_Bleed_Proc_Chance = new GameAttributeF(733, 0, -1, 7, 0, "", "", "On_Hit_Bleed_Proc_Chance", GameAttributeEncoding.Float16, 9, 0, 0, 16);
         public static readonly GameAttributeF On_Hit_Bleed_Proc_Damage_Base = new GameAttributeF(734, 0, -1, 0, 0, "", "", "On_Hit_Bleed_Proc_Damage_Base", GameAttributeEncoding.Float16Or32, 9, 0, 0, 0);
         public static readonly GameAttributeF On_Hit_Bleed_Proc_Damage_Delta = new GameAttributeF(735, 0, -1, 0, 0, "", "", "On_Hit_Bleed_Proc_Damage_Delta", GameAttributeEncoding.Float16Or32, 9, 0, 0, 0);
-        public static readonly GameAttributeF Damage_Percent_Reduction_From_Ranged = new GameAttributeF(736, 0, -1, 7, 0, "", "", "Damage_Percent_Reduction_From_Ranged", GameAttributeEncoding.Float16, 9, 0, 0, 16);
-        public static readonly GameAttributeF Damage_Percent_Reduction_From_Melee = new GameAttributeF(737, 0, -1, 7, 0, "", "", "Damage_Percent_Reduction_From_Melee", GameAttributeEncoding.Float16, 9, 0, 0, 16);
+        public static readonly GameAttributeI Damage_Percent_Reduction_From_Ranged = new GameAttributeI(736, 0, -1, 7, 0, "", "", "Damage_Percent_Reduction_From_Ranged", GameAttributeEncoding.Int, 9, 0, 0, 32);
+        public static readonly GameAttributeI Damage_Percent_Reduction_From_Melee = new GameAttributeI(737, 0, -1, 7, 0, "", "", "Damage_Percent_Reduction_From_Melee", GameAttributeEncoding.Int, 9, 0, 0, 32);
         public static readonly GameAttributeF Damage_Percent_Reduction_Turns_Into_Heal = new GameAttributeF(738, 0, -1, 7, 0, "", "", "Damage_Percent_Reduction_Turns_Into_Heal", GameAttributeEncoding.Float16, 9, 0, 0, 16);
         public static readonly GameAttributeF Damage_Percent_Reduction_From_Elites = new GameAttributeF(739, 0, -1, 7, 0, "", "", "Damage_Percent_Reduction_From_Elites", GameAttributeEncoding.Float16, 9, 0, 0, 16);
         public static readonly GameAttributeF Damage_Percent_Reduction_From_Type = new GameAttributeF(740, 0, 0, 7, 0, "", "", "Damage_Percent_Reduction_From_Type", GameAttributeEncoding.Float16, 9, 0, 0, 16);

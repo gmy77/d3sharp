@@ -3,6 +3,7 @@ import "OnlineService.proto";
 import "Settings.proto";
 import "Account.proto";
 import "Items.proto";
+import "CS.proto";
 
 package D3.GameMessage;
 
@@ -63,6 +64,7 @@ message GameCurrentPlayers
 message AccountVersionList
 {
     required .D3.OnlineService.EntityId account_id = 1;
+    optional bool return_snapshots = 2 [default = false];
 }
 
 message AccountVersionSync
@@ -151,6 +153,30 @@ message ServerFetchInventory
     required .D3.OnlineService.EntityId hero_id = 2;
 }
 
+message ServerSnapshot
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+}
+
+message ServerSnapshotResponse
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required uint64 version = 2;
+}
+
+message ServerFetchSnapshot
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required uint64 version = 2;
+}
+
+message ServerRevokeItem
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required .D3.OnlineService.EntityId hero_id = 2;
+    required .D3.OnlineService.ItemId item_id = 3;
+}
+
 message RenameHero
 {
     required .D3.OnlineService.EntityId hero_id = 1;
@@ -228,6 +254,16 @@ message GetDeletedHero
 
 message CSGetSnapshots
 {
+}
+
+message CSPullSnapshot
+{
+    required uint64 version = 1;
+}
+
+message CSPushSnapshot
+{
+    required .D3.CS.Snapshot data = 1;
 }
 
 message CSRestoreToSnapshot

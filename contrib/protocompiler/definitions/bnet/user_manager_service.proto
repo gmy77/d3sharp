@@ -40,6 +40,7 @@ message BlockEntityRequest
 {
     optional .bnet.protocol.EntityId agent_id = 1;
     required .bnet.protocol.EntityId target_id = 2;
+    optional uint32 role = 3;
 }
 
 message UnblockEntityRequest

@@ -47,24 +47,25 @@ namespace bnet.protocol.search {
             "YXJjaBoOYm5ldC9ycGMucHJvdG8aF2JuZXQvc2VhcmNoX3R5cGVzLnByb3Rv" + 
             "IoIBChJGaW5kTWF0Y2hlc1JlcXVlc3QSEAoIdW5pdmVyc2UYASACKAkSLQoH" + 
             "ZmlsdGVycxgCIAMoCzIcLmJuZXQucHJvdG9jb2wuc2VhcmNoLkZpbHRlchIZ" + 
-            "Cg5zdGFydGluZ19pbmRleBgDIAEoDToBMBIQCgVjb3VudBgEIAEoDToBMCJZ" + 
-            "ChNGaW5kTWF0Y2hlc1Jlc3BvbnNlEhMKC3RvdGFsX2NvdW50GAEgAigNEi0K" + 
-            "B29iamVjdHMYAiADKAsyHC5ibmV0LnByb3RvY29sLnNlYXJjaC5PYmplY3Qi" + 
-            "QQoQU2V0T2JqZWN0UmVxdWVzdBItCgdvYmplY3RzGAEgAygLMhwuYm5ldC5w" + 
-            "cm90b2NvbC5zZWFyY2guT2JqZWN0IjgKFFJlbW92ZU9iamVjdHNSZXF1ZXN0" + 
-            "EhAKCHN0YXJ0X2lkGAEgAigMEg4KBmVuZF9pZBgCIAIoDCIOCgxTZWFyY2hD" + 
-            "b25maWcidgobU2VhcmNoVW5pdmVyc2VMaWNlbnNlQ29uZmlnEhAKCHVuaXZl" + 
-            "cnNlGAEgAigJEiEKFnNlYXJjaF9lbmFibGVkX2xpY2Vuc2UYAiABKA06ATAS" + 
-            "IgoXc2VhcmNoX2Rpc2FibGVkX2xpY2Vuc2UYAyABKA06ATAiYwoTU2VhcmNo" + 
-            "TGljZW5zZUNvbmZpZxJMChF1bml2ZXJzZV9saWNlbnNlcxgBIAMoCzIxLmJu" + 
-            "ZXQucHJvdG9jb2wuc2VhcmNoLlNlYXJjaFVuaXZlcnNlTGljZW5zZUNvbmZp" + 
-            "ZzKvAgoNU2VhcmNoU2VydmljZRJoCgtGaW5kTWF0Y2hlcxIoLmJuZXQucHJv" + 
-            "dG9jb2wuc2VhcmNoLkZpbmRNYXRjaGVzUmVxdWVzdBopLmJuZXQucHJvdG9j" + 
-            "b2wuc2VhcmNoLkZpbmRNYXRjaGVzUmVzcG9uc2UiBIC1GAESVQoJU2V0T2Jq" + 
-            "ZWN0EiYuYm5ldC5wcm90b2NvbC5zZWFyY2guU2V0T2JqZWN0UmVxdWVzdBoa" + 
-            "LmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAISXQoNUmVtb3ZlT2Jq" + 
-            "ZWN0cxIqLmJuZXQucHJvdG9jb2wuc2VhcmNoLlJlbW92ZU9iamVjdHNSZXF1" + 
-            "ZXN0GhouYm5ldC5wcm90b2NvbC5OT19SRVNQT05TRSIEgLUYA0IDgAEA");
+            "Cg5zdGFydGluZ19pbmRleBgDIAEoDToBMBIQCgVjb3VudBgEIAEoDToBMCJ+" + 
+            "ChNGaW5kTWF0Y2hlc1Jlc3BvbnNlEhoKEnRvdGFsX2NvdW50X2NhcHBlZBgB" + 
+            "IAIoDRItCgdvYmplY3RzGAIgAygLMhwuYm5ldC5wcm90b2NvbC5zZWFyY2gu" + 
+            "T2JqZWN0EhwKFHRvdGFsX2NvdW50X3VuY2FwcGVkGAMgASgNIkEKEFNldE9i" + 
+            "amVjdFJlcXVlc3QSLQoHb2JqZWN0cxgBIAMoCzIcLmJuZXQucHJvdG9jb2wu" + 
+            "c2VhcmNoLk9iamVjdCI4ChRSZW1vdmVPYmplY3RzUmVxdWVzdBIQCghzdGFy" + 
+            "dF9pZBgBIAIoDBIOCgZlbmRfaWQYAiACKAwiDgoMU2VhcmNoQ29uZmlnInYK" + 
+            "G1NlYXJjaFVuaXZlcnNlTGljZW5zZUNvbmZpZxIQCgh1bml2ZXJzZRgBIAIo" + 
+            "CRIhChZzZWFyY2hfZW5hYmxlZF9saWNlbnNlGAIgASgNOgEwEiIKF3NlYXJj" + 
+            "aF9kaXNhYmxlZF9saWNlbnNlGAMgASgNOgEwImMKE1NlYXJjaExpY2Vuc2VD" + 
+            "b25maWcSTAoRdW5pdmVyc2VfbGljZW5zZXMYASADKAsyMS5ibmV0LnByb3Rv" + 
+            "Y29sLnNlYXJjaC5TZWFyY2hVbml2ZXJzZUxpY2Vuc2VDb25maWcyrwIKDVNl" + 
+            "YXJjaFNlcnZpY2USaAoLRmluZE1hdGNoZXMSKC5ibmV0LnByb3RvY29sLnNl" + 
+            "YXJjaC5GaW5kTWF0Y2hlc1JlcXVlc3QaKS5ibmV0LnByb3RvY29sLnNlYXJj" + 
+            "aC5GaW5kTWF0Y2hlc1Jlc3BvbnNlIgSAtRgBElUKCVNldE9iamVjdBImLmJu" + 
+            "ZXQucHJvdG9jb2wuc2VhcmNoLlNldE9iamVjdFJlcXVlc3QaGi5ibmV0LnBy" + 
+            "b3RvY29sLk5PX1JFU1BPTlNFIgSAtRgCEl0KDVJlbW92ZU9iamVjdHMSKi5i" + 
+            "bmV0LnByb3RvY29sLnNlYXJjaC5SZW1vdmVPYmplY3RzUmVxdWVzdBoaLmJu" + 
+            "ZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GANCA4ABAA==");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_search_FindMatchesRequest__Descriptor = Descriptor.MessageTypes[0];
@@ -74,7 +75,7 @@ namespace bnet.protocol.search {
           internal__static_bnet_protocol_search_FindMatchesResponse__Descriptor = Descriptor.MessageTypes[1];
           internal__static_bnet_protocol_search_FindMatchesResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.search.FindMatchesResponse, global::bnet.protocol.search.FindMatchesResponse.Builder>(internal__static_bnet_protocol_search_FindMatchesResponse__Descriptor,
-                  new string[] { "TotalCount", "Objects", });
+                  new string[] { "TotalCountCapped", "Objects", "TotalCountUncapped", });
           internal__static_bnet_protocol_search_SetObjectRequest__Descriptor = Descriptor.MessageTypes[2];
           internal__static_bnet_protocol_search_SetObjectRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.search.SetObjectRequest, global::bnet.protocol.search.SetObjectRequest.Builder>(internal__static_bnet_protocol_search_SetObjectRequest__Descriptor,
@@ -553,8 +554,8 @@ namespace bnet.protocol.search {
   public sealed partial class FindMatchesResponse : pb::GeneratedMessage<FindMatchesResponse, FindMatchesResponse.Builder> {
     private FindMatchesResponse() { }
     private static readonly FindMatchesResponse defaultInstance = new FindMatchesResponse().MakeReadOnly();
-    private static readonly string[] _findMatchesResponseFieldNames = new string[] { "objects", "total_count" };
-    private static readonly uint[] _findMatchesResponseFieldTags = new uint[] { 18, 8 };
+    private static readonly string[] _findMatchesResponseFieldNames = new string[] { "objects", "total_count_capped", "total_count_uncapped" };
+    private static readonly uint[] _findMatchesResponseFieldTags = new uint[] { 18, 8, 24 };
     public static FindMatchesResponse DefaultInstance {
       get { return defaultInstance; }
     }
@@ -575,14 +576,14 @@ namespace bnet.protocol.search {
       get { return global::bnet.protocol.search.Proto.SearchService.internal__static_bnet_protocol_search_FindMatchesResponse__FieldAccessorTable; }
     }
     
-    public const int TotalCountFieldNumber = 1;
-    private bool hasTotalCount;
-    private uint totalCount_;
-    public bool HasTotalCount {
-      get { return hasTotalCount; }
+    public const int TotalCountCappedFieldNumber = 1;
+    private bool hasTotalCountCapped;
+    private uint totalCountCapped_;
+    public bool HasTotalCountCapped {
+      get { return hasTotalCountCapped; }
     }
-    public uint TotalCount {
-      get { return totalCount_; }
+    public uint TotalCountCapped {
+      get { return totalCountCapped_; }
     }
     
     public const int ObjectsFieldNumber = 2;
@@ -597,9 +598,19 @@ namespace bnet.protocol.search {
       return objects_[index];
     }
     
+    public const int TotalCountUncappedFieldNumber = 3;
+    private bool hasTotalCountUncapped;
+    private uint totalCountUncapped_;
+    public bool HasTotalCountUncapped {
+      get { return hasTotalCountUncapped; }
+    }
+    public uint TotalCountUncapped {
+      get { return totalCountUncapped_; }
+    }
+    
     public override bool IsInitialized {
       get {
-        if (!hasTotalCount) return false;
+        if (!hasTotalCountCapped) return false;
         foreach (global::bnet.protocol.search.Object element in ObjectsList) {
           if (!element.IsInitialized) return false;
         }
@@ -610,11 +621,14 @@ namespace bnet.protocol.search {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _findMatchesResponseFieldNames;
-      if (hasTotalCount) {
-        output.WriteUInt32(1, field_names[1], TotalCount);
+      if (hasTotalCountCapped) {
+        output.WriteUInt32(1, field_names[1], TotalCountCapped);
       }
       if (objects_.Count > 0) {
         output.WriteMessageArray(2, field_names[0], objects_);
+      }
+      if (hasTotalCountUncapped) {
+        output.WriteUInt32(3, field_names[2], TotalCountUncapped);
       }
       UnknownFields.WriteTo(output);
     }
@@ -626,11 +640,14 @@ namespace bnet.protocol.search {
         if (size != -1) return size;
         
         size = 0;
-        if (hasTotalCount) {
-          size += pb::CodedOutputStream.ComputeUInt32Size(1, TotalCount);
+        if (hasTotalCountCapped) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, TotalCountCapped);
         }
         foreach (global::bnet.protocol.search.Object element in ObjectsList) {
           size += pb::CodedOutputStream.ComputeMessageSize(2, element);
+        }
+        if (hasTotalCountUncapped) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(3, TotalCountUncapped);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -759,11 +776,14 @@ namespace bnet.protocol.search {
       public override Builder MergeFrom(FindMatchesResponse other) {
         if (other == global::bnet.protocol.search.FindMatchesResponse.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.HasTotalCount) {
-          TotalCount = other.TotalCount;
+        if (other.HasTotalCountCapped) {
+          TotalCountCapped = other.TotalCountCapped;
         }
         if (other.objects_.Count != 0) {
           result.objects_.Add(other.objects_);
+        }
+        if (other.HasTotalCountUncapped) {
+          TotalCountUncapped = other.TotalCountUncapped;
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -809,11 +829,15 @@ namespace bnet.protocol.search {
               break;
             }
             case 8: {
-              result.hasTotalCount = input.ReadUInt32(ref result.totalCount_);
+              result.hasTotalCountCapped = input.ReadUInt32(ref result.totalCountCapped_);
               break;
             }
             case 18: {
               input.ReadMessageArray(tag, field_name, result.objects_, global::bnet.protocol.search.Object.DefaultInstance, extensionRegistry);
+              break;
+            }
+            case 24: {
+              result.hasTotalCountUncapped = input.ReadUInt32(ref result.totalCountUncapped_);
               break;
             }
           }
@@ -826,23 +850,23 @@ namespace bnet.protocol.search {
       }
       
       
-      public bool HasTotalCount {
-        get { return result.hasTotalCount; }
+      public bool HasTotalCountCapped {
+        get { return result.hasTotalCountCapped; }
       }
-      public uint TotalCount {
-        get { return result.TotalCount; }
-        set { SetTotalCount(value); }
+      public uint TotalCountCapped {
+        get { return result.TotalCountCapped; }
+        set { SetTotalCountCapped(value); }
       }
-      public Builder SetTotalCount(uint value) {
+      public Builder SetTotalCountCapped(uint value) {
         PrepareBuilder();
-        result.hasTotalCount = true;
-        result.totalCount_ = value;
+        result.hasTotalCountCapped = true;
+        result.totalCountCapped_ = value;
         return this;
       }
-      public Builder ClearTotalCount() {
+      public Builder ClearTotalCountCapped() {
         PrepareBuilder();
-        result.hasTotalCount = false;
-        result.totalCount_ = 0;
+        result.hasTotalCountCapped = false;
+        result.totalCountCapped_ = 0;
         return this;
       }
       
@@ -887,6 +911,26 @@ namespace bnet.protocol.search {
       public Builder ClearObjects() {
         PrepareBuilder();
         result.objects_.Clear();
+        return this;
+      }
+      
+      public bool HasTotalCountUncapped {
+        get { return result.hasTotalCountUncapped; }
+      }
+      public uint TotalCountUncapped {
+        get { return result.TotalCountUncapped; }
+        set { SetTotalCountUncapped(value); }
+      }
+      public Builder SetTotalCountUncapped(uint value) {
+        PrepareBuilder();
+        result.hasTotalCountUncapped = true;
+        result.totalCountUncapped_ = value;
+        return this;
+      }
+      public Builder ClearTotalCountUncapped() {
+        PrepareBuilder();
+        result.hasTotalCountUncapped = false;
+        result.totalCountUncapped_ = 0;
         return this;
       }
     }

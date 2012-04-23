@@ -15,8 +15,9 @@ message FindMatchesRequest
 
 message FindMatchesResponse
 {
-    required uint32 total_count = 1;
+    required uint32 total_count_capped = 1;
     repeated .bnet.protocol.search.Object objects = 2;
+    optional uint32 total_count_uncapped = 3;
 }
 
 message SetObjectRequest

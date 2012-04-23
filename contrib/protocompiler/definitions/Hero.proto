@@ -42,16 +42,16 @@ message Digest
     required uint32 player_flags = 6;
     required .D3.Hero.VisualEquipment visual_equipment = 7;
     repeated .D3.Hero.QuestHistoryEntry quest_history = 8;
-    required sint32 last_played_act = 10;
-    required sint32 highest_unlocked_act = 11;
-    required sint32 last_played_difficulty = 12;
-    required sint32 highest_unlocked_difficulty = 13;
-    required sfixed32 last_played_quest = 14;
-    required sint32 last_played_quest_step = 15;
-    required uint32 time_played = 16 [default = 0];
-    optional sint32 highest_completed_difficulty = 17 [default = -1];
-    optional uint32 create_time = 18;
-    optional uint32 last_played_time = 19;
+    required sint32 last_played_act = 9;
+    required sint32 highest_unlocked_act = 10;
+    required sint32 last_played_difficulty = 11;
+    required sint32 highest_unlocked_difficulty = 12;
+    required sfixed32 last_played_quest = 13;
+    required sint32 last_played_quest_step = 14;
+    required uint32 time_played = 15 [default = 0];
+    optional sint32 highest_completed_difficulty = 16 [default = -1];
+    optional uint32 create_time = 17;
+    optional uint32 last_played_time = 18;
 }
 
 message DigestUI
@@ -101,18 +101,18 @@ message SkillWithRune
 
 message SavedData
 {
-    required uint32 time_played = 3 [default = 0];
-    required uint32 activated_waypoints = 4 [default = 0];
-    required .D3.Hireling.SavedData hireling_saved_data = 5;
-    required uint32 last_level_time = 6 [default = 0];
-    required .D3.Hero.LearnedLore learned_lore = 7;
-    required .D3.Hero.SavedConversations saved_conversations = 8;
-    repeated sfixed32 sno_traits = 10;
-    required .D3.Hero.SavePointData_Proto save_point = 12;
-    required sfixed32 gbid_potion_button = 13 [default = -1];
-    repeated .D3.Hero.SkillWithRune active_skills = 14;
-    required bytes skill_slot_ever_assigned = 15;
-    required uint32 skill_version = 16 [default = 0];
+    required uint32 time_played = 1 [default = 0];
+    required uint32 activated_waypoints = 2 [default = 0];
+    required .D3.Hireling.SavedData hireling_saved_data = 3;
+    required uint32 last_level_time = 4 [default = 0];
+    required .D3.Hero.LearnedLore learned_lore = 5;
+    required .D3.Hero.SavedConversations saved_conversations = 6;
+    repeated sfixed32 sno_traits = 7;
+    required .D3.Hero.SavePointData_Proto save_point = 8;
+    required sfixed32 gbid_potion_button = 9 [default = -1];
+    repeated .D3.Hero.SkillWithRune active_skills = 10;
+    required bytes skill_slot_ever_assigned = 11;
+    required uint32 skill_version = 12 [default = 0];
 }
 
 message Timestamps

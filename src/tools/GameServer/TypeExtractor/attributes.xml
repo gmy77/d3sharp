@@ -736,8 +736,8 @@
   <Entry Id="733" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Bleed_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
   <Entry Id="734" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Bleed_Proc_Damage_Base" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
   <Entry Id="735" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Bleed_Proc_Damage_Delta" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
-  <Entry Id="736" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Reduction_From_Ranged" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
-  <Entry Id="737" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Reduction_From_Melee" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="736" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Reduction_From_Ranged" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="737" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Reduction_From_Melee" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
   <Entry Id="738" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Reduction_Turns_Into_Heal" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
   <Entry Id="739" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Reduction_From_Elites" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
   <Entry Id="740" U2="0" U3="0" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Reduction_From_Type" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
