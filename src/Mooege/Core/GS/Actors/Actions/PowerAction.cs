@@ -53,6 +53,18 @@ namespace Mooege.Core.GS.Actors.Actions
             _ownerMover = new ActorMover(owner);
         }
 
+        public PowerAction(Actor owner, int powerSNO, Actor target)
+            : base(owner)
+        {
+            _power = PowerLoader.CreateImplementationForPowerSNO(powerSNO);
+            _power.World = owner.World;
+            _power.User = owner;
+            _powerRan = false;
+            _baseAttackRadius = this.Owner.ActorData.Cylinder.Ax2 + _power.EvalTag(PowerKeys.AttackRadius) + 1.5f;
+            _ownerMover = new ActorMover(owner);
+            _target = target;
+        }
+
         public override void Start(int tickCounter)
         {
             this.Started = true;

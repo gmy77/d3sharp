@@ -104,5 +104,9 @@ namespace Mooege.Core.GS.AI.Brains
             // no usable power
             return -1;
         }
+        public void AddPresetPower(int powerSNO)
+        {
+            this.PresetPowers.Add(powerSNO);
+        }
     }
 }

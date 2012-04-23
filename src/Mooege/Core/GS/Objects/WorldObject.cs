@@ -93,6 +93,11 @@ namespace Mooege.Core.GS.Objects
         protected WorldObject(World world, uint dynamicID)
             : base(dynamicID)
         {
+            if (world==null)
+            {
+                
+
+            }
             this.World = world;
             this.World.Game.StartTracking(this); // track the object.
             this.RotationAxis = new Vector3D();

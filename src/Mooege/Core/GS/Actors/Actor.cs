@@ -234,8 +234,13 @@ namespace Mooege.Core.GS.Actors
         public override void Destroy()
         {
             if (_questRange != null)
-                foreach (var quest in World.Game.Quests)
-                    quest.OnQuestProgress -= quest_OnQuestProgress;
+                if (World==null)
+                    Logger.Debug("World is null? {0}",this.GetType());
+                else if (World.Game==null)
+                    Logger.Debug("Game is null? {0}", this.GetType());
+                else if (World.Game.Quests != null)
+                    foreach (var quest in World.Game.Quests)
+                        quest.OnQuestProgress -= quest_OnQuestProgress;
 
             base.Destroy();
         }
@@ -303,7 +308,7 @@ namespace Mooege.Core.GS.Actors
         }
 
         #endregion
-        
+
         #region Movement/Translation
 
         public void TranslateFacing(Vector3D target, bool immediately = false)
@@ -667,7 +672,7 @@ namespace Mooege.Core.GS.Actors
 
         public virtual void OnTeleport()
         {
-            
+
         }
 
         /// <summary>
@@ -726,7 +731,7 @@ namespace Mooege.Core.GS.Actors
 
             // load scale from actor data and override it with marker tags if one is set
             this.Scale = ActorData.TagMap.ContainsKey(ActorKeys.Scale) ? ActorData.TagMap[ActorKeys.Scale] : 1;
-            this.Scale = Tags.ContainsKey(MarkerKeys.Scale) ? Tags[MarkerKeys.Scale] : this.Scale ;
+            this.Scale = Tags.ContainsKey(MarkerKeys.Scale) ? Tags[MarkerKeys.Scale] : this.Scale;
 
 
             if (Tags.ContainsKey(MarkerKeys.QuestRange))
