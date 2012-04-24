@@ -594,7 +594,9 @@ namespace Mooege.Core.GS.Players
                     }
 
                     this.SkillSet.PassiveSkills[i] = message.SNOPowers[i];
-                    _StartSkillCooldown(message.SNOPowers[i], SkillChangeCooldownLength);
+
+                    if (oldSNOSkill != -1)  // don't do cooldown when first skill put in slot
+                        _StartSkillCooldown(message.SNOPowers[i], SkillChangeCooldownLength);
                 }
             }
 
