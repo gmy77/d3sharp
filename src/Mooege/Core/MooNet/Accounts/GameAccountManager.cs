@@ -20,10 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Common.Logging;
 using Mooege.Common.Storage;
 using Mooege.Core.MooNet.Toons;
+using NHibernate.Linq;
 
 namespace Mooege.Core.MooNet.Accounts
 {
@@ -56,15 +58,8 @@ namespace Mooege.Core.MooNet.Accounts
 
         public static ulong GetNextAvailablePersistentId()
         {
-            var cmd = new SQLiteCommand("SELECT MAX(id) FROM gameaccounts", DBManager.Connection);
-            try
-            {
-                return Convert.ToUInt64(cmd.ExecuteScalar());
-            }
-            catch (InvalidCastException)
-            {
-                return 0;
-            }
+            return !DBSessions.AccountSession.Query<DBGameAccount>().Any() ? 1
+                : DBSessions.AccountSession.Query<DBGameAccount>().OrderByDescending(dba => dba.Id).Select(dba => dba.Id).First() + 1;
         }
 
         static GameAccountManager()
@@ -74,36 +69,68 @@ namespace Mooege.Core.MooNet.Accounts
 
         private static void LoadGameAccounts()
         {
-            var query = "SELECT * FROM gameaccounts";
-            var cmd = new SQLiteCommand(query, DBManager.Connection);
-            var reader = cmd.ExecuteReader();
-
-            if (!reader.HasRows) return;
-
-            while (reader.Read())
+            var allDbGameAccounts = DBSessions.AccountSession.Query<DBGameAccount>().ToList();
+            foreach (var dbGameAccount in allDbGameAccounts)
             {
-                var gameAccountId = Convert.ToUInt64(reader["id"]);
-                var accountId = Convert.ToUInt64(reader["accountid"]);
-                var gameAccount = new GameAccount(gameAccountId, accountId);
+                var gameAccountId = dbGameAccount.Id;
+                var dbAcount = dbGameAccount.DBAccount;
+
+                if (dbAcount == null)
+                {
+                    Logger.Error("Gameaccount without Account!");
+                    continue;
+                }
+                var gameAccount = new GameAccount(dbGameAccount);
+
+
 
                 #region Populate GameAccount Data
 
-                var banner = (byte[])reader.GetValue(2);
-                gameAccount.BannerConfiguration = D3.Account.BannerConfiguration.ParseFrom(banner);
-                gameAccount.LastOnlineField.Value = Convert.ToInt64(reader["LastOnline"]);
+                //var banner = dbGameAccount.Banner;
+                //gameAccount.BannerConfiguration = D3.Account.BannerConfiguration.ParseFrom(banner);
+                //gameAccount.LastOnlineField.Value = dbGameAccount.LastOnline;
                 GameAccounts.Add(gameAccountId, gameAccount);
 
                 #endregion
+
+            }
+
+
+        }
+
+        public static void SaveToDB(GameAccount gameAccount)
+        {
+            try
+            {
+                var dbGameAccount = DBSessions.AccountSession.Get<DBGameAccount>(gameAccount.PersistentID);
+                dbGameAccount.DBAccount = DBSessions.AccountSession.Get<DBAccount>(gameAccount.Owner.PersistentID);
+                dbGameAccount.LastOnline = gameAccount.LastOnlineField.Value;
+                dbGameAccount.Banner = gameAccount.BannerConfiguration.ToByteArray();
+                DBSessions.AccountSession.SaveOrUpdate(dbGameAccount);
+                DBSessions.AccountSession.Flush();
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e, "GameAccount.SaveToDB()");
             }
         }
 
         public static GameAccount CreateGameAccount(Account account)
         {
-            var gameAccount = new GameAccount(account);
+            var newDBGameAccount = new DBGameAccount
+                                       {
+                                           Id = GetNextAvailablePersistentId(),
+                                           DBAccount = DBSessions.AccountSession.Get<DBAccount>(account.PersistentID)
+                                       };
+
+            DBSessions.AccountSession.SaveOrUpdate(newDBGameAccount);
+            DBSessions.AccountSession.Flush();
+            var gameAccount = new GameAccount(newDBGameAccount);
             GameAccounts.Add(gameAccount.PersistentID, gameAccount);
-            gameAccount.SaveToDB();
             return gameAccount;
         }
+
+
         public static void DeleteGameAccount(GameAccount GameAccount)
         {
             if (!GameAccounts.ContainsKey(GameAccount.PersistentID))
@@ -118,7 +145,13 @@ namespace Mooege.Core.MooNet.Accounts
                 ToonManager.DeleteToon(toon);
             }
 
-            if (GameAccount.DeleteFromDB()) GameAccounts.Remove(GameAccount.PersistentID);
+
+            var dbGameAccount = DBSessions.AccountSession.Get<DBGameAccount>(GameAccount.PersistentID);
+            DBSessions.AccountSession.Delete(dbGameAccount);
+            DBSessions.AccountSession.Flush();
+
+            
+            GameAccounts.Remove(GameAccount.PersistentID);
         }
 
     }

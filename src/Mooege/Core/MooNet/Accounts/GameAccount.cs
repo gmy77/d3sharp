@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using Mooege.Common.Storage;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
 using Mooege.Core.MooNet.Toons;
@@ -183,6 +184,28 @@ namespace Mooege.Core.MooNet.Accounts
             return (ulong)++_persistentIdCounter;
         }
 
+        public GameAccount(DBGameAccount dbGameAccount):this(dbGameAccount.Id,dbGameAccount.DBAccount.Id)
+        {
+            if (dbGameAccount.Banner==null || dbGameAccount.Banner.Length<1)
+            {
+                dbGameAccount.Banner=D3.Account.BannerConfiguration.CreateBuilder()
+                .SetBannerShape(189701627)
+                .SetSigilMain(1494901005)
+                .SetSigilAccent(3399297034)
+                .SetPatternColor(1797588777)
+                .SetBackgroundColor(1797588777)
+                .SetSigilColor(2045456409)
+                .SetSigilPlacement(1015980604)
+                .SetPattern(4173846786)
+                .SetUseSigilVariant(true)
+                .Build().ToByteArray();
+            }
+
+            this.BannerConfiguration = D3.Account.BannerConfiguration.ParseFrom(dbGameAccount.Banner);
+            this.LastOnlineField.Value = dbGameAccount.LastOnline;
+        }
+
+
         /// <summary>
         /// Existing GameAccount
         /// </summary>
@@ -193,7 +216,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             this.SetField(AccountManager.GetAccountByPersistentID(accountId));
         }
-
+        /*
         /// <summary>
         /// New GameAccount
         /// </summary>
@@ -216,7 +239,7 @@ namespace Mooege.Core.MooNet.Accounts
                 .SetUseSigilVariant(true)
                 .Build();
         }
-
+        */
         private void SetField(Account owner)
         {
             this.Owner = owner;
@@ -294,7 +317,7 @@ namespace Mooege.Core.MooNet.Accounts
             var operationList = new List<bnet.protocol.presence.FieldOperation>();
 
             //gameaccount
-            //D3,GameAccount,1,0 -> D3.Account.BannerConfiguration
+            //D3,GameAccount,1,0 -> D3.DBAccount.BannerConfiguration
             //D3,GameAccount,2,0 -> ToonId
             //D3,Hero,1,0 -> Hero Class
             //D3,Hero,2,0 -> Hero's current level
@@ -307,8 +330,8 @@ namespace Mooege.Core.MooNet.Accounts
             //Bnet,GameAccount,3,0 -> FourCC = "D3"
             //Bnet,GameAccount,4,0 -> Unk Int (0 if GameAccount is Offline)
             //Bnet,GameAccount,5,0 -> BattleTag
-            //Bnet,GameAccount,6,0 -> Account.Low + "#1"
-            //Bnet,GameAccount,7,0 -> Account.EntityId
+            //Bnet,GameAccount,6,0 -> DBAccount.Low + "#1"
+            //Bnet,GameAccount,7,0 -> DBAccount.EntityId
 
             operationList.Add(BannerConfigurationField.GetFieldOperation());
             if (this.lastPlayedHeroId != AccountHasNoToons)
@@ -540,7 +563,7 @@ namespace Mooege.Core.MooNet.Accounts
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetStringValue(this.Owner.BattleTag).Build());
                     }
-                    else if (queryKey.Group == 2 && queryKey.Field == 7) // Account.EntityId
+                    else if (queryKey.Group == 2 && queryKey.Field == 7) // DBAccount.EntityId
                     {
                         field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetEntityidValue(this.Owner.BnetEntityId).Build());
                     }
@@ -563,6 +586,8 @@ namespace Mooege.Core.MooNet.Accounts
             return String.Format("{{ GameAccount: {0} [lowId: {1}] }}", this.Owner.BattleTag, this.BnetEntityId.Low);
         }
 
+        //Moved DB thingies to GameAccountManager.
+        /*
         public void SaveToDB()
         {
             try
@@ -624,6 +649,7 @@ namespace Mooege.Core.MooNet.Accounts
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
         }
+        */
 
         //TODO: figure out what 1 and 3 represent, or if it is a flag since all observed values are powers of 2 so far /dustinconrad
         public enum AwayStatusFlag : uint

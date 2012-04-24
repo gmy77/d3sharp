@@ -22,6 +22,7 @@ using System.Data.SQLite;
 using System.Linq;
 using Mooege.Common.Storage;
 using Mooege.Common.Helpers.Hash;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.Cryptography;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
@@ -67,8 +68,8 @@ namespace Mooege.Core.MooNet.Accounts
         }
 
         public string Email { get; private set; } // I - Username
-        public byte[] Salt { get; private set; }  // s- User's salt.
-        public byte[] PasswordVerifier { get; private set; } // v - password verifier.
+        public byte[] Salt { get; internal set; }  // s- User's salt.
+        public byte[] PasswordVerifier { get; internal set; } // v - password verifier.
 
         //TODO: Eliminate this variable as it is used inside the Field property
         private string _name;
@@ -105,7 +106,7 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        public UserLevels UserLevel { get; private set; } // user level for account.
+        public UserLevels UserLevel { get; internal set; } // user level for account.
 
         public Dictionary<ulong, GameAccount> GameAccounts
         {
@@ -170,22 +171,32 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        public Account(ulong persistentId, string email, byte[] salt, byte[] passwordVerifier, string battleTagName, int hashCode, UserLevels userLevel) // Account with given persistent ID
+        private Account(ulong persistentId, string email, byte[] salt, byte[] passwordVerifier, string battleTagName, int hashCode, UserLevels userLevel) // Account with given persistent ID
             : base(persistentId)
         {
             this.SetFields(email, salt, passwordVerifier, battleTagName, hashCode, userLevel);
         }
 
-        public Account(string email, string password, string battleTagName, int hashCode, UserLevels userLevel) // Account with **newly generated** persistent ID
-            : base(StringHashHelper.HashIdentity(battleTagName + "#" + hashCode.ToString("D4")))
+
+        public Account(DBAccount dbAccount)
+            : this(
+                dbAccount.Id, dbAccount.Email, dbAccount.Salt, dbAccount.PasswordVerifier, dbAccount.BattleTagName,
+                dbAccount.HashCode, (UserLevels)dbAccount.UserLevel)
         {
-            if (password.Length > 16) password = password.Substring(0, 16); // make sure the password does not exceed 16 chars.
-
-            var salt = SRP6a.GetRandomBytes(32);
-            var passwordVerifier = SRP6a.CalculatePasswordVerifierForAccount(email, password, salt);
-
-            this.SetFields(email, salt, passwordVerifier, battleTagName, hashCode, userLevel);
         }
+
+
+        /*
+                public Account(string email, string password, string battleTagName, int hashCode, UserLevels userLevel) // Account with **newly generated** persistent ID
+                    : base(StringHashHelper.HashIdentity(battleTagName + "#" + hashCode.ToString("D4")))
+                {
+                    if (password.Length > 16) password = password.Substring(0, 16); // make sure the password does not exceed 16 chars.
+
+                    var salt = SRP6a.GetRandomBytes(32);
+                    var passwordVerifier = SRP6a.CalculatePasswordVerifierForAccount(email, password, salt);
+
+                    this.SetFields(email, salt, passwordVerifier, battleTagName, hashCode, userLevel);
+                }*/
 
         private static ulong? _persistentIdCounter = null;
         protected override ulong GenerateNewPersistentId()
@@ -308,6 +319,9 @@ namespace Mooege.Core.MooNet.Accounts
         }
 
         #region DB
+
+        /* 
+         * Account Operations should be made only in AccountManager... just my two cents :)
         public void SaveToDB()
         {
             try
@@ -387,8 +401,8 @@ namespace Mooege.Core.MooNet.Accounts
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
         }
-
-#endregion
+        */
+        #endregion
 
         public override string ToString()
         {

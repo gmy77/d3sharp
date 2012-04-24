@@ -22,6 +22,9 @@ using System.Data.SQLite;
 using System.Linq;
 using Mooege.Common.Logging;
 using Mooege.Common.Storage;
+using Mooege.Common.Storage.AccountDataBase.Entities;
+using Mooege.Core.Cryptography;
+using NHibernate.Linq;
 
 namespace Mooege.Core.MooNet.Accounts
 {
@@ -59,12 +62,56 @@ namespace Mooege.Core.MooNet.Accounts
 
         public static Account CreateAccount(string email, string password, string battleTag, Account.UserLevels userLevel = Account.UserLevels.User)
         {
+            if (password.Length > 16) password = password.Substring(0, 16); // make sure the password does not exceed 16 chars.
             var hashCode = AccountManager.GetUnusedHashCodeForBattleTag(battleTag);
-            var account = new Account(email, password, battleTag, hashCode, userLevel);
-            Accounts.Add(email, account);
-            account.SaveToDB();
+            var salt = SRP6a.GetRandomBytes(32);
+            var passwordVerifier = SRP6a.CalculatePasswordVerifierForAccount(email, password, salt);
 
+
+            var newDBAccount = new DBAccount
+                                   {
+                                       Id=GetNextAvailablePersistentId(),
+                                       Email = email,
+                                       Salt = salt,
+                                       PasswordVerifier = passwordVerifier,
+                                       BattleTagName = battleTag,
+                                       UserLevel = (byte)userLevel,
+                                       HashCode = hashCode
+                                   };
+            
+            
+            DBSessions.AccountSession.SaveOrUpdate(newDBAccount);
+            DBSessions.AccountSession.Flush();
+
+            var account = new Account(newDBAccount);
+            Accounts.Add(email, account);
             return account;
+        }
+
+        public static void SaveToDB(Account account)
+        {
+
+
+            try
+            {
+                var dbAccount = DBSessions.AccountSession.Get<DBAccount>(account.PersistentID);
+                dbAccount.Email = account.Email;
+                dbAccount.Salt = account.Salt;
+                dbAccount.PasswordVerifier = account.PasswordVerifier;
+                dbAccount.BattleTagName = account.Name;
+                dbAccount.HashCode = account.HashCode;
+                dbAccount.UserLevel = (byte)account.UserLevel;
+                dbAccount.LastOnline = account.LastOnlineField.Value;
+                dbAccount.LastSelectedHeroId = account.LastSelectedHero.IdLow;
+                DBSessions.AccountSession.SaveOrUpdate(dbAccount);
+                DBSessions.AccountSession.Flush();
+
+
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e, "SaveToDB()");
+            }
         }
 
         public static Account GetAccountByPersistentID(ulong persistentId)
@@ -76,7 +123,7 @@ namespace Mooege.Core.MooNet.Accounts
         {
             if (account == null) return false;
             if (!Accounts.ContainsKey(account.Email)) return false;
-
+            /*
             try
             {
                 var query = string.Format("DELETE from accounts where id={0}", account.PersistentID);
@@ -88,7 +135,10 @@ namespace Mooege.Core.MooNet.Accounts
                 Logger.ErrorException(e, "DeleteAccount()");
                 return false;
             }
-
+            */
+            var dbAccount = DBSessions.AccountSession.Get<DBAccount>(account.PersistentID);
+            DBSessions.AccountSession.Delete(dbAccount);
+            DBSessions.AccountSession.Flush();
             Accounts.Remove(account.Email);
             // we should be also disconnecting the account if he's online. /raist.
 
@@ -97,74 +147,75 @@ namespace Mooege.Core.MooNet.Accounts
 
         private static void LoadAccounts()
         {
-            var query = "SELECT * FROM accounts";
-            var cmd = new SQLiteCommand(query, DBManager.Connection);
-            var reader = cmd.ExecuteReader();
-
-            if (!reader.HasRows) return;
-
-            while (reader.Read())
+            var allDbAccounts = DBSessions.AccountSession.Query<DBAccount>().ToList();
+            foreach (var dbAccount in allDbAccounts)
             {
-                var accountId = Convert.ToUInt64(reader["id"]);
-                var email = Convert.ToString(reader["email"]);
-
-                var salt = new byte[32];
-                var readBytes = reader.GetBytes(2, 0, salt, 0, 32);
-
-                var passwordVerifier = new byte[128];
-                readBytes = reader.GetBytes(3, 0, passwordVerifier, 0, 128);
-
-                var battleTagName = Convert.ToString(reader["battletagname"]);
-                var hashCode = Convert.ToInt32(reader["hashCode"]);
-                var userLevel = Convert.ToByte(reader["userLevel"]);
-
-                var account = new Account(accountId, email, salt, passwordVerifier, battleTagName, hashCode, (Account.UserLevels)userLevel);
-                account.LastOnlineField.Value = Convert.ToInt64(reader["LastOnline"]);
+                var email = dbAccount.Email;
+                var account = new Account(dbAccount);
+                account.LastOnlineField.Value = dbAccount.LastOnline;
                 Accounts.Add(email, account);
             }
         }
 
         public static int GetUnusedHashCodeForBattleTag(string name)
         {
-            var query = string.Format("SELECT hashCode FROM accounts WHERE battletagname='{0}'", name);
-            Logger.Trace(query);
-            var cmd = new SQLiteCommand(query, DBManager.Connection);
-            var reader = cmd.ExecuteReader();
-            if (!reader.HasRows) return GenerateHashCodeNotInList(null);
 
-            var codes = new HashSet<int>();
-            while (reader.Read())
-            {
-                var hashCode = Convert.ToInt32(reader["hashCode"]);
-                codes.Add(hashCode);
-            }
+            var codes = DBSessions.AccountSession.Query<DBAccount>().Select(dba => dba.HashCode).ToList();
             return GenerateHashCodeNotInList(codes);
         }
 
         public static ulong GetNextAvailablePersistentId()
         {
-            var cmd = new SQLiteCommand("SELECT MAX(id) FROM accounts", DBManager.Connection);
-            try
-            {
-                return Convert.ToUInt64(cmd.ExecuteScalar());
-            }
-            catch (InvalidCastException)
-            {
-                return 0;
-            }
+            return !DBSessions.AccountSession.Query<DBAccount>().Any() ? 1
+                : DBSessions.AccountSession.Query<DBAccount>().OrderByDescending(dba => dba.Id).Select(dba => dba.Id).First()+1;
         }
 
-        private static int GenerateHashCodeNotInList(HashSet<int> codes)
+        private static int GenerateHashCodeNotInList(ICollection<int> codes)
         {
-            Random rnd = new Random();
-            if (codes == null) return rnd.Next(1, 1000);
-
+            var rnd = new Random();
             int hashCode;
             do
             {
                 hashCode = rnd.Next(1, 1000);
             } while (codes.Contains(hashCode));
             return hashCode;
+        }
+
+        public static void UpdatePassword(Account account, string newPassword)
+        {
+            account.PasswordVerifier = SRP6a.CalculatePasswordVerifierForAccount(account.Email, newPassword, account.Salt);
+            try
+            {
+                /*
+                var query = string.Format("UPDATE accounts SET passwordVerifier=@passwordVerifier WHERE id={0}", this.PersistentID);
+
+                using (var cmd = new SQLiteCommand(query, DBManager.Connection))
+                {
+                    cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
+                    cmd.ExecuteNonQuery();
+                }*/
+                SaveToDB(account);
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e, "UpdatePassword()");
+            }
+        }
+
+        public static void UpdateUserLevel(Account account, Account.UserLevels userLevel)
+        {
+            account.UserLevel = userLevel;
+            try
+            {/*
+                var query = string.Format("UPDATE accounts SET userLevel={0} WHERE id={1}", (byte)userLevel, this.PersistentID);
+                var cmd = new SQLiteCommand(query, DBManager.Connection);
+                cmd.ExecuteNonQuery();*/
+                SaveToDB(account);
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e, "UpdateUserLevel()");
+            }
         }
 
     }

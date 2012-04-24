@@ -130,7 +130,7 @@ namespace Mooege.Core.MooNet.Accounts
             if (password.Length < 8 || password.Length > 16)
                 return "Password should be a minimum of 8 and a maximum of 16 characters.";
 
-            account.UpdatePassword(password);
+            AccountManager.UpdatePassword(account,password);
             return string.Format("Updated password for account {0}.", email);
         }
 
@@ -166,8 +166,7 @@ namespace Mooege.Core.MooNet.Accounts
                 default:
                     return level + " is not a valid user level.";
             }
-
-            account.UpdateUserLevel(userLevel);
+            AccountManager.UpdateUserLevel(account,userLevel);
             return string.Format("Updated user level for account {0} [user-level: {1}].", email, userLevel);
         }
     }
