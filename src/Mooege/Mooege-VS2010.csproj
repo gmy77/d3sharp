@@ -109,7 +109,6 @@
   <ItemGroup>
     <Compile Include="Core\GS\Actors\Actions\PowerAction.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Door.cs" />
-    <Compile Include="Core\GS\Actors\Implementations\Minions\AcidCloudSlime.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Minions\AncientKorlic.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Minions\AncientMawdawc.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Minions\AncientTalic.cs" />

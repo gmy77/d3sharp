@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Windows;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
@@ -43,7 +44,8 @@ namespace Mooege.Core.GS.Objects
         public Vector3D Position
         {
             get { return _position; }
-            set { 
+            set
+            {
                 _position = value;
                 this.Bounds = new Rect(this.Position.X, this.Position.Y, this.Size.Width, this.Size.Height);
                 var handler = PositionChanged;
@@ -93,11 +95,7 @@ namespace Mooege.Core.GS.Objects
         protected WorldObject(World world, uint dynamicID)
             : base(dynamicID)
         {
-            if (world==null)
-            {
-                
-
-            }
+            Debug.Assert(world != null);
             this.World = world;
             this.World.Game.StartTracking(this); // track the object.
             this.RotationAxis = new Vector3D();
