@@ -1866,7 +1866,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 foreach (ZombieDog dog in buff.dogs)
                 {
-                    dog.Kill();
+                    dog.Kill(this);
                 }
                 World.BuffManager.RemoveBuffs(this.User, buff.GetType());
                 StartCooldown(1f);
@@ -1982,7 +1982,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 //System.Console.Out.WriteLine("lol");
                 foreach (ZombieDog dog in buff.dogs)
                 {
-                    dog.Kill();
+                    dog.Kill(this);
                 }
                 World.BuffManager.RemoveBuffs(this.User, buff.GetType());
             }
