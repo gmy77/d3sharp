@@ -220,8 +220,8 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             bool hitAnything = false;
             var ShockWavePos = PowerMath.TranslateDirection2D(User.Position, TargetPosition,
-                                                             User.Position,
-                                                            ScriptFormula(23));
+                                                              User.Position,
+                                                              ScriptFormula(23));
             var maxHits = ScriptFormula(1);
             for (int i = 0; i < maxHits; ++i)
             {
@@ -229,9 +229,9 @@ namespace Mooege.Core.GS.Powers.Implementations
                 attack.Targets = GetBestMeleeEnemy();
 
                 if (i == 0)
-                { attack.AddWeaponDamage(ScriptFormula(3), DamageType.Physical); }
+                    attack.AddWeaponDamage(ScriptFormula(3), DamageType.Physical);
                 else
-                { attack.AddWeaponDamage(ScriptFormula(12), DamageType.Physical); }
+                    attack.AddWeaponDamage(ScriptFormula(12), DamageType.Physical);
 
                 attack.OnHit = hitPayload =>
                 {
@@ -274,6 +274,13 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
             yield break;
         }
+
+        public override float GetContactDelay()
+        {
+            // seems to need this custom speed for all attacks
+            return ScriptFormula(13);
+        }
+
         [ImplementsPowerBuff(0, true)]
         public class AddDamageBuff : PowerBuff
         {
