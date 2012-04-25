@@ -850,7 +850,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 WeaponDamage(hit, ScriptFormula(0), DamageType.Physical);
                 bool firsthit = true;
                 float range = ScriptFormula(3);
-                if (firsthit = false)
+                if (firsthit == false)
                 {
                     range = ScriptFormula(4);
                 }
