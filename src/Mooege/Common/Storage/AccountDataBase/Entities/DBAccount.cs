@@ -8,7 +8,7 @@ namespace Mooege.Common.Storage.AccountDataBase.Entities
 {
     public class DBAccount : Entity
     {
-        public new virtual ulong Id { get; set; }
+        public new virtual ulong Id { get; protected set; }
         public virtual string Email { get; set; }
         public virtual byte[] Salt { get; set; }
         public virtual byte[] PasswordVerifier { get; set; }

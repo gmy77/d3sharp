@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using Mooege.Common.Helpers.Hash;
 using Mooege.Common.Storage;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
@@ -94,11 +95,12 @@ namespace Mooege.Core.MooNet.Toons
             }
         }
 
+        /*
         /// <summary>
         /// Toon's hash-code.
         /// </summary>
         public int HashCode { get; set; }
-
+        */
         /// <summary>
         /// Toon's owner account.
         /// </summary>
@@ -316,6 +318,38 @@ namespace Mooege.Core.MooNet.Toons
 
         #region c-tor and setfields
 
+
+        public Toon(DBToon dbToon):base(dbToon.Id)
+        {
+            this.D3EntityID = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId).SetIdLow(this.PersistentID).Build();
+
+            this.Name = dbToon.Name;
+            this.Class = (ToonClass)dbToon.Class;
+            this.Flags = (ToonFlags) dbToon.Flags;
+            this.Level = dbToon.Level;
+            this.ExperienceNext = Player.LevelBorders[this.Level];
+            this.GameAccount = GameAccountManager.GetAccountByDBGameAccount(dbToon.DBGameAccount);
+            this.TimePlayed = dbToon.TimePlayed;
+            this.Deleted = dbToon.Deleted;
+            /*this.HashCode = dbToon.HashCode;*/
+
+            var visualItems = new[]
+            {                                
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Head
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Chest
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Feet
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Hands
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Weapon (1)
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Weapon (2)
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Shoulders
+                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Legs
+            };
+
+            this.HeroVisualEquipmentField.Value = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
+
+
+        }
+        /*
         public Toon(string name, int hashCode, int classId, ToonFlags flags, byte level, GameAccount account) // Toon with **newly generated** persistent ID
             : base(StringHashHelper.HashIdentity(name + "#" + hashCode.ToString("D3")))
         {
@@ -413,7 +447,7 @@ namespace Mooege.Core.MooNet.Toons
             }
             this.HeroVisualEquipmentField.Value = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
         }
-
+        */
         #endregion
 
         public void LevelUp()
@@ -449,7 +483,7 @@ namespace Mooege.Core.MooNet.Toons
 
         #endregion
 
-        private static ToonClass GetClassByID(int classId)
+        public static ToonClass GetClassByID(int classId)
         {
             switch (classId)
             {
@@ -475,87 +509,15 @@ namespace Mooege.Core.MooNet.Toons
 
         #region DB
 
-        public void SaveToDB()
-        {
-            try
-            {
-                // save character base data
-                if (ExistsInDB())
-                {
-                    var query =
-                        string.Format(
-                            "UPDATE toons SET name='{0}', hashCode={1}, class={2}, gender={3}, level={4}, experience={5}, accountId={6}, timePlayed={7}, deleted={8} WHERE id={9}",
-                            this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.ExperienceNext, this.GameAccount.PersistentID, this.TimePlayed, this.Deleted ? 1 : 0, this.PersistentID);
 
-                    var cmd = new SQLiteCommand(query, DBManager.Connection);
-                    cmd.ExecuteNonQuery();
-                }
-                else
-                {
-                    var query =
-                        string.Format(
-                            "INSERT INTO toons (id, name, hashCode, class, gender, level, experience, timePlayed, accountId) VALUES({0},'{1}',{2},{3},{4},{5},{6},{7},{8})",
-                            this.PersistentID, this.Name, this.HashCode, (byte)this.Class, (byte)this.Gender, this.Level, this.ExperienceNext, this.TimePlayed, this.GameAccount.PersistentID);
-
-                    var cmd = new SQLiteCommand(query, DBManager.Connection);
-                    cmd.ExecuteNonQuery();
-                    Logger.Debug("Create Toon for the first time in DB {0}", this.PersistentID);
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException(e, "Toon.SaveToDB()");
-            }
-        }
-
-        public bool DeleteFromDB()
-        {
-            try
-            {
-                // Remove from DB
-                if (!ExistsInDB()) return false;
-
-                //delete items from DB
-                var itemQuery = string.Format("DELETE FROM inventory WHERE toon_id={0}", this.PersistentID);
-                var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
-                itemCmd.ExecuteNonQuery();
-
-                //delete entry from active_skills table
-                var asSkillquery = string.Format("DELETE FROM active_skills WHERE id_toon={0}", this.PersistentID);
-                var asCmd = new SQLiteCommand(asSkillquery, DBManager.Connection);
-                asCmd.ExecuteNonQuery();
-
-                //delete the actual toon from toons table
-                var query = string.Format("DELETE FROM toons WHERE id={0}", this.PersistentID);
-                var cmd = new SQLiteCommand(query, DBManager.Connection);
-                cmd.ExecuteNonQuery();
-				
-				Logger.Debug("Deleting toon {0}",this.PersistentID);
-                return true;
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException(e, "Toon.DeleteFromDB()");
-                return false;
-            }
-        }
-
-        private bool ExistsInDB()
-        {
-            var query = string.Format("SELECT id FROM toons WHERE id={0}", this.PersistentID);
-
-            var cmd = new SQLiteCommand(query, DBManager.Connection);
-            var reader = cmd.ExecuteReader();
-            return reader.HasRows;
-        }
-
+        /*
         private bool VisualItemExistsInDb(int slot)
         {
             var query = string.Format("SELECT toon_id FROM inventory WHERE toon_id = {0} AND equipment_slot = {1}", this.PersistentID, slot);
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
-        }
+        }*/
     }
     #endregion
 

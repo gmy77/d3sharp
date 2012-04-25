@@ -11,7 +11,7 @@ namespace Mooege.Common.Storage.AccountDataBase.Mapper
     {
         public DBAccountMapper()
         {
-            Id(e => e.Id).GeneratedBy.Assigned();
+            Id(e => e.Id).GeneratedBy.Increment();
             Map(e => e.Email);
             Map(e => e.BattleTagName);
             Map(e => e.HashCode);

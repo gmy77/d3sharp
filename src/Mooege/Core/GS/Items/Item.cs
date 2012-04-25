@@ -18,6 +18,7 @@
 
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
@@ -52,6 +53,8 @@ namespace Mooege.Core.GS.Items
     */
     public class Item : Actor
     {
+        public DBInventory DBInventory = null;
+
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         public override ActorType ActorType { get { return ActorType.Item; } }

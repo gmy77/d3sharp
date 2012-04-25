@@ -56,6 +56,11 @@ namespace Mooege.Core.MooNet.Accounts
             return GameAccounts.Where(account => account.Value.PersistentID == persistentId).Select(account => account.Value).FirstOrDefault();
         }
 
+        public static GameAccount GetAccountByDBGameAccount(DBGameAccount dbGameAccount)
+        {
+            return GetAccountByPersistentID(dbGameAccount.Id);
+        }
+
         public static ulong GetNextAvailablePersistentId()
         {
             return !DBSessions.AccountSession.Query<DBGameAccount>().Any() ? 1
@@ -119,7 +124,6 @@ namespace Mooege.Core.MooNet.Accounts
         {
             var newDBGameAccount = new DBGameAccount
                                        {
-                                           Id = GetNextAvailablePersistentId(),
                                            DBAccount = DBSessions.AccountSession.Get<DBAccount>(account.PersistentID)
                                        };
 

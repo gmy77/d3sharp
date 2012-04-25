@@ -11,10 +11,12 @@ namespace Mooege.Common.Storage.AccountDataBase.Mapper
     {
         public DBGameAccountMapper()
         {
-            Id(e => e.Id).GeneratedBy.Assigned();
+            Id(e => e.Id).GeneratedBy.Increment();
             HasOne(e => e.DBAccount).Constrained();
             Map(e => e.Banner).CustomSqlType("Blob");
             Map(e => e.LastOnline);
+            HasMany(e => e.DBToons).Cascade.All();
+            HasMany(e => e.DBInventories).Cascade.All();
         }
     }
 }

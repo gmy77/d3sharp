@@ -63,14 +63,13 @@ namespace Mooege.Core.MooNet.Accounts
         public static Account CreateAccount(string email, string password, string battleTag, Account.UserLevels userLevel = Account.UserLevels.User)
         {
             if (password.Length > 16) password = password.Substring(0, 16); // make sure the password does not exceed 16 chars.
-            var hashCode = AccountManager.GetUnusedHashCodeForBattleTag(battleTag);
+            var hashCode = AccountManager.GetRandomHashCodeForBattleTag(battleTag);
             var salt = SRP6a.GetRandomBytes(32);
             var passwordVerifier = SRP6a.CalculatePasswordVerifierForAccount(email, password, salt);
 
 
             var newDBAccount = new DBAccount
                                    {
-                                       Id=GetNextAvailablePersistentId(),
                                        Email = email,
                                        Salt = salt,
                                        PasswordVerifier = passwordVerifier,
@@ -78,8 +77,8 @@ namespace Mooege.Core.MooNet.Accounts
                                        UserLevel = (byte)userLevel,
                                        HashCode = hashCode
                                    };
-            
-            
+
+
             DBSessions.AccountSession.SaveOrUpdate(newDBAccount);
             DBSessions.AccountSession.Flush();
 
@@ -157,29 +156,18 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        public static int GetUnusedHashCodeForBattleTag(string name)
+        public static int GetRandomHashCodeForBattleTag(string name)
         {
-
-            var codes = DBSessions.AccountSession.Query<DBAccount>().Select(dba => dba.HashCode).ToList();
-            return GenerateHashCodeNotInList(codes);
+            var rnd = new Random();
+            return rnd.Next(1, 1000);
         }
 
         public static ulong GetNextAvailablePersistentId()
         {
             return !DBSessions.AccountSession.Query<DBAccount>().Any() ? 1
-                : DBSessions.AccountSession.Query<DBAccount>().OrderByDescending(dba => dba.Id).Select(dba => dba.Id).First()+1;
+                : DBSessions.AccountSession.Query<DBAccount>().OrderByDescending(dba => dba.Id).Select(dba => dba.Id).First() + 1;
         }
 
-        private static int GenerateHashCodeNotInList(ICollection<int> codes)
-        {
-            var rnd = new Random();
-            int hashCode;
-            do
-            {
-                hashCode = rnd.Next(1, 1000);
-            } while (codes.Contains(hashCode));
-            return hashCode;
-        }
 
         public static void UpdatePassword(Account account, string newPassword)
         {
