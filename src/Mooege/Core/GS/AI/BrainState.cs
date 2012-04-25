@@ -52,6 +52,7 @@ namespace Mooege.Core.GS.AI
         /// I see dead brains.
         /// </summary>
         Dead,
+        Off,
         End
     }
 }

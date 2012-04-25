@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
+ * Copyright (C) 2011 mooege project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,14 +30,14 @@ using Mooege.Core.GS.Ticker;
 
 namespace Mooege.Core.GS.AI.Brains
 {
-    public class MonsterBrain : Brain
+    public class AggressiveNPCBrain : Brain
     {
         // list of power SNOs that are defined for the monster
         public List<int> PresetPowers { get; private set; }
-
+        private Actor _target { get; set; }
         private TickTimer _powerDelay;
 
-        public MonsterBrain(Actor body)
+        public AggressiveNPCBrain(Actor body)
             : base(body)
         {
             this.PresetPowers = new List<int>();
@@ -49,7 +49,9 @@ namespace Mooege.Core.GS.AI.Brains
                 foreach (var monsterSkill in monsterData.SkillDeclarations)
                 {
                     if (monsterSkill.SNOPower > 0)
+                    {
                         this.PresetPowers.Add(monsterSkill.SNOPower);
+                    }
                 }
             }
         }
@@ -57,8 +59,8 @@ namespace Mooege.Core.GS.AI.Brains
         public override void Think(int tickCounter)
         {
             // this needed? /mdz
-            if (this.Body is NPC) return;
-            
+            //if (this.Body is NPC) return;
+
             // check if in disabled state, if so cancel any action then do nothing
             if (this.Body.Attributes[GameAttribute.Frozen] ||
                 this.Body.Attributes[GameAttribute.Stunned] ||
@@ -84,9 +86,21 @@ namespace Mooege.Core.GS.AI.Brains
 
                 if (_powerDelay.TimedOut)
                 {
-                    int powerToUse = PickPowerToUse();
-                    if (powerToUse > 0)
-                        this.CurrentAction = new PowerAction(this.Body, powerToUse);
+                    
+                    if (this.Body.GetObjectsInRange<Monster>(40f).Count != 0)
+                    {
+                        _target = this.Body.GetObjectsInRange<Monster>(40f)[0];
+                        //System.Console.Out.WriteLine("Enemy in range, use powers");
+                        //This will only attack when you and your minions are not moving..TODO: FIX.
+                        int powerToUse = PickPowerToUse();
+                        if (powerToUse > 0)
+                            this.CurrentAction = new PowerAction(this.Body, powerToUse,_target);
+                    }
+                    else
+                    {
+                        //System.Console.Out.WriteLine("No enemies in range, return to master");
+                        this.CurrentAction = new MoveToPointAction(this.Body, this.Body.CheckPointPosition);
+                    }
                 }
             }
         }
@@ -104,6 +118,7 @@ namespace Mooege.Core.GS.AI.Brains
             // no usable power
             return -1;
         }
+
         public void AddPresetPower(int powerSNO)
         {
             this.PresetPowers.Add(powerSNO);

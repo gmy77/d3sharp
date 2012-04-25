@@ -156,16 +156,10 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         private void LoadSceneData()
         {
-            if (!MPQStorage.Data.Assets.ContainsKey(SNOGroup.Scene))
-            {
-                Logger.Error("No Assets for SNOGroup.Scene!");
-                throw new Exception("No Assets for SNOGroup.Scene!");
-            }
-
             if (!MPQStorage.Data.Assets[SNOGroup.Scene].ContainsKey(this.SceneSNO.Id))
             {
-                Logger.Error("No Assets for Scene {0},Totalcount:{1}", this.SceneSNO.Id, MPQStorage.Data.Assets[SNOGroup.Scene].Count);
-                throw new Exception("No Assets for Scene " + this.SceneSNO.Id);
+                Logger.Debug("AssetsForScene not found in MPQ Storage:Scene:{0}, Asset:{1}", SNOGroup.Scene,this.SceneSNO.Id);
+                return;
             }
             var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SceneSNO.Id].Data as Mooege.Common.MPQ.FileFormats.Scene;
             if (data == null) return;

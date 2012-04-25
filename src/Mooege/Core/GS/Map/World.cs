@@ -736,6 +736,61 @@ namespace Mooege.Core.GS.Map
 
         #endregion
 
+        public bool CheckLocationForFlag(Vector3D location, Mooege.Common.MPQ.FileFormats.Scene.NavCellFlags flags)
+        {
+            // We loop Scenes as its far quicker than looking thru the QuadTree - DarkLotus
+
+            foreach (Scene s in this._scenes.Values)
+            {
+                if (s.Bounds.IntersectsWith(new Rect(location.X, location.Y, 1f, 1f)))
+                {
+                    /*if (s.DynamicID != QuadTree.Query<Scene>(new Common.Types.Misc.Circle(location.X, location.Y, 2f)).FirstOrDefault().DynamicID)
+                    {
+                        Logger.Debug("Quadtree");// This is here because quadtree has the same problem finding the master scene instead of subscene
+                    }*/
+                    Scene scene = s;
+                    if (s.Parent != null) { scene = s.Parent; }
+                    if (s.Subscenes.Count > 0)
+                    {
+                        foreach (var subscene in s.Subscenes)
+                        {
+                            if (subscene.Bounds.IntersectsWith(new Rect(location.X, location.Y, 1f, 1f)))
+                            {
+                                scene = subscene;
+                            }
+                        }
+                    }
+
+                    int x = (int)((location.X - scene.Bounds.Left) / 2.5f);
+                    int y = (int)((location.Y - scene.Bounds.Top) / 2.5f);
+                    /*if (s.NavMesh.WalkGrid[x, y] == 1)
+                    {
+                        return true;
+                    }*/
+                    int total = (int)((y * scene.NavMesh.SquaresCountY) + x);
+                    if (total < 0 || total > scene.NavMesh.NavMeshSquareCount)
+                    {
+                        Logger.Error("DarkLotus Cant Code:( Navmesh overflow");
+                        return false;
+                    }
+                    if (scene.NavMesh.Squares[total].Flags.HasFlag(flags))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        Logger.Debug("Flags: " + scene.NavMesh.Squares[total].Flags.ToString());
+                        return false;
+                    }
+                    //return false;
+
+                }
+            }
+            // Location not inside a known scene - DarkLotus
+            return false;
+        }
+
+        
         public override string ToString()
         {
             return string.Format("[World] SNOId: {0} DynamicId: {1} Name: {2}", this.WorldSNO.Id, this.DynamicID, this.WorldSNO.Name);
