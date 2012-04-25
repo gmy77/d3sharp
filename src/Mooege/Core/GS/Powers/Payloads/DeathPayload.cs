@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mooege.Common.Logging;
 using Mooege.Core.GS.Actors;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Misc;
@@ -36,6 +37,7 @@ namespace Mooege.Core.GS.Powers.Payloads
     public class DeathPayload : Payload
     {
         public DamageType DeathDamageType;
+        public bool LootAndExp; //HACK: As we currently just give out random exp and loot, this is in to prevent giving this out for mobs that shouldn't give it.
 
         public DeathPayload(PowerContext context, DamageType deathDamageType, Actor target)
             : base(context, target)
@@ -43,12 +45,28 @@ namespace Mooege.Core.GS.Powers.Payloads
             this.DeathDamageType = deathDamageType;
         }
 
+        public DeathPayload(PowerContext context, DamageType deathDamageType, Actor target, bool grantsLootAndExp = true)
+            : base(context, target)
+        {
+            this.LootAndExp = grantsLootAndExp;
+            this.DeathDamageType = deathDamageType;
+        }
+
         public void Apply()
         {
             if (this.Target.World == null) return;
-
+            
             // HACK: add to hackish list thats used to defer deleting actor and filter it from powers targetting
             this.Target.World.PowerManager.AddDeletingActor(this.Target);
+
+
+            // kill brain if living
+            if (this.Target is Living)
+            {
+                Living actor = (Living)this.Target;
+                if (actor.Brain != null)
+                    actor.Brain.Kill();
+            }
 
             // kill brain if monster
             if (this.Target is Monster)
@@ -97,6 +115,19 @@ namespace Mooege.Core.GS.Powers.Payloads
                 this.Target.World.SpawnRandomItemDrop(this.Target, plr);
             }
 
+            if (LootAndExp)
+            {
+                if (this.Context.User is Player)
+                {
+                    Player player = (Player)this.Context.User;
+
+                    player.ExpBonusData.Update(player.GBHandle.Type, this.Target.GBHandle.Type);
+                    this.Target.World.SpawnGold(this.Target, player);
+                    if (Mooege.Common.Helpers.Math.RandomHelper.Next(1, 100) < 20)
+                        this.Target.World.SpawnHealthGlobe(this.Target, player, this.Target.Position);
+                }
+            }
+
             if (this.Context.User is Player)
             {
                 Player player = (Player)this.Context.User;
@@ -113,6 +144,7 @@ namespace Mooege.Core.GS.Powers.Payloads
             // HACK: instead of deleting actor right here, its added to a list (near the top of this function)
             //this.Target.Destroy();
         }
+
 
         private int _FindBestDeathAnimationSNO()
         {
