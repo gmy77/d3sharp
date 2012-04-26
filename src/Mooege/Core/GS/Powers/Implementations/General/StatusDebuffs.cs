@@ -106,10 +106,30 @@ namespace Mooege.Core.GS.Powers.Implementations
     [ImplementsPowerBuff(0)]
     public class DebuffChilled : SimpleBooleanStatusDebuff
     {
-        public DebuffChilled(TickTimer timeout)
+        public float Percentage;
+
+        public DebuffChilled(float percentage, TickTimer timeout)
             : base(GameAttribute.Chilled, null, null)
         {
+            Percentage = percentage;
             Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] -= Percentage;
+            Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] += Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] += Percentage;
+            Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] -= Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
         }
     }
 
@@ -121,6 +141,274 @@ namespace Mooege.Core.GS.Powers.Implementations
             : base(GameAttribute.Stunned, GameAttribute.Stun_Immune, FloatingNumberMessage.FloatType.Stunned)
         {
             Timeout = timeout;
+        }
+    }
+
+
+
+    [ImplementsPowerSNO(101002)] // DebuffFeared.pow
+    [ImplementsPowerBuff(0)]
+    public class DebuffFeared : SimpleBooleanStatusDebuff
+    {
+        public DebuffFeared(TickTimer timeout)
+            : base(GameAttribute.Feared, GameAttribute.Fear_Immune, FloatingNumberMessage.FloatType.Feared)
+        {
+            Timeout = timeout;
+        }
+    }
+
+    [ImplementsPowerSNO(101003)] // DebuffRooted.pow
+    [ImplementsPowerBuff(0)]
+    public class DebuffRooted : SimpleBooleanStatusDebuff
+    {
+        public DebuffRooted(TickTimer timeout)
+            : base(GameAttribute.IsRooted, GameAttribute.Root_Immune, FloatingNumberMessage.FloatType.Rooted)
+        {
+            Timeout = timeout;
+        }
+        //Seems there is no Rooted attribute.. so Stunned does the same thing.
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Stunned] = true;
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Stunned] = false;
+            Target.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+
+
+    [ImplementsPowerSNO(100971)] // DebuffSlowed.pow
+    [ImplementsPowerBuff(0)]
+    public class DebuffSlowed : SimpleBooleanStatusDebuff
+    {
+        public float Percentage;
+
+        public DebuffSlowed(float percentage, TickTimer timeout)
+            : base(GameAttribute.Slow, GameAttribute.Slowdown_Immune, FloatingNumberMessage.FloatType.Snared)
+        {
+            Percentage = percentage;
+            Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] -= Percentage;
+            Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] += Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] += Percentage;
+            Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] -= Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+
+    [ImplementsPowerBuff(0)]
+    public class DebuffFrozen : SimpleBooleanStatusDebuff
+    {
+        public DebuffFrozen(TickTimer timeout)
+            : base(GameAttribute.Frozen, GameAttribute.Freeze_Immune, FloatingNumberMessage.FloatType.Frozen)
+        {
+            Timeout = timeout;
+        }
+    }
+    //----------------------------------------------------------------------------------------------
+    //These are Skill-Related Powers
+    [ImplementsPowerSNO(1755)] // SlowTimeDebuff.pow
+    [ImplementsPowerBuff(0)]
+    public class SlowTimeDebuff : SimpleBooleanStatusDebuff
+    {
+        public float Percentage;
+
+        public SlowTimeDebuff(float percentage, TickTimer timeout)
+            : base(GameAttribute.Slow, GameAttribute.Slowdown_Immune, FloatingNumberMessage.FloatType.Snared)
+        {
+            Percentage = percentage;
+            Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            //is my projectile speed correct?
+            Target.Attributes[GameAttribute.Projectile_Speed] += Target.Attributes[GameAttribute.Projectile_Speed] * 0.1f;
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] -= Percentage;
+            Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] += Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Projectile_Speed] += Target.Attributes[GameAttribute.Projectile_Speed] / 0.1f;
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] += Percentage;
+            Target.Attributes[GameAttribute.Movement_Scalar_Reduction_Percent] -= Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+
+    //Wrong Section but i'm just gonna put it here.
+    [ImplementsPowerSNO(74499)]
+    [ImplementsPowerBuff(0)]
+    public class MovementBuff : PowerBuff
+    {
+        public float Percentage;
+
+        public MovementBuff(float percentage, TickTimer timeout)
+        {
+            Percentage = percentage;
+            Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Movement_Bonus_Run_Speed] += Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Movement_Bonus_Run_Speed] -= Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+
+    [ImplementsPowerSNO(1769)]
+    [ImplementsPowerBuff(0)]
+    public class SpeedBuff : PowerBuff
+    {
+        public float Percentage;
+
+        public SpeedBuff(float percentage, TickTimer timeout)
+        {
+            Percentage = percentage;
+            Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Casting_Speed_Percent] += Percentage;
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] += Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Casting_Speed_Percent] -= Percentage;
+            Target.Attributes[GameAttribute.Attacks_Per_Second_Percent] -= Percentage;
+            Target.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+    [ImplementsPowerSNO(86991)]
+    [ImplementsPowerBuff(0)]
+    public class EnergyArmorPowers : PowerBuff
+    {
+        public EnergyArmorPowers(TickTimer timeout)
+        {
+            Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            if (Rune_A > 0)
+            {
+                Target.Attributes[GameAttribute.Defense_Bonus_Percent] += ScriptFormula(1);
+                Target.Attributes[GameAttribute.Resource_Max_Bonus] -= ScriptFormula(2);
+                Target.Attributes[GameAttribute.Resistance] += ScriptFormula(4);
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
+            if (Rune_B > 0)
+            {
+                Target.Attributes[GameAttribute.Defense_Bonus_Percent] += ScriptFormula(1);
+                Target.Attributes[GameAttribute.Resource_Max_Bonus] += ScriptFormula(6);
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
+            if (Rune_E > 0)
+            {
+                Target.Attributes[GameAttribute.Defense_Bonus_Percent] += ScriptFormula(1);
+                Target.Attributes[GameAttribute.Resource_Max_Bonus] -= ScriptFormula(2);
+                Target.Attributes[GameAttribute.Precision_Bonus_Percent] += ScriptFormula(13);
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
+            else
+                Target.Attributes[GameAttribute.Defense_Bonus_Percent] += ScriptFormula(1);
+            Target.Attributes[GameAttribute.Resource_Max_Bonus] -= ScriptFormula(2);
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            if (Rune_A > 0)
+            {
+                Target.Attributes[GameAttribute.Defense_Bonus_Percent] -= ScriptFormula(1);
+                Target.Attributes[GameAttribute.Resource_Max_Bonus] += ScriptFormula(2);
+                Target.Attributes[GameAttribute.Resistance] -= ScriptFormula(4);
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
+            if (Rune_B > 0)
+            {
+                Target.Attributes[GameAttribute.Defense_Bonus_Percent] -= ScriptFormula(1);
+                Target.Attributes[GameAttribute.Resource_Max_Bonus] -= ScriptFormula(6);
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
+            if (Rune_E > 0)
+            {
+                Target.Attributes[GameAttribute.Defense_Bonus_Percent] -= ScriptFormula(1);
+                Target.Attributes[GameAttribute.Resource_Max_Bonus] += ScriptFormula(2);
+                Target.Attributes[GameAttribute.Precision_Bonus_Percent] -= ScriptFormula(13);
+                Target.Attributes.BroadcastChangedIfRevealed();
+            }
+            else
+                Target.Attributes[GameAttribute.Defense_Bonus_Percent] -= ScriptFormula(1);
+            Target.Attributes[GameAttribute.Resource_Max_Bonus] += ScriptFormula(2);
+            Target.Attributes.BroadcastChangedIfRevealed();
+        }
+    }
+    [ImplementsPowerSNO(30680)] //blizzard.pow
+    [ImplementsPowerBuff(0)]
+    public class BlizzardPowers : PowerBuff
+    {
+        public BlizzardPowers(TickTimer timeout)
+        {
+            Timeout = timeout;
+        }
+        public override bool Apply()
+        {
+            if (!base.Apply())
+                return false;
+            Target.Attributes[GameAttribute.Crit_Damage_Percent] += (int)ScriptFormula(9);
+            Target.Attributes.BroadcastChangedIfRevealed();
+            return true;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            Target.Attributes[GameAttribute.Crit_Damage_Percent] -= (int)ScriptFormula(9);
+            Target.Attributes.BroadcastChangedIfRevealed();
         }
     }
 }

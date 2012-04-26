@@ -85,9 +85,9 @@ namespace Mooege.Core.GS.Powers
 
         public void StartDefaultCooldown()
         {
-            float sec = EvalTag(PowerKeys.CooldownTime);
-            if (sec > 0f)
-                StartCooldown(WaitSeconds(sec));
+            float seconds = EvalTag(PowerKeys.CooldownTime);
+            if (seconds > 0f)
+                StartCooldown(seconds);
         }
 
         public void GeneratePrimaryResource(float amount)
@@ -135,6 +135,22 @@ namespace Mooege.Core.GS.Powers
             AttackPayload payload = new AttackPayload(this);
             payload.Targets = targets;
             payload.AddWeaponDamage(damageMultiplier, damageType);
+            payload.Apply();
+        }
+
+        public void Damage(Actor target, float minDamage, float damageDelta, DamageType damageType)
+        {
+            AttackPayload payload = new AttackPayload(this);
+            payload.SetSingleTarget(target);
+            payload.AddDamage(minDamage, damageDelta, damageType);
+            payload.Apply();
+        }
+
+        public void Damage(TargetList targets, float minDamage, float damageDelta, DamageType damageType)
+        {
+            AttackPayload payload = new AttackPayload(this);
+            payload.Targets = targets;
+            payload.AddDamage(minDamage, damageDelta, damageType);
             payload.Apply();
         }
 
@@ -244,10 +260,10 @@ namespace Mooege.Core.GS.Powers
         {
             get
             {
-                if (User is Player)
+                if (User is Player || User is Minion)
                     return (actor) => actor is Monster;
                 else
-                    return (actor) => actor is Player;
+                    return (actor) => actor is Player || actor is Minion;
             }
         }
 
@@ -255,8 +271,8 @@ namespace Mooege.Core.GS.Powers
         {
             get
             {
-                if (User is Player)
-                    return (actor) => actor is Player;
+                if (User is Player || User is Minion)
+                    return (actor) => actor is Player || actor is Minion;
                 else
                     return (actor) => actor is Monster;
             }
@@ -385,6 +401,11 @@ namespace Mooege.Core.GS.Powers
         public bool AddBuff(Actor user, Actor target, Buff buff)
         {
             return target.World.BuffManager.AddBuff(user, target, buff);
+        }
+
+        public bool HasBuff<BuffType>(Actor target) where BuffType : Buff
+        {
+            return target.World.BuffManager.HasBuff<BuffType>(target);
         }
 
         public Vector3D RandomDirection(Vector3D position, float radius)

@@ -5074,16 +5074,16 @@
     public class UnassignSkillMessage : GameMessage
     {
         int _Field0;
-        public int Field0 { get { return _Field0; } set { if(value < 0 || value > 26) throw new ArgumentOutOfRangeException(); _Field0 = value; } }
+        public int Field0 { get { return _Field0; } set { if(value < 0 || value > 5) throw new ArgumentOutOfRangeException(); _Field0 = value; } }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(5);
+            Field0 = buffer.ReadInt(3);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(5, Field0);
+            buffer.WriteInt(3, Field0);
         }
 
     }
@@ -5094,20 +5094,20 @@
         int _Field1;
         public int Field1 { get { return _Field1; } set { if(value < -1 || value > 4) throw new ArgumentOutOfRangeException(); _Field1 = value; } }
         int _Field2;
-        public int Field2 { get { return _Field2; } set { if(value < 0 || value > 26) throw new ArgumentOutOfRangeException(); _Field2 = value; } }
+        public int Field2 { get { return _Field2; } set { if(value < 0 || value > 5) throw new ArgumentOutOfRangeException(); _Field2 = value; } }
 
         public override void Parse(GameBitBuffer buffer)
         {
             snoPower = buffer.ReadInt(32);
             Field1 = buffer.ReadInt(3) + (-1);
-            Field2 = buffer.ReadInt(5);
+            Field2 = buffer.ReadInt(3);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteInt(32, snoPower);
             buffer.WriteInt(3, Field1 - (-1));
-            buffer.WriteInt(5, Field2);
+            buffer.WriteInt(3, Field2);
         }
 
     }

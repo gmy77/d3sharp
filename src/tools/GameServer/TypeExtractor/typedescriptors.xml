@@ -3295,27 +3295,25 @@
     <Field Type="DT_INT#1" Offset="1680" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1684" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1688" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="1692" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="1696" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="1692" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="1696" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1700" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="1704" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="1708" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="1712" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FIXEDARRAY#20" Offset="1716" Flags="1" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
-    <Field Type="BannerParams#404" Offset="1736" Flags="1" />
+    <Field Type="DT_INT#1" Offset="1704" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FIXEDARRAY#20" Offset="1708" Flags="1" SubType="DT_INT#1" ArrayLength="4" EncodedBits="32" />
+    <Field Type="BannerParams#404" Offset="1728" Flags="1" />
+    <Field Type="DT_INT#1" Offset="1960" Flags="1" EncodedBits="32" />
+    <Field Type="DT_INT#1" Offset="1964" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="1968" Flags="1" EncodedBits="32" />
     <Field Type="DT_INT#1" Offset="1972" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="1976" Flags="1" EncodedBits="32" />
-    <Field Type="DT_INT#1" Offset="1980" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="1976" Flags="1" EncodedBits="32" />
+    <Field Type="DT_FLOAT#5" Offset="1980" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1984" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1988" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1992" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="1996" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="2000" Flags="1" EncodedBits="32" />
     <Field Type="DT_FLOAT#5" Offset="2004" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="2008" Flags="1" EncodedBits="32" />
-    <Field Type="DT_FLOAT#5" Offset="2012" Flags="1" EncodedBits="32" />
-    <Field Offset="2016" Flags="0" />
+    <Field Offset="2008" Flags="0" />
   </StructureDescriptor>
   <StructureDescriptor Index="399" Name="GlobalServerData">
     <Field Type="DT_VARIABLEARRAY#3" Offset="0" Flags="33" SubType="ActorGroup#400" VariableOffset="8" />
@@ -4686,12 +4684,12 @@
     <Field Type="IVector2D#35" Offset="36" Flags="1" />
     <Field Offset="44" Flags="0" />
   </StructureDescriptor>
-  <StructureDescriptor Index="517" Name="Account" UnkValue="58">
+  <StructureDescriptor Index="517" Name="Account" UnkValue="59">
     <Field Name="serProtoData" Type="SerializeData#2" Offset="12" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="24" Flags="32" SubType="DT_BYTE#38" VariableOffset="-12" />
     <Field Offset="32" Flags="0" />
   </StructureDescriptor>
-  <StructureDescriptor Index="518" Name="Hero" UnkValue="470">
+  <StructureDescriptor Index="518" Name="Hero" UnkValue="471">
     <Field Name="serProtoData" Type="SerializeData#2" Offset="12" Flags="0" />
     <Field Type="DT_VARIABLEARRAY#3" Offset="24" Flags="32" SubType="DT_BYTE#38" VariableOffset="-12" />
     <Field Offset="32" Flags="0" />
@@ -4703,14 +4701,14 @@
   </GameMessageDescriptor>
   <GameMessageDescriptor Index="520" Name="UnassignSkillMessage" Size="12" NetworkIds="108">
     <Field Type="RequiredMessageHeader#86" Offset="0" Flags="1" />
-    <Field Type="DT_INT#1" Offset="8" Min="0" Max="26" Flags="17" EncodedBits="5" />
+    <Field Type="DT_INT#1" Offset="8" Min="0" Max="5" Flags="17" EncodedBits="3" />
     <Field Offset="12" Flags="0" />
   </GameMessageDescriptor>
   <GameMessageDescriptor Index="521" Name="AssignSkillMessage" Size="20" NetworkIds="107 110 111">
     <Field Type="RequiredMessageHeader#86" Offset="0" Flags="1" />
     <Field Name="snoPower" Type="DT_SNO#78" Offset="8" Flags="1" EncodedBits="32" SnoType="29" />
     <Field Type="DT_INT#1" Offset="12" Min="-1" Max="4" Flags="17" EncodedBits="3" />
-    <Field Type="DT_INT#1" Offset="16" Min="0" Max="26" Flags="17" EncodedBits="5" />
+    <Field Type="DT_INT#1" Offset="16" Min="0" Max="5" Flags="17" EncodedBits="3" />
     <Field Offset="20" Flags="0" />
   </GameMessageDescriptor>
   <StructureDescriptor Index="522" Name="SavedConversations">

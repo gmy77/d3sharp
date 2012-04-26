@@ -234,8 +234,13 @@ namespace Mooege.Core.GS.Actors
         public override void Destroy()
         {
             if (_questRange != null)
-                foreach (var quest in World.Game.Quests)
-                    quest.OnQuestProgress -= quest_OnQuestProgress;
+                if (World==null)
+                    Logger.Debug("World is null? {0}",this.GetType());
+                else if (World.Game==null)
+                    Logger.Debug("Game is null? {0}", this.GetType());
+                else if (World.Game.Quests != null)
+                    foreach (var quest in World.Game.Quests)
+                        quest.OnQuestProgress -= quest_OnQuestProgress;
 
             base.Destroy();
         }
@@ -303,7 +308,7 @@ namespace Mooege.Core.GS.Actors
         }
 
         #endregion
-        
+
         #region Movement/Translation
 
         public void TranslateFacing(Vector3D target, bool immediately = false)
@@ -667,7 +672,7 @@ namespace Mooege.Core.GS.Actors
 
         public virtual void OnTeleport()
         {
-            
+
         }
 
         /// <summary>
@@ -726,7 +731,7 @@ namespace Mooege.Core.GS.Actors
 
             // load scale from actor data and override it with marker tags if one is set
             this.Scale = ActorData.TagMap.ContainsKey(ActorKeys.Scale) ? ActorData.TagMap[ActorKeys.Scale] : 1;
-            this.Scale = Tags.ContainsKey(MarkerKeys.Scale) ? Tags[MarkerKeys.Scale] : this.Scale ;
+            this.Scale = Tags.ContainsKey(MarkerKeys.Scale) ? Tags[MarkerKeys.Scale] : this.Scale;
 
 
             if (Tags.ContainsKey(MarkerKeys.QuestRange))
@@ -756,7 +761,19 @@ namespace Mooege.Core.GS.Actors
 
         public void Move(Vector3D point, float facingAngle)
         {
+            this.Position = point;  // TODO: will need update Position over time, not instantly.
             this.SetFacingRotation(facingAngle);
+
+            // find suitable movement animation
+            int aniTag;
+            if (this.AnimationSet == null)
+                aniTag = -1;
+            else if (this.AnimationSet.TagExists(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk))
+                aniTag = this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk);
+            else if (this.AnimationSet.TagExists(Mooege.Common.MPQ.FileFormats.AnimationTags.Run))
+                aniTag = this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Run);
+            else
+                aniTag = -1;
 
             var movementMessage = new ACDTranslateNormalMessage
             {
@@ -766,7 +783,7 @@ namespace Mooege.Core.GS.Actors
                 TurnImmediately = false,
                 Speed = this.WalkSpeed,
                 Field5 = 0,
-                AnimationTag = this.AnimationSet == null ? 0 : this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk)
+                AnimationTag = aniTag
             };
 
             this.World.BroadcastIfRevealed(movementMessage, this);

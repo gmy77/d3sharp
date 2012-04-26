@@ -173,7 +173,7 @@ namespace Mooege.Core.GS.Players
         private int _lastResourceUpdateTick;
 
         // number of seconds to use for the cooldown that is started after changing a skill.
-        private const float SkillChangeCooldownLength = 15f;
+        private const float SkillChangeCooldownLength = 5f;  // TODO: this needs to vary based on difficulty
 
         /// <summary>
         /// Creates a new player.
@@ -565,7 +565,9 @@ namespace Mooege.Core.GS.Players
             this.SkillSet.ActiveSkills[message.SkillIndex].snoSkill = message.SNOSkill;
             this.SkillSet.SwitchUpdateSkills(oldSNOSkill, message.SNOSkill, message.RuneIndex, this.Toon);
             this.UpdateHeroState();
-            _StartSkillCooldown(message.SNOSkill, SkillChangeCooldownLength);
+
+            if (oldSNOSkill != -1)  // don't do cooldown when first skill put in slot
+                _StartSkillCooldown(message.SNOSkill, SkillChangeCooldownLength);
         }
 
         private void OnAssignPassiveSkills(GameClient client, AssignTraitsMessage message)
@@ -592,7 +594,9 @@ namespace Mooege.Core.GS.Players
                     }
 
                     this.SkillSet.PassiveSkills[i] = message.SNOPowers[i];
-                    _StartSkillCooldown(message.SNOPowers[i], SkillChangeCooldownLength);
+
+                    if (oldSNOSkill != -1)  // don't do cooldown when first skill put in slot
+                        _StartSkillCooldown(message.SNOPowers[i], SkillChangeCooldownLength);
                 }
             }
 
@@ -604,8 +608,7 @@ namespace Mooege.Core.GS.Players
         private void _StartSkillCooldown(int snoPower, float seconds)
         {
             this.World.BuffManager.AddBuff(this, this,
-                new Powers.Implementations.CooldownBuff(snoPower,
-                    new Ticker.SecondsTickTimer(this.InGameClient.Game, seconds)));
+                new Powers.Implementations.CooldownBuff(snoPower, seconds));
         }
 
         //private void OnPlayerChangeHotbarButtonMessage(GameClient client, PlayerChangeHotbarButtonMessage message)
@@ -718,7 +721,6 @@ namespace Mooege.Core.GS.Players
                 Angle = message.Angle,
                 TurnImmediately = false,
                 Speed = message.Speed,
-                //Field5 = message.Field5,  // TODO: don't even know what this is, might be message.Field6 now?
                 AnimationTag = message.AnimationTag
             };
 
