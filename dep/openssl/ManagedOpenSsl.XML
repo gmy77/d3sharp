@@ -3228,6 +3228,7 @@
         <member name="T:OpenSSL.Core.Version">
             <summary>
             Contains the set of elements that make up a Version.
+            MNNFFPPS: major minor fix patch status
             </summary>
         </member>
         <member name="M:OpenSSL.Core.Version.#ctor(System.UInt32)">
