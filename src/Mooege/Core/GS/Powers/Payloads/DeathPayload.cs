@@ -39,12 +39,6 @@ namespace Mooege.Core.GS.Powers.Payloads
         public DamageType DeathDamageType;
         public bool LootAndExp; //HACK: As we currently just give out random exp and loot, this is in to prevent giving this out for mobs that shouldn't give it.
 
-        public DeathPayload(PowerContext context, DamageType deathDamageType, Actor target)
-            : base(context, target)
-        {
-            this.DeathDamageType = deathDamageType;
-        }
-
         public DeathPayload(PowerContext context, DamageType deathDamageType, Actor target, bool grantsLootAndExp = true)
             : base(context, target)
         {
@@ -58,7 +52,6 @@ namespace Mooege.Core.GS.Powers.Payloads
             
             // HACK: add to hackish list thats used to defer deleting actor and filter it from powers targetting
             this.Target.World.PowerManager.AddDeletingActor(this.Target);
-
 
             // kill brain if living
             if (this.Target is Living)
@@ -126,16 +119,6 @@ namespace Mooege.Core.GS.Powers.Payloads
                     if (Mooege.Common.Helpers.Math.RandomHelper.Next(1, 100) < 20)
                         this.Target.World.SpawnHealthGlobe(this.Target, player, this.Target.Position);
                 }
-            }
-
-            if (this.Context.User is Player)
-            {
-                Player player = (Player)this.Context.User;
-
-                player.ExpBonusData.Update(player.GBHandle.Type, this.Target.GBHandle.Type);
-                this.Target.World.SpawnGold(this.Target, player);
-                if (Mooege.Common.Helpers.Math.RandomHelper.Next(1, 100) < 20)
-                    this.Target.World.SpawnHealthGlobe(this.Target, player, this.Target.Position);
             }
 
             if (this.Target is Monster)

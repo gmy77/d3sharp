@@ -761,7 +761,19 @@ namespace Mooege.Core.GS.Actors
 
         public void Move(Vector3D point, float facingAngle)
         {
+            this.Position = point;  // TODO: will need update Position over time, not instantly.
             this.SetFacingRotation(facingAngle);
+
+            // find suitable movement animation
+            int aniTag;
+            if (this.AnimationSet == null)
+                aniTag = -1;
+            else if (this.AnimationSet.TagExists(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk))
+                aniTag = this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk);
+            else if (this.AnimationSet.TagExists(Mooege.Common.MPQ.FileFormats.AnimationTags.Run))
+                aniTag = this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Run);
+            else
+                aniTag = -1;
 
             var movementMessage = new ACDTranslateNormalMessage
             {
@@ -771,7 +783,7 @@ namespace Mooege.Core.GS.Actors
                 TurnImmediately = false,
                 Speed = this.WalkSpeed,
                 Field5 = 0,
-                AnimationTag = this.AnimationSet == null ? 0 : this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk)
+                AnimationTag = aniTag
             };
 
             this.World.BroadcastIfRevealed(movementMessage, this);
