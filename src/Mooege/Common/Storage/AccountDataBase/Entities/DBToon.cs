@@ -16,7 +16,6 @@ namespace Mooege.Common.Storage.AccountDataBase.Entities
         public virtual byte Level { get; set; }
         public virtual int Experience { get; set; }
         public virtual DBGameAccount DBGameAccount { get; set; }
-        /*public virtual int HashCode { get; set; }*/
         public virtual uint TimePlayed { get; set; }
         public virtual bool Deleted { get; set; }
 

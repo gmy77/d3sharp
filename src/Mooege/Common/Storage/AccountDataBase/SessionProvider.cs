@@ -28,8 +28,21 @@ namespace Mooege.Common.Storage.AccountDataBase
                 if (_config == null)
                 {
                     _config = new Configuration();
-                    _config=_config.Configure(string.Format("database.Account.config"))
-                        .AddMappingsFromAssembly(Assembly.GetCallingAssembly());
+                    _config = _config.Configure(string.Format("database.Account.config"));
+
+
+                    var replacedProperties = new Dictionary<string, string>();
+                    foreach (var prop in _config.Properties)
+                    {
+                        var newvalue = prop.Value;
+                        newvalue = newvalue.Replace("{$ASSETBASE}", DBManager.AssetDirectory);
+                        replacedProperties.Add(prop.Key, newvalue);
+                    }
+
+
+                    _config=_config.SetProperties(replacedProperties);
+                    _config=_config.AddMappingsFromAssembly(Assembly.GetCallingAssembly());
+
                 }
                 return _config;
             }
@@ -37,7 +50,10 @@ namespace Mooege.Common.Storage.AccountDataBase
 
         private static ISessionFactory CreateSessionFactory()
         {
-            return Fluently.Configure(Config).ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true)).
+            return Fluently.Configure(Config).ExposeConfiguration(
+                cfg =>
+                    new SchemaUpdate(cfg).Execute(false, true)
+                ).
                 BuildSessionFactory();
         }
 

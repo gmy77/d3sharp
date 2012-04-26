@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
 using System.Linq;
 using Mooege.Common.Logging;
 using Mooege.Common.Storage;
@@ -30,40 +29,20 @@ namespace Mooege.Core.MooNet.Accounts
 {
     public static class AccountManager
     {
+        private static readonly HashSet<Account> LoadedAccounts = new HashSet<Account>();
         private static readonly Logger Logger = LogManager.CreateLogger();
-
-        private static readonly Dictionary<string, Account> Accounts = new Dictionary<string, Account>();
-        public static List<Account> AccountsList { get { return Accounts.Values.ToList(); } }
 
         public static int TotalAccounts
         {
-            get { return Accounts.Count; }
+            get { return DBSessions.AccountSession.Query<DBAccount>().Count(); }
         }
 
-        static AccountManager()
-        {
-            LoadAccounts();
-        }
 
-        public static Account GetAccountByEmail(string email)
-        {
-            return Accounts.ContainsKey(email) ? Accounts[email] : null;
-        }
-
-        public static Account GetAccountByBattletag(string battletag)
-        {
-            foreach (var account in Accounts.Values)
-            {
-                if (account.AccountBattleTagField.Value == battletag)
-                    return account;
-            }
-            return null;
-        }
-
+        #region AccountGetter
         public static Account CreateAccount(string email, string password, string battleTag, Account.UserLevels userLevel = Account.UserLevels.User)
         {
             if (password.Length > 16) password = password.Substring(0, 16); // make sure the password does not exceed 16 chars.
-            var hashCode = AccountManager.GetRandomHashCodeForBattleTag(battleTag);
+            var hashCode = GetRandomHashCodeForBattleTag();
             var salt = SRP6a.GetRandomBytes(32);
             var passwordVerifier = SRP6a.CalculatePasswordVerifierForAccount(email, password, salt);
 
@@ -74,7 +53,7 @@ namespace Mooege.Core.MooNet.Accounts
                                        Salt = salt,
                                        PasswordVerifier = passwordVerifier,
                                        BattleTagName = battleTag,
-                                       UserLevel = (byte)userLevel,
+                                       UserLevel = userLevel,
                                        HashCode = hashCode
                                    };
 
@@ -82,30 +61,52 @@ namespace Mooege.Core.MooNet.Accounts
             DBSessions.AccountSession.SaveOrUpdate(newDBAccount);
             DBSessions.AccountSession.Flush();
 
-            var account = new Account(newDBAccount);
-            Accounts.Add(email, account);
-            return account;
+            return GetAccountByDBAccount(newDBAccount);
         }
 
-        public static void SaveToDB(Account account)
+        public static Account GetAccountByEmail(string email)
+        {
+            if (DBSessions.AccountSession.Query<DBAccount>().Any(dba => dba.Email.ToLower() == email.ToLower()))
+                return
+                    GetAccountByDBAccount(
+                        DBSessions.AccountSession.Query<DBAccount>().Single(
+                            dba => dba.Email.ToLower() == email.ToLower()));
+            return null;
+        }
+
+        public static Account GetAccountByBattletag(string battletag)
+        {
+            if (DBSessions.AccountSession.Query<DBAccount>().Any(dba => dba.BattleTagName.ToLower() == battletag.ToLower()))
+                return
+                    GetAccountByDBAccount(
+                        DBSessions.AccountSession.Query<DBAccount>().Single(
+                            dba => dba.BattleTagName.ToLower() == battletag.ToLower()));
+            return null;
+        }
+
+        public static Account GetAccountByPersistentID(ulong persistentId)
+        {
+            var dbAccount = DBSessions.AccountSession.Get<DBAccount>(persistentId);
+            return GetAccountByDBAccount(dbAccount);
+        }
+
+        public static Account GetAccountByDBAccount(DBAccount dbAccount)
+        {
+            if (!LoadedAccounts.Any(acc => acc.DBAccount.Id == dbAccount.Id))
+                LoadedAccounts.Add(new Account(dbAccount));
+            return LoadedAccounts.Single(acc => acc.DBAccount.Id == dbAccount.Id);
+        }
+        #endregion
+
+        #region Managing Functions, also extending Account
+        public static void SaveToDB(this Account account)
         {
 
-
+            Logger.Debug("Saving account \"{0}\"", account.Email);
             try
             {
-                var dbAccount = DBSessions.AccountSession.Get<DBAccount>(account.PersistentID);
-                dbAccount.Email = account.Email;
-                dbAccount.Salt = account.Salt;
-                dbAccount.PasswordVerifier = account.PasswordVerifier;
-                dbAccount.BattleTagName = account.Name;
-                dbAccount.HashCode = account.HashCode;
-                dbAccount.UserLevel = (byte)account.UserLevel;
-                dbAccount.LastOnline = account.LastOnlineField.Value;
-                dbAccount.LastSelectedHeroId = account.LastSelectedHero.IdLow;
-                DBSessions.AccountSession.SaveOrUpdate(dbAccount);
+                DBSessions.AccountSession.SaveOrUpdate(account.DBAccount);
                 DBSessions.AccountSession.Flush();
-
-
             }
             catch (Exception e)
             {
@@ -113,75 +114,27 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        public static Account GetAccountByPersistentID(ulong persistentId)
+        public static bool DeleteAccount(this Account account)
         {
-            return Accounts.Where(account => account.Value.PersistentID == persistentId).Select(account => account.Value).FirstOrDefault();
-        }
-
-        public static bool DeleteAccount(Account account)
-        {
-            if (account == null) return false;
-            if (!Accounts.ContainsKey(account.Email)) return false;
-            /*
-            try
-            {
-                var query = string.Format("DELETE from accounts where id={0}", account.PersistentID);
-                var cmd = new SQLiteCommand(query, DBManager.Connection);
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException(e, "DeleteAccount()");
+            if (account == null)
                 return false;
-            }
-            */
-            var dbAccount = DBSessions.AccountSession.Get<DBAccount>(account.PersistentID);
-            DBSessions.AccountSession.Delete(dbAccount);
+
+            if (LoadedAccounts.Contains(account))
+                LoadedAccounts.Remove(account);
+
+            DBSessions.AccountSession.Delete(account.DBAccount);
             DBSessions.AccountSession.Flush();
-            Accounts.Remove(account.Email);
             // we should be also disconnecting the account if he's online. /raist.
 
             return true;
         }
 
-        private static void LoadAccounts()
-        {
-            var allDbAccounts = DBSessions.AccountSession.Query<DBAccount>().ToList();
-            foreach (var dbAccount in allDbAccounts)
-            {
-                var email = dbAccount.Email;
-                var account = new Account(dbAccount);
-                account.LastOnlineField.Value = dbAccount.LastOnline;
-                Accounts.Add(email, account);
-            }
-        }
-
-        public static int GetRandomHashCodeForBattleTag(string name)
-        {
-            var rnd = new Random();
-            return rnd.Next(1, 1000);
-        }
-
-        public static ulong GetNextAvailablePersistentId()
-        {
-            return !DBSessions.AccountSession.Query<DBAccount>().Any() ? 1
-                : DBSessions.AccountSession.Query<DBAccount>().OrderByDescending(dba => dba.Id).Select(dba => dba.Id).First() + 1;
-        }
-
-
-        public static void UpdatePassword(Account account, string newPassword)
+        public static void UpdatePassword(this Account account, string newPassword)
         {
             account.PasswordVerifier = SRP6a.CalculatePasswordVerifierForAccount(account.Email, newPassword, account.Salt);
             try
             {
-                /*
-                var query = string.Format("UPDATE accounts SET passwordVerifier=@passwordVerifier WHERE id={0}", this.PersistentID);
 
-                using (var cmd = new SQLiteCommand(query, DBManager.Connection))
-                {
-                    cmd.Parameters.Add("@passwordVerifier", System.Data.DbType.Binary, 128).Value = this.PasswordVerifier;
-                    cmd.ExecuteNonQuery();
-                }*/
                 SaveToDB(account);
             }
             catch (Exception e)
@@ -190,14 +143,11 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        public static void UpdateUserLevel(Account account, Account.UserLevels userLevel)
+        public static void UpdateUserLevel(this Account account, Account.UserLevels userLevel)
         {
             account.UserLevel = userLevel;
             try
-            {/*
-                var query = string.Format("UPDATE accounts SET userLevel={0} WHERE id={1}", (byte)userLevel, this.PersistentID);
-                var cmd = new SQLiteCommand(query, DBManager.Connection);
-                cmd.ExecuteNonQuery();*/
+            {
                 SaveToDB(account);
             }
             catch (Exception e)
@@ -205,6 +155,14 @@ namespace Mooege.Core.MooNet.Accounts
                 Logger.ErrorException(e, "UpdateUserLevel()");
             }
         }
+        #endregion
 
+
+
+        private static int GetRandomHashCodeForBattleTag()
+        {
+            var rnd = new Random();
+            return rnd.Next(1, 1000);
+        }
     }
 }

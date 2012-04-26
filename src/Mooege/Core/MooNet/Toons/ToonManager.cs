@@ -31,15 +31,17 @@ namespace Mooege.Core.MooNet.Toons
     // Just a quick hack - not to be meant final
     public static class ToonManager
     {
-        private static readonly List<Toon> LoadedToons = new List<Toon>();
-        private static readonly IQueryable<DBToon> DBToons = DBSessions.AccountSession.Query<DBToon>();
-
+        private static readonly HashSet<Toon> LoadedToons = new HashSet<Toon>();
         private static readonly Logger Logger = LogManager.CreateLogger();
 
-        static ToonManager()
+
+        public static Toon GetToonByDBToon(DBToon dbToon)
         {
-            //LoadToons();
+            if (!LoadedToons.Any(dbt => dbt.DBToon.Id == dbToon.Id))
+                LoadedToons.Add(new Toon(dbToon));
+            return LoadedToons.Single(dbt => dbt.DBToon.Id == dbToon.Id);
         }
+
 
         public static Account GetOwnerAccountByToonLowId(ulong id)
         {
@@ -55,37 +57,22 @@ namespace Mooege.Core.MooNet.Toons
 
         public static Toon GetToonByLowID(ulong id)
         {
-            if (!LoadedToons.Any(t => t.PersistentID == id))
-            {
-                if (!DBToons.Any(t => t.Id == id))
-                    return null;
-                var dbToon = DBToons.Single(t => t.Id == id);
-                LoadedToons.Add(new Toon(dbToon));
-            }
-
-
-            return LoadedToons.Single(t => t.PersistentID == id);
+            var dbToon = DBSessions.AccountSession.Get<DBToon>(id);
+            return GetToonByDBToon(dbToon);
         }
 
         public static Toon GetDeletedToon(GameAccount account)
         {
-            var query = DBToons.Where(dbt => dbt.DBGameAccount.Id == account.PersistentID && dbt.Deleted);
-            if (query.Any())
-                return GetToonByLowID(query.First().Id);
-            return null;
+            var query = DBSessions.AccountSession.Query<DBToon>().Where(dbt => dbt.DBGameAccount.Id == account.PersistentID && dbt.Deleted);
+            return query.Any() ? GetToonByLowID(query.First().Id) : null;
         }
 
-        public static Dictionary<ulong, Toon> GetToonsForGameAccount(GameAccount account)
+        public static List<Toon> GetToonsForGameAccount(GameAccount account)
         {
-            var dbGameAccount = DBSessions.AccountSession.Get<DBGameAccount>(account.PersistentID);
-            var toons = dbGameAccount.DBToons.Select(dbt => GetToonByLowID(dbt.Id));
-            return toons.ToDictionary(toon => toon.PersistentID);
+            var toons = account.DBGameAccount.DBToons.Select(dbt => GetToonByLowID(dbt.Id));
+            return toons.ToList();
         }
 
-        //public static Dictionary<ulong, Toon> GetToonsForAccount(Account account)
-        //{
-        //    return Toons.Where(pair => pair.Value.GameAccount.Owner != null).Where(pair => pair.Value.GameAccount.Owner.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
-        //}
 
         public static int TotalToons
         {
@@ -116,60 +103,27 @@ namespace Mooege.Core.MooNet.Toons
 
         public static void DeleteToon(Toon toon)
         {
-            //if (!Toons.Any(t => t.PersistentID == toon.PersistentID))
-            //{
-            //    Logger.Error("Attempting to delete toon that does not exist: {0}", toon.PersistentID);
-            //    return;
-            //}
+            if (toon == null)
+                return;
 
-            var dbToon = DBToons.Single(dbt => dbt.Id == toon.PersistentID);
-            dbToon.DBGameAccount.DBToons.Remove(dbToon);
-            DBSessions.AccountSession.Update(dbToon.DBGameAccount);
-            DBSessions.AccountSession.Delete(dbToon);
+            toon.DBToon.DBGameAccount.DBToons.Remove(toon.DBToon);
+            DBSessions.AccountSession.Update(toon.DBToon.DBGameAccount);
+            DBSessions.AccountSession.Delete(toon.DBToon);
             DBSessions.AccountSession.Flush();
 
-            if (LoadedToons.Any(t => t.PersistentID == toon.PersistentID))
-                LoadedToons.RemoveAll(t => t.PersistentID == toon.PersistentID);
+            if (LoadedToons.Contains(toon))
+                LoadedToons.Remove(toon);
 
             Logger.Debug("Deleting toon {0}", toon.PersistentID);
         }
 
-        private static void LoadToons()
-        {
-            /*
-            var allDBToons = DBSessions.AccountSession.Query<DBToon>().ToList();
-
-            foreach (var dbToon in allDBToons)
-                Toons.Add(new Toon(dbToon));*/
-        }
-
-        /*
-        public static int GetUnusedHashCodeForToonName(string name)
-        {
-            var codes = DBSessions.AccountSession.Query<DBToon>().Select(dba => dba.HashCode).ToList();
-            return GenerateHashCodeNotInList(codes);
-        }
-        */
+       
         public static void Sync()
         {
             foreach (var toon in LoadedToons)
             {
                 SaveToDB(toon);
             }
-        }
-
-        private static int GenerateHashCodeNotInList(ICollection<int> codes)
-        {
-            var rnd = new Random();
-            if (codes == null) return rnd.Next(1, 1000);
-
-            int hashCode;
-            do
-            {
-                hashCode = rnd.Next(1, 1000);
-            } while (codes.Contains(hashCode));
-            return hashCode;
-
         }
 
         public static void SaveToDB(Toon toon)

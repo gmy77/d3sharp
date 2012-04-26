@@ -22,13 +22,18 @@ using System.Reflection;
 using System.Threading;
 using Mooege.Common.Logging;
 using Mooege.Common.MPQ;
+using Mooege.Common.Storage;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.GS.Items;
+using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet;
 using Mooege.Core.MooNet.Achievement;
 using Mooege.Net.WebServices;
+using NHibernate.Linq;
+using NHibernate.Util;
 using Environment = System.Environment;
 
 namespace Mooege
@@ -50,6 +55,7 @@ namespace Mooege
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create.
+
 
             Console.ForegroundColor = ConsoleColor.Yellow;
             PrintBanner();
@@ -73,6 +79,17 @@ namespace Mooege
             Logger.Info("Loading achievements database..");
             Logger.Trace("Achievement file parsed with a total of {0} achievements and {1} criteria in {2} categories.",
                 AchievementManager.TotalAchievements, AchievementManager.TotalCriteria, AchievementManager.TotalCategories);
+
+            //Prefilling Database
+            if (!DBSessions.AccountSession.Query<DBAccount>().Any())
+            {
+                Logger.Info("New Database, creating first Test account (Test@,testpass)");
+                var account = AccountManager.CreateAccount("test@", "testpass", "test", Account.UserLevels.Admin);
+                var gameAccount = GameAccountManager.CreateGameAccount(account);
+                account.DBAccount.DBGameAccounts.Add(gameAccount.DBGameAccount);
+                account.SaveToDB();
+            }
+
 
             Logger.Info("Type '!commands' for a list of available commands");
 
@@ -125,6 +142,7 @@ namespace Mooege
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
+            var ex = e.ExceptionObject as Exception;
             if (e.IsTerminating)
                 Logger.FatalException((e.ExceptionObject as Exception), "Mooege terminating because of unhandled exception.");                
             else

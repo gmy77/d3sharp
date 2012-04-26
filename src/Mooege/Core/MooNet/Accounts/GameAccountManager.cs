@@ -31,87 +31,52 @@ namespace Mooege.Core.MooNet.Accounts
 {
     class GameAccountManager
     {
+        private static readonly HashSet<GameAccount> LoadedGameAccounts = new HashSet<GameAccount>();
         private static readonly Logger Logger = LogManager.CreateLogger();
-
-        private static readonly Dictionary<ulong, GameAccount> GameAccounts = new Dictionary<ulong, GameAccount>();
-        public static List<GameAccount> GameAccountsList { get { return GameAccounts.Values.ToList(); } }
 
         public static int TotalAccounts
         {
-            get { return GameAccounts.Count; }
+            get { return DBSessions.AccountSession.Query<DBGameAccount>().Count(); }
         }
 
-        public static Dictionary<ulong, GameAccount> GetGameAccountsForAccount(Account account)
+        public static GameAccount GetGameAccountByDBGameAccount(DBGameAccount dbGameAccount)
         {
-            return GameAccounts.Where(pair => pair.Value.Owner != null).Where(pair => pair.Value.Owner.PersistentID == account.PersistentID).ToDictionary(pair => pair.Key, pair => pair.Value);
+            if (!LoadedGameAccounts.Any(acc => acc.DBGameAccount.Id == dbGameAccount.Id))
+                LoadedGameAccounts.Add(new GameAccount(dbGameAccount));
+            return LoadedGameAccounts.Single(acc => acc.DBGameAccount.Id == dbGameAccount.Id);
         }
 
+        public static GameAccount FindLoadedGameAccountByBnetId(ulong id)
+        {
+            if (LoadedGameAccounts.Any(ga => ga.BnetEntityId.Low == id))
+                return LoadedGameAccounts.Single(ga => ga.BnetEntityId.Low == id);
+            return null;
+        }
+
+        public static List<GameAccount> GetGameAccountsForAccount(Account account)
+        {
+            return account.DBAccount.DBGameAccounts.Select(GetGameAccountByDBGameAccount).ToList();
+        }
+
+        //Not needed... we emulate only D3, or not?
+        /*
         public static Dictionary<ulong, GameAccount> GetGameAccountsForAccountProgram(Account account, FieldKeyHelper.Program program)
         {
+            
             return GameAccounts.Where(pair => pair.Value.Owner != null).Where(pair => (pair.Value.Owner.PersistentID == account.PersistentID) && (pair.Value.Program == program)).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
-        
+        */
         public static GameAccount GetAccountByPersistentID(ulong persistentId)
         {
-            return GameAccounts.Where(account => account.Value.PersistentID == persistentId).Select(account => account.Value).FirstOrDefault();
-        }
-
-        public static GameAccount GetAccountByDBGameAccount(DBGameAccount dbGameAccount)
-        {
-            return GetAccountByPersistentID(dbGameAccount.Id);
-        }
-
-        public static ulong GetNextAvailablePersistentId()
-        {
-            return !DBSessions.AccountSession.Query<DBGameAccount>().Any() ? 1
-                : DBSessions.AccountSession.Query<DBGameAccount>().OrderByDescending(dba => dba.Id).Select(dba => dba.Id).First() + 1;
-        }
-
-        static GameAccountManager()
-        {
-            LoadGameAccounts();
-        }
-
-        private static void LoadGameAccounts()
-        {
-            var allDbGameAccounts = DBSessions.AccountSession.Query<DBGameAccount>().ToList();
-            foreach (var dbGameAccount in allDbGameAccounts)
-            {
-                var gameAccountId = dbGameAccount.Id;
-                var dbAcount = dbGameAccount.DBAccount;
-
-                if (dbAcount == null)
-                {
-                    Logger.Error("Gameaccount without Account!");
-                    continue;
-                }
-                var gameAccount = new GameAccount(dbGameAccount);
-
-
-
-                #region Populate GameAccount Data
-
-                //var banner = dbGameAccount.Banner;
-                //gameAccount.BannerConfiguration = D3.Account.BannerConfiguration.ParseFrom(banner);
-                //gameAccount.LastOnlineField.Value = dbGameAccount.LastOnline;
-                GameAccounts.Add(gameAccountId, gameAccount);
-
-                #endregion
-
-            }
-
-
+            var dbGameAccount = DBSessions.AccountSession.Get<DBGameAccount>(persistentId);
+            return GetGameAccountByDBGameAccount(dbGameAccount);
         }
 
         public static void SaveToDB(GameAccount gameAccount)
         {
             try
             {
-                var dbGameAccount = DBSessions.AccountSession.Get<DBGameAccount>(gameAccount.PersistentID);
-                dbGameAccount.DBAccount = DBSessions.AccountSession.Get<DBAccount>(gameAccount.Owner.PersistentID);
-                dbGameAccount.LastOnline = gameAccount.LastOnlineField.Value;
-                dbGameAccount.Banner = gameAccount.BannerConfiguration.ToByteArray();
-                DBSessions.AccountSession.SaveOrUpdate(dbGameAccount);
+                DBSessions.AccountSession.SaveOrUpdate(gameAccount.DBGameAccount);
                 DBSessions.AccountSession.Flush();
             }
             catch (Exception e)
@@ -129,33 +94,23 @@ namespace Mooege.Core.MooNet.Accounts
 
             DBSessions.AccountSession.SaveOrUpdate(newDBGameAccount);
             DBSessions.AccountSession.Flush();
-            var gameAccount = new GameAccount(newDBGameAccount);
-            GameAccounts.Add(gameAccount.PersistentID, gameAccount);
-            return gameAccount;
+            return GetGameAccountByDBGameAccount(newDBGameAccount);
         }
 
-
-        public static void DeleteGameAccount(GameAccount GameAccount)
+        public static void DeleteGameAccount(GameAccount gameAccount)
         {
-            if (!GameAccounts.ContainsKey(GameAccount.PersistentID))
-            {
-                Logger.Error("Attempting to delete game account that does not exist: {0}", GameAccount.PersistentID);
+            if (gameAccount==null)
                 return;
-            }
+            if (LoadedGameAccounts.Contains(gameAccount))
+                LoadedGameAccounts.Remove(gameAccount);
 
             //Delete all toons for game account
-            foreach (var toon in ToonManager.GetToonsForGameAccount(GameAccount).Values)
-            {
+            foreach (var toon in ToonManager.GetToonsForGameAccount(gameAccount))
                 ToonManager.DeleteToon(toon);
-            }
 
-
-            var dbGameAccount = DBSessions.AccountSession.Get<DBGameAccount>(GameAccount.PersistentID);
-            DBSessions.AccountSession.Delete(dbGameAccount);
+            DBSessions.AccountSession.Delete(gameAccount.DBGameAccount);
             DBSessions.AccountSession.Flush();
 
-            
-            GameAccounts.Remove(GameAccount.PersistentID);
         }
 
     }

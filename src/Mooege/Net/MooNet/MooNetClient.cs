@@ -352,7 +352,7 @@ namespace Mooege.Net.MooNet
             var logonResponseBuilder = bnet.protocol.authentication.LogonResult.CreateBuilder();
             logonResponseBuilder.SetAccount(this.Account.BnetEntityId);
             logonResponseBuilder.SetErrorCode(0);
-            foreach (var gameAccount in this.Account.GameAccounts.Values)
+            foreach (var gameAccount in this.Account.GameAccounts)
             {
                 logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
             }

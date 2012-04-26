@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mooege.Common.Storage.AccountDataBase.Entities;
+using Mooege.Core.MooNet.Accounts;
 using NHibernate;
+using NHibernate.Linq;
 
 namespace Mooege.Common.Storage
 {
@@ -14,7 +17,9 @@ namespace Mooege.Common.Storage
             get
             {
                 if (_accountSession == null || !_accountSession.IsOpen)
+                {
                     _accountSession = AccountDataBase.SessionProvider.SessionFactory.OpenSession();
+                }
 
                 return _accountSession;
             }

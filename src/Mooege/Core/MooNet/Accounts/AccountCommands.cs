@@ -87,6 +87,7 @@ namespace Mooege.Core.MooNet.Accounts
 
             var account = AccountManager.CreateAccount(email, password, battleTagName, userLevel);
             var gameAccount = GameAccountManager.CreateGameAccount(account);
+            account.DBAccount.DBGameAccounts.Add(gameAccount.DBGameAccount);
             return string.Format("Created new account {0} [user-level: {1}] Full BattleTag: {2}.", account.Email, account.UserLevel, account.BattleTag);
         }
 
@@ -103,7 +104,7 @@ namespace Mooege.Core.MooNet.Accounts
 
             //Delete game accounts for account
             //which in turn will delete toons for each game account
-            foreach (var gameAccount in GameAccountManager.GetGameAccountsForAccount(account).Values)
+            foreach (var gameAccount in GameAccountManager.GetGameAccountsForAccount(account))
             {
                 GameAccountManager.DeleteGameAccount(gameAccount);
             }
