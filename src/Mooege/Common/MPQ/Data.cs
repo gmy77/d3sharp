@@ -39,7 +39,7 @@ namespace Mooege.Common.MPQ
         private readonly List<Task> _tasks = new List<Task>();
         private static readonly SNOGroup[] PatchExceptions = new[] { SNOGroup.TimedEvent, SNOGroup.Script, SNOGroup.AiBehavior, SNOGroup.AiState, SNOGroup.Conductor, SNOGroup.FlagSet, SNOGroup.Code };
 
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        protected static new readonly Logger Logger = LogManager.CreateLogger();
 
         public Data()
             : base(VersionInfo.MPQ.RequiredPatchVersion, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
