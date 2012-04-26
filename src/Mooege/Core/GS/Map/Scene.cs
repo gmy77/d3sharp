@@ -158,17 +158,19 @@ namespace Mooege.Core.GS.Map
             if (!MPQStorage.Data.Assets[SNOGroup.Scene].ContainsKey(this.SceneSNO.Id))
             {
                 Logger.Debug("AssetsForScene not found in MPQ Storage:Scene:{0}, Asset:{1}", SNOGroup.Scene,this.SceneSNO.Id);
-                return;
+                //return;
             }
-            var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SceneSNO.Id].Data as Mooege.Common.MPQ.FileFormats.Scene;
-            if (data == null) return;
-
-            this.AABBBounds = data.AABBBounds;
-            this.AABBMarketSetBounds = data.AABBMarketSetBounds;
-            this.NavMesh = data.NavMesh;
-            this.MarkerSets = data.MarkerSets;
-            this.LookLink = data.LookLink;
-            this.NavZone = data.NavZone;
+			else
+			{
+				var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SceneSNO.Id].Data as Mooege.Common.MPQ.FileFormats.Scene;
+				if (data == null) return;
+				this.AABBBounds = data.AABBBounds;
+				this.AABBMarketSetBounds = data.AABBMarketSetBounds;
+				this.NavMesh = data.NavMesh;
+				this.MarkerSets = data.MarkerSets;
+				this.LookLink = data.LookLink;
+				this.NavZone = data.NavZone;
+			}
         }
 
         #endregion
