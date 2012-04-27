@@ -72,7 +72,7 @@ namespace Mooege.Core.MooNet.Web
             var account = AccountManager.GetAccountByEmail(email.ToLower());
 
             if (account == null)
-                throw new FaultException(new FaultReason(string.Format("Accout does not exist for email address {0}.", email)));
+                throw new FaultException(new FaultReason(string.Format("Account does not exist for email address {0}.", email)));
 
             return account.VerifyPassword(password);
         }
@@ -93,7 +93,7 @@ namespace Mooege.Core.MooNet.Web
 
            var account = AccountManager.GetAccountByEmail(email.ToLower());
            if (account == null)
-               throw new FaultException(new FaultReason(string.Format("Accout does not exist for email address {0}.", email)));
+               throw new FaultException(new FaultReason(string.Format("Account does not exist for email address {0}.", email)));
 
            return account.UpdatePassword(password);
          
