@@ -106,18 +106,47 @@ namespace Mooege.Core.MooNet.Toons
             if (toon == null)
                 return;
 
-            toon.DBToon.DBGameAccount.DBToons.Remove(toon.DBToon);
-            DBSessions.AccountSession.Update(toon.DBToon.DBGameAccount);
+            //remove toonActiveSkills
+            if (toon.DBToon.DBActiveSkills != null)
+            {
+                DBSessions.AccountSession.Delete(toon.DBToon.DBActiveSkills);
+                toon.DBToon.DBActiveSkills = null;
+            }
+
+            //remove toon inventory
+            var inventoryToDelete = DBSessions.AccountSession.Query<DBInventory>().Where(inv => inv.DBToon.Id == toon.DBToon.Id);
+            foreach (var inv in inventoryToDelete)
+            {
+                //toon.DBToon.DBGameAccount.DBInventories.Remove(inv);
+                DBSessions.AccountSession.Delete(inv);
+            }
+
+            
+            
+
+            //remove lastplayed hero if it was toon
+            if (toon.DBToon.DBGameAccount.LastPlayedHero != null && toon.DBToon.DBGameAccount.LastPlayedHero.Id == toon.DBToon.Id)
+                toon.DBToon.DBGameAccount.LastPlayedHero = null;
+
+            
+            //remove toon from dbgameaccount
+            while (toon.DBToon.DBGameAccount.DBToons.Contains(toon.DBToon))
+                toon.DBToon.DBGameAccount.DBToons.Remove(toon.DBToon);
+
+            //save all this thinks
+            DBSessions.AccountSession.SaveOrUpdate(toon.DBToon.DBGameAccount);
             DBSessions.AccountSession.Delete(toon.DBToon);
             DBSessions.AccountSession.Flush();
 
+            
+            //remove toon from loadedToon list
             if (LoadedToons.Contains(toon))
                 LoadedToons.Remove(toon);
 
             Logger.Debug("Deleting toon {0}", toon.PersistentID);
         }
 
-       
+
         public static void Sync()
         {
             foreach (var toon in LoadedToons)
@@ -141,6 +170,7 @@ namespace Mooege.Core.MooNet.Toons
                 dbToon.DBGameAccount = DBSessions.AccountSession.Get<DBGameAccount>(toon.GameAccount.PersistentID);
                 dbToon.TimePlayed = toon.TimePlayed;
                 dbToon.Deleted = toon.Deleted;
+
                 DBSessions.AccountSession.SaveOrUpdate(dbToon);
                 DBSessions.AccountSession.Flush();
             }

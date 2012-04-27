@@ -19,6 +19,7 @@ namespace Mooege.Common.Storage
                 if (_accountSession == null || !_accountSession.IsOpen)
                 {
                     _accountSession = AccountDataBase.SessionProvider.SessionFactory.OpenSession();
+                    _accountSession.FlushMode=FlushMode.Always;
                 }
 
                 return _accountSession;

@@ -106,8 +106,19 @@ namespace Mooege.Core.MooNet.Accounts
 
             //Delete all toons for game account
             foreach (var toon in ToonManager.GetToonsForGameAccount(gameAccount))
+
                 ToonManager.DeleteToon(toon);
 
+
+            var inventoryToDelete = DBSessions.AccountSession.Query<DBInventory>().Where(inv => inv.DBGameAccount.Id==gameAccount.DBGameAccount.Id);
+            foreach (var inv in inventoryToDelete)
+                DBSessions.AccountSession.Delete(inv);
+
+
+
+            gameAccount.DBGameAccount.DBAccount.DBGameAccounts.Remove(gameAccount.DBGameAccount);
+
+            DBSessions.AccountSession.Update(gameAccount.DBGameAccount.DBAccount);
             DBSessions.AccountSession.Delete(gameAccount.DBGameAccount);
             DBSessions.AccountSession.Flush();
 

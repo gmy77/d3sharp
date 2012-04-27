@@ -20,6 +20,7 @@ namespace Mooege.Common.Storage.AccountDataBase.Mapper
             Map(e => e.Level);
             Map(e => e.Name);
             Map(e => e.TimePlayed);
+            
             HasOne(e => e.DBActiveSkills).Cascade.All();
         }
     }

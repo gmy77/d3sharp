@@ -12,7 +12,7 @@ namespace Mooege.Common.Storage.AccountDataBase.Mapper
         public DBInventoryMapper()
         {
             Id(e => e.Id).GeneratedBy.Increment();
-            References(e => e.DBGameAccount).Not.Nullable();
+            References(e => e.DBGameAccount).Nullable();
             References(e => e.DBToon).Nullable();
             Map(e => e.EquipmentSlot);
             Map(e => e.ItemId);
