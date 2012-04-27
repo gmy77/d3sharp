@@ -129,17 +129,19 @@ namespace Mooege.Core.MooNet.Accounts
             return true;
         }
 
-        public static void UpdatePassword(this Account account, string newPassword)
+        public static bool UpdatePassword(this Account account, string newPassword)
         {
             account.PasswordVerifier = SRP6a.CalculatePasswordVerifierForAccount(account.Email, newPassword, account.Salt);
             try
             {
 
                 SaveToDB(account);
+                return true;
             }
             catch (Exception e)
             {
                 Logger.ErrorException(e, "UpdatePassword()");
+                return false;
             }
         }
 
