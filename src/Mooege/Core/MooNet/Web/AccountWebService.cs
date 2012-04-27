@@ -83,6 +83,22 @@ namespace Mooege.Core.MooNet.Web
             return AccountManager.TotalAccounts;
         }
 
+        public bool ChangePassword(string email, string password)
+        {
+            if (string.IsNullOrEmpty(password))
+                throw new FaultException(new FaultReason("Password parameter can not be null or empty."));
+
+            if (password.Length < 8 || password.Length > 16)
+                throw new FaultException(new FaultReason("Password should be a minimum of 8 and a maximum of 16 characters."));
+
+           var account = AccountManager.GetAccountByEmail(email.ToLower());
+           if (account == null)
+               throw new FaultException(new FaultReason(string.Format("Accout does not exist for email address {0}.", email)));
+
+           return account.UpdatePassword(password);
+         
+        }
+
         //[OperationContract]
         //public int TotalToons()
         //{
