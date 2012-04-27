@@ -186,6 +186,68 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
             this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 7f;
         }
     }
+     #endregion
+    #region Zombie_LeahInn
+    [HandledSNO(203121)] //ZombieSkinny_A_LeahInn.acr
+    public class InnZombie : Monster
+    {
+        public InnZombie(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+            this.Brain = new MonsterBrain(this);
+            (Brain as MonsterBrain).AddPresetPower(7789); //Weapon_Ranged_Wand.pow?
+            //this.Attributes[GameAttribute.Hitpoints_Max_Total] = 4.132813f;
+            this.Attributes[GameAttribute.Hitpoints_Max] = 4.132813f;
+            //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 0f;
+            this.Attributes[GameAttribute.Hitpoints_Cur] = 4.132813f;
+            this.Attributes[GameAttribute.Attacks_Per_Second] = 1.0f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 4f; 
+            this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 4f; 
+        }
+    }
+     #endregion
+    #region ZombieCrawler
+    [HandledSNO(218367)] //ZombieCrawler_Barricade_A.acr
+    public class ZombieCrawler : Monster
+    {
+        public ZombieCrawler(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+            this.Brain = new MonsterBrain(this);
+            (Brain as MonsterBrain).AddPresetPower(7789); //Weapon_Ranged_Wand.pow?
+            //this.Attributes[GameAttribute.Hitpoints_Max_Total] = 5f;
+            this.Attributes[GameAttribute.Hitpoints_Max] = 1.602539f;
+            //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 0f;
+            this.Attributes[GameAttribute.Hitpoints_Cur] = 1.602539f;
+            this.Attributes[GameAttribute.Attacks_Per_Second] = 1.0f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 4f; 
+            this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 4f; 
+        }
+    }
+    #endregion
+    #region ZombieCustom
+    [HandledSNO(218339)] //ZombieSkinny_Custom_A.acr (2036596938)
+    public class ZombieSkinny : Monster
+    {
+        public ZombieSkinny(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+            this.Brain = new MonsterBrain(this);
+            //Not sure how to actually make the AI for the Buffs used for this mob.
+            (Brain as MonsterBrain).AddPresetPower(30290); //InvulnerableDuringBuff.pow
+            (Brain as MonsterBrain).AddPresetPower(79486); //UninterruptibleDuringBuff.pow
+            (Brain as MonsterBrain).AddPresetPower(30582); //UntargetableDuringBuff.pow
+            (Brain as MonsterBrain).AddPresetPower(225599); //CannotDieDuringBuff.pow
+            //this.Attributes[GameAttribute.Buff_Active,488] = true; //Can we handle buffs?.
+            //this.Attributes[GameAttribute.Hitpoints_Max_Total] = 4.132813f;
+            this.Attributes[GameAttribute.Hitpoints_Max] = 4.132813f;
+            //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 0f;
+            this.Attributes[GameAttribute.Hitpoints_Cur] = 4.132813f;
+            this.Attributes[GameAttribute.Attacks_Per_Second] = 1.0f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 4f; 
+            this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 4f; 
+        }
+    }
     #endregion
     #region Skeleton
     //No Uniques Added
@@ -337,6 +399,29 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
             this.Attributes[GameAttribute.Attacks_Per_Second] = 1.0f;
             this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 5f;
             this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 7f;
+        }
+    }
+    #endregion
+    #region Wretched Mothers
+
+    [HandledSNO(219725, 108444)] // ZombieFemale_A_TristramQuest_Unique.acr
+    public class WretchedMother : Monster
+    {
+        public WretchedMother(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+            this.Brain = new MonsterBrain(this);
+            (Brain as MonsterBrain).AddPresetPower(110518); //spit
+            (Brain as MonsterBrain).AddPresetPower(94734); // Vommit Without the Spawns
+            (Brain as MonsterBrain).AddPresetPower(30592); //Instant Wep
+            //this.Attributes[GameAttribute.Hitpoints_Max_Total] = 13.38281f;
+            this.Attributes[GameAttribute.Hitpoints_Max] = 13.38281f;
+            //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 0f;
+            this.Attributes[GameAttribute.Hitpoints_Cur] = 13.38281f;
+            this.Attributes[GameAttribute.Attacks_Per_Second] = 1.0f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 4f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 6f;
+            this.WalkSpeed = 0f; //We hardcode this so RumFord doesnt kill her before u even grab the quest...
         }
     }
     #endregion
