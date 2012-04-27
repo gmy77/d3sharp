@@ -327,6 +327,7 @@ namespace Mooege.Core.MooNet.Accounts
 
                 ChangedFields.SetPresenceFieldValue(GameAccountStatusField);
                 ChangedFields.SetPresenceFieldValue(LastOnlineField);
+                ChangedFields.SetPresenceFieldValue(BannerConfigurationField);
 
                 //TODO: Remove this set once delegate for set is added to presence field
                 //this.Owner.AccountOnlineField.Value = this.Owner.IsOnline;
