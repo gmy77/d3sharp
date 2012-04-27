@@ -76,7 +76,7 @@ namespace Mooege.Core.MooNet.Toons
 
         public static int TotalToons
         {
-            get { return 0; }
+            get { return DBSessions.AccountSession.Query<DBToon>().Count(); }
         }
 
 
