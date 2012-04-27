@@ -31,6 +31,7 @@ namespace OpenSSL.Core
 {
 	/// <summary>
 	/// Contains the set of elements that make up a Version.
+    /// MNNFFPPS: major minor fix patch status
 	/// </summary>
 	public class Version
 	{
@@ -87,7 +88,7 @@ namespace OpenSSL.Core
 		/// </summary>
 		public uint Major
 		{
-			get { return (this.raw & 0xf0000000) >> 28; }
+			get { return (this.raw >> 28) & 0xff; }
 		}
 
 		/// <summary>
@@ -95,7 +96,7 @@ namespace OpenSSL.Core
 		/// </summary>
 		public uint Minor
 		{
-			get { return (this.raw & 0x0ff00000) >> 20; }
+            get { return (this.raw >> 20) & 0xff; }
 		}
 
 		/// <summary>
@@ -103,7 +104,7 @@ namespace OpenSSL.Core
 		/// </summary>
 		public uint Fix
 		{
-			get { return (this.raw & 0x000ff000) >> 12; }
+            get { return (this.raw >> 12) & 0xff; }
 		}
 
 		/// <summary>
@@ -113,7 +114,7 @@ namespace OpenSSL.Core
 		{
 			get
 			{
-				uint patch = (this.raw & 0x00000ff0) >> 4;
+                uint patch = (this.raw >> 4) & 0xff;
 
 				byte a = Encoding.ASCII.GetBytes("a")[0];
 				uint x = a + patch;
