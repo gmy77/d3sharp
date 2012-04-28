@@ -36,7 +36,7 @@ namespace Mooege.Core.MooNet.Toons
         {
             get
             {
-                var val = new IntPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 1, 0, unchecked((long)this.DBToon.Class));
+                var val = new IntPresenceField(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Hero, 1, 0, this.ClassID);
                 return val;
             }
         }
@@ -551,13 +551,13 @@ namespace Mooege.Core.MooNet.Toons
 
     #region Definitions and Enums
     //Order is important as actor voices and saved data is based on enum index
-    public enum ToonClass : uint
+    public enum ToonClass// : uint
     {
-        Barbarian = 0x4FB91EE2,
-        Monk = 0x3DAC15,
-        DemonHunter = 0xC88B9649,
-        WitchDoctor = 0x343C22A,
-        Wizard = 0x1D4681B1
+        Barbarian,// = 0x4FB91EE2,
+        Monk ,//= 0x3DAC15,
+        DemonHunter,// = 0xC88B9649,
+        WitchDoctor,// = 0x343C22A,
+        Wizard,// = 0x1D4681B1
     }
 
     [Flags]
