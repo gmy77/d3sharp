@@ -149,16 +149,24 @@ namespace Mooege.Core.GS.Generators
                         }
                         else
                         {
-                            var subScenePosition = scene.Position + pos;
-                            var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
+                            // HACK: avoid trying to create scenes with SNOs that aren't valid
+                            if (MPQStorage.Data.Assets[SNOGroup.Scene].ContainsKey(subSceneEntry.SNOScene))
                             {
-                                MiniMapVisibility = true,
-                                RotationW = sceneChunk.PRTransform.Quaternion.W,
-                                RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
-                                Specification = sceneChunk.SceneSpecification
-                            };
-                            scene.Subscenes.Add(subscene);
-                            subscene.LoadMarkers();
+                                var subScenePosition = scene.Position + pos;
+                                var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
+                                {
+                                    MiniMapVisibility = true,
+                                    RotationW = sceneChunk.PRTransform.Quaternion.W,
+                                    RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
+                                    Specification = sceneChunk.SceneSpecification
+                                };
+                                scene.Subscenes.Add(subscene);
+                                subscene.LoadMarkers();
+                            }
+                            else
+                            {
+                                Logger.Error("Scene not found in mpq storage: {0}", subSceneEntry.SNOScene);
+                            }
                         }
                     }
 
