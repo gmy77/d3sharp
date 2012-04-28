@@ -26,39 +26,39 @@ using Mooege.Core.GS.Actors;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
-    [ImplementsPowerSNO(30334)]  // Monster_Ranged_Projectile.pow
-    public class MonsterRangedProjectile : ActionTimedSkill
-    {
-        public override IEnumerable<TickTimer> Main()
-        {
-            var proj = new Projectile(this, 3901, User.Position);
-            proj.OnCollision = (hit) =>
-            {
-                WeaponDamage(hit, 1.00f, DamageType.Physical);
-                proj.Destroy();
-            };
-            proj.Launch(TargetPosition, 1f);
+    //[ImplementsPowerSNO(30334)]  // Monster_Ranged_Projectile.pow
+    //public class MonsterRangedProjectile : ActionTimedSkill
+    //{
+    //    public override IEnumerable<TickTimer> Main()
+    //    {
+    //        var proj = new Projectile(this, 3901, User.Position);
+    //        proj.OnCollision = (hit) =>
+    //        {
+    //            WeaponDamage(hit, 1.00f, DamageType.Physical);
+    //            proj.Destroy();
+    //        };
+    //        proj.Launch(TargetPosition, 1f);
 
-            yield break;
-        }
-    }
+    //        yield break;
+    //    }
+    //}
 
-    [ImplementsPowerSNO(30503)]  // SkeletonSummoner_Projectile.pow
-    public class SkeletonSummonerProjectile : ActionTimedSkill
-    {
-        public override IEnumerable<TickTimer> Main()
-        {
-            var proj = new Projectile(this, 5392, User.Position);
-            proj.Position.Z += 5f; // fix height
-            proj.OnCollision = (hit) =>
-            {
-                hit.PlayEffectGroup(19052);
-                WeaponDamage(hit, 2.00f, DamageType.Arcane);
-                proj.Destroy();
-            };
-            proj.Launch(TargetPosition, 0.5f);
+    //[ImplementsPowerSNO(30503)]  // SkeletonSummoner_Projectile.pow
+    //public class SkeletonSummonerProjectile : ActionTimedSkill
+    //{
+    //    public override IEnumerable<TickTimer> Main()
+    //    {
+    //        var proj = new Projectile(this, 5392, User.Position);
+    //        proj.Position.Z += 5f; // fix height
+    //        proj.OnCollision = (hit) =>
+    //        {
+    //            hit.PlayEffectGroup(19052);
+    //            WeaponDamage(hit, 2.00f, DamageType.Arcane);
+    //            proj.Destroy();
+    //        };
+    //        proj.Launch(TargetPosition, 0.5f);
 
-            yield break;
-        }
-    }
+    //        yield break;
+    //    }
+    //}
 }
