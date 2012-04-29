@@ -345,7 +345,7 @@ namespace Mooege.Core.MooNet.Accounts
             }
         }
 
-        public void UpdatePassword(string newPassword)
+        public bool UpdatePassword(string newPassword)
         {
             this.PasswordVerifier = SRP6a.CalculatePasswordVerifierForAccount(this.Email, newPassword, this.Salt);
             try
@@ -361,7 +361,9 @@ namespace Mooege.Core.MooNet.Accounts
             catch (Exception e)
             {
                 Logger.ErrorException(e, "UpdatePassword()");
-            }
+                return false;
+            } 
+            return true;
         }
 
         public void UpdateUserLevel(UserLevels userLevel)

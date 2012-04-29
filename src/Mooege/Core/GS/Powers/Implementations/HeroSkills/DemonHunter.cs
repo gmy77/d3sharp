@@ -889,40 +889,38 @@ namespace Mooege.Core.GS.Powers.Implementations
             proj.OnCollision = (hit) =>
             {
                 hit.PlayEffectGroup(RuneSelect(221164, 222107, 222120, 222133, 221164, 222146));
-                WeaponDamage(hit, ScriptFormula(0), DamageType.Physical);
-                /*AttackPayload attack = new AttackPayload(this);
-                attack.Target = hit;
+                
+                AttackPayload attack = new AttackPayload(this);
+                attack.SetSingleTarget(hit);
                 attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
                 attack.OnHit = (HitPayload) =>
                     {
-                        if (HitPayload.IsCriticalHit)
+                        //if (HitPayload.IsCriticalHit)
+                        //{
+                        //    if (Rune_E > 0)
+                        //    {
+                        //        WeaponDamage(HitPayload.Target, ScriptFormula(13), DamageType.Physical);
+                        //    }
+                        //}
+                        if (Rune_A > 0)
                         {
-                            if (Rune_E > 0)
+                            //Nothing goes here.
+                        }
+                        else
+                        {
+                            if (Rune_B > 0)
                             {
-                                WeaponDamage(HitPayload.Target, ScriptFormula(13), DamageType.Physical);
+                                Knockback(User.Position, hit, ScriptFormula(4));
+                                AddBuff(hit, new DebuffStunned(WaitSeconds(ScriptFormula(6))));
                             }
+                            if (Rune_C > 0)
+                            {
+                                AddBuff(hit, new addsDOTDamage());
+                            }
+                            proj.Destroy();
                         }
                     };
-                attack.Apply();*/
-
-                if (Rune_A > 0)
-                {
-                    //Nothing goes here.
-                }
-                else
-                {
-                    if (Rune_B > 0)
-                    {
-                        Knockback(User.Position, hit, ScriptFormula(4));
-                        AddBuff(hit, new DebuffStunned(WaitSeconds(ScriptFormula(6))));
-                    }
-                    if (Rune_C > 0)
-                    {
-                        AddBuff(hit, new addsDOTDamage());
-                    }
-                    proj.Destroy();
-
-                }
+                attack.Apply();
             };
             proj.Launch(TargetPosition, ScriptFormula(2));
 

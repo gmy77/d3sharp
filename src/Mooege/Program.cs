@@ -60,6 +60,17 @@ namespace Mooege
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
 
+            try
+            {
+                Logger.Info("Found OpenSSL version {0}.", OpenSSL.Core.Version.Library.ToString());
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e, "OpenSSL Error");
+                Console.ReadLine();
+                return;
+            }
+
             if (!MPQStorage.Initialized)
             {
                 Logger.Fatal("Cannot run servers as MPQStorage failed initialization.");
