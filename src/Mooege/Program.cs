@@ -77,6 +77,18 @@ namespace Mooege
                 return;
             }
 
+
+            //Prefilling Database
+            if (!DBSessions.AccountSession.Query<DBAccount>().Any())
+            {
+                Logger.Info("New Database, creating first Test account (Test@,testpass)");
+                var account = AccountManager.CreateAccount("test@", "testpass", "test", Account.UserLevels.Admin);
+                var gameAccount = GameAccountManager.CreateGameAccount(account);
+                account.DBAccount.DBGameAccounts.Add(gameAccount.DBGameAccount);
+                account.SaveToDB();
+            }
+
+            
             if (!MPQStorage.Initialized)
             {
                 Logger.Fatal("Cannot run servers as MPQStorage failed initialization.");
@@ -90,16 +102,6 @@ namespace Mooege
             Logger.Info("Loading achievements database..");
             Logger.Trace("Achievement file parsed with a total of {0} achievements and {1} criteria in {2} categories.",
                 AchievementManager.TotalAchievements, AchievementManager.TotalCriteria, AchievementManager.TotalCategories);
-
-            //Prefilling Database
-            if (!DBSessions.AccountSession.Query<DBAccount>().Any())
-            {
-                Logger.Info("New Database, creating first Test account (Test@,testpass)");
-                var account = AccountManager.CreateAccount("test@", "testpass", "test", Account.UserLevels.Admin);
-                var gameAccount = GameAccountManager.CreateGameAccount(account);
-                account.DBAccount.DBGameAccounts.Add(gameAccount.DBGameAccount);
-                account.SaveToDB();
-            }
 
 
             Logger.Info("Type '!commands' for a list of available commands");

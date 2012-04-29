@@ -155,15 +155,9 @@ namespace Mooege.Core.GS.Map
         /// </summary>
         private void LoadSceneData()
         {
+            // oh yeah, this really happens to me sometimes, i dont know why! ~weltmeyer
             if (!MPQStorage.Data.Assets[SNOGroup.Scene].ContainsKey(this.SceneSNO.Id))
-            {
-                // oh yeah, this really happens to me sometimes, i dont know why! ~weltmeyer
-                Logger.Debug("AssetsForScene not found in MPQ Storage:Scene:{0}, Asset:{1}", SNOGroup.Scene,this.SceneSNO.Id);
-                //My fix: disconnect all clients...
-                foreach (var player in World.Players.Values)
-                    player.InGameClient.Connection.Disconnect();
-                return;
-            }
+                Logger.Debug("AssetsForScene not found in MPQ Storage:Scene:{0}, Asset:{1}", SNOGroup.Scene, this.SceneSNO.Id);
             var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SceneSNO.Id].Data as Mooege.Common.MPQ.FileFormats.Scene;
             if (data == null) return;
 

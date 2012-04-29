@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using FluentNHibernate;
 using FluentNHibernate.Cfg;
+using Mooege.Common.Storage.AccountDataBase.Mapper;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
@@ -15,12 +16,19 @@ namespace Mooege.Common.Storage.AccountDataBase
     {
         private static ISessionFactory _sessionFactory;
         private static Configuration _config;
-
+        private static readonly object Lockobj = new object();
         public static ISessionFactory SessionFactory
         {
-            get { return _sessionFactory ?? (_sessionFactory = CreateSessionFactory()); }
+            get
+            {
+                lock (Lockobj)
+                {
+                    return _sessionFactory ?? (_sessionFactory = CreateSessionFactory());
+                }
+            }
         }
 
+        
         public static Configuration Config
         {
             get
@@ -40,10 +48,13 @@ namespace Mooege.Common.Storage.AccountDataBase
                     }
 
 
-                    _config=_config.SetProperties(replacedProperties);
-                    _config=_config.AddMappingsFromAssembly(Assembly.GetCallingAssembly());
-
+                    _config = _config.SetProperties(replacedProperties);
+                    _config = _config.AddMappingsFromAssembly(Assembly.GetAssembly(typeof(DBAccountMapper)));
+                    if (_config.Properties.ContainsKey("dialect"))
+                        if (_config.GetProperty("dialect").ToLower().Contains("sqlite"))
+                            _config = _config.SetProperty("connection.release_mode", "on_close");
                 }
+                
                 return _config;
             }
         }

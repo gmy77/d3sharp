@@ -11,7 +11,7 @@ namespace Mooege.Common.Storage.AccountDataBase.Mapper
     {
         public DBGameAccountMapper()
         {
-            Id(e => e.Id).GeneratedBy.Increment();
+            Id(e => e.Id).GeneratedBy.Native();
             References(e => e.DBAccount);
             Map(e => e.Banner).CustomSqlType("Blob");
             Map(e => e.LastOnline);

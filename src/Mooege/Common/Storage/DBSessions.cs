@@ -11,17 +11,21 @@ namespace Mooege.Common.Storage
 {
     public static class DBSessions
     {
+        private static Object _sessionLock=new object();
         private static ISession _accountSession = null;
+        
         public static ISession AccountSession
         {
             get
             {
-                if (_accountSession == null || !_accountSession.IsOpen)
+                lock (_sessionLock)
                 {
-                    _accountSession = AccountDataBase.SessionProvider.SessionFactory.OpenSession();
-                    _accountSession.FlushMode=FlushMode.Always;
+                    if (_accountSession == null || !_accountSession.IsOpen)
+                    {
+                        _accountSession = AccountDataBase.SessionProvider.SessionFactory.OpenSession();
+                        _accountSession.FlushMode = FlushMode.Always;
+                    }
                 }
-
                 return _accountSession;
             }
         }

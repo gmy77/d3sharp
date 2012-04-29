@@ -11,7 +11,7 @@ namespace Mooege.Common.Storage.AccountDataBase.Mapper
     {
         public DBAccountMapper()
         {
-            Id(e => e.Id).GeneratedBy.Increment();
+            Id(e => e.Id).GeneratedBy.Native();
             Map(e => e.Email);
             Map(e => e.Salt).CustomSqlType("VarBinary").Length(32);
             Map(e => e.PasswordVerifier).CustomSqlType("VarBinary").Length(128);

@@ -11,7 +11,7 @@ namespace Mooege.Common.Storage.AccountDataBase.Mapper
     {
         public DBToonMapper()
         {
-            Id(e => e.Id).GeneratedBy.Increment();
+            Id(e => e.Id).GeneratedBy.Native();
             Map(e => e.Class);
             References(e => e.DBGameAccount);
             Map(e => e.Deleted);

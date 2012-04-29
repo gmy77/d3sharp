@@ -11,7 +11,7 @@ namespace Mooege.Common.Storage.AccountDataBase.Mapper
     {
         public DBActiveSkillsMapper()
         {
-            Id(e => e.Id).GeneratedBy.Increment();
+            Id(e => e.Id).GeneratedBy.Native();
             HasOne(e => e.DBToon);
             Map(e => e.Rune0);
             Map(e => e.Skill0);
