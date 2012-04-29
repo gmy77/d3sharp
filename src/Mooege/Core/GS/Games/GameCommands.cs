@@ -298,6 +298,29 @@ namespace Mooege.Core.GS.Games
 
             return string.Format("Spawned {0} items with type: {1}", amount, name);
         }
+
+        [Command("search", "Search an item by name.\nUsage: item search <namepart>")]
+        public string Search(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            var player = invokerClient.InGameClient.Player;
+
+
+            if (@params == null || @params.Length < 1)
+                return "You need to specify a search string!";
+
+            
+            var searchstring = @params[0];
+            var searchResultList = ItemGenerator.Search(searchstring);
+            var returnString = String.Join("\n", searchResultList.Select(itm => itm.Name));
+
+            return string.Format(returnString);
+        }
     }
     
     [CommandGroup("conversation", "Starts a conversation. \n Usage: conversation snoConversation")]

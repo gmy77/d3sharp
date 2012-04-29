@@ -39,6 +39,7 @@ namespace Mooege.Core.GS.Players
 
     public class Inventory : IMessageConsumer, IRevealable
     {
+        
         static readonly Logger Logger = LogManager.CreateLogger();
 
         // Access by ID
@@ -51,6 +52,7 @@ namespace Mooege.Core.GS.Players
         private InventoryGrid _inventoryGrid;
         private InventoryGrid _stashGrid;
         private Item _inventoryGold;
+        public bool Loaded { get; private set; }
         // backpack for spellRunes, their Items are kept in equipment
         private uint[] _skillSocketRunes;
 
@@ -71,6 +73,12 @@ namespace Mooege.Core.GS.Players
                 InventoryLocation = item.InventoryLocationMessage,
                 Field2 = 1 // what does this do?  // 0 - source item not disappearing from inventory, 1 - Moving, any other possibilities? its an int32
             }); */
+        }
+
+
+        public List<Item> GetEquippedItems()
+        {
+            return this._equipment.Items.Values.ToList();
         }
 
         /// <summary>
@@ -451,7 +459,8 @@ namespace Mooege.Core.GS.Players
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
             else if (message is RequestBuySharedStashSlotsMessage) OnBuySharedStashSlots(message as RequestBuySharedStashSlotsMessage);
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
-            else return;
+
+            _owner.SetStats();
         }
 
         private void OnBuySharedStashSlots(RequestBuySharedStashSlotsMessage requestBuySharedStashSlotsMessage)
@@ -716,6 +725,7 @@ namespace Mooege.Core.GS.Players
             this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = goldAmount; // This is the attribute that makes the gold visible in game
             this._inventoryGold.Owner = _owner;
             this._inventoryGold.SetInventoryLocation((int)EquipmentSlotId.Gold, 0, 0);
+            Loaded = true;
         }
 
         // TODO: change saving at the world OnLeave to saving at every inventory change, without delete and insert

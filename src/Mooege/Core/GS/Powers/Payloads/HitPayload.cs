@@ -75,11 +75,24 @@ namespace Mooege.Core.GS.Powers.Payloads
                     this.ElementDamages[type] *= 1.5f + this.Target.Attributes[GameAttribute.Crit_Percent_Bonus_Capped];
             }
 
+
+
             // TODO: reduce element damage amounts according to target's resistances
 
             // TODO: reduce total damage by target's armor
+            // ~weltmeyer Using WOW Calculation till we find the correct formula :)
 
-            this.TotalDamage = this.ElementDamages.Sum(kv => kv.Value);
+
+            this.TotalDamage = this.ElementDamages.Sum(kv => kv.Value) ;
+            var targetArmor = target.Attributes[GameAttribute.Armor_Total];
+            var attackerLevel = attackPayload.Context.User.Attributes[GameAttribute.Level];
+            var reduction = TotalDamage * (0.1f * targetArmor) /
+                               ((8.5f * attackerLevel) + 40);
+
+            reduction /= 1+reduction;
+            reduction = Math.Min(0.75f, reduction);
+            this.TotalDamage = TotalDamage*(1 - reduction);
+
             this.DominantDamageType = this.ElementDamages.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
             if (this.DominantDamageType == null)
                 this.DominantDamageType = DamageType.Physical; // default to physical if no other damage type calced

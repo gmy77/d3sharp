@@ -175,43 +175,10 @@ namespace Mooege.Core.GS.Players
         // number of seconds to use for the cooldown that is started after changing a skill.
         private const float SkillChangeCooldownLength = 5f;  // TODO: this needs to vary based on difficulty
 
-        /// <summary>
-        /// Creates a new player.
-        /// </summary>
-        /// <param name="world">The initial world player joins in.</param>
-        /// <param name="client">The gameclient for the player.</param>
-        /// <param name="bnetToon">Toon of the player.</param>
-        public Player(World world, GameClient client, Toon bnetToon)
-            : base(world, GetClassSNOId(bnetToon.Gender, bnetToon.Class))
+
+        public void SetStats()
         {
-            this.InGameClient = client;
-            this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
-            this.Toon = bnetToon;
             var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
-            this.GBHandle.Type = (int)GBHandleType.Player;
-            this.GBHandle.GBID = this.Toon.ClassID;
-
-            this.Field2 = 0x00000009;
-            this.Scale = this.ModelScale;
-            this.RotationW = 0.05940768f;
-            this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
-            this.Field7 = -1;
-            this.NameSNOId = -1;
-            this.Field10 = 0x0;
-
-            this.SkillSet = new SkillSet(this.Toon.Class, this.Toon);
-            this.GroundItems = new Dictionary<uint, Item>();
-            this.Conversations = new ConversationManager(this, this.World.Game.Quests);
-            this.ExpBonusData = new ExpBonusData(this);
-            this.SelectedNPC = null;
-
-            this._lastResourceUpdateTick = 0;
-
-            // TODO SavePoint from DB
-            this.SavePointData = new SavePointData() { snoWorld = -1, SavepointId = -1 };
-
-            #region Attributes
-
             //Skills
             this.Attributes[GameAttribute.SkillKit] = data.SNOSKillKit0;
             //scripted //this.Attributes[GameAttribute.Skill_Total, 0x7545] = 1; //Axe Operate Gizmo
@@ -325,7 +292,9 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Level] = this.Toon.Level;
             this.Attributes[GameAttribute.Experience_Next] = this.Toon.ExperienceNext;
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
-            //scripted //this.Attributes[GameAttribute.Armor_Total] = 0;
+            this.Attributes[GameAttribute.Armor_Item] = this.ArmorItem;
+            this.Attributes[GameAttribute.Armor] = 0;
+            //scripted //this.Attributes[GameAttribute.Armor_Total]
 
             //scripted //this.Attributes[GameAttribute.Strength_Total] = this.StrengthTotal;
             //scripted //this.Attributes[GameAttribute.Intelligence_Total] = this.IntelligenceTotal;
@@ -347,6 +316,47 @@ namespace Mooege.Core.GS.Players
             //scripted //this.Attributes[GameAttribute.Hitpoints_Max_Total] = GetMaxTotalHitpoints();
             this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
 
+            this.Attributes.BroadcastChangedIfRevealed();
+        }
+        /// <summary>
+        /// Creates a new player.
+        /// </summary>
+        /// <param name="world">The initial world player joins in.</param>
+        /// <param name="client">The gameclient for the player.</param>
+        /// <param name="bnetToon">Toon of the player.</param>
+        public Player(World world, GameClient client, Toon bnetToon)
+            : base(world, GetClassSNOId(bnetToon.Gender, bnetToon.Class))
+        {
+            this.InGameClient = client;
+            this.PlayerIndex = Interlocked.Increment(ref this.InGameClient.Game.PlayerIndexCounter); // get a new playerId for the player and make it atomic.
+            this.Toon = bnetToon;
+            var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
+            this.GBHandle.Type = (int)GBHandleType.Player;
+            this.GBHandle.GBID = this.Toon.ClassID;
+
+            this.Field2 = 0x00000009;
+            this.Scale = this.ModelScale;
+            this.RotationW = 0.05940768f;
+            this.RotationAxis = new Vector3D(0f, 0f, 0.9982339f);
+            this.Field7 = -1;
+            this.NameSNOId = -1;
+            this.Field10 = 0x0;
+
+            this.SkillSet = new SkillSet(this.Toon.Class, this.Toon);
+            this.GroundItems = new Dictionary<uint, Item>();
+            this.Conversations = new ConversationManager(this, this.World.Game.Quests);
+            this.ExpBonusData = new ExpBonusData(this);
+            this.SelectedNPC = null;
+
+            this._lastResourceUpdateTick = 0;
+
+            // TODO SavePoint from DB
+            this.SavePointData = new SavePointData() { snoWorld = -1, SavepointId = -1 };
+
+            #region Attributes
+
+
+            SetStats();
             //Resource
             this.Attributes[GameAttribute.Resource_Max, (int)data.PrimaryResource] = data.PrimaryResourceMax;
             this.Attributes[GameAttribute.Resource_Factor_Level, (int)data.PrimaryResource] = data.PrimaryResourceFactorLevel;
@@ -802,8 +812,8 @@ namespace Mooege.Core.GS.Players
                     continue; // if the scene is already revealed, skip it.
 
                 if (scene.Parent != null) // if it's a subscene, always make sure it's parent get reveals first and then it reveals his childs.
-                    scene.Parent.Reveal(this); 
-                else 
+                    scene.Parent.Reveal(this);
+                else
                     scene.Reveal(this);
             }
         }
@@ -820,8 +830,8 @@ namespace Mooege.Core.GS.Players
                 if (actor.Visible == false || actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
                     continue;
 
-                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player 
-                    || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment 
+                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player
+                    || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment
                     || actor.ActorType == ActorType.Critter || actor.ActorType == ActorType.Item || actor.ActorType == ActorType.ServerProp)
                     actor.Reveal(this);
             }
@@ -836,9 +846,11 @@ namespace Mooege.Core.GS.Players
 
             // load all inventory items
             this.Inventory.LoadFromDB();
-
+            
             // generate visual update message
             this.Inventory.SendVisualInventory(this);
+
+            SetStats();
         }
 
         public override void OnTeleport()
@@ -951,15 +963,39 @@ namespace Mooege.Core.GS.Players
 
         #region player attribute handling
 
+        public float ArmorItem
+        {
+            get
+            {
+
+                var armorAddByItems = 0.0f;
+                if (this.Inventory != null && this.Inventory.Loaded)
+                    armorAddByItems += this.Inventory.GetEquippedItems().Sum(item => item.ItemDefinition.ArmorValue);
+
+                return armorAddByItems;   
+            }
+        }
+
         public float Strength
         {
             get
             {
+                var baseStrength = 0.0f;
+
                 var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
                 if (data.CoreAttribute == Mooege.Common.MPQ.FileFormats.PrimaryAttribute.Strength)
-                    return data.Strength + ((this.Toon.Level - 1) * 3);
+                    baseStrength = data.Strength + ((this.Toon.Level - 1) * 3);
                 else
-                    return data.Strength + (this.Toon.Level - 1);
+                    baseStrength = data.Strength + (this.Toon.Level - 1);
+
+                var strengthAddByItems = 0;
+                if (this.Inventory!=null && this.Inventory.Loaded)
+                    foreach (var item in this.Inventory.GetEquippedItems())
+                    {
+
+                    }
+                var finalStrength = baseStrength + strengthAddByItems;
+                return finalStrength;
             }
         }
 
@@ -1153,13 +1189,13 @@ namespace Mooege.Core.GS.Players
         {
             var data = HeroData.Heros.Find(item => item.Name == @class.ToString());
 
-            if(gender==0) // male
+            if (gender == 0) // male
             {
                 return data.SNOMaleActor;
             }
             else // female
             {
-                    return data.SNOFemaleActor;
+                return data.SNOFemaleActor;
             }
         }
 
@@ -1234,7 +1270,7 @@ namespace Mooege.Core.GS.Players
         {
             return (Math.Max((this.Attributes[GameAttribute.Hitpoints_Max] + this.Attributes[GameAttribute.Hitpoints_Total_From_Level] +
                 this.Attributes[GameAttribute.Hitpoints_Max_Bonus]) *
-                (this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus] + this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus_Item] + 1),1));
+                (this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus] + this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus_Item] + 1), 1));
         }
 
         //Max((Resource_Max + ((Level#NONE - 1) * Resource_Factor_Level) + Resource_Max_Bonus) * (Resource_Max_Percent_Bonus + 1), 0)
@@ -1535,7 +1571,8 @@ namespace Mooege.Core.GS.Players
         /// Adds lore to player's state
         /// </summary>
         /// <param name="loreSNOId"></param>
-        public void AddLore(int loreSNOId) {
+        public void AddLore(int loreSNOId)
+        {
             if (this.LearnedLore.Count < this.LearnedLore.m_snoLoreLearned.Length)
             {
                 LearnedLore.m_snoLoreLearned[LearnedLore.Count] = loreSNOId;
