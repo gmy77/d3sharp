@@ -789,6 +789,21 @@ namespace Mooege.Core.GS.Actors
             this.World.BroadcastIfRevealed(movementMessage, this);
         }
 
+        public void MoveSnapped(Vector3D point, float facingAngle)
+        {
+            this.Position = point;
+            this.SetFacingRotation(facingAngle);
+
+            this.World.BroadcastIfRevealed(new ACDTranslateSnappedMessage
+            {
+                Field0 = (int)this.DynamicID,
+                Field1 = point,
+                Field2 = facingAngle,
+                Field3 = false,
+                Field4 = 0x900  // TODO: figure out when to use this field
+            }, this);
+        }
+
         #endregion
 
         public override string ToString()
