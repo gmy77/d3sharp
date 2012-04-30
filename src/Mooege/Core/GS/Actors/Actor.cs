@@ -364,7 +364,7 @@ namespace Mooege.Core.GS.Actors
         {
             if (this.World == null) return;
 
-            World.BroadcastIfRevealed(new PlayEffectMessage
+            this.World.BroadcastIfRevealed(new PlayEffectMessage
             {
                 ActorId = this.DynamicID,
                 Effect = effect,
@@ -376,13 +376,12 @@ namespace Mooege.Core.GS.Actors
         {
             if (target == null || target.World == null || this.World == null) return;
 
-            World.BroadcastIfRevealed(new RopeEffectMessageACDToACD
+            this.World.BroadcastIfRevealed(new RopeEffectMessageACDToACD
             {
-                Id = (int)Opcodes.RopeEffectMessageACDToACD,
-                Field0 = ropeSNO,
-                Field1 = (int)DynamicID,
+                RopeSNO = ropeSNO,
+                StartSourceActorId = (int)DynamicID,
                 Field2 = 4,
-                Field3 = (int)target.DynamicID,
+                DestinationActorId = (int)target.DynamicID,
                 Field4 = 1
             }, this);
         }
@@ -393,11 +392,10 @@ namespace Mooege.Core.GS.Actors
 
             this.World.BroadcastIfRevealed(new RopeEffectMessageACDToPlace
             {
-                Id = (int)Opcodes.RopeEffectMessageACDToPlace,
-                Field0 = ropeSNO,
-                Field1 = (int)this.DynamicID,
+                RopeSNO = ropeSNO,
+                StartSourceActorId = (int)this.DynamicID,
                 Field2 = 4,
-                Field3 = new WorldPlace { Position = target, WorldID = this.World.DynamicID }
+                EndPosition = new WorldPlace { Position = target, WorldID = this.World.DynamicID }
             }, this);
         }
 
@@ -405,17 +403,15 @@ namespace Mooege.Core.GS.Actors
         {
             if (target == null || target.World == null || this.World == null) return;
 
-            // TODO: Might need to track complex effects
-            World.BroadcastIfRevealed(new ComplexEffectAddMessage
+            this.World.BroadcastIfRevealed(new ComplexEffectAddMessage
             {
-                Id = (int)Opcodes.ComplexEffectAddMessage,
-                Field0 = (int)World.NewActorID, // TODO: maybe not use actor ids?
-                Field1 = 1,  // 0=efg, 1=efg, 2=rope
-                Field2 = effectGroupSNO, // efgSNO or ropeSNO
-                Field3 = (int)this.DynamicID, // source
-                Field4 = (int)target.DynamicID, // target
-                Field5 = 0, // 0=efg, 4=rope1, 3=rope2
-                Field6 = 0 // 0=efg, 1=rope1, 3=rope2
+                EffectId = (int)this.World.NewActorID, // TODO: maybe not use actor ids?
+                Field1 = 1,
+                EffectSNO = effectGroupSNO,
+                SourceActorId = (int)this.DynamicID,
+                TargetActorId = (int)target.DynamicID,
+                Field5 = 0,
+                Field6 = 0
             }, target);
         }
 
@@ -796,9 +792,9 @@ namespace Mooege.Core.GS.Actors
 
             this.World.BroadcastIfRevealed(new ACDTranslateSnappedMessage
             {
-                Field0 = (int)this.DynamicID,
-                Field1 = point,
-                Field2 = facingAngle,
+                ActorId = (int)this.DynamicID,
+                Position = point,
+                Angle = facingAngle,
                 Field3 = false,
                 Field4 = 0x900  // TODO: figure out when to use this field
             }, this);

@@ -96,8 +96,8 @@ namespace Mooege.Core.GS.Powers
             baseMessage.ActorId = (int)this.Target.DynamicID;
             baseMessage.Start = this.Target.Position;
             baseMessage.Velocity = this.Velocity;
-            baseMessage.Field6 = gravity;
-            baseMessage.Field9 = destination.Z;
+            baseMessage.Gravity = gravity;
+            baseMessage.DestinationZ = destination.Z;
 
             this.Target.World.BroadcastIfRevealed(baseMessage, this.Target);
         }

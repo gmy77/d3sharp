@@ -1664,7 +1664,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 //Field3 = 303110, // used for male barb leap, not needed?
                 FlyingAnimationTagID = AnimationSetKeys.Attack2.ID,
                 LandingAnimationTagID = -1,
-                Field7 = PowerSNO
+                PowerSNO = PowerSNO
             });
 
             // wait for landing
