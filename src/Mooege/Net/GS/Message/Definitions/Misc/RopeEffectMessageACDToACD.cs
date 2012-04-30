@@ -23,27 +23,29 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     [Message(Opcodes.RopeEffectMessageACDToACD)]
     public class RopeEffectMessageACDToACD : GameMessage
     {
-        public int /* sno */ Field0;
-        public int Field1;
-        public int Field2;
-        public int Field3;
-        public int Field4;
+        public int /* sno */ RopeSNO;
+        public int StartSourceActorId;
+        public int Field2;  // always seems to be 4
+        public int DestinationActorId;
+        public int Field4;  // always seems to be 1
+
+        public RopeEffectMessageACDToACD() : base(Opcodes.RopeEffectMessageACDToACD) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            RopeSNO = buffer.ReadInt(32);
+            StartSourceActorId = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(5);
-            Field3 = buffer.ReadInt(32);
+            DestinationActorId = buffer.ReadInt(32);
             Field4 = buffer.ReadInt(5);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, RopeSNO);
+            buffer.WriteInt(32, StartSourceActorId);
             buffer.WriteInt(5, Field2);
-            buffer.WriteInt(32, Field3);
+            buffer.WriteInt(32, DestinationActorId);
             buffer.WriteInt(5, Field4);
         }
 
@@ -53,10 +55,10 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("RopeEffectMessageACDToACD:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("RopeSNO: 0x" + RopeSNO.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("StartSourceActorId: 0x" + StartSourceActorId.ToString("X8") + " (" + StartSourceActorId + ")");
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
-            b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
+            b.Append(' ', pad); b.AppendLine("DestinationActorId: 0x" + DestinationActorId.ToString("X8") + " (" + DestinationActorId + ")");
             b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");

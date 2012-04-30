@@ -120,8 +120,8 @@ namespace Mooege.Core.GS.Powers
                 Field3 = 0x00800000,
                 FlyingAnimationTagID = AnimationSetKeys.IdleDefault.ID,
                 LandingAnimationTagID = -1,
-                Field7 = this.Context.PowerSNO,
-                Field8 = visualBounce
+                PowerSNO = this.Context.PowerSNO,
+                Bounce = visualBounce
             });
         }
 
