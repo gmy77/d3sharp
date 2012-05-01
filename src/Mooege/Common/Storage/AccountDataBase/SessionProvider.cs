@@ -63,15 +63,15 @@ namespace Mooege.Common.Storage.AccountDataBase
         {
             return Fluently.Configure(Config).ExposeConfiguration(
                 cfg =>
-                    new SchemaUpdate(cfg).Execute(false, true)
+                    new SchemaUpdate(cfg).Execute(true, true)
                 ).
                 BuildSessionFactory();
         }
 
         public static void RebuildSchema()
         {
-            var schema = new SchemaExport(Config);
-            schema.Create(true, true);
+            var schema = new SchemaUpdate(Config);
+            schema.Execute(true, true);
         }
     }
 }

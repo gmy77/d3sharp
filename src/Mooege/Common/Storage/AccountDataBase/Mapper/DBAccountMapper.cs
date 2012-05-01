@@ -13,8 +13,8 @@ namespace Mooege.Common.Storage.AccountDataBase.Mapper
         {
             Id(e => e.Id).GeneratedBy.Native();
             Map(e => e.Email);
-            Map(e => e.Salt).CustomSqlType("VarBinary").Length(32);
-            Map(e => e.PasswordVerifier).CustomSqlType("VarBinary").Length(128);
+            Map(e => e.Salt)/*.CustomSqlType("VarBinary(32)")*/.Length(32);
+            Map(e => e.PasswordVerifier)/*.CustomSqlType("VarBinary")*/.Length(128);
             Map(e => e.BattleTagName);
             Map(e => e.HashCode);
             Map(e => e.UserLevel);

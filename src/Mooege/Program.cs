@@ -79,6 +79,7 @@ namespace Mooege
 
 
             //Prefilling Database
+            Mooege.Common.Storage.AccountDataBase.SessionProvider.RebuildSchema();
             if (!DBSessions.AccountSession.Query<DBAccount>().Any())
             {
                 Logger.Info("New Database, creating first Test account (Test@,testpass)");
