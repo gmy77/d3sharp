@@ -63,5 +63,20 @@ namespace Mooege.Core.GS.Powers.Implementations
             World.SpawnMonster(actorSNO, pos);
         }
     }
+
+    [ImplementsPowerSNO(30800)] // Summon Spores
+    public class SummonSpores : SummoningSkill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            float x, y, z, castAngle = MovementHelpers.GetFacingAngle(User.Position, TargetPosition);
+            x = User.Position.X + 8 * (float)Math.Cos(castAngle);
+            y = User.Position.Y + 8 * (float)Math.Sin(castAngle);
+            z = User.Position.Z;
+            yield return WaitSeconds(1.0f); 
+            var pos = new Vector3D(x, y, z);
+            World.SpawnMonster(5482, pos);//HACK, we don't have this in mpq
+        }
+    }
         }
     }

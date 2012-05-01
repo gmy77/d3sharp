@@ -97,6 +97,27 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         }
     }
     #endregion
+    #region DarkCultists
+    [HandledSNO(6024)]
+    public class DarkCultists : Monster
+    {
+        public DarkCultists(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+            this.Brain = new MonsterBrain(this);
+        }
+    }
+    [HandledSNO(6035)]
+    public class DarkSummoner : Monster
+    {
+        public DarkSummoner(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+            this.Brain = new MonsterBrain(this);
+            (Brain as MonsterBrain).AddPresetPower(30592);
+        }
+    }
+    #endregion
     #region Ghost
 	//Enraged phantom 370, 136943
 	
@@ -157,6 +178,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
             : base(world, snoId, tags)
         {
             this.Brain = new MonsterBrain(this);
+            (Brain as MonsterBrain).AddPresetPower(30800); //Summon Spores // We summon this to often, need some time blocking
         }
     }
     #endregion
