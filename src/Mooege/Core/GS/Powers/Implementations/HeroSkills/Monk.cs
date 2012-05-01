@@ -450,47 +450,24 @@ namespace Mooege.Core.GS.Powers.Implementations
     //TODO Rune_E
     #region ExplodingPalm
     [ImplementsPowerSNO(Skills.Skills.Monk.SpiritGenerator.ExplodingPalm)]
-    public class MonkExplodingPalm : ComboSkill
+    public class MonkExplodingPalm : ActionTimedSkill
     {
         public override IEnumerable<TickTimer> Main()
         {
-            AttackPayload attack = new AttackPayload(this);
-            switch (ComboIndex)
+            UsePrimaryResource(EvalTag(PowerKeys.ResourceCost));
+
+            var target = GetBestMeleeEnemy();
+            if (target.Actors.Count > 0)
             {
-                case 0:
-                case 1:
-                    attack.Targets = GetBestMeleeEnemy();
-                    attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
-                    if (Rune_C > 0)
-                        attack.AddBuffOnHit<RuneCDebuff>();
-                    break;
-
-                case 2:
-                    if (Rune_B > 0)
-                    {
-                        attack.Targets = GetEnemiesInArcDirection(User.Position, TargetPosition, ScriptFormula(19), ScriptFormula(20));
-                        int maxTargets = (int)ScriptFormula(18);
-                        if (maxTargets < attack.Targets.Actors.Count)
-                            attack.Targets.Actors.RemoveRange(maxTargets, attack.Targets.Actors.Count - maxTargets);
-                    }
-                    else
-                    {
-                        attack.Targets = GetBestMeleeEnemy();
-                    }
-
-                    attack.AutomaticHitEffects = false;
-                    attack.AddBuffOnHit<MainDebuff>();
-                    break;
-
-                default:
-                    yield break;
+                AddBuff(target.Actors[0], new MainDebuff());
+                if (Rune_C > 0)
+                    AddBuff(target.Actors[0], new RuneCDebuff());
+                else if (Rune_B > 0)
+                    AddBuff(target.Actors[0],
+                        // DebuffSlowed also lowers attack rate, not sure if it should only be movement.
+                        new DebuffSlowed(ScriptFormula(18), WaitSeconds(ScriptFormula(3))));
             }
-            bool hitAnything = false;
-            attack.OnHit = hitPayload => { hitAnything = true; };
-            attack.Apply();
 
-            if (hitAnything)
-                GeneratePrimaryResource(EvalTag(PowerKeys.SpiritGained));
             yield break;
         }
 

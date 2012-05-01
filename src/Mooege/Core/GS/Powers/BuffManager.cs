@@ -48,6 +48,8 @@ namespace Mooege.Core.GS.Powers
 
         public bool AddBuff(Actor user, Actor target, Buff buff)
         {
+            if (user.World == null || target.World == null) return false;
+
             buff.User = user;
             buff.Target = target;
             buff.World = target.World;
