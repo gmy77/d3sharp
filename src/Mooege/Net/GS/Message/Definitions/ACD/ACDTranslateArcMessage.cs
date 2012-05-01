@@ -30,18 +30,21 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
     {
         public int ActorId;                 // DynamicID of the Actor to be moved
         public Vector3D Start;              // Starting position of the movement
-        public Vector3D Velocity;           // Velocity vector i guess, exact math is unknown - farmy
-        public int Field3;
+        public Vector3D Velocity;           // Velocity vector, added to actor position every tick
+        public int Field3;                  // Some sort of move enum, varies depending on type of movement
         public int FlyingAnimationTagID;    // TagID of the flying animation or -1
         public int LandingAnimationTagID;   // TagID of the landing animation or -1
-        public float Field6;                // some sort of fallof / individual gravity..always < 0...math is unknown - farmy
-        public int /* sno */ Field7;        // its a power sno, like in knockback.pow. but i dont know what its used for -farmy
-        public float Field8;
-        public float Field9;
+        public float Gravity;               // Gravity, added to Velocity.Z every tick, so it needs to be <0. Smaller values effectively speed up the translate.
+        public int /* sno */ PowerSNO;      // PowerSNO, usually whatever skill is activating the translate
+        public float Bounce;                // if >0 client will do extra physics bouncing arc translates when actor lands, math isn't known yet
+        public float DestinationZ;          // Once Actor.Position.Z reaches this value while landing the translate ends.
 
-        public ACDTranslateArcMessage() 
-            : base(Opcodes.ACDTranslateArcMessage) 
-        { }
+        // Some useful math for calculating arcs:
+        // TicksToArrival = current_tick + Math.sqrt(2 * height / +Gravity) * 2
+        // Velocity.Z = +Gravity * Math.sqrt(2 * height / +Gravity)
+        // Actor.Position.Z = 0.5 * Gravity * (ticks*ticks) + Velicity.Z*ticks + Start.Z
+
+        public ACDTranslateArcMessage() : base(Opcodes.ACDTranslateArcMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {
@@ -53,10 +56,10 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             Field3 = buffer.ReadInt(25);
             FlyingAnimationTagID = buffer.ReadInt(21) + (-1);
             LandingAnimationTagID = buffer.ReadInt(21) + (-1);
-            Field6 = buffer.ReadFloat32();
-            Field7 = buffer.ReadInt(32);
-            Field8 = buffer.ReadFloat32();
-            Field9 = buffer.ReadFloat32();
+            Gravity = buffer.ReadFloat32();
+            PowerSNO = buffer.ReadInt(32);
+            Bounce = buffer.ReadFloat32();
+            DestinationZ = buffer.ReadFloat32();
         }
 
         public override void Encode(GameBitBuffer buffer)
@@ -67,10 +70,10 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             buffer.WriteInt(25, Field3);
             buffer.WriteInt(21, FlyingAnimationTagID - (-1));
             buffer.WriteInt(21, LandingAnimationTagID - (-1));
-            buffer.WriteFloat32(Field6);
-            buffer.WriteInt(32, Field7);
-            buffer.WriteFloat32(Field8);
-            buffer.WriteFloat32(Field9);
+            buffer.WriteFloat32(Gravity);
+            buffer.WriteInt(32, PowerSNO);
+            buffer.WriteFloat32(Bounce);
+            buffer.WriteFloat32(DestinationZ);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -85,10 +88,10 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.Append(' ', pad); b.AppendLine("Field3: 0x" + Field3.ToString("X8") + " (" + Field3 + ")");
             b.Append(' ', pad); b.AppendLine("FlyingAnimationTagID: 0x" + FlyingAnimationTagID.ToString("X8") + " (" + FlyingAnimationTagID + ")");
             b.Append(' ', pad); b.AppendLine("LandingAnimationTagID: 0x" + LandingAnimationTagID.ToString("X8") + " (" + LandingAnimationTagID + ")");
-            b.Append(' ', pad); b.AppendLine("Field6: " + Field6.ToString("G"));
-            b.Append(' ', pad); b.AppendLine("Field7: 0x" + Field7.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field8: " + Field8.ToString("G"));
-            b.Append(' ', pad); b.AppendLine("Field9: " + Field9.ToString("G"));
+            b.Append(' ', pad); b.AppendLine("Gravity: " + Gravity.ToString("G"));
+            b.Append(' ', pad); b.AppendLine("PowerSNO: 0x" + PowerSNO.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("Bounce: " + Bounce.ToString("G"));
+            b.Append(' ', pad); b.AppendLine("DestinationZ: " + DestinationZ.ToString("G"));
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
