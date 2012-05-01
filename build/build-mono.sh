@@ -1,7 +1,7 @@
 #!/bin/bash
 # Replaces mixed-mode SQLite path with managed path for Mono Linux/MacOS users
 
-SCRIPT=`readlink -f $0`
+SCRIPT="$(cd "${0%/*}" 2>/dev/null; echo "$PWD"/"${0##*/}")"
 SCRIPTPATH=`dirname $SCRIPT`
 echo $SCRIPTPATH
 
