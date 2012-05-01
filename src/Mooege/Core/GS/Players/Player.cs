@@ -1418,7 +1418,7 @@ namespace Mooege.Core.GS.Players
 
         public void AddPercentageHP(int percentage)
         {
-            float quantity = (percentage * this.Attributes[GameAttribute.Hitpoints_Max]) / 100;
+            float quantity = (percentage * this.Attributes[GameAttribute.Hitpoints_Max_Total]) / 100;
             this.AddHP(quantity);
         }
 
