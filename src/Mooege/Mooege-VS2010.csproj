@@ -120,7 +120,7 @@
     <Compile Include="Core\GS\Actors\Implementations\Minions\MirrorImageMinion.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Minions\MysticAllyMinion.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Minions\ZombieDog.cs" />
-	<Compile Include="Core\GS\Actors\Implementations\Monsters\Monsters.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Monsters\Monsters.cs" />
     <Compile Include="Core\GS\Actors\Minion.cs" />
     <Compile Include="Core\GS\AI\Brains\AggressiveNPCBrain.cs" />
     <Compile Include="Core\GS\AI\Brains\MinionBrain.cs" />
@@ -132,6 +132,7 @@
     <Compile Include="Core\GS\Powers\Implementations\General\LevelUp.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\Ranged.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\StatusDebuffs.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\SummoningSkills.cs" />
     <Compile Include="Core\GS\Powers\Payloads\AttackPayload.cs" />
     <Compile Include="Core\GS\Powers\BaseBuffs.cs" />
     <Compile Include="Core\GS\Powers\BuffManager.cs" />
@@ -149,7 +150,7 @@
     <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Monk.cs" />
     <Compile Include="Core\GS\Powers\Implementations\HeroSkills\WitchDoctor.cs" />
     <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Wizard.cs" />
-	<Compile Include="Core\GS\Powers\Implementations\MonsterSkills\SingleProjectileSkills.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\MonsterSkills\SingleProjectileSkills.cs" />
     <Compile Include="Core\GS\Powers\ImplementsPowerSNO.cs" />
     <Compile Include="Core\GS\Powers\PowerContext.cs" />
     <Compile Include="Core\GS\Powers\PowerScript.cs" />

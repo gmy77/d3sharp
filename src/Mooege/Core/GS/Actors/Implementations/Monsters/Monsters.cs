@@ -317,6 +317,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         {
             this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(30592);
+            (Brain as MonsterBrain).AddPresetPower(30503);
+            (Brain as MonsterBrain).AddPresetPower(30543); //Summon Skeletons
         }
     }
     #endregion
@@ -409,6 +411,9 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
             : base(world, snoId, tags)
         {
             this.Brain = new MonsterBrain(this);
+            (Brain as MonsterBrain).AddPresetPower(30531);
+            (Brain as MonsterBrain).AddPresetPower(30530);
+            (Brain as MonsterBrain).AddPresetPower(30529); //Explode
         }
     }
     [HandledSNO(38484)]
@@ -530,12 +535,13 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         {
             this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(30592);
-            //(Brain as MonsterBrain).AddPresetPower(94734); // It doesn't work properly
+            (Brain as MonsterBrain).AddPresetPower(94734);
+            (Brain as MonsterBrain).AddPresetPower(110518);
             SetHitpoints_Max(13.38281f);
             SetHitpoints_Cur(13.38281f);
             SetDamage_Weapon_Min(4f);
             SetDamage_Weapon_Delta(6f);
-            //SetWalkSpeed(0f); //We hardcode this so RumFord doesnt kill her before u even grab the quest...
+            SetWalkSpeed(0.75f); 
         }
     }
     #endregion
