@@ -44,7 +44,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-[ImplementsPowerSNO(30334)] // Monster_Ranged_Projectile.pow
+    [ImplementsPowerSNO(30334)] // Monster_Ranged_Projectile.pow
     public class MonsterRangedProjectile : SingleProjectileSkill
     {
         public override IEnumerable<TickTimer> Main()
@@ -58,7 +58,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-[ImplementsPowerSNO(30258)] // graveRobber_Projectile.pow
+    [ImplementsPowerSNO(30258)] // graveRobber_Projectile.pow
     public class graveRobberProjectile : SingleProjectileSkill
     {
         public override IEnumerable<TickTimer> Main()
@@ -72,7 +72,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-[ImplementsPowerSNO(30503)] // SkeletonSummoner_Projectile.pow
+    [ImplementsPowerSNO(30503)] // SkeletonSummoner_Projectile.pow
     public class SkeletonSummonerProjectile : SingleProjectileSkill
     {
         public override IEnumerable<TickTimer> Main()
@@ -88,7 +88,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-[ImplementsPowerSNO(99077)] // Goatman_Shaman_Iceball.pow
+    [ImplementsPowerSNO(99077)] // Goatman_Shaman_Iceball.pow
     public class ShamanIceBallProjectile : SingleProjectileSkill
     {
         public override IEnumerable<TickTimer> Main()
@@ -104,7 +104,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-[ImplementsPowerSNO(129661)] // DemonHunter_Sentry_TurretAttack.pow
+    [ImplementsPowerSNO(129661)] // DemonHunter_Sentry_TurretAttack.pow
     public class TurretAttackProjectile : SingleProjectileSkill
     {
         public override IEnumerable<TickTimer> Main()
@@ -120,7 +120,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-[ImplementsPowerSNO(152540)] // Unique_Monster_Generic_Projectile.pow
+    [ImplementsPowerSNO(152540)] // Unique_Monster_Generic_Projectile.pow
     public class UniqueMonsterGenericProjectile : SingleProjectileSkill
     {
         //I believe this is correct, because uniques come in different elements
@@ -145,7 +145,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
-[ImplementsPowerSNO(107729)] // QuillDemon_Projectile.pow
+    [ImplementsPowerSNO(107729)] // QuillDemon_Projectile.pow
     public class QuillDemonProjectile : SingleProjectileSkill
     {
         public override IEnumerable<TickTimer> Main()
@@ -160,20 +160,20 @@ namespace Mooege.Core.GS.Powers.Implementations
             return Launch();
         }
     }
-[ImplementsPowerSNO(110518)] // ZombieFemale_Projectile.pow
-    public class WretchedMother : SingleProjectileSkill
+
+    [ImplementsPowerSNO(110518)] // ZombieFemale_Projectile.pow
+    public class WretchedMother_Projectile : SingleProjectileSkill
     {
         public override IEnumerable<TickTimer> Main()
         {
-            SetProjectile(this, 120957, User.Position, 1.10f, (hit) =>
+            SetProjectile(this, 120957, User.Position, 1.00f, (hit) =>
             {
                 hit.PlayEffectGroup(142812);
                 WeaponDamage(hit, 1.00f, DamageType.Poison);
                 projectile.Destroy();
             });
-            projectile.Position.Z = User.Position.Z;
+            projectile.Position.Z += 5f;  // fix height
             return Launch();
         }
     }
-
 }
