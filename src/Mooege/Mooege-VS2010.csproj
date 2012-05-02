@@ -131,9 +131,9 @@
     <Compile Include="Core\GS\Powers\Implementations\General\CooldownBuff.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\KnockbackBuff.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\LevelUp.cs" />
-    <Compile Include="Core\GS\Powers\Implementations\General\Ranged.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\StatusDebuffs.cs" />
-    <Compile Include="Core\GS\Powers\Implementations\General\SummoningSkills.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\SummonedBuff.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\MonsterSkills\SummoningSkills.cs" />
     <Compile Include="Core\GS\Powers\Payloads\AttackPayload.cs" />
     <Compile Include="Core\GS\Powers\BaseBuffs.cs" />
     <Compile Include="Core\GS\Powers\BuffManager.cs" />

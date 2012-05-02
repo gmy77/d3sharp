@@ -128,7 +128,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
             : base(world, snoId, tags)
         {
             this.Brain = new MonsterBrain(this);
-            SetDamage_Weapon_Min(15f);
+            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 15f;
         }
     }
     #endregion
@@ -354,7 +354,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
             : base(world, snoId, tags)
         {
             this.Brain = new MonsterBrain(this);
-            (Brain as MonsterBrain).AddPresetPower(30592);
         }
     }
     [HandledSNO(218400)]
@@ -554,11 +553,10 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
             : base(world, snoId, tags)
         {
             this.Brain = new MonsterBrain(this);
-            (Brain as MonsterBrain).AddPresetPower(30592);
             (Brain as MonsterBrain).AddPresetPower(94734);
             (Brain as MonsterBrain).AddPresetPower(110518);
-            SetDamage_Weapon_Min(4f);
-            SetDamage_Weapon_Delta(6f);
+            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 4f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 4f;
         }
     }
     #endregion
