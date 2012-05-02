@@ -128,8 +128,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
             : base(world, snoId, tags)
         {
             this.Brain = new MonsterBrain(this);
-            SetHitpoints_Max(15f);
-            SetHitpoints_Cur(15f);
             SetDamage_Weapon_Min(15f);
         }
     }
@@ -559,11 +557,8 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
             (Brain as MonsterBrain).AddPresetPower(30592);
             (Brain as MonsterBrain).AddPresetPower(94734);
             (Brain as MonsterBrain).AddPresetPower(110518);
-            SetHitpoints_Max(13.38281f);
-            SetHitpoints_Cur(13.38281f);
             SetDamage_Weapon_Min(4f);
             SetDamage_Weapon_Delta(6f);
-            SetWalkSpeed(0.75f); 
         }
     }
     #endregion

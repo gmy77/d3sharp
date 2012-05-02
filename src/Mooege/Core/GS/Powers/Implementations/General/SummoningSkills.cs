@@ -27,56 +27,55 @@ using Mooege.Core.GS.Ticker;
 using Mooege.Net.GS.Message;
 using Mooege.Core.GS.Actors;
 
-
 namespace Mooege.Core.GS.Powers.Implementations
 {
     public abstract class SummoningSkill : Skill
     {
-    [ImplementsPowerSNO(94734)] // Summon_Zombie_Vomit.pow
+        [ImplementsPowerSNO(94734)] // Summon_Zombie_Vomit.pow
         public class WretchedMotherVomit : SummoningSkill
         {
             public override IEnumerable<TickTimer> Main()
             {
-                    float x, y, z, castAngle = MovementHelpers.GetFacingAngle(User.Position, TargetPosition);
-                    x = User.Position.X + 8 * (float)Math.Cos(castAngle);
-                    y = User.Position.Y + 8 * (float)Math.Sin(castAngle);
-                    z = User.Position.Z;
-                    var actorSNO = (this.User as Monster).SNOSummon[0];
-                    yield return WaitSeconds(0.8f);
-                    var pos = new Vector3D(x, y, z);
-                    World.SpawnMonster(actorSNO, pos);
-                }
+                float x, y, z, castAngle = MovementHelpers.GetFacingAngle(User.Position, TargetPosition);
+                x = User.Position.X + 8 * (float)Math.Cos(castAngle);
+                y = User.Position.Y + 8 * (float)Math.Sin(castAngle);
+                z = User.Position.Z;
+                var actorSNO = (this.User as Monster).SNOSummons[0];
+                yield return WaitSeconds(0.8f);
+                var pos = new Vector3D(x, y, z);
+                World.SpawnMonster(actorSNO, pos);
             }
+        }
 
-    [ImplementsPowerSNO(30543)] // Summon Skeleton
-    public class SummonSkeleton : SummoningSkill
-    {
-        public override IEnumerable<TickTimer> Main()
+        [ImplementsPowerSNO(30543)] // Summon Skeleton
+        public class SummonSkeleton : SummoningSkill
         {
-            float x, y, z, castAngle = MovementHelpers.GetFacingAngle(User.Position, TargetPosition);
-            x = User.Position.X + 8 * (float)Math.Cos(castAngle);
-            y = User.Position.Y + 8 * (float)Math.Sin(castAngle);
-            z = User.Position.Z;
-            var actorSNO = (this.User as Monster).SNOSummon[0];
-            yield return WaitSeconds(0.8f);
-            var pos = new Vector3D(x, y, z);
-            World.SpawnMonster(actorSNO, pos);
+            public override IEnumerable<TickTimer> Main()
+            {
+                float x, y, z, castAngle = MovementHelpers.GetFacingAngle(User.Position, TargetPosition);
+                x = User.Position.X + 8 * (float)Math.Cos(castAngle);
+                y = User.Position.Y + 8 * (float)Math.Sin(castAngle);
+                z = User.Position.Z;
+                var actorSNO = (this.User as Monster).SNOSummons[0];
+                yield return WaitSeconds(0.8f);
+                var pos = new Vector3D(x, y, z);
+                World.SpawnMonster(actorSNO, pos);
+            }
         }
-    }
 
-    [ImplementsPowerSNO(30800)] // Summon Spores
-    public class SummonSpores : SummoningSkill
-    {
-        public override IEnumerable<TickTimer> Main()
+        [ImplementsPowerSNO(30800)] // Summon Spores
+        public class SummonSpores : SummoningSkill
         {
-            float x, y, z, castAngle = MovementHelpers.GetFacingAngle(User.Position, TargetPosition);
-            x = User.Position.X + 8 * (float)Math.Cos(castAngle);
-            y = User.Position.Y + 8 * (float)Math.Sin(castAngle);
-            z = User.Position.Z;
-            yield return WaitSeconds(1.0f); 
-            var pos = new Vector3D(x, y, z);
-            World.SpawnMonster(5482, pos);//HACK, we don't have this in mpq
+            public override IEnumerable<TickTimer> Main()
+            {
+                float x, y, z, castAngle = MovementHelpers.GetFacingAngle(User.Position, TargetPosition);
+                x = User.Position.X + 8 * (float)Math.Cos(castAngle);
+                y = User.Position.Y + 8 * (float)Math.Sin(castAngle);
+                z = User.Position.Z;
+                yield return WaitSeconds(1.0f);
+                var pos = new Vector3D(x, y, z);
+                World.SpawnMonster(5482, pos);//HACK, we don't have this in mpq
+            }
         }
     }
-        }
-    }
+}

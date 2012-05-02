@@ -30,6 +30,8 @@ using Mooege.Net.GS.Message.Definitions.Effect;
 using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Core.GS.Common.Types.TagMap;
 using MonsterFF = Mooege.Common.MPQ.FileFormats.Monster;
+using GameBalance = Mooege.Common.MPQ.FileFormats.GameBalance;
+using Mooege.Core.GS.Common.Types.SNO;
 
 namespace Mooege.Core.GS.Actors
 {
@@ -57,18 +59,39 @@ namespace Mooege.Core.GS.Actors
             }
         }
 
+        /// <summary>
+        /// Gets the Actors summoning fields from the mpq's and returns them in format for Monsters.
+        /// Useful for the Monsters spawning/summoning skills.
+        /// </summary>
+        public int[] SNOSummons
+        {
+            get
+            {
+                return (Monster.Target as MonsterFF).SNOSummonActor;
+            }
+        }
+
         public Monster(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
             this.Field2 = 0x8;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
             this.Attributes[GameAttribute.Experience_Granted] = 125;
-            SetHitpoints_Cur();
-            SetHitpoints_Max();
-            SetDamage_Weapon_Delta();
-            SetDamage_Weapon_Min();
-            SetAttacks_Per_Second();
 
+            // lookup GameBalance MonsterLevels.gam asset
+            var monsterLevels = (GameBalance)Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.GameBalance][19760].Data;
+            var monsterData = (Monster.Target as MonsterFF);
+
+            // always use normal difficulty levels for now
+            if (monsterData.Level.Normal >= 0 && monsterData.Level.Normal < monsterLevels.MonsterLevel.Count)
+            {
+                this.Attributes[GameAttribute.Hitpoints_Max] = monsterLevels.MonsterLevel[monsterData.Level.Normal].F0;
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
+                this.Attributes[GameAttribute.Attacks_Per_Second] = 1.0f;
+                this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 5f;
+                this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 7f;
+                this.WalkSpeed = monsterData.Floats[129];  // TODO: this is probably multiplied by something
+            }
         }
 
         public override void OnTargeted(Player player, TargetMessage message)
@@ -101,41 +124,19 @@ namespace Mooege.Core.GS.Actors
             }
         }
 
-        public void SetBrain(Mooege.Core.GS.AI.Brain brain)
-        {
-            this.Brain = brain;
-        }
-
-        public void SetHitpoints_Cur(float value=5f)
-        {
-            this.Attributes[GameAttribute.Hitpoints_Cur] = value;
-        }
-
-        public void SetHitpoints_Max(float value = 5f)
-        {
-            this.Attributes[GameAttribute.Hitpoints_Max] = value;
-        }
-
-        public void SetAttacks_Per_Second(float value = 1.0f)
+        public void SetAttacks_Per_Second(float value)
         {
             this.Attributes[GameAttribute.Attacks_Per_Second] = value;
         }
 
-        public void SetDamage_Weapon_Min(float value = 5f)
+        public void SetDamage_Weapon_Min(float value)
         {
-            this.Attributes[GameAttribute.Damage_Weapon_Min,0] = value;
+            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = value;
         }
 
-        public void SetDamage_Weapon_Delta(float value = 7f)
+        public void SetDamage_Weapon_Delta(float value)
         {
-            this.Attributes[GameAttribute.Damage_Weapon_Delta,0] = value;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = value;
         }
-
-        public void SetWalkSpeed(float value)
-        {
-            this.WalkSpeed = value;
-        }
-        
-        
     }
 }
