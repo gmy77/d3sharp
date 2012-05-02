@@ -63,6 +63,11 @@ namespace Mooege.Core.GS.Actors
             this.Field2 = 0x8;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
             this.Attributes[GameAttribute.Experience_Granted] = 125;
+            SetHitpoints_Cur();
+            SetHitpoints_Max();
+            SetDamage_Weapon_Delta();
+            SetDamage_Weapon_Min();
+            SetAttacks_Per_Second();
 
         }
 
@@ -100,5 +105,37 @@ namespace Mooege.Core.GS.Actors
         {
             this.Brain = brain;
         }
+
+        public void SetHitpoints_Cur(float value=5f)
+        {
+            this.Attributes[GameAttribute.Hitpoints_Cur] = value;
+        }
+
+        public void SetHitpoints_Max(float value = 5f)
+        {
+            this.Attributes[GameAttribute.Hitpoints_Max] = value;
+        }
+
+        public void SetAttacks_Per_Second(float value = 1.0f)
+        {
+            this.Attributes[GameAttribute.Attacks_Per_Second] = value;
+        }
+
+        public void SetDamage_Weapon_Min(float value = 5f)
+        {
+            this.Attributes[GameAttribute.Damage_Weapon_Min,0] = value;
+        }
+
+        public void SetDamage_Weapon_Delta(float value = 7f)
+        {
+            this.Attributes[GameAttribute.Damage_Weapon_Delta,0] = value;
+        }
+
+        public void SetWalkSpeed(float value)
+        {
+            this.WalkSpeed = value;
+        }
+        
+        
     }
 }
