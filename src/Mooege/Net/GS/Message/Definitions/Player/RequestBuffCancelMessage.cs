@@ -23,16 +23,11 @@ namespace Mooege.Net.GS.Message.Definitions.Player
 	/// <summary>
     /// Sent from the client when a buff is right clicked to be cancelled
     /// </summary>
-    [Message(Opcodes.RequestBuffCancelMessage)]
-    public class RequestBuffCancelMessage : GameMessage, ISelfHandler
+    [Message(Opcodes.RequestBuffCancelMessage, Consumers.Player)]
+    public class RequestBuffCancelMessage : GameMessage
     {
         public int /* sno */ PowerSNOId; // SNO of the power that activated the buff to be canceled
         public int Field1; // Might be ActorID, might be number of stacks to clear off?
-
-        public void Handle(GameClient client)
-        {
-            client.Player.World.BuffManager.RemoveBuffs(client.Player, PowerSNOId);
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

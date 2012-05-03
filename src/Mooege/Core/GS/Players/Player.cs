@@ -48,6 +48,8 @@ using Mooege.Core.GS.Actors.Implementations.Hirelings;
 using Mooege.Net.GS.Message.Definitions.Hireling;
 using Mooege.Common.Helpers;
 using Mooege.Net.GS.Message.Definitions.ACD;
+using Mooege.Net.GS.Message.Definitions.Animation;
+using Mooege.Net.GS.Message.Definitions.Tutorial;
 
 namespace Mooege.Core.GS.Players
 {
@@ -267,12 +269,12 @@ namespace Mooege.Core.GS.Players
             //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 4] = 3.051758E-05f;
             //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 5] = 3.051758E-05f;
             //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 6] = 3.051758E-05f;
-            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 2f;
+            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 6f;
             //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] = 2f;
             //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_All] = 2f;
             //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_MainHand, 0] = 2f;
             //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 0xFFFFF] = 3.051758E-05f;
-            this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 1f;
+            this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 3f;
             //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_SubTotal, 0] = 1f;
             //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 0] = 1f;
             //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 1] = 3.051758E-05f;
@@ -517,7 +519,25 @@ namespace Mooege.Core.GS.Players
             else if (message is HirelingDismissMessage) OnHirelingDismiss();
             //else if (message is SocketSpellMessage) OnSocketSpell(client, (SocketSpellMessage)message);
             else if (message is PlayerTranslateFacingMessage) OnTranslateFacing(client, (PlayerTranslateFacingMessage)message);
+            else if (message is SecondaryAnimationPowerMessage) OnSecondaryPowerMessage(client, (SecondaryAnimationPowerMessage)message);
+            else if (message is RequestBuffCancelMessage) OnRequestBuffCancel(client, (RequestBuffCancelMessage)message);
+            else if (message is CancelChanneledSkillMessage) OnCancelChanneledSkill(client, (CancelChanneledSkillMessage)message);
+            else if (message is TutorialShownMessage) OnTutorialShown(client, (TutorialShownMessage)message);
             else return;
+        }
+
+        private void OnTutorialShown(GameClient client, TutorialShownMessage message)
+        {
+            // Server has to save what tutorials are shown, so the player
+            // does not have to see them over and over...
+            for (int i = 0; i < this.SeenTutorials.Length; i++)
+            {
+                if (this.SeenTutorials[i] == -1)
+                {
+                    this.SeenTutorials[i] = message.SNOTutorial;
+                    break;
+                }
+            }
         }
 
         private void OnTranslateFacing(GameClient client, PlayerTranslateFacingMessage message)
@@ -734,6 +754,21 @@ namespace Mooege.Core.GS.Players
 
             this.CollectGold();
             this.CollectHealthGlobe();
+        }
+
+        private void OnCancelChanneledSkill(GameClient client, CancelChanneledSkillMessage message)
+        {
+            this.World.PowerManager.CancelChanneledSkill(this, message.PowerSNO);
+        }
+
+        private void OnRequestBuffCancel(GameClient client, RequestBuffCancelMessage message)
+        {
+            this.World.BuffManager.RemoveBuffs(this, message.PowerSNOId);
+        }
+
+        private void OnSecondaryPowerMessage(GameClient client, SecondaryAnimationPowerMessage message)
+        {
+            this.World.PowerManager.RunPower(this, message.PowerSNO);
         }
 
         private void OnTryWaypoint(GameClient client, TryWaypointMessage tryWaypointMessage)
@@ -1418,7 +1453,7 @@ namespace Mooege.Core.GS.Players
 
         public void AddPercentageHP(int percentage)
         {
-            float quantity = (percentage * this.Attributes[GameAttribute.Hitpoints_Max]) / 100;
+            float quantity = (percentage * this.Attributes[GameAttribute.Hitpoints_Max_Total]) / 100;
             this.AddHP(quantity);
         }
 

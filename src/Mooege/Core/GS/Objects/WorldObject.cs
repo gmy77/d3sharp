@@ -78,16 +78,6 @@ namespace Mooege.Core.GS.Objects
         public float RotationW { get; set; }
 
         /// <summary>
-        /// Replaces the object rotation with one that rotates along the Z-axis by the specified "facing" angle. 
-        /// </summary>
-        /// <param name="facingAngle">The angle in radians.</param>
-        public void SetFacingRotation(float facingAngle)
-        {
-            this.RotationW = (float)Math.Cos(facingAngle / 2f);
-            this.RotationAxis = new Vector3D(0, 0, (float)Math.Sin(facingAngle / 2f));
-        }
-
-        /// <summary>
         /// Creates a new world object.
         /// </summary>
         /// <param name="world">The world object belongs to.</param>

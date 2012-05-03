@@ -20,24 +20,19 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Skill
 {
-    [Message(Opcodes.DWordDataMessage3)]
-    public class CancelChanneledSkillMessage : GameMessage, ISelfHandler
+    [Message(Opcodes.DWordDataMessage3, Consumers.Player)]
+    public class CancelChanneledSkillMessage : GameMessage
     {
-        public int Field0;
-
-        public void Handle(GameClient client)
-        {
-            client.Player.World.PowerManager.CancelChanneledSkill(client.Player, Field0);
-        }
+        public int PowerSNO;
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
+            PowerSNO = buffer.ReadInt(32);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
+            buffer.WriteInt(32, PowerSNO);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -46,7 +41,7 @@ namespace Mooege.Net.GS.Message.Definitions.Skill
             b.AppendLine("CancelChanneledSkillMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8") + " (" + Field0 + ")");
+            b.Append(' ', pad); b.AppendLine("PowerSNO: 0x" + PowerSNO.ToString("X8") + " (" + PowerSNO + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

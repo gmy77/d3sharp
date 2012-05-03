@@ -1224,7 +1224,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override void OnChannelOpen()
         {
-            this.EffectsPerSecond = 0.1f;
+            this.EffectsPerSecond = 0.33f;
 
             if (Rune_B > 0)
             {

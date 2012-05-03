@@ -83,6 +83,7 @@ namespace Mooege.Core.MooNet.Web
             return AccountManager.TotalAccounts;
         }
 
+        [OperationContract]
         public bool ChangePassword(string email, string password)
         {
             if (string.IsNullOrEmpty(password))
