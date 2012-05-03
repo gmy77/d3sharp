@@ -79,7 +79,7 @@ namespace Mooege
 
 
             //Prefilling Database
-            Mooege.Common.Storage.AccountDataBase.SessionProvider.RebuildSchema();
+            Common.Storage.AccountDataBase.SessionProvider.RebuildSchema();
             if (!DBSessions.AccountSession.Query<DBAccount>().Any())
             {
                 Logger.Info("New Database, creating first Test account (Test@,testpass)");
@@ -158,9 +158,9 @@ namespace Mooege
         {
             var ex = e.ExceptionObject as Exception;
             if (e.IsTerminating)
-                Logger.FatalException((e.ExceptionObject as Exception), "Mooege terminating because of unhandled exception.");                
+                Logger.FatalException(ex, "Mooege terminating because of unhandled exception.");                
             else
-                Logger.ErrorException((e.ExceptionObject as Exception), "Caught unhandled exception.");
+                Logger.ErrorException(ex, "Caught unhandled exception.");
             Console.ReadLine();
         }
 
