@@ -85,8 +85,9 @@ namespace Mooege.Core.GS.Actors
             // always use normal difficulty levels for now
             if (monsterData.Level.Normal >= 0 && monsterData.Level.Normal < monsterLevels.MonsterLevel.Count)
             {
+                this.Attributes[GameAttribute.Level] = monsterData.Level.Normal;
                 this.Attributes[GameAttribute.Hitpoints_Max] = monsterLevels.MonsterLevel[monsterData.Level.Normal].F0;
-                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max];
+                this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
                 this.Attributes[GameAttribute.Attacks_Per_Second] = 1.0f;
                 this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 5f;
                 this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 5f;
