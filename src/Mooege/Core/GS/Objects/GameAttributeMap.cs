@@ -74,16 +74,25 @@ namespace Mooege.Core.GS.Objects
             string serialized = "";
             foreach (var pair in _attributeValues)
             {
+
+                var gameAttribute = GameAttribute.GetById(pair.Key.Id);
+
                 if (serialized.Length > 0)
                     serialized += ";";
-                var ValueF = Convert.ToString(pair.Value.ValueF);
+                
+
+                var values = RawGetAttributeValue(gameAttribute, pair.Key.Key);
+
+
+
+                var ValueF = Convert.ToString(values.ValueF);
                 float testFloat = 0.0f;
                 if (!float.TryParse(ValueF, out testFloat))
                 {
                     ValueF = "0.0";
                     Logger.Error("Could not save ValueF to DB, saving 0 instead of {0}", pair.Value.ValueF);
                 }
-                serialized += string.Format("{0},{1}:{2}|{3}", pair.Key.Id, pair.Key.Key, pair.Value.Value, ValueF);
+                serialized += string.Format("{0},{1}:{2}|{3}", pair.Key.Id, pair.Key.Key, values.Value, ValueF);
             }
             return serialized;//.ZipCompress();
         }
@@ -108,39 +117,29 @@ namespace Mooege.Core.GS.Objects
                     var values = pairParts[1].Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
                     var valueI = int.Parse(values[0].Trim());
-                    var valueF = float.Parse(values[1].Trim());
+                    var valueF = 0.0f;
+                    if (!float.TryParse(values[1].Trim(), out valueF))
+                    {
+                        Logger.Error("Error Parsing ValueF");
+                    }
+
                     var keyData = pairParts[0].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                     var attributeId = int.Parse(keyData[0].Trim());
                     var gameAttribute = GameAttribute.GetById(attributeId);
 
                     if (gameAttribute.ScriptFunc != null && !gameAttribute.ScriptedAndSettable)
                         continue;
-
+                    int? attributeKey = null;
                     if (keyData.Length > 1)
                     {
-                        var attributeKey = int.Parse(keyData[1].Trim());
-
-                        if (gameAttribute is GameAttributeB)
-                            this[gameAttribute as GameAttributeB, attributeKey] = valueI != 0;
-                        else if (gameAttribute is GameAttributeI)
-                            this[gameAttribute as GameAttributeI, attributeKey] = valueI;
-                        else if (gameAttribute is GameAttributeF)
-                            this[gameAttribute as GameAttributeF, attributeKey] = valueF;
-                    }
-                    else
-                    {
-
-                        if (gameAttribute is GameAttributeB)
-                            this[gameAttribute as GameAttributeB] = valueI != 0;
-                        else if (gameAttribute is GameAttributeI)
-                            this[gameAttribute as GameAttributeI] = valueI;
-                        else if (gameAttribute is GameAttributeF)
-                            this[gameAttribute as GameAttributeF] = valueF;
+                        attributeKey = int.Parse(keyData[1].Trim());
                     }
 
 
-
-
+                    var val = RawGetAttributeValue(gameAttribute, attributeKey);
+                    val.ValueF = valueF;
+                    val.Value = valueI;
+                    RawSetAttributeValue(gameAttribute, attributeKey, val);
                 }
                 catch (Exception exception)
                 {
