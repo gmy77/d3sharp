@@ -29,7 +29,6 @@ namespace Mooege.Core.GS.Objects
     public class GameAttributeMap
     {
         private static Logger Logger = LogManager.CreateLogger();
-
         private struct KeyId
         {
             // was using Id | (Key << 12) like Blizz at first but im not 100% sure it will work... /cm
@@ -62,11 +61,117 @@ namespace Mooege.Core.GS.Objects
         private Dictionary<KeyId, GameAttributeValue> _attributeValues = new Dictionary<KeyId, GameAttributeValue>();
         private WorldObject _parent;
 
+
         public GameAttributeMap(WorldObject parent)
         {
             _parent = parent;
         }
 
+
+        public string Serialize()
+        {
+            string serialized = "";
+            foreach (var pair in _attributeValues)
+            {
+                if (serialized.Length > 0)
+                    serialized += ";";
+
+                serialized += string.Format("{0},{1}:{2}|{3}", pair.Key.Id, pair.Key.Key, pair.Value.Value, pair.Value.ValueF);
+            }
+            return serialized;
+        }
+
+        public void FillBySerialized(string serializedGameAttributeMap)
+        {
+            var pairs = serializedGameAttributeMap.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            _attributeValues.Clear();
+            foreach (var pair in pairs)
+            {
+                try
+                {
+
+                    var pairParts = pair.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (pairParts.Length != 2)
+                    {
+                        Logger.Error("GA Deserializated error, skipping Bad Pair.");
+                        continue;
+                    }
+                    var values = pairParts[1].Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    var valueI = int.Parse(values[0].Trim());
+                    var valueF = float.Parse(values[1].Trim());
+                    var keyData = pairParts[0].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    var attributeId = int.Parse(keyData[0].Trim());
+                    var gameAttribute = GameAttribute.GetById(attributeId);
+
+                    if (gameAttribute.ScriptFunc != null && !gameAttribute.ScriptedAndSettable)
+                        continue;
+
+                    if (keyData.Length > 1)
+                    {
+                        var attributeKey = int.Parse(keyData[1].Trim());
+
+                        if (gameAttribute is GameAttributeB)
+                            this[gameAttribute as GameAttributeB, attributeKey] = valueI != 0;
+                        else if (gameAttribute is GameAttributeI)
+                            this[gameAttribute as GameAttributeI, attributeKey] = valueI;
+                        else if (gameAttribute is GameAttributeF)
+                            this[gameAttribute as GameAttributeF, attributeKey] = valueF;
+                    }
+                    else
+                    {
+
+                        if (gameAttribute is GameAttributeB)
+                            this[gameAttribute as GameAttributeB] = valueI != 0;
+                        else if (gameAttribute is GameAttributeI)
+                            this[gameAttribute as GameAttributeI] = valueI;
+                        else if (gameAttribute is GameAttributeF)
+                            this[gameAttribute as GameAttributeF] = valueF;
+                    }
+
+
+
+
+                }
+                catch (Exception exception)
+                {
+                    Logger.ErrorException(exception, "Error setting GA Value \"{0}\"", pair);
+                }
+            }
+
+        }
+        /*
+        public static GameAttributeMap Deserialize(WorldObject parent,string serializedGameAttributeMap)
+        {
+            var map = new GameAttributeMap(parent);
+            var pairs = serializedGameAttributeMap.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var pair in pairs)
+            {
+                var pairParts = pair.Split(new[] {':'}, StringSplitOptions.RemoveEmptyEntries);
+                var keyId = -1;
+                if (pairParts.Length != 2 || int.TryParse(pairParts[0].Trim(),out keyId))
+                {
+                    Logger.Error("GA Deserializated error, skipping.");
+                    continue;
+                }
+                var values = pairParts[1].Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+
+                var valueI = int.Parse(values[0].Trim());
+                var valueF = int.Parse(values[1].Trim());
+                var gameAttribute = GameAttribute.Attributes[keyId];
+                if (gameAttribute is GameAttributeB)
+
+                    map[gameAttribute as GameAttributeB] = valueI != 0;
+                else if (gameAttribute is GameAttributeI)
+                    map[gameAttribute as GameAttributeI] = valueI;
+                else if (gameAttribute is GameAttributeF)
+                    map[gameAttribute as GameAttributeF] = valueF;
+
+            }
+            return map;
+        }
+        */
         #region message broadcasting
 
         public void SendMessage(GameClient client)
@@ -82,7 +187,7 @@ namespace Mooege.Core.GS.Objects
             var list = GetMessageList();
             foreach (var msg in list)
             {
-                foreach(var client in clients)
+                foreach (var client in clients)
                     client.SendMessage(msg);
             }
             _changedAttributes.Clear();
@@ -326,7 +431,7 @@ namespace Mooege.Core.GS.Objects
             else if (attribute.EncodingType == GameAttributeEncoding.Float16)
             {
                 if (value.ValueF < GameAttribute.Float16Min || value.ValueF > GameAttribute.Float16Max)
-                    throw new ArgumentOutOfRangeException("GameAttribute." + attribute.Name.Replace(' ', '_'), "Min: " + GameAttribute.Float16Min  + " Max " + GameAttribute.Float16Max + " Tried to set: " + value.ValueF);
+                    throw new ArgumentOutOfRangeException("GameAttribute." + attribute.Name.Replace(' ', '_'), "Min: " + GameAttribute.Float16Min + " Max " + GameAttribute.Float16Max + " Tried to set: " + value.ValueF);
             }
 
             RawSetAttributeValue(attribute, key, value);

@@ -17,11 +17,13 @@
  */
 
 using System;
+using System.Data.SQLite;
 using System.Linq;
 using System.Collections.Generic;
 using Mooege.Common.Helpers.Hash;
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
+using Mooege.Common.Storage;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Common.MPQ.FileFormats;
@@ -41,6 +43,9 @@ namespace Mooege.Core.GS.Items
         private static readonly Dictionary<int, Type> GBIDHandlers = new Dictionary<int, Type>();
         private static readonly Dictionary<int, Type> TypeHandlers = new Dictionary<int, Type>();
         private static readonly HashSet<int> AllowedItemTypes = new HashSet<int>();
+
+
+
 
         public static int TotalItems
         {
@@ -111,13 +116,15 @@ namespace Mooege.Core.GS.Items
                 AllowedItemTypes.Add(hash);
             foreach (int hash in TypeHandlers.Keys)
             {
-                if (AllowedItemTypes.Contains(hash)) {
+                if (AllowedItemTypes.Contains(hash))
+                {
                     // already added structure
                     continue;
                 }
                 foreach (int subhash in ItemGroup.SubTypesToHashList(ItemGroup.FromHash(hash).Name))
                 {
-                    if (AllowedItemTypes.Contains(subhash)) {
+                    if (AllowedItemTypes.Contains(subhash))
+                    {
                         // already added structure
                         continue;
                     }
@@ -154,7 +161,7 @@ namespace Mooege.Core.GS.Items
                 itemDefinition = pool[RandomHelper.Next(0, pool.Count() - 1)];
 
                 if (itemDefinition.SNOActor == -1) continue;
-                
+
                 // if ((itemDefinition.ItemType1 == StringHashHelper.HashItemName("Book")) && (itemDefinition.BaseGoldValue != 0)) return itemDefinition; // testing books /xsochor
                 // if (itemDefinition.ItemType1 != StringHashHelper.HashItemName("Book")) continue; // testing books /xsochor
                 // if (!ItemGroup.SubTypesToHashList("SpellRune").Contains(itemDefinition.ItemType1)) continue; // testing spellrunes /xsochor
@@ -171,7 +178,7 @@ namespace Mooege.Core.GS.Items
 
                 if (!GBIDHandlers.ContainsKey(itemDefinition.Hash) &&
                     !AllowedItemTypes.Contains(itemDefinition.ItemType1)) continue;
-                              
+
                 found = true;
             }
 
@@ -199,6 +206,13 @@ namespace Mooege.Core.GS.Items
             }
 
             return type;
+        }
+
+        public static Item CloneItem(Item originalItem)
+        {
+            var clonedItem = CreateItem(originalItem.Owner, originalItem.ItemDefinition);
+            AffixGenerator.CloneIntoItem(originalItem, clonedItem);
+            return clonedItem;
         }
 
         // Creates an item based on supplied definition.
@@ -259,6 +273,78 @@ namespace Mooege.Core.GS.Items
         public static bool IsValidItem(string name)
         {
             return Items.ContainsKey(StringHashHelper.HashItemName(name));
+        }
+
+        public static void SaveToDB(Item item)
+        {
+            //Method only used when creating a Toon for the first time, ambiguous method name - Tharuler
+
+            var affixSer = SerializeAffixList(item.AffixList);
+            if (item.DBId < 0)
+            {
+                //item not in db, creating new
+
+                var query = string.Format("INSERT INTO item_entities (item_gbid,item_attributes,item_affixes) VALUES ({0},'{1}','{2}');select last_insert_rowid(); ", item.GBHandle.GBID, item.Attributes.Serialize(), affixSer);
+                var cmd = new SQLiteCommand(query, DBManager.Connection);
+                var insertID=cmd.ExecuteScalar();
+                item.DBId = Convert.ToInt32(insertID);
+            }
+            else
+            {
+                //item in db, updating
+                var query = string.Format("UPDATE item_entities SET item_gbid={0},item_attributes='{1}',item_affixes='{2}' WHERE id={3}", item.GBHandle.GBID, item.Attributes.Serialize(), affixSer, item.DBId);
+                var cmd = new SQLiteCommand(query, DBManager.Connection);
+                cmd.ExecuteNonQuery();
+            }
+
+
+        }
+
+
+        public static void DeleteFromDB(Item item)
+        {
+            if (item.DBId < 0)
+                return;
+
+            var deletequery = string.Format("DELETE FROM item_entities WHERE id={0}", item.DBId);
+            var cmd = new SQLiteCommand(deletequery, DBManager.Connection);
+            cmd.ExecuteNonQuery();
+        }
+
+        public static Item LoadFromDB(Map.World ownerWorld, int dbID)
+        {
+            var query = string.Format("SELECT * FROM item_entities WHERE id={0}", dbID);
+            var cmd = new SQLiteCommand(query, DBManager.Connection);
+            var reader = cmd.ExecuteReader();
+
+            if (!reader.HasRows)
+                return null;
+
+            reader.Read();
+
+            var gbid = Convert.ToInt32(reader["item_gbid"]);
+            var attributesSer = (string)reader["item_attributes"];
+            var affixesSer = (string)reader["item_affixes"];
+            var table = Items[gbid];
+
+
+            var itm = new Item(ownerWorld, table, DeSerializeAffixList(affixesSer), attributesSer);
+            itm.DBId = dbID;
+            return itm;
+        }
+
+        public static string SerializeAffixList(List<Affix> affixList)
+        {
+            var affixgbIdList = affixList.Select(af => af.AffixGbid);
+            var affixSer = affixgbIdList.Aggregate(",", (current, affixId) => current + (affixId + ",")).Trim(new[] { ',' });
+            return affixSer;
+        }
+
+        public static List<Affix>  DeSerializeAffixList(string serializedAffixList)
+        {
+            var affixListStr = serializedAffixList.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var affixList = affixListStr.Select(int.Parse).Select(affixId => new Affix(affixId)).ToList();
+            return affixList;
         }
     }
 

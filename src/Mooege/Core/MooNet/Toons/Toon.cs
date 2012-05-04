@@ -62,7 +62,8 @@ namespace Mooege.Core.MooNet.Toons
         /// True if toon has been recently deleted;
         /// </summary>
         private bool _deleted = false;
-        public bool Deleted {
+        public bool Deleted
+        {
             get
             {
                 return _deleted;
@@ -82,7 +83,8 @@ namespace Mooege.Core.MooNet.Toons
         /// Toon's name.
         /// </summary>
         private string _name;
-        public string Name {
+        public string Name
+        {
             get
             {
                 return _name;
@@ -350,8 +352,8 @@ namespace Mooege.Core.MooNet.Toons
         {
             this.D3EntityID = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId).SetIdLow(this.PersistentID).Build();
 
-            var sqlQuery  = string.Format("SELECT * FROM toons WHERE id = {0}", persistentId);
-            var sqlCmd    = new SQLiteCommand(sqlQuery, DBManager.Connection);
+            var sqlQuery = string.Format("SELECT * FROM toons WHERE id = {0}", persistentId);
+            var sqlCmd = new SQLiteCommand(sqlQuery, DBManager.Connection);
             var sqlReader = sqlCmd.ExecuteReader();
 
             // Use name of column to prevent errors if column moved
@@ -379,7 +381,7 @@ namespace Mooege.Core.MooNet.Toons
                 D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Shoulders
                 D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Legs
             };
-            
+
             // Load Visual Equipment
             Dictionary<int, int> visualToSlotMapping = new Dictionary<int, int>();
             visualToSlotMapping.Add(1, 0);
@@ -390,7 +392,7 @@ namespace Mooege.Core.MooNet.Toons
             visualToSlotMapping.Add(3, 5);
             visualToSlotMapping.Add(8, 6);
             visualToSlotMapping.Add(9, 7);
-            
+
             //add visual equipment form DB, only the visualizable equipment, not everything
             var itemQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND equipment_slot <> -1 AND item_id <> -1", persistentId);
             var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
@@ -515,6 +517,11 @@ namespace Mooege.Core.MooNet.Toons
                 // Remove from DB
                 if (!ExistsInDB()) return false;
 
+
+                var deleteInstancedItemsQuery = string.Format("DELETE FROM item_entities WHERE id IN (SELECT item_id FROM inventory WHERE toon_id={0})", this.PersistentID);
+                var deleteInstancedItemsCmd = new SQLiteCommand(deleteInstancedItemsQuery, DBManager.Connection);
+                deleteInstancedItemsCmd.ExecuteNonQuery();
+
                 //delete items from DB
                 var itemQuery = string.Format("DELETE FROM inventory WHERE toon_id={0}", this.PersistentID);
                 var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
@@ -529,8 +536,8 @@ namespace Mooege.Core.MooNet.Toons
                 var query = string.Format("DELETE FROM toons WHERE id={0}", this.PersistentID);
                 var cmd = new SQLiteCommand(query, DBManager.Connection);
                 cmd.ExecuteNonQuery();
-				
-				Logger.Debug("Deleting toon {0}",this.PersistentID);
+
+                Logger.Debug("Deleting toon {0}", this.PersistentID);
                 return true;
             }
             catch (Exception e)
@@ -557,7 +564,7 @@ namespace Mooege.Core.MooNet.Toons
             return reader.HasRows;
         }
     }
-    #endregion
+        #endregion
 
     #region Definitions and Enums
     //Order is important as actor voices and saved data is based on enum index

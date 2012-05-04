@@ -184,7 +184,7 @@ namespace Mooege.Core.GS.Players
         public void BuyItem(Item originalItem)
         {
             // TODO: Create a copy instead of random.
-            var newItem = ItemGenerator.CreateItem(_owner, originalItem.ItemDefinition);
+            var newItem = ItemGenerator.CloneItem(originalItem);
             _inventoryGrid.AddItem(newItem);
         }
 
@@ -394,7 +394,7 @@ namespace Mooege.Core.GS.Players
             itemFrom.Attributes[GameAttribute.ItemStackQuantityLo] -= (int)msg.Amount;
             itemFrom.Attributes.SendChangedMessage(_owner.InGameClient);
 
-            Item item = ItemGenerator.CreateItem(_owner, itemFrom.ItemDefinition);
+            Item item = ItemGenerator.CloneItem(itemFrom);
             item.Attributes[GameAttribute.ItemStackQuantityLo] = (int)msg.Amount;
 
             InventoryGrid targetGrid = (msg.InvLoc.EquipmentSlot == (int)EquipmentSlotId.Stash) ? _stashGrid : _inventoryGrid;
@@ -678,12 +678,13 @@ namespace Mooege.Core.GS.Players
                     var gbid = Convert.ToInt32(stashReader["item_id"]);
                     if (slot == (int)EquipmentSlotId.Gold)
                     {
-                        goldAmount = Convert.ToInt32(stashReader["item_id"]);// is the amount
+                        goldAmount = Convert.ToInt32(gbid);// is the amount
                     }
                     else if (slot == (int)EquipmentSlotId.Stash)
                     {
                         // load stash
-                        item = ItemGenerator.CreateItem(_owner, ItemGenerator.GetItemDefinition(gbid));
+                        item = ItemGenerator.LoadFromDB(this._owner.World,gbid);
+                        item.Owner = this._owner;
                         this._stashGrid.AddItem(item, Convert.ToInt32(stashReader["inventory_loc_y"]), Convert.ToInt32(stashReader["inventory_loc_x"]));
                     }
                 }
@@ -697,10 +698,11 @@ namespace Mooege.Core.GS.Players
                 while (itemsReader.Read())
                 {
                     var slot = Convert.ToInt32(itemsReader["equipment_slot"]);
-                    var gbid = Convert.ToInt32(itemsReader["item_id"]);
+                    var item_instance_id = Convert.ToInt32(itemsReader["item_id"]);
                     if (slot >= (int)EquipmentSlotId.Inventory && slot <= (int)EquipmentSlotId.Neck)
                     {
-                        item = ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(gbid));
+                        item = ItemGenerator.LoadFromDB(this._owner.World, item_instance_id);// ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(gbid));
+                        item.Owner = this._owner;
                         if (slot == (int)EquipmentSlotId.Inventory)
                         {
                             this._inventoryGrid.AddItem(item, Convert.ToInt32(itemsReader["inventory_loc_y"]), Convert.ToInt32(itemsReader["inventory_loc_x"]));
@@ -755,8 +757,11 @@ namespace Mooege.Core.GS.Players
         {
             if (item == null)
                 return;
+            ItemGenerator.SaveToDB(item);
+            var itemInstanceId = item.DBId;
+
             var itemQuery = string.Format("INSERT INTO inventory (account_id, toon_id, inventory_loc_x, inventory_loc_y, equipment_slot, item_id) VALUES ({0}, {1}, {2}, {3}, {4}, {5})",
-                account_id, toon_id, item.InventoryLocation.X, item.InventoryLocation.Y, (int)slotId, item.GBHandle.GBID);
+                account_id, toon_id, item.InventoryLocation.X, item.InventoryLocation.Y, (int)slotId, itemInstanceId);
             var itemCmd = new SQLiteCommand(itemQuery, DBManager.Connection);
             var itemReader = itemCmd.ExecuteNonQuery();
         }

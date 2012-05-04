@@ -26,7 +26,7 @@ namespace Mooege.Net.GS.Message
 
         static GameAttribute()
         {
-            Attributes = typeof (GameAttribute).GetFields()
+            Attributes = typeof(GameAttribute).GetFields()
                 .Where(a =>
                        a.IsStatic &&
                        (a.FieldType.Name == "GameAttributeI" ||
@@ -47,6 +47,11 @@ namespace Mooege.Net.GS.Message
                 Resistance_From_Intelligence.Dependents.Add(
                     new GameAttributeDependency(Resistance_Total, n, true, true));
             }
+        }
+
+        public static GameAttribute GetById(int Id)
+        {
+            return Attributes.Single(x => x.Id == Id);
         }
 
         // Caution: Be advised, converting these attribs from Int to Float may crash d3 client or make it throw an error! Do it with caution if needed any! /raist.
