@@ -75,7 +75,7 @@ namespace Mooege.Core.GS.Objects
             foreach (var pair in _attributeValues)
             {
 
-                var gameAttribute = GameAttribute.GetById(pair.Key.Id);
+                var gameAttribute = GameAttribute.Attributes[pair.Key.Id];//GameAttribute.GetById(pair.Key.Id);
 
                 if (serialized.Length > 0)
                     serialized += ";";
@@ -125,7 +125,7 @@ namespace Mooege.Core.GS.Objects
 
                     var keyData = pairParts[0].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                     var attributeId = int.Parse(keyData[0].Trim());
-                    var gameAttribute = GameAttribute.GetById(attributeId);
+                    var gameAttribute = GameAttribute.Attributes[attributeId];// .GetById(attributeId);
 
                     if (gameAttribute.ScriptFunc != null && !gameAttribute.ScriptedAndSettable)
                         continue;

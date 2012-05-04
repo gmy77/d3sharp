@@ -49,11 +49,6 @@ namespace Mooege.Net.GS.Message
             }
         }
 
-        public static GameAttribute GetById(int Id)
-        {
-            return Attributes.Single(x => x.Id == Id);
-        }
-
         // Caution: Be advised, converting these attribs from Int to Float may crash d3 client or make it throw an error! Do it with caution if needed any! /raist.
         // Attack, Precision, Vitality, Defense
 
