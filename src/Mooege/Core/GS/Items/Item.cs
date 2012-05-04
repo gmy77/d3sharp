@@ -424,6 +424,8 @@ namespace Mooege.Core.GS.Items
         public void Drop(Player owner, Vector3D position)
         {
             this.Owner = owner;
+            if (this.Owner==null)
+                ItemGenerator.DeleteFromDB(this);
             this.EnterWorld(position);
         }
 

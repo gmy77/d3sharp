@@ -280,20 +280,22 @@ namespace Mooege.Core.GS.Items
             //Method only used when creating a Toon for the first time, ambiguous method name - Tharuler
 
             var affixSer = SerializeAffixList(item.AffixList);
+            var cmd = DBManager.Connection.CreateCommand();
             if (item.DBId < 0)
             {
                 //item not in db, creating new
-
-                var query = string.Format("INSERT INTO item_entities (item_gbid,item_attributes,item_affixes) VALUES ({0},'{1}','{2}');select last_insert_rowid(); ", item.GBHandle.GBID, item.Attributes.Serialize(), affixSer);
-                var cmd = new SQLiteCommand(query, DBManager.Connection);
-                var insertID=cmd.ExecuteScalar();
+                cmd.CommandText=string.Format("INSERT INTO item_entities (item_gbid,item_attributes,item_affixes) VALUES ({0},@item_attributes,@item_affixes);select last_insert_rowid(); ", item.GBHandle.GBID);
+                cmd.Parameters.Add(new SQLiteParameter("@item_attributes", item.Attributes.Serialize()));
+                cmd.Parameters.Add(new SQLiteParameter("@item_affixes", affixSer));
+                var insertID = cmd.ExecuteScalar();
                 item.DBId = Convert.ToInt32(insertID);
             }
             else
             {
                 //item in db, updating
-                var query = string.Format("UPDATE item_entities SET item_gbid={0},item_attributes='{1}',item_affixes='{2}' WHERE id={3}", item.GBHandle.GBID, item.Attributes.Serialize(), affixSer, item.DBId);
-                var cmd = new SQLiteCommand(query, DBManager.Connection);
+                cmd.CommandText = string.Format("UPDATE item_entities SET item_gbid={0},item_attributes=@item_attributes,item_affixes=@item_affixes WHERE id={3}", item.GBHandle.GBID);
+                cmd.Parameters.Add(new SQLiteParameter("@item_attributes", item.Attributes.Serialize()));
+                cmd.Parameters.Add(new SQLiteParameter("@item_affixes", affixSer));
                 cmd.ExecuteNonQuery();
             }
 

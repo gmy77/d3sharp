@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mooege.Common.Extensions;
 using Mooege.Net.GS.Message.Definitions.Attribute;
 using System.Linq;
 using Mooege.Net.GS.Message;
@@ -78,11 +79,12 @@ namespace Mooege.Core.GS.Objects
 
                 serialized += string.Format("{0},{1}:{2}|{3}", pair.Key.Id, pair.Key.Key, pair.Value.Value, pair.Value.ValueF);
             }
-            return serialized;
+            return serialized;//.ZipCompress();
         }
 
-        public void FillBySerialized(string serializedGameAttributeMap)
+        public void FillBySerialized(string serializedGameAttributeMapCompressed)
         {
+            var serializedGameAttributeMap = serializedGameAttributeMapCompressed;//.UnZipCompress();
             var pairs = serializedGameAttributeMap.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             _attributeValues.Clear();
             foreach (var pair in pairs)
