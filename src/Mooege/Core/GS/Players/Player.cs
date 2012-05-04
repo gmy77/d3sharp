@@ -894,7 +894,7 @@ namespace Mooege.Core.GS.Players
 
             // save all inventory items
             this.Inventory.SaveToDB();
-            ItemGenerator.Cleanup(world);
+            ItemGenerator.Cleanup(this);
         }
 
         public override bool Reveal(Player player)

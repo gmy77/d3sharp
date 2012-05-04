@@ -668,23 +668,31 @@ namespace Mooege.Core.GS.Players
                 _stashGrid.ResizeGrid(_owner.Attributes[GameAttribute.Shared_Stash_Slots] / 7, 7);
             }
             // next load all stash items and gold
-            var stashQuery = string.Format("SELECT * FROM inventory WHERE account_id = {0} AND toon_id = -1 AND item_id <> -1", _owner.Toon.GameAccount.PersistentID);
+            var stashQuery = string.Format("SELECT * FROM inventory i LEFT JOIN item_entities ie ON i.item_id=ie.id  WHERE i.account_id = {0} AND i.toon_id = -1 AND i.item_id <> -1 ", _owner.Toon.GameAccount.PersistentID);
+            
+
             var stashCmd = new SQLiteCommand(stashQuery, DBManager.Connection);
             var stashReader = stashCmd.ExecuteReader();
+            
             if (stashReader.HasRows)
             {
                 while (stashReader.Read())
                 {
                     var slot = Convert.ToInt32(stashReader["equipment_slot"]);
-                    var gbid = Convert.ToInt32(stashReader["item_id"]);
+                    var instance_id = Convert.ToInt32(stashReader["item_id"]);
                     if (slot == (int)EquipmentSlotId.Gold)
                     {
-                        goldAmount = Convert.ToInt32(gbid);// is the amount
+                        goldAmount = Convert.ToInt32(instance_id);// is the amount
                     }
                     else if (slot == (int)EquipmentSlotId.Stash)
                     {
                         // load stash
-                        item = ItemGenerator.LoadFromDB(this._owner.World, gbid);
+                        var gbid = Convert.ToInt32(stashReader["item_gbid"]);
+                        var attributesSer = (string)stashReader["item_attributes"];
+                        var affixesSer = (string)stashReader["item_affixes"];
+                        
+                        //item = ItemGenerator.LoadFromDB(this._owner, gbid);
+                        item = ItemGenerator.LoadFromValues(this._owner, instance_id, gbid, attributesSer, affixesSer);
                         if (item != null)
                         {
                             item.Owner = this._owner;
@@ -699,7 +707,8 @@ namespace Mooege.Core.GS.Players
                 }
             }
             // next read all items
-            var itemsQuery = string.Format("SELECT * FROM inventory WHERE toon_id = {0} AND item_id <> -1", _owner.Toon.PersistentID);
+            var itemsQuery = string.Format("SELECT * FROM inventory i LEFT JOIN item_entities ie ON i.item_id=ie.id  WHERE toon_id = {0} AND item_id <> -1", _owner.Toon.PersistentID);
+
             var itemsCmd = new SQLiteCommand(itemsQuery, DBManager.Connection);
             var itemsReader = itemsCmd.ExecuteReader();
             if (itemsReader.HasRows)
@@ -707,10 +716,14 @@ namespace Mooege.Core.GS.Players
                 while (itemsReader.Read())
                 {
                     var slot = Convert.ToInt32(itemsReader["equipment_slot"]);
-                    var item_instance_id = Convert.ToInt32(itemsReader["item_id"]);
+                    var instance_id = Convert.ToInt32(itemsReader["item_id"]);
                     if (slot >= (int)EquipmentSlotId.Inventory && slot <= (int)EquipmentSlotId.Neck)
                     {
-                        item = ItemGenerator.LoadFromDB(this._owner.World, item_instance_id);// ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(gbid));
+                        var gbid = Convert.ToInt32(itemsReader["item_gbid"]);
+                        var attributesSer = (string)itemsReader["item_attributes"];
+                        var affixesSer = (string)itemsReader["item_affixes"];
+                        //item = ItemGenerator.LoadFromDB(this._owner, item_instance_id);// ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(gbid));
+                        item = ItemGenerator.LoadFromValues(this._owner, instance_id, gbid, attributesSer, affixesSer);
                         if (item != null)
                         {
                             item.Owner = this._owner;
