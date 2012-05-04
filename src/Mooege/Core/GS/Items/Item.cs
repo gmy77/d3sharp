@@ -147,21 +147,21 @@ namespace Mooege.Core.GS.Items
 
             // level requirement
             // Attributes[GameAttribute.Requirement, 38] = definition.RequiredLevel;
-
+            /*
             Attributes[GameAttribute.Item_Quality_Level] = 1;
             if (Item.IsArmor(this.ItemType) || Item.IsWeapon(this.ItemType) || Item.IsOffhand(this.ItemType))
                 Attributes[GameAttribute.Item_Quality_Level] = RandomHelper.Next(6);
             if (this.ItemType.Flags.HasFlag(ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
                 Attributes[GameAttribute.Item_Quality_Level] = 3;
-
-            Attributes[GameAttribute.ItemStackQuantityLo] = 1;
-            Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
-
+            */
+            //Attributes[GameAttribute.ItemStackQuantityLo] = 1;
+            //Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
+            /*
             RandomGenerator = new ItemRandomHelper(Attributes[GameAttribute.Seed]);
             RandomGenerator.Next();
             if (Item.IsArmor(this.ItemType))
                 RandomGenerator.Next(); // next value is used but unknown if armor
-            RandomGenerator.ReinitSeed();
+            RandomGenerator.ReinitSeed();*/
         }
 
 
@@ -185,8 +185,8 @@ namespace Mooege.Core.GS.Items
 
 
 
-          
-            
+
+
 
         }
         public Item(GS.Map.World world, ItemTable definition)
@@ -216,6 +216,8 @@ namespace Mooege.Core.GS.Items
             ApplyArmorSpecificOptions(definition);
             ApplyDurability(definition);
             ApplySkills(definition);
+            ApplyAttributeSpecifier(definition);
+
             int affixNumber = 1;
             if (Attributes[GameAttribute.Item_Quality_Level] >= 3)
                 affixNumber = Attributes[GameAttribute.Item_Quality_Level] - 2;
@@ -424,7 +426,7 @@ namespace Mooege.Core.GS.Items
         public void Drop(Player owner, Vector3D position)
         {
             this.Owner = owner;
-            if (this.Owner==null)
+            if (this.Owner == null)
                 ItemGenerator.DeleteFromDB(this);
             this.EnterWorld(position);
         }
