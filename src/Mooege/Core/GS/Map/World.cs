@@ -45,6 +45,10 @@ namespace Mooege.Core.GS.Map
     public sealed class World : DynamicObject, IRevealable, IUpdateable
     {
         static readonly Logger Logger = LogManager.CreateLogger();
+        public readonly Dictionary<World, List<Item>> DbItems = new Dictionary<World, List<Item>>(); //we need this list to delete item_instances from items which have no owner anymore.
+        public readonly Dictionary<int, Item> CachedItems = new Dictionary<int, Item>();
+
+
 
         /// <summary>
         /// Game that the world belongs to.
@@ -788,6 +792,18 @@ namespace Mooege.Core.GS.Map
             }
             // Location not inside a known scene - DarkLotus
             return false;
+        }
+
+        public void CleanupItemInstances()
+        {
+            if (DbItems.ContainsKey(this))
+            {
+                var itemInstancesToDelete = DbItems[this].Where(dbi => dbi.Owner == null);
+                foreach (var itm in itemInstancesToDelete)
+                    ItemGenerator.DeleteFromDB(itm);
+                DbItems.Remove(this);
+            }
+
         }
 
 

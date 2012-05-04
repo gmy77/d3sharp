@@ -44,8 +44,9 @@ namespace Mooege.Core.GS.Items
         private static readonly Dictionary<int, Type> GBIDHandlers = new Dictionary<int, Type>();
         private static readonly Dictionary<int, Type> TypeHandlers = new Dictionary<int, Type>();
         private static readonly HashSet<int> AllowedItemTypes = new HashSet<int>();
-        private static readonly Dictionary<Player, List<Item>> DbItems = new Dictionary<Player, List<Item>>(); //we need this list to delete item_instances from items which have no owner anymore.
-        private static readonly Dictionary<int, Item> CachedItems = new Dictionary<int, Item>();
+        
+        //private static readonly Dictionary<Player, List<Item>> DbItems = new Dictionary<Player, List<Item>>(); //we need this list to delete item_instances from items which have no owner anymore.
+        //private static readonly Dictionary<int, Item> CachedItems = new Dictionary<int, Item>();
 
 
 
@@ -316,8 +317,8 @@ namespace Mooege.Core.GS.Items
                     cmd.Parameters.Add(new SQLiteParameter("@item_attributes", attributesSer));
                     cmd.Parameters.Add(new SQLiteParameter("@item_affixes", affixSer));
                     cmd.ExecuteNonQuery();
-                    if (CachedItems.ContainsKey(item.DBId))
-                        CachedItems.Remove(item.DBId);//clearing cache to reRead item from database to find errors earlier.
+                    if (item.World.CachedItems.ContainsKey(item.DBId))
+                        item.World.CachedItems.Remove(item.DBId);//clearing cache to reRead item from database to find errors earlier.
                 }
             }
 
@@ -333,8 +334,8 @@ namespace Mooege.Core.GS.Items
             if (item.DBId < 0)
                 return;
             Logger.Debug("Deleting Item instance #{0} from DB", item.DBId);
-            if (CachedItems.ContainsKey(item.DBId))
-                CachedItems.Remove(item.DBId);
+            if (item.World.CachedItems.ContainsKey(item.DBId))
+                item.World.CachedItems.Remove(item.DBId);
             var deletequery = string.Format("DELETE FROM item_entities WHERE id={0}", item.DBId);
             var cmd = new SQLiteCommand(deletequery, DBManager.Connection);
             cmd.ExecuteNonQuery();
@@ -346,10 +347,10 @@ namespace Mooege.Core.GS.Items
         public static Item LoadFromDB(Player owner, int dbID)
         {
 
-            if (CachedItems.ContainsKey(dbID))
+            if (owner.World.CachedItems.ContainsKey(dbID))
             {
                 Logger.Debug("Getting item instance #{0} from Cache", dbID);
-                return CachedItems[dbID];
+                return owner.World.CachedItems[dbID];
             }
             var timestart = DateTime.Now;
 
@@ -377,12 +378,12 @@ namespace Mooege.Core.GS.Items
             var table = Items[gbid];
             var itm = new Item(owner.World, table, DeSerializeAffixList(affixesSer), attributesSer);
             itm.DBId = dbID;
-            if (!DbItems.ContainsKey(owner))
-                DbItems.Add(owner, new List<Item>());
-            if (!DbItems[owner].Contains(itm))
-                DbItems[owner].Add(itm);
+            if (!owner.World.DbItems.ContainsKey(owner.World))
+                owner.World.DbItems.Add(owner.World, new List<Item>());
+            if (!owner.World.DbItems[owner.World].Contains(itm))
+                owner.World.DbItems[owner.World].Add(itm);
 
-            CachedItems[itm.DBId] = itm;
+            owner.World.CachedItems[itm.DBId] = itm;
             serAffixesHashes[dbID] = itm.AffixList.GetHashCode();
             serAttributesHashes[dbID] = itm.Attributes.GetHashCode();
             return itm;
@@ -392,7 +393,7 @@ namespace Mooege.Core.GS.Items
         {
             var timestart = DateTime.Now;
             var results = new List<Item>();
-            results.AddRange(CachedItems.Where(citm => dbIDs.Contains(citm.Key)).Select(citm => citm.Value));
+            results.AddRange(owner.World.CachedItems.Where(citm => dbIDs.Contains(citm.Key)).Select(citm => citm.Value));
 
 
 
@@ -422,17 +423,6 @@ namespace Mooege.Core.GS.Items
             var timeTaken = DateTime.Now - timestart;
             Logger.Debug("Loaded {0} item_instances from Database, took {1} msec", results.Count, timeTaken.TotalMilliseconds);
             return results.ToArray();
-        }
-        public static void Cleanup(Player owner)
-        {
-            if (DbItems.ContainsKey(owner))
-            {
-                var itemInstancesToDelete = DbItems[owner].Where(dbi => dbi.Owner == null);
-                foreach (var itm in itemInstancesToDelete)
-                    DeleteFromDB(itm);
-                DbItems.Remove(owner);
-            }
-
         }
 
         public static string SerializeAffixList(List<Affix> affixList)
