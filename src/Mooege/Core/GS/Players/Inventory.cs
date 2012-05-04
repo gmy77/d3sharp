@@ -65,12 +65,12 @@ namespace Mooege.Core.GS.Players
 
         private void AcceptMoveRequest(Item item)
         {
-           /* _owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
-            {
-                ItemId = item.DynamicID,
-                InventoryLocation = item.InventoryLocationMessage,
-                Field2 = 1 // what does this do?  // 0 - source item not disappearing from inventory, 1 - Moving, any other possibilities? its an int32
-            }); */
+            /* _owner.InGameClient.SendMessage(new ACDInventoryPositionMessage()
+             {
+                 ItemId = item.DynamicID,
+                 InventoryLocation = item.InventoryLocationMessage,
+                 Field2 = 1 // what does this do?  // 0 - source item not disappearing from inventory, 1 - Moving, any other possibilities? its an int32
+             }); */
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace Mooege.Core.GS.Players
         {
             _inventoryGrid.AddItem(item);
         }
-        
+
         /// <summary>
         /// Picks an item up after client request
         /// </summary>
@@ -161,7 +161,7 @@ namespace Mooege.Core.GS.Players
                 item.CurrentState = ItemState.Normal;
                 AcceptMoveRequest(item);
             }
-          
+
             return success;
         }
 
@@ -175,12 +175,12 @@ namespace Mooege.Core.GS.Players
         {
             this._equipment.EquipItem(item, slot);
         }
- 	 
+
         private List<Item> FindSameItems(int gbid)
         {
             return _inventoryGrid.Items.Values.Where(i => i.GBHandle.GBID == gbid).ToList();
         }
-       
+
         public void BuyItem(Item originalItem)
         {
             // TODO: Create a copy instead of random.
@@ -359,7 +359,7 @@ namespace Mooege.Core.GS.Players
                     //remove object first to make room for possible unequiped item
                     _inventoryGrid.RemoveItem(item);
 
-                    if(itemMainHand != null)
+                    if (itemMainHand != null)
                     {
                         _equipment.UnequipItem(itemMainHand);
                         _inventoryGrid.AddItem(itemMainHand);
@@ -652,6 +652,7 @@ namespace Mooege.Core.GS.Players
             // LoadFromDB is called every time World is changed, even entering a dungeon
             _stashGrid.Clear();
             _inventoryGrid.Clear();
+            _equipment.Items.Clear();
 
             // first of all load stash size
             var rowsQuery = string.Format("SELECT * FROM inventory WHERE account_id = {0} AND equipment_slot = {1}", _owner.Toon.GameAccount.PersistentID, (int)EquipmentSlotId.StashSize);
@@ -683,9 +684,17 @@ namespace Mooege.Core.GS.Players
                     else if (slot == (int)EquipmentSlotId.Stash)
                     {
                         // load stash
-                        item = ItemGenerator.LoadFromDB(this._owner.World,gbid);
-                        item.Owner = this._owner;
-                        this._stashGrid.AddItem(item, Convert.ToInt32(stashReader["inventory_loc_y"]), Convert.ToInt32(stashReader["inventory_loc_x"]));
+                        item = ItemGenerator.LoadFromDB(this._owner.World, gbid);
+                        if (item != null)
+                        {
+                            item.Owner = this._owner;
+                            this._stashGrid.AddItem(item, Convert.ToInt32(stashReader["inventory_loc_y"]),
+                                                    Convert.ToInt32(stashReader["inventory_loc_x"]));
+                        }
+                        else
+                        {
+                            Logger.Error("Could not load item");
+                        }
                     }
                 }
             }
@@ -702,14 +711,22 @@ namespace Mooege.Core.GS.Players
                     if (slot >= (int)EquipmentSlotId.Inventory && slot <= (int)EquipmentSlotId.Neck)
                     {
                         item = ItemGenerator.LoadFromDB(this._owner.World, item_instance_id);// ItemGenerator.CreateItem(this._owner, ItemGenerator.GetItemDefinition(gbid));
-                        item.Owner = this._owner;
-                        if (slot == (int)EquipmentSlotId.Inventory)
+                        if (item != null)
                         {
-                            this._inventoryGrid.AddItem(item, Convert.ToInt32(itemsReader["inventory_loc_y"]), Convert.ToInt32(itemsReader["inventory_loc_x"]));
+                            item.Owner = this._owner;
+                            if (slot == (int)EquipmentSlotId.Inventory)
+                            {
+                                this._inventoryGrid.AddItem(item, Convert.ToInt32(itemsReader["inventory_loc_y"]),
+                                                            Convert.ToInt32(itemsReader["inventory_loc_x"]));
+                            }
+                            else
+                            {
+                                _equipment.EquipItem(item, (int)slot);
+                            }
                         }
                         else
                         {
-                            _equipment.EquipItem(item, (int)slot);
+                            Logger.Error("Could not load item");
                         }
                     }
                 }
@@ -734,7 +751,7 @@ namespace Mooege.Core.GS.Players
             deleteCmd2.ExecuteNonQuery();
 
             // save equipment
-            for (int i=1; i <= 13; i++) // from Helm = 1 to Neck = 13 in EquipmentSlotId
+            for (int i = 1; i <= 13; i++) // from Helm = 1 to Neck = 13 in EquipmentSlotId
             {
                 SaveItemToDB(this._owner.Toon.GameAccount.PersistentID, (long)this._owner.Toon.PersistentID, (EquipmentSlotId)i, _equipment.GetEquipment((EquipmentSlotId)i));
             }

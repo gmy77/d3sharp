@@ -315,6 +315,7 @@ namespace Mooege.Core.GS.Items
 
         public static Item LoadFromDB(Map.World ownerWorld, int dbID)
         {
+            Logger.Debug("Load item_instance #{0} from Database",dbID);
             var query = string.Format("SELECT * FROM item_entities WHERE id={0}", dbID);
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
