@@ -59,7 +59,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Field3 = 0x2006, // wtf?
                 FlyingAnimationTagID = AnimationSetKeys.KnockBack.ID,
                 LandingAnimationTagID = AnimationSetKeys.KnockBackLand.ID,
-                Field7 = PowerSNO
+                PowerSNO = PowerSNO
             });
 
             return true;

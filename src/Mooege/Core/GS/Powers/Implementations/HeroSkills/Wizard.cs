@@ -31,403 +31,12 @@ using Mooege.Core.GS.Actors.Movement;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
-    /*
-    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Meteor)]
-    public class WizardMeteor : PowerScript
-    {
-        public override IEnumerable<TickTimer> Run()
-        {
-            UsePrimaryResource(ScriptFormula(8));
-
-            // cast effect
-            User.PlayEffectGroup(RuneSelect(71141, 71141, 71141, 92222, 217377, 217461));
-
-            // HACK: mooege's 100ms update rate is a little to slow for the impact to appear right on time so
-            // an 100ms is shaved off the wait time
-            TickTimer waitForImpact = WaitSeconds(ScriptFormula(4) - 0.1f);  
-
-            List<Vector3D> impactPositions = new List<Vector3D>();
-            int meteorCount = Rune_B > 0 ? (int)ScriptFormula(9) : 1;
-
-            // pending effect + meteor
-            for (int n = 0; n < meteorCount; ++n)
-            {
-                Vector3D impactPos;
-                if (meteorCount > 1)
-                    impactPos = new Vector3D(TargetPosition.X + ((float)Rand.NextDouble() - 0.5f) * 25,
-                                             TargetPosition.Y + ((float)Rand.NextDouble() - 0.5f) * 25,
-                                             TargetPosition.Z);
-                else
-                    impactPos = TargetPosition;
-
-                SpawnEffect(RuneSelect(86790, 215853, 91440, 92030, 217142, 217457), impactPos, 0, WaitSeconds(5f));
-                impactPositions.Add(impactPos);
-
-                if (meteorCount > 1)
-                    yield return WaitSeconds(0.1f);
-            }
-
-            // wait for meteor impact(s)
-            yield return waitForImpact;
-
-            // impact effects
-            foreach (var impactPos in impactPositions)
-            {
-                // impact
-                SpawnEffect(RuneSelect(86769, 215809, 91441, 92031, 217139, 217458), impactPos);
-
-                WeaponDamage(GetEnemiesInRadius(impactPos, ScriptFormula(3)), ScriptFormula(0),
-                    RuneSelect(DamageType.Fire, DamageType.Fire, DamageType.Fire, DamageType.Cold, DamageType.Arcane, DamageType.Fire));
-
-                // pool effect
-                if (Rune_B == 0)
-                {
-                    SpawnEffect(RuneSelect(90364, 90364, -1, 92032, 217307, 217459), impactPos, 0,
-                        WaitSeconds(ScriptFormula(5)));
-                }
-
-                if (meteorCount > 1)
-                    yield return WaitSeconds(0.1f);
-            }
-        }
-    }
-
-    [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.Electrocute)]
-    public class WizardElectrocute : ChanneledSkill
-    {
-        public override void OnChannelOpen()
-        {
-            EffectsPerSecond = 0.5f;
-        }
-
-        public override IEnumerable<TickTimer> Main()
-        {
-            User.TranslateFacing(TargetPosition);
-
-            UsePrimaryResource(10f);
-
-            if (Target == null)
-            {
-                // no target, just zap the air with miss effect rope
-                User.AddRopeEffect(30913, TargetPosition);
-            }
-            else
-            {
-                IList<Actor> targets = new List<Actor>() { Target };
-                Actor ropeSource = User;
-                Actor curTarget = Target;
-                float damage = 0.4f;
-                while (targets.Count < 4) // original target + bounce 2 times
-                {
-                    // replace source with proxy if it died while doing bounce delay
-                    if (ropeSource.World == null)
-                        ropeSource = SpawnProxy(ropeSource.Position);
-
-                    if (curTarget.World != null)
-                    {
-                        ropeSource.AddRopeEffect(0x78c0, curTarget);
-                        ropeSource = curTarget;
-
-                        WeaponDamage(curTarget, damage, DamageType.Lightning);
-                        damage *= 0.7f;
-                    }
-                    else
-                    {
-                        // early out if monster to be bounced died prematurely
-                        break;
-                    }
-
-                    curTarget = GetEnemiesInRadius(curTarget.Position, 15f, 3).Actors.FirstOrDefault(t => !targets.Contains(t));
-                    if (curTarget != null)
-                    {
-                        targets.Add(curTarget);
-                        yield return WaitSeconds(0.150f);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }             
-            }
-        }
-    }
-
-    [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.MagicMissile)]
-    public class WizardMagicMissile : PowerScript
-    {
-        public override IEnumerable<TickTimer> Run()
-        {
-            UsePrimaryResource(20f);
-
-            User.PlayEffectGroup(19305); // cast effect
-            
-            var projectile = new Projectile(this, 99567, User.Position);
-            projectile.OnCollision = (hit) =>
-            {
-                SpawnEffect(99572, new Vector3D(hit.Position.X, hit.Position.Y, hit.Position.Z + 5f)); // impact effect (fix height)
-                projectile.Destroy();
-                WeaponDamage(hit, 1.10f, DamageType.Arcane);
-            };
-            projectile.Launch(TargetPosition, 1f);
-
-            yield break;
-        }
-    }
-
-    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Hydra)]
-    public class WizardHydra : PowerScript
-    {
-        public override IEnumerable<TickTimer> Run()
-        {
-            UsePrimaryResource(60f);
-
-            // HACK: made up demonic meteor spell, not real hydra
-            SpawnEffect(185366, TargetPosition);
-            yield return WaitSeconds(0.4f);
-
-            WeaponDamage(GetEnemiesInRadius(TargetPosition, 10f), 10f, DamageType.Fire);
-        }
-    }
-
-    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Disintegrate)]
-    public class WizardDisintegrate : ChanneledSkill
-    {
-        const float BeamLength = 40f;
-
-        private Actor _target = null;
-
-        private void _calcTargetPosition()
-        {
-            // project beam end to always be a certain length
-            TargetPosition = PowerMath.TranslateDirection2D(User.Position, TargetPosition,
-                                                             new Vector3D(User.Position.X, User.Position.Y, TargetPosition.Z),
-                                                             BeamLength);
-        }
-
-        public override void OnChannelOpen()
-        {
-            EffectsPerSecond = 0.1f;
-
-            _calcTargetPosition();
-            _target = SpawnEffect(52687, TargetPosition, 0, WaitInfinite());
-            User.AddComplexEffect(18792, _target);
-        }
-
-        public override void OnChannelClose()
-        {
-            if (_target != null)
-                _target.Destroy();
-        }
-
-        public override void OnChannelUpdated()
-        {
-            _calcTargetPosition();
-            User.TranslateFacing(TargetPosition);
-            // client updates target actor position
-        }
-
-        public override IEnumerable<TickTimer> Main()
-        {
-            UsePrimaryResource(23f * EffectsPerSecond);
-
-            foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f).Actors)
-            {
-                if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
-                {
-                    WeaponDamage(actor, 1.35f * EffectsPerSecond, DamageType.Arcane);
-                }
-            }
-
-            yield break;
-        }
-    }
-
-    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.WaveOfForce)]
-    public class WizardWaveOfForce : PowerScript
-    {
-        public override IEnumerable<TickTimer> Run()
-        {
-            UsePrimaryResource(25f);
-            StartCooldown(15f);
-
-            yield return WaitSeconds(0.350f); // wait for wizard to land
-            User.PlayEffectGroup(19356);
-
-            AttackPayload attack = new AttackPayload(this);
-            attack.Targets = GetEnemiesInRadius(User.Position, 20f);
-            attack.AddWeaponDamage(2.05f, DamageType.Physical);
-            attack.OnHit = hitPayload => { Knockback(hitPayload.Target, ScriptFormula(0), ScriptFormula(4), ScriptFormula(5)); };
-            attack.Apply();
-            yield break;
-        }
-    }
-
-    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.ArcaneTorrent)]
-    public class WizardArcaneTorrent : ChanneledSkill
-    {
-        private Actor _targetProxy = null;
-        private Actor _userProxy = null;
-
-        public override void OnChannelOpen()
-        {
-            EffectsPerSecond = 0.2f;
-
-            _targetProxy = SpawnEffect(RuneSelect(134595, 170443, 170285, 170830, 170590, 134595), TargetPosition, 0, WaitInfinite());
-            _userProxy = SpawnProxy(User.Position, WaitInfinite());
-            _userProxy.PlayEffectGroup(RuneSelect(134442, 170263, 170264, 170569, 170572, 164077), _targetProxy);
-        }
-
-        public override void OnChannelClose()
-        {
-            _targetProxy.Destroy();
-            _userProxy.Destroy();
-        }
-
-        public override IEnumerable<TickTimer> Main()
-        {
-            UsePrimaryResource(20f * EffectsPerSecond);
-
-            AddBuff(User, new CastEffect());
-
-            Vector3D laggyPosition = new Vector3D(TargetPosition);
-
-            yield return WaitSeconds(0.9f);
-
-            // update proxy target delayed so animation lines up with explosions a bit better
-            if (IsChannelOpen)
-                TranslateEffect(_targetProxy, laggyPosition, 8f);
-
-            WeaponDamage(GetEnemiesInRadius(laggyPosition, 6f), 2.00f * EffectsPerSecond, DamageType.Arcane);
-        }
-
-        [ImplementsPowerBuff(0)]
-        class CastEffect : PowerBuff
-        {
-            public override void Init()
-            {
-                Timeout = WaitSeconds(0.3f);
-            }
-        }
-    }
-
-    //bumbasher
-    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.FrostNova)]
-    public class WizardFrostNova : PowerScript
-    {
-        public const int FrostNova_Emitter = 4402;
-
-        public override IEnumerable<TickTimer> Run()
-        {
-            StartCooldown(12f);
-
-            SpawnEffect(FrostNova_Emitter, User.Position);
-
-            WeaponDamage(GetEnemiesInRadius(User.Position, 18f), 0.65f, DamageType.Cold);
-
-            yield break;
-        }
-    }
-
-    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.Blizzard)]
-    public class WizardBlizzard : PowerScript
-    {
-        public const int Wizard_Blizzard = 0x1977;
-
-        public override IEnumerable<TickTimer> Run()
-        {
-            UsePrimaryResource(45f);
-
-            SpawnEffect(Wizard_Blizzard, TargetPosition);
-
-            const int blizzard_duration = 3;
-
-            for(int i = 0; i < blizzard_duration; ++i)
-            {
-                AttackPayload attack = new AttackPayload(this);
-                attack.Targets = GetEnemiesInRadius(TargetPosition, 18f);
-                attack.AddWeaponDamage(0.65f, DamageType.Cold);
-                attack.OnHit = (hit) =>
-                {
-                    AddBuff(hit.Target, new DebuffChilled(WaitSeconds(3f)));
-                };
-                attack.Apply();
-
-                yield return WaitSeconds(1f);
-            }
-        }
-    }
-
-    [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.RayOfFrost)]
-    public class WizardRayOfFrost : ChanneledSkill
-    {
-        const float BeamLength = 40f;
-
-        private Actor _target = null;
-
-        private void _calcTargetPosition()
-        {
-            // project beam end to always be a certain length
-            TargetPosition = PowerMath.TranslateDirection2D(User.Position, TargetPosition,
-                                                             new Vector3D(User.Position.X, User.Position.Y, TargetPosition.Z),
-                                                             BeamLength);
-        }
-
-        public override void OnChannelOpen()
-        {
-            EffectsPerSecond = 0.1f;
-
-            _calcTargetPosition();
-            _target = SpawnEffect(6535, TargetPosition, 0, WaitInfinite());
-            User.AddComplexEffect(19327, _target);
-        }
-
-        public override void OnChannelClose()
-        {
-            if (_target != null)
-                _target.Destroy();
-        }
-
-        public override void OnChannelUpdated()
-        {
-            _calcTargetPosition();
-            User.TranslateFacing(TargetPosition);
-            // client updates target actor position
-        }
-        
-        public override IEnumerable<TickTimer> Main()
-        {
-            UsePrimaryResource(29f * EffectsPerSecond);
-
-            foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f).Actors)
-            {
-                if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
-                {
-                    WeaponDamage(actor, 2.70f * EffectsPerSecond, DamageType.Cold);
-                }
-            }
-
-            yield break;
-        }
-    }
-
-    [ImplementsPowerSNO(Skills.Skills.Wizard.Utility.Teleport)]
-    public class WizardTeleport : PowerScript
-    {
-        public override IEnumerable<TickTimer> Run()
-        {
-            UsePrimaryResource(15f);
-            //StartCooldown(WaitSeconds(16f));
-            SpawnProxy(User.Position).PlayEffectGroup(191848);  // alt cast efg: 170231
-            yield return WaitSeconds(0.3f);
-            User.Teleport(TargetPosition);
-            User.PlayEffectGroup(191849);
-        }
-    }
-
+    //TODO: all runes
+    #region SpectralBlade
     [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.SpectralBlade)]
-    public class WizardSpectralBlade : PowerScript
+    public class WizardSpectralBlade : Skill
     {
-        public override IEnumerable<TickTimer> Run()
+        public override IEnumerable<TickTimer> Main()
         {
             UsePrimaryResource(15f);
 
@@ -443,50 +52,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             }
         }
     }
-
-    [ImplementsPowerSNO(Skills.Skills.Wizard.Signature.ShockPulse)]
-    public class WizardShockPulse : Skill
-    {
-        public override IEnumerable<TickTimer> Main()
-        {
-            // _SpawnBolt() not working right in 8101, also can cause client to crash!
-            yield break;
-        }
-
-        private void _SpawnBolt()
-        {
-            var eff = SpawnEffect(176247, User.Position, 0, WaitSeconds(10f));
-            
-            World.BroadcastIfRevealed(new ACDTranslateDetPathMessage
-            {
-                Id = 118,
-                Field0 = (int)eff.DynamicID,
-                Field1 = 1, // 0 - crashes client
-                            // 1 - random scuttle (charged bolt effect)
-                            // 2 - random movement, random movement pauses (toads hopping)
-                            // 3 - clockwise spiral
-                            // 4 - counter-clockwise spiral
-                            // >=5 - nothing it seems
-                Field2 = Rand.Next(), // RNG seed for style 1 and 2
-                Field3 = Rand.Next(), // RNG seed for style 1 and 2
-                Field4 = new Vector3D(0.0f, 0.3f, 0),  // length of this vector is amount moved for style 1 and 2, 
-                Field5 = MovementHelpers.GetFacingAngle(User.Position, TargetPosition), // facing angle
-                Field6 = User.Position,
-                Field7 = 1,
-                Field8 = 0,
-                Field9 = -1,
-                Field10 = PowerSNO, // power sno
-                Field11 = 0,
-                Field12 = 0f, // spiral control?
-                Field13 = 0f, // spiral control? for charged bolt this is facing angle again, but seems to effect nothing.
-                Field14 = 0f, // spiral control? for charged bolt this is Position.X and seems to effect nothing
-                Field15 = 0f  // spiral control? for charged bolt this is Position.Y and seems to effect nothing
-            }, eff);
-
-        }
-    }
-*/
-
+    #endregion
 
     //Complete
     #region Meteor
@@ -1641,53 +1207,46 @@ namespace Mooege.Core.GS.Powers.Implementations
     }
     #endregion
 
-    //TODO: Rune_A,C,E
+    //TODO: finalize chilled debuff params, rune cast effects
     #region RayOfFrost
     [ImplementsPowerSNO(Skills.Skills.Wizard.Offensive.RayOfFrost)]
     public class WizardRayOfFrost : ChanneledSkill
     {
+        const float MaxBeamLength = 40f;
+        private Actor _beamEnd;
 
-        //We need to change how frost beam powermath works -> Beam radius (SF(10)) and Beam end Radius (SF(11)), currently the function has a weird visual
-        //for other rune effects with a wider starting effect
-
-        const float BeamLength = 40f;
-
-        private Actor _target = null;
-
-        private void _calcTargetPosition()
+        private Vector3D _calcBeamEnd(float length)
         {
-            // project beam end to always be a certain length
-            TargetPosition = PowerMath.TranslateDirection2D(User.Position, TargetPosition,
-                                                             new Vector3D(User.Position.X, User.Position.Y, TargetPosition.Z),
-                                                             BeamLength);
+            return PowerMath.TranslateDirection2D(User.Position, TargetPosition,
+                                                  new Vector3D(User.Position.X, User.Position.Y, TargetPosition.Z),
+                                                  length);
         }
 
         public override void OnChannelOpen()
         {
-            EffectsPerSecond = 0.1f;
+            this.EffectsPerSecond = 0.33f;
+
             if (Rune_B > 0)
             {
                 AddBuff(User, new IceDomeBuff());
             }
             else
             {
-                _calcTargetPosition();
-                _target = SpawnEffect(6535, TargetPosition, 0, WaitInfinite());
-                User.AddComplexEffect(RuneSelect(19327, 149835, -1, 149836, 149869, 149879), _target);
+                _beamEnd = SpawnEffect(6535, User.Position, 0, WaitInfinite());
+                User.AddComplexEffect(RuneSelect(19327, 149835, -1, 149836, 149869, 149879), _beamEnd);
             }
         }
 
         public override void OnChannelClose()
         {
-            if (_target != null)
-                _target.Destroy();
+            if (_beamEnd != null)
+                _beamEnd.Destroy();
         }
 
         public override void OnChannelUpdated()
         {
-            _calcTargetPosition();
             User.TranslateFacing(TargetPosition);
-            // client updates target actor position
+
             if (Rune_B > 0)
             {
                 AddBuff(User, new IceDomeBuff());
@@ -1696,68 +1255,93 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override IEnumerable<TickTimer> Main()
         {
-            //Rune_D
-            UsePrimaryResource(ScriptFormula(19) * EffectsPerSecond); //total casting cost * effects per second??
+            // Rune_D resource mod calculated in SF_19
+            UsePrimaryResource(ScriptFormula(19) * EffectsPerSecond);
 
+            AttackPayload attack = new AttackPayload(this);
             if (Rune_B > 0)
             {
-                foreach (Actor actor in GetEnemiesInRadius(User.Position, ScriptFormula(7)).Actors)
+                attack.Targets = GetEnemiesInRadius(User.Position, ScriptFormula(7));
+                attack.AddWeaponDamage(ScriptFormula(6), DamageType.Cold);
+                // TODO: chill debuff?
+            }
+            else
+            {
+                // Select first actor beam hits, or make max beam length
+                Vector3D attackPos;
+                var beamTargets = GetEnemiesInBeamDirection(User.Position, TargetPosition, MaxBeamLength, ScriptFormula(10));
+                if (beamTargets.Actors.Count > 0)
                 {
-                    WeaponDamage(actor, 2.70f * EffectsPerSecond, DamageType.Cold);
+                    Actor target = beamTargets.GetClosestTo(User.Position);
+                    attackPos = target.Position + new Vector3D(0, 0, 5f);  // fix height for beam end
+                    attack.SetSingleTarget(target);
+                }
+                else
+                {
+                    attackPos = _calcBeamEnd(MaxBeamLength);
+                }
+
+                // update _beamEnd actor
+                _beamEnd.MoveSnapped(attackPos, 0f);
+
+                // all runes other than B seem to share the same weapon damage.
+                attack.AddWeaponDamage(ScriptFormula(0), DamageType.Cold);
+
+                if (Rune_A > 0)
+                {
+                    // TODO: damage time amp
+                    attack.OnHit = hit =>
+                    {
+                        AddBuff(hit.Target, new DebuffChilled(0.3f, WaitSeconds(0.5f))); //slow 40%, atk spd 30%
+                        //this does attack and movement, but doesnt do the difference which is needed.
+                    };
+                }
+                else if (Rune_C > 0)
+                {
+                    attack.OnHit = hit =>
+                    {
+                        AddBuff(hit.Target, new DebuffChilled(ScriptFormula(14), WaitSeconds(ScriptFormula(4)))); //slow 40%, atk spd 30%
+                        //Atk Speed Reduction % {SF(24)} to monster //AddBuff(actor, new AtkSpeedDebuff
+                        //Dmg Reduction {SF(25)}
+                        //targets attack speed by 30% for 5 seconds
+                    };
+                }
+                else
+                {
+                    attack.OnHit = hit =>
+                    {
+                        AddBuff(hit.Target, new DebuffChilled(0.3f, WaitSeconds(0.5f))); //slow 40%, atk spd 30%
+                        //this does attack and movement, but doesnt do the difference which is needed.
+                    };
+                }
+
+                if (Rune_E > 0)
+                {
+                    attack.OnDeath = death =>
+                    {
+                        var icepool = SpawnEffect(148634, death.Target.Position, 0, WaitSeconds(ScriptFormula(8)));
+                        icepool.PlayEffectGroup(149879);
+                        icepool.UpdateDelay = 1f;
+                        icepool.OnUpdate = () =>
+                        {
+                            WeaponDamage(GetEnemiesInRadius(icepool.Position, 3f), ScriptFormula(3), DamageType.Cold);
+                            // TODO: chilled buff?
+                        };
+                    };
                 }
             }
 
-            else
-                foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f).Actors)
-                {
-                    if (PowerMath.PointInBeam(actor.Position, User.Position, TargetPosition, 3f))
-                    {
-                        if (Rune_A > 0)
-                        {
-                            //TODO:takes 1.5 seconds to reach the new maximum dmg(SF(20)) from the minimum dmg(base?)
-                            AddBuff(actor, new DebuffChilled(0.3f, WaitSeconds(0.5f))); //slow 40%, atk spd 30%
-                            //this does attack and movement, but doesnt do the difference which is needed.
-
-                        }
-                        else if (Rune_C > 0)
-                        {
-                            WeaponDamage(actor, 2.70f * EffectsPerSecond, DamageType.Cold);
-                            AddBuff(actor, new DebuffChilled(ScriptFormula(14), WaitSeconds(ScriptFormula(4)))); //slow 40%, atk spd 30%
-                            //Atk Speed Reduction % {SF(24)} to monster //AddBuff(actor, new AtkSpeedDebuff
-                            //Dmg Reduction {SF(25)}
-                            //targets attack speed by 30% for 5 seconds
-                        }
-                        else
-                        {
-                            WeaponDamage(actor, 2.70f * EffectsPerSecond, DamageType.Cold);
-                            AddBuff(actor, new DebuffChilled(0.3f, WaitSeconds(0.5f))); //slow 40%, atk spd 30%
-                            //this does attack and movement, but doesnt do the difference which is needed.
-                        }
-                    }
-                }
-
-            //Rune_E - Enemies who die leave a patch of ice on the ground that causes 64500% weapon damage as Cold to enemies moving through it over 5 seconds.
-            //if enemy dies {
-            //AddBuff(Hit.Target, new icyPatchBuff());
-            //playeffectgroup(149878);
-            //OnUpdate
-            //WeaponDamage(actor, 2.70f * EffectsPerSecond, DamageType.Cold);
-            //E: Ground Ice Dps (SF(3))
-            //E: Ground Ice Lifetime (SF(8))
-            //E: Ground Ice Chance (SF(9))
-            //E: Ground Ice Refresh Interval (SF(13))
-            //}
-
+            attack.Apply();
             yield break;
         }
 
         [ImplementsPowerBuff(1)]
         class IceDomeBuff : PowerBuff
         {
-            //Rune_C
+            //Rune_B
             public override void Init()
             {
-                Timeout = WaitSeconds(0.1f);
+                Timeout = WaitSeconds(0.2f);
             }
         }
     }
@@ -1772,13 +1356,17 @@ namespace Mooege.Core.GS.Powers.Implementations
         {
             if (!User.World.CheckLocationForFlag(TargetPosition, Mooege.Common.MPQ.FileFormats.Scene.NavCellFlags.AllowWalk))
             {
-                TeleRevertBuff buff = User.World.BuffManager.GetFirstBuff<TeleRevertBuff>(User);
-                Logger.Info("Try to Teleport to unwalkable location");
+                Logger.Info("Tried to Teleport to unwalkable location");
                 User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
-                yield return WaitSeconds(0.3f);
-                User.Teleport(buff.OrigSpot);
-                User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
-                buff.Remove(); // Ensures that you can only revert the teleport once.
+
+                TeleRevertBuff buff = User.World.BuffManager.GetFirstBuff<TeleRevertBuff>(User);                
+                if (buff != null)
+                {
+                    yield return WaitSeconds(0.3f);
+                    User.Teleport(buff.OrigSpot);
+                    User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
+                    buff.Remove(); // Ensures that you can only revert the teleport once.
+                }
             }
             else
             {

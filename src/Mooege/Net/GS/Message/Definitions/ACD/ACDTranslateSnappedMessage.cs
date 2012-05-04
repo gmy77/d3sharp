@@ -24,9 +24,9 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
     [Message(Opcodes.ACDTranslateSnappedMessage)]
     public class ACDTranslateSnappedMessage : GameMessage
     {
-        public int Field0;
-        public Vector3D Field1;
-        public float /* angle */ Field2;
+        public int ActorId;
+        public Vector3D Position;
+        public float /* angle */ Angle;
         public bool Field3;
         public int Field4;
         public int? Field5;
@@ -35,10 +35,10 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = new Vector3D();
-            Field1.Parse(buffer);
-            Field2 = buffer.ReadFloat32();
+            ActorId = buffer.ReadInt(32);
+            Position = new Vector3D();
+            Position.Parse(buffer);
+            Angle = buffer.ReadFloat32();
             Field3 = buffer.ReadBool();
             Field4 = buffer.ReadInt(25);
             if (buffer.ReadBool())
@@ -49,9 +49,9 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            Field1.Encode(buffer);
-            buffer.WriteFloat32(Field2);
+            buffer.WriteInt(32, ActorId);
+            Position.Encode(buffer);
+            buffer.WriteFloat32(Angle);
             buffer.WriteBool(Field3);
             buffer.WriteInt(25, Field4);
             buffer.WriteBool(Field5.HasValue);
@@ -67,9 +67,9 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             b.AppendLine("ACDTranslateSnappedMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
-            Field1.AsText(b, pad);
-            b.Append(' ', pad); b.AppendLine("Field2: " + Field2.ToString("G"));
+            b.Append(' ', pad); b.AppendLine("Field0: 0x" + ActorId.ToString("X8"));
+            Position.AsText(b, pad);
+            b.Append(' ', pad); b.AppendLine("Angle: " + Angle.ToString("G"));
             b.Append(' ', pad); b.AppendLine("Field3: " + (Field3 ? "true" : "false"));
             b.Append(' ', pad); b.AppendLine("Field4: 0x" + Field4.ToString("X8") + " (" + Field4 + ")");
             if (Field5.HasValue)
