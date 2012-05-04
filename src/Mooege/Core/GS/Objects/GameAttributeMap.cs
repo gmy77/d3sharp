@@ -76,8 +76,14 @@ namespace Mooege.Core.GS.Objects
             {
                 if (serialized.Length > 0)
                     serialized += ";";
-
-                serialized += string.Format("{0},{1}:{2}|{3}", pair.Key.Id, pair.Key.Key, pair.Value.Value, pair.Value.ValueF);
+                var ValueF = Convert.ToString(pair.Value.ValueF);
+                float testFloat = 0.0f;
+                if (!float.TryParse(ValueF, out testFloat))
+                {
+                    ValueF = "0.0";
+                    Logger.Error("Could not save ValueF to DB, saving 0 instead of {0}", pair.Value.ValueF);
+                }
+                serialized += string.Format("{0},{1}:{2}|{3}", pair.Key.Id, pair.Key.Key, pair.Value.Value, ValueF);
             }
             return serialized;//.ZipCompress();
         }

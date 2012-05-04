@@ -293,7 +293,7 @@ namespace Mooege.Core.GS.Items
             else
             {
                 //item in db, updating
-                cmd.CommandText = string.Format("UPDATE item_entities SET item_gbid={0},item_attributes=@item_attributes,item_affixes=@item_affixes WHERE id={3}", item.GBHandle.GBID);
+                cmd.CommandText = string.Format("UPDATE item_entities SET item_gbid={0},item_attributes=@item_attributes,item_affixes=@item_affixes WHERE id={1}", item.GBHandle.GBID,item.DBId);
                 cmd.Parameters.Add(new SQLiteParameter("@item_attributes", item.Attributes.Serialize()));
                 cmd.Parameters.Add(new SQLiteParameter("@item_affixes", affixSer));
                 cmd.ExecuteNonQuery();
