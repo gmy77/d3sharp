@@ -790,7 +790,7 @@ namespace Mooege.Core.GS.Map
             return false;
         }
 
-        
+
         public override string ToString()
         {
             return string.Format("[World] SNOId: {0} DynamicId: {1} Name: {2}", this.WorldSNO.Id, this.DynamicID, this.WorldSNO.Name);

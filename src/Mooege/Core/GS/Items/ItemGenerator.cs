@@ -30,6 +30,7 @@ using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
 using System.Reflection;
+using World = Mooege.Core.GS.Map.World;
 
 // FIXME: Most of this stuff should be elsewhere and not explicitly generate items to the player's GroundItems collection / komiga?
 
@@ -43,7 +44,8 @@ namespace Mooege.Core.GS.Items
         private static readonly Dictionary<int, Type> GBIDHandlers = new Dictionary<int, Type>();
         private static readonly Dictionary<int, Type> TypeHandlers = new Dictionary<int, Type>();
         private static readonly HashSet<int> AllowedItemTypes = new HashSet<int>();
-
+        private static readonly Dictionary<Map.World, List<Item>> DbItems = new Dictionary<World, List<Item>>(); //we need this list to delete item_instances from items which have no owner anymore.
+        private static readonly Dictionary<int,Item> CachedItems=new Dictionary<int, Item>(); 
 
 
 
@@ -284,7 +286,7 @@ namespace Mooege.Core.GS.Items
             if (item.DBId < 0)
             {
                 //item not in db, creating new
-                cmd.CommandText=string.Format("INSERT INTO item_entities (item_gbid,item_attributes,item_affixes) VALUES ({0},@item_attributes,@item_affixes);select last_insert_rowid(); ", item.GBHandle.GBID);
+                cmd.CommandText = string.Format("INSERT INTO item_entities (item_gbid,item_attributes,item_affixes) VALUES ({0},@item_attributes,@item_affixes);select last_insert_rowid(); ", item.GBHandle.GBID);
                 cmd.Parameters.Add(new SQLiteParameter("@item_attributes", item.Attributes.Serialize()));
                 cmd.Parameters.Add(new SQLiteParameter("@item_affixes", affixSer));
                 var insertID = cmd.ExecuteScalar();
@@ -293,11 +295,15 @@ namespace Mooege.Core.GS.Items
             else
             {
                 //item in db, updating
-                cmd.CommandText = string.Format("UPDATE item_entities SET item_gbid={0},item_attributes=@item_attributes,item_affixes=@item_affixes WHERE id={1}", item.GBHandle.GBID,item.DBId);
+                cmd.CommandText = string.Format("UPDATE item_entities SET item_gbid={0},item_attributes=@item_attributes,item_affixes=@item_affixes WHERE id={1}", item.GBHandle.GBID, item.DBId);
                 cmd.Parameters.Add(new SQLiteParameter("@item_attributes", item.Attributes.Serialize()));
                 cmd.Parameters.Add(new SQLiteParameter("@item_affixes", affixSer));
                 cmd.ExecuteNonQuery();
             }
+
+            if (CachedItems.ContainsKey(item.DBId))
+                CachedItems.Remove(item.DBId);//clearing cache to reRead item from database to find errors earlier.
+
 
 
         }
@@ -307,15 +313,23 @@ namespace Mooege.Core.GS.Items
         {
             if (item.DBId < 0)
                 return;
-
+            Logger.Debug("Deleting Item instance #{0} from DB",item.DBId);
+            if (CachedItems.ContainsKey(item.DBId))
+                CachedItems.Remove(item.DBId);
             var deletequery = string.Format("DELETE FROM item_entities WHERE id={0}", item.DBId);
             var cmd = new SQLiteCommand(deletequery, DBManager.Connection);
             cmd.ExecuteNonQuery();
+            item.DBId = -1;
         }
-
         public static Item LoadFromDB(Map.World ownerWorld, int dbID)
         {
-            Logger.Debug("Load item_instance #{0} from Database",dbID);
+            if (CachedItems.ContainsKey(dbID))
+            {
+                Logger.Debug("Getting item instance #{0} from Cache",dbID);
+                return CachedItems[dbID];
+            }
+
+            Logger.Debug("Load item_instance #{0} from Database", dbID);
             var query = string.Format("SELECT * FROM item_entities WHERE id={0}", dbID);
             var cmd = new SQLiteCommand(query, DBManager.Connection);
             var reader = cmd.ExecuteReader();
@@ -333,7 +347,22 @@ namespace Mooege.Core.GS.Items
 
             var itm = new Item(ownerWorld, table, DeSerializeAffixList(affixesSer), attributesSer);
             itm.DBId = dbID;
+            if (!DbItems.ContainsKey(ownerWorld))
+                DbItems.Add(ownerWorld, new List<Item>());
+            DbItems[ownerWorld].Add(itm);
             return itm;
+        }
+
+        public static void Cleanup(World world)
+        {
+            if (DbItems.ContainsKey(world))
+            {
+                var itemInstancesToDelete = DbItems[world].Where(dbi => dbi.Owner == null);
+                foreach (var itm in itemInstancesToDelete)
+                    DeleteFromDB(itm);
+                DbItems.Remove(world);
+            }
+
         }
 
         public static string SerializeAffixList(List<Affix> affixList)
@@ -343,7 +372,7 @@ namespace Mooege.Core.GS.Items
             return affixSer;
         }
 
-        public static List<Affix>  DeSerializeAffixList(string serializedAffixList)
+        public static List<Affix> DeSerializeAffixList(string serializedAffixList)
         {
             var affixListStr = serializedAffixList.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             var affixList = affixListStr.Select(int.Parse).Select(affixId => new Affix(affixId)).ToList();
