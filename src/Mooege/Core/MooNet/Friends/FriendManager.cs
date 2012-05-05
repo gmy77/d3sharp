@@ -123,8 +123,8 @@ namespace Mooege.Core.MooNet.Friends
             var friendAddedNotificationToInviter = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviteeAsFriend).SetGameAccountId(invitee.BnetEntityId).Build();
             var friendAddedNotificationToInvitee = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviterAsFriend).SetGameAccountId(inviter.BnetEntityId).Build();
 
-            var inviterGameAccounts = GameAccountManager.GetGameAccountsForAccount(inviter).Values;
-            var inviteeGameAccounts = GameAccountManager.GetGameAccountsForAccount(invitee).Values;
+            var inviterGameAccounts = GameAccountManager.GetGameAccountsForAccount(inviter);
+            var inviteeGameAccounts = GameAccountManager.GetGameAccountsForAccount(invitee);
 
             foreach (var inviterGameAccount in inviterGameAccounts)
             {
@@ -163,8 +163,8 @@ namespace Mooege.Core.MooNet.Friends
                 .SetInvitation(invitation)
                 .SetReason((uint)InvitationRemoveReason.Declined).Build();
 
-            var inviterGameAccounts = GameAccountManager.GetGameAccountsForAccount(inviter).Values;
-            var inviteeGameAccounts = GameAccountManager.GetGameAccountsForAccount(invitee).Values;
+            var inviterGameAccounts = GameAccountManager.GetGameAccountsForAccount(inviter);
+            var inviteeGameAccounts = GameAccountManager.GetGameAccountsForAccount(invitee);
 
             foreach (var inviterGameAccount in inviterGameAccounts)
             {
@@ -205,7 +205,7 @@ namespace Mooege.Core.MooNet.Friends
                 bnet.protocol.friends.FriendsNotify.CreateStub(client).NotifyFriendRemoved(null, notifyRemover, callback => { }));
 
 
-            var removeeGameAccounts = GameAccountManager.GetGameAccountsForAccount(removee).Values;
+            var removeeGameAccounts = GameAccountManager.GetGameAccountsForAccount(removee);
             foreach (var removeeGameAccount in removeeGameAccounts)
             {
                 if (removeeGameAccount.IsOnline)

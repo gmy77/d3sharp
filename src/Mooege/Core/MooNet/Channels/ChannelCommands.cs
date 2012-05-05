@@ -95,7 +95,7 @@ namespace Mooege.Core.MooNet.Channels
                     return string.Format("Account '{0}' is not logged in.", email);
 
                 var gameAccounts = GameAccountManager.GetGameAccountsForAccount(account);
-                foreach (var gameAccount in gameAccounts.Values)
+                foreach (var gameAccount in gameAccounts)
                 {
                     output += this.ClientChannels(null, gameAccount.LoggedInClient);
                 }

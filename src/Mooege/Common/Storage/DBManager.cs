@@ -21,6 +21,7 @@ using System.Data.SQLite;
 using System.IO;
 using Mooege.Common.Helpers.IO;
 using Mooege.Common.Logging;
+using NHibernate.Linq;
 
 namespace Mooege.Common.Storage
 {
@@ -32,6 +33,19 @@ namespace Mooege.Common.Storage
 
         public static readonly Logger Logger = LogManager.CreateLogger();
 
+        public static string AssetDirectory
+        {
+            get
+            {
+                var dataDirectory = String.Format(@"{0}/{1}", FileHelpers.AssemblyRoot, Config.Instance.Root);
+
+                if (Path.IsPathRooted(Config.Instance.Root))
+                    //Path is rooted... dont use assemblyRoot, as its absolute path.
+                    dataDirectory = Config.Instance.Root;
+                return dataDirectory;
+            }
+        }
+
         static DBManager()
         {
             Connect();
@@ -41,16 +55,11 @@ namespace Mooege.Common.Storage
         {
             try
             {
-                var dataDirectory = String.Format(@"{0}/{1}", FileHelpers.AssemblyRoot, Config.Instance.Root);
 
-                if (Path.IsPathRooted(Config.Instance.Root))
-                    //Path is rooted... dont use assemblyRoot, as its absolute path.
-                    dataDirectory = Config.Instance.Root;
-
-                Connection = new SQLiteConnection(String.Format("Data Source={0}/account.db", dataDirectory));
+                Connection = new SQLiteConnection(String.Format("Data Source={0}/account.db", AssetDirectory));
                 Connection.Open();
 
-                MPQMirror = new SQLiteConnection(String.Format("Data Source={0}/mpqdata.db", dataDirectory));
+                MPQMirror = new SQLiteConnection(String.Format("Data Source={0}/mpqdata.db", AssetDirectory));
                 MPQMirror.Open();
             }
             catch (Exception e)
