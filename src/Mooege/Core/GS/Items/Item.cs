@@ -56,6 +56,8 @@ namespace Mooege.Core.GS.Items
     {
         public int DBId = -1;
         private static readonly Logger Logger = LogManager.CreateLogger();
+        public bool ItemHasChanges { get; private set; }//needed in Future, set this to true if Item affixes or item attributes have changed.
+
 
         public override ActorType ActorType { get { return ActorType.Item; } }
 
@@ -193,7 +195,7 @@ namespace Mooege.Core.GS.Items
             : base(world, definition.SNOActor)
         {
             SetInitialValues(definition);
-
+            this.ItemHasChanges = true;//initial, this is set to true.
             // level requirement
             // Attributes[GameAttribute.Requirement, 38] = definition.RequiredLevel;
 

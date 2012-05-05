@@ -47,6 +47,8 @@ namespace Mooege.Core.GS.Players
         //Values for buying new slots on stash
         private readonly int[] _stashBuyValue = { 100000, 200000 }; // from Pacth 13, stash is limited to 3 tabs
 
+        public bool Loaded { get; private set; }
+
         private Equipment _equipment;
         private InventoryGrid _inventoryGrid;
         private InventoryGrid _stashGrid;
@@ -748,6 +750,7 @@ namespace Mooege.Core.GS.Players
             this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = goldAmount; // This is the attribute that makes the gold visible in game
             this._inventoryGold.Owner = _owner;
             this._inventoryGold.SetInventoryLocation((int)EquipmentSlotId.Gold, 0, 0);
+            Loaded = true;
         }
 
         // TODO: change saving at the world OnLeave to saving at every inventory change, without delete and insert

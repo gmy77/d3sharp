@@ -870,7 +870,8 @@ namespace Mooege.Core.GS.Players
             this.RevealActorsToPlayer(); // reveal actors in players proximity.
 
             // load all inventory items
-            this.Inventory.LoadFromDB();
+            if (!this.Inventory.Loaded)//why reload if already loaded?
+                this.Inventory.LoadFromDB();
 
             // generate visual update message
             this.Inventory.SendVisualInventory(this);

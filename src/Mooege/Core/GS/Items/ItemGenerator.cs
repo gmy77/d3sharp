@@ -44,7 +44,7 @@ namespace Mooege.Core.GS.Items
         private static readonly Dictionary<int, Type> GBIDHandlers = new Dictionary<int, Type>();
         private static readonly Dictionary<int, Type> TypeHandlers = new Dictionary<int, Type>();
         private static readonly HashSet<int> AllowedItemTypes = new HashSet<int>();
-        
+
         //private static readonly Dictionary<Player, List<Item>> DbItems = new Dictionary<Player, List<Item>>(); //we need this list to delete item_instances from items which have no owner anymore.
         //private static readonly Dictionary<int, Item> CachedItems = new Dictionary<int, Item>();
 
@@ -300,10 +300,7 @@ namespace Mooege.Core.GS.Items
             {
                 //item in db, updating
 
-                if (
-                    serAffixesHashes.ContainsKey(item.DBId) && serAffixesHashes[item.DBId] == item.AffixList.GetHashCode() &&
-                    serAttributesHashes.ContainsKey(item.DBId) && serAttributesHashes[item.DBId] == item.Attributes.GetHashCode()
-                    )
+                if (!item.ItemHasChanges)
                 {
                     Logger.Debug("Item not changed. skipping db-update.");
                 }
@@ -325,7 +322,7 @@ namespace Mooege.Core.GS.Items
 
             var timeTaken = DateTime.Now - timestart;
             Logger.Debug("Save item instance #{0}, took {1} msec", item.DBId, timeTaken.TotalMilliseconds);
-            
+
         }
 
 
@@ -342,8 +339,6 @@ namespace Mooege.Core.GS.Items
             item.DBId = -1;
         }
 
-        private static Dictionary<int, int> serAffixesHashes = new Dictionary<int, int>();
-        private static Dictionary<int, int> serAttributesHashes = new Dictionary<int, int>();
         public static Item LoadFromDB(Player owner, int dbID)
         {
 
@@ -384,8 +379,6 @@ namespace Mooege.Core.GS.Items
                 owner.World.DbItems[owner.World].Add(itm);
 
             owner.World.CachedItems[itm.DBId] = itm;
-            serAffixesHashes[dbID] = itm.AffixList.GetHashCode();
-            serAttributesHashes[dbID] = itm.Attributes.GetHashCode();
             return itm;
         }
 
