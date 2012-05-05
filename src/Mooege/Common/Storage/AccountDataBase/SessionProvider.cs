@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +10,7 @@ using Mooege.Common.Storage.AccountDataBase.Mapper;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
+using Mooege.Common.Helpers.IO;
 
 namespace Mooege.Common.Storage.AccountDataBase
 {
@@ -36,7 +38,7 @@ namespace Mooege.Common.Storage.AccountDataBase
                 if (_config == null)
                 {
                     _config = new Configuration();
-                    _config = _config.Configure(string.Format("database.Account.config"));
+                    _config = _config.Configure(Path.Combine(FileHelpers.AssemblyRoot, "database.Account.config"));
 
 
                     var replacedProperties = new Dictionary<string, string>();
