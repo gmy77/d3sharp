@@ -18,6 +18,7 @@
 
 using System;
 using System.Linq;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.MooNet.Toons;
 using Mooege.Net.GS.Message.Fields;
 using Mooege.Common.Logging;
@@ -41,11 +42,9 @@ namespace Mooege.Core.GS.Skills
         public SkillSet(ToonClass @class, Toon toon)
         {
             this.@Class = @class;
+            var dbToon = DBSessions.AccountSession.Get<DBToon>(toon.PersistentID);
 
-            var query = string.Format("SELECT * FROM active_skills WHERE id_toon={0}", toon.PersistentID);
-            var cmd = new SQLiteCommand(query, DBManager.Connection);
-            var reader = cmd.ExecuteReader();
-            if (!reader.HasRows)
+            if (dbToon.DBActiveSkills == null)
             {
                 int[] ActiveSkillsList = Skills.GetAllActiveSkillsByClass(this.@Class).Take(1).ToArray();
 
@@ -57,38 +56,57 @@ namespace Mooege.Core.GS.Skills
                     new ActiveSkillSavedData { snoSkill = Skills.None, snoRune = -1 },
                     new ActiveSkillSavedData { snoSkill = Skills.None, snoRune = -1 }
                 };
-                this.PassiveSkills = new int[3] { -1, -1, -1 };
 
-                var insQuery = string.Format("INSERT INTO active_skills (id_toon,"+
-                    "skill_0,skill_1,skill_2,skill_3,skill_4,skill_5,"+
-                    "rune_0,rune_1,rune_2,rune_3,rune_4,rune_5,"+
-                    "passive_0,passive_1,passive_2) VALUES ({0},{1},-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1 )",
-                                 toon.PersistentID, ActiveSkillsList[0]);
-                var insCmd = new SQLiteCommand(insQuery, DBManager.Connection);
-                insCmd.ExecuteNonQuery();
+                this.PassiveSkills = new int[3] {
+                    -1,-1,-1,
+                };
+
+
+                dbToon.DBActiveSkills = new DBActiveSkills
+                                            {
+                                                Skill0 = ActiveSkillsList[0],
+                                                Skill1 = -1,
+                                                Skill2 = -1,
+                                                Skill3 = -1,
+                                                Skill4 = -1,
+                                                Skill5 = -1,
+                                                Rune0 = -1,
+                                                Rune1 = -1,
+                                                Rune2 = -1,
+                                                Rune3 = -1,
+                                                Rune4 = -1,
+                                                Rune5 = -1,
+                                                Passive0 = -1,
+                                                Passive1 = -1,
+                                                Passive2 = -1
+                                            };
+                DBSessions.AccountSession.SaveOrUpdate(dbToon.DBActiveSkills);
+                DBSessions.AccountSession.Flush();
+
             }
             else
             {
                 this.ActiveSkills = new ActiveSkillSavedData[6] {
-                    new ActiveSkillSavedData {  snoSkill = Convert.ToInt32(reader["skill_0"]), 
-                                                snoRune  = Convert.ToInt32(reader["rune_0"]) },
-                    new ActiveSkillSavedData {  snoSkill = Convert.ToInt32(reader["skill_1"]), 
-                                                snoRune  = Convert.ToInt32(reader["rune_1"]) },
-                    new ActiveSkillSavedData {  snoSkill = Convert.ToInt32(reader["skill_2"]), 
-                                                snoRune  = Convert.ToInt32(reader["rune_2"]) },
-                    new ActiveSkillSavedData {  snoSkill = Convert.ToInt32(reader["skill_3"]), 
-                                                snoRune  = Convert.ToInt32(reader["rune_3"]) },
-                    new ActiveSkillSavedData {  snoSkill = Convert.ToInt32(reader["skill_4"]), 
-                                                snoRune  = Convert.ToInt32(reader["rune_4"]) },
-                    new ActiveSkillSavedData {  snoSkill = Convert.ToInt32(reader["skill_5"]), 
-                                                snoRune  = Convert.ToInt32(reader["rune_5"]) }
+                    new ActiveSkillSavedData {  snoSkill = dbToon.DBActiveSkills.Skill0, 
+                                                snoRune  = dbToon.DBActiveSkills.Rune0 },
+                    new ActiveSkillSavedData {  snoSkill = dbToon.DBActiveSkills.Skill1, 
+                                                snoRune  = dbToon.DBActiveSkills.Rune1 },
+                    new ActiveSkillSavedData {  snoSkill = dbToon.DBActiveSkills.Skill2, 
+                                                snoRune  = dbToon.DBActiveSkills.Rune2 },
+                    new ActiveSkillSavedData {  snoSkill = dbToon.DBActiveSkills.Skill3, 
+                                                snoRune  = dbToon.DBActiveSkills.Rune3 },
+                    new ActiveSkillSavedData {  snoSkill = dbToon.DBActiveSkills.Skill4, 
+                                                snoRune  = dbToon.DBActiveSkills.Rune4 },
+                    new ActiveSkillSavedData {  snoSkill = dbToon.DBActiveSkills.Skill5, 
+                                                snoRune  = dbToon.DBActiveSkills.Rune5 },
                 };
                 this.PassiveSkills = new int[3] {
-                    Convert.ToInt32(reader["passive_0"]),
-                    Convert.ToInt32(reader["passive_1"]),
-                    Convert.ToInt32(reader["passive_2"])
+                    dbToon.DBActiveSkills.Passive0,
+                    dbToon.DBActiveSkills.Passive1,
+                    dbToon.DBActiveSkills.Passive2,
                 };
             }
+
             this.HotBarSkills = new HotbarButtonData[6] {
                 new HotbarButtonData { SNOSkill = ActiveSkills[0].snoSkill, Field1 = -1, ItemGBId = -1 }, // left-click
                 new HotbarButtonData { SNOSkill = ActiveSkills[1].snoSkill, Field1 = -1, ItemGBId = -1 }, // right-click
@@ -102,31 +120,64 @@ namespace Mooege.Core.GS.Skills
         public void UpdateSkills(int hotBarIndex, int SNOSkill, int SNORune, Toon toon)
         {
             Logger.Debug("Update index {0} skill {1} rune {2}", hotBarIndex, SNOSkill, SNORune);
-            var query = string.Format("UPDATE active_skills SET skill_{1}={2}, rune_{1}={3} WHERE id_toon={0} ", toon.PersistentID, hotBarIndex, SNOSkill, SNORune);
-            var cmd = new SQLiteCommand(query, DBManager.Connection);
-            cmd.ExecuteNonQuery();
+            var dbToon = DBSessions.AccountSession.Get<DBToon>(toon.PersistentID);
+            switch (hotBarIndex)
+            {
+                case 0:
+                    dbToon.DBActiveSkills.Skill0 = SNOSkill;
+                    dbToon.DBActiveSkills.Rune0 = SNORune;
+                    break;
+                case 1:
+                    dbToon.DBActiveSkills.Skill1 = SNOSkill;
+                    dbToon.DBActiveSkills.Rune1 = SNORune;
+                    break;
+                case 2:
+                    dbToon.DBActiveSkills.Skill2 = SNOSkill;
+                    dbToon.DBActiveSkills.Rune2 = SNORune;
+                    break;
+                case 3:
+                    dbToon.DBActiveSkills.Skill3 = SNOSkill;
+                    dbToon.DBActiveSkills.Rune3 = SNORune;
+                    break;
+                case 4:
+                    dbToon.DBActiveSkills.Skill4 = SNOSkill;
+                    dbToon.DBActiveSkills.Rune4 = SNORune;
+                    break;
+                case 5:
+                    dbToon.DBActiveSkills.Skill5 = SNOSkill;
+                    dbToon.DBActiveSkills.Rune5 = SNORune;
+                    break;
+            }
+            DBSessions.AccountSession.SaveOrUpdate(dbToon.DBActiveSkills);
+            DBSessions.AccountSession.Flush();
+
         }
 
         public void SwitchUpdateSkills(int oldSNOSkill, int SNOSkill, int SNORune, Toon toon)
-		{
-			for (int i = 0; i < this.HotBarSkills.Length; i++)
-			{
-				if(this.HotBarSkills[i].SNOSkill == oldSNOSkill)
-				{
-					Logger.Debug("SkillSet: SwitchUpdateSkill Oldskill {0} Newskill {1}", oldSNOSkill, SNOSkill);
-					this.HotBarSkills[i].SNOSkill = SNOSkill;
+        {
+            for (int i = 0; i < this.HotBarSkills.Length; i++)
+            {
+                if (this.HotBarSkills[i].SNOSkill == oldSNOSkill)
+                {
+                    Logger.Debug("SkillSet: SwitchUpdateSkill Oldskill {0} Newskill {1}", oldSNOSkill, SNOSkill);
+                    this.HotBarSkills[i].SNOSkill = SNOSkill;
                     this.UpdateSkills(i, SNOSkill, SNORune, toon);
                     return;
-				}
-			}
-		}
+                }
+            }
+        }
 
         public void UpdatePassiveSkills(Toon toon)
         {
             Logger.Debug("Update passive to {0} {1} {2}", PassiveSkills[0], PassiveSkills[1], PassiveSkills[2]);
-            var query = string.Format("UPDATE active_skills SET passive_0={1}, passive_1={2}, passive_2={3} WHERE id_toon={0} ", toon.PersistentID, PassiveSkills[0], PassiveSkills[1], PassiveSkills[2]);
-            var cmd = new SQLiteCommand(query, DBManager.Connection);
-            cmd.ExecuteNonQuery();
+            var dbToon = DBSessions.AccountSession.Get<DBToon>(toon.PersistentID);
+            dbToon.DBActiveSkills.Passive0 = PassiveSkills[0];
+            dbToon.DBActiveSkills.Passive1 = PassiveSkills[1];
+            dbToon.DBActiveSkills.Passive2 = PassiveSkills[2];
+
+            DBSessions.AccountSession.SaveOrUpdate(dbToon.DBActiveSkills);
+            DBSessions.AccountSession.Flush();
+
         }
     }
 }

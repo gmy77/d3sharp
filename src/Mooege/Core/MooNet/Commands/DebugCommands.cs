@@ -55,7 +55,7 @@ namespace Mooege.Core.MooNet.Commands
                     return string.Format("Account '{0}' is not logged in.", email);
 
                 var gameAccounts = GameAccountManager.GetGameAccountsForAccount(account);
-                foreach (var gameAccount in gameAccounts.Values)
+                foreach (var gameAccount in gameAccounts)
                 {
                     output += this.ClientServices(null, gameAccount.LoggedInClient);
                 }

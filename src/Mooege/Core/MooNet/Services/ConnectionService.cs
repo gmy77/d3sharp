@@ -101,10 +101,10 @@ namespace Mooege.Core.MooNet.Services
             Logger.Trace("RequestDisconnect()");
             if (this.Client.Account != null)
             {
-                this.Client.Account.SaveToDB();
+                Accounts.AccountManager.SaveToDB(this.Client.Account);
                 if (this.Client.Account.CurrentGameAccount != null)
                 {
-                    this.Client.Account.CurrentGameAccount.SaveToDB();
+                    Accounts.GameAccountManager.SaveToDB(this.Client.Account.CurrentGameAccount);
                     this.Client.Account.CurrentGameAccount.LoggedInClient.Connection.Disconnect();
                 }
             }

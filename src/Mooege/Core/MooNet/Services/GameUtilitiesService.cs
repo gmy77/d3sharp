@@ -129,7 +129,7 @@ namespace Mooege.Core.MooNet.Services
                         attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(DeletedHero).Build());
                     else
                         this.Status = 395003;
-                        //LastCallHeader = LastCallHeader.ToBuilder().SetStatus(395003).Build();
+                    //LastCallHeader = LastCallHeader.ToBuilder().SetStatus(395003).Build();
                     break;
                 default:
                     Logger.Warn("Unknown CustomMessageId {0}: {1}", MessageId, request.AttributeCount > 2 ? request.GetAttribute(2).Value.ToString() : "No CustomMessage?");
@@ -207,14 +207,9 @@ namespace Mooege.Core.MooNet.Services
 
         private ByteString CreateHero(D3.OnlineService.HeroCreateParams createPrams)
         {
-            int hashCode = ToonManager.GetUnusedHashCodeForToonName(createPrams.Name);
-            var newToon = new Toon(createPrams.Name, hashCode, createPrams.GbidClass, createPrams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account.CurrentGameAccount);
-            if (ToonManager.SaveToon(newToon))
-            {
-                Logger.Trace("CreateHero(): {0}", newToon);
-                return newToon.D3EntityID.ToByteString();
-            }
-            return ByteString.Empty;
+
+            var newToon = ToonManager.CreateNewToon(createPrams.Name, createPrams.GbidClass, createPrams.IsFemale ? ToonFlags.Female : ToonFlags.Male, 1, Client.Account.CurrentGameAccount);
+            return newToon.D3EntityID.ToByteString();
         }
 
         private void DeleteHero(D3.OnlineService.EntityId hero)
@@ -229,22 +224,24 @@ namespace Mooege.Core.MooNet.Services
             //Mark hero as deleted
             var markHero = ToonManager.GetToonByLowID(hero.IdLow);
             markHero.Deleted = true;
-            markHero.SaveToDB();
+            ToonManager.SaveToDB(markHero);
 
             Logger.Trace("DeleteHero(): Marked {0} as deleted.", markHero);
         }
 
         private ByteString SelectHero(D3.OnlineService.EntityId hero)
         {
-            this.Client.Account.CurrentGameAccount.CurrentToon = ToonManager.GetToonByLowID(hero.IdLow);
+            var oldToon = this.Client.Account.CurrentGameAccount.CurrentToon;
+            var newtoon = ToonManager.GetToonByLowID(hero.IdLow);
+            
 
             Logger.Trace("SelectToon() {0}", this.Client.Account.CurrentGameAccount.CurrentToon);
 
-            if (this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID != this.Client.Account.CurrentGameAccount.lastPlayedHeroId)
+            if (oldToon!=newtoon)
             {
+                this.Client.Account.CurrentGameAccount.CurrentToon = newtoon;
                 this.Client.Account.CurrentGameAccount.NotifyUpdate();
-                this.Client.Account.CurrentGameAccount.lastPlayedHeroId = this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID;
-                this.Client.Account.SaveToDB();
+                AccountManager.SaveToDB(this.Client.Account);
             }
             return this.Client.Account.CurrentGameAccount.CurrentToon.D3EntityID.ToByteString();
         }
@@ -343,7 +340,7 @@ namespace Mooege.Core.MooNet.Services
             else
             {
                 var heroList = GameAccountManager.GetAccountByPersistentID(profiles.AccountId.IdLow).Toons;
-                foreach (var hero in heroList.Values)
+                foreach (var hero in heroList)
                 {
                     profileList.AddHeros(hero.Profile);
                 }
@@ -358,7 +355,7 @@ namespace Mooege.Core.MooNet.Services
 
             var HeroList = D3.Hero.HeroList.CreateBuilder();
             var gameAccount = GameAccountManager.GetAccountByPersistentID(heroIds.AccountId.IdLow);
-            foreach (var toon in gameAccount.Toons.Values)
+            foreach (var toon in gameAccount.Toons)
             {
                 if (!toon.Deleted)
                     HeroList.AddHeroIds(toon.D3EntityID);
@@ -372,7 +369,7 @@ namespace Mooege.Core.MooNet.Services
             if (toon != null && toon.Deleted)
             {
                 toon.Deleted = false;
-                toon.SaveToDB();
+                ToonManager.SaveToDB(toon);
                 return toon.Digest.ToByteString();
             }
             else
@@ -381,7 +378,7 @@ namespace Mooege.Core.MooNet.Services
         private ByteString GetDeletedHero()
         {
             Logger.Trace("GetDeletedHero()");
-            foreach (var toon in this.Client.Account.CurrentGameAccount.Toons.Values)
+            foreach (var toon in this.Client.Account.CurrentGameAccount.Toons)
             {
                 if (toon.Deleted)
                     return toon.Digest.ToByteString();

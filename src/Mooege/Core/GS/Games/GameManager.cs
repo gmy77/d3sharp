@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using Mooege.Common.Extensions;
 using Mooege.Common.Logging;
 using Mooege.Core.GS.Players;
+using Mooege.Core.MooNet.Toons;
 using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Games
@@ -75,7 +76,7 @@ namespace Mooege.Core.GS.Games
                 // Generate Update for Client
                 gameClient.BnetClient.Account.CurrentGameAccount.NotifyUpdate();
                 //save hero to db after player data was updated in toon
-                toon.SaveToDB();
+                ToonManager.SaveToDB(toon);
             }
 
             if (game.Players.Count == 0)

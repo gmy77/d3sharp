@@ -46,7 +46,7 @@ namespace Mooege.Core.GS.Map
     {
         static readonly Logger Logger = LogManager.CreateLogger();
         public readonly Dictionary<World, List<Item>> DbItems = new Dictionary<World, List<Item>>(); //we need this list to delete item_instances from items which have no owner anymore.
-        public readonly Dictionary<int, Item> CachedItems = new Dictionary<int, Item>();
+        public readonly Dictionary<ulong, Item> CachedItems = new Dictionary<ulong, Item>();
 
 
 

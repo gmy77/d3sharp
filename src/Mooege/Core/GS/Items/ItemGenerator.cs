@@ -18,12 +18,14 @@
 
 using System;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.Linq;
 using System.Collections.Generic;
 using Mooege.Common.Helpers.Hash;
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
 using Mooege.Common.Storage;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Common.MPQ.FileFormats;
@@ -283,139 +285,57 @@ namespace Mooege.Core.GS.Items
             var timestart = DateTime.Now;
 
 
-            if (item.DBId < 0)
-            {
-                //item not in db, creating new
-                var affixSer = SerializeAffixList(item.AffixList);
-                var attributesSer = item.Attributes.Serialize();
 
-                var cmd = DBManager.Connection.CreateCommand();
-                cmd.CommandText = string.Format("INSERT INTO item_entities (item_gbid,item_attributes,item_affixes) VALUES ({0},@item_attributes,@item_affixes);select last_insert_rowid(); ", item.GBHandle.GBID);
-                cmd.Parameters.Add(new SQLiteParameter("@item_attributes", attributesSer));
-                cmd.Parameters.Add(new SQLiteParameter("@item_affixes", affixSer));
-                var insertID = cmd.ExecuteScalar();
-                item.DBId = Convert.ToInt32(insertID);
+            if (!item.ItemHasChanges && item.DBItemInstance != null)
+            {
+                //Logger.Debug("Item instance not saved, is already in DB and NOT CHANGED.");
             }
             else
             {
-                //item in db, updating
-
-                if (!item.ItemHasChanges)
-                {
-                    Logger.Debug("Item not changed. skipping db-update.");
-                }
-                else
-                {
-                    var affixSer = SerializeAffixList(item.AffixList);
-                    var attributesSer = item.Attributes.Serialize();
-
-                    var cmd = DBManager.Connection.CreateCommand();
-                    cmd.CommandText = string.Format("UPDATE item_entities SET item_gbid={0},item_attributes=@item_attributes,item_affixes=@item_affixes WHERE id={1}", item.GBHandle.GBID, item.DBId);
-                    cmd.Parameters.Add(new SQLiteParameter("@item_attributes", attributesSer));
-                    cmd.Parameters.Add(new SQLiteParameter("@item_affixes", affixSer));
-                    cmd.ExecuteNonQuery();
-                    if (item.World.CachedItems.ContainsKey(item.DBId))
-                        item.World.CachedItems.Remove(item.DBId);//clearing cache to reRead item from database to find errors earlier.
-                }
+                if (item.DBItemInstance == null)
+                    item.DBItemInstance = new DBItemInstance();
+                var affixSer = SerializeAffixList(item.AffixList);
+                var attributesSer = item.Attributes.Serialize();
+                item.DBItemInstance.Affixes = affixSer;
+                item.DBItemInstance.Attributes = attributesSer;
+                item.DBItemInstance.GbId = item.GBHandle.GBID;
+                DBSessions.AccountSession.SaveOrUpdate(item.DBItemInstance);
             }
 
 
+
             var timeTaken = DateTime.Now - timestart;
-            Logger.Debug("Save item instance #{0}, took {1} msec", item.DBId, timeTaken.TotalMilliseconds);
+            //Logger.Debug("Save item instance #{0}, took {1} msec", item.DBItemInstance.Id, timeTaken.TotalMilliseconds);
 
         }
 
-
+        
         public static void DeleteFromDB(Item item)
         {
-            if (item.DBId < 0)
+            if (item.DBItemInstance==null)
                 return;
-            Logger.Debug("Deleting Item instance #{0} from DB", item.DBId);
-            if (item.World.CachedItems.ContainsKey(item.DBId))
-                item.World.CachedItems.Remove(item.DBId);
-            var deletequery = string.Format("DELETE FROM item_entities WHERE id={0}", item.DBId);
-            var cmd = new SQLiteCommand(deletequery, DBManager.Connection);
-            cmd.ExecuteNonQuery();
-            item.DBId = -1;
+            Logger.Debug("Deleting Item instance #{0} from DB", item.DBItemInstance.Id);
+            if (item.World.CachedItems.ContainsKey(item.DBItemInstance.Id))
+                item.World.CachedItems.Remove(item.DBItemInstance.Id);
+            Debug.Assert(item.DBInventory==null);
+            DBSessions.AccountSession.Delete(item.DBItemInstance);
+            item.DBItemInstance = null;
         }
+        
 
-        public static Item LoadFromDB(Player owner, int dbID)
+        public static Item LoadFromDBInstance(Player owner, DBItemInstance instance)//  int dbID, int gbid, string attributesSer, string affixesSer)
         {
+            var table = Items[instance.GbId];
+            var itm = new Item(owner.World, table, DeSerializeAffixList(instance.Affixes), instance.Attributes);
+            itm.DBItemInstance = instance;
 
-            if (owner.World.CachedItems.ContainsKey(dbID))
-            {
-                Logger.Debug("Getting item instance #{0} from Cache", dbID);
-                return owner.World.CachedItems[dbID];
-            }
-            var timestart = DateTime.Now;
-
-            var query = string.Format("SELECT * FROM item_entities WHERE id={0}", dbID);
-            var cmd = new SQLiteCommand(query, DBManager.Connection);
-            var reader = cmd.ExecuteReader();
-
-            if (!reader.HasRows)
-                return null;
-
-            reader.Read();
-
-            var gbid = Convert.ToInt32(reader["item_gbid"]);
-            var attributesSer = (string)reader["item_attributes"];
-            var affixesSer = (string)reader["item_affixes"];
-
-            var itm = LoadFromValues(owner, dbID, gbid, attributesSer, affixesSer);
-
-            var timeTaken = DateTime.Now - timestart;
-            Logger.Debug("Loaded item_instance #{0} from Database, took {1} msec", dbID, timeTaken.TotalMilliseconds);
-            return itm;
-        }
-        public static Item LoadFromValues(Player owner, int dbID, int gbid, string attributesSer, string affixesSer)
-        {
-            var table = Items[gbid];
-            var itm = new Item(owner.World, table, DeSerializeAffixList(affixesSer), attributesSer);
-            itm.DBId = dbID;
             if (!owner.World.DbItems.ContainsKey(owner.World))
                 owner.World.DbItems.Add(owner.World, new List<Item>());
             if (!owner.World.DbItems[owner.World].Contains(itm))
                 owner.World.DbItems[owner.World].Add(itm);
 
-            owner.World.CachedItems[itm.DBId] = itm;
+            owner.World.CachedItems[instance.Id] = itm;
             return itm;
-        }
-
-        public static Item[] LoadFromDB(Player owner, int[] dbIDs)
-        {
-            var timestart = DateTime.Now;
-            var results = new List<Item>();
-            results.AddRange(owner.World.CachedItems.Where(citm => dbIDs.Contains(citm.Key)).Select(citm => citm.Value));
-
-
-
-            var idsToSelect = dbIDs.Where(id => !results.Any(r => r.DBId == id));
-            var idsToSelectInQuery = idsToSelect.Aggregate("", (current, id) => current + ((current.Length > 0 ? "," : "") + id));
-
-            var query = string.Format("SELECT * FROM item_entities WHERE id IN ({0})", idsToSelectInQuery);
-            var cmd = new SQLiteCommand(query, DBManager.Connection);
-
-            var reader = cmd.ExecuteReader();
-
-            if (!reader.HasRows)
-                return results.ToArray();
-
-            while (reader.Read())
-            {
-                var gbid = Convert.ToInt32(reader["item_gbid"]);
-                var attributesSer = (string)reader["item_attributes"];
-                var affixesSer = (string)reader["item_affixes"];
-
-
-                var dbId = Convert.ToInt32(reader["id"]); ;
-                var itm = LoadFromValues(owner, dbId, gbid, attributesSer, affixesSer);
-                results.Add(itm);
-            }
-
-            var timeTaken = DateTime.Now - timestart;
-            Logger.Debug("Loaded {0} item_instances from Database, took {1} msec", results.Count, timeTaken.TotalMilliseconds);
-            return results.ToArray();
         }
 
         public static string SerializeAffixList(List<Affix> affixList)

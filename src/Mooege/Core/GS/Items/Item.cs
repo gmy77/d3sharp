@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Objects;
@@ -54,7 +55,9 @@ namespace Mooege.Core.GS.Items
     */
     public class Item : Actor
     {
-        public int DBId = -1;
+        public DBInventory DBInventory = null;
+        public DBItemInstance DBItemInstance=null;
+
         private static readonly Logger Logger = LogManager.CreateLogger();
         public bool ItemHasChanges { get; private set; }//needed in Future, set this to true if Item affixes or item attributes have changed.
 
