@@ -237,7 +237,7 @@ namespace Mooege.Core.GS.Players
 
         public void SetNonDefaultStats()
         {
-           
+
             //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 0] = 1f;
             //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 1] = 3.051758E-05f;
             //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 2] = 3.051758E-05f;
@@ -1644,33 +1644,24 @@ namespace Mooege.Core.GS.Players
         }
 
 
-        private DateTime _lastRegeneration = DateTime.Now;
         private void _UpdateResources()
         {
             // will crash client when loading if you try to update resources too early
             if (!InGameClient.TickingEnabled) return;
 
-            // update resources once every update for now.
-            if (this.InGameClient.Game.TickCounter - _lastResourceUpdateTick < this.InGameClient.Game.TickRate)
-                return;
-
+            // 1 tick = 1/60s, so multiply ticks in seconds against resource regen per-second to get the amount to update
+            float tickSeconds = 1f / 60f * (this.InGameClient.Game.TickCounter - _lastResourceUpdateTick);
             _lastResourceUpdateTick = this.InGameClient.Game.TickCounter;
 
-            var regenTimeDiff = (DateTime.Now - _lastRegeneration);
-            if (regenTimeDiff.TotalSeconds >= 1)
-            {
-                _lastRegeneration = DateTime.Now;
-                for (var i = 0; i < regenTimeDiff.TotalSeconds; i++)
-                {
-                    GeneratePrimaryResource(Toon.HeroTable.PrimaryResourceRegenPerSecond);
-                    GenerateSecondaryResource(Toon.HeroTable.SecondaryResourceRegenPerSecond);
+            GeneratePrimaryResource(tickSeconds * Toon.HeroTable.PrimaryResourceRegenPerSecond);
+            GenerateSecondaryResource(tickSeconds * Toon.HeroTable.SecondaryResourceRegenPerSecond);
+            AddHP(tickSeconds * this.Attributes[GameAttribute.Hitpoints_Regen_Per_Second]);
 
-                    AddHP(this.Attributes[GameAttribute.Hitpoints_Regen_Per_Second]);
+            // TODO: replace this with Trait_Barbarian_Fury.pow implementation
+            if (this.Toon.Class == ToonClass.Barbarian)
+                UsePrimaryResource(tickSeconds * 0.9f);
 
-                    if (this.Toon.Class == ToonClass.Barbarian)
-                        UsePrimaryResource(0.1f);
-                }
-            }
+
         }
 
         #endregion
