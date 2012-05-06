@@ -22,6 +22,7 @@ using System.Data.SQLite;
 using System.Linq;
 using Mooege.Common.Storage;
 using Mooege.Common.Helpers.Hash;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.Cryptography;
 using Mooege.Core.MooNet.Helpers;
 using Mooege.Core.MooNet.Objects;
@@ -30,68 +31,90 @@ namespace Mooege.Core.MooNet.Accounts
 {
     public class Account : PersistentRPCObject
     {
+        public DBAccount DBAccount { get; private set; }
+
         //public D3.PartyMessage.ScreenStatus ScreenStatus { get; set; }
 
         public ByteStringPresenceField<D3.OnlineService.EntityId> LastPlayedGameAccountIdField
-            = new ByteStringPresenceField<D3.OnlineService.EntityId>(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Account, 2, 0);
+        {
+            get
+            {
+                var val = new ByteStringPresenceField<D3.OnlineService.EntityId>(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Account, 2, 0, this.LastSelectedGameAccount);
+                return val;
+            }
+        }
+
 
         public StringPresenceField RealIDTagField
-            = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 1, 0);
+        {
+            get
+            {
+                return new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 1, 0, this.DBAccount.BattleTagName);
+            }
+        }
 
-        public ByteStringPresenceField<D3.OnlineService.EntityId> LastPlayedHeroIdField
-            = new ByteStringPresenceField<D3.OnlineService.EntityId>(FieldKeyHelper.Program.D3, FieldKeyHelper.OriginatingClass.Account, 1, 0);
 
         //public BoolPresenceField AccountOnlineField
         //    = new BoolPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 2, 0);
 
         public StringPresenceField AccountBattleTagField
-            = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 4, 0);
+        {
+            get
+            {
+                var val = new StringPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 4, 0, this.BattleTagName + "#" + HashCode.ToString("D4"));
+                return val;
+            }
+        }
+
 
         public EntityIdPresenceFieldList GameAccountListField
-            = new EntityIdPresenceFieldList(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 3, 0);
+        {
+            get
+            {
+                var val = new EntityIdPresenceFieldList(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 3, 0);
+                val.Value.AddRange(this.GameAccounts.Select(ga => ga.BnetEntityId));
+                return val;
+            }
+        }
+            
+
 
         public IntPresenceField LastOnlineField
-            = new IntPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 6, 0, 0);
+        {
+            get
+            {
+                var val = new IntPresenceField(FieldKeyHelper.Program.BNet, FieldKeyHelper.OriginatingClass.Account, 6, 0, 0);
+                val.Value = this.DBAccount.LastOnline;
+                return val;
+            }
+
+            set { this.DBAccount.LastOnline = value.Value; }
+
+        }
+
 
         public bool IsOnline
         {
             get
             {
                 //check if anygameAccounts are online
-                foreach (var gameAccount in GameAccounts)
-                {
-                    if (gameAccount.Value.IsOnline) return true;
-                }
-                return false;
+                return GameAccounts.Any(gameAccount => gameAccount.IsOnline);
             }
         }
 
-        public string Email { get; private set; } // I - Username
-        public byte[] Salt { get; private set; }  // s- User's salt.
-        public byte[] PasswordVerifier { get; private set; } // v - password verifier.
+        public string Email { get { return this.DBAccount.Email; } private set { this.DBAccount.Email = value; } } // I - Username
+        public byte[] Salt { get { return this.DBAccount.Salt; } internal set { this.DBAccount.Salt = value; } }  // s- User's salt.
+        public byte[] PasswordVerifier { get { return this.DBAccount.PasswordVerifier; } internal set { this.DBAccount.PasswordVerifier = value; } } // v - password verifier.
 
-        //TODO: Eliminate this variable as it is used inside the Field property
-        private string _name;
-        public string Name
-        {
-            get
-            {
-                return this._name;
-            }
-            private set
-            {
-                this._name = value;
-                this.RealIDTagField.Value = this.Name;
-                this.AccountBattleTagField.Value = Name + "#" + HashCode.ToString("D4");
-            }
-        }
+        public int HashCode { get { return this.DBAccount.HashCode; } private set { this.DBAccount.HashCode = value; } }
 
-        public int HashCode { get; private set; }
+        public string BattleTagName { get { return this.DBAccount.BattleTagName; } private set { this.DBAccount.BattleTagName = value; } }
+
         public string BattleTag
         {
             get
             {
-                return Name + "#" + HashCode.ToString("D4");
+                return this.BattleTagName + "#" + this.HashCode.ToString("D4");
             }
             set
             {
@@ -99,15 +122,14 @@ namespace Mooege.Core.MooNet.Accounts
                     throw new Exception("BattleTag must contain '#'");
 
                 var split = value.Split('#');
-                this.Name = split[0];
-                this.HashCode = Convert.ToInt32(split[1]);
-                this.AccountBattleTagField.Value = Name + "#" + HashCode.ToString("D4");
+                this.DBAccount.BattleTagName = split[0];
+                this.DBAccount.HashCode = Convert.ToInt32(split[1]);
             }
         }
 
-        public UserLevels UserLevel { get; private set; } // user level for account.
+        public UserLevels UserLevel { get { return this.DBAccount.UserLevel; } internal set { this.DBAccount.UserLevel = value; } } // user level for account.
 
-        public Dictionary<ulong, GameAccount> GameAccounts
+        public List<GameAccount> GameAccounts
         {
             get { return GameAccountManager.GetGameAccountsForAccount(this); }
         }
@@ -122,8 +144,8 @@ namespace Mooege.Core.MooNet.Accounts
             }
             set
             {
-                this.LastSelectedGameAccount = value.D3GameAccountId;
-                this.LastPlayedGameAccountIdField.Value = value.D3GameAccountId;
+                //this.LastSelectedGameAccount = value.D3GameAccountId;
+                //this.LastPlayedGameAccountIdField.Value = value.D3GameAccountId;
                 this._currentGameAccount = value;
             }
         }
@@ -131,83 +153,33 @@ namespace Mooege.Core.MooNet.Accounts
         public static readonly D3.OnlineService.EntityId AccountHasNoToons =
             D3.OnlineService.EntityId.CreateBuilder().SetIdHigh(0).SetIdLow(0).Build();
 
-        //TODO: Eliminate this variable as it is stored already in the persistence field;
-        private D3.OnlineService.EntityId _lastSelectedHero = AccountHasNoToons;
-        public D3.OnlineService.EntityId LastSelectedHero
-        {
-            get
-            {
-                if (_lastSelectedHero == AccountHasNoToons)
-                {
-                    var gameAccount = GameAccountManager.GetAccountByPersistentID(this.LastSelectedGameAccount.IdLow);
-                    if (gameAccount.Toons.Count > 0)
-                        _lastSelectedHero = gameAccount.Toons.First().Value.D3EntityID;
-                    this.LastPlayedHeroIdField.Value = _lastSelectedHero;
-                }
-                return _lastSelectedHero;
-            }
-            set
-            {
-                _lastSelectedHero = value;
-                this.LastPlayedHeroIdField.Value = value;
-            }
-        }
 
-        private D3.OnlineService.EntityId _lastSelectedGameAccount = AccountHasNoToons;
+
+        //at the moment, a
         public D3.OnlineService.EntityId LastSelectedGameAccount
         {
             get
             {
-                if (_lastSelectedGameAccount == AccountHasNoToons && this.GameAccounts.Count > 0)
-                    _lastSelectedGameAccount = this.LastPlayedGameAccountIdField.Value = this.GameAccounts.First().Value.D3GameAccountId;
-                return _lastSelectedGameAccount;
+                return this.GameAccounts.First().D3GameAccountId;
             }
+            /*
             set
             {
                 _lastSelectedGameAccount = value;
-                this.LastPlayedGameAccountIdField.Value = value;
-
-            }
+            }*/
         }
 
-        public Account(ulong persistentId, string email, byte[] salt, byte[] passwordVerifier, string battleTagName, int hashCode, UserLevels userLevel) // Account with given persistent ID
-            : base(persistentId)
+        public Account(DBAccount dbAccount)
+            : base(dbAccount.Id)
         {
-            this.SetFields(email, salt, passwordVerifier, battleTagName, hashCode, userLevel);
+            this.DBAccount = dbAccount;
+            SetFields();
         }
 
-        public Account(string email, string password, string battleTagName, int hashCode, UserLevels userLevel) // Account with **newly generated** persistent ID
-            : base(StringHashHelper.HashIdentity(battleTagName + "#" + hashCode.ToString("D4")))
+
+        private void SetFields()
         {
-            if (password.Length > 16) password = password.Substring(0, 16); // make sure the password does not exceed 16 chars.
-
-            var salt = SRP6a.GetRandomBytes(32);
-            var passwordVerifier = SRP6a.CalculatePasswordVerifierForAccount(email, password, salt);
-
-            this.SetFields(email, salt, passwordVerifier, battleTagName, hashCode, userLevel);
-        }
-
-        private static ulong? _persistentIdCounter = null;
-        protected override ulong GenerateNewPersistentId()
-        {
-            if (_persistentIdCounter == null)
-                _persistentIdCounter = AccountManager.GetNextAvailablePersistentId();
-
-            return (ulong)++_persistentIdCounter;
-        }
-
-        private void SetFields(string email, byte[] salt, byte[] passwordVerifier, string battleTagName, int hashCode, UserLevels userLevel)
-        {
-            this.Email = email;
-            this.Salt = salt;
-            this.PasswordVerifier = passwordVerifier;
-            this.UserLevel = userLevel;
-
             this.BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh((ulong)EntityIdHelper.HighIdType.AccountId).SetLow(this.PersistentID).Build();
-
-            this.Name = battleTagName;
-            this.HashCode = hashCode;
-            this.AccountBattleTagField.Value = Name + "#" + HashCode.ToString("D4");
         }
 
         public bnet.protocol.presence.Field QueryField(bnet.protocol.presence.FieldKey queryKey)
@@ -219,8 +191,9 @@ namespace Mooege.Core.MooNet.Accounts
                 case FieldKeyHelper.Program.D3:
                     if (queryKey.Group == 1 && queryKey.Field == 1) // Account's last selected toon.
                     {
+                        /*
                         if (this.IsOnline) // check if the account is online actually.
-                            field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LastSelectedHero.ToByteString()).Build());
+                            field.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(this.LastSelectedHero.ToByteString()).Build());*/
                     }
                     else if (queryKey.Group == 1 && queryKey.Field == 2) // Account's last selected Game Account
                     {
@@ -269,17 +242,19 @@ namespace Mooege.Core.MooNet.Accounts
             //TODO: Create delegate inside Persistence field so IsOnline can be removed
             //this.AccountOnlineField.Value = this.IsOnline;
             //TODO: Create delegate-move this out
+            
+            /*
             this.GameAccountListField.Value.Clear();
-            foreach (var pair in this.GameAccounts.Values)
+            foreach (var pair in this.GameAccounts)
             {
                 this.GameAccountListField.Value.Add(pair.BnetEntityId);
-            }
+            }*/
 
 
             var operationList = new List<bnet.protocol.presence.FieldOperation>();
 
-            if (this.LastSelectedHero != AccountHasNoToons)
-                operationList.Add(this.LastPlayedHeroIdField.GetFieldOperation());
+            /*if (this.LastSelectedHero != AccountHasNoToons)
+                operationList.Add(this.LastPlayedHeroIdField.GetFieldOperation());*/
             if (this.LastSelectedGameAccount != AccountHasNoToons)
                 operationList.Add(this.LastPlayedGameAccountIdField.GetFieldOperation());
             operationList.Add(this.RealIDTagField.GetFieldOperation());
@@ -308,6 +283,9 @@ namespace Mooege.Core.MooNet.Accounts
         }
 
         #region DB
+
+        /* 
+         * Account Operations should be made only in AccountManager... just my two cents :)
         public void SaveToDB()
         {
             try
@@ -389,8 +367,8 @@ namespace Mooege.Core.MooNet.Accounts
             var reader = cmd.ExecuteReader();
             return reader.HasRows;
         }
-
-#endregion
+        */
+        #endregion
 
         public override string ToString()
         {
