@@ -90,6 +90,8 @@ namespace Mooege.Core.GS.Items
                             if (FormulaScript.Evaluate(effect.Formula.ToArray(), item.RandomGenerator, out result))
                             {
                                 //Logger.Debug("Randomized value for attribute " + GameAttribute.Attributes[effect.AttributeId].Name + " is " + result);
+                                var tmpAttr = GameAttribute.Attributes[effect.AttributeId];
+                                var attrName = tmpAttr.Name;
 
                                 if (GameAttribute.Attributes[effect.AttributeId] is GameAttributeF)
                                 {

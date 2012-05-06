@@ -29,6 +29,11 @@ namespace Mooege.Core.GS.Objects
     public class GameAttributeMap
     {
         private static Logger Logger = LogManager.CreateLogger();
+        public IEnumerable<int> ActiveIds
+        {
+            get { return this._attributeValues.Select(k => k.Key.Id); }
+        }
+
 
         private struct KeyId
         {

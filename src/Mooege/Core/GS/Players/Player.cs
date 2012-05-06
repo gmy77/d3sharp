@@ -295,9 +295,22 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Experience_Next] = this.Toon.ExperienceNext;
             this.Attributes[GameAttribute.Experience_Granted] = 1000;
             this.Attributes[GameAttribute.Armor_Item] = this.ArmorItem;
+            this.Attributes[GameAttribute.Strength_Item] = this.StrengthItem;
+            this.Attributes[GameAttribute.Dexterity_Item] = this.DexterityItem;
             this.Attributes[GameAttribute.Armor] = 0;
             //scripted //this.Attributes[GameAttribute.Armor_Total]
 
+            
+            if (this.Inventory != null && this.Inventory.Loaded)
+                foreach (var item in this.Inventory.GetEquippedItems())
+                {
+                    foreach (var id in item.Attributes.ActiveIds)
+                    {
+                        var gameAttribute = GameAttribute.Attributes[id];
+                        
+                    }
+                }
+            
             //scripted //this.Attributes[GameAttribute.Strength_Total] = this.StrengthTotal;
             //scripted //this.Attributes[GameAttribute.Intelligence_Total] = this.IntelligenceTotal;
             //scripted //this.Attributes[GameAttribute.Dexterity_Total] = this.DexterityTotal;
@@ -881,7 +894,7 @@ namespace Mooege.Core.GS.Players
 
             // load all inventory items
             this.Inventory.LoadFromDB();
-            
+
             // generate visual update message
             this.Inventory.SendVisualInventory(this);
 
@@ -1005,11 +1018,38 @@ namespace Mooege.Core.GS.Players
 
                 var armorAddByItems = 0.0f;
                 if (this.Inventory != null && this.Inventory.Loaded)
-                    armorAddByItems += this.Inventory.GetEquippedItems().Sum(item => item.ItemDefinition.ArmorValue);
+                    armorAddByItems += this.Inventory.GetEquippedItems().Sum(item => item.Attributes[GameAttribute.Armor_Item]);
 
-                return armorAddByItems;   
+                return armorAddByItems;
             }
         }
+
+
+        public int StrengthItem
+        {
+            get
+            {
+
+                var strengthAddByItems = 0;
+                if (this.Inventory != null && this.Inventory.Loaded)
+                    strengthAddByItems += this.Inventory.GetEquippedItems().Sum(item => item.Attributes[GameAttribute.Strength_Item]);
+
+                return strengthAddByItems;
+            }
+        }
+
+        public int DexterityItem
+        {
+            get
+            {
+
+                var dexterityAddByItems = 0;
+                if (this.Inventory != null && this.Inventory.Loaded)
+                    dexterityAddByItems += this.Inventory.GetEquippedItems().Sum(item => item.Attributes[GameAttribute.Dexterity_Item]);
+                return dexterityAddByItems;
+            }
+        }
+
 
         public float Strength
         {
@@ -1023,14 +1063,7 @@ namespace Mooege.Core.GS.Players
                 else
                     baseStrength = data.Strength + (this.Toon.Level - 1);
 
-                var strengthAddByItems = 0;
-                if (this.Inventory!=null && this.Inventory.Loaded)
-                    foreach (var item in this.Inventory.GetEquippedItems())
-                    {
-
-                    }
-                var finalStrength = baseStrength + strengthAddByItems;
-                return finalStrength;
+                return baseStrength;
             }
         }
 
