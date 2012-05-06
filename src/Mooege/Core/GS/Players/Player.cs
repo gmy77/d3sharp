@@ -337,39 +337,39 @@ namespace Mooege.Core.GS.Players
 
             foreach (var damageType in DamageType.AllTypes)
             {
-                var weaponDamageMin = this.GetItemBonus(GameAttribute.Damage_Weapon_Min, damageType.AttributeKey);
-                var weaponDamageDelta = this.GetItemBonus(GameAttribute.Damage_Weapon_Delta, damageType.AttributeKey);
-                var weaponDamageBonusMin = this.GetItemBonus(GameAttribute.Damage_Weapon_Bonus_Min, damageType.AttributeKey);
-                var weaponDamageBonusDelta = this.GetItemBonus(GameAttribute.Damage_Weapon_Bonus_Delta, damageType.AttributeKey);
+                var weaponDamageMin = this.Inventory.GetItemBonus(GameAttribute.Damage_Weapon_Min, damageType.AttributeKey);
+                var weaponDamageDelta = this.Inventory.GetItemBonus(GameAttribute.Damage_Weapon_Delta, damageType.AttributeKey);
+                var weaponDamageBonusMin = this.Inventory.GetItemBonus(GameAttribute.Damage_Weapon_Bonus_Min, damageType.AttributeKey);
+                var weaponDamageBonusDelta = this.Inventory.GetItemBonus(GameAttribute.Damage_Weapon_Bonus_Delta, damageType.AttributeKey);
 
                 this.Attributes[GameAttribute.Damage_Weapon_Min, damageType.AttributeKey] = Math.Max(3.0f, weaponDamageMin);//what is the minimum damage per damageType?
                 this.Attributes[GameAttribute.Damage_Weapon_Delta, damageType.AttributeKey] = Math.Max(3.0f, weaponDamageDelta);//what is the minimum damage per damageType?
                 this.Attributes[GameAttribute.Damage_Weapon_Bonus_Min, damageType.AttributeKey] = weaponDamageBonusMin;
                 this.Attributes[GameAttribute.Damage_Weapon_Bonus_Delta, damageType.AttributeKey] = weaponDamageBonusDelta;
 
-                this.Attributes[GameAttribute.Resistance, damageType.AttributeKey] = this.GetItemBonus(GameAttribute.Resistance, damageType.AttributeKey);
+                this.Attributes[GameAttribute.Resistance, damageType.AttributeKey] = this.Inventory.GetItemBonus(GameAttribute.Resistance, damageType.AttributeKey);
 
             }
 
 
 
 
-            this.Attributes[GameAttribute.Armor_Item_Percent] = this.GetItemBonus(GameAttribute.Armor_Item_Percent);
-            this.Attributes[GameAttribute.Armor_Item] = this.GetItemBonus(GameAttribute.Armor_Item);
-            this.Attributes[GameAttribute.Strength_Item] = this.GetItemBonus(GameAttribute.Strength_Item);
-            this.Attributes[GameAttribute.Dexterity_Item] = this.GetItemBonus(GameAttribute.Dexterity_Item);
-            this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus_Item] = this.GetItemBonus(GameAttribute.Hitpoints_Max_Percent_Bonus_Item);
-            this.Attributes[GameAttribute.Hitpoints_Max_Bonus] = this.GetItemBonus(GameAttribute.Hitpoints_Max_Bonus);
-            this.Attributes[GameAttribute.Attacks_Per_Second_Item] = this.GetItemBonus(GameAttribute.Attacks_Per_Second_Item);
+            this.Attributes[GameAttribute.Armor_Item_Percent] = this.Inventory.GetItemBonus(GameAttribute.Armor_Item_Percent);
+            this.Attributes[GameAttribute.Armor_Item] = this.Inventory.GetItemBonus(GameAttribute.Armor_Item);
+            this.Attributes[GameAttribute.Strength_Item] = this.Inventory.GetItemBonus(GameAttribute.Strength_Item);
+            this.Attributes[GameAttribute.Dexterity_Item] = this.Inventory.GetItemBonus(GameAttribute.Dexterity_Item);
+            this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus_Item] = this.Inventory.GetItemBonus(GameAttribute.Hitpoints_Max_Percent_Bonus_Item);
+            this.Attributes[GameAttribute.Hitpoints_Max_Bonus] = this.Inventory.GetItemBonus(GameAttribute.Hitpoints_Max_Bonus);
+            this.Attributes[GameAttribute.Attacks_Per_Second_Item] = this.Inventory.GetItemBonus(GameAttribute.Attacks_Per_Second_Item);
 
 
 
-            this.Attributes[GameAttribute.Resistance_Freeze] = this.GetItemBonus(GameAttribute.Resistance_Freeze);
-            this.Attributes[GameAttribute.Resistance_Penetration] = this.GetItemBonus(GameAttribute.Resistance_Penetration);
-            this.Attributes[GameAttribute.Resistance_Percent] = this.GetItemBonus(GameAttribute.Resistance_Percent);
-            this.Attributes[GameAttribute.Resistance_Root] = this.GetItemBonus(GameAttribute.Resistance_Root);
-            this.Attributes[GameAttribute.Resistance_Stun] = this.GetItemBonus(GameAttribute.Resistance_Stun);
-            this.Attributes[GameAttribute.Resistance_StunRootFreeze] = this.GetItemBonus(GameAttribute.Resistance_StunRootFreeze);
+            this.Attributes[GameAttribute.Resistance_Freeze] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Freeze);
+            this.Attributes[GameAttribute.Resistance_Penetration] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Penetration);
+            this.Attributes[GameAttribute.Resistance_Percent] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Percent);
+            this.Attributes[GameAttribute.Resistance_Root] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Root);
+            this.Attributes[GameAttribute.Resistance_Stun] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Stun);
+            this.Attributes[GameAttribute.Resistance_StunRootFreeze] = this.Inventory.GetItemBonus(GameAttribute.Resistance_StunRootFreeze);
             //end Attributes by equipped items.
 
 
@@ -413,7 +413,7 @@ namespace Mooege.Core.GS.Players
             #region Attributes
 
 
-            SetNonDefaultStats();
+
             this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
             //Skills
             this.Attributes[GameAttribute.SkillKit] = Toon.HeroTable.SNOSKillKit0;
@@ -571,6 +571,8 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Backpack_Slots] = 60;
             this.Attributes[GameAttribute.General_Cooldown] = 0;
 
+            this.Inventory = new Inventory(this); // Here because it needs attributes /fasbat
+            SetNonDefaultStats();//needs to be called after inventory creation.
 
             #endregion // Attributes
 
@@ -600,7 +602,6 @@ namespace Mooege.Core.GS.Players
                 }
             }
 
-            this.Inventory = new Inventory(this); // Here because it needs attributes /fasbat
         }
 
         #region game-message handling & consumers
@@ -1094,35 +1095,6 @@ namespace Mooege.Core.GS.Players
 
         #region player attribute handling
 
-        public float GetItemBonus(GameAttributeF attributeF)
-        {
-
-            if (this.Inventory != null && this.Inventory.Loaded)
-                return this.Inventory.GetEquippedItems().Sum(item => item.Attributes[attributeF]);
-            return 0.0f;
-        }
-
-        public int GetItemBonus(GameAttributeI attributeI)
-        {
-            if (this.Inventory != null && this.Inventory.Loaded)
-                return this.Inventory.GetEquippedItems().Sum(item => item.Attributes[attributeI]);
-            return 0;
-        }
-
-        public float GetItemBonus(GameAttributeF attributeF, int attributeKey)
-        {
-
-            if (this.Inventory != null && this.Inventory.Loaded)
-                return this.Inventory.GetEquippedItems().Sum(item => item.Attributes[attributeF, attributeKey]);
-            return 0.0f;
-        }
-
-        public int GetItemBonus(GameAttributeI attributeI, int attributeKey)
-        {
-            if (this.Inventory != null && this.Inventory.Loaded)
-                return this.Inventory.GetEquippedItems().Sum(item => item.Attributes[attributeI, attributeKey]);
-            return 0;
-        }
 
 
         public float Strength

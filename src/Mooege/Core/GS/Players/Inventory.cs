@@ -41,7 +41,7 @@ namespace Mooege.Core.GS.Players
 
     public class Inventory : IMessageConsumer, IRevealable
     {
-        
+
         static readonly Logger Logger = LogManager.CreateLogger();
 
         // Access by ID
@@ -802,5 +802,28 @@ namespace Mooege.Core.GS.Players
             item.DBInventory.DBItemInstance = item.DBItemInstance;
             DBSessions.AccountSession.SaveOrUpdate(item.DBInventory);
         }
+
+        #region EqupimentStats
+        public float GetItemBonus(GameAttributeF attributeF)
+        {
+            return this.Loaded ? this.GetEquippedItems().Sum(item => item.Attributes[attributeF]) : 0.0f;
+        }
+
+        public int GetItemBonus(GameAttributeI attributeI)
+        {
+            return this.Loaded ? this.GetEquippedItems().Sum(item => item.Attributes[attributeI]) : 0;
+        }
+
+        public float GetItemBonus(GameAttributeF attributeF, int attributeKey)
+        {
+            return this.Loaded ? this.GetEquippedItems().Sum(item => item.Attributes[attributeF, attributeKey]) : 0.0f;
+        }
+
+        public int GetItemBonus(GameAttributeI attributeI, int attributeKey)
+        {
+            return this.Loaded ? this.GetEquippedItems().Sum(item => item.Attributes[attributeI, attributeKey]) : 0;
+        }
+
+        #endregion
     }
 }
