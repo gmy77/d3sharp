@@ -26,11 +26,12 @@ using Mooege.Core.GS.Actors;
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
-    [ImplementsPowerSNO(0x00007780)]  // Weapon_Melee_Instant.pow
+    [ImplementsPowerSNO(30592)]  // Weapon_Melee_Instant.pow
     public class WeaponMeleeInstant : ActionTimedSkill
     {
         public override IEnumerable<TickTimer> Main()
         {
+            (this.User as Monster).TranslateFacing(TargetPosition);
             WeaponDamage(GetBestMeleeEnemy(), 1.00f, DamageType.Physical);
             yield break;
         }

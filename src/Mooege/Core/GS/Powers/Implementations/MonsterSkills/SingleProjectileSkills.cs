@@ -58,6 +58,16 @@ namespace Mooege.Core.GS.Powers.Implementations
         }
     }
 
+    [ImplementsPowerSNO(30474)] // Shield_Skeleton_Melee_Instant.pow
+    public class ShieldSkeletonMeleeInstant : SingleProjectileSkill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            WeaponDamage(GetBestMeleeEnemy(), 1.50f, DamageType.Physical);
+            yield break;
+        }
+    }
+
     [ImplementsPowerSNO(30258)] // graveRobber_Projectile.pow
     public class graveRobberProjectile : SingleProjectileSkill
     {
@@ -172,6 +182,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 WeaponDamage(hit, 1.00f, DamageType.Poison);
                 projectile.Destroy();
             });
+            (this.User as Monster).TranslateFacing(TargetPosition);
             projectile.Position.Z += 5f;  // fix height
             return Launch();
         }

@@ -44,6 +44,30 @@ namespace Mooege.Core.GS.Powers.Implementations
             monster.EnterWorld(spawnPos);
             this.World.BuffManager.AddBuff(User, monster, new Implementations.SummonedBuff());
         }
+        public void SummonMonsterOn(int actorSNO)
+        {
+            float userFacing = (float)Math.Acos(this.User.RotationW) * 2f;
+            Vector3D spawnPos = new Vector3D(User.Position.X,
+                                             User.Position.Y,
+                                             User.Position.Z);
+
+            var monster = ActorFactory.Create(User.World, actorSNO, new TagMap());
+            monster.Scale = 1.35f;  // TODO: look this up properly
+            monster.EnterWorld(spawnPos);
+            this.World.BuffManager.AddBuff(User, monster, new Implementations.SummonedBuff());
+        }
+        public void SummonMonsterRandom(int actorSNO)
+        {
+            float userFacing = (float)Math.Acos(this.User.RotationW) * 2f;
+            Vector3D spawnPos = new Vector3D(User.Position.X + 100 * (float)RandomHelper.NextDouble(),
+                                             User.Position.Y + 100 * (float)RandomHelper.NextDouble(),
+                                             User.Position.Z);
+
+            var monster = ActorFactory.Create(User.World, actorSNO, new TagMap());
+            monster.Scale = 1.35f;  // TODO: look this up properly
+            monster.EnterWorld(spawnPos);
+            this.World.BuffManager.AddBuff(User, monster, new Implementations.SummonedBuff());
+        }
     }
 
     [ImplementsPowerSNO(94734)] // Summon_Zombie_Vomit.pow
@@ -71,8 +95,18 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            SummonMonsterInFront(5482);  // HACK: we don't have this in mpq
+            SummonMonsterRandom(5482);  // HACK: we don't have this in mpq
             yield break;
         }
     }
+    [ImplementsPowerSNO(117580)] // Summon FleshPitFlyers
+    public class SummonFleshPitFlyers : SummoningSkill
+    {
+        public override IEnumerable<TickTimer> Main()
+        {
+            SummonMonsterOn((this.User as Monster).SNOSummons[0]);
+            yield break;
+        }
+    }
+    //
 }

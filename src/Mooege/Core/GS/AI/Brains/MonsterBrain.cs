@@ -35,6 +35,8 @@ namespace Mooege.Core.GS.AI.Brains
     {
         // list of power SNOs that are defined for the monster
         public List<int> PresetPowers { get; private set; }
+        public float timedelay=-0.01f;
+        public bool dodelay = false;
 
         private TickTimer _powerDelay;
 
@@ -83,21 +85,38 @@ namespace Mooege.Core.GS.AI.Brains
                 return;
             }
 
+            if(dodelay)
+            _powerDelay = null;
+
             // select and start executing a power if no active action
             if (this.CurrentAction == null)
             {
                 // do a little delay so groups of monsters don't all execute at once
                 if (_powerDelay == null)
-                    _powerDelay = new SecondsTickTimer(this.Body.World.Game, (float)RandomHelper.NextDouble());
+                    _powerDelay = PowerDelay(timedelay);
+                
 
                 if (_powerDelay.TimedOut)
                 {
                     int powerToUse = PickPowerToUse();
                     if (powerToUse > 0)
+                    {
                         this.CurrentAction = new PowerAction(this.Body, powerToUse);
+                    }
                 }
             }
         }
+
+        protected TickTimer PowerDelay(float time)
+        {
+            TickTimer Delay;
+             if(time<0)
+                 Delay= new SecondsTickTimer(this.Body.World.Game, (float)RandomHelper.NextDouble());
+             else
+                 Delay = new SecondsTickTimer(this.Body.World.Game, time);
+            return Delay;
+        }
+
 
         protected virtual int PickPowerToUse()
         {
@@ -130,6 +149,14 @@ namespace Mooege.Core.GS.AI.Brains
             }
             
             this.PresetPowers.Add(powerSNO);
+        }
+
+        public void RemovePresetPower(int powerSNO)
+        {
+            if (this.PresetPowers.Contains(powerSNO))
+            {
+                this.PresetPowers.Remove(powerSNO);
+            }
         }
     }
 }
