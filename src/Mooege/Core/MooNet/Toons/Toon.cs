@@ -355,7 +355,7 @@ namespace Mooege.Core.MooNet.Toons
             var visualToSlotMapping = new Dictionary<int, int> { { 1, 0 }, { 2, 1 }, { 7, 2 }, { 5, 3 }, { 4, 4 }, { 3, 5 }, { 8, 6 }, { 9, 7 } };
 
             //add visual equipment from DB, only the visualizable equipment, not everything
-            var visibleEquipment = DBSessions.AccountSession.Query<DBInventory>().Where(inv => inv.ItemId != -1 && inv.DBToon.Id == dbToon.Id && inv.EquipmentSlot != -1).ToList();
+            var visibleEquipment = DBSessions.AccountSession.Query<DBInventory>().Where(inv => inv.DBItemInstance!=null && inv.DBToon.Id == dbToon.Id && inv.EquipmentSlot != -1).ToList();
 
             foreach (var inv in visibleEquipment)
             {
@@ -364,7 +364,7 @@ namespace Mooege.Core.MooNet.Toons
                     continue;
                 // decode vislual slot from equipment slot
                 slot = visualToSlotMapping[slot];
-                var gbid = inv.ItemId;
+                var gbid = inv.DBItemInstance.GbId;
                 visualItems[slot] = D3.Hero.VisualItem.CreateBuilder()
                     .SetGbid(gbid)
                     .SetEffectLevel(0)

@@ -114,5 +114,49 @@ namespace Mooege.Core.GS.Items
             }
         }
 
+        public static void CloneIntoItem(Item source, Item target)
+        {
+            target.AffixList.Clear();
+            foreach (var affix in source.AffixList)
+            {
+                var newItemAffix = new Affix(affix.AffixGbid);
+                target.AffixList.Add(newItemAffix);
+            }
+            foreach (var affix in target.AffixList)
+            {
+                var definition = AffixList.Single(def => def.Hash == affix.AffixGbid);
+                foreach (var effect in definition.AttributeSpecifier)
+                {
+                    if (effect.AttributeId <= 0)
+                        continue;
+
+                    var attribute = GameAttribute.Attributes[effect.AttributeId];
+
+                    if (attribute.ScriptFunc != null && !attribute.ScriptedAndSettable)
+                        continue;
+
+                    if (attribute is GameAttributeF)
+                    {
+                        var attr = GameAttribute.Attributes[effect.AttributeId] as GameAttributeF;
+                        if (effect.SNOParam != -1)
+                            target.Attributes[attr, effect.SNOParam] = source.Attributes[attr, effect.SNOParam];
+                        else
+                            target.Attributes[attr] = source.Attributes[attr];
+                    }
+                    else if (GameAttribute.Attributes[effect.AttributeId] is GameAttributeI)
+                    {
+                        var attr = GameAttribute.Attributes[effect.AttributeId] as GameAttributeI;
+                        if (effect.SNOParam != -1)
+                            target.Attributes[attr, effect.SNOParam] = source.Attributes[attr, effect.SNOParam];
+                        else
+                            target.Attributes[attr] = source.Attributes[attr];
+                    }
+
+                }
+            }
+
+
+        }
+
     }
 }

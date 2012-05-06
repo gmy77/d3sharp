@@ -26,7 +26,7 @@ namespace Mooege.Net.GS.Message
 
         static GameAttribute()
         {
-            Attributes = typeof (GameAttribute).GetFields()
+            Attributes = typeof(GameAttribute).GetFields()
                 .Where(a =>
                        a.IsStatic &&
                        (a.FieldType.Name == "GameAttributeI" ||

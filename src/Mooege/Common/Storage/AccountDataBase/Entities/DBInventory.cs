@@ -14,7 +14,8 @@ namespace Mooege.Common.Storage.AccountDataBase.Entities
         public virtual int LocationX { get; set; }
         public virtual int LocationY { get; set; }
         public virtual int EquipmentSlot { get; set; }
-        public virtual int ItemId { get; set; }
+        //public virtual int ItemId { get; set; }
+        public virtual DBItemInstance DBItemInstance { get; set; }
 
     }
 }

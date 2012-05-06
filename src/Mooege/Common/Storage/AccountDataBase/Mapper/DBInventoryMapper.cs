@@ -15,10 +15,10 @@ namespace Mooege.Common.Storage.AccountDataBase.Mapper
             References(e => e.DBGameAccount).Nullable();
             References(e => e.DBToon).Nullable();
             Map(e => e.EquipmentSlot);
-            Map(e => e.ItemId);
+            //Map(e => e.ItemId);
             Map(e => e.LocationX);
             Map(e => e.LocationY);
-            
+            References(e => e.DBItemInstance).Not.Nullable();
         }
     }
 }

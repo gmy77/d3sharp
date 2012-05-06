@@ -23,6 +23,7 @@ using System.Linq;
 using System.Windows;
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
+using Mooege.Common.Storage;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.QuadTrees;
@@ -45,6 +46,10 @@ namespace Mooege.Core.GS.Map
     public sealed class World : DynamicObject, IRevealable, IUpdateable
     {
         static readonly Logger Logger = LogManager.CreateLogger();
+        public readonly Dictionary<World, List<Item>> DbItems = new Dictionary<World, List<Item>>(); //we need this list to delete item_instances from items which have no owner anymore.
+        public readonly Dictionary<ulong, Item> CachedItems = new Dictionary<ulong, Item>();
+
+
 
         /// <summary>
         /// Game that the world belongs to.
@@ -790,7 +795,22 @@ namespace Mooege.Core.GS.Map
             return false;
         }
 
-        
+        public void CleanupItemInstances()
+        {
+            if (DbItems.ContainsKey(this))
+            {
+                var itemInstancesToDelete = DbItems[this].Where(dbi => dbi.Owner == null);
+                foreach (var itm in itemInstancesToDelete)
+                {
+                    if (itm.DBInventory == null)
+                        ItemGenerator.DeleteFromDB(itm);
+                }
+                DbItems.Remove(this);
+            }
+
+        }
+
+
         public override string ToString()
         {
             return string.Format("[World] SNOId: {0} DynamicId: {1} Name: {2}", this.WorldSNO.Id, this.DynamicID, this.WorldSNO.Name);

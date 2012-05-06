@@ -124,14 +124,17 @@
     <Compile Include="Common\Storage\AccountDataBase\Entities\DBActiveSkills.cs" />
     <Compile Include="Common\Storage\AccountDataBase\Entities\DBGameAccount.cs" />
     <Compile Include="Common\Storage\AccountDataBase\Entities\DBInventory.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Entities\DBItemInstance.cs" />
     <Compile Include="Common\Storage\AccountDataBase\Entities\DBToon.cs" />
     <Compile Include="Common\Storage\AccountDataBase\Mapper\DBAccountMapper.cs" />
     <Compile Include="Common\Storage\AccountDataBase\Mapper\DBActiveSkillsMapper.cs" />
     <Compile Include="Common\Storage\AccountDataBase\Mapper\DBGameAccountMapper.cs" />
     <Compile Include="Common\Storage\AccountDataBase\Mapper\DBInventoryMapper.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Mapper\DBItemInstanceMapper.cs" />
     <Compile Include="Common\Storage\AccountDataBase\Mapper\DBToonMapper.cs" />
     <Compile Include="Common\Storage\AccountDataBase\SessionProvider.cs" />
     <Compile Include="Common\Storage\DBSessions.cs" />
+    <Compile Include="Common\Extensions\StringExtensions.cs" />
     <Compile Include="Core\GS\Actors\Actions\PowerAction.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Door.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Minions\AncientKorlic.cs" />

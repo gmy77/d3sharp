@@ -837,8 +837,8 @@ namespace Mooege.Core.GS.Players
                     continue; // if the scene is already revealed, skip it.
 
                 if (scene.Parent != null) // if it's a subscene, always make sure it's parent get reveals first and then it reveals his childs.
-                    scene.Parent.Reveal(this); 
-                else 
+                    scene.Parent.Reveal(this);
+                else
                     scene.Reveal(this);
             }
         }
@@ -855,8 +855,8 @@ namespace Mooege.Core.GS.Players
                 if (actor.Visible == false || actor.IsRevealedToPlayer(this)) // if the actors is already revealed, skip it.
                     continue;
 
-                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player 
-                    || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment 
+                if (actor.ActorType == ActorType.Gizmo || actor.ActorType == ActorType.Player
+                    || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Enviroment
                     || actor.ActorType == ActorType.Critter || actor.ActorType == ActorType.Item || actor.ActorType == ActorType.ServerProp)
                     actor.Reveal(this);
             }
@@ -870,7 +870,8 @@ namespace Mooege.Core.GS.Players
             this.RevealActorsToPlayer(); // reveal actors in players proximity.
 
             // load all inventory items
-            this.Inventory.LoadFromDB();
+            if (!this.Inventory.Loaded)//why reload if already loaded?
+                this.Inventory.LoadFromDB();
 
             // generate visual update message
             this.Inventory.SendVisualInventory(this);
@@ -894,6 +895,7 @@ namespace Mooege.Core.GS.Players
 
             // save all inventory items
             this.Inventory.SaveToDB();
+            world.CleanupItemInstances();
         }
 
         public override bool Reveal(Player player)
@@ -1188,13 +1190,13 @@ namespace Mooege.Core.GS.Players
         {
             var data = HeroData.Heros.Find(item => item.Name == @class.ToString());
 
-            if(gender==0) // male
+            if (gender == 0) // male
             {
                 return data.SNOMaleActor;
             }
             else // female
             {
-                    return data.SNOFemaleActor;
+                return data.SNOFemaleActor;
             }
         }
 
@@ -1269,7 +1271,7 @@ namespace Mooege.Core.GS.Players
         {
             return (Math.Max((this.Attributes[GameAttribute.Hitpoints_Max] + this.Attributes[GameAttribute.Hitpoints_Total_From_Level] +
                 this.Attributes[GameAttribute.Hitpoints_Max_Bonus]) *
-                (this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus] + this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus_Item] + 1),1));
+                (this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus] + this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus_Item] + 1), 1));
         }
 
         //Max((Resource_Max + ((Level#NONE - 1) * Resource_Factor_Level) + Resource_Max_Bonus) * (Resource_Max_Percent_Bonus + 1), 0)
@@ -1570,7 +1572,8 @@ namespace Mooege.Core.GS.Players
         /// Adds lore to player's state
         /// </summary>
         /// <param name="loreSNOId"></param>
-        public void AddLore(int loreSNOId) {
+        public void AddLore(int loreSNOId)
+        {
             if (this.LearnedLore.Count < this.LearnedLore.m_snoLoreLearned.Length)
             {
                 LearnedLore.m_snoLoreLearned[LearnedLore.Count] = loreSNOId;
