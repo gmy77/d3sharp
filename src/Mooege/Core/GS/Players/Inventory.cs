@@ -55,7 +55,6 @@ namespace Mooege.Core.GS.Players
         private InventoryGrid _inventoryGrid;
         private InventoryGrid _stashGrid;
         private Item _inventoryGold;
-        public bool Loaded { get; private set; }
         // backpack for spellRunes, their Items are kept in equipment
         private uint[] _skillSocketRunes;
 

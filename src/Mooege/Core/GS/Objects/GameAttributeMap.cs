@@ -66,6 +66,10 @@ namespace Mooege.Core.GS.Objects
 
         private HashSet<KeyId> _changedAttributes = new HashSet<KeyId>();
         private Dictionary<KeyId, GameAttributeValue> _attributeValues = new Dictionary<KeyId, GameAttributeValue>();
+        public int?[] AttributeKeys(GameAttribute ga)
+        {
+            return _attributeValues.Where(av => av.Key.Id == ga.Id).Select(av => av.Key.Key).ToArray();
+        }
         private WorldObject _parent;
 
 
