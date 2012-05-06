@@ -729,7 +729,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override void OnChannelOpen()
         {
-            EffectsPerSecond = 0.1f;
+            EffectsPerSecond = ScriptFormula(18);
 
             _calcTargetPosition();
             _target = SpawnEffect(RuneSelect(52687, 52687, 93544, -1, 52687, 215723), TargetPosition, 0, WaitInfinite());
@@ -751,7 +751,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override IEnumerable<TickTimer> Main()
         {
-            UsePrimaryResource(ScriptFormula(22) * EffectsPerSecond);
+            UsePrimaryResource(ScriptFormula(22));
 
             foreach (Actor actor in GetEnemiesInRadius(User.Position, BeamLength + 10f).Actors)
             {
@@ -1224,7 +1224,7 @@ namespace Mooege.Core.GS.Powers.Implementations
 
         public override void OnChannelOpen()
         {
-            this.EffectsPerSecond = 0.33f;
+            this.EffectsPerSecond = ScriptFormula(15);
 
             if (Rune_B > 0)
             {
@@ -1256,7 +1256,7 @@ namespace Mooege.Core.GS.Powers.Implementations
         public override IEnumerable<TickTimer> Main()
         {
             // Rune_D resource mod calculated in SF_19
-            UsePrimaryResource(ScriptFormula(19) * EffectsPerSecond);
+            UsePrimaryResource(ScriptFormula(19));
 
             AttackPayload attack = new AttackPayload(this);
             if (Rune_B > 0)

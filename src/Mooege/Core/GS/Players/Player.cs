@@ -1522,18 +1522,17 @@ namespace Mooege.Core.GS.Players
             // will crash client when loading if you try to update resources too early
             if (!InGameClient.TickingEnabled) return;
 
-            // update resources once every update for now.
-            if (this.InGameClient.Game.TickCounter - _lastResourceUpdateTick < this.InGameClient.Game.TickRate)
-                return;
-
+            // 1 tick = 1/60s, so multiply ticks in seconds against resource regen per-second to get the amount to update
+            float tickSeconds = 1f / 60f * (this.InGameClient.Game.TickCounter - _lastResourceUpdateTick);
             _lastResourceUpdateTick = this.InGameClient.Game.TickCounter;
 
             var data = HeroData.Heros.Find(item => item.Name == this.Toon.Class.ToString());
-            GeneratePrimaryResource(data.PrimaryResourceRegenPerSecond);
-            GenerateSecondaryResource(data.SecondaryResourceRegenPerSecond);
+            GeneratePrimaryResource(tickSeconds * data.PrimaryResourceRegenPerSecond);
+            GenerateSecondaryResource(tickSeconds * data.SecondaryResourceRegenPerSecond);
 
+            // TODO: replace this with Trait_Barbarian_Fury.pow implementation
             if (this.Toon.Class == ToonClass.Barbarian)
-                UsePrimaryResource(0.1f);
+                UsePrimaryResource(tickSeconds * 0.9f);
         }
 
         #endregion
