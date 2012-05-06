@@ -30,11 +30,6 @@ namespace Mooege.Core.GS.Objects
     public class GameAttributeMap
     {
         private static Logger Logger = LogManager.CreateLogger();
-        public IEnumerable<int> ActiveIds
-        {
-            get { return this._attributeValues.Select(k => k.Key.Id); }
-        }
-
 
         private struct KeyId
         {
@@ -66,12 +61,7 @@ namespace Mooege.Core.GS.Objects
 
         private HashSet<KeyId> _changedAttributes = new HashSet<KeyId>();
         private Dictionary<KeyId, GameAttributeValue> _attributeValues = new Dictionary<KeyId, GameAttributeValue>();
-        public int?[] AttributeKeys(GameAttribute ga)
-        {
-            return _attributeValues.Where(av => av.Key.Id == ga.Id).Select(av => av.Key.Key).ToArray();
-        }
         private WorldObject _parent;
-
 
         public GameAttributeMap(WorldObject parent)
         {
@@ -540,5 +530,15 @@ namespace Mooege.Core.GS.Objects
             return RawGetAttributeValue(attribute, key).Value != 0;
         }
         #endregion
+
+
+        public IEnumerable<int> ActiveIds
+        {
+            get { return this._attributeValues.Select(k => k.Key.Id); }
+        }
+        public int?[] AttributeKeys(GameAttribute ga)
+        {
+            return _attributeValues.Where(av => av.Key.Id == ga.Id).Select(av => av.Key.Key).ToArray();
+        }
     }
 }
