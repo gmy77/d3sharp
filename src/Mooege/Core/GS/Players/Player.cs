@@ -177,14 +177,15 @@ namespace Mooege.Core.GS.Players
 
         // number of seconds to use for the cooldown that is started after changing a skill.
         private const float SkillChangeCooldownLength = 5f;  // TODO: this needs to vary based on difficulty
+        #region Just a testing function, never called. Add this to the End of SetNonDefaultStats to get All Equipped items attributes written to a file.
         private void TestOutPutItemAttributes()
         {
             if (this.Inventory == null || !this.Inventory.Loaded) return;
-
-            File.Delete("c:/attrtest.txt");
+            const string filename = "c:/attrtest.txt";
+            File.Delete(filename);
             foreach (var item in this.Inventory.GetEquippedItems())
             {
-                File.AppendAllText("C:/attrtest.txt", string.Format("======{0}=========\r\n", item.EquipmentSlot));
+                File.AppendAllText(filename, string.Format("======{0}=========\r\n", item.EquipmentSlot));
                 foreach (GameAttributeF ga in GameAttribute.Attributes.Where(ga => ga is GameAttributeF))
                 {
                     var keys = item.Attributes.AttributeKeys(ga);
@@ -193,7 +194,7 @@ namespace Mooege.Core.GS.Players
                         var curVal = Convert.ToDouble(item.Attributes[ga]);
                         if (curVal.CompareTo(Convert.ToDouble(ga.DefaultValue)) == 0)
                             continue;
-                        File.AppendAllText("C:/attrtest.txt", string.Format("{0}:\t{1}\r\n", ga.Name, curVal));
+                        File.AppendAllText(filename, string.Format("{0}:\t{1}\r\n", ga.Name, curVal));
                     }
                     else
                     {
@@ -202,7 +203,7 @@ namespace Mooege.Core.GS.Players
                             var curVal = Convert.ToDouble(item.Attributes[ga, key]);
                             if (curVal.CompareTo(Convert.ToDouble(ga.DefaultValue)) == 0)
                                 continue;
-                            File.AppendAllText("C:/attrtest.txt", string.Format("{0}|{1}:\t{2}\r\n", ga.Name, key, curVal));
+                            File.AppendAllText(filename, string.Format("{0}|{1}:\t{2}\r\n", ga.Name, key, curVal));
 
                         }
                     }
@@ -216,7 +217,7 @@ namespace Mooege.Core.GS.Players
                         var curVal = item.Attributes[ga];
                         if (curVal == ga.DefaultValue)
                             continue;
-                        File.AppendAllText("C:/attrtest.txt", string.Format("{0}:\t{1}\r\n", ga.Name, curVal));
+                        File.AppendAllText(filename, string.Format("{0}:\t{1}\r\n", ga.Name, curVal));
                     }
                     else
                     {
@@ -225,16 +226,16 @@ namespace Mooege.Core.GS.Players
                             var curVal = item.Attributes[ga];
                             if (curVal == ga.DefaultValue)
                                 continue;
-                            File.AppendAllText("C:/attrtest.txt", string.Format("{0}|{1}:\t{2}\r\n", ga.Name, key, curVal));
+                            File.AppendAllText(filename, string.Format("{0}|{1}:\t{2}\r\n", ga.Name, key, curVal));
 
                         }
                     }
                 }
 
-                File.AppendAllText("C:/attrtest.txt", "===============\r\n\r\n");
+                File.AppendAllText(filename, "===============\r\n\r\n");
             }
         }
-
+        #endregion
         public void SetNonDefaultStats()
         {
 
