@@ -300,6 +300,13 @@ namespace Mooege.Core.GS.Items
                 item.DBItemInstance.Attributes = attributesSer;
                 item.DBItemInstance.GbId = item.GBHandle.GBID;
                 DBSessions.AccountSession.SaveOrUpdate(item.DBItemInstance);
+                if (item.DBInventory != null)
+                {
+                    item.DBInventory.DBItemInstance = item.DBItemInstance;
+                    DBSessions.AccountSession.SaveOrUpdate(item.DBInventory);
+                }
+
+                DBSessions.AccountSession.Flush();
             }
 
 
@@ -310,15 +317,18 @@ namespace Mooege.Core.GS.Items
         }
 
         
+        
         public static void DeleteFromDB(Item item)
         {
             if (item.DBItemInstance==null)
                 return;
+            if (item.DBInventory!=null)
+                return;//should be deleted by inventory.
             Logger.Debug("Deleting Item instance #{0} from DB", item.DBItemInstance.Id);
             if (item.World.CachedItems.ContainsKey(item.DBItemInstance.Id))
                 item.World.CachedItems.Remove(item.DBItemInstance.Id);
-            Debug.Assert(item.DBInventory==null);
             DBSessions.AccountSession.Delete(item.DBItemInstance);
+            DBSessions.AccountSession.Flush();
             item.DBItemInstance = null;
         }
         

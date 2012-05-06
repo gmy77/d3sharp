@@ -23,6 +23,7 @@ using System.Linq;
 using System.Windows;
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
+using Mooege.Common.Storage;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.QuadTrees;
@@ -800,7 +801,10 @@ namespace Mooege.Core.GS.Map
             {
                 var itemInstancesToDelete = DbItems[this].Where(dbi => dbi.Owner == null);
                 foreach (var itm in itemInstancesToDelete)
-                    ItemGenerator.DeleteFromDB(itm);
+                {
+                    if (itm.DBInventory == null)
+                        ItemGenerator.DeleteFromDB(itm);
+                }
                 DbItems.Remove(this);
             }
 

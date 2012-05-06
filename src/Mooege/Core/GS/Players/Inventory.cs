@@ -418,7 +418,7 @@ namespace Mooege.Core.GS.Players
             itemFrom.Attributes.SendChangedMessage(_owner.InGameClient);
             itemTo.Attributes.SendChangedMessage(_owner.InGameClient);
         }
-
+        private List<DBInventory> _dbInventoriesToDelete = new List<DBInventory>();
         private void OnInventoryDropItemMessage(InventoryDropItemMessage msg)
         {
             var item = GetItem(msg.ItemID);
@@ -440,6 +440,9 @@ namespace Mooege.Core.GS.Players
             item.Unreveal(_owner);
             item.SetNewWorld(_owner.World);
             item.Drop(null, _owner.Position);
+            if (item.DBInventory != null)
+                _dbInventoriesToDelete.Add(item.DBInventory);
+            item.DBInventory = null;
             item.CurrentState = ItemState.Normal;
             AcceptMoveRequest(item);
         }
@@ -649,7 +652,7 @@ namespace Mooege.Core.GS.Players
             return _inventoryGold.Attributes[GameAttribute.Gold];
         }
 
-        private static IEnumerable<DBInventory> _dbInventories = DBSessions.AccountSession.Query<DBInventory>().Fetch(inv=>inv.DBItemInstance);
+        private static IEnumerable<DBInventory> _dbInventories = DBSessions.AccountSession.Query<DBInventory>().Fetch(inv => inv.DBItemInstance);
 
 
         public void LoadFromDB()
@@ -699,7 +702,7 @@ namespace Mooege.Core.GS.Players
             // next read all items
             var allInventoryItems = _dbInventories.Where(
                     dbi =>
-                    dbi.DBToon != null && dbi.DBToon.Id == _owner.Toon.PersistentID && dbi.DBItemInstance!=null).ToList();
+                    dbi.DBToon != null && dbi.DBToon.Id == _owner.Toon.PersistentID && dbi.DBItemInstance != null).ToList();
 
 
             foreach (var inv in allInventoryItems)
@@ -735,11 +738,20 @@ namespace Mooege.Core.GS.Players
             var dbToon = DBSessions.AccountSession.Get<DBToon>(this._owner.Toon.PersistentID);
             var dbGameAccount = DBSessions.AccountSession.Get<DBGameAccount>(this._owner.Toon.GameAccount.PersistentID);
 
+
+            foreach (var dbInventory in _dbInventoriesToDelete)
+            {
+                DBSessions.AccountSession.Delete(dbInventory);
+            }
+
             foreach (var inv in _destroyedItems.Where(inv => inv.DBInventory != null))
+            {
                 DBSessions.AccountSession.Delete(inv.DBInventory);
+            }
+            DBSessions.AccountSession.Flush();
 
             _destroyedItems.Clear();
-
+            _dbInventoriesToDelete.Clear();
             // save equipment
             for (int i = 1; i <= 13; i++) // from Helm = 1 to Neck = 13 in EquipmentSlotId
             {
