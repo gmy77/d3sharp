@@ -465,7 +465,7 @@ namespace Mooege.Core.GS.Players
             else if (message is RequestBuySharedStashSlotsMessage) OnBuySharedStashSlots(message as RequestBuySharedStashSlotsMessage);
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
 
-            _owner.SetStats();
+            _owner.SetNonDefaultStats();
         }
 
         private void OnBuySharedStashSlots(RequestBuySharedStashSlotsMessage requestBuySharedStashSlotsMessage)

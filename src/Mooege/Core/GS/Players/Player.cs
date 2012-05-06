@@ -184,11 +184,11 @@ namespace Mooege.Core.GS.Players
             File.Delete("c:/attrtest.txt");
             foreach (var item in this.Inventory.GetEquippedItems())
             {
-                File.AppendAllText("C:/attrtest.txt",string.Format("======{0}=========\r\n",item.EquipmentSlot));
+                File.AppendAllText("C:/attrtest.txt", string.Format("======{0}=========\r\n", item.EquipmentSlot));
                 foreach (GameAttributeF ga in GameAttribute.Attributes.Where(ga => ga is GameAttributeF))
                 {
                     var keys = item.Attributes.AttributeKeys(ga);
-                    if (keys.Length == 0 ||( keys.Length==1 && !keys[0].HasValue))
+                    if (keys.Length == 0 || (keys.Length == 1 && !keys[0].HasValue))
                     {
                         var curVal = Convert.ToDouble(item.Attributes[ga]);
                         if (curVal.CompareTo(Convert.ToDouble(ga.DefaultValue)) == 0)
@@ -235,33 +235,9 @@ namespace Mooege.Core.GS.Players
             }
         }
 
-        public void SetStats()
+        public void SetNonDefaultStats()
         {
-            //Skills
-            this.Attributes[GameAttribute.SkillKit] = Toon.HeroTable.SNOSKillKit0;
-            //scripted //this.Attributes[GameAttribute.Skill_Total, 0x7545] = 1; //Axe Operate Gizmo
-            this.Attributes[GameAttribute.Skill, 0x7545] = 1;
-            //scripted //this.Attributes[GameAttribute.Skill_Total, 0x76B7] = 1; //Punch!
-            this.Attributes[GameAttribute.Skill, 0x76B7] = 1;
-            //scripted //this.Attributes[GameAttribute.Skill_Total, 0x6DF] = 1; //Use Item
-            this.Attributes[GameAttribute.Skill, 0x6DF] = 1;
-            //scripted //this.Attributes[GameAttribute.Skill_Total, 0x7780] = 1; //Basic Attack
-            this.Attributes[GameAttribute.Skill, 0x7780] = 1;
-            //scripted //this.Attributes[GameAttribute.Skill_Total, 0x0002EC66] = 0; //stone of recall
-            //scripted //this.Attributes[GameAttribute.Skill_Total, 0xFFFFF] = 1;
-            this.Attributes[GameAttribute.Skill, 0xFFFFF] = 1;
-
-            //Buffs
-            this.Attributes[GameAttribute.Buff_Active, 0x33C40] = true;
-            this.Attributes[GameAttribute.Buff_Icon_End_Tick0, 0x00033C40] = 0x000003FB;
-            this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x00033C40] = 0x00000077;
-            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x00033C40] = 1;
-            this.Attributes[GameAttribute.Buff_Active, 0xCE11] = true;
-            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x0000CE11] = 1;
-            this.Attributes[GameAttribute.Buff_Visual_Effect, 0xFFFFF] = true;
-
-            //Damage
-            this.Attributes[GameAttribute.Primary_Damage_Attribute] = (int)Toon.HeroTable.CoreAttribute;
+           
             //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 0] = 1f;
             //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 1] = 3.051758E-05f;
             //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 2] = 3.051758E-05f;
@@ -312,12 +288,6 @@ namespace Mooege.Core.GS.Players
 
 
             //Bonus stats
-            //scripted //this.Attributes[GameAttribute.Get_Hit_Recovery] = 6f;
-            this.Attributes[GameAttribute.Get_Hit_Recovery_Per_Level] = Toon.HeroTable.GetHitRecoveryPerLevel;
-            this.Attributes[GameAttribute.Get_Hit_Recovery_Base] = Toon.HeroTable.GetHitRecoveryBase;
-            //scripted //this.Attributes[GameAttribute.Get_Hit_Max] = 60f;
-            this.Attributes[GameAttribute.Get_Hit_Max_Per_Level] = Toon.HeroTable.GetHitMaxPerLevel;
-            this.Attributes[GameAttribute.Get_Hit_Max_Base] = Toon.HeroTable.GetHitMaxBase;
             this.Attributes[GameAttribute.Hit_Chance] = 1f;
             //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item_CurrentHand] = 1.199219f;
             //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item_Total_MainHand] = 1.199219f;
@@ -361,11 +331,6 @@ namespace Mooege.Core.GS.Players
             //this.Attributes[GameAttribute.Hitpoints_Max_Bonus] = HitpointsBonusPercentItem;
             //scripted //this.Attributes[GameAttribute.Hitpoints_Max_Total] = GetMaxTotalHitpoints();
 
-            this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
-            this.Attributes[GameAttribute.Hitpoints_Regen_Per_Second] = this.Toon.HeroTable.GetHitRecoveryBase +
-                                                                        (this.Toon.HeroTable.GetHitRecoveryPerLevel *
-                                                                         this.Toon.Level);
-
 
             //Attributes by equipped items 
 
@@ -376,13 +341,12 @@ namespace Mooege.Core.GS.Players
                 var weaponDamageBonusMin = this.GetItemBonus(GameAttribute.Damage_Weapon_Bonus_Min, damageType.AttributeKey);
                 var weaponDamageBonusDelta = this.GetItemBonus(GameAttribute.Damage_Weapon_Bonus_Delta, damageType.AttributeKey);
 
-                this.Attributes[GameAttribute.Damage_Weapon_Min, damageType.AttributeKey] = weaponDamageMin;
-                this.Attributes[GameAttribute.Damage_Weapon_Delta, damageType.AttributeKey] = weaponDamageDelta;
+                this.Attributes[GameAttribute.Damage_Weapon_Min, damageType.AttributeKey] = Math.Max(3.0f, weaponDamageMin);//what is the minimum damage per damageType?
+                this.Attributes[GameAttribute.Damage_Weapon_Delta, damageType.AttributeKey] = Math.Max(3.0f, weaponDamageDelta);//what is the minimum damage per damageType?
                 this.Attributes[GameAttribute.Damage_Weapon_Bonus_Min, damageType.AttributeKey] = weaponDamageBonusMin;
                 this.Attributes[GameAttribute.Damage_Weapon_Bonus_Delta, damageType.AttributeKey] = weaponDamageBonusDelta;
 
-
-                this.Attributes[GameAttribute.Resistance,damageType.AttributeKey] = this.GetItemBonus(GameAttribute.Resistance,damageType.AttributeKey);
+                this.Attributes[GameAttribute.Resistance, damageType.AttributeKey] = this.GetItemBonus(GameAttribute.Resistance, damageType.AttributeKey);
 
             }
 
@@ -396,9 +360,9 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus_Item] = this.GetItemBonus(GameAttribute.Hitpoints_Max_Percent_Bonus_Item);
             this.Attributes[GameAttribute.Hitpoints_Max_Bonus] = this.GetItemBonus(GameAttribute.Hitpoints_Max_Bonus);
             this.Attributes[GameAttribute.Attacks_Per_Second_Item] = this.GetItemBonus(GameAttribute.Attacks_Per_Second_Item);
-            
-            
-            
+
+
+
             this.Attributes[GameAttribute.Resistance_Freeze] = this.GetItemBonus(GameAttribute.Resistance_Freeze);
             this.Attributes[GameAttribute.Resistance_Penetration] = this.GetItemBonus(GameAttribute.Resistance_Penetration);
             this.Attributes[GameAttribute.Resistance_Percent] = this.GetItemBonus(GameAttribute.Resistance_Percent);
@@ -448,7 +412,35 @@ namespace Mooege.Core.GS.Players
             #region Attributes
 
 
-            SetStats();
+            SetNonDefaultStats();
+            this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
+            //Skills
+            this.Attributes[GameAttribute.SkillKit] = Toon.HeroTable.SNOSKillKit0;
+            //scripted //this.Attributes[GameAttribute.Skill_Total, 0x7545] = 1; //Axe Operate Gizmo
+            this.Attributes[GameAttribute.Skill, 0x7545] = 1;
+            //scripted //this.Attributes[GameAttribute.Skill_Total, 0x76B7] = 1; //Punch!
+            this.Attributes[GameAttribute.Skill, 0x76B7] = 1;
+            //scripted //this.Attributes[GameAttribute.Skill_Total, 0x6DF] = 1; //Use Item
+            this.Attributes[GameAttribute.Skill, 0x6DF] = 1;
+            //scripted //this.Attributes[GameAttribute.Skill_Total, 0x7780] = 1; //Basic Attack
+            this.Attributes[GameAttribute.Skill, 0x7780] = 1;
+            //scripted //this.Attributes[GameAttribute.Skill_Total, 0x0002EC66] = 0; //stone of recall
+            //scripted //this.Attributes[GameAttribute.Skill_Total, 0xFFFFF] = 1;
+            this.Attributes[GameAttribute.Skill, 0xFFFFF] = 1;
+
+            //Buffs
+            this.Attributes[GameAttribute.Buff_Active, 0x33C40] = true;
+            this.Attributes[GameAttribute.Buff_Icon_End_Tick0, 0x00033C40] = 0x000003FB;
+            this.Attributes[GameAttribute.Buff_Icon_Start_Tick0, 0x00033C40] = 0x00000077;
+            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x00033C40] = 1;
+            this.Attributes[GameAttribute.Buff_Active, 0xCE11] = true;
+            this.Attributes[GameAttribute.Buff_Icon_Count0, 0x0000CE11] = 1;
+            this.Attributes[GameAttribute.Buff_Visual_Effect, 0xFFFFF] = true;
+
+            //Damage
+            this.Attributes[GameAttribute.Primary_Damage_Attribute] = (int)Toon.HeroTable.CoreAttribute;
+
+
             //Resource
             this.Attributes[GameAttribute.Resource_Max, (int)Toon.HeroTable.PrimaryResource] = Toon.HeroTable.PrimaryResourceMax;
             this.Attributes[GameAttribute.Resource_Factor_Level, (int)Toon.HeroTable.PrimaryResource] = Toon.HeroTable.PrimaryResourceFactorLevel;
@@ -471,6 +463,14 @@ namespace Mooege.Core.GS.Players
                 this.Attributes[GameAttribute.Resource_Type_Secondary] = (int)Toon.HeroTable.SecondaryResource;
             }
 
+            //scripted //this.Attributes[GameAttribute.Get_Hit_Recovery] = 6f;
+            this.Attributes[GameAttribute.Get_Hit_Recovery_Per_Level] = Toon.HeroTable.GetHitRecoveryPerLevel;
+            this.Attributes[GameAttribute.Get_Hit_Recovery_Base] = Toon.HeroTable.GetHitRecoveryBase;
+            //scripted //this.Attributes[GameAttribute.Get_Hit_Max] = 60f;
+            this.Attributes[GameAttribute.Get_Hit_Max_Per_Level] = Toon.HeroTable.GetHitMaxPerLevel;
+            this.Attributes[GameAttribute.Get_Hit_Max_Base] = Toon.HeroTable.GetHitMaxBase;
+
+
             //Resistance
             //scripted //this.Attributes[GameAttribute.Resistance_From_Intelligence] = this.Attributes[GameAttribute.Intelligence] * 0.1f;
             //scripted //this.Attributes[GameAttribute.Resistance_Total, 0] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; // im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
@@ -486,6 +486,9 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Resistance, 0x226] = 0.5f;
             //scripted //this.Attributes[GameAttribute.Resistance_Total, 0xDE] = 0.5f;
             //scripted //this.Attributes[GameAttribute.Resistance_Total, 0x226] = 0.5f;
+
+            this.Attributes[GameAttribute.Hitpoints_Regen_Per_Second] = this.Attributes[GameAttribute.Get_Hit_Recovery]; //this.Toon.HeroTable.GetHitRecoveryBase +(this.Toon.HeroTable.GetHitRecoveryPerLevel *this.Toon.Level);
+
 
             // Class specific
             switch (this.Toon.Class)
@@ -976,7 +979,7 @@ namespace Mooege.Core.GS.Players
             // generate visual update message
             this.Inventory.SendVisualInventory(this);
 
-            SetStats();
+            SetNonDefaultStats();
         }
 
         public override void OnTeleport()
@@ -1502,6 +1505,9 @@ namespace Mooege.Core.GS.Players
                 //scripted //this.Attributes[GameAttribute.Resource_Effective_Max, this.Attributes[GameAttribute.Resource_Type_Secondary]] = GetMaxResource(this.Attributes[GameAttribute.Resource_Type_Secondary]);
                 //scripted //this.Attributes[GameAttribute.Resource_Cur, this.Attributes[GameAttribute.Resource_Type_Secondary]] = GetMaxResource(this.Attributes[GameAttribute.Resource_Type_Secondary]);
 
+                this.Attributes[GameAttribute.Hitpoints_Regen_Per_Second] = this.Attributes[GameAttribute.Get_Hit_Recovery]; //this.Toon.HeroTable.GetHitRecoveryBase +(this.Toon.HeroTable.GetHitRecoveryPerLevel *this.Toon.Level);
+
+
                 this.Attributes.BroadcastChangedIfRevealed();
 
                 this.PlayEffect(Effect.LevelUp);
@@ -1637,6 +1643,8 @@ namespace Mooege.Core.GS.Players
             this.Attributes.BroadcastChangedIfRevealed();
         }
 
+
+        private DateTime _lastRegeneration = DateTime.Now;
         private void _UpdateResources()
         {
             // will crash client when loading if you try to update resources too early
@@ -1648,14 +1656,21 @@ namespace Mooege.Core.GS.Players
 
             _lastResourceUpdateTick = this.InGameClient.Game.TickCounter;
 
+            var regenTimeDiff = (DateTime.Now - _lastRegeneration);
+            if (regenTimeDiff.TotalSeconds >= 1)
+            {
+                _lastRegeneration = DateTime.Now;
+                for (var i = 0; i < regenTimeDiff.TotalSeconds; i++)
+                {
+                    GeneratePrimaryResource(Toon.HeroTable.PrimaryResourceRegenPerSecond);
+                    GenerateSecondaryResource(Toon.HeroTable.SecondaryResourceRegenPerSecond);
 
-            GeneratePrimaryResource(Toon.HeroTable.PrimaryResourceRegenPerSecond);
-            GenerateSecondaryResource(Toon.HeroTable.SecondaryResourceRegenPerSecond);
+                    AddHP(this.Attributes[GameAttribute.Hitpoints_Regen_Per_Second]);
 
-            AddHP(this.Attributes[GameAttribute.Hitpoints_Regen_Per_Second]);
-
-            if (this.Toon.Class == ToonClass.Barbarian)
-                UsePrimaryResource(0.1f);
+                    if (this.Toon.Class == ToonClass.Barbarian)
+                        UsePrimaryResource(0.1f);
+                }
+            }
         }
 
         #endregion
