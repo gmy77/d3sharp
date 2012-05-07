@@ -30,6 +30,7 @@ namespace Mooege.Core.GS.Objects
     public class GameAttributeMap
     {
         private static Logger Logger = LogManager.CreateLogger();
+
         private struct KeyId
         {
             // was using Id | (Key << 12) like Blizz at first but im not 100% sure it will work... /cm
@@ -61,7 +62,6 @@ namespace Mooege.Core.GS.Objects
         private HashSet<KeyId> _changedAttributes = new HashSet<KeyId>();
         private Dictionary<KeyId, GameAttributeValue> _attributeValues = new Dictionary<KeyId, GameAttributeValue>();
         private WorldObject _parent;
-
 
         public GameAttributeMap(WorldObject parent)
         {
@@ -530,5 +530,15 @@ namespace Mooege.Core.GS.Objects
             return RawGetAttributeValue(attribute, key).Value != 0;
         }
         #endregion
+
+
+        public IEnumerable<int> ActiveIds
+        {
+            get { return this._attributeValues.Select(k => k.Key.Id); }
+        }
+        public int?[] AttributeKeys(GameAttribute ga)
+        {
+            return _attributeValues.Where(av => av.Key.Id == ga.Id).Select(av => av.Key.Key).ToArray();
+        }
     }
 }

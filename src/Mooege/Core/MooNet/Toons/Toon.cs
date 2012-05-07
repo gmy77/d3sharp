@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mooege.Common.MPQ;
+using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.Storage;
 using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.MooNet.Accounts;
@@ -328,14 +330,16 @@ namespace Mooege.Core.MooNet.Toons
 
         #region c-tor and setfields
 
+        public readonly HeroTable HeroTable;
+        private static readonly Mooege.Common.MPQ.FileFormats.GameBalance HeroData = (Mooege.Common.MPQ.FileFormats.GameBalance)MPQStorage.Data.Assets[Mooege.Core.GS.Common.Types.SNO.SNOGroup.GameBalance][19740].Data;
 
         public Toon(DBToon dbToon)
             : base(dbToon.Id)
         {
             this.D3EntityID = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId).SetIdLow(this.PersistentID).Build();
-
-
+            
             this.DBToon = dbToon;
+            this.HeroTable = HeroData.Heros.Find(item => item.Name == this.Class.ToString());
             this.ExperienceNext = Player.LevelBorders[this.Level];
 
             var visualItems = new[]

@@ -41,6 +41,7 @@ namespace Mooege.Core.GS.Players
 
     public class Inventory : IMessageConsumer, IRevealable
     {
+
         static readonly Logger Logger = LogManager.CreateLogger();
 
         // Access by ID
@@ -56,6 +57,7 @@ namespace Mooege.Core.GS.Players
         private Item _inventoryGold;
         // backpack for spellRunes, their Items are kept in equipment
         private uint[] _skillSocketRunes;
+
 
         public Inventory(Player owner)
         {
@@ -74,6 +76,15 @@ namespace Mooege.Core.GS.Players
                  InventoryLocation = item.InventoryLocationMessage,
                  Field2 = 1 // what does this do?  // 0 - source item not disappearing from inventory, 1 - Moving, any other possibilities? its an int32
              }); */
+        }
+        public List<Item>  GetBackPackItems()
+        {
+            return new List<Item>(this._inventoryGrid.Items.Values);
+        }
+
+        public List<Item> GetEquippedItems()
+        {
+            return this._equipment.Items.Values.ToList();
         }
 
         /// <summary>
@@ -457,7 +468,9 @@ namespace Mooege.Core.GS.Players
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
             else if (message is RequestBuySharedStashSlotsMessage) OnBuySharedStashSlots(message as RequestBuySharedStashSlotsMessage);
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
-            else return;
+
+            _owner.SetAttributesByItems();
+            _owner.Attributes.BroadcastChangedIfRevealed();
         }
 
         private void OnBuySharedStashSlots(RequestBuySharedStashSlotsMessage requestBuySharedStashSlotsMessage)
@@ -794,5 +807,28 @@ namespace Mooege.Core.GS.Players
             item.DBInventory.DBItemInstance = item.DBItemInstance;
             DBSessions.AccountSession.SaveOrUpdate(item.DBInventory);
         }
+
+        #region EqupimentStats
+        public float GetItemBonus(GameAttributeF attributeF)
+        {
+            return this.Loaded ? this.GetEquippedItems().Sum(item => item.Attributes[attributeF]) : 0.0f;
+        }
+
+        public int GetItemBonus(GameAttributeI attributeI)
+        {
+            return this.Loaded ? this.GetEquippedItems().Sum(item => item.Attributes[attributeI]) : 0;
+        }
+
+        public float GetItemBonus(GameAttributeF attributeF, int attributeKey)
+        {
+            return this.Loaded ? this.GetEquippedItems().Sum(item => item.Attributes[attributeF, attributeKey]) : 0.0f;
+        }
+
+        public int GetItemBonus(GameAttributeI attributeI, int attributeKey)
+        {
+            return this.Loaded ? this.GetEquippedItems().Sum(item => item.Attributes[attributeI, attributeKey]) : 0;
+        }
+
+        #endregion
     }
 }
