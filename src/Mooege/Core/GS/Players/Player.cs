@@ -178,6 +178,7 @@ namespace Mooege.Core.GS.Players
 
         // number of seconds to use for the cooldown that is started after changing a skill.
         private const float SkillChangeCooldownLength = 5f;  // TODO: this needs to vary based on difficulty
+
         #region Just a testing function, never called. Add this to the End of SetNonDefaultStats to get All Equipped items attributes written to a file.
         private string TestOutputAttributes(GameAttributeMap map)
         {
@@ -245,7 +246,6 @@ namespace Mooege.Core.GS.Players
         }
         #endregion
 
-
         /// <summary>
         /// Creates a new player.
         /// </summary>
@@ -280,16 +280,13 @@ namespace Mooege.Core.GS.Players
             // TODO SavePoint from DB
             this.SavePointData = new SavePointData() { snoWorld = -1, SavepointId = -1 };
 
-            #region Attributes
+            // Attributes
             SetAllStatsInCorrectOrder();
-            
 
             //this only need to be set on Player load
             this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
-            #endregion // Attributes
             this.Attributes.BroadcastChangedIfRevealed();
         }
-
 
         #region Attribute Setters
         public void SetAllStatsInCorrectOrder()
@@ -303,7 +300,7 @@ namespace Mooege.Core.GS.Players
             SetAttributesMisc();
             SetAttributesSkillSets();
             SetAttributesOther();
-            if (this.Inventory==null)
+            if (this.Inventory == null)
                 this.Inventory = new Inventory(this);
             SetAttributesByItems();//needs the Inventory
         }
@@ -677,8 +674,6 @@ namespace Mooege.Core.GS.Players
 
 
         #endregion
-
-
 
         #region game-message handling & consumers
 
@@ -1550,9 +1545,6 @@ namespace Mooege.Core.GS.Players
                 //scripted //this.Attributes[GameAttribute.Resource_Max_Total, this.Attributes[GameAttribute.Resource_Type_Secondary]] = GetMaxResource(this.Attributes[GameAttribute.Resource_Type_Secondary]);
                 //scripted //this.Attributes[GameAttribute.Resource_Effective_Max, this.Attributes[GameAttribute.Resource_Type_Secondary]] = GetMaxResource(this.Attributes[GameAttribute.Resource_Type_Secondary]);
                 //scripted //this.Attributes[GameAttribute.Resource_Cur, this.Attributes[GameAttribute.Resource_Type_Secondary]] = GetMaxResource(this.Attributes[GameAttribute.Resource_Type_Secondary]);
-
-                this.Attributes[GameAttribute.Hitpoints_Regen_Per_Second] = this.Attributes[GameAttribute.Get_Hit_Recovery]; //this.Toon.HeroTable.GetHitRecoveryBase +(this.Toon.HeroTable.GetHitRecoveryPerLevel *this.Toon.Level);
-
 
                 this.Attributes.BroadcastChangedIfRevealed();
 
