@@ -745,6 +745,27 @@ namespace Mooege.Core.GS.Players
             this.Loaded = true;
         }
 
+        public void RefreshInventoryToClient()
+        {
+            var itemsToUpdate = new List<Item>();
+            itemsToUpdate.AddRange(this._inventoryGrid.Items.Values);
+            itemsToUpdate.AddRange(this._stashGrid.Items.Values);
+            itemsToUpdate.Add(this._inventoryGold);
+
+            foreach (var itm in itemsToUpdate)
+            {
+                if (itm.Owner is GS.Players.Player)
+                {
+                    var player = (itm.Owner as GS.Players.Player);
+                    if (!itm.Reveal(player))
+                    {
+                        player.InGameClient.SendMessage(itm.ACDInventoryPositionMessage);
+                    }
+                }
+            }
+
+        }
+
         // TODO: change saving at the world OnLeave to saving at every inventory change, //~weltmeyer:done:without delete and insert 
         public void SaveToDB()
         {

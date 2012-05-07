@@ -1048,6 +1048,8 @@ namespace Mooege.Core.GS.Players
             // load all inventory items
             if (!this.Inventory.Loaded)//why reload if already loaded?
                 this.Inventory.LoadFromDB();
+            else
+                this.Inventory.RefreshInventoryToClient();
 
             // generate visual update message
             this.Inventory.SendVisualInventory(this);
