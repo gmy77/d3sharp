@@ -32,40 +32,31 @@ namespace Mooege.Core.GS.Powers.Implementations
 {
     public abstract class SummoningSkill : ActionTimedSkill
     {
-        public void SummonMonsterInFront(int actorSNO)
+        public Vector3D SpawnPosition { get; set; }
+
+        protected void RandomPostion() // spawn actor at random postion
+        {
+            this.SpawnPosition = RandomDirection(User.Position, 0, 1);
+        }
+
+        protected void UserPostion() // spawn actor at user postion
+        {
+            this.SpawnPosition = User.Position;
+        }
+
+        protected void InFrontPostion() // spawn actor in front of user
         {
             float userFacing = (float)Math.Acos(this.User.RotationW) * 2f;
-            Vector3D spawnPos = new Vector3D(User.Position.X + 8 * (float)Math.Cos(userFacing),
+            this.SpawnPosition = new Vector3D(User.Position.X + 8 * (float)Math.Cos(userFacing),
                                              User.Position.Y + 8 * (float)Math.Sin(userFacing),
                                              User.Position.Z);
-
-            var monster = ActorFactory.Create(User.World, actorSNO, new TagMap());
-            monster.Scale = 1.35f;  // TODO: look this up properly
-            monster.EnterWorld(spawnPos);
-            this.World.BuffManager.AddBuff(User, monster, new Implementations.SummonedBuff());
         }
-        public void SummonMonsterOn(int actorSNO)
-        {
-            float userFacing = (float)Math.Acos(this.User.RotationW) * 2f;
-            Vector3D spawnPos = new Vector3D(User.Position.X,
-                                             User.Position.Y,
-                                             User.Position.Z);
 
+        public void SummonMonster(int actorSNO)
+        {
             var monster = ActorFactory.Create(User.World, actorSNO, new TagMap());
             monster.Scale = 1.35f;  // TODO: look this up properly
-            monster.EnterWorld(spawnPos);
-            this.World.BuffManager.AddBuff(User, monster, new Implementations.SummonedBuff());
-        }
-        public void SummonMonsterRandom(int actorSNO)
-        {
-            float userFacing = (float)Math.Acos(this.User.RotationW) * 2f;
-            Vector3D spawnPos = new Vector3D(User.Position.X + 100 * (float)RandomHelper.NextDouble(),
-                                             User.Position.Y + 100 * (float)RandomHelper.NextDouble(),
-                                             User.Position.Z);
-
-            var monster = ActorFactory.Create(User.World, actorSNO, new TagMap());
-            monster.Scale = 1.35f;  // TODO: look this up properly
-            monster.EnterWorld(spawnPos);
+            monster.EnterWorld(this.SpawnPosition);
             this.World.BuffManager.AddBuff(User, monster, new Implementations.SummonedBuff());
         }
     }
@@ -75,7 +66,8 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            SummonMonsterInFront((this.User as Monster).SNOSummons[0]);
+            InFrontPostion();
+            SummonMonster((this.User as Monster).SNOSummons[0]);
             yield break;
         }
     }
@@ -85,7 +77,8 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            SummonMonsterInFront((this.User as Monster).SNOSummons[0]);
+            RandomPostion();
+            SummonMonster((this.User as Monster).SNOSummons[0]);
             yield break;
         }
     }
@@ -95,7 +88,8 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            SummonMonsterRandom(5482);  // HACK: we don't have this in mpq
+            RandomPostion();
+            SummonMonster(5482);  // HACK: we don't have this in mpq
             yield break;
         }
     }
@@ -104,7 +98,8 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            SummonMonsterOn((this.User as Monster).SNOSummons[0]);
+            UserPostion();
+            SummonMonster((this.User as Monster).SNOSummons[0]);
             yield break;
         }
     }

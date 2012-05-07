@@ -182,7 +182,6 @@ namespace Mooege.Core.GS.Powers.Implementations
                 WeaponDamage(hit, 1.00f, DamageType.Poison);
                 projectile.Destroy();
             });
-            (this.User as Monster).TranslateFacing(TargetPosition);
             projectile.Position.Z += 5f;  // fix height
             return Launch();
         }

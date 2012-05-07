@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using Mooege.Common.Helpers.Math;
 using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Actors.Implementations.Monsters;
 using Mooege.Core.GS.Actors.Movement;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
@@ -35,8 +36,6 @@ namespace Mooege.Core.GS.AI.Brains
     {
         // list of power SNOs that are defined for the monster
         public List<int> PresetPowers { get; private set; }
-        public float timedelay=-0.01f;
-        public bool dodelay = false;
 
         private TickTimer _powerDelay;
 
@@ -85,15 +84,13 @@ namespace Mooege.Core.GS.AI.Brains
                 return;
             }
 
-            if(dodelay)
-            _powerDelay = null;
 
             // select and start executing a power if no active action
             if (this.CurrentAction == null)
             {
                 // do a little delay so groups of monsters don't all execute at once
                 if (_powerDelay == null)
-                    _powerDelay = PowerDelay(timedelay);
+                    _powerDelay = new SecondsTickTimer(this.Body.World.Game, (float)RandomHelper.NextDouble());
                 
 
                 if (_powerDelay.TimedOut)
@@ -106,17 +103,6 @@ namespace Mooege.Core.GS.AI.Brains
                 }
             }
         }
-
-        protected TickTimer PowerDelay(float time)
-        {
-            TickTimer Delay;
-             if(time<0)
-                 Delay= new SecondsTickTimer(this.Body.World.Game, (float)RandomHelper.NextDouble());
-             else
-                 Delay = new SecondsTickTimer(this.Body.World.Game, time);
-            return Delay;
-        }
-
 
         protected virtual int PickPowerToUse()
         {

@@ -150,6 +150,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public WoodWraith(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
+            (Brain as MonsterBrain).AddPresetPower(30592);
         }
     }
     [HandledSNO(170324, 170325, 495)]
@@ -158,6 +159,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public HighLandWalker(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
+            (Brain as MonsterBrain).AddPresetPower(30592);
         }
     }
     [HandledSNO(496)]
@@ -166,7 +168,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public TheOldMan(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            (Brain as MonsterBrain).dodelay = true; //Make a random delay before every spawn
+            (Brain as MonsterBrain).AddPresetPower(30592);
             // Summon Spores
         }
     }
@@ -518,7 +520,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public CarrionNest(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            (Brain as MonsterBrain).dodelay = true; //Make a random delay before every spawn
             (Brain as MonsterBrain).RemovePresetPower(30592);
             (Brain as MonsterBrain).AddPresetPower(117580);
         }

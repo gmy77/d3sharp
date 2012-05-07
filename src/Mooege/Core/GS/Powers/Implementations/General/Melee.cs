@@ -23,6 +23,8 @@ using System.Text;
 using Mooege.Core.GS.Skills;
 using Mooege.Core.GS.Ticker;
 using Mooege.Core.GS.Actors;
+using Mooege.Net.GS.Message;
+
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
@@ -31,7 +33,6 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            (this.User as Monster).TranslateFacing(TargetPosition);
             WeaponDamage(GetBestMeleeEnemy(), 1.00f, DamageType.Physical);
             yield break;
         }
