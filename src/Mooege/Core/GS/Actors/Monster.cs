@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mooege.Common.Helpers.Math;
+using Mooege.Core.GS.AI.Brains;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
@@ -85,6 +86,7 @@ namespace Mooege.Core.GS.Actors
             // always use normal difficulty levels for now
             if (monsterData.Level.Normal >= 0 && monsterData.Level.Normal < monsterLevels.MonsterLevel.Count)
             {
+                this.Brain = new MonsterBrain(this);
                 this.Attributes[GameAttribute.Level] = monsterData.Level.Normal;
                 this.Attributes[GameAttribute.Hitpoints_Max] = monsterLevels.MonsterLevel[monsterData.Level.Normal].F0;
                 this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];

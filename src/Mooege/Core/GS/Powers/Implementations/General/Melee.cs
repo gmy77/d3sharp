@@ -23,10 +23,12 @@ using System.Text;
 using Mooege.Core.GS.Skills;
 using Mooege.Core.GS.Ticker;
 using Mooege.Core.GS.Actors;
+using Mooege.Net.GS.Message;
+
 
 namespace Mooege.Core.GS.Powers.Implementations
 {
-    [ImplementsPowerSNO(0x00007780)]  // Weapon_Melee_Instant.pow
+    [ImplementsPowerSNO(30592)]  // Weapon_Melee_Instant.pow
     public class WeaponMeleeInstant : ActionTimedSkill
     {
         public override IEnumerable<TickTimer> Main()

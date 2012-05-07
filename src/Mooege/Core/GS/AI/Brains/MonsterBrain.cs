@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using Mooege.Common.Helpers.Math;
 using Mooege.Core.GS.Actors;
+using Mooege.Core.GS.Actors.Implementations.Monsters;
 using Mooege.Core.GS.Actors.Movement;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Players;
@@ -83,18 +84,22 @@ namespace Mooege.Core.GS.AI.Brains
                 return;
             }
 
+
             // select and start executing a power if no active action
             if (this.CurrentAction == null)
             {
                 // do a little delay so groups of monsters don't all execute at once
                 if (_powerDelay == null)
                     _powerDelay = new SecondsTickTimer(this.Body.World.Game, (float)RandomHelper.NextDouble());
+                
 
                 if (_powerDelay.TimedOut)
                 {
                     int powerToUse = PickPowerToUse();
                     if (powerToUse > 0)
+                    {
                         this.CurrentAction = new PowerAction(this.Body, powerToUse);
+                    }
                 }
             }
         }
@@ -130,6 +135,14 @@ namespace Mooege.Core.GS.AI.Brains
             }
             
             this.PresetPowers.Add(powerSNO);
+        }
+
+        public void RemovePresetPower(int powerSNO)
+        {
+            if (this.PresetPowers.Contains(powerSNO))
+            {
+                this.PresetPowers.Remove(powerSNO);
+            }
         }
     }
 }

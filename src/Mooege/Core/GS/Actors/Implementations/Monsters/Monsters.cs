@@ -38,7 +38,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public TreasureGoblin(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
 
@@ -48,7 +47,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public TreasureSeeker(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
 
@@ -58,7 +56,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public TreasureBandit(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
 
@@ -68,7 +65,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public TreasurePygmy(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     #endregion
@@ -79,19 +75,17 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public Spore(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
+            (Brain as MonsterBrain).AddPresetPower(30525);//SporeCloud.pow
         }
     }
     #endregion
     #region QuillDemon
-	//QuillDemon
     [HandledSNO(4982)]
     public class QuillDemon : Monster
     {
         public QuillDemon(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(107729);
             (Brain as MonsterBrain).AddPresetPower(30592);
         }
@@ -104,7 +98,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public DarkCultists(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(6035)]
@@ -113,35 +106,29 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public DarkSummoner(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(30592);
         }
     }
     #endregion
     #region Ghost
 	//Enraged phantom 370, 136943
-	
     [HandledSNO(370, 136943)]
     public class EnragedPhantom : Monster
     {
         public EnragedPhantom(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
             this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 15f;
         }
     }
     #endregion
     #region Unburieds
-	//Unburied 6356
-    //Disentomb Hulk 6359
     [HandledSNO(6356)]
     public class Unburied : Monster
     {
         public Unburied(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(30592);
         }
     }
@@ -152,21 +139,18 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public DisentombHulk(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(30592);
         }
     }
     #endregion
     #region WoodWraiths
-    //WoodWraith 6572,139454,139456, 
-	//HighLand Walker 495, 170324,170325
     [HandledSNO(6572, 139454, 139456)]
     public class WoodWraith : Monster
     {
         public WoodWraith(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
+            (Brain as MonsterBrain).AddPresetPower(30592);
         }
     }
     [HandledSNO(170324, 170325, 495)]
@@ -175,31 +159,27 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public HighLandWalker(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
-            (Brain as MonsterBrain).AddPresetPower(30800); //Summon Spores // We summon this to often, need some time blocking
+            (Brain as MonsterBrain).AddPresetPower(30592);
+        }
+    }
+    [HandledSNO(496)]
+    public class TheOldMan : Monster
+    {
+        public TheOldMan(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+            (Brain as MonsterBrain).AddPresetPower(30592);
+            // Summon Spores
         }
     }
     #endregion
     #region Zombies
-    //Walking Corpse 6652
-	//Hungry Corpse 6653
-	//Bloated Corpse 6654
-	//Rancid Stumbler 204256
-	//Risen 6644
-	//Ravenous Dead 6646
-	//Voracious Zombie 6647
-	//Decayer 6651
-    //Risen 218339
-    //Crowling Torso 218367
-    //Risen - LeahInnZombie 203121
-
     [HandledSNO(6652)] 
     public class WalkingCorpse : Monster
     {
         public WalkingCorpse(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(6653)] 
@@ -208,7 +188,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public HungryCorpse(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(6654)] 
@@ -217,7 +196,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public BloatedCorpse(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(204256)] 
@@ -226,7 +204,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public RancidStumbler(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(6644)] //ZombieSkinny
@@ -235,7 +212,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public Risen(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(6646)] //ZombieSkinny
@@ -244,7 +220,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public RavenousDead(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(6647)] //ZombieSkinny
@@ -253,7 +228,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public VoraciousZombie(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(6651)] //ZombieSkinny
@@ -262,18 +236,15 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public Decayer(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
-
     //Risen
-    [HandledSNO(218339)] //ZombieSkinny_Custom_A.acr (2036596938)
+    [HandledSNO(218339)] //ZombieSkinny_Custom_A.acr
     public class ZombieSkinny : Monster
     {
         public ZombieSkinny(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(218367)] //ZombieCrawler_Barricade_A.acr
@@ -282,7 +253,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public CrowlingTorso(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(203121)] //ZombieSkinny_A_LeahInn.acr
@@ -291,26 +261,65 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public LeahInnZombie(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
      #endregion
     #region Skeleton
-    //No Uniques Added
-	//Skeleton 5393
-	//Royal Hanchman 87012
-	//Returned 5395
-	//Skeletal Warrior 5397
-	//Skeleton_Knee 80562 -> 30474
-	//Skeletal Executioner 5411
-	//Returned Executioner 434
-    [HandledSNO(5393, 87012, 5395, 5397, 80652, 5411, 434)]
+    [HandledSNO(539)]
     public class Skeleton : Monster
     {
         public Skeleton(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
+        }
+    }
+    [HandledSNO(87012)]
+    public class RoyalHanchman : Monster
+    {
+        public RoyalHanchman(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+        }
+    }
+    [HandledSNO(5395)]
+    public class Returned : Monster
+    {
+        public Returned(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+        }
+    }
+    [HandledSNO(5397)]
+    public class SkeletalWarrior : Monster
+    {
+        public SkeletalWarrior(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+        }
+    }
+    [HandledSNO(80652)]
+    public class SkeletonKnee : Monster
+    {
+        public SkeletonKnee(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+            //30474
+        }
+    }
+    [HandledSNO(5411)]
+    public class SkeletalExecutioner : Monster
+    {
+        public SkeletalExecutioner(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+        }
+    }
+    [HandledSNO(434)]
+    public class ReturnedExecutioner : Monster
+    {
+        public ReturnedExecutioner(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
         }
     }
     #endregion
@@ -322,7 +331,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public NecromanticMinion(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     #endregion
@@ -335,7 +343,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public TombGuardian(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(30592);
             (Brain as MonsterBrain).AddPresetPower(30503);
             (Brain as MonsterBrain).AddPresetPower(30543); //Summon Skeletons
@@ -343,17 +350,12 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
     }
     #endregion
     #region Skeleton_Archer
-    //This power doesn't do anything ->SNO : 30474
-    //Skeletal Archer 5346 -> 30334 
-    //Killian Damort 218400 -> 30334 
-    //Returned Archer 5347 -> 30334 
     [HandledSNO(5346)]
     public class SkeletalArcher : Monster
     {
         public SkeletalArcher(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(218400)]
@@ -362,7 +364,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public KillianDamort(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(30592);
         }
     }
@@ -372,23 +373,17 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public ReturnedArcher(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(30592);
         }
     }
     #endregion
     #region Shield_Skeleton
-    //This power doesn't do anything ->SNO : 30474
-	//Skeletal ShieldBearer 5275 -> 30474
-	//Returned ShieldMan 5276 -> 30474
-	//Skeletal Sentry 5277 -> 30474
     [HandledSNO(5275)]
     public class SkeletalShieldBearer : Monster
     {
         public SkeletalShieldBearer(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(30592);
         }
     }
@@ -398,7 +393,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public ReturnedShieldMan(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(30592);
         }
     }
@@ -408,19 +402,11 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public SkeletalSentry(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(30592);
         }
     }
     #endregion
-    #region Grotesque
-    //Grotesque 3847
-	//Harvester 3848
-	//Ragus Grimlow 218307
-	//Braluk Grimlow 218308
-	//BellyBloat The Scarred 218405
-	//Corpse worm 4564
-	
+    #region Grotesque	
     [HandledSNO(3847)]
     public class Grotesque : Monster
     {
@@ -429,7 +415,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public Grotesque(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
             (Brain as MonsterBrain).AddPresetPower(30531);
             (Brain as MonsterBrain).AddPresetPower(30530);
             (Brain as MonsterBrain).AddPresetPower(30529); //Explode
@@ -443,7 +428,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public Harvester(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(218307)]
@@ -454,7 +438,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public RagusGrimlow(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(218308)]
@@ -465,7 +448,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public BralukGrimlow(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(218405)]
@@ -476,7 +458,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public BellyBloatTheScarred(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(4564)]
@@ -486,25 +467,17 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public CorpseWorm(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
 
     #endregion
     #region FleshPitFlyers
-    //Carrion Bat 4156
-	//Plague Carrier 4157
-	//Glidewing 218314
-	//Firestarter 218362
-	//Plague Carrier 81954
-	//Vile Hellbat 195747
     [HandledSNO(4156)]
     public class CarrionBat : Monster
     {
         public CarrionBat(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(4157, 81954)]
@@ -513,7 +486,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public PlagueCarrier(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(218314)]
@@ -522,7 +494,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public Glidewing(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(218362)]
@@ -531,7 +502,6 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public Firestarter(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     [HandledSNO(195747)]
@@ -540,25 +510,35 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         public VileHellbat(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
         }
     }
     #endregion
+    #region CarrionNest
+    [HandledSNO(4152)]
+    public class CarrionNest : Monster
+    {
+        public CarrionNest(World world, int snoId, TagMap tags)
+            : base(world, snoId, tags)
+        {
+            (Brain as MonsterBrain).RemovePresetPower(30592);
+            (Brain as MonsterBrain).AddPresetPower(117580);
+        }
+        
+    }
+    #endregion
     #region Wretched Mothers
-	//Wretched Mother 219725, 108444
     [HandledSNO(219725, 108444)] // ZombieFemale_A_TristramQuest_Unique.acr
     public class WretchedMother : Monster
     {
         public WretchedMother(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
-            this.Brain = new MonsterBrain(this);
+            (Brain as MonsterBrain).RemovePresetPower(30592); // Only distance attack
             (Brain as MonsterBrain).AddPresetPower(94734);
             (Brain as MonsterBrain).AddPresetPower(110518);
-            this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 4f;
-            this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 4f;
+            //this.Attributes[GameAttribute.Damage_Weapon_Min, 0] = 4f;
+            //this.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 4f;
         }
     }
     #endregion
-	
 }
