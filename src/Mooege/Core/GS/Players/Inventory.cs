@@ -58,6 +58,7 @@ namespace Mooege.Core.GS.Players
         // backpack for spellRunes, their Items are kept in equipment
         private uint[] _skillSocketRunes;
 
+
         public Inventory(Player owner)
         {
             this._owner = owner;
@@ -76,7 +77,10 @@ namespace Mooege.Core.GS.Players
                  Field2 = 1 // what does this do?  // 0 - source item not disappearing from inventory, 1 - Moving, any other possibilities? its an int32
              }); */
         }
-
+        public List<Item>  GetBackPackItems()
+        {
+            return new List<Item>(this._inventoryGrid.Items.Values);
+        }
 
         public List<Item> GetEquippedItems()
         {
@@ -465,7 +469,8 @@ namespace Mooege.Core.GS.Players
             else if (message is RequestBuySharedStashSlotsMessage) OnBuySharedStashSlots(message as RequestBuySharedStashSlotsMessage);
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
 
-            _owner.SetNonDefaultStats();
+            _owner.SetAttributesByItems();
+            _owner.Attributes.BroadcastChangedIfRevealed();
         }
 
         private void OnBuySharedStashSlots(RequestBuySharedStashSlotsMessage requestBuySharedStashSlotsMessage)

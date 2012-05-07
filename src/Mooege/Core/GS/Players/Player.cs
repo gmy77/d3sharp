@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
@@ -178,6 +179,57 @@ namespace Mooege.Core.GS.Players
         // number of seconds to use for the cooldown that is started after changing a skill.
         private const float SkillChangeCooldownLength = 5f;  // TODO: this needs to vary based on difficulty
         #region Just a testing function, never called. Add this to the End of SetNonDefaultStats to get All Equipped items attributes written to a file.
+        private string TestOutputAttributes(GameAttributeMap map)
+        {
+            var resultStringBuilder = new StringBuilder();
+            foreach (GameAttributeF ga in GameAttribute.Attributes.Where(ga => ga is GameAttributeF))
+            {
+                var keys = map.AttributeKeys(ga);
+                if (keys.Length == 0 || (keys.Length == 1 && !keys[0].HasValue))
+                {
+                    var curVal = Convert.ToDouble(map[ga]);
+                    if (curVal.CompareTo(Convert.ToDouble(ga.DefaultValue)) == 0)
+                        continue;
+                    resultStringBuilder.AppendFormat("{0}:\t{1}\r\n", ga.Name, curVal);
+                }
+                else
+                {
+                    foreach (var key in keys)
+                    {
+                        var curVal = Convert.ToDouble(map[ga, key]);
+                        if (curVal.CompareTo(Convert.ToDouble(ga.DefaultValue)) == 0)
+                            continue;
+                        resultStringBuilder.AppendFormat("{0}|{1}:\t{2}\r\n", ga.Name, key, curVal);
+
+                    }
+                }
+            }
+
+            foreach (GameAttributeI ga in GameAttribute.Attributes.Where(ga => ga is GameAttributeI))
+            {
+                var keys = map.AttributeKeys(ga);
+                if (keys.Length == 0 || (keys.Length == 1 && !keys[0].HasValue))
+                {
+                    var curVal = map[ga];
+                    if (curVal == ga.DefaultValue)
+                        continue;
+                    resultStringBuilder.AppendFormat("{0}:\t{1}\r\n", ga.Name, curVal);
+                }
+                else
+                {
+                    foreach (var key in keys)
+                    {
+                        var curVal = map[ga];
+                        if (curVal == ga.DefaultValue)
+                            continue;
+                        resultStringBuilder.AppendFormat("{0}|{1}:\t{2}\r\n", ga.Name, key, curVal);
+
+                    }
+                }
+            }
+            return resultStringBuilder.ToString();
+        }
+
         private void TestOutPutItemAttributes()
         {
             if (this.Inventory == null || !this.Inventory.Loaded) return;
@@ -186,196 +238,14 @@ namespace Mooege.Core.GS.Players
             foreach (var item in this.Inventory.GetEquippedItems())
             {
                 File.AppendAllText(filename, string.Format("======{0}=========\r\n", item.EquipmentSlot));
-                foreach (GameAttributeF ga in GameAttribute.Attributes.Where(ga => ga is GameAttributeF))
-                {
-                    var keys = item.Attributes.AttributeKeys(ga);
-                    if (keys.Length == 0 || (keys.Length == 1 && !keys[0].HasValue))
-                    {
-                        var curVal = Convert.ToDouble(item.Attributes[ga]);
-                        if (curVal.CompareTo(Convert.ToDouble(ga.DefaultValue)) == 0)
-                            continue;
-                        File.AppendAllText(filename, string.Format("{0}:\t{1}\r\n", ga.Name, curVal));
-                    }
-                    else
-                    {
-                        foreach (var key in keys)
-                        {
-                            var curVal = Convert.ToDouble(item.Attributes[ga, key]);
-                            if (curVal.CompareTo(Convert.ToDouble(ga.DefaultValue)) == 0)
-                                continue;
-                            File.AppendAllText(filename, string.Format("{0}|{1}:\t{2}\r\n", ga.Name, key, curVal));
 
-                        }
-                    }
-                }
-
-                foreach (GameAttributeI ga in GameAttribute.Attributes.Where(ga => ga is GameAttributeI))
-                {
-                    var keys = item.Attributes.AttributeKeys(ga);
-                    if (keys.Length == 0 || (keys.Length == 1 && !keys[0].HasValue))
-                    {
-                        var curVal = item.Attributes[ga];
-                        if (curVal == ga.DefaultValue)
-                            continue;
-                        File.AppendAllText(filename, string.Format("{0}:\t{1}\r\n", ga.Name, curVal));
-                    }
-                    else
-                    {
-                        foreach (var key in keys)
-                        {
-                            var curVal = item.Attributes[ga];
-                            if (curVal == ga.DefaultValue)
-                                continue;
-                            File.AppendAllText(filename, string.Format("{0}|{1}:\t{2}\r\n", ga.Name, key, curVal));
-
-                        }
-                    }
-                }
-
+                File.AppendAllText(filename, TestOutputAttributes(item.Attributes));
                 File.AppendAllText(filename, "===============\r\n\r\n");
             }
         }
         #endregion
-        public void SetNonDefaultStats()
-        {
-
-            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 0] = 1f;
-            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 1] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 2] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 3] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 4] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 5] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 6] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 0] = 2f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 1] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 2] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 3] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 4] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 5] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 6] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 0xFFFFF] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 0] = 2f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 1] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 2] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 3] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 4] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 5] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 6] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 0xFFFFF] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 0] = 2f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 1] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 2] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 3] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 4] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 5] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 6] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] = 2f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_All] = 2f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_MainHand, 0] = 2f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 0xFFFFF] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_SubTotal, 0] = 1f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 0] = 1f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 1] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 2] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 3] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 4] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 5] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 6] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] = 1f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_All] = 1f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_MainHand, 0] = 1f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Max, 0] = 3f;
-            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Max_Total, 0] = 3f;
 
 
-            //Bonus stats
-            this.Attributes[GameAttribute.Hit_Chance] = 1f;
-            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item_CurrentHand] = 1.199219f;
-            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item_Total_MainHand] = 1.199219f;
-            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Total] = 1.199219f;
-            this.Attributes[GameAttribute.Attacks_Per_Second] = 1f;
-            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item_MainHand] = 1.199219f;
-            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item_Total] = 1.199219f;
-            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item_Subtotal] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item] = 3.051758E-05f;
-            //this.Attributes[GameAttribute.Attacks_Per_Second_Item] = 1.199219f;
-            this.Attributes[GameAttribute.Crit_Percent_Cap] = Toon.HeroTable.CritPercentCap;
-            //scripted //this.Attributes[GameAttribute.Casting_Speed_Total] = 1f;
-            this.Attributes[GameAttribute.Casting_Speed] = 1f;
-
-            //Basic stats
-            this.Attributes[GameAttribute.Level_Cap] = 60;
-            this.Attributes[GameAttribute.Level] = this.Toon.Level;
-            this.Attributes[GameAttribute.Experience_Next] = this.Toon.ExperienceNext;
-            this.Attributes[GameAttribute.Experience_Granted] = 1000;
-            this.Attributes[GameAttribute.Armor] = 0;
-            //scripted //this.Attributes[GameAttribute.Armor_Total]
-
-
-            //scripted //this.Attributes[GameAttribute.Strength_Total] = this.StrengthTotal;
-            //scripted //this.Attributes[GameAttribute.Intelligence_Total] = this.IntelligenceTotal;
-            //scripted //this.Attributes[GameAttribute.Dexterity_Total] = this.DexterityTotal;
-            //scripted //this.Attributes[GameAttribute.Vitality_Total] = this.VitalityTotal;
-            this.Attributes[GameAttribute.Strength] = this.Strength;
-            this.Attributes[GameAttribute.Dexterity] = this.Dexterity;
-            this.Attributes[GameAttribute.Vitality] = this.Vitality;
-            this.Attributes[GameAttribute.Intelligence] = this.Intelligence;
-
-            //Hitpoints have to be calculated after Vitality
-            this.Attributes[GameAttribute.Hitpoints_Factor_Level] = Toon.HeroTable.HitpointsFactorLevel;
-            this.Attributes[GameAttribute.Hitpoints_Factor_Vitality] = 10f;
-            //scripted //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
-            //scripted //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 40f; // For now, this just adds 40 hitpoints to the hitpoints gained from vitality
-            //scripted //this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality] = this.Attributes[GameAttribute.Vitality] * this.Attributes[GameAttribute.Hitpoints_Factor_Vitality];
-            //this.Attributes[GameAttribute.Hitpoints_Max] = this.Attributes[GameAttribute.Hitpoints_Total_From_Level] + this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality];
-            this.Attributes[GameAttribute.Hitpoints_Max] = 40f;
-            //this.Attributes[GameAttribute.Hitpoints_Max_Bonus] = HitpointsBonusPercentItem;
-            //scripted //this.Attributes[GameAttribute.Hitpoints_Max_Total] = GetMaxTotalHitpoints();
-
-
-            //Attributes by equipped items 
-
-            foreach (var damageType in DamageType.AllTypes)
-            {
-                var weaponDamageMin = this.Inventory.GetItemBonus(GameAttribute.Damage_Weapon_Min, damageType.AttributeKey);
-                var weaponDamageDelta = this.Inventory.GetItemBonus(GameAttribute.Damage_Weapon_Delta, damageType.AttributeKey);
-                var weaponDamageBonusMin = this.Inventory.GetItemBonus(GameAttribute.Damage_Weapon_Bonus_Min, damageType.AttributeKey);
-                var weaponDamageBonusDelta = this.Inventory.GetItemBonus(GameAttribute.Damage_Weapon_Bonus_Delta, damageType.AttributeKey);
-
-                this.Attributes[GameAttribute.Damage_Weapon_Min, damageType.AttributeKey] = Math.Max(3.0f, weaponDamageMin);//what is the minimum damage per damageType?
-                this.Attributes[GameAttribute.Damage_Weapon_Delta, damageType.AttributeKey] = Math.Max(3.0f, weaponDamageDelta);//what is the minimum damage per damageType?
-                this.Attributes[GameAttribute.Damage_Weapon_Bonus_Min, damageType.AttributeKey] = weaponDamageBonusMin;
-                this.Attributes[GameAttribute.Damage_Weapon_Bonus_Delta, damageType.AttributeKey] = weaponDamageBonusDelta;
-
-                this.Attributes[GameAttribute.Resistance, damageType.AttributeKey] = this.Inventory.GetItemBonus(GameAttribute.Resistance, damageType.AttributeKey);
-
-            }
-
-
-
-
-            this.Attributes[GameAttribute.Armor_Item_Percent] = this.Inventory.GetItemBonus(GameAttribute.Armor_Item_Percent);
-            this.Attributes[GameAttribute.Armor_Item] = this.Inventory.GetItemBonus(GameAttribute.Armor_Item);
-            this.Attributes[GameAttribute.Strength_Item] = this.Inventory.GetItemBonus(GameAttribute.Strength_Item);
-            this.Attributes[GameAttribute.Dexterity_Item] = this.Inventory.GetItemBonus(GameAttribute.Dexterity_Item);
-            this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus_Item] = this.Inventory.GetItemBonus(GameAttribute.Hitpoints_Max_Percent_Bonus_Item);
-            this.Attributes[GameAttribute.Hitpoints_Max_Bonus] = this.Inventory.GetItemBonus(GameAttribute.Hitpoints_Max_Bonus);
-            this.Attributes[GameAttribute.Attacks_Per_Second_Item] = this.Inventory.GetItemBonus(GameAttribute.Attacks_Per_Second_Item);
-
-
-
-            this.Attributes[GameAttribute.Resistance_Freeze] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Freeze);
-            this.Attributes[GameAttribute.Resistance_Penetration] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Penetration);
-            this.Attributes[GameAttribute.Resistance_Percent] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Percent);
-            this.Attributes[GameAttribute.Resistance_Root] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Root);
-            this.Attributes[GameAttribute.Resistance_Stun] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Stun);
-            this.Attributes[GameAttribute.Resistance_StunRootFreeze] = this.Inventory.GetItemBonus(GameAttribute.Resistance_StunRootFreeze);
-            //end Attributes by equipped items.
-
-
-            //TestOutPutItemAttributes(); //Activate this only for finding item stats.
-            this.Attributes.BroadcastChangedIfRevealed();
-        }
         /// <summary>
         /// Creates a new player.
         /// </summary>
@@ -411,13 +281,39 @@ namespace Mooege.Core.GS.Players
             this.SavePointData = new SavePointData() { snoWorld = -1, SavepointId = -1 };
 
             #region Attributes
+            SetAllStatsInCorrectOrder();
+            
 
-
-
+            //this only need to be set on Player load
             this.Attributes[GameAttribute.Hitpoints_Cur] = this.Attributes[GameAttribute.Hitpoints_Max_Total];
+            #endregion // Attributes
+            this.Attributes.BroadcastChangedIfRevealed();
+        }
+
+
+        #region Attribute Setters
+        public void SetAllStatsInCorrectOrder()
+        {
+            SetAttributesSkills();
+            SetAttributesBuffs();
+            SetAttributesDamage();
+            SetAttributesRessources();
+            SetAttributesClassSpecific();
+            SetAttributesMovement();
+            SetAttributesMisc();
+            SetAttributesSkillSets();
+            SetAttributesOther();
+            if (this.Inventory==null)
+                this.Inventory = new Inventory(this);
+            SetAttributesByItems();//needs the Inventory
+        }
+
+        public void SetAttributesSkills()
+        {
             //Skills
             this.Attributes[GameAttribute.SkillKit] = Toon.HeroTable.SNOSKillKit0;
             //scripted //this.Attributes[GameAttribute.Skill_Total, 0x7545] = 1; //Axe Operate Gizmo
+
             this.Attributes[GameAttribute.Skill, 0x7545] = 1;
             //scripted //this.Attributes[GameAttribute.Skill_Total, 0x76B7] = 1; //Punch!
             this.Attributes[GameAttribute.Skill, 0x76B7] = 1;
@@ -428,7 +324,9 @@ namespace Mooege.Core.GS.Players
             //scripted //this.Attributes[GameAttribute.Skill_Total, 0x0002EC66] = 0; //stone of recall
             //scripted //this.Attributes[GameAttribute.Skill_Total, 0xFFFFF] = 1;
             this.Attributes[GameAttribute.Skill, 0xFFFFF] = 1;
-
+        }
+        public void SetAttributesBuffs()
+        {
             //Buffs
             this.Attributes[GameAttribute.Buff_Active, 0x33C40] = true;
             this.Attributes[GameAttribute.Buff_Icon_End_Tick0, 0x00033C40] = 0x000003FB;
@@ -437,11 +335,13 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Buff_Active, 0xCE11] = true;
             this.Attributes[GameAttribute.Buff_Icon_Count0, 0x0000CE11] = 1;
             this.Attributes[GameAttribute.Buff_Visual_Effect, 0xFFFFF] = true;
-
-            //Damage
+        }
+        public void SetAttributesDamage()
+        {
             this.Attributes[GameAttribute.Primary_Damage_Attribute] = (int)Toon.HeroTable.CoreAttribute;
-
-
+        }
+        public void SetAttributesRessources()
+        {
             //Resource
             this.Attributes[GameAttribute.Resource_Max, (int)Toon.HeroTable.PrimaryResource] = Toon.HeroTable.PrimaryResourceMax;
             this.Attributes[GameAttribute.Resource_Factor_Level, (int)Toon.HeroTable.PrimaryResource] = Toon.HeroTable.PrimaryResourceFactorLevel;
@@ -470,27 +370,14 @@ namespace Mooege.Core.GS.Players
             //scripted //this.Attributes[GameAttribute.Get_Hit_Max] = 60f;
             this.Attributes[GameAttribute.Get_Hit_Max_Per_Level] = Toon.HeroTable.GetHitMaxPerLevel;
             this.Attributes[GameAttribute.Get_Hit_Max_Base] = Toon.HeroTable.GetHitMaxBase;
-
-
-            //Resistance
-            //scripted //this.Attributes[GameAttribute.Resistance_From_Intelligence] = this.Attributes[GameAttribute.Intelligence] * 0.1f;
-            //scripted //this.Attributes[GameAttribute.Resistance_Total, 0] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; // im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
-            // likely the physical school of damage, it probably doesn't actually do anything in this case (or maybe just not for the player's hero)
-            // but exists for the sake of parity with weapon damage schools
-            //scripted //this.Attributes[GameAttribute.Resistance_Total, 1] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Fire
-            //scripted //this.Attributes[GameAttribute.Resistance_Total, 2] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Lightning
-            //scripted //this.Attributes[GameAttribute.Resistance_Total, 3] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Cold
-            //scripted //this.Attributes[GameAttribute.Resistance_Total, 4] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Poison
-            //scripted //this.Attributes[GameAttribute.Resistance_Total, 5] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Arcane
-            //scripted //this.Attributes[GameAttribute.Resistance_Total, 6] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Holy
+        }
+        public void SetAttributesResistance()
+        {
             this.Attributes[GameAttribute.Resistance, 0xDE] = 0.5f;
             this.Attributes[GameAttribute.Resistance, 0x226] = 0.5f;
-            //scripted //this.Attributes[GameAttribute.Resistance_Total, 0xDE] = 0.5f;
-            //scripted //this.Attributes[GameAttribute.Resistance_Total, 0x226] = 0.5f;
-
-            this.Attributes[GameAttribute.Hitpoints_Regen_Per_Second] = this.Attributes[GameAttribute.Get_Hit_Recovery]; //this.Toon.HeroTable.GetHitRecoveryBase +(this.Toon.HeroTable.GetHitRecoveryPerLevel *this.Toon.Level);
-
-
+        }
+        public void SetAttributesClassSpecific()
+        {
             // Class specific
             switch (this.Toon.Class)
             {
@@ -540,7 +427,9 @@ namespace Mooege.Core.GS.Players
                      */
                     break;
             }
-
+        }
+        public void SetAttributesMovement()
+        {
             //Movement
             //scripted //this.Attributes[GameAttribute.Movement_Scalar_Total] = 1f;
             //scripted //this.Attributes[GameAttribute.Movement_Scalar_Capped_Total] = 1f;
@@ -554,9 +443,10 @@ namespace Mooege.Core.GS.Players
             //scripted //this.Attributes[GameAttribute.Strafing_Rate_Total] = data.F18;
             this.Attributes[GameAttribute.Sprinting_Rate] = Toon.HeroTable.F17; //These two are guesses -Egris
             this.Attributes[GameAttribute.Strafing_Rate] = Toon.HeroTable.F18;
-
+        }
+        public void SetAttributesMisc()
+        {
             //Miscellaneous
-
             this.Attributes[GameAttribute.Disabled] = true; // we should be making use of these ones too /raist.
             this.Attributes[GameAttribute.Loading] = true;
             this.Attributes[GameAttribute.Invulnerable] = true;
@@ -570,12 +460,66 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Shared_Stash_Slots] = 14;
             this.Attributes[GameAttribute.Backpack_Slots] = 60;
             this.Attributes[GameAttribute.General_Cooldown] = 0;
+        }
+        public void SetAttributesByItems()
+        {
+            var damageAttributeMinValues = new Dictionary<DamageType, float[]>
+                                               {
+                                                   {DamageType.Physical, new[] {6f, 3f}},
+                                                   {DamageType.Arcane, new[] {3.051758E-05f, 3.051758E-05f}},
+                                                   {DamageType.Cold, new[] {3.051758E-05f, 3.051758E-05f}},
+                                                   {DamageType.Fire, new[] {3.051758E-05f, 3.051758E-05f}},
+                                                   {DamageType.Holy, new[] {3.051758E-05f, 3.051758E-05f}},
+                                                   {DamageType.Lightning, new[] {3.051758E-05f, 3.051758E-05f}},
+                                                   {DamageType.Poison, new[] {3.051758E-05f, 3.051758E-05f}}
+                                               };
 
-            this.Inventory = new Inventory(this); // Here because it needs attributes /fasbat
-            SetNonDefaultStats();//needs to be called after inventory creation.
+            foreach (var damageType in DamageType.AllTypes)
+            {
+                var weaponDamageMin = Math.Max(this.Inventory.GetItemBonus(GameAttribute.Damage_Weapon_Min, damageType.AttributeKey), damageAttributeMinValues[damageType][0]);
+                var weaponDamageDelta = Math.Max(this.Inventory.GetItemBonus(GameAttribute.Damage_Weapon_Delta, damageType.AttributeKey), damageAttributeMinValues[damageType][1]);
+                var weaponDamageBonusMin = this.Inventory.GetItemBonus(GameAttribute.Damage_Weapon_Bonus_Min, damageType.AttributeKey);
+                var weaponDamageBonusDelta = this.Inventory.GetItemBonus(GameAttribute.Damage_Weapon_Bonus_Delta, damageType.AttributeKey);
 
-            #endregion // Attributes
+                this.Attributes[GameAttribute.Damage_Weapon_Min, damageType.AttributeKey] = weaponDamageMin;
+                this.Attributes[GameAttribute.Damage_Weapon_Delta, damageType.AttributeKey] = weaponDamageDelta;
+                this.Attributes[GameAttribute.Damage_Weapon_Bonus_Min, damageType.AttributeKey] = weaponDamageBonusMin;
+                this.Attributes[GameAttribute.Damage_Weapon_Bonus_Delta, damageType.AttributeKey] = weaponDamageBonusDelta;
 
+                this.Attributes[GameAttribute.Resistance, damageType.AttributeKey] = this.Inventory.GetItemBonus(GameAttribute.Resistance, damageType.AttributeKey);
+            }
+
+
+
+
+
+            this.Attributes[GameAttribute.Armor_Item_Percent] = this.Inventory.GetItemBonus(GameAttribute.Armor_Item_Percent);
+            this.Attributes[GameAttribute.Armor_Item] = this.Inventory.GetItemBonus(GameAttribute.Armor_Item);
+            this.Attributes[GameAttribute.Strength_Item] = this.Inventory.GetItemBonus(GameAttribute.Strength_Item);
+            this.Attributes[GameAttribute.Dexterity_Item] = this.Inventory.GetItemBonus(GameAttribute.Dexterity_Item);
+            this.Attributes[GameAttribute.Intelligence_Item] = this.Inventory.GetItemBonus(GameAttribute.Intelligence_Item);
+
+
+
+
+            this.Attributes[GameAttribute.Hitpoints_Max_Percent_Bonus_Item] = this.Inventory.GetItemBonus(GameAttribute.Hitpoints_Max_Percent_Bonus_Item);
+            this.Attributes[GameAttribute.Hitpoints_Max_Bonus] = this.Inventory.GetItemBonus(GameAttribute.Hitpoints_Max_Bonus);
+
+            this.Attributes[GameAttribute.Attacks_Per_Second_Item] = this.Inventory.GetItemBonus(GameAttribute.Attacks_Per_Second_Item);
+
+
+            this.Attributes[GameAttribute.Resistance_Freeze] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Freeze);
+            this.Attributes[GameAttribute.Resistance_Penetration] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Penetration);
+            this.Attributes[GameAttribute.Resistance_Percent] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Percent);
+            this.Attributes[GameAttribute.Resistance_Root] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Root);
+            this.Attributes[GameAttribute.Resistance_Stun] = this.Inventory.GetItemBonus(GameAttribute.Resistance_Stun);
+            this.Attributes[GameAttribute.Resistance_StunRootFreeze] = this.Inventory.GetItemBonus(GameAttribute.Resistance_StunRootFreeze);
+
+            this.Attributes[GameAttribute.Hitpoints_Regen_Per_Second] = this.Inventory.GetItemBonus(GameAttribute.Hitpoints_Regen_Per_Second); //this.Toon.HeroTable.GetHitRecoveryBase +(this.Toon.HeroTable.GetHitRecoveryPerLevel *this.Toon.Level);
+
+        }
+        public void SetAttributesSkillSets()
+        {
             // unlocking assigned skills
             for (int i = 0; i < this.SkillSet.ActiveSkills.Length; i++)
             {
@@ -601,8 +545,139 @@ namespace Mooege.Core.GS.Players
                     //scripted //this.Attributes[GameAttribute.Skill_Total, this.SkillSet.PassiveSkills[i]] = 1;
                 }
             }
+        }
+        public void SetAttributesOther()
+        {
+
+
+
+            //Bonus stats
+            this.Attributes[GameAttribute.Hit_Chance] = 1f;
+
+            this.Attributes[GameAttribute.Attacks_Per_Second] = 1f;
+            //this.Attributes[GameAttribute.Attacks_Per_Second_Item] = 1.199219f;
+            this.Attributes[GameAttribute.Crit_Percent_Cap] = Toon.HeroTable.CritPercentCap;
+            //scripted //this.Attributes[GameAttribute.Casting_Speed_Total] = 1f;
+            this.Attributes[GameAttribute.Casting_Speed] = 1f;
+
+            //Basic stats
+            this.Attributes[GameAttribute.Level_Cap] = 60;
+            this.Attributes[GameAttribute.Level] = this.Toon.Level;
+            this.Attributes[GameAttribute.Experience_Next] = this.Toon.ExperienceNext;
+            this.Attributes[GameAttribute.Experience_Granted] = 1000;
+            this.Attributes[GameAttribute.Armor] = 0;
+            //scripted //this.Attributes[GameAttribute.Armor_Total]
+
+
+            this.Attributes[GameAttribute.Strength] = this.Strength;
+            this.Attributes[GameAttribute.Dexterity] = this.Dexterity;
+            this.Attributes[GameAttribute.Vitality] = this.Vitality;
+            this.Attributes[GameAttribute.Intelligence] = this.Intelligence;
+
+            //Hitpoints have to be calculated after Vitality
+            this.Attributes[GameAttribute.Hitpoints_Factor_Level] = Toon.HeroTable.HitpointsFactorLevel;
+            this.Attributes[GameAttribute.Hitpoints_Factor_Vitality] = 10f;
+            this.Attributes[GameAttribute.Hitpoints_Max] = 40f;
+
+            //TestOutPutItemAttributes(); //Activate this only for finding item stats.
+            this.Attributes.BroadcastChangedIfRevealed();
 
         }
+
+
+        public void AllTheScriptedStats()
+        {
+            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 0] = 1f;
+            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 1] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 2] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 3] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 4] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 5] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Delta_Total, 6] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 0] = 2f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 1] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 2] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 3] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 4] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 5] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 6] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Total, 0xFFFFF] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 0] = 2f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 1] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 2] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 3] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 4] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 5] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 6] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Min_Subtotal, 0xFFFFF] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 0] = 2f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 1] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 2] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 3] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 4] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 5] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 6] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total, 0] = 2f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_All] = 2f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_MainHand, 0] = 2f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Min_Total_CurrentHand, 0xFFFFF] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_SubTotal, 0] = 1f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 0] = 1f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 1] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 2] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 3] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 4] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 5] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_CurrentHand, 6] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] = 1f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_All] = 1f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Delta_Total_MainHand, 0] = 1f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Max, 0] = 3f;
+            //scripted //this.Attributes[GameAttribute.Damage_Weapon_Max_Total, 0] = 3f; 
+
+            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item_CurrentHand] = 1.199219f;
+            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item_Total_MainHand] = 1.199219f;
+            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Total] = 1.199219f;
+
+            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item_MainHand] = 1.199219f;
+            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item_Total] = 1.199219f;
+            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item_Subtotal] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Attacks_Per_Second_Item] = 3.051758E-05f;
+
+            //scripted //this.Attributes[GameAttribute.Strength_Total] = this.StrengthTotal;
+            //scripted //this.Attributes[GameAttribute.Intelligence_Total] = this.IntelligenceTotal;
+            //scripted //this.Attributes[GameAttribute.Dexterity_Total] = this.DexterityTotal;
+            //scripted //this.Attributes[GameAttribute.Vitality_Total] = this.VitalityTotal;
+
+            //scripted //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 3.051758E-05f;
+            //scripted //this.Attributes[GameAttribute.Hitpoints_Total_From_Level] = 40f; // For now, this just adds 40 hitpoints to the hitpoints gained from vitality
+            //scripted //this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality] = this.Attributes[GameAttribute.Vitality] * this.Attributes[GameAttribute.Hitpoints_Factor_Vitality];
+            //this.Attributes[GameAttribute.Hitpoints_Max] = this.Attributes[GameAttribute.Hitpoints_Total_From_Level] + this.Attributes[GameAttribute.Hitpoints_Total_From_Vitality];
+
+            //scripted //this.Attributes[GameAttribute.Hitpoints_Max_Total] = GetMaxTotalHitpoints();
+
+            //Resistance
+            //scripted //this.Attributes[GameAttribute.Resistance_From_Intelligence] = this.Attributes[GameAttribute.Intelligence] * 0.1f;
+            //scripted //this.Attributes[GameAttribute.Resistance_Total, 0] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; // im pretty sure key = 0 doesnt do anything since the lookup is (attributeId | (key << 12)), maybe this is some base resistance? /cm
+            // likely the physical school of damage, it probably doesn't actually do anything in this case (or maybe just not for the player's hero)
+            // but exists for the sake of parity with weapon damage schools
+            //scripted //this.Attributes[GameAttribute.Resistance_Total, 1] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Fire
+            //scripted //this.Attributes[GameAttribute.Resistance_Total, 2] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Lightning
+            //scripted //this.Attributes[GameAttribute.Resistance_Total, 3] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Cold
+            //scripted //this.Attributes[GameAttribute.Resistance_Total, 4] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Poison
+            //scripted //this.Attributes[GameAttribute.Resistance_Total, 5] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Arcane
+            //scripted //this.Attributes[GameAttribute.Resistance_Total, 6] = this.Attributes[GameAttribute.Resistance_From_Intelligence]; //Holy
+
+            //scripted //this.Attributes[GameAttribute.Resistance_Total, 0xDE] = 0.5f;
+            //scripted //this.Attributes[GameAttribute.Resistance_Total, 0x226] = 0.5f;
+
+
+        }
+
+
+        #endregion
+
+
 
         #region game-message handling & consumers
 
@@ -680,15 +755,10 @@ namespace Mooege.Core.GS.Players
             this.Attributes[GameAttribute.Skill, message.SNOSkill] = 1;
             //scripted //this.Attributes[GameAttribute.Skill_Total, message.SNOSkill] = 1;
             // update rune attributes for new skill
-            this.Attributes[GameAttribute.Rune_A, message.SNOSkill] = message.RuneIndex == 0 ? 1 : 0;
-            this.Attributes[GameAttribute.Rune_B, message.SNOSkill] = message.RuneIndex == 1 ? 1 : 0;
-            this.Attributes[GameAttribute.Rune_C, message.SNOSkill] = message.RuneIndex == 2 ? 1 : 0;
-            this.Attributes[GameAttribute.Rune_D, message.SNOSkill] = message.RuneIndex == 3 ? 1 : 0;
-            this.Attributes[GameAttribute.Rune_E, message.SNOSkill] = message.RuneIndex == 4 ? 1 : 0;
-            this.Attributes.BroadcastChangedIfRevealed();
-
+            this.SetAttributesSkillSets();
             this.SkillSet.ActiveSkills[message.SkillIndex].snoSkill = message.SNOSkill;
             this.SkillSet.SwitchUpdateSkills(oldSNOSkill, message.SNOSkill, message.RuneIndex, this.Toon);
+            this.Attributes.BroadcastChangedIfRevealed();
             this.UpdateHeroState();
 
             if (oldSNOSkill != -1)  // don't do cooldown when first skill put in slot
@@ -981,7 +1051,7 @@ namespace Mooege.Core.GS.Players
             // generate visual update message
             this.Inventory.SendVisualInventory(this);
 
-            SetNonDefaultStats();
+            SetAllStatsInCorrectOrder();
         }
 
         public override void OnTeleport()
