@@ -750,10 +750,11 @@ namespace Mooege.Core.GS.Players
 
             this.Attributes[GameAttribute.Skill, message.SNOSkill] = 1;
             //scripted //this.Attributes[GameAttribute.Skill_Total, message.SNOSkill] = 1;
-            // update rune attributes for new skill
-            this.SetAttributesSkillSets();
             this.SkillSet.ActiveSkills[message.SkillIndex].snoSkill = message.SNOSkill;
+            this.SkillSet.ActiveSkills[message.SkillIndex].snoRune = message.RuneIndex;
             this.SkillSet.SwitchUpdateSkills(oldSNOSkill, message.SNOSkill, message.RuneIndex, this.Toon);
+            this.SetAttributesSkillSets();
+
             this.Attributes.BroadcastChangedIfRevealed();
             this.UpdateHeroState();
 
@@ -1690,9 +1691,11 @@ namespace Mooege.Core.GS.Players
             // 1 tick = 1/60s, so multiply ticks in seconds against resource regen per-second to get the amount to update
             float tickSeconds = 1f / 60f * (this.InGameClient.Game.TickCounter - _lastResourceUpdateTick);
             _lastResourceUpdateTick = this.InGameClient.Game.TickCounter;
-
-            GeneratePrimaryResource(tickSeconds * Toon.HeroTable.PrimaryResourceRegenPerSecond);
-            GenerateSecondaryResource(tickSeconds * Toon.HeroTable.SecondaryResourceRegenPerSecond);
+            
+            GeneratePrimaryResource(tickSeconds * this.Attributes[GameAttribute.Resource_Regen_Total,
+                                                                  this.Attributes[GameAttribute.Resource_Type_Primary]]);
+            GenerateSecondaryResource(tickSeconds * this.Attributes[GameAttribute.Resource_Regen_Total,
+                                                                  this.Attributes[GameAttribute.Resource_Type_Secondary]]);
             AddHP(tickSeconds * this.Attributes[GameAttribute.Hitpoints_Regen_Per_Second]);
 
             // TODO: replace this with Trait_Barbarian_Fury.pow implementation

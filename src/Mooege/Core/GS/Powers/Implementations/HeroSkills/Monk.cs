@@ -40,23 +40,22 @@ namespace Mooege.Core.GS.Powers.Implementations
     {
         public override IEnumerable<TickTimer> Main()
         {
-            float reachLength;
-            float reachThickness;
+            float reachRadius;
+            float reachDegrees;
 
             switch (ComboIndex)
             {
-                //This may be ArcDirection instead of BeamDirection
                 case 0:
-                    reachLength = ScriptFormula(5);
-                    reachThickness = ScriptFormula(9);
+                    reachRadius = ScriptFormula(5);
+                    reachDegrees = ScriptFormula(9);
                     break;
                 case 1:
-                    reachLength = ScriptFormula(4);
-                    reachThickness = ScriptFormula(3);
+                    reachRadius = ScriptFormula(4);
+                    reachDegrees = ScriptFormula(3);
                     break;
                 case 2:
-                    reachLength = ScriptFormula(20);
-                    reachThickness = ScriptFormula(19);
+                    reachRadius = ScriptFormula(20);
+                    reachDegrees = ScriptFormula(19);
                     break;
                 default:
                     yield break;
@@ -87,7 +86,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             {
                 bool hitAnything = false;
                 AttackPayload attack = new AttackPayload(this);
-                attack.Targets = GetEnemiesInBeamDirection(User.Position, TargetPosition, reachLength, reachThickness);
+                attack.Targets = GetEnemiesInArcDirection(User.Position, TargetPosition, reachRadius, reachDegrees);
                 attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);
                 attack.OnHit = hitPayload =>
                 {
