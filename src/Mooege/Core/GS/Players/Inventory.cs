@@ -732,12 +732,25 @@ namespace Mooege.Core.GS.Players
             this.Loaded = true;
         }
 
-        public void RefreshToClient()
+        public void RefreshInventoryToClient()
         {
-            //this._inventoryGold = ItemGenerator.CreateGold(this._owner, this.GetGoldAmount());
-            //this._inventoryGold.Attributes[GameAttribute.ItemStackQuantityLo] = this.GetGoldAmount(); // This is the attribute that makes the gold visible in game
-            //this._inventoryGold.Owner = _owner;
-            this._inventoryGold.SetInventoryLocation((int)EquipmentSlotId.Gold, 0, 0);
+            var itemsToUpdate = new List<Item>();
+            itemsToUpdate.AddRange(this._inventoryGrid.Items.Values);
+            itemsToUpdate.AddRange(this._stashGrid.Items.Values);
+            itemsToUpdate.Add(this._inventoryGold);
+
+            foreach (var itm in itemsToUpdate)
+            {
+                if (itm.Owner is GS.Players.Player)
+                {
+                    var player = (itm.Owner as GS.Players.Player);
+                    if (!itm.Reveal(player))
+                    {
+                        player.InGameClient.SendMessage(itm.ACDInventoryPositionMessage);
+                    }
+                }
+            }
+
         }
 
         // TODO: change saving at the world OnLeave to saving at every inventory change, //~weltmeyer:done:without delete and insert 

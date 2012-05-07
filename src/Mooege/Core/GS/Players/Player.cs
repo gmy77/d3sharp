@@ -873,7 +873,7 @@ namespace Mooege.Core.GS.Players
             if (!this.Inventory.Loaded)//why reload if already loaded?
                 this.Inventory.LoadFromDB();
             else
-                this.Inventory.RefreshToClient();
+                this.Inventory.RefreshInventoryToClient();
 
             // generate visual update message
             this.Inventory.SendVisualInventory(this);
