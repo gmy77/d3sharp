@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -311,11 +312,12 @@ namespace Mooege.Core.GS.Games
 
             var player = invokerClient.InGameClient.Player;
 
-            var bpItems = player.Inventory.GetBackPackItems();
+            var bpItems = new List<Item>(player.Inventory.GetBackPackItems());
+
+
             foreach (var item in bpItems)
             {
-                var msg = new InventoryDropItemMessage();
-                msg.ItemID = item.DynamicID;
+                var msg = new InventoryDropItemMessage {ItemID = item.DynamicID};
                 player.Inventory.Consume(invokerClient.InGameClient, msg);
             }
             return string.Format("Dropped {0} Items for you", bpItems.Count);

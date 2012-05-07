@@ -463,15 +463,16 @@ namespace Mooege.Core.GS.Players
         }
         public void SetAttributesByItems()
         {
+            const float nonPhysDefault = 0f; //was 3.051758E-05f
             var damageAttributeMinValues = new Dictionary<DamageType, float[]>
                                                {
-                                                   {DamageType.Physical, new[] {6f, 3f}},
-                                                   {DamageType.Arcane, new[] {3.051758E-05f, 3.051758E-05f}},
-                                                   {DamageType.Cold, new[] {3.051758E-05f, 3.051758E-05f}},
-                                                   {DamageType.Fire, new[] {3.051758E-05f, 3.051758E-05f}},
-                                                   {DamageType.Holy, new[] {3.051758E-05f, 3.051758E-05f}},
-                                                   {DamageType.Lightning, new[] {3.051758E-05f, 3.051758E-05f}},
-                                                   {DamageType.Poison, new[] {3.051758E-05f, 3.051758E-05f}}
+                                                   {DamageType.Physical, new[] {2f, 2f}},
+                                                   {DamageType.Arcane, new[] {nonPhysDefault, nonPhysDefault}},
+                                                   {DamageType.Cold, new[] {nonPhysDefault, nonPhysDefault}},
+                                                   {DamageType.Fire, new[] {nonPhysDefault, nonPhysDefault}},
+                                                   {DamageType.Holy, new[] {nonPhysDefault, nonPhysDefault}},
+                                                   {DamageType.Lightning, new[] {nonPhysDefault, nonPhysDefault}},
+                                                   {DamageType.Poison, new[] {nonPhysDefault, nonPhysDefault}}
                                                };
 
             foreach (var damageType in DamageType.AllTypes)
@@ -554,7 +555,7 @@ namespace Mooege.Core.GS.Players
             //Bonus stats
             this.Attributes[GameAttribute.Hit_Chance] = 1f;
 
-            this.Attributes[GameAttribute.Attacks_Per_Second] = 1f;
+            this.Attributes[GameAttribute.Attacks_Per_Second] = 1.2f;
             //this.Attributes[GameAttribute.Attacks_Per_Second_Item] = 1.199219f;
             this.Attributes[GameAttribute.Crit_Percent_Cap] = Toon.HeroTable.CritPercentCap;
             //scripted //this.Attributes[GameAttribute.Casting_Speed_Total] = 1f;
