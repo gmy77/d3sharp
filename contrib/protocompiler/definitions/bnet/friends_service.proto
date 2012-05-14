@@ -96,47 +96,47 @@ service FriendsService
 {
     rpc SubscribeToFriends(.bnet.protocol.friends.SubscribeToFriendsRequest) returns(.bnet.protocol.friends.SubscribeToFriendsResponse)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc SendInvitation(.bnet.protocol.invitation.SendInvitationRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc AcceptInvitation(.bnet.protocol.invitation.GenericRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
     rpc RevokeInvitation(.bnet.protocol.invitation.GenericRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 4;
+        option (log) = 4;
     }
     rpc DeclineInvitation(.bnet.protocol.invitation.GenericRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 5;
+        option (log) = 5;
     }
     rpc IgnoreInvitation(.bnet.protocol.invitation.GenericRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 6;
+        option (log) = 6;
     }
     rpc AssignRole(.bnet.protocol.friends.AssignRoleRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 7;
+        option (log) = 7;
     }
     rpc RemoveFriend(.bnet.protocol.friends.GenericFriendRequest) returns(.bnet.protocol.friends.GenericFriendResponse)
     {
-        option (method_id) = 8;
+        option (log) = 8;
     }
     rpc ViewFriends(.bnet.protocol.friends.ViewFriendsRequest) returns(.bnet.protocol.friends.ViewFriendsResponse)
     {
-        option (method_id) = 9;
+        option (log) = 9;
     }
     rpc UpdateFriendState(.bnet.protocol.friends.UpdateFriendStateRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 10;
+        option (log) = 10;
     }
     rpc UnsubscribeToFriends(.bnet.protocol.friends.UnsubscribeToFriendsRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 11;
+        option (log) = 11;
     }
 }
 
@@ -144,31 +144,31 @@ service FriendsNotify
 {
     rpc NotifyFriendAdded(.bnet.protocol.friends.FriendNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc NotifyFriendRemoved(.bnet.protocol.friends.FriendNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc NotifyReceivedInvitationAdded(.bnet.protocol.friends.InvitationNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
     rpc NotifyReceivedInvitationRemoved(.bnet.protocol.friends.InvitationNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 4;
+        option (log) = 4;
     }
     rpc NotifySentInvitationAdded(.bnet.protocol.friends.InvitationNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 5;
+        option (log) = 5;
     }
     rpc NotifySentInvitationRemoved(.bnet.protocol.friends.InvitationNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 6;
+        option (log) = 6;
     }
     rpc NotifyUpdateFriendState(.bnet.protocol.friends.UpdateFriendStateNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 7;
+        option (log) = 7;
     }
 }
 

@@ -38,7 +38,7 @@ service ServerPoolService
 {
     rpc GetPoolState(.bnet.protocol.server_pool.PoolStateRequest) returns(.bnet.protocol.server_pool.PoolStateResponse)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
 }
 

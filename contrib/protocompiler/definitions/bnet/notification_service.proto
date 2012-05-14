@@ -42,19 +42,19 @@ service NotificationService
 {
     rpc SendNotification(.bnet.protocol.notification.Notification) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc RegisterClient(.bnet.protocol.notification.RegisterClientRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc UnregisterClient(.bnet.protocol.notification.UnregisterClientRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
     rpc FindClient(.bnet.protocol.notification.FindClientRequest) returns(.bnet.protocol.notification.FindClientResponse)
     {
-        option (method_id) = 4;
+        option (log) = 4;
     }
 }
 
@@ -62,11 +62,11 @@ service NotificationListener
 {
     rpc OnNotificationReceived(.bnet.protocol.notification.Notification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc OnNotificationSent(.bnet.protocol.notification.Notification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
 }
 

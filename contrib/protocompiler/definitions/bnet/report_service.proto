@@ -25,7 +25,7 @@ service ReportService
 {
     rpc SendReport(.bnet.protocol.report.SendReportRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
 }
 

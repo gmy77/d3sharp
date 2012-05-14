@@ -16,7 +16,7 @@ service Resources
 {
     rpc GetContentHandle(.bnet.protocol.resources.ContentHandleRequest) returns(.bnet.protocol.ContentHandle)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
 }
 
