@@ -43,8 +43,12 @@ namespace Mooege.Core.MooNet.Web
             if (AccountManager.GetAccountByEmail(email.ToLower()) != null)
                 throw new FaultException(new FaultReason(string.Format("An account already exists for email address {0}.", email)));
 
+
             var account = AccountManager.CreateAccount(email, password, battleTag);
             var gameAccount = GameAccountManager.CreateGameAccount(account);
+            account.DBAccount.DBGameAccounts.Add(gameAccount.DBGameAccount);
+            account.SaveToDB();
+
             return true;
         }
 
