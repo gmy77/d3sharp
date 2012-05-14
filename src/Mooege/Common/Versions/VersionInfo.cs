@@ -47,10 +47,11 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 9359;
+            public const int RequiredClientVersion = 9558;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
+                {"Aurora 31c8df955a_public", 9558},
                 {"Aurora 8eac7d44dc_public", 9359}, //9327
                 {"Aurora _public", 9183},
                 {"Aurora bcd3e50524_public", 8896},
