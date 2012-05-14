@@ -140,8 +140,8 @@ message SubscribeOrderBookStatusChangeRequest
     required .bnet.protocol.exchange.PartitionId max_partition_id = 3;
     required fixed32 program = 4;
     required int32 status = 5;
-    optional string currency = 6;
-    optional int32 specialist = 7;
+    required string currency = 6;
+    required int32 specialist = 7;
     optional bool bootstrap = 8;
     optional uint64 bootstrap_oldest_created_time = 9;
 }

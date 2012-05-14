@@ -50,6 +50,7 @@
     <Compile Include="bnet\protocol\exchange\Exchange.cs" />
     <Compile Include="bnet\protocol\exchange_object_provider\ExchangeObjectProviderTypes.cs" />
     <Compile Include="bnet\protocol\exchange_risk\ExchangeRiskTypes.cs" />
+    <Compile Include="bnet\protocol\FieldOptions.cs" />
     <Compile Include="bnet\protocol\friends\FriendsService.cs" />
     <Compile Include="bnet\protocol\game_master\GameMasterService.cs" />
     <Compile Include="bnet\protocol\game_utilities\GameUtilitiesService.cs" />

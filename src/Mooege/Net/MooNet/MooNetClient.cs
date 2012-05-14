@@ -482,7 +482,8 @@ namespace Mooege.Net.MooNet
         {
             Unknown,
             Invalid,
-            enUS
+            enUS,
+            enGB
         }
     }
 }

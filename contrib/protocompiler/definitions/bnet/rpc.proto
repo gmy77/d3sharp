@@ -10,7 +10,6 @@ message Address
 {
     required string address = 1;
     optional uint32 port = 2;
-    optional .bnet.protocol.Address next = 3;
 }
 
 message ProcessId

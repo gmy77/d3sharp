@@ -60,6 +60,9 @@ namespace Mooege.Core.MooNet.Authentication
                 case "enUS":
                     client.Locale = MooNetClient.ClientLocale.enUS;
                     break;
+                case "enGB":
+                    client.Locale = MooNetClient.ClientLocale.enGB;
+                    break;
                 default:
                     client.Locale = MooNetClient.ClientLocale.Invalid;
                     break;

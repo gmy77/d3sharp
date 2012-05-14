@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.9359.*";
+            public const string Version = "1.9558.*";
         }
 
         /// <summary>
@@ -47,10 +47,11 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 9359;
+            public const int RequiredClientVersion = 9558;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
+                {"Aurora 31c8df955a_public", 9558},
                 {"Aurora 8eac7d44dc_public", 9359}, //9327
                 {"Aurora _public", 9183},
                 {"Aurora bcd3e50524_public", 8896},
@@ -125,7 +126,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 9359;
+            public const int RequiredPatchVersion = 9558;
         }
 
         /// <summary>
@@ -151,8 +152,8 @@ namespace Mooege.Common.Versions
             // 0x21EEE08D                   // 7446
 
             //This is the server version sent in VersionsMessage
-            public const string MajorVersion = "0.11.0";
-            public const string ServerBuild = "9359";
+            public const string MajorVersion = "1.0.1";
+            public const string ServerBuild = "9558";
             public const string VersionString = MajorVersion + ServerBuild;
 
             // old version strings.

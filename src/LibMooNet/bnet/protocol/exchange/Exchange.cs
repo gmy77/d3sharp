@@ -40,15 +40,16 @@ namespace bnet.protocol.exchange {
     static Exchange() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           "ChNibmV0L2V4Y2hhbmdlLnByb3RvEhZibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
-          "IigKC1BhcnRpdGlvbklkEgwKBGhpZ2gYASACKAYSCwoDbG93GAIgAigGIjwK" + 
-          "CEJsb2JGcm9tEg4KBnNvdXJjZRgBIAIoBxIMCgRkYXRhGAIgAigMEhIKCmV4" + 
-          "dHJhX2RhdGEYAyABKAwiPAoKQmxvYk9mVHlwZRIMCgR0eXBlGAEgAigJEgwK" + 
-          "BGRhdGEYAiABKAwSEgoKZXh0cmFfZGF0YRgDIAEoDCI8Cg5CbG9iRnJvbU9m" + 
-          "VHlwZRIOCgZzb3VyY2UYASACKAcSDAoEdHlwZRgCIAIoCRIMCgRkYXRhGAMg" + 
-          "AigMIj0KEkFjdGlvblJlc3VsdERldGFpbBIQCghjYXRlZ29yeRgBIAIoDRIV" + 
-          "Cg1yZXN1bHRfcmVhc29uGAIgASgNIlYKDkJpbGxpbmdBZGRyZXNzEhIKCmNv" + 
-          "dW50cnlfaWQYASACKAUSDAoEY2l0eRgCIAEoCRINCgVzdGF0ZRgDIAEoCRIT" + 
-          "Cgtwb3N0YWxfY29kZRgEIAEoCUIDgAEA");
+          "GhhibmV0L2ZpZWxkX29wdGlvbnMucHJvdG8iKAoLUGFydGl0aW9uSWQSDAoE" + 
+          "aGlnaBgBIAIoBhILCgNsb3cYAiACKAYiPAoIQmxvYkZyb20SDgoGc291cmNl" + 
+          "GAEgAigHEgwKBGRhdGEYAiACKAwSEgoKZXh0cmFfZGF0YRgDIAEoDCI8CgpC" + 
+          "bG9iT2ZUeXBlEgwKBHR5cGUYASACKAkSDAoEZGF0YRgCIAEoDBISCgpleHRy" + 
+          "YV9kYXRhGAMgASgMIjwKDkJsb2JGcm9tT2ZUeXBlEg4KBnNvdXJjZRgBIAIo" + 
+          "BxIMCgR0eXBlGAIgAigJEgwKBGRhdGEYAyACKAwiPQoSQWN0aW9uUmVzdWx0" + 
+          "RGV0YWlsEhAKCGNhdGVnb3J5GAEgAigNEhUKDXJlc3VsdF9yZWFzb24YAiAB" + 
+          "KA0iVgoOQmlsbGluZ0FkZHJlc3MSEgoKY291bnRyeV9pZBgBIAIoBRIMCgRj" + 
+          "aXR5GAIgASgJEg0KBXN0YXRlGAMgASgJEhMKC3Bvc3RhbF9jb2RlGAQgASgJ" + 
+          "QgOAAQA=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_PartitionId__Descriptor = Descriptor.MessageTypes[0];
@@ -79,6 +80,7 @@ namespace bnet.protocol.exchange {
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
           new pbd::FileDescriptor[] {
+          global::bnet.protocol.FieldOptions.Descriptor, 
           }, assigner);
     }
     #endregion
