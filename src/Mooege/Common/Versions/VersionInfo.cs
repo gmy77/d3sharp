@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.9359.*";
+            public const string Version = "1.9558.*";
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 9359;
+            public const int RequiredPatchVersion = 9558;
         }
 
         /// <summary>
@@ -151,8 +151,8 @@ namespace Mooege.Common.Versions
             // 0x21EEE08D                   // 7446
 
             //This is the server version sent in VersionsMessage
-            public const string MajorVersion = "0.11.0";
-            public const string ServerBuild = "9359";
+            public const string MajorVersion = "1.0.1";
+            public const string ServerBuild = "9558";
             public const string VersionString = MajorVersion + ServerBuild;
 
             // old version strings.
