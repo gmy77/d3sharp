@@ -61,23 +61,23 @@ service AuthenticationClient
 {
     rpc ModuleLoad(.bnet.protocol.authentication.ModuleLoadRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 1;
+        option (method_id) = 1;
     }
     rpc ModuleMessage(.bnet.protocol.authentication.ModuleMessageRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 2;
+        option (method_id) = 2;
     }
     rpc AccountSettings(.bnet.protocol.authentication.AccountSettingsNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 3;
+        option (method_id) = 3;
     }
     rpc ServerStateChange(.bnet.protocol.authentication.ServerStateChangeRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 4;
+        option (method_id) = 4;
     }
     rpc LogonComplete(.bnet.protocol.authentication.LogonResult) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 5;
+        option (method_id) = 5;
     }
 }
 
@@ -85,19 +85,19 @@ service AuthenticationServer
 {
     rpc Logon(.bnet.protocol.authentication.LogonRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 1;
+        option (method_id) = 1;
     }
     rpc ModuleNotify(.bnet.protocol.authentication.ModuleNotification) returns(.bnet.protocol.NoData)
     {
-        option (log) = 2;
+        option (method_id) = 2;
     }
     rpc ModuleMessage(.bnet.protocol.authentication.ModuleMessageRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 3;
+        option (method_id) = 3;
     }
     rpc SelectGameAccount(.bnet.protocol.EntityId) returns(.bnet.protocol.NoData)
     {
-        option (log) = 4;
+        option (method_id) = 4;
     }
 }
 

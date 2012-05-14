@@ -51,15 +51,15 @@ service SearchService
 {
     rpc FindMatches(.bnet.protocol.search.FindMatchesRequest) returns(.bnet.protocol.search.FindMatchesResponse)
     {
-        option (log) = 1;
+        option (method_id) = 1;
     }
     rpc SetObject(.bnet.protocol.search.SetObjectRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 2;
+        option (method_id) = 2;
     }
     rpc RemoveObjects(.bnet.protocol.search.RemoveObjectsRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 3;
+        option (method_id) = 3;
     }
 }
 

@@ -80,31 +80,31 @@ service ChannelInvitationService
 {
     rpc Subscribe(.bnet.protocol.channel_invitation.SubscribeRequest) returns(.bnet.protocol.channel_invitation.SubscribeResponse)
     {
-        option (log) = 1;
+        option (method_id) = 1;
     }
     rpc Unsubscribe(.bnet.protocol.channel_invitation.UnsubscribeRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 2;
+        option (method_id) = 2;
     }
     rpc SendInvitation(.bnet.protocol.invitation.SendInvitationRequest) returns(.bnet.protocol.invitation.SendInvitationResponse)
     {
-        option (log) = 3;
+        option (method_id) = 3;
     }
     rpc AcceptInvitation(.bnet.protocol.channel_invitation.AcceptInvitationRequest) returns(.bnet.protocol.channel_invitation.AcceptInvitationResponse)
     {
-        option (log) = 4;
+        option (method_id) = 4;
     }
     rpc DeclineInvitation(.bnet.protocol.invitation.GenericRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 5;
+        option (method_id) = 5;
     }
     rpc RevokeInvitation(.bnet.protocol.channel_invitation.RevokeInvitationRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 6;
+        option (method_id) = 6;
     }
     rpc SuggestInvitation(.bnet.protocol.channel_invitation.SuggestInvitationRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 7;
+        option (method_id) = 7;
     }
 }
 
@@ -112,19 +112,19 @@ service ChannelInvitationNotify
 {
     rpc NotifyReceivedInvitationAdded(.bnet.protocol.channel_invitation.InvitationAddedNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 1;
+        option (method_id) = 1;
     }
     rpc NotifyReceivedInvitationRemoved(.bnet.protocol.channel_invitation.InvitationRemovedNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 2;
+        option (method_id) = 2;
     }
     rpc NotifyReceivedSuggestionAdded(.bnet.protocol.channel_invitation.SuggestionAddedNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 3;
+        option (method_id) = 3;
     }
     rpc HasRoomForInvitation(.bnet.protocol.channel_invitation.HasRoomForInvitationRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 4;
+        option (method_id) = 4;
     }
 }
 
