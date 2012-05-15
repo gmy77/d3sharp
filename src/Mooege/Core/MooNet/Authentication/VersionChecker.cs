@@ -57,11 +57,38 @@ namespace Mooege.Core.MooNet.Authentication
             // set client locale
             switch(request.Locale)
             {
-                case "enUS":
-                    client.Locale = MooNetClient.ClientLocale.enUS;
+                case "deDE":
+                    client.Locale = MooNetClient.ClientLocale.deDE;
                     break;
                 case "enGB":
                     client.Locale = MooNetClient.ClientLocale.enGB;
+                    break;
+                case "enSG":
+                    client.Locale = MooNetClient.ClientLocale.enSG;
+                    break;
+                case "enUS":
+                    client.Locale = MooNetClient.ClientLocale.enUS;
+                    break;
+                case "esES":
+                    client.Locale = MooNetClient.ClientLocale.esES;
+                    break;
+                case "frFR":
+                    client.Locale = MooNetClient.ClientLocale.frFR;
+                    break;
+                case "itIT":
+                    client.Locale = MooNetClient.ClientLocale.itIT;
+                    break;
+                case "krKR":
+                    client.Locale = MooNetClient.ClientLocale.krKR;
+                    break;
+                case "plPL":
+                    client.Locale = MooNetClient.ClientLocale.plPL;
+                    break;
+                case "ptBR":
+                    client.Locale = MooNetClient.ClientLocale.ptBR;
+                    break;
+                case "zhTW":
+                    client.Locale = MooNetClient.ClientLocale.zhTW;
                     break;
                 default:
                     client.Locale = MooNetClient.ClientLocale.Invalid;
