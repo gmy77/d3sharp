@@ -480,10 +480,58 @@ namespace Mooege.Net.MooNet
         /// </summary>
         public enum ClientLocale
         {
+            /// <summary>
+            /// Unknown client locale state.
+            /// </summary>
             Unknown,
+            /// <summary>
+            /// Invalid client locale.
+            /// </summary>
             Invalid,
+            /// <summary>
+            /// Deutsch.
+            /// </summary>
+            deDE,
+            /// <summary>
+            /// EU.
+            /// </summary>
+            enGB,
+            /// <summary>
+            /// Singapure.
+            /// </summary>
+            enSG,
+            /// <summary>
+            /// US
+            /// </summary>
             enUS,
-            enGB
+            /// <summary>
+            /// Espanol
+            /// </summary>
+            esES,
+            /// <summary>
+            /// French
+            /// </summary>
+            frFR,
+            /// <summary>
+            /// Italian
+            /// </summary>
+            itIT,
+            /// <summary>
+            /// Korean
+            /// </summary>
+            krKR,
+            /// <summary>
+            /// Polish
+            /// </summary>
+            plPL,
+            /// <summary>
+            /// Portuguese
+            /// </summary>
+            ptBR,
+            /// <summary>
+            /// Taiwan
+            /// </summary>
+            zhTW
         }
     }
 }
