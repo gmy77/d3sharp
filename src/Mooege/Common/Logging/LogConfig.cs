@@ -22,7 +22,16 @@ namespace Mooege.Common.Logging
     {
         public string LoggingRoot { get { return this.GetString("Root", @"logs"); } set { this.Set("Root", value); } }
 
-        public LogTargetConfig[] Targets = new[] { new LogTargetConfig("ConsoleLog"), new LogTargetConfig("ServerLog"), new LogTargetConfig("PacketLog") };
+        /// <summary>
+        /// Available log target configs.
+        /// </summary>
+        public LogTargetConfig[] Targets = new[]
+        {
+            new LogTargetConfig("ConsoleLog"), 
+            new LogTargetConfig("ServerLog"), 
+            new LogTargetConfig("SQLLog"), 
+            new LogTargetConfig("PacketLog")
+        };
 
         private static readonly LogConfig _instance = new LogConfig();
         public static LogConfig Instance { get { return _instance; } }
@@ -32,7 +41,8 @@ namespace Mooege.Common.Logging
     public class LogTargetConfig : Config.Config
     {
         public bool Enabled { get { return this.GetBoolean("Enabled", true); } set { this.Set("Enabled", value); } }
-        public string Target { get { return this.GetString("Target", "Console"); } set { this.GetString("Target", value); } }
+        public string Medium { get { return this.GetString("Medium", "Console"); } set { this.GetString("Medium", value); } }
+        public Logger.TargetType TargetType { get { return (Logger.TargetType)(this.GetInt("TargetType", (int)Logger.TargetType.Server, true)); } set { this.Set("TargetType", (int)value); } }
         public bool IncludeTimeStamps { get { return this.GetBoolean("IncludeTimeStamps", false); } set { this.Set("IncludeTimeStamps", value); } }
         public string FileName { get { return this.GetString("FileName", ""); } set { this.GetString("FileName", value); } }
         public Logger.Level MinimumLevel { get { return (Logger.Level)( this.GetInt("MinimumLevel", (int)Logger.Level.Info, true)); } set { this.Set("MinimumLevel", (int)value ); } }

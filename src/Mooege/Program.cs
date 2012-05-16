@@ -38,52 +38,76 @@ using Environment = System.Environment;
 
 namespace Mooege
 {
-    internal class Program
+    /// <summary>
+    /// Contains mooege's startup code.
+    /// </summary>
+    public static class Program
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
-        public static readonly DateTime StartupTime = DateTime.Now; 
+        /// <summary>
+        /// Used for uptime calculations.
+        /// </summary>
+        public static readonly DateTime StartupTime = DateTime.Now; // used for uptime calculations.
 
+        /// <summary>
+        /// MooNetServer instance.
+        /// </summary>
         public static MooNetServer MooNetServer;
+
+        /// <summary>
+        /// GameServer instance.
+        /// </summary>
         public static GameServer GameServer;
 
+        /// <summary>
+        /// MooNetServer thread.
+        /// </summary>
         public static Thread MooNetServerThread;
+
+        /// <summary>
+        /// GameServer thread.
+        /// </summary>
         public static Thread GameServerThread;
 
+        /// <summary>
+        /// Logger instance.
+        /// </summary>
+        private static readonly Logger Logger = LogManager.CreateLogger();
+
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
         public static void Main(string[] args)
         {
-            // Watch for unhandled exceptions
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
-
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create.
-
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // Watch for any unhandled exceptions.
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any mpq-reading problems (mostly because of number formats).
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            PrintBanner();
-            PrintLicense();
-            Console.ResetColor();
+            PrintBanner(); // print ascii banner.
+            PrintLicense(); // print license text.
+            Console.ResetColor(); // reset color back to default.
 
             InitLoggers(); // init logging facility.
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
 
+            // init openssl & wrapper.
             try
             {
                 Logger.Info("Found OpenSSL version {0}.", OpenSSL.Core.Version.Library.ToString());
             }
             catch (Exception e)
             {
-                Logger.ErrorException(e, "OpenSSL Error");
+                Logger.ErrorException(e, "OpenSSL init error");
                 Console.ReadLine();
                 return;
             }
 
-
-            //Prefilling Database
+            // prefill the database.
             Common.Storage.AccountDataBase.SessionProvider.RebuildSchema();
             if (!DBSessions.AccountSession.Query<DBAccount>().Any())
             {
-                Logger.Info("New Database, creating first Test account (Test@,testpass)");
-                var account = AccountManager.CreateAccount("test@", "testpass", "test", Account.UserLevels.Admin);
+                Logger.Info("Initing new database, creating first owner account (test@,123456)");
+                var account = AccountManager.CreateAccount("test@", "testpass", "test", Account.UserLevels.Owner);
                 var gameAccount = GameAccountManager.CreateGameAccount(account);
                 account.DBAccount.DBGameAccounts.Add(gameAccount.DBGameAccount);
                 account.SaveToDB();
@@ -119,20 +143,21 @@ namespace Mooege
                 if (!targetConfig.Enabled) continue;
 
                 LogTarget target = null;
-                switch (targetConfig.Target.ToLower())
+                switch (targetConfig.Medium.ToLower())
                 {
                     case "console":
-                        target = new ConsoleTarget(targetConfig.MinimumLevel, targetConfig.MaximumLevel,
-                                                   targetConfig.IncludeTimeStamps);
+                        target = new ConsoleTarget(targetConfig.TargetType, targetConfig.MinimumLevel, 
+                                                   targetConfig.MaximumLevel, targetConfig.IncludeTimeStamps);
                         break;
                     case "file":
-                        target = new FileTarget(targetConfig.FileName, targetConfig.MinimumLevel,
-                                                targetConfig.MaximumLevel, targetConfig.IncludeTimeStamps,
-                                                targetConfig.ResetOnStartup);
+                        target = new FileTarget(targetConfig.TargetType, targetConfig.FileName, 
+                                                targetConfig.MinimumLevel, targetConfig.MaximumLevel, 
+                                                targetConfig.IncludeTimeStamps, targetConfig.ResetOnStartup);
                         break;
                 }
 
-                if (target != null) LogManager.AttachLogTarget(target);
+                if (target != null) 
+                    LogManager.AttachLogTarget(target);
             }
         }
 

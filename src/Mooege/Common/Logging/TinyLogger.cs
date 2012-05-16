@@ -58,18 +58,21 @@ namespace Mooege.Common.Logging
 
     internal static class LogRouter
     {
-        public static void RouteMessage(Logger.Level level, string logger, string message)
+        public static void RouteMessage(Logger.Level level, string logger, string message, Logger.TargetType type = Logger.TargetType.Any)
         {
-            if (!LogManager.Enabled) return;
-            if (LogManager.Targets.Count == 0) return;
+            if (!LogManager.Enabled) 
+                return;
 
-            foreach (var target in LogManager.Targets.Where(target => level >= target.MinimumLevel && level <= target.MaximumLevel))
+            if (LogManager.Targets.Count == 0) 
+                return;
+
+            foreach (var target in LogManager.Targets.Where(target => level >= target.MinimumLevel && level <= target.MaximumLevel && (type == Logger.TargetType.Any | target.Type == type)))
             {
                 target.LogMessage(level, logger, message);
             }
         }
 
-        public static void RouteException(Logger.Level level, string logger, string message, Exception exception)
+        public static void RouteException(Logger.Level level, string logger, string message, Exception exception, Logger.TargetType type = Logger.TargetType.Any)
         {
             if (!LogManager.Enabled) return;
             if (LogManager.Targets.Count == 0) return;
@@ -90,14 +93,14 @@ namespace Mooege.Common.Logging
             Name = name;
         }
 
-        private void Log(Level level, string message, object[] args)
+        private void Log(Level level, string message, object[] args, TargetType targetType = TargetType.Any)
         {
-            LogRouter.RouteMessage(level, this.Name, args == null ? message : string.Format(CultureInfo.InvariantCulture, message, args));
+            LogRouter.RouteMessage(level, this.Name, args == null ? message : string.Format(CultureInfo.InvariantCulture, message, args), targetType);
         }
 
-        private void LogException(Level level, string message, object[] args, Exception exception)
+        private void LogException(Level level, string message, object[] args, Exception exception, TargetType targetType = TargetType.Any)
         {
-            LogRouter.RouteException(level, this.Name, args == null ? message : string.Format(CultureInfo.InvariantCulture, message, args), exception);
+            LogRouter.RouteException(level, this.Name, args == null ? message : string.Format(CultureInfo.InvariantCulture, message, args), exception, targetType);
         }
 
         public void Trace(string message) { Log(Level.Trace, message, null); }
@@ -106,7 +109,7 @@ namespace Mooege.Common.Logging
         public void Debug(string message) { Log(Level.Debug, message, null); }
         public void Debug(string message, params object[] args) { Log(Level.Debug, message, args); }
 
-        public void Info(string message) { Log(Level.Info, message, null); }
+        public void Info(string message, TargetType targetType = TargetType.Any) { Log(Level.Info, message, null, targetType); }
         public void Info(string message, params object[] args) { Log(Level.Info, message, args); }
 
         public void Warn(string message) { Log(Level.Warn, message, null); }
@@ -121,6 +124,7 @@ namespace Mooege.Common.Logging
         // moonet packet loggers
         public void LogIncoming(Google.ProtocolBuffers.IMessage msg, bnet.protocol.Header header) { Log(Level.Dump, ShortHeader(header) + "[I] " + msg.AsText(), null); }
         public void LogOutgoing(Google.ProtocolBuffers.IMessage msg, bnet.protocol.Header header) { Log(Level.Dump, ShortHeader(header) + "[O] " + msg.AsText(), null); }
+
         private StringBuilder ShortHeader(bnet.protocol.Header header)
         {
             var result = new StringBuilder("service_id: " + header.ServiceId);
@@ -132,11 +136,6 @@ namespace Mooege.Common.Logging
             result.AppendLine();
             return result;
         }
-
-
-        // ingame packet loggers
-        public void LogIncoming(GameMessage msg) { Log(Level.Dump, "[I] " + msg.AsText(), null); }
-        public void LogOutgoing(GameMessage msg) { Log(Level.Dump, "[O] " + msg.AsText(), null); }
 
         public void TraceException(Exception exception, string message) { LogException(Level.Trace, message, null, exception); }
         public void TraceException(Exception exception, string message, params object[] args) { LogException(Level.Trace, message, args, exception); }
@@ -156,6 +155,10 @@ namespace Mooege.Common.Logging
         public void FatalException(Exception exception, string message) { LogException(Level.Fatal, message, null, exception); }
         public void FatalException(Exception exception, string message, params object[] args) { LogException(Level.Fatal, message, args, exception); }
 
+        // ingame packet loggers
+        public void LogIncoming(GameMessage msg) { Log(Level.Dump, "[I] " + msg.AsText(), null); }
+        public void LogOutgoing(GameMessage msg) { Log(Level.Dump, "[O] " + msg.AsText(), null); }
+
         public enum Level
         {
             Dump, // used for logging packets.
@@ -166,16 +169,50 @@ namespace Mooege.Common.Logging
             Error,
             Fatal
         }
+
+        public enum TargetType
+        {
+            /// <summary>
+            /// Message will be directed to any existing loggers.
+            /// </summary>
+            Any,
+            /// <summary>
+            /// Message will be directed to only console.
+            /// </summary>
+            Console,
+            /// <summary>
+            /// Message will be directed to only server log.
+            /// </summary>
+            Server,
+            /// <summary>
+            /// Message will be directed to only SQL log.
+            /// </summary>
+            SQL,
+            /// <summary>
+            /// Message will be directed to only packet log.
+            /// </summary>
+            Packet
+        }
     }
 
     public class LogTarget
     {
+        /// <summary>
+        /// LogTarget's name.
+        /// </summary>
+        public Logger.TargetType Type { get; protected set; }
+
         public Logger.Level MinimumLevel { get; protected set; }
         public Logger.Level MaximumLevel { get; protected set; }
         public bool IncludeTimeStamps { get; protected set; }
 
         public virtual void LogMessage(Logger.Level level, string logger, string message) { throw new NotSupportedException(); }
-        public virtual void LogException(Logger.Level level, string logger, string message, Exception exception) { throw new NotSupportedException(); }        
+        public virtual void LogException(Logger.Level level, string logger, string message, Exception exception) { throw new NotSupportedException(); }
+
+        public LogTarget(Logger.TargetType type)
+        {
+            this.Type = type;
+        }
     }
 
     public class FileTarget : LogTarget, IDisposable
@@ -186,7 +223,8 @@ namespace Mooege.Common.Logging
         private FileStream _fileStream;
         private StreamWriter _logStream;
 
-        public FileTarget(string fileName, Logger.Level minLevel, Logger.Level maxLevel, bool includeTimeStamps, bool reset = false)
+        public FileTarget(Logger.TargetType type, string fileName, Logger.Level minLevel, Logger.Level maxLevel, bool includeTimeStamps, bool reset = false)
+            :base(type)
         {
             this._fileName = fileName;
             this._filePath = string.Format("{0}/{1}", LogConfig.Instance.LoggingRoot, _fileName);
@@ -263,7 +301,8 @@ namespace Mooege.Common.Logging
 
     public class ConsoleTarget : LogTarget
     {
-        public ConsoleTarget(Logger.Level minLevel, Logger.Level maxLevel, bool includeTimeStamps)
+        public ConsoleTarget(Logger.TargetType type, Logger.Level minLevel, Logger.Level maxLevel, bool includeTimeStamps)
+            :base(type)
         {
             MinimumLevel = minLevel;
             MaximumLevel = maxLevel;
