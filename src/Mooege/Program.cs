@@ -86,6 +86,8 @@ namespace Mooege
             PrintLicense(); // print license text.
             Console.ResetColor(); // reset color back to default.
 
+            logtest.test();
+
             InitLoggers(); // init logging facility.
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
