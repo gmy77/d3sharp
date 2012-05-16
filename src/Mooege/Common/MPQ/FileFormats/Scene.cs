@@ -97,17 +97,25 @@ namespace Mooege.Common.MPQ.FileFormats
                 this.Float0 = stream.ReadValueF32();
                 this.Squares = stream.ReadSerializedData<NavMeshSquare>();
                
-                if (SquaresCountX < 64 && SquaresCountY < 64)
+                if (SquaresCountX <= 64 && SquaresCountY <= 64)
                 {
                     WalkGrid = new byte[64, 64];
                 }
-                else if (SquaresCountX < 128 && SquaresCountY < 128)
+                else if (SquaresCountX <= 128 && SquaresCountY <= 128)
                 {
                     WalkGrid = new byte[128, 128]; //96*96
                 }
-                else if (SquaresCountX > 128 || SquaresCountY > 128)
+                else if (SquaresCountX <= 256 && SquaresCountY <= 256)
                 {
                     WalkGrid = new byte[256, 256];
+                }
+                else if (SquaresCountX <= 384 && SquaresCountY <= 384)
+                {
+                    WalkGrid = new byte[384, 384];
+                }
+                else if (SquaresCountX > 384 || SquaresCountY > 384)
+                {
+                    WalkGrid = new byte[512, 512];
                 }
 
 
