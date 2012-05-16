@@ -143,16 +143,16 @@ namespace Mooege
                 if (!targetConfig.Enabled) continue;
 
                 LogTarget target = null;
-                switch (targetConfig.Medium.ToLower())
+                switch (targetConfig.Target.ToLower())
                 {
                     case "console":
-                        target = new ConsoleTarget(targetConfig.TargetType, targetConfig.MinimumLevel, 
-                                                   targetConfig.MaximumLevel, targetConfig.IncludeTimeStamps);
+                        target = new ConsoleTarget(targetConfig.MinimumLevel, targetConfig.MaximumLevel,
+                                                   targetConfig.IncludeTimeStamps);
                         break;
                     case "file":
-                        target = new FileTarget(targetConfig.TargetType, targetConfig.FileName, 
-                                                targetConfig.MinimumLevel, targetConfig.MaximumLevel, 
-                                                targetConfig.IncludeTimeStamps, targetConfig.ResetOnStartup);
+                        target = new FileTarget(targetConfig.FileName, targetConfig.MinimumLevel, 
+                                                targetConfig.MaximumLevel, targetConfig.IncludeTimeStamps, 
+                                                targetConfig.ResetOnStartup);
                         break;
                 }
 

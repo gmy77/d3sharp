@@ -53,9 +53,6 @@ namespace Mooege.Common.Config
                 // logger level aliases.
                 Parser.Alias.AddAlias("MinimumLevel", Logger.Level.Trace);
                 Parser.Alias.AddAlias("MaximumLevel", Logger.Level.Trace);
-
-                // logger target aliases.
-                Parser.Alias.AddAlias("TargetType", Logger.TargetType.Any);
             }
 
             Parser.ExpandKeyValues();
