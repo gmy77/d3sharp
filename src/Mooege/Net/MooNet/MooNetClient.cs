@@ -493,21 +493,25 @@ namespace Mooege.Net.MooNet
             /// </summary>
             deDE,
             /// <summary>
-            /// EU.
+            /// English (EU)
             /// </summary>
             enGB,
             /// <summary>
-            /// Singapure.
+            /// English (Singapore)
             /// </summary>
             enSG,
             /// <summary>
-            /// US
+            /// English (US)
             /// </summary>
             enUS,
             /// <summary>
             /// Espanol
             /// </summary>
             esES,
+            /// <summary>
+            /// Espanol (Mexico)
+            /// </summary>
+            esMX,
             /// <summary>
             /// French
             /// </summary>
@@ -519,7 +523,7 @@ namespace Mooege.Net.MooNet
             /// <summary>
             /// Korean
             /// </summary>
-            krKR,
+            koKR,
             /// <summary>
             /// Polish
             /// </summary>
@@ -527,9 +531,25 @@ namespace Mooege.Net.MooNet
             /// <summary>
             /// Portuguese
             /// </summary>
+            ptPT,
+            /// <summary>
+            /// Portuguese (Brazil)
+            /// </summary>
             ptBR,
             /// <summary>
-            /// Taiwan
+            /// Russian
+            /// </summary>
+            ruRU,
+            /// <summary>
+            /// Turkish
+            /// </summary>
+            trTR,
+            /// <summary>
+            /// Chinese
+            /// </summary>
+            zhCN,
+            /// <summary>
+            /// Chinese (Taiwan)
             /// </summary>
             zhTW
         }

@@ -72,7 +72,6 @@ namespace Mooege.Common.MPQ
         private void LoadCatalogs()
         {
             this.LoadCatalog("CoreTOC.dat"); // as of patch beta patch 7841, blizz renamed TOC.dat as CoreTOC.dat
-            this.LoadCatalog("TOC.dat", true, PatchExceptions.ToList()); // used for reading assets patched to zero bytes and removed from mainCatalog file.  
             this.LoadDBCatalog();
         }
 
@@ -208,19 +207,9 @@ namespace Mooege.Common.MPQ
         {
             MpqFile file = null;
 
+            //Ignore loading wrl and lvl files for now.
             if (fileName.Contains(".wrl") || fileName.Contains(".lvl"))
-            {
-                var i = 0;
-                foreach (MpqArchive archive in this.FileSystem.Archives)
-                {
-                    if (i++ < 11) continue;
-
-                    file = archive.FindFile(fileName);
-                    if (file != null)
-                        return file;
-                }
-                return file;
-            }
+                return null;
 
             if (!startSearchingFromBaseMPQ)
                 file = this.FileSystem.FindFile(fileName);

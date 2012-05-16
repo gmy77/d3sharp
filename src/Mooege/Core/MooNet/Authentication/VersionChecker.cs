@@ -72,20 +72,35 @@ namespace Mooege.Core.MooNet.Authentication
                 case "esES":
                     client.Locale = MooNetClient.ClientLocale.esES;
                     break;
+                case "esMX":
+                    client.Locale = MooNetClient.ClientLocale.esMX;
+                    break;
                 case "frFR":
                     client.Locale = MooNetClient.ClientLocale.frFR;
                     break;
                 case "itIT":
                     client.Locale = MooNetClient.ClientLocale.itIT;
                     break;
-                case "krKR":
-                    client.Locale = MooNetClient.ClientLocale.krKR;
+                case "koKR":
+                    client.Locale = MooNetClient.ClientLocale.koKR;
                     break;
                 case "plPL":
                     client.Locale = MooNetClient.ClientLocale.plPL;
                     break;
+                case "ptPT":
+                    client.Locale = MooNetClient.ClientLocale.ptPT;
+                    break;
                 case "ptBR":
                     client.Locale = MooNetClient.ClientLocale.ptBR;
+                    break;
+                case "ruRU":
+                    client.Locale = MooNetClient.ClientLocale.ruRU;
+                    break;
+                case "trTR":
+                    client.Locale = MooNetClient.ClientLocale.trTR;
+                    break;
+                case "zhCN":
+                    client.Locale = MooNetClient.ClientLocale.zhCN;
                     break;
                 case "zhTW":
                     client.Locale = MooNetClient.ClientLocale.zhTW;
