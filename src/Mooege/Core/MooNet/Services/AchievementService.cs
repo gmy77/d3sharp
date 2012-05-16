@@ -87,7 +87,7 @@ namespace Mooege.Core.MooNet.Services
             Logger.Trace("Initialize()");
 
             var contentHandle = bnet.protocol.ContentHandle.CreateBuilder()
-                .SetRegion(VersionInfo.MooNet.Region)
+                .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
                 .SetUsage(0x61636875) //achu
                 .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.Achievements.AchievementFileHash.ToByteArray()));
             var reponse = bnet.protocol.achievements.InitializeResponse.CreateBuilder().SetContentHandle(contentHandle)
