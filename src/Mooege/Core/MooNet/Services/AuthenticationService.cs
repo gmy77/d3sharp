@@ -87,7 +87,7 @@ namespace Mooege.Core.MooNet.Services
             {
                 var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
                     .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
-                    .SetRegion(0x00005858) // XX
+                    .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
                     .SetUsage(0x61757468) // auth - password.dll
                     .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AuthModuleHashMap[this.Client.Platform])))
                     .SetMessage(ByteString.CopyFrom(AuthManager.OngoingAuthentications[this.Client].LogonChallenge))
