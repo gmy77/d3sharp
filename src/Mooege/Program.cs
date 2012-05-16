@@ -140,7 +140,8 @@ namespace Mooege
 
             foreach (var targetConfig in LogConfig.Instance.Targets)
             {
-                if (!targetConfig.Enabled) continue;
+                if (!targetConfig.Enabled) 
+                    continue;
 
                 LogTarget target = null;
                 switch (targetConfig.Target.ToLower())

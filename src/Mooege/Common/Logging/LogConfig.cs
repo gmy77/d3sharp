@@ -29,7 +29,6 @@ namespace Mooege.Common.Logging
         {
             new LogTargetConfig("ConsoleLog"), 
             new LogTargetConfig("ServerLog"), 
-            new LogTargetConfig("SQLLog"), 
             new LogTargetConfig("PacketLog")
         };
 

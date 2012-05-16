@@ -124,9 +124,6 @@ namespace Mooege.Common.Logging
         public void Fatal(string message) { Log(Level.Fatal, message, null); }
         public void Fatal(string message, params object[] args) { Log(Level.Fatal, message, args); }
 
-        public void SQL(string message) { Log(Level.SQL, message, null); }
-        public void SQL(string message, params object[] args) { Log(Level.SQL, message, args); }
-
         // moonet packet loggers
         public void LogIncoming(Google.ProtocolBuffers.IMessage msg, bnet.protocol.Header header) { Log(Level.PacketDump, ShortHeader(header) + "[I] " + msg.AsText(), null); }
         public void LogOutgoing(Google.ProtocolBuffers.IMessage msg, bnet.protocol.Header header) { Log(Level.PacketDump, ShortHeader(header) + "[O] " + msg.AsText(), null); }
@@ -148,9 +145,6 @@ namespace Mooege.Common.Logging
 
         public void FatalException(Exception exception, string message) { LogException(Level.Fatal, message, null, exception); }
         public void FatalException(Exception exception, string message, params object[] args) { LogException(Level.Fatal, message, args, exception); }
-
-        public void SQLException(Exception exception, string message) { LogException(Level.SQL, message, null, exception); }
-        public void SQLException(Exception exception, string message, params object[] args) { LogException(Level.SQL, message, args, exception); }
 
         // ingame packet loggers
         public void LogIncoming(GameMessage msg) { Log(Level.PacketDump, "[I] " + msg.AsText(), null); }
@@ -198,10 +192,6 @@ namespace Mooege.Common.Logging
             /// Packet dumps.
             /// </summary>
             PacketDump,
-            /// <summary>
-            /// SQL messages.
-            /// </summary>
-            SQL,
         }
     }
 
@@ -331,7 +321,6 @@ namespace Mooege.Common.Logging
         {
             switch (level)
             {
-                case Logger.Level.SQL: Console.ForegroundColor = ConsoleColor.DarkGray; break;
                 case Logger.Level.PacketDump: Console.ForegroundColor = ConsoleColor.DarkGray; break;
                 case Logger.Level.Trace: Console.ForegroundColor = ConsoleColor.DarkGray; break;
                 case Logger.Level.Debug: Console.ForegroundColor = ConsoleColor.Cyan; break;
