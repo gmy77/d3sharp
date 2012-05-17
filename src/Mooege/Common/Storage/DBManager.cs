@@ -21,14 +21,12 @@ using System.Data.SQLite;
 using System.IO;
 using Mooege.Common.Helpers.IO;
 using Mooege.Common.Logging;
-using NHibernate.Linq;
 
 namespace Mooege.Common.Storage
 {
     // just a quick hack - not to be meant a final layer.
     public static class DBManager
     {
-        public static SQLiteConnection Connection { get; private set; }
         public static SQLiteConnection MPQMirror { get; private set; }
 
         public static readonly Logger Logger = LogManager.CreateLogger();
@@ -55,9 +53,6 @@ namespace Mooege.Common.Storage
         {
             try
             {
-
-                Connection = new SQLiteConnection(String.Format("Data Source={0}/account.db", AssetDirectory));
-                Connection.Open();
 
                 MPQMirror = new SQLiteConnection(String.Format("Data Source={0}/mpqdata.db", AssetDirectory));
                 MPQMirror.Open();
