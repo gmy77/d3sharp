@@ -120,6 +120,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Logging\ConsoleTarget.cs" />
+    <Compile Include="Common\Logging\FileTarget.cs" />
+    <Compile Include="Common\Logging\LogManager.cs" />
+    <Compile Include="Common\Logging\LogRouter.cs" />
+    <Compile Include="Common\Logging\LogTarget.cs" />
     <Compile Include="Common\Storage\AccountDataBase\Entities\DBAccount.cs" />
     <Compile Include="Common\Storage\AccountDataBase\Entities\DBActiveSkills.cs" />
     <Compile Include="Common\Storage\AccountDataBase\Entities\DBGameAccount.cs" />
@@ -691,7 +696,7 @@
     <Compile Include="Net\MooNet\MooNetRouter.cs" />
     <Compile Include="Common\Helpers\Hash\StringHashHelper.cs" />
     <Compile Include="Common\Extensions\IMessageExtensions.cs" />
-    <Compile Include="Common\Logging\TinyLogger.cs" />
+    <Compile Include="Common\Logging\Logger.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObjectManager.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObject.cs" />
     <Compile Include="Common\Storage\Config.cs" />

@@ -68,10 +68,7 @@ namespace Mooege
         /// </summary>
         public static Thread GameServerThread;
 
-        /// <summary>
-        /// Logger instance.
-        /// </summary>
-        private static readonly Logger Logger = LogManager.CreateLogger();
+        private static readonly Logger Logger = LogManager.CreateLogger(); // logger instance.
 
         /// <summary>
         /// The main entry point for the application.
@@ -85,7 +82,7 @@ namespace Mooege
             PrintBanner(); // print ascii banner.
             PrintLicense(); // print license text.
             Console.ResetColor(); // reset color back to default.
-
+            
             InitLoggers(); // init logging facility.
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
