@@ -38,58 +38,82 @@ using Environment = System.Environment;
 
 namespace Mooege
 {
-    internal class Program
+    /// <summary>
+    /// Contains mooege's startup code.
+    /// </summary>
+    public static class Program
     {
-        private static readonly Logger Logger = LogManager.CreateLogger();
-        public static readonly DateTime StartupTime = DateTime.Now; 
+        /// <summary>
+        /// Used for uptime calculations.
+        /// </summary>
+        public static readonly DateTime StartupTime = DateTime.Now; // used for uptime calculations.
 
+        /// <summary>
+        /// MooNetServer instance.
+        /// </summary>
         public static MooNetServer MooNetServer;
+
+        /// <summary>
+        /// GameServer instance.
+        /// </summary>
         public static GameServer GameServer;
 
+        /// <summary>
+        /// MooNetServer thread.
+        /// </summary>
         public static Thread MooNetServerThread;
+
+        /// <summary>
+        /// GameServer thread.
+        /// </summary>
         public static Thread GameServerThread;
 
+        /// <summary>
+        /// Logger instance.
+        /// </summary>
+        private static readonly Logger Logger = LogManager.CreateLogger();
+
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
         public static void Main(string[] args)
         {
-            // Watch for unhandled exceptions
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
-
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create.
-
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // Watch for any unhandled exceptions.
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any mpq-reading problems (mostly because of number formats).
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            PrintBanner();
-            PrintLicense();
-            Console.ResetColor();
+            PrintBanner(); // print ascii banner.
+            PrintLicense(); // print license text.
+            Console.ResetColor(); // reset color back to default.
 
             InitLoggers(); // init logging facility.
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
 
+            // init openssl & wrapper.
             try
             {
                 Logger.Info("Found OpenSSL version {0}.", OpenSSL.Core.Version.Library.ToString());
             }
             catch (Exception e)
             {
-                Logger.ErrorException(e, "OpenSSL Error");
+                Logger.ErrorException(e, "OpenSSL init error");
                 Console.ReadLine();
                 return;
             }
 
-
-            //Prefilling Database
+            // prefill the database.
             Common.Storage.AccountDataBase.SessionProvider.RebuildSchema();
             if (!DBSessions.AccountSession.Query<DBAccount>().Any())
             {
-                Logger.Info("New Database, creating first Test account (Test@,testpass)");
-                var account = AccountManager.CreateAccount("test@", "testpass", "test", Account.UserLevels.Admin);
+                Logger.Info("Initing new database, creating first owner account (test@,123456)");
+                var account = AccountManager.CreateAccount("test@", "testpass", "test", Account.UserLevels.Owner);
                 var gameAccount = GameAccountManager.CreateGameAccount(account);
                 account.DBAccount.DBGameAccounts.Add(gameAccount.DBGameAccount);
                 account.SaveToDB();
             }
 
-            
+            // init MPQStorage.
             if (!MPQStorage.Initialized)
             {
                 Logger.Fatal("Cannot run servers as MPQStorage failed initialization.");
@@ -97,87 +121,52 @@ namespace Mooege
                 return;
             }
 
+            // load item database.
             Logger.Info("Loading item database..");
             Logger.Trace("Item database loaded with a total of {0} item definitions.", ItemGenerator.TotalItems);
 
+            // load achievements database.
             Logger.Info("Loading achievements database..");
             Logger.Trace("Achievement file parsed with a total of {0} achievements and {1} criteria in {2} categories.",
                 AchievementManager.TotalAchievements, AchievementManager.TotalCriteria, AchievementManager.TotalCategories);
 
 
-            Logger.Info("Type '!commands' for a list of available commands");
+            Logger.Info("Type '!commands' for a list of available commands.");
 
-            StartupServers();
+            StartupServers(); // startup the servers
         }
 
-        private static void InitLoggers()
-        {
-            LogManager.Enabled = true;
-
-            foreach (var targetConfig in LogConfig.Instance.Targets)
-            {
-                if (!targetConfig.Enabled) continue;
-
-                LogTarget target = null;
-                switch (targetConfig.Target.ToLower())
-                {
-                    case "console":
-                        target = new ConsoleTarget(targetConfig.MinimumLevel, targetConfig.MaximumLevel,
-                                                   targetConfig.IncludeTimeStamps);
-                        break;
-                    case "file":
-                        target = new FileTarget(targetConfig.FileName, targetConfig.MinimumLevel,
-                                                targetConfig.MaximumLevel, targetConfig.IncludeTimeStamps,
-                                                targetConfig.ResetOnStartup);
-                        break;
-                }
-
-                if (target != null) LogManager.AttachLogTarget(target);
-            }
-        }
-
-        private static void PrintBanner()
-        {
-            Console.WriteLine(@"  _ __ ___    ___    ___    ___   __ _   ___ ");
-            Console.WriteLine(@" | '_ ` _ \  / _ \  / _ \  / _ \ / _` | / _ \");
-            Console.WriteLine(@" | | | | | || (_) || (_) ||  __/| (_| ||  __/");
-            Console.WriteLine(@" |_| |_| |_| \___/  \___/  \___| \__, | \___|");
-            Console.WriteLine(@"                                 |___/       ");
-            Console.WriteLine();
-        }
-
-        private static void PrintLicense()
-        {
-            Console.WriteLine("Copyright (C) 2011 - 2012, mooege project");
-            Console.WriteLine("mooege comes with ABSOLUTELY NO WARRANTY.");
-            Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
-            Console.WriteLine();
-        }
-
+        /// <summary>
+        /// Unhandled exception emitter.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
             var ex = e.ExceptionObject as Exception;
+
             if (e.IsTerminating)
                 Logger.FatalException(ex, "Mooege terminating because of unhandled exception.");                
             else
                 Logger.ErrorException(ex, "Caught unhandled exception.");
+
             Console.ReadLine();
         }
 
-        #region server-control
+        #region server startup managment
 
         private static void StartupServers()
         {
             if(NetworkingConfig.Instance.EnableIPv6)
                 Logger.Info("IPv6 enabled!");
 
-            StartMooNet();
-            StartGS();
+            StartMooNet(); // start moonet.
+            StartGS(); // start game-server.
 
-            if(Net.WebServices.Config.Instance.Enabled)
-                StartWebServices();
+            if(Net.WebServices.Config.Instance.Enabled) // if webservices are enabled,
+                StartWebServices(); // start them.
 
-            while (true)
+            while (true) // idle loop & command parser
             {
                 var line = Console.ReadLine();
                 CommandManager.Parse(line);
@@ -255,6 +244,69 @@ namespace Mooege
             webservices.Run();
 
             return true;
+        }
+
+        #endregion
+
+        #region logging facility 
+
+        /// <summary>
+        /// Inits logging facility and loggers.
+        /// </summary>
+        private static void InitLoggers()
+        {
+            LogManager.Enabled = true; // enable logger by default.
+
+            foreach (var targetConfig in LogConfig.Instance.Targets)
+            {
+                if (!targetConfig.Enabled)
+                    continue;
+
+                LogTarget target = null;
+                switch (targetConfig.Target.ToLower())
+                {
+                    case "console":
+                        target = new ConsoleTarget(targetConfig.MinimumLevel, targetConfig.MaximumLevel,
+                                                   targetConfig.IncludeTimeStamps);
+                        break;
+                    case "file":
+                        target = new FileTarget(targetConfig.FileName, targetConfig.MinimumLevel,
+                                                targetConfig.MaximumLevel, targetConfig.IncludeTimeStamps,
+                                                targetConfig.ResetOnStartup);
+                        break;
+                }
+
+                if (target != null)
+                    LogManager.AttachLogTarget(target);
+            }
+        }
+
+        #endregion
+
+        #region console banners
+
+        /// <summary>
+        /// Prints an info banner.
+        /// </summary>
+        private static void PrintBanner()
+        {
+            Console.WriteLine(@"  _ __ ___    ___    ___    ___   __ _   ___ ");
+            Console.WriteLine(@" | '_ ` _ \  / _ \  / _ \  / _ \ / _` | / _ \");
+            Console.WriteLine(@" | | | | | || (_) || (_) ||  __/| (_| ||  __/");
+            Console.WriteLine(@" |_| |_| |_| \___/  \___/  \___| \__, | \___|");
+            Console.WriteLine(@"                                 |___/       ");
+            Console.WriteLine();
+        }
+
+        /// <summary>
+        /// Prints a copyright banner.
+        /// </summary>
+        private static void PrintLicense()
+        {
+            Console.WriteLine("Copyright (C) 2011 - 2012, mooege project");
+            Console.WriteLine("mooege comes with ABSOLUTELY NO WARRANTY.");
+            Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
+            Console.WriteLine();
         }
 
         #endregion
