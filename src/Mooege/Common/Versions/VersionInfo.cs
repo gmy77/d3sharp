@@ -82,8 +82,13 @@ namespace Mooege.Common.Versions
                 { MooNetClient.ClientPlatform.Mac,"36b27cd911b33c61730a8b82c8b2495fd16e8024fc3b2dde08861c77a852941c".ToByteArray() },
             };
 
-            public static uint Region = 0x5553; //XX
-                //0x5553 //US
+            public static Dictionary<string, uint> Regions = new Dictionary<string, uint>()
+            {
+                { "US", 0x5553 },
+                { "XX", 0x5858 }, //Beta Region
+            };
+
+            public static string Region = "US";
 
             public static class Resources
             {
@@ -115,7 +120,7 @@ namespace Mooege.Common.Versions
                 /// <summary>
                 /// AchievementFile download URL.
                 /// </summary>
-                public static string AchievementURL = "http://US.depot.battle.net:1119/" + AchievementFilename;
+                public static string AchievementURL = "http://" + MooNet.Region + ".depot.battle.net:1119/" + AchievementFilename;
 
             }
         }

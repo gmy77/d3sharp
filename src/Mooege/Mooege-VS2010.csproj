@@ -716,10 +716,6 @@
       <Link>database.Account.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\assets\account.db">
-      <Link>Assets\account.db</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\..\assets\config.ini">
       <Link>config.ini</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

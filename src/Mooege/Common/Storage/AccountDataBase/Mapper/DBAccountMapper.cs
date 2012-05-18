@@ -20,6 +20,7 @@ namespace Mooege.Common.Storage.AccountDataBase.Mapper
             Map(e => e.UserLevel);
             Map(e => e.LastOnline);
             HasMany(e => e.DBGameAccounts).Cascade.All();//Cascade all means if this Account gets deleted/saved/update ALL GameAccounts do the same :)
+            HasManyToMany(e => e.Friends).ParentKeyColumn("AccountAId").ChildKeyColumn("AccountBId").Cascade.SaveUpdate();
         }
     }
 }

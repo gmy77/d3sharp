@@ -59,7 +59,7 @@ namespace Mooege.Core.MooNet.Authentication
             // request client to load thumbprint.dll for authentication.
             var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
                 .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
-                    .SetRegion(0x00005858) // XX
+                    .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
                     .SetUsage(0x61757468) // auth - thumbprint.dll
                     .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.ThumbprintHashMap[client.Platform])))
                 .SetMessage(ByteString.CopyFrom(thumbprintData))
@@ -92,7 +92,7 @@ namespace Mooege.Core.MooNet.Authentication
                 /*
                 var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
                     .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
-                        .SetRegion(0x00005858) // XX
+                        .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
                         .SetUsage(0x61757468) // auth - RiskFingerprint.dll
                         .SetHash(ByteString.CopyFrom("bcfa324ab555fc66614976011d018d2be2b9dc23d0b54d94a3bd7d12472aa107".ToByteArray())))
                     .SetMessage(ByteString.Empty)

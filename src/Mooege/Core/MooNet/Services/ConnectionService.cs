@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Google.ProtocolBuffers;
+using Mooege.Common.Versions;
 using Mooege.Common.Extensions;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
@@ -43,6 +45,12 @@ namespace Mooege.Core.MooNet.Services
 
             if (request.HasClientId)
                 builder.SetClientId(request.ClientId);
+
+            builder.SetContentHandleArray(bnet.protocol.connection.ConnectionMeteringContentHandles.CreateBuilder()
+                .AddContentHandle(bnet.protocol.ContentHandle.CreateBuilder()
+                    .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
+                    .SetUsage(0x6D74727A) //mtrz
+                    .SetHash(ByteString.CopyFrom("18e98cde12837149621988ceee55123bf2be839a6dc1d6bb00a399520656b2a6".ToByteArray()))));
 
             done(builder.Build());
         }
