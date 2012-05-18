@@ -95,7 +95,7 @@ namespace Mooege.Net.MooNet
             var builder = proto.WeakCreateBuilderForType();
             var message = packet.ReadMessage(builder);
             
-            Logger.LogIncoming(message, packet.Header);
+            Logger.LogIncomingPacket(message, packet.Header);
 
             try
             {
