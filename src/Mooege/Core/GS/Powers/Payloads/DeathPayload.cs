@@ -49,6 +49,12 @@ namespace Mooege.Core.GS.Powers.Payloads
         public void Apply()
         {
             if (this.Target.World == null) return;
+
+            if (this.Target is Player)
+            {
+                _DoSimplePlayerDeath();
+                return;
+            }
             
             // HACK: add to hackish list thats used to defer deleting actor and filter it from powers targetting
             this.Target.World.PowerManager.AddDeletingActor(this.Target);
@@ -128,6 +134,18 @@ namespace Mooege.Core.GS.Powers.Payloads
             //this.Target.Destroy();
         }
 
+        private void _DoSimplePlayerDeath()
+        {
+            // HACK: simple death implementation
+            this.Target.World.BuffManager.RemoveAllBuffs(this.Target);
+            this.Target.World.PowerManager.CancelAllPowers(this.Target);
+
+            this.Target.World.BuffManager.AddBuff(this.Target, this.Target, new Implementations.ActorGhostedBuff());
+
+            Player player = (Player)this.Target;
+            player.Teleport(player.CheckPointPosition);
+            player.AddPercentageHP(100);
+        }
 
         private int _FindBestDeathAnimationSNO()
         {

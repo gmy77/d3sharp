@@ -23,16 +23,11 @@ using Mooege.Net.GS.Message.Fields;
 
 namespace Mooege.Net.GS.Message.Definitions.Animation
 {
-    [Message(Opcodes.SecondaryAnimationPowerMessage)]
-    public class SecondaryAnimationPowerMessage : GameMessage,ISelfHandler
+    [Message(Opcodes.SecondaryAnimationPowerMessage, Consumers.Player)]
+    public class SecondaryAnimationPowerMessage : GameMessage
     {
         public int /* sno */ PowerSNO;
         public AnimPreplayData Field1;
-
-        public void Handle(GameClient client)
-        {
-            client.Player.World.PowerManager.RunPower(client.Player, PowerSNO);
-        }
 
         public override void Parse(GameBitBuffer buffer)
         {

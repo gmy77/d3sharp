@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Core.MooNet.Games;
@@ -41,7 +42,7 @@ namespace Mooege.Core.MooNet.Services
             //var game = GameFactoryManager.FindGameByEntityId(request.GameHandle.GameId);
 
             var builder = bnet.protocol.game_master.JoinGameResponse.CreateBuilder();
-                //.AddConnectInfo(game.GetConnectionInfoForClient(this.Client));
+            //.AddConnectInfo(game.GetConnectionInfoForClient(this.Client));
 
             done(builder.Build());
             //throw new NotImplementedException();
@@ -134,7 +135,7 @@ namespace Mooege.Core.MooNet.Services
         }
 
         public override void FindGame(IRpcController controller, bnet.protocol.game_master.FindGameRequest request, Action<bnet.protocol.game_master.FindGameResponse> done)
-        {            
+        {
             Logger.Trace("FindGame() {0}", this.Client);
 
             // find the game.
@@ -161,17 +162,7 @@ namespace Mooege.Core.MooNet.Services
             var builder = bnet.protocol.game_master.FindGameResponse.CreateBuilder().SetRequestId(gameFound.RequestId);
             done(builder.Build());
 
-            var clients = new List<MooNetClient>();
-            foreach (var player in request.PlayerList)
-            {
-                foreach (var gameAccount in GameAccountManager.GameAccountsList)
-                {
-                    if (player.Identity.GameAccountId.Low == gameAccount.BnetEntityId.Low)
-                    {
-                        clients.Add(gameAccount.LoggedInClient);
-                    }
-                }
-            }
+            var clients = (from player in request.PlayerList select GameAccountManager.FindLoadedGameAccountByBnetId(player.Identity.GameAccountId.Low) into gameAccount where gameFound != null select gameAccount.LoggedInClient).ToList();
 
             // send game found notification.
             var notification = bnet.protocol.notification.Notification.CreateBuilder()
@@ -186,7 +177,7 @@ namespace Mooege.Core.MooNet.Services
             this.Client.MakeRPC(() =>
                 bnet.protocol.notification.NotificationListener.CreateStub(this.Client).OnNotificationReceived(null, notification.Build(), callback => { }));
 
-            if(gameFound.Started)
+            if (gameFound.Started)
             {
                 Logger.Info("Client {0} joining game with FactoryID:{1}", this.Client.Account.CurrentGameAccount.CurrentToon.Name, gameFound.FactoryID);
                 gameFound.JoinGame(clients, request.FactoryObjectId);

@@ -169,10 +169,14 @@ namespace Mooege.Core.GS.Games
                 this._tickWatch.Restart();
                 Interlocked.Add(ref this._tickCounter, this.TickRate); // +6 ticks per 100ms. Verified by setting LogoutTickTimeMessage.Ticks to 600 which eventually renders a 10 sec logout timer on client. /raist
 
-                // only update worlds with active players in it - so mob brain()'s in empty worlds doesn't get called and take actions for nothing. /raist.
-                foreach (var pair in this._worlds.Where(pair => pair.Value.HasPlayersIn)) 
+                // Lock Game instance to prevent incoming messages from modifying state while updating
+                lock (this)
                 {
-                    pair.Value.Update(this._tickCounter);
+                    // only update worlds with active players in it - so mob brain()'s in empty worlds doesn't get called and take actions for nothing. /raist.
+                    foreach (var pair in this._worlds.Where(pair => pair.Value.HasPlayersIn))
+                    {
+                        pair.Value.Update(this._tickCounter);
+                    }
                 }
 
                 this._tickWatch.Stop();
@@ -197,34 +201,37 @@ namespace Mooege.Core.GS.Games
         /// <param name="message"></param>
         public void Route(GameClient client, GameMessage message)
         {
-            try
+            lock (this)
             {
-                switch (message.Consumer)
+                try
                 {
-                    case Consumers.Game:
-                        this.Consume(client, message);
-                        break;
-                    case Consumers.Inventory:
-                        client.Player.Inventory.Consume(client, message);
-                        break;
-                    case Consumers.Player:
-                        client.Player.Consume(client, message);
-                        break;
+                    switch (message.Consumer)
+                    {
+                        case Consumers.Game:
+                            this.Consume(client, message);
+                            break;
+                        case Consumers.Inventory:
+                            client.Player.Inventory.Consume(client, message);
+                            break;
+                        case Consumers.Player:
+                            client.Player.Consume(client, message);
+                            break;
 
-                    case Consumers.Conversations:
-                        client.Player.Conversations.Consume(client, message);
-                        break;
+                        case Consumers.Conversations:
+                            client.Player.Conversations.Consume(client, message);
+                            break;
 
-                    case Consumers.SelectedNPC:
-                        if (client.Player.SelectedNPC != null)
-                            client.Player.SelectedNPC.Consume(client, message);
-                        break;
+                        case Consumers.SelectedNPC:
+                            if (client.Player.SelectedNPC != null)
+                                client.Player.SelectedNPC.Consume(client, message);
+                            break;
 
+                    }
                 }
-            }
-            catch(Exception e)
-            {
-                Logger.DebugException(e, "Unhandled exception caught:");
+                catch (Exception e)
+                {
+                    Logger.DebugException(e, "Unhandled exception caught:");
+                }
             }
         }
 

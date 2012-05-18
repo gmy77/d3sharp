@@ -22,13 +22,18 @@ using System.Reflection;
 using System.Threading;
 using Mooege.Common.Logging;
 using Mooege.Common.MPQ;
+using Mooege.Common.Storage;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.GS.Items;
+using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Net;
 using Mooege.Net.GS;
 using Mooege.Net.MooNet;
 using Mooege.Core.MooNet.Achievement;
 using Mooege.Net.WebServices;
+using NHibernate.Linq;
+using NHibernate.Util;
 using Environment = System.Environment;
 
 namespace Mooege
@@ -51,6 +56,7 @@ namespace Mooege
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create.
 
+
             Console.ForegroundColor = ConsoleColor.Yellow;
             PrintBanner();
             PrintLicense();
@@ -60,6 +66,30 @@ namespace Mooege
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
 
+            try
+            {
+                Logger.Info("Found OpenSSL version {0}.", OpenSSL.Core.Version.Library.ToString());
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e, "OpenSSL Error");
+                Console.ReadLine();
+                return;
+            }
+
+
+            //Prefilling Database
+            Common.Storage.AccountDataBase.SessionProvider.RebuildSchema();
+            if (!DBSessions.AccountSession.Query<DBAccount>().Any())
+            {
+                Logger.Info("New Database, creating first Test account (Test@,testpass)");
+                var account = AccountManager.CreateAccount("test@", "testpass", "test", Account.UserLevels.Admin);
+                var gameAccount = GameAccountManager.CreateGameAccount(account);
+                account.DBAccount.DBGameAccounts.Add(gameAccount.DBGameAccount);
+                account.SaveToDB();
+            }
+
+            
             if (!MPQStorage.Initialized)
             {
                 Logger.Fatal("Cannot run servers as MPQStorage failed initialization.");
@@ -73,6 +103,7 @@ namespace Mooege
             Logger.Info("Loading achievements database..");
             Logger.Trace("Achievement file parsed with a total of {0} achievements and {1} criteria in {2} categories.",
                 AchievementManager.TotalAchievements, AchievementManager.TotalCriteria, AchievementManager.TotalCategories);
+
 
             Logger.Info("Type '!commands' for a list of available commands");
 
@@ -125,10 +156,11 @@ namespace Mooege
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
+            var ex = e.ExceptionObject as Exception;
             if (e.IsTerminating)
-                Logger.FatalException((e.ExceptionObject as Exception), "Mooege terminating because of unhandled exception.");                
+                Logger.FatalException(ex, "Mooege terminating because of unhandled exception.");                
             else
-                Logger.ErrorException((e.ExceptionObject as Exception), "Caught unhandled exception.");
+                Logger.ErrorException(ex, "Caught unhandled exception.");
             Console.ReadLine();
         }
 

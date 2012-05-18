@@ -48,9 +48,12 @@ namespace Mooege.Core.MooNet.Services
                 .AddRole(bnet.protocol.Role.CreateBuilder().SetId(1).SetName("battle_tag_friend").Build())
                 .AddRole(bnet.protocol.Role.CreateBuilder().SetId(2).SetName("real_id_friend").Build());
 
-            foreach (var friend in FriendManager.Friends[this.Client.Account.BnetEntityId.Low]) // send friends list.
+
+            foreach (var dbAccountFriend in this.Client.Account.DBAccount.Friends) // send friends list.
             {
-                builder.AddFriends(friend);
+                var friendAccount = AccountManager.GetAccountByDBAccount(dbAccountFriend);
+                var resp = bnet.protocol.friends.Friend.CreateBuilder().SetId(friendAccount.BnetEntityId).Build();
+                builder.AddFriends(resp);
             }
 
             var invitations = new List<bnet.protocol.invitation.Invitation>();
@@ -108,7 +111,7 @@ namespace Mooege.Core.MooNet.Services
                 return;
             }
 
-            Account invitee = null;
+            Account invitee;
 
             if (friendRequest.HasTargetEmail)
                 invitee = AccountManager.GetAccountByEmail(friendRequest.TargetEmail);

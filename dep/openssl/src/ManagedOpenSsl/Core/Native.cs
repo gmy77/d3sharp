@@ -154,7 +154,7 @@ namespace OpenSSL.Core
 		{
 			Version lib = Version.Library;
 			Version wrapper = Version.Wrapper;
-			uint mmf = lib.Raw & 0xfffff000;
+			uint mmf = lib.Raw & 0xfff00000;
 			if (mmf != wrapper.Raw)
 				throw new Exception(string.Format("Invalid version of {0}, expecting {1}, got: {2}",
 					DLLNAME, wrapper, lib));

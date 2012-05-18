@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Google.ProtocolBuffers;
+using Mooege.Common.Versions;
 using Mooege.Common.Extensions;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
@@ -43,6 +45,12 @@ namespace Mooege.Core.MooNet.Services
 
             if (request.HasClientId)
                 builder.SetClientId(request.ClientId);
+
+            builder.SetContentHandleArray(bnet.protocol.connection.ConnectionMeteringContentHandles.CreateBuilder()
+                .AddContentHandle(bnet.protocol.ContentHandle.CreateBuilder()
+                    .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
+                    .SetUsage(0x6D74727A) //mtrz
+                    .SetHash(ByteString.CopyFrom("18e98cde12837149621988ceee55123bf2be839a6dc1d6bb00a399520656b2a6".ToByteArray()))));
 
             done(builder.Build());
         }
@@ -101,10 +109,10 @@ namespace Mooege.Core.MooNet.Services
             Logger.Trace("RequestDisconnect()");
             if (this.Client.Account != null)
             {
-                this.Client.Account.SaveToDB();
+                Accounts.AccountManager.SaveToDB(this.Client.Account);
                 if (this.Client.Account.CurrentGameAccount != null)
                 {
-                    this.Client.Account.CurrentGameAccount.SaveToDB();
+                    Accounts.GameAccountManager.SaveToDB(this.Client.Account.CurrentGameAccount);
                     this.Client.Account.CurrentGameAccount.LoggedInClient.Connection.Disconnect();
                 }
             }

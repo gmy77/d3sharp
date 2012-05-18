@@ -149,16 +149,24 @@ namespace Mooege.Core.GS.Generators
                         }
                         else
                         {
-                            var subScenePosition = scene.Position + pos;
-                            var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
+                            // HACK: avoid trying to create scenes with SNOs that aren't valid
+                            if (MPQStorage.Data.Assets[SNOGroup.Scene].ContainsKey(subSceneEntry.SNOScene))
                             {
-                                MiniMapVisibility = true,
-                                RotationW = sceneChunk.PRTransform.Quaternion.W,
-                                RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
-                                Specification = sceneChunk.SceneSpecification
-                            };
-                            scene.Subscenes.Add(subscene);
-                            subscene.LoadMarkers();
+                                var subScenePosition = scene.Position + pos;
+                                var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
+                                {
+                                    MiniMapVisibility = true,
+                                    RotationW = sceneChunk.PRTransform.Quaternion.W,
+                                    RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
+                                    Specification = sceneChunk.SceneSpecification
+                                };
+                                scene.Subscenes.Add(subscene);
+                                subscene.LoadMarkers();
+                            }
+                            else
+                            {
+                                Logger.Error("Scene not found in mpq storage: {0}", subSceneEntry.SNOScene);
+                            }
                         }
                     }
 
@@ -753,6 +761,9 @@ namespace Mooege.Core.GS.Generators
                     if (MPQStorage.Data.Assets[SNOGroup.Scene][scene.SceneSNO.Id].Name.StartsWith("trOut_Tristram_"))
                         continue;
 
+                    // a little variety in monsters spawned
+                    int[] monsterActors = { 6652, 219725, 5346, 6356, 5393, 434, 4982 };
+
                     for (int i = 0; i < 100; i++)
                     {
                         if (RandomHelper.NextDouble() > 0.8)
@@ -765,7 +776,7 @@ namespace Mooege.Core.GS.Generators
                             if ((scene.NavMesh.Squares[y * scene.NavMesh.SquaresCountX + x].Flags & Mooege.Common.MPQ.FileFormats.Scene.NavCellFlags.NoSpawn) == 0)
                             {
                                 loadActor(
-                                    new SNOHandle(6652), 
+                                    new SNOHandle(monsterActors[RandomHelper.Next(monsterActors.Length)]), 
                                     new PRTransform
                                     {
                                         Vector3D = new Vector3D
@@ -774,11 +785,7 @@ namespace Mooege.Core.GS.Generators
                                             Y = (float)(y * 2.5 + scene.Position.Y),
                                             Z = scene.NavMesh.Squares[y * scene.NavMesh.SquaresCountX + x].Z + scene.Position.Z
                                         },
-                                        Quaternion = new Quaternion
-                                        {
-                                            W = (float)(RandomHelper.NextDouble() * System.Math.PI * 2),
-                                            Vector3D = new Vector3D(0, 0, 1)
-                                        }
+                                        Quaternion = Quaternion.FacingRotation((float)(RandomHelper.NextDouble() * System.Math.PI * 2))
                                     },
                                     world,
                                     new TagMap()

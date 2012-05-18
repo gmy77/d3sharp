@@ -1,6 +1,7 @@
 import "bnet/attribute.proto";
 import "bnet/entity.proto";
 import "bnet/rpc.proto";
+import "bnet/field_options.proto";
 
 package bnet.protocol.challenge;
 

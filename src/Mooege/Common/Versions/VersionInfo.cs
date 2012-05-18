@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.9359.*";
+            public const string Version = "1.9558.*";
         }
 
         /// <summary>
@@ -47,10 +47,11 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 9359;
+            public const int RequiredClientVersion = 9558;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
+                {"Aurora 31c8df955a_public", 9558},
                 {"Aurora 8eac7d44dc_public", 9359}, //9327
                 {"Aurora _public", 9183},
                 {"Aurora bcd3e50524_public", 8896},
@@ -81,16 +82,22 @@ namespace Mooege.Common.Versions
                 { MooNetClient.ClientPlatform.Mac,"36b27cd911b33c61730a8b82c8b2495fd16e8024fc3b2dde08861c77a852941c".ToByteArray() },
             };
 
-            public static uint Region = 0x5858; //XX
-                //0x5553 //US
+            public static Dictionary<string, uint> Regions = new Dictionary<string, uint>()
+            {
+                { "US", 0x5553 },
+                { "XX", 0x5858 }, //Beta Region
+            };
+
+            public static string Region = "US";
 
             public static class Resources
             {
-                public static string ProfanityFilterHash = "1d9bdf93a409c93cd82a49670deccb36eca150c3f22ab2741666524a7368eb94"; //8896
+                public static string ProfanityFilterHash = "de1862793fdbabb6eb1edec6ad1c95dd99e2fd3fc6ca730ab95091d694318a24"; //9558
                 public static string AvailableActs = "89dd44c90f3b7dca32bd7a289d5c09b253c1398b81e7dbf860cd5e635cb4a763"; //8815
                 public static string AvailableQuests = "e2aeeb41ad31eadd710f7e3729411b249195123d0a804a1b3bf18883f9011b04"; //8815
 
                 //public static string ProfanityFilterHash = "068fec3c7426b8ba9497225a73437c6dffaa92de962c2b05589b5f46fbe5f5b0"; //8815
+                //public static string ProfanityFilterHash = "1d9bdf93a409c93cd82a49670deccb36eca150c3f22ab2741666524a7368eb94"; //8896
             }
 
             public static class Achievements
@@ -102,7 +109,8 @@ namespace Mooege.Common.Versions
                 //public static string AchievementFileHash = "ef29e59b9394e7c6f694afbb92b70a74c4fd4c96961a8ec490e770371b72e6ab"; // ??
                 //public static string AchievementFileHash = "0b61aeee74bba6ba02b93c9e15089404daf5d3cd1c7e631d7c108685894b3feb"; //8101
                 //public static string AchievementFileHash = "c06c3a43f760b9ef2c7965ac229531d17e93279cd2666bf1b9f130b8db5cb2f9"; //8296,8815
-                public static string AchievementFileHash = "99b7ccad605818c95e965b21ce3bf35b8406202ea616f54705c4ebaf45c4c7f2"; //8896
+                //public static string AchievementFileHash = "99b7ccad605818c95e965b21ce3bf35b8406202ea616f54705c4ebaf45c4c7f2"; //8896
+                public static string AchievementFileHash = "e3440d1a1430864371175afabb81e0b124c2824ea93def5d994cf8250cc1082b"; //9558
 
                 /// <summary>
                 /// AchievementFile filename.
@@ -112,7 +120,7 @@ namespace Mooege.Common.Versions
                 /// <summary>
                 /// AchievementFile download URL.
                 /// </summary>
-                public static string AchievementURL = "http://XX.depot.battle.net:1119/" + AchievementFilename;
+                public static string AchievementURL = "http://" + MooNet.Region + ".depot.battle.net:1119/" + AchievementFilename;
 
             }
         }
@@ -125,7 +133,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 9359;
+            public const int RequiredPatchVersion = 9558;
         }
 
         /// <summary>
@@ -151,11 +159,12 @@ namespace Mooege.Common.Versions
             // 0x21EEE08D                   // 7446
 
             //This is the server version sent in VersionsMessage
-            public const string MajorVersion = "0.11.0";
-            public const string ServerBuild = "9359";
+            public const string MajorVersion = "1.0.1";
+            public const string ServerBuild = "9558";
             public const string VersionString = MajorVersion + ServerBuild;
 
             // old version strings.
+            // 1.0.1.9558   // 9558 Retail
             // 0.11.0.9359  // 9359 patch 18
             // 0.11.0.9327  // 9327 patch 17
             // 0.10.0.9236  // 9183 patch 16

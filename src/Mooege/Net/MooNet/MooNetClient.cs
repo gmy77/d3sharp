@@ -352,7 +352,7 @@ namespace Mooege.Net.MooNet
             var logonResponseBuilder = bnet.protocol.authentication.LogonResult.CreateBuilder();
             logonResponseBuilder.SetAccount(this.Account.BnetEntityId);
             logonResponseBuilder.SetErrorCode(0);
-            foreach (var gameAccount in this.Account.GameAccounts.Values)
+            foreach (var gameAccount in this.Account.GameAccounts)
             {
                 logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
             }
@@ -480,9 +480,78 @@ namespace Mooege.Net.MooNet
         /// </summary>
         public enum ClientLocale
         {
+            /// <summary>
+            /// Unknown client locale state.
+            /// </summary>
             Unknown,
+            /// <summary>
+            /// Invalid client locale.
+            /// </summary>
             Invalid,
-            enUS
+            /// <summary>
+            /// Deutsch.
+            /// </summary>
+            deDE,
+            /// <summary>
+            /// English (EU)
+            /// </summary>
+            enGB,
+            /// <summary>
+            /// English (Singapore)
+            /// </summary>
+            enSG,
+            /// <summary>
+            /// English (US)
+            /// </summary>
+            enUS,
+            /// <summary>
+            /// Espanol
+            /// </summary>
+            esES,
+            /// <summary>
+            /// Espanol (Mexico)
+            /// </summary>
+            esMX,
+            /// <summary>
+            /// French
+            /// </summary>
+            frFR,
+            /// <summary>
+            /// Italian
+            /// </summary>
+            itIT,
+            /// <summary>
+            /// Korean
+            /// </summary>
+            koKR,
+            /// <summary>
+            /// Polish
+            /// </summary>
+            plPL,
+            /// <summary>
+            /// Portuguese
+            /// </summary>
+            ptPT,
+            /// <summary>
+            /// Portuguese (Brazil)
+            /// </summary>
+            ptBR,
+            /// <summary>
+            /// Russian
+            /// </summary>
+            ruRU,
+            /// <summary>
+            /// Turkish
+            /// </summary>
+            trTR,
+            /// <summary>
+            /// Chinese
+            /// </summary>
+            zhCN,
+            /// <summary>
+            /// Chinese (Taiwan)
+            /// </summary>
+            zhTW
         }
     }
 }

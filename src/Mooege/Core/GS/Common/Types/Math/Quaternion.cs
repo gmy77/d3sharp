@@ -31,6 +31,20 @@ namespace Mooege.Core.GS.Common.Types.Math
         public Quaternion() { }
 
         /// <summary>
+        /// Creates an quaternion that rotates along the Z-axis by the specified "facing" angle. 
+        /// </summary>
+        /// <param name="facingAngle">The angle in radians.</param>
+        /// <returns></returns>
+        public static Quaternion FacingRotation(float facingAngle)
+        {
+            return new Quaternion
+            {
+                W  = (float)System.Math.Cos(facingAngle / 2f),
+                Vector3D = new Vector3D(0, 0, (float)System.Math.Sin(facingAngle / 2f))
+            };
+        }
+
+        /// <summary>
         /// Reads Quaternion from given MPQFileStream.
         /// </summary>
         /// <param name="stream">The MPQFileStream to read from.</param>

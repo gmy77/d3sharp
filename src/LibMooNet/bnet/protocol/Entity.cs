@@ -33,12 +33,13 @@ namespace bnet.protocol {
     
     static Entity() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "ChFibmV0L2VudGl0eS5wcm90bxINYm5ldC5wcm90b2NvbCIlCghFbnRpdHlJ" + 
-          "ZBIMCgRoaWdoGAEgAigGEgsKA2xvdxgCIAIoBiJpCghJZGVudGl0eRIrCgph" + 
-          "Y2NvdW50X2lkGAEgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBIwCg9n" + 
-          "YW1lX2FjY291bnRfaWQYAiABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlk" + 
-          "IkEKC0FjY291bnRJbmZvEhsKDGFjY291bnRfcGFpZBgBIAEoCDoFZmFsc2US" + 
-          "FQoKY291bnRyeV9pZBgCIAEoBzoBMA==");
+          "ChFibmV0L2VudGl0eS5wcm90bxINYm5ldC5wcm90b2NvbBoYYm5ldC9maWVs" + 
+          "ZF9vcHRpb25zLnByb3RvIiUKCEVudGl0eUlkEgwKBGhpZ2gYASACKAYSCwoD" + 
+          "bG93GAIgAigGImkKCElkZW50aXR5EisKCmFjY291bnRfaWQYASABKAsyFy5i" + 
+          "bmV0LnByb3RvY29sLkVudGl0eUlkEjAKD2dhbWVfYWNjb3VudF9pZBgCIAEo" + 
+          "CzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQiQQoLQWNjb3VudEluZm8SGwoM" + 
+          "YWNjb3VudF9wYWlkGAEgASgIOgVmYWxzZRIVCgpjb3VudHJ5X2lkGAIgASgH" + 
+          "OgEw");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_EntityId__Descriptor = Descriptor.MessageTypes[0];
@@ -57,6 +58,7 @@ namespace bnet.protocol {
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
           new pbd::FileDescriptor[] {
+          global::bnet.protocol.FieldOptions.Descriptor, 
           }, assigner);
     }
     #endregion

@@ -27,10 +27,22 @@ namespace Mooege.Common.Storage
     // just a quick hack - not to be meant a final layer.
     public static class DBManager
     {
-        public static SQLiteConnection Connection { get; private set; }
         public static SQLiteConnection MPQMirror { get; private set; }
 
         public static readonly Logger Logger = LogManager.CreateLogger();
+
+        public static string AssetDirectory
+        {
+            get
+            {
+                var dataDirectory = String.Format(@"{0}/{1}", FileHelpers.AssemblyRoot, Config.Instance.Root);
+
+                if (Path.IsPathRooted(Config.Instance.Root))
+                    //Path is rooted... dont use assemblyRoot, as its absolute path.
+                    dataDirectory = Config.Instance.Root;
+                return dataDirectory;
+            }
+        }
 
         static DBManager()
         {
@@ -41,16 +53,8 @@ namespace Mooege.Common.Storage
         {
             try
             {
-                var dataDirectory = String.Format(@"{0}/{1}", FileHelpers.AssemblyRoot, Config.Instance.Root);
 
-                if (Path.IsPathRooted(Config.Instance.Root))
-                    //Path is rooted... dont use assemblyRoot, as its absolute path.
-                    dataDirectory = Config.Instance.Root;
-
-                Connection = new SQLiteConnection(String.Format("Data Source={0}/account.db", dataDirectory));
-                Connection.Open();
-
-                MPQMirror = new SQLiteConnection(String.Format("Data Source={0}/mpqdata.db", dataDirectory));
+                MPQMirror = new SQLiteConnection(String.Format("Data Source={0}/mpqdata.db", AssetDirectory));
                 MPQMirror.Open();
             }
             catch (Exception e)

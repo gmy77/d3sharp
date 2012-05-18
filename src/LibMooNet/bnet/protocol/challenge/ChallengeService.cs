@@ -43,32 +43,32 @@ namespace bnet.protocol.challenge {
         byte[] descriptorData = global::System.Convert.FromBase64String(
             "ChxibmV0L2NoYWxsZW5nZV9zZXJ2aWNlLnByb3RvEhdibmV0LnByb3RvY29s" + 
             "LmNoYWxsZW5nZRoUYm5ldC9hdHRyaWJ1dGUucHJvdG8aEWJuZXQvZW50aXR5" + 
-            "LnByb3RvGg5ibmV0L3JwYy5wcm90byJICglDaGFsbGVuZ2USDAoEdHlwZRgB" + 
-            "IAIoBxIMCgRpbmZvGAIgASgJEg4KBmFuc3dlchgDIAEoCRIPCgdyZXRyaWVz" + 
-            "GAQgASgNIisKFkNoYWxsZW5nZVBpY2tlZFJlcXVlc3QSEQoJY2hhbGxlbmdl" + 
-            "GAEgAigHIioKGENoYWxsZW5nZUFuc3dlcmVkUmVxdWVzdBIOCgZhbnN3ZXIY" + 
-            "ASACKAkiwgEKGlNlbmRDaGFsbGVuZ2VUb1VzZXJSZXF1ZXN0EikKB3BlZXJf" + 
-            "aWQYASABKAsyGC5ibmV0LnByb3RvY29sLlByb2Nlc3NJZBIwCg9nYW1lX2Fj" + 
-            "Y291bnRfaWQYAiABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEjYKCmNo" + 
-            "YWxsZW5nZXMYAyADKAsyIi5ibmV0LnByb3RvY29sLmNoYWxsZW5nZS5DaGFs" + 
-            "bGVuZ2USDwoHY29udGV4dBgEIAIoByJUChtTZW5kQ2hhbGxlbmdlVG9Vc2Vy" + 
-            "UmVzcG9uc2USNQoJY2hhbGxlbmdlGAEgAigLMiIuYm5ldC5wcm90b2NvbC5j" + 
-            "aGFsbGVuZ2UuQ2hhbGxlbmdlIl8KFENoYWxsZW5nZVVzZXJSZXF1ZXN0EjYK" + 
-            "CmNoYWxsZW5nZXMYASADKAsyIi5ibmV0LnByb3RvY29sLmNoYWxsZW5nZS5D" + 
-            "aGFsbGVuZ2USDwoHY29udGV4dBgCIAIoBzK1AwoQQ2hhbGxlbmdlU2Vydmlj" + 
-            "ZRJkCg9DaGFsbGVuZ2VQaWNrZWQSLy5ibmV0LnByb3RvY29sLmNoYWxsZW5n" + 
-            "ZS5DaGFsbGVuZ2VQaWNrZWRSZXF1ZXN0GhouYm5ldC5wcm90b2NvbC5OT19S" + 
-            "RVNQT05TRSIEgLUYARJjChFDaGFsbGVuZ2VBbnN3ZXJlZBIxLmJuZXQucHJv" + 
-            "dG9jb2wuY2hhbGxlbmdlLkNoYWxsZW5nZUFuc3dlcmVkUmVxdWVzdBoVLmJu" + 
-            "ZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgCEk0KEkNoYWxsZW5nZUNhbmNlbGxl" + 
-            "ZBIVLmJuZXQucHJvdG9jb2wuTm9EYXRhGhouYm5ldC5wcm90b2NvbC5OT19S" + 
-            "RVNQT05TRSIEgLUYAxKGAQoTU2VuZENoYWxsZW5nZVRvVXNlchIzLmJuZXQu" + 
-            "cHJvdG9jb2wuY2hhbGxlbmdlLlNlbmRDaGFsbGVuZ2VUb1VzZXJSZXF1ZXN0" + 
-            "GjQuYm5ldC5wcm90b2NvbC5jaGFsbGVuZ2UuU2VuZENoYWxsZW5nZVRvVXNl" + 
-            "clJlc3BvbnNlIgSAtRgEMnMKD0NoYWxsZW5nZU5vdGlmeRJgCg1DaGFsbGVu" + 
-            "Z2VVc2VyEi0uYm5ldC5wcm90b2NvbC5jaGFsbGVuZ2UuQ2hhbGxlbmdlVXNl" + 
-            "clJlcXVlc3QaGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgBQgOA" + 
-            "AQA=");
+            "LnByb3RvGg5ibmV0L3JwYy5wcm90bxoYYm5ldC9maWVsZF9vcHRpb25zLnBy" + 
+            "b3RvIkgKCUNoYWxsZW5nZRIMCgR0eXBlGAEgAigHEgwKBGluZm8YAiABKAkS" + 
+            "DgoGYW5zd2VyGAMgASgJEg8KB3JldHJpZXMYBCABKA0iKwoWQ2hhbGxlbmdl" + 
+            "UGlja2VkUmVxdWVzdBIRCgljaGFsbGVuZ2UYASACKAciKgoYQ2hhbGxlbmdl" + 
+            "QW5zd2VyZWRSZXF1ZXN0Eg4KBmFuc3dlchgBIAIoCSLCAQoaU2VuZENoYWxs" + 
+            "ZW5nZVRvVXNlclJlcXVlc3QSKQoHcGVlcl9pZBgBIAEoCzIYLmJuZXQucHJv" + 
+            "dG9jb2wuUHJvY2Vzc0lkEjAKD2dhbWVfYWNjb3VudF9pZBgCIAEoCzIXLmJu" + 
+            "ZXQucHJvdG9jb2wuRW50aXR5SWQSNgoKY2hhbGxlbmdlcxgDIAMoCzIiLmJu" + 
+            "ZXQucHJvdG9jb2wuY2hhbGxlbmdlLkNoYWxsZW5nZRIPCgdjb250ZXh0GAQg" + 
+            "AigHIlQKG1NlbmRDaGFsbGVuZ2VUb1VzZXJSZXNwb25zZRI1CgljaGFsbGVu" + 
+            "Z2UYASACKAsyIi5ibmV0LnByb3RvY29sLmNoYWxsZW5nZS5DaGFsbGVuZ2Ui" + 
+            "XwoUQ2hhbGxlbmdlVXNlclJlcXVlc3QSNgoKY2hhbGxlbmdlcxgBIAMoCzIi" + 
+            "LmJuZXQucHJvdG9jb2wuY2hhbGxlbmdlLkNoYWxsZW5nZRIPCgdjb250ZXh0" + 
+            "GAIgAigHMrUDChBDaGFsbGVuZ2VTZXJ2aWNlEmQKD0NoYWxsZW5nZVBpY2tl" + 
+            "ZBIvLmJuZXQucHJvdG9jb2wuY2hhbGxlbmdlLkNoYWxsZW5nZVBpY2tlZFJl" + 
+            "cXVlc3QaGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgBEmMKEUNo" + 
+            "YWxsZW5nZUFuc3dlcmVkEjEuYm5ldC5wcm90b2NvbC5jaGFsbGVuZ2UuQ2hh" + 
+            "bGxlbmdlQW5zd2VyZWRSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEi" + 
+            "BIC1GAISTQoSQ2hhbGxlbmdlQ2FuY2VsbGVkEhUuYm5ldC5wcm90b2NvbC5O" + 
+            "b0RhdGEaGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgDEoYBChNT" + 
+            "ZW5kQ2hhbGxlbmdlVG9Vc2VyEjMuYm5ldC5wcm90b2NvbC5jaGFsbGVuZ2Uu" + 
+            "U2VuZENoYWxsZW5nZVRvVXNlclJlcXVlc3QaNC5ibmV0LnByb3RvY29sLmNo" + 
+            "YWxsZW5nZS5TZW5kQ2hhbGxlbmdlVG9Vc2VyUmVzcG9uc2UiBIC1GAQycwoP" + 
+            "Q2hhbGxlbmdlTm90aWZ5EmAKDUNoYWxsZW5nZVVzZXISLS5ibmV0LnByb3Rv" + 
+            "Y29sLmNoYWxsZW5nZS5DaGFsbGVuZ2VVc2VyUmVxdWVzdBoaLmJuZXQucHJv" + 
+            "dG9jb2wuTk9fUkVTUE9OU0UiBIC1GAFCA4ABAA==");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_challenge_Challenge__Descriptor = Descriptor.MessageTypes[0];
@@ -100,6 +100,7 @@ namespace bnet.protocol.challenge {
           global::bnet.protocol.attribute.Proto.Attribute.RegisterAllExtensions(registry);
           global::bnet.protocol.Entity.RegisterAllExtensions(registry);
           global::bnet.protocol.Rpc.RegisterAllExtensions(registry);
+          global::bnet.protocol.FieldOptions.RegisterAllExtensions(registry);
           return registry;
         };
         pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -107,6 +108,7 @@ namespace bnet.protocol.challenge {
             global::bnet.protocol.attribute.Proto.Attribute.Descriptor, 
             global::bnet.protocol.Entity.Descriptor, 
             global::bnet.protocol.Rpc.Descriptor, 
+            global::bnet.protocol.FieldOptions.Descriptor, 
             }, assigner);
       }
       #endregion
