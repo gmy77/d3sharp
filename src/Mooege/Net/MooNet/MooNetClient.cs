@@ -24,7 +24,9 @@ using System.Threading;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
 using Mooege.Common.Helpers.Hash;
+using Mooege.Common.Extensions;
 using Mooege.Common.Logging;
+using Mooege.Common.Versions;
 using Mooege.Core.Cryptography.SSL;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Authentication;
@@ -97,8 +99,24 @@ namespace Mooege.Net.MooNet
         /// </summary>
         public AuthManager.AuthenticationErrorCodes AuthenticationErrorCode;
 
-        public bool ThumbprintReq = false;
-        public bool PasswordReq = false;
+        /// <summary>
+        /// The client's ModuleIds for all the streamed modules.
+        /// </summary>
+        public Dictionary<StreamedModule, int> ClientModuleIds = new Dictionary<StreamedModule, int>();
+
+        /// <summary>
+        /// The last module client was instructed to load.
+        /// </summary>
+        public StreamedModule LastRequestedModule = StreamedModule.None;
+
+        public enum StreamedModule
+        {
+            None,
+            Thumbprint,
+            Password,
+            Token,
+            RiskFingerprint,
+        }
 
         /// <summary>
         /// Callback list for issued client RPCs.
@@ -149,6 +167,36 @@ namespace Mooege.Net.MooNet
             if (toon && this.Account.CurrentGameAccount.CurrentToon != null)
                 Logger.Warn("DEPRECATED: GetIdentity called with toon.");
             return identityBuilder.Build();
+        }
+
+        public void CheckAuthenticator()
+        {
+            var HasAuthenticator = false;
+            var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder();
+            var moduleHandle = bnet.protocol.ContentHandle.CreateBuilder()
+                .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
+                .SetUsage(0x61757468); // auth
+
+            //Account has Authenticator attached, load Token module
+            if (HasAuthenticator)
+            {
+                moduleHandle.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.TokenHashMap[this.Platform]));
+                moduleLoadRequest.SetMessage(ByteString.CopyFrom("0012F1BF6506277817890210A8529A4BB7BDD1E08EB397A4B0CABF174F6266B7CAF7F2CE7A298F001958F8".ToByteArray()));
+
+                this.LastRequestedModule = StreamedModule.Token;
+            }
+            //Account does not have Authenticator, load RiskFingerprint module
+            else
+            {
+                moduleHandle.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.RiskFingerprintHashMap[this.Platform]));
+                moduleLoadRequest.SetMessage(ByteString.Empty);
+
+                this.LastRequestedModule = StreamedModule.RiskFingerprint;
+            }
+
+            moduleLoadRequest.SetModuleHandle(moduleHandle);
+
+            this.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this).ModuleLoad(null, moduleLoadRequest.Build(), callback => { }));
         }
 
         public void AuthenticationComplete()

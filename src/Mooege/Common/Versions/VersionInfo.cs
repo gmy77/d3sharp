@@ -66,13 +66,12 @@ namespace Mooege.Common.Versions
             };
 
             /// <summary>
-            /// Auth module's hash map for client platforms.
+            /// Auth modules' hash maps for client platforms.
             /// </summary>
-            public static Dictionary<MooNetClient.ClientPlatform, byte[]> AuthModuleHashMap = new Dictionary<MooNetClient.ClientPlatform, byte[]>()
+            //TODO: Get Hashes for Mac client.
+            public static Dictionary<MooNetClient.ClientPlatform, byte[]> PasswordHashMap = new Dictionary<MooNetClient.ClientPlatform, byte[]>()
             {
-                //{ MooNetClient.ClientPlatform.Win,"bfa574bcff509b3c92f7c4b25b2dc2d1decb962209f8c9c8582ddf4f26aac176".ToByteArray() },
-                //{ MooNetClient.ClientPlatform.Win,"72dd40a65ccadc04fe4ece1323effd3177f4afb9f88a96905a7a30db42c0ae0f".ToByteArray() },
-                { MooNetClient.ClientPlatform.Win,"8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray() }, //2nd
+                { MooNetClient.ClientPlatform.Win,"8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray() },
                 { MooNetClient.ClientPlatform.Mac,"63BC118937E6EA2FAA7B7192676DAEB1B7CA87A9C24ED9F5ACD60E630B4DD7A4".ToByteArray() }
             };
 
@@ -80,6 +79,18 @@ namespace Mooege.Common.Versions
             {
                 { MooNetClient.ClientPlatform.Win,"36b27cd911b33c61730a8b82c8b2495fd16e8024fc3b2dde08861c77a852941c".ToByteArray() },
                 { MooNetClient.ClientPlatform.Mac,"36b27cd911b33c61730a8b82c8b2495fd16e8024fc3b2dde08861c77a852941c".ToByteArray() },
+            };
+
+            public static Dictionary<MooNetClient.ClientPlatform, byte[]> TokenHashMap = new Dictionary<MooNetClient.ClientPlatform, byte[]>()
+            {
+                { MooNetClient.ClientPlatform.Win,"bfa574bcff509b3c92f7c4b25b2dc2d1decb962209f8c9c8582ddf4f26aac176".ToByteArray() },
+                { MooNetClient.ClientPlatform.Mac,"bfa574bcff509b3c92f7c4b25b2dc2d1decb962209f8c9c8582ddf4f26aac176".ToByteArray() },
+            };
+
+            public static Dictionary<MooNetClient.ClientPlatform, byte[]> RiskFingerprintHashMap = new Dictionary<MooNetClient.ClientPlatform, byte[]>()
+            {
+                { MooNetClient.ClientPlatform.Win,"bcfa324ab555fc66614976011d018d2be2b9dc23d0b54d94a3bd7d12472aa107".ToByteArray() },
+                { MooNetClient.ClientPlatform.Mac,"bcfa324ab555fc66614976011d018d2be2b9dc23d0b54d94a3bd7d12472aa107".ToByteArray() },
             };
 
             public static Dictionary<string, uint> Regions = new Dictionary<string, uint>()

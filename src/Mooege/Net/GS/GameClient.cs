@@ -79,7 +79,7 @@ namespace Mooege.Net.GS
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                         else Logger.Warn("{0} - ID:{1} has no consumer or self-handler.", message.GetType(), message.Id);
 
-                        Logger.LogIncoming(message); // change ConsoleTarget's level to Level.Dump in program.cs if u want to see messages on console.
+                        Logger.LogIncomingPacket(message); // change ConsoleTarget's level to Level.Dump in program.cs if u want to see messages on console.
                     }
                     catch (NotImplementedException)
                     {
@@ -96,7 +96,7 @@ namespace Mooege.Net.GS
         {
             lock (this._bufferLock)
             {
-                Logger.LogOutgoing(message);
+                Logger.LogOutgoingPacket(message);
                 _outgoingBuffer.EncodeMessage(message); // change ConsoleTarget's level to Level.Dump in program.cs if u want to see messages on console.
                 if (flushImmediatly) this.SendTick();
             }

@@ -64,13 +64,25 @@
     <Reference Include="CrystalMpq">
       <HintPath>..\..\dep\crystalmpq\CrystalMpq.dll</HintPath>
     </Reference>
+    <Reference Include="FluentNHibernate, Version=1.3.0.717, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dep\nhibernate\FluentNHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\dep\sharpziplib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dep\nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="ManagedOpenSsl">
       <HintPath>..\..\dep\openssl\ManagedOpenSsl.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp">
+    </Reference>
+    <Reference Include="NHibernate, Version=3.3.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dep\nhibernate\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System">
     </Reference>
@@ -94,6 +106,7 @@
     <Reference Include="System.Data.SQLite, Version=1.0.74.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dep\sqlite\sqlite-managed\System.Data.SQLite.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\dep\powercollections\PowerCollections.dll</HintPath>
@@ -107,6 +120,26 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Logging\ConsoleTarget.cs" />
+    <Compile Include="Common\Logging\FileTarget.cs" />
+    <Compile Include="Common\Logging\LogManager.cs" />
+    <Compile Include="Common\Logging\LogRouter.cs" />
+    <Compile Include="Common\Logging\LogTarget.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Entities\DBAccount.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Entities\DBActiveSkills.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Entities\DBGameAccount.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Entities\DBInventory.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Entities\DBItemInstance.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Entities\DBToon.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Mapper\DBAccountMapper.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Mapper\DBActiveSkillsMapper.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Mapper\DBGameAccountMapper.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Mapper\DBInventoryMapper.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Mapper\DBItemInstanceMapper.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\Mapper\DBToonMapper.cs" />
+    <Compile Include="Common\Storage\AccountDataBase\SessionProvider.cs" />
+    <Compile Include="Common\Storage\DBSessions.cs" />
+    <Compile Include="Common\Extensions\StringExtensions.cs" />
     <Compile Include="Core\GS\Actors\Actions\PowerAction.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Door.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Minions\AncientKorlic.cs" />
@@ -120,19 +153,20 @@
     <Compile Include="Core\GS\Actors\Implementations\Minions\MirrorImageMinion.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Minions\MysticAllyMinion.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Minions\ZombieDog.cs" />
-	<Compile Include="Core\GS\Actors\Implementations\Monsters\Monsters.cs" />
+    <Compile Include="Core\GS\Actors\Implementations\Monsters\Monsters.cs" />
     <Compile Include="Core\GS\Actors\Minion.cs" />
     <Compile Include="Core\GS\AI\Brains\AggressiveNPCBrain.cs" />
     <Compile Include="Core\GS\AI\Brains\MinionBrain.cs" />
     <Compile Include="Core\GS\Powers\ActionTimedSkill.cs" />
     <Compile Include="Core\GS\Powers\ActorMover.cs" />
     <Compile Include="Core\GS\Powers\ComboSkill.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\ActorGhostedBuff.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\CooldownBuff.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\KnockbackBuff.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\LevelUp.cs" />
-    <Compile Include="Core\GS\Powers\Implementations\General\Ranged.cs" />
     <Compile Include="Core\GS\Powers\Implementations\General\StatusDebuffs.cs" />
-	<Compile Include="Core\GS\Powers\Implementations\General\SummoningSkills.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\General\SummonedBuff.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\MonsterSkills\SummoningSkills.cs" />
     <Compile Include="Core\GS\Powers\Payloads\AttackPayload.cs" />
     <Compile Include="Core\GS\Powers\BaseBuffs.cs" />
     <Compile Include="Core\GS\Powers\BuffManager.cs" />
@@ -150,6 +184,7 @@
     <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Monk.cs" />
     <Compile Include="Core\GS\Powers\Implementations\HeroSkills\WitchDoctor.cs" />
     <Compile Include="Core\GS\Powers\Implementations\HeroSkills\Wizard.cs" />
+    <Compile Include="Core\GS\Powers\Implementations\MonsterSkills\SingleProjectileSkills.cs" />
     <Compile Include="Core\GS\Powers\ImplementsPowerSNO.cs" />
     <Compile Include="Core\GS\Powers\PowerContext.cs" />
     <Compile Include="Core\GS\Powers\PowerScript.cs" />
@@ -661,7 +696,7 @@
     <Compile Include="Net\MooNet\MooNetRouter.cs" />
     <Compile Include="Common\Helpers\Hash\StringHashHelper.cs" />
     <Compile Include="Common\Extensions\IMessageExtensions.cs" />
-    <Compile Include="Common\Logging\TinyLogger.cs" />
+    <Compile Include="Common\Logging\Logger.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObjectManager.cs" />
     <Compile Include="Core\MooNet\Objects\RPCObject.cs" />
     <Compile Include="Common\Storage\Config.cs" />
@@ -676,9 +711,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="..\..\assets\account.db">
-      <Link>Assets\account.db</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="..\..\assets\database.Account.config">
+      <Link>database.Account.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\config.ini">
       <Link>config.ini</Link>

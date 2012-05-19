@@ -65,7 +65,7 @@ namespace Mooege.Core.MooNet.Authentication
                 .SetMessage(ByteString.CopyFrom(thumbprintData))
                 .Build();
 
-            client.ThumbprintReq = true;
+            client.LastRequestedModule = MooNetClient.StreamedModule.Thumbprint;
             client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, callback => { }));
         }
 
@@ -88,18 +88,7 @@ namespace Mooege.Core.MooNet.Authentication
                     .Build();
 
                 client.MakeRPC(() =>
-                    bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => client.AuthenticationComplete()));
-                /*
-                var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
-                    .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
-                        .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
-                        .SetUsage(0x61757468) // auth - RiskFingerprint.dll
-                        .SetHash(ByteString.CopyFrom("bcfa324ab555fc66614976011d018d2be2b9dc23d0b54d94a3bd7d12472aa107".ToByteArray())))
-                    .SetMessage(ByteString.Empty)
-                    .Build();
-
-                client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
-                */
+                    bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => client.CheckAuthenticator()));
 
                 client.Account = AccountManager.GetAccountByEmail(srp6.Account.Email);
                 //if (client.Account.LoggedInClient != null)
@@ -119,13 +108,8 @@ namespace Mooege.Core.MooNet.Authentication
         public static void SendAccountSettings(MooNetClient client)
         {
             var accset = new bnet.protocol.authentication.AccountSettingsNotification.Builder();
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(168));
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(184));
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(185));
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(186));
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(187));
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(188));
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(193));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(111));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(227));
             client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).AccountSettings(null, accset.Build(), delegate(bnet.protocol.NO_RESPONSE a) { }));
         }
 
