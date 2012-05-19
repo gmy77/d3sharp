@@ -298,7 +298,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         private void SetField()
         {
-            const ulong bnetGameAccountHigh = ((ulong)EntityIdHelper.HighIdType.GameAccountId) + (0x6200004433);
+            const ulong bnetGameAccountHigh = ((ulong)EntityIdHelper.HighIdType.GameAccountId) + (0x0100004433);
             BnetEntityId = bnet.protocol.EntityId.CreateBuilder().SetHigh(bnetGameAccountHigh).SetLow(PersistentID).Build();
 
             //TODO: Now hardcode all game account notifications to D3
