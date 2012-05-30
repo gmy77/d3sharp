@@ -35,7 +35,7 @@ namespace Mooege.Common.MPQ.FileFormats
     // this file should be fixed with our naming-conventions. /raist
 
     [FileFormat(SNOGroup.GameBalance)]
-    class GameBalance : FileFormat
+    public class GameBalance : FileFormat
     {
         public Header Header { get; private set; }
         public BalanceType Type { get; private set; }

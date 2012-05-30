@@ -159,7 +159,7 @@ namespace Mooege.Common.Versions
             public const int ProtocolHash = 0x33CABB38;
 
             // old hashes
-            // 0x33CABB38                   // 9183, 9327, 9359
+            // 0x33CABB38                   // 9183, 9327, 9359, 9749
             // unchecked((int)0x9726E2E3)   // 8896
             // 0x375AE194                   // 8815
             // unchecked((int)0xA8F17EC5)   // 8610

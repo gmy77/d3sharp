@@ -79,8 +79,10 @@ namespace Mooege.Core.MooNet.Authentication
             byte[] seed = authMessage.Skip(1 + 32 + 128).Take(128).ToArray(); // client's second challenge.
 
             var success = srp6.Verify(A, M_client, seed);
-            if (Config.Instance.DisablePasswordChecks || success) // if authentication is sucesseful or password check's are disabled.
+            //if (Config.Instance.DisablePasswordChecks || success)
+            if (success) 
             {
+                client.SessionKey = srp6.SessionKey;
                 // send the logon proof.
                 var message = bnet.protocol.authentication.ModuleMessageRequest.CreateBuilder()
                     .SetModuleId(moduleId)
