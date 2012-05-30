@@ -129,7 +129,20 @@ namespace Mooege.Net.MooNet
             Password,
             Token,
             RiskFingerprint,
+            Agreement,
         }
+
+        public AvailableAgreements LastAgreementSent = AvailableAgreements.None;
+
+        public enum AvailableAgreements
+        {
+            None,
+            EULA,
+            TOS,
+            RMAH,
+        }
+
+        public Dictionary<AvailableAgreements, bool> Agreements = new Dictionary<AvailableAgreements, bool>();
 
         /// <summary>
         /// Callback list for issued client RPCs.
@@ -186,6 +199,82 @@ namespace Mooege.Net.MooNet
             return identityBuilder.Build();
         }
 
+
+        private void LoadAgreementModule()
+        {
+            var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder();
+            var moduleHandle = bnet.protocol.ContentHandle.CreateBuilder()
+                .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
+                .SetUsage(0x61757468) // auth
+                .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AgreementHashMap[this.Platform]));
+
+            this.LastRequestedModule = StreamedModule.Agreement;
+
+            moduleLoadRequest.SetModuleHandle(moduleHandle);
+            this.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this).ModuleLoad(null, moduleLoadRequest.Build(), callback => { }));
+            }
+
+
+        public bool HasAgreements()
+        {
+            //Bypass agreements
+            //return false;
+
+            foreach (AvailableAgreements x in Enum.GetValues(typeof(AvailableAgreements)))
+            {
+                if (x != AvailableAgreements.None && !Agreements.ContainsKey(x))
+                    return true;
+            }
+            return false;
+        }
+
+        public void SendAgreements()
+        {
+
+            var moduleMessageRequest = bnet.protocol.authentication.ModuleMessageRequest.CreateBuilder()
+                .SetModuleId(this.ClientModuleIds[StreamedModule.Agreement]);
+
+            //Account has not agreed to TOS
+            if (!Agreements.ContainsKey(AvailableAgreements.TOS))
+            {
+                moduleMessageRequest.SetMessage(ByteString.CopyFrom(VersionInfo.MooNet.TOS));
+                Logger.Trace("Sending TOS to client {0}", this);
+                this.LastAgreementSent = AvailableAgreements.TOS;
+            }
+            //Account has not agreed to EULA
+            else if (!Agreements.ContainsKey(AvailableAgreements.EULA))
+            {
+                moduleMessageRequest.SetMessage(ByteString.CopyFrom(VersionInfo.MooNet.EULA));
+                Logger.Trace("Sending EULA to client {0}", this);
+                this.LastAgreementSent = AvailableAgreements.EULA;
+            }
+            //Account has not agreed to RMAH
+            else if (!Agreements.ContainsKey(AvailableAgreements.RMAH))
+            {
+                moduleMessageRequest.SetMessage(ByteString.CopyFrom(VersionInfo.MooNet.RMAH));
+                Logger.Trace("Sending RMAH to client {0}", this);
+                this.LastAgreementSent = AvailableAgreements.RMAH;
+            }
+            else
+            {
+                //Account has no more agreements to see.
+                var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder();
+                var moduleHandle = bnet.protocol.ContentHandle.CreateBuilder()
+                    .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
+                    .SetUsage(0x61757468); // auth
+
+                moduleHandle.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.RiskFingerprintHashMap[this.Platform]));
+                moduleLoadRequest.SetMessage(ByteString.Empty);
+                this.LastRequestedModule = StreamedModule.RiskFingerprint;
+                moduleLoadRequest.SetModuleHandle(moduleHandle);
+
+                this.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this).ModuleLoad(null, moduleLoadRequest.Build(), callback => { }));
+                return;
+            }
+
+            this.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this).ModuleMessage(null, moduleMessageRequest.Build(), callback => { }));
+        }
+
         public void CheckAuthenticator()
         {
             var HasAuthenticator = false;
@@ -202,13 +291,20 @@ namespace Mooege.Net.MooNet
 
                 this.LastRequestedModule = StreamedModule.Token;
             }
-            //Account does not have Authenticator, load RiskFingerprint module
+            //Account does not have Authenticator, Check Agreements or load RiskFingerprint module
             else
             {
-                moduleHandle.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.RiskFingerprintHashMap[this.Platform]));
-                moduleLoadRequest.SetMessage(ByteString.Empty);
-
-                this.LastRequestedModule = StreamedModule.RiskFingerprint;
+                if (this.HasAgreements())
+                {
+                    moduleHandle.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AgreementHashMap[this.Platform]));
+                    this.LastRequestedModule = StreamedModule.Agreement;
+                }
+                else
+                {
+                    moduleHandle.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.RiskFingerprintHashMap[this.Platform]));
+                    moduleLoadRequest.SetMessage(ByteString.Empty);
+                    this.LastRequestedModule = StreamedModule.RiskFingerprint;
+                }
             }
 
             moduleLoadRequest.SetModuleHandle(moduleHandle);
