@@ -57,6 +57,11 @@ namespace OpenSSL
 		protected HandshakeState handShakeState = HandshakeState.None;
 		protected OpenSslException handshakeException = null;
 
+        // PSK attributes
+        protected string pskCiphers = null;
+        protected string pskIdentity = null;
+        protected byte[] pskPsk = null;
+
 		/// <summary>
 		/// Override to implement client/server specific handshake processing
 		/// </summary>
@@ -325,6 +330,11 @@ namespace OpenSSL
 		{
 			get { return sslContext.GetCipherList(); }
 		}
+
+        public string CipherDescription
+        {
+            get { return ssl.CurrentCipher.Description; }
+        }
 
 		#region Stream methods
 		public override bool CanRead
@@ -1184,7 +1194,8 @@ namespace OpenSSL
 			}
 
 			// Now format the return string
-			return String.Format("{0}:!ADH:!aNULL:!eNULL:@STRENGTH", str);
+            string cipherString = String.Format("{0}:!ADH:!aNULL:!eNULL:@STRENGTH", str);
+            return cipherString;
 		}
 
 	}

@@ -34,6 +34,9 @@ namespace OpenSSL
 {
     class SslStreamServer : SslStreamBase
     {
+        // Internal callbacks for PSK
+        protected PskServerCallbackHandler internalPskServerCallback;
+
         public SslStreamServer(
             Stream stream, 
             bool ownStream,
@@ -52,6 +55,33 @@ namespace OpenSSL
             // Initialize the SslContext object
             InitializeServerContext(serverCertificate, clientCertificateRequired, caCerts, enabledSslProtocols, sslStrength, checkCertificateRevocation);
             
+            ssl = new Ssl(sslContext);
+            // Initialze the read/write bio
+            read_bio = BIO.MemoryBuffer(false);
+            write_bio = BIO.MemoryBuffer(false);
+            // Set the read/write bio's into the the Ssl object
+            ssl.SetBIO(read_bio, write_bio);
+            read_bio.SetClose(BIO.CloseOption.Close);
+            write_bio.SetClose(BIO.CloseOption.Close);
+            // Set the Ssl object into server mode
+            ssl.SetAcceptState();
+        }
+
+        public SslStreamServer(
+            Stream stream,
+            bool ownStream,
+            string pskCiphers,
+            byte[] pskPsk)
+            : base(stream, ownStream)
+        {
+            this.pskCiphers = pskCiphers;
+            this.pskPsk = pskPsk;
+
+            this.internalPskServerCallback = new PskServerCallbackHandler(InternalPskServerCallback);
+
+            // Initialize the SslContext object
+            InitializeServerContextUsingPsk(this.pskCiphers);
+
             // Initalize the Ssl object
             ssl = new Ssl(sslContext);
             // Initialze the read/write bio
@@ -206,6 +236,44 @@ namespace OpenSSL
             sslContext.UsePrivateKey(serverCertificate.PrivateKey);
             // Set the session id context
             sslContext.SetSessionIdContext(Encoding.ASCII.GetBytes(AppDomain.CurrentDomain.FriendlyName));
+        }
+        private void InitializeServerContextUsingPsk(string pskCiphers)
+        {
+            // Initialize the context
+            //sslContext = new SslContext(SslMethod.SSLv23_server_method);
+            sslContext = new SslContext(SslMethod.TLSv1_server_method);
+            //sslContext = new SslContext(SslMethod.SSLv3_server_method);
+
+            // Remove support for protocols that should not be supported
+            sslContext.Options |= SslOptions.SSL_OP_NO_SSLv2;
+            sslContext.Options |= SslOptions.SSL_OP_NO_SSLv3;
+
+            // Set the context mode
+            sslContext.Mode = SslMode.SSL_MODE_AUTO_RETRY;
+            // Set the workaround options
+            sslContext.Options = SslOptions.SSL_OP_ALL;
+            sslContext.SetVerify(VerifyMode.SSL_VERIFY_NONE, null);
+
+            // Set the cipher string
+            // WARNING: Using PSK ciphers requires that the PSK callback be set and initialize the identity and psk value.
+            // Failure to do this will cause the PSK ciphers to be skipped when picking a shared cipher.
+            // The result will be an error because of "no shared ciphers".
+//            sslContext.SetCipherList("PSK-AES256-CBC-SHA:PSK-3DES-EDE-CBC-SHA:PSK-AES128-CBC-SHA:PSK-RC4-SHA");
+            sslContext.SetCipherList(pskCiphers);
+
+            // Set the session id context
+            sslContext.SetSessionIdContext(Encoding.ASCII.GetBytes(AppDomain.CurrentDomain.FriendlyName));
+
+            // Set the PSK callbacks
+            sslContext.SetPskServerCallback(this.internalPskServerCallback);
+        }
+
+        // PSK client callback
+        public int InternalPskServerCallback(Ssl ssl, String identity, out byte[] psk, uint max_psk_len)
+        {
+            psk = this.pskPsk;
+
+            return 1; // success
         }
     }
 }
