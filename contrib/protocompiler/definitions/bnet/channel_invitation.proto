@@ -1,4 +1,3 @@
-import "google/protobuf/csharp_options.proto";
 import "bnet/entity.proto";
 import "bnet/invitation_types.proto";
 import "bnet/rpc.proto";
@@ -9,7 +8,6 @@ import "bnet/channel_types.proto";
 package bnet.protocol.channel_invitation;
 
 option cc_generic_services = false;
-option (google.protobuf.csharp_file_options).umbrella_classname = "ChannelInvitationService";
 
 message AcceptInvitationRequest
 {
@@ -47,6 +45,7 @@ message SuggestInvitationRequest
     required .bnet.protocol.EntityId channel_id = 2;
     required .bnet.protocol.EntityId target_id = 3;
     optional .bnet.protocol.EntityId approval_id = 4;
+    optional .bnet.protocol.EntityId agent_account_id = 5;
 }
 
 message RevokeInvitationRequest
