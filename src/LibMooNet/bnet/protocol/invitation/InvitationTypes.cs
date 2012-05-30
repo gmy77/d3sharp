@@ -48,28 +48,29 @@ namespace bnet.protocol.invitation {
           "dml0ZWVfaWRlbnRpdHkYAyACKAsyFy5ibmV0LnByb3RvY29sLklkZW50aXR5" + 
           "EhQKDGludml0ZXJfbmFtZRgEIAEoCRIUCgxpbnZpdGVlX25hbWUYBSABKAkS" + 
           "GgoSaW52aXRhdGlvbl9tZXNzYWdlGAYgASgJEhUKDWNyZWF0aW9uX3RpbWUY" + 
-          "ByABKAQSFwoPZXhwaXJhdGlvbl90aW1lGAggASgEKgUIZBCRTiLHAQoKU3Vn" + 
+          "ByABKAQSFwoPZXhwaXJhdGlvbl90aW1lGAggASgEKgUIZBCRTiL+AQoKU3Vn" + 
           "Z2VzdGlvbhIrCgpjaGFubmVsX2lkGAEgASgLMhcuYm5ldC5wcm90b2NvbC5F" + 
           "bnRpdHlJZBItCgxzdWdnZXN0ZXJfaWQYAiACKAsyFy5ibmV0LnByb3RvY29s" + 
           "LkVudGl0eUlkEi0KDHN1Z2dlc3RlZV9pZBgDIAIoCzIXLmJuZXQucHJvdG9j" + 
           "b2wuRW50aXR5SWQSFgoOc3VnZ2VzdGVyX25hbWUYBCABKAkSFgoOc3VnZ2Vz" + 
-          "dGVlX25hbWUYBSABKAkiUQoQSW52aXRhdGlvblBhcmFtcxIaChJpbnZpdGF0" + 
-          "aW9uX21lc3NhZ2UYASABKAkSGgoPZXhwaXJhdGlvbl90aW1lGAIgASgEOgEw" + 
-          "KgUIZBCRTiKwAQoVU2VuZEludml0YXRpb25SZXF1ZXN0Ei8KDmFnZW50X2lk" + 
-          "ZW50aXR5GAEgASgLMhcuYm5ldC5wcm90b2NvbC5JZGVudGl0eRIqCgl0YXJn" + 
-          "ZXRfaWQYAiACKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEjoKBnBhcmFt" + 
-          "cxgDIAIoCzIqLmJuZXQucHJvdG9jb2wuaW52aXRhdGlvbi5JbnZpdGF0aW9u" + 
-          "UGFyYW1zIlIKFlNlbmRJbnZpdGF0aW9uUmVzcG9uc2USOAoKaW52aXRhdGlv" + 
-          "bhgCIAEoCzIkLmJuZXQucHJvdG9jb2wuaW52aXRhdGlvbi5JbnZpdGF0aW9u" + 
-          "Ip0BChdVcGRhdGVJbnZpdGF0aW9uUmVxdWVzdBIvCg5hZ2VudF9pZGVudGl0" + 
-          "eRgBIAEoCzIXLmJuZXQucHJvdG9jb2wuSWRlbnRpdHkSFQoNaW52aXRhdGlv" + 
-          "bl9pZBgCIAIoBhI6CgZwYXJhbXMYAyACKAsyKi5ibmV0LnByb3RvY29sLmlu" + 
-          "dml0YXRpb24uSW52aXRhdGlvblBhcmFtcyLfAQoOR2VuZXJpY1JlcXVlc3QS" + 
-          "KQoIYWdlbnRfaWQYASABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEioK" + 
-          "CXRhcmdldF9pZBgCIAEoCzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSFQoN" + 
-          "aW52aXRhdGlvbl9pZBgDIAIoBhIUCgxpbnZpdGVlX25hbWUYBCABKAkSFAoM" + 
-          "aW52aXRlcl9uYW1lGAUgASgJEhkKDXByZXZpb3VzX3JvbGUYBiADKA1CAhAB" + 
-          "EhgKDGRlc2lyZWRfcm9sZRgHIAMoDUICEAE=");
+          "dGVlX25hbWUYBSABKAkSNQoUc3VnZ2VzdGVyX2FjY291bnRfaWQYBiABKAsy" + 
+          "Fy5ibmV0LnByb3RvY29sLkVudGl0eUlkIlEKEEludml0YXRpb25QYXJhbXMS" + 
+          "GgoSaW52aXRhdGlvbl9tZXNzYWdlGAEgASgJEhoKD2V4cGlyYXRpb25fdGlt" + 
+          "ZRgCIAEoBDoBMCoFCGQQkU4isAEKFVNlbmRJbnZpdGF0aW9uUmVxdWVzdBIv" + 
+          "Cg5hZ2VudF9pZGVudGl0eRgBIAEoCzIXLmJuZXQucHJvdG9jb2wuSWRlbnRp" + 
+          "dHkSKgoJdGFyZ2V0X2lkGAIgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJ" + 
+          "ZBI6CgZwYXJhbXMYAyACKAsyKi5ibmV0LnByb3RvY29sLmludml0YXRpb24u" + 
+          "SW52aXRhdGlvblBhcmFtcyJSChZTZW5kSW52aXRhdGlvblJlc3BvbnNlEjgK" + 
+          "Cmludml0YXRpb24YAiABKAsyJC5ibmV0LnByb3RvY29sLmludml0YXRpb24u" + 
+          "SW52aXRhdGlvbiKdAQoXVXBkYXRlSW52aXRhdGlvblJlcXVlc3QSLwoOYWdl" + 
+          "bnRfaWRlbnRpdHkYASABKAsyFy5ibmV0LnByb3RvY29sLklkZW50aXR5EhUK" + 
+          "DWludml0YXRpb25faWQYAiACKAYSOgoGcGFyYW1zGAMgAigLMiouYm5ldC5w" + 
+          "cm90b2NvbC5pbnZpdGF0aW9uLkludml0YXRpb25QYXJhbXMi3wEKDkdlbmVy" + 
+          "aWNSZXF1ZXN0EikKCGFnZW50X2lkGAEgASgLMhcuYm5ldC5wcm90b2NvbC5F" + 
+          "bnRpdHlJZBIqCgl0YXJnZXRfaWQYAiABKAsyFy5ibmV0LnByb3RvY29sLkVu" + 
+          "dGl0eUlkEhUKDWludml0YXRpb25faWQYAyACKAYSFAoMaW52aXRlZV9uYW1l" + 
+          "GAQgASgJEhQKDGludml0ZXJfbmFtZRgFIAEoCRIZCg1wcmV2aW91c19yb2xl" + 
+          "GAYgAygNQgIQARIYCgxkZXNpcmVkX3JvbGUYByADKA1CAhAB");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_invitation_Invitation__Descriptor = Descriptor.MessageTypes[0];
@@ -79,7 +80,7 @@ namespace bnet.protocol.invitation {
         internal__static_bnet_protocol_invitation_Suggestion__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_invitation_Suggestion__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.invitation.Suggestion, global::bnet.protocol.invitation.Suggestion.Builder>(internal__static_bnet_protocol_invitation_Suggestion__Descriptor,
-                new string[] { "ChannelId", "SuggesterId", "SuggesteeId", "SuggesterName", "SuggesteeName", });
+                new string[] { "ChannelId", "SuggesterId", "SuggesteeId", "SuggesterName", "SuggesteeName", "SuggesterAccountId", });
         internal__static_bnet_protocol_invitation_InvitationParams__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_invitation_InvitationParams__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.invitation.InvitationParams, global::bnet.protocol.invitation.InvitationParams.Builder>(internal__static_bnet_protocol_invitation_InvitationParams__Descriptor,
@@ -756,8 +757,8 @@ namespace bnet.protocol.invitation {
   public sealed partial class Suggestion : pb::GeneratedMessage<Suggestion, Suggestion.Builder> {
     private Suggestion() { }
     private static readonly Suggestion defaultInstance = new Suggestion().MakeReadOnly();
-    private static readonly string[] _suggestionFieldNames = new string[] { "channel_id", "suggestee_id", "suggestee_name", "suggester_id", "suggester_name" };
-    private static readonly uint[] _suggestionFieldTags = new uint[] { 10, 26, 42, 18, 34 };
+    private static readonly string[] _suggestionFieldNames = new string[] { "channel_id", "suggestee_id", "suggestee_name", "suggester_account_id", "suggester_id", "suggester_name" };
+    private static readonly uint[] _suggestionFieldTags = new uint[] { 10, 26, 42, 50, 18, 34 };
     public static Suggestion DefaultInstance {
       get { return defaultInstance; }
     }
@@ -828,6 +829,16 @@ namespace bnet.protocol.invitation {
       get { return suggesteeName_; }
     }
     
+    public const int SuggesterAccountIdFieldNumber = 6;
+    private bool hasSuggesterAccountId;
+    private global::bnet.protocol.EntityId suggesterAccountId_;
+    public bool HasSuggesterAccountId {
+      get { return hasSuggesterAccountId; }
+    }
+    public global::bnet.protocol.EntityId SuggesterAccountId {
+      get { return suggesterAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasSuggesterId) return false;
@@ -837,6 +848,9 @@ namespace bnet.protocol.invitation {
         }
         if (!SuggesterId.IsInitialized) return false;
         if (!SuggesteeId.IsInitialized) return false;
+        if (HasSuggesterAccountId) {
+          if (!SuggesterAccountId.IsInitialized) return false;
+        }
         return true;
       }
     }
@@ -848,16 +862,19 @@ namespace bnet.protocol.invitation {
         output.WriteMessage(1, field_names[0], ChannelId);
       }
       if (hasSuggesterId) {
-        output.WriteMessage(2, field_names[3], SuggesterId);
+        output.WriteMessage(2, field_names[4], SuggesterId);
       }
       if (hasSuggesteeId) {
         output.WriteMessage(3, field_names[1], SuggesteeId);
       }
       if (hasSuggesterName) {
-        output.WriteString(4, field_names[4], SuggesterName);
+        output.WriteString(4, field_names[5], SuggesterName);
       }
       if (hasSuggesteeName) {
         output.WriteString(5, field_names[2], SuggesteeName);
+      }
+      if (hasSuggesterAccountId) {
+        output.WriteMessage(6, field_names[3], SuggesterAccountId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -883,6 +900,9 @@ namespace bnet.protocol.invitation {
         }
         if (hasSuggesteeName) {
           size += pb::CodedOutputStream.ComputeStringSize(5, SuggesteeName);
+        }
+        if (hasSuggesterAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(6, SuggesterAccountId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1025,6 +1045,9 @@ namespace bnet.protocol.invitation {
         if (other.HasSuggesteeName) {
           SuggesteeName = other.SuggesteeName;
         }
+        if (other.HasSuggesterAccountId) {
+          MergeSuggesterAccountId(other.SuggesterAccountId);
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1101,6 +1124,15 @@ namespace bnet.protocol.invitation {
             }
             case 42: {
               result.hasSuggesteeName = input.ReadString(ref result.suggesteeName_);
+              break;
+            }
+            case 50: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasSuggesterAccountId) {
+                subBuilder.MergeFrom(SuggesterAccountId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              SuggesterAccountId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -1272,6 +1304,46 @@ namespace bnet.protocol.invitation {
         PrepareBuilder();
         result.hasSuggesteeName = false;
         result.suggesteeName_ = "";
+        return this;
+      }
+      
+      public bool HasSuggesterAccountId {
+       get { return result.hasSuggesterAccountId; }
+      }
+      public global::bnet.protocol.EntityId SuggesterAccountId {
+        get { return result.SuggesterAccountId; }
+        set { SetSuggesterAccountId(value); }
+      }
+      public Builder SetSuggesterAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasSuggesterAccountId = true;
+        result.suggesterAccountId_ = value;
+        return this;
+      }
+      public Builder SetSuggesterAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasSuggesterAccountId = true;
+        result.suggesterAccountId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeSuggesterAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasSuggesterAccountId &&
+            result.suggesterAccountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.suggesterAccountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.suggesterAccountId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.suggesterAccountId_ = value;
+        }
+        result.hasSuggesterAccountId = true;
+        return this;
+      }
+      public Builder ClearSuggesterAccountId() {
+        PrepareBuilder();
+        result.hasSuggesterAccountId = false;
+        result.suggesterAccountId_ = null;
         return this;
       }
     }

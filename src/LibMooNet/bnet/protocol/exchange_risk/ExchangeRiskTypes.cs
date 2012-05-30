@@ -41,9 +41,10 @@ namespace bnet.protocol.exchange_risk {
           "IAEoBCKPAQoeUmVwb3J0U2V0dGxlUmlza1ZlcmRpY3RSZXF1ZXN0EjkKDHBh" + 
           "cnRpdGlvbl9pZBgBIAIoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFy" + 
           "dGl0aW9uSWQSEQoJc2V0dGxlX2lkGAIgAigEEg4KBnJlc3VsdBgDIAIoBBIP" + 
-          "Cgd2ZXJkaWN0GAQgASgEIm0KHURlbGF5U2V0dGxlUmlza1ZlcmRpY3RSZXF1" + 
-          "ZXN0EjkKDHBhcnRpdGlvbl9pZBgBIAIoCzIjLmJuZXQucHJvdG9jb2wuZXhj" + 
-          "aGFuZ2UuUGFydGl0aW9uSWQSEQoJc2V0dGxlX2lkGAIgAigEQgOAAQA=");
+          "Cgd2ZXJkaWN0GAQgASgEIoMBCh1EZWxheVNldHRsZVJpc2tWZXJkaWN0UmVx" + 
+          "dWVzdBI5CgxwYXJ0aXRpb25faWQYASACKAsyIy5ibmV0LnByb3RvY29sLmV4" + 
+          "Y2hhbmdlLlBhcnRpdGlvbklkEhEKCXNldHRsZV9pZBgCIAIoBBIUCgxkZWxh" + 
+          "eV9pbl9taW4YAyABKARCA4ABAA==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_risk_ReportAuthorizeRiskVerdictRequest__Descriptor = Descriptor.MessageTypes[0];
@@ -57,7 +58,7 @@ namespace bnet.protocol.exchange_risk {
         internal__static_bnet_protocol_exchange_risk_DelaySettleRiskVerdictRequest__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_exchange_risk_DelaySettleRiskVerdictRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange_risk.DelaySettleRiskVerdictRequest, global::bnet.protocol.exchange_risk.DelaySettleRiskVerdictRequest.Builder>(internal__static_bnet_protocol_exchange_risk_DelaySettleRiskVerdictRequest__Descriptor,
-                new string[] { "PartitionId", "SettleId", });
+                new string[] { "PartitionId", "SettleId", "DelayInMin", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -939,8 +940,8 @@ namespace bnet.protocol.exchange_risk {
   public sealed partial class DelaySettleRiskVerdictRequest : pb::GeneratedMessage<DelaySettleRiskVerdictRequest, DelaySettleRiskVerdictRequest.Builder> {
     private DelaySettleRiskVerdictRequest() { }
     private static readonly DelaySettleRiskVerdictRequest defaultInstance = new DelaySettleRiskVerdictRequest().MakeReadOnly();
-    private static readonly string[] _delaySettleRiskVerdictRequestFieldNames = new string[] { "partition_id", "settle_id" };
-    private static readonly uint[] _delaySettleRiskVerdictRequestFieldTags = new uint[] { 10, 16 };
+    private static readonly string[] _delaySettleRiskVerdictRequestFieldNames = new string[] { "delay_in_min", "partition_id", "settle_id" };
+    private static readonly uint[] _delaySettleRiskVerdictRequestFieldTags = new uint[] { 24, 10, 16 };
     public static DelaySettleRiskVerdictRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -981,6 +982,16 @@ namespace bnet.protocol.exchange_risk {
       get { return settleId_; }
     }
     
+    public const int DelayInMinFieldNumber = 3;
+    private bool hasDelayInMin;
+    private ulong delayInMin_;
+    public bool HasDelayInMin {
+      get { return hasDelayInMin; }
+    }
+    public ulong DelayInMin {
+      get { return delayInMin_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasPartitionId) return false;
@@ -994,10 +1005,13 @@ namespace bnet.protocol.exchange_risk {
       int size = SerializedSize;
       string[] field_names = _delaySettleRiskVerdictRequestFieldNames;
       if (hasPartitionId) {
-        output.WriteMessage(1, field_names[0], PartitionId);
+        output.WriteMessage(1, field_names[1], PartitionId);
       }
       if (hasSettleId) {
-        output.WriteUInt64(2, field_names[1], SettleId);
+        output.WriteUInt64(2, field_names[2], SettleId);
+      }
+      if (hasDelayInMin) {
+        output.WriteUInt64(3, field_names[0], DelayInMin);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1014,6 +1028,9 @@ namespace bnet.protocol.exchange_risk {
         }
         if (hasSettleId) {
           size += pb::CodedOutputStream.ComputeUInt64Size(2, SettleId);
+        }
+        if (hasDelayInMin) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(3, DelayInMin);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1147,6 +1164,9 @@ namespace bnet.protocol.exchange_risk {
         if (other.HasSettleId) {
           SettleId = other.SettleId;
         }
+        if (other.HasDelayInMin) {
+          DelayInMin = other.DelayInMin;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1201,6 +1221,10 @@ namespace bnet.protocol.exchange_risk {
             }
             case 16: {
               result.hasSettleId = input.ReadUInt64(ref result.settleId_);
+              break;
+            }
+            case 24: {
+              result.hasDelayInMin = input.ReadUInt64(ref result.delayInMin_);
               break;
             }
           }
@@ -1270,6 +1294,26 @@ namespace bnet.protocol.exchange_risk {
         PrepareBuilder();
         result.hasSettleId = false;
         result.settleId_ = 0UL;
+        return this;
+      }
+      
+      public bool HasDelayInMin {
+        get { return result.hasDelayInMin; }
+      }
+      public ulong DelayInMin {
+        get { return result.DelayInMin; }
+        set { SetDelayInMin(value); }
+      }
+      public Builder SetDelayInMin(ulong value) {
+        PrepareBuilder();
+        result.hasDelayInMin = true;
+        result.delayInMin_ = value;
+        return this;
+      }
+      public Builder ClearDelayInMin() {
+        PrepareBuilder();
+        result.hasDelayInMin = false;
+        result.delayInMin_ = 0UL;
         return this;
       }
     }

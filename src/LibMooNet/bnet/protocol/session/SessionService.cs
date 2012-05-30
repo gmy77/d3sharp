@@ -31,19 +31,20 @@ namespace bnet.protocol.session {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           "ChpibmV0L3Nlc3Npb25fc2VydmljZS5wcm90bxIVYm5ldC5wcm90b2NvbC5z" + 
           "ZXNzaW9uGhRibmV0L2F0dHJpYnV0ZS5wcm90bxoOYm5ldC9ycGMucHJvdG8a" + 
-          "EWJuZXQvZW50aXR5LnByb3RvIrIBChNTZXNzaW9uTm90aWZpY2F0aW9uEhQK" + 
+          "EWJuZXQvZW50aXR5LnByb3RvItUBChNTZXNzaW9uTm90aWZpY2F0aW9uEhQK" + 
           "DHNlc3Npb25fdHlwZRgBIAIoDRIcChRleHBpcmF0aW9uX3RpbWVzdGFtcBgC" + 
           "IAEoBhIZChFtaW51dGVzX3JlbWFpbmluZxgDIAEoDRIbChNjYWlzX3BsYXll" + 
           "ZF9taW51dGVzGAQgASgNEhsKE2NhaXNfcmVzdGVkX21pbnV0ZXMYBSABKA0S" + 
-          "EgoKYmVuZWZhY3RvchgGIAEoCDJnCg1TZXNzaW9uTm90aWZ5ElYKBlVwZGF0" + 
-          "ZRIqLmJuZXQucHJvdG9jb2wuc2Vzc2lvbi5TZXNzaW9uTm90aWZpY2F0aW9u" + 
-          "GhouYm5ldC5wcm90b2NvbC5OT19SRVNQT05TRSIEgLUYAUIDgAEA");
+          "EgoKYmVuZWZhY3RvchgGIAEoCBIhChliaWxsaW5nX21pbnV0ZXNfcmVtYWlu" + 
+          "aW5nGAcgASgNMmcKDVNlc3Npb25Ob3RpZnkSVgoGVXBkYXRlEiouYm5ldC5w" + 
+          "cm90b2NvbC5zZXNzaW9uLlNlc3Npb25Ob3RpZmljYXRpb24aGi5ibmV0LnBy" + 
+          "b3RvY29sLk5PX1JFU1BPTlNFIgSAtRgBQgOAAQA=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_session_SessionNotification__Descriptor = Descriptor.MessageTypes[0];
         internal__static_bnet_protocol_session_SessionNotification__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.session.SessionNotification, global::bnet.protocol.session.SessionNotification.Builder>(internal__static_bnet_protocol_session_SessionNotification__Descriptor,
-                new string[] { "SessionType", "ExpirationTimestamp", "MinutesRemaining", "CaisPlayedMinutes", "CaisRestedMinutes", "Benefactor", });
+                new string[] { "SessionType", "ExpirationTimestamp", "MinutesRemaining", "CaisPlayedMinutes", "CaisRestedMinutes", "Benefactor", "BillingMinutesRemaining", });
         pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
         RegisterAllExtensions(registry);
         global::bnet.protocol.attribute.Proto.Attribute.RegisterAllExtensions(registry);
@@ -68,8 +69,8 @@ namespace bnet.protocol.session {
   public sealed partial class SessionNotification : pb::GeneratedMessage<SessionNotification, SessionNotification.Builder> {
     private SessionNotification() { }
     private static readonly SessionNotification defaultInstance = new SessionNotification().MakeReadOnly();
-    private static readonly string[] _sessionNotificationFieldNames = new string[] { "benefactor", "cais_played_minutes", "cais_rested_minutes", "expiration_timestamp", "minutes_remaining", "session_type" };
-    private static readonly uint[] _sessionNotificationFieldTags = new uint[] { 48, 32, 40, 17, 24, 8 };
+    private static readonly string[] _sessionNotificationFieldNames = new string[] { "benefactor", "billing_minutes_remaining", "cais_played_minutes", "cais_rested_minutes", "expiration_timestamp", "minutes_remaining", "session_type" };
+    private static readonly uint[] _sessionNotificationFieldTags = new uint[] { 48, 56, 32, 40, 17, 24, 8 };
     public static SessionNotification DefaultInstance {
       get { return defaultInstance; }
     }
@@ -150,6 +151,16 @@ namespace bnet.protocol.session {
       get { return benefactor_; }
     }
     
+    public const int BillingMinutesRemainingFieldNumber = 7;
+    private bool hasBillingMinutesRemaining;
+    private uint billingMinutesRemaining_;
+    public bool HasBillingMinutesRemaining {
+      get { return hasBillingMinutesRemaining; }
+    }
+    public uint BillingMinutesRemaining {
+      get { return billingMinutesRemaining_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasSessionType) return false;
@@ -161,22 +172,25 @@ namespace bnet.protocol.session {
       int size = SerializedSize;
       string[] field_names = _sessionNotificationFieldNames;
       if (hasSessionType) {
-        output.WriteUInt32(1, field_names[5], SessionType);
+        output.WriteUInt32(1, field_names[6], SessionType);
       }
       if (hasExpirationTimestamp) {
-        output.WriteFixed64(2, field_names[3], ExpirationTimestamp);
+        output.WriteFixed64(2, field_names[4], ExpirationTimestamp);
       }
       if (hasMinutesRemaining) {
-        output.WriteUInt32(3, field_names[4], MinutesRemaining);
+        output.WriteUInt32(3, field_names[5], MinutesRemaining);
       }
       if (hasCaisPlayedMinutes) {
-        output.WriteUInt32(4, field_names[1], CaisPlayedMinutes);
+        output.WriteUInt32(4, field_names[2], CaisPlayedMinutes);
       }
       if (hasCaisRestedMinutes) {
-        output.WriteUInt32(5, field_names[2], CaisRestedMinutes);
+        output.WriteUInt32(5, field_names[3], CaisRestedMinutes);
       }
       if (hasBenefactor) {
         output.WriteBool(6, field_names[0], Benefactor);
+      }
+      if (hasBillingMinutesRemaining) {
+        output.WriteUInt32(7, field_names[1], BillingMinutesRemaining);
       }
       UnknownFields.WriteTo(output);
     }
@@ -205,6 +219,9 @@ namespace bnet.protocol.session {
         }
         if (hasBenefactor) {
           size += pb::CodedOutputStream.ComputeBoolSize(6, Benefactor);
+        }
+        if (hasBillingMinutesRemaining) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(7, BillingMinutesRemaining);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -350,6 +367,9 @@ namespace bnet.protocol.session {
         if (other.HasBenefactor) {
           Benefactor = other.Benefactor;
         }
+        if (other.HasBillingMinutesRemaining) {
+          BillingMinutesRemaining = other.BillingMinutesRemaining;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -415,6 +435,10 @@ namespace bnet.protocol.session {
             }
             case 48: {
               result.hasBenefactor = input.ReadBool(ref result.benefactor_);
+              break;
+            }
+            case 56: {
+              result.hasBillingMinutesRemaining = input.ReadUInt32(ref result.billingMinutesRemaining_);
               break;
             }
           }
@@ -544,6 +568,26 @@ namespace bnet.protocol.session {
         PrepareBuilder();
         result.hasBenefactor = false;
         result.benefactor_ = false;
+        return this;
+      }
+      
+      public bool HasBillingMinutesRemaining {
+        get { return result.hasBillingMinutesRemaining; }
+      }
+      public uint BillingMinutesRemaining {
+        get { return result.BillingMinutesRemaining; }
+        set { SetBillingMinutesRemaining(value); }
+      }
+      public Builder SetBillingMinutesRemaining(uint value) {
+        PrepareBuilder();
+        result.hasBillingMinutesRemaining = true;
+        result.billingMinutesRemaining_ = value;
+        return this;
+      }
+      public Builder ClearBillingMinutesRemaining() {
+        PrepareBuilder();
+        result.hasBillingMinutesRemaining = false;
+        result.billingMinutesRemaining_ = 0;
         return this;
       }
     }

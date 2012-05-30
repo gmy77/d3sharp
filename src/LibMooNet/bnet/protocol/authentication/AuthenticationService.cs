@@ -32,6 +32,10 @@ namespace bnet.protocol.authentication {
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.AccountSettingsNotification, global::bnet.protocol.authentication.AccountSettingsNotification.Builder> internal__static_bnet_protocol_authentication_AccountSettingsNotification__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_ServerStateChangeRequest__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ServerStateChangeRequest, global::bnet.protocol.authentication.ServerStateChangeRequest.Builder> internal__static_bnet_protocol_authentication_ServerStateChangeRequest__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_MemModuleLoadRequest__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.MemModuleLoadRequest, global::bnet.protocol.authentication.MemModuleLoadRequest.Builder> internal__static_bnet_protocol_authentication_MemModuleLoadRequest__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_MemModuleLoadResponse__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.MemModuleLoadResponse, global::bnet.protocol.authentication.MemModuleLoadResponse.Builder> internal__static_bnet_protocol_authentication_MemModuleLoadResponse__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -49,38 +53,45 @@ namespace bnet.protocol.authentication {
           "bGUSDwoHbWVzc2FnZRgCIAEoDCI3ChJNb2R1bGVOb3RpZmljYXRpb24SEQoJ" + 
           "bW9kdWxlX2lkGAIgASgFEg4KBnJlc3VsdBgDIAEoDSI6ChRNb2R1bGVNZXNz" + 
           "YWdlUmVxdWVzdBIRCgltb2R1bGVfaWQYASACKAUSDwoHbWVzc2FnZRgCIAEo" + 
-          "DCJ+CgxMb2dvblJlcXVlc3QSDwoHcHJvZ3JhbRgBIAEoCRIQCghwbGF0Zm9y" + 
-          "bRgCIAEoCRIOCgZsb2NhbGUYAyABKAkSDQoFZW1haWwYBCABKAkSDwoHdmVy" + 
-          "c2lvbhgFIAEoCRIbChNhcHBsaWNhdGlvbl92ZXJzaW9uGAYgASgFInoKC0xv" + 
-          "Z29uUmVzdWx0EhIKCmVycm9yX2NvZGUYASACKA0SKAoHYWNjb3VudBgCIAEo" + 
-          "CzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSLQoMZ2FtZV9hY2NvdW50GAMg" + 
-          "AygLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZCK8AQobQWNjb3VudFNldHRp" + 
-          "bmdzTm90aWZpY2F0aW9uEjcKCGxpY2Vuc2VzGAEgAygLMiUuYm5ldC5wcm90" + 
-          "b2NvbC5hY2NvdW50LkFjY291bnRMaWNlbnNlEhQKDGlzX3VzaW5nX3JpZBgC" + 
-          "IAEoCBIbChNpc19wbGF5aW5nX2Zyb21faWdyGAMgASgIEhkKEWNhbl9yZWNl" + 
-          "aXZlX3ZvaWNlGAQgASgIEhYKDmNhbl9zZW5kX3ZvaWNlGAUgASgIIj0KGFNl" + 
-          "cnZlclN0YXRlQ2hhbmdlUmVxdWVzdBINCgVzdGF0ZRgBIAIoDRISCgpldmVu" + 
-          "dF90aW1lGAIgAigEMpYEChRBdXRoZW50aWNhdGlvbkNsaWVudBJfCgpNb2R1" + 
-          "bGVMb2FkEi8uYm5ldC5wcm90b2NvbC5hdXRoZW50aWNhdGlvbi5Nb2R1bGVM" + 
-          "b2FkUmVxdWVzdBoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAES" + 
-          "YAoNTW9kdWxlTWVzc2FnZRIyLmJuZXQucHJvdG9jb2wuYXV0aGVudGljYXRp" + 
-          "b24uTW9kdWxlTWVzc2FnZVJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0" + 
-          "YSIEgLUYAhJuCg9BY2NvdW50U2V0dGluZ3MSOS5ibmV0LnByb3RvY29sLmF1" + 
-          "dGhlbnRpY2F0aW9uLkFjY291bnRTZXR0aW5nc05vdGlmaWNhdGlvbhoaLmJu" + 
-          "ZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAMSbQoRU2VydmVyU3RhdGVD" + 
-          "aGFuZ2USNi5ibmV0LnByb3RvY29sLmF1dGhlbnRpY2F0aW9uLlNlcnZlclN0" + 
-          "YXRlQ2hhbmdlUmVxdWVzdBoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0Ui" + 
-          "BIC1GAQSXAoNTG9nb25Db21wbGV0ZRIpLmJuZXQucHJvdG9jb2wuYXV0aGVu" + 
-          "dGljYXRpb24uTG9nb25SZXN1bHQaGi5ibmV0LnByb3RvY29sLk5PX1JFU1BP" + 
-          "TlNFIgSAtRgFMvQCChRBdXRoZW50aWNhdGlvblNlcnZlchJQCgVMb2dvbhIq" + 
-          "LmJuZXQucHJvdG9jb2wuYXV0aGVudGljYXRpb24uTG9nb25SZXF1ZXN0GhUu" + 
-          "Ym5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GAESXQoMTW9kdWxlTm90aWZ5EjAu" + 
-          "Ym5ldC5wcm90b2NvbC5hdXRoZW50aWNhdGlvbi5Nb2R1bGVOb3RpZmljYXRp" + 
-          "b24aFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYAhJgCg1Nb2R1bGVNZXNz" + 
-          "YWdlEjIuYm5ldC5wcm90b2NvbC5hdXRoZW50aWNhdGlvbi5Nb2R1bGVNZXNz" + 
-          "YWdlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgDEkkKEVNl" + 
-          "bGVjdEdhbWVBY2NvdW50EhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBoVLmJu" + 
-          "ZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgEQgOAAQA=");
+          "DCKTAQoMTG9nb25SZXF1ZXN0Eg8KB3Byb2dyYW0YASABKAkSEAoIcGxhdGZv" + 
+          "cm0YAiABKAkSDgoGbG9jYWxlGAMgASgJEg0KBWVtYWlsGAQgASgJEg8KB3Zl" + 
+          "cnNpb24YBSABKAkSGwoTYXBwbGljYXRpb25fdmVyc2lvbhgGIAEoBRITCgtj" + 
+          "b29raWVfb25seRgHIAEoCCJ6CgtMb2dvblJlc3VsdBISCgplcnJvcl9jb2Rl" + 
+          "GAEgAigNEigKB2FjY291bnQYAiABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0" + 
+          "eUlkEi0KDGdhbWVfYWNjb3VudBgDIAMoCzIXLmJuZXQucHJvdG9jb2wuRW50" + 
+          "aXR5SWQivAEKG0FjY291bnRTZXR0aW5nc05vdGlmaWNhdGlvbhI3CghsaWNl" + 
+          "bnNlcxgBIAMoCzIlLmJuZXQucHJvdG9jb2wuYWNjb3VudC5BY2NvdW50TGlj" + 
+          "ZW5zZRIUCgxpc191c2luZ19yaWQYAiABKAgSGwoTaXNfcGxheWluZ19mcm9t" + 
+          "X2lnchgDIAEoCBIZChFjYW5fcmVjZWl2ZV92b2ljZRgEIAEoCBIWCg5jYW5f" + 
+          "c2VuZF92b2ljZRgFIAEoCCI9ChhTZXJ2ZXJTdGF0ZUNoYW5nZVJlcXVlc3QS" + 
+          "DQoFc3RhdGUYASACKA0SEgoKZXZlbnRfdGltZRgCIAIoBCJgChRNZW1Nb2R1" + 
+          "bGVMb2FkUmVxdWVzdBIsCgZoYW5kbGUYASACKAsyHC5ibmV0LnByb3RvY29s" + 
+          "LkNvbnRlbnRIYW5kbGUSCwoDa2V5GAIgAigMEg0KBWlucHV0GAMgAigMIiUK" + 
+          "FU1lbU1vZHVsZUxvYWRSZXNwb25zZRIMCgRkYXRhGAEgAigMMpYFChRBdXRo" + 
+          "ZW50aWNhdGlvbkNsaWVudBJfCgpNb2R1bGVMb2FkEi8uYm5ldC5wcm90b2Nv" + 
+          "bC5hdXRoZW50aWNhdGlvbi5Nb2R1bGVMb2FkUmVxdWVzdBoaLmJuZXQucHJv" + 
+          "dG9jb2wuTk9fUkVTUE9OU0UiBIC1GAESYAoNTW9kdWxlTWVzc2FnZRIyLmJu" + 
+          "ZXQucHJvdG9jb2wuYXV0aGVudGljYXRpb24uTW9kdWxlTWVzc2FnZVJlcXVl" + 
+          "c3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYAhJuCg9BY2NvdW50U2V0" + 
+          "dGluZ3MSOS5ibmV0LnByb3RvY29sLmF1dGhlbnRpY2F0aW9uLkFjY291bnRT" + 
+          "ZXR0aW5nc05vdGlmaWNhdGlvbhoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9O" + 
+          "U0UiBIC1GAMSbQoRU2VydmVyU3RhdGVDaGFuZ2USNi5ibmV0LnByb3RvY29s" + 
+          "LmF1dGhlbnRpY2F0aW9uLlNlcnZlclN0YXRlQ2hhbmdlUmVxdWVzdBoaLmJu" + 
+          "ZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAQSXAoNTG9nb25Db21wbGV0" + 
+          "ZRIpLmJuZXQucHJvdG9jb2wuYXV0aGVudGljYXRpb24uTG9nb25SZXN1bHQa" + 
+          "Gi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgFEn4KDU1lbU1vZHVs" + 
+          "ZUxvYWQSMi5ibmV0LnByb3RvY29sLmF1dGhlbnRpY2F0aW9uLk1lbU1vZHVs" + 
+          "ZUxvYWRSZXF1ZXN0GjMuYm5ldC5wcm90b2NvbC5hdXRoZW50aWNhdGlvbi5N" + 
+          "ZW1Nb2R1bGVMb2FkUmVzcG9uc2UiBIC1GAYy9AIKFEF1dGhlbnRpY2F0aW9u" + 
+          "U2VydmVyElAKBUxvZ29uEiouYm5ldC5wcm90b2NvbC5hdXRoZW50aWNhdGlv" + 
+          "bi5Mb2dvblJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYARJd" + 
+          "CgxNb2R1bGVOb3RpZnkSMC5ibmV0LnByb3RvY29sLmF1dGhlbnRpY2F0aW9u" + 
+          "Lk1vZHVsZU5vdGlmaWNhdGlvbhoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSA" + 
+          "tRgCEmAKDU1vZHVsZU1lc3NhZ2USMi5ibmV0LnByb3RvY29sLmF1dGhlbnRp" + 
+          "Y2F0aW9uLk1vZHVsZU1lc3NhZ2VSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5O" + 
+          "b0RhdGEiBIC1GAMSSQoRU2VsZWN0R2FtZUFjY291bnQSFy5ibmV0LnByb3Rv" + 
+          "Y29sLkVudGl0eUlkGhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GARCA4AB" + 
+          "AA==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_authentication_ModuleLoadRequest__Descriptor = Descriptor.MessageTypes[0];
@@ -98,7 +109,7 @@ namespace bnet.protocol.authentication {
         internal__static_bnet_protocol_authentication_LogonRequest__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_authentication_LogonRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonRequest, global::bnet.protocol.authentication.LogonRequest.Builder>(internal__static_bnet_protocol_authentication_LogonRequest__Descriptor,
-                new string[] { "Program", "Platform", "Locale", "Email", "Version", "ApplicationVersion", });
+                new string[] { "Program", "Platform", "Locale", "Email", "Version", "ApplicationVersion", "CookieOnly", });
         internal__static_bnet_protocol_authentication_LogonResult__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_authentication_LogonResult__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonResult, global::bnet.protocol.authentication.LogonResult.Builder>(internal__static_bnet_protocol_authentication_LogonResult__Descriptor,
@@ -111,6 +122,14 @@ namespace bnet.protocol.authentication {
         internal__static_bnet_protocol_authentication_ServerStateChangeRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ServerStateChangeRequest, global::bnet.protocol.authentication.ServerStateChangeRequest.Builder>(internal__static_bnet_protocol_authentication_ServerStateChangeRequest__Descriptor,
                 new string[] { "State", "EventTime", });
+        internal__static_bnet_protocol_authentication_MemModuleLoadRequest__Descriptor = Descriptor.MessageTypes[7];
+        internal__static_bnet_protocol_authentication_MemModuleLoadRequest__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.MemModuleLoadRequest, global::bnet.protocol.authentication.MemModuleLoadRequest.Builder>(internal__static_bnet_protocol_authentication_MemModuleLoadRequest__Descriptor,
+                new string[] { "Handle", "Key", "Input", });
+        internal__static_bnet_protocol_authentication_MemModuleLoadResponse__Descriptor = Descriptor.MessageTypes[8];
+        internal__static_bnet_protocol_authentication_MemModuleLoadResponse__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.MemModuleLoadResponse, global::bnet.protocol.authentication.MemModuleLoadResponse.Builder>(internal__static_bnet_protocol_authentication_MemModuleLoadResponse__Descriptor,
+                new string[] { "Data", });
         pb::ExtensionRegistry registry = pb::ExtensionRegistry.CreateInstance();
         RegisterAllExtensions(registry);
         global::bnet.protocol.account.AccountTypes.RegisterAllExtensions(registry);
@@ -1118,8 +1137,8 @@ namespace bnet.protocol.authentication {
   public sealed partial class LogonRequest : pb::GeneratedMessage<LogonRequest, LogonRequest.Builder> {
     private LogonRequest() { }
     private static readonly LogonRequest defaultInstance = new LogonRequest().MakeReadOnly();
-    private static readonly string[] _logonRequestFieldNames = new string[] { "application_version", "email", "locale", "platform", "program", "version" };
-    private static readonly uint[] _logonRequestFieldTags = new uint[] { 48, 34, 26, 18, 10, 42 };
+    private static readonly string[] _logonRequestFieldNames = new string[] { "application_version", "cookie_only", "email", "locale", "platform", "program", "version" };
+    private static readonly uint[] _logonRequestFieldTags = new uint[] { 48, 56, 34, 26, 18, 10, 42 };
     public static LogonRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1200,6 +1219,16 @@ namespace bnet.protocol.authentication {
       get { return applicationVersion_; }
     }
     
+    public const int CookieOnlyFieldNumber = 7;
+    private bool hasCookieOnly;
+    private bool cookieOnly_;
+    public bool HasCookieOnly {
+      get { return hasCookieOnly; }
+    }
+    public bool CookieOnly {
+      get { return cookieOnly_; }
+    }
+    
     public override bool IsInitialized {
       get {
         return true;
@@ -1210,22 +1239,25 @@ namespace bnet.protocol.authentication {
       int size = SerializedSize;
       string[] field_names = _logonRequestFieldNames;
       if (hasProgram) {
-        output.WriteString(1, field_names[4], Program);
+        output.WriteString(1, field_names[5], Program);
       }
       if (hasPlatform) {
-        output.WriteString(2, field_names[3], Platform);
+        output.WriteString(2, field_names[4], Platform);
       }
       if (hasLocale) {
-        output.WriteString(3, field_names[2], Locale);
+        output.WriteString(3, field_names[3], Locale);
       }
       if (hasEmail) {
-        output.WriteString(4, field_names[1], Email);
+        output.WriteString(4, field_names[2], Email);
       }
       if (hasVersion) {
-        output.WriteString(5, field_names[5], Version);
+        output.WriteString(5, field_names[6], Version);
       }
       if (hasApplicationVersion) {
         output.WriteInt32(6, field_names[0], ApplicationVersion);
+      }
+      if (hasCookieOnly) {
+        output.WriteBool(7, field_names[1], CookieOnly);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1254,6 +1286,9 @@ namespace bnet.protocol.authentication {
         }
         if (hasApplicationVersion) {
           size += pb::CodedOutputStream.ComputeInt32Size(6, ApplicationVersion);
+        }
+        if (hasCookieOnly) {
+          size += pb::CodedOutputStream.ComputeBoolSize(7, CookieOnly);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1399,6 +1434,9 @@ namespace bnet.protocol.authentication {
         if (other.HasApplicationVersion) {
           ApplicationVersion = other.ApplicationVersion;
         }
+        if (other.HasCookieOnly) {
+          CookieOnly = other.CookieOnly;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1464,6 +1502,10 @@ namespace bnet.protocol.authentication {
             }
             case 48: {
               result.hasApplicationVersion = input.ReadInt32(ref result.applicationVersion_);
+              break;
+            }
+            case 56: {
+              result.hasCookieOnly = input.ReadBool(ref result.cookieOnly_);
               break;
             }
           }
@@ -1598,6 +1640,26 @@ namespace bnet.protocol.authentication {
         PrepareBuilder();
         result.hasApplicationVersion = false;
         result.applicationVersion_ = 0;
+        return this;
+      }
+      
+      public bool HasCookieOnly {
+        get { return result.hasCookieOnly; }
+      }
+      public bool CookieOnly {
+        get { return result.CookieOnly; }
+        set { SetCookieOnly(value); }
+      }
+      public Builder SetCookieOnly(bool value) {
+        PrepareBuilder();
+        result.hasCookieOnly = true;
+        result.cookieOnly_ = value;
+        return this;
+      }
+      public Builder ClearCookieOnly() {
+        PrepareBuilder();
+        result.hasCookieOnly = false;
+        result.cookieOnly_ = false;
         return this;
       }
     }
@@ -2820,6 +2882,673 @@ namespace bnet.protocol.authentication {
     }
   }
   
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class MemModuleLoadRequest : pb::GeneratedMessage<MemModuleLoadRequest, MemModuleLoadRequest.Builder> {
+    private MemModuleLoadRequest() { }
+    private static readonly MemModuleLoadRequest defaultInstance = new MemModuleLoadRequest().MakeReadOnly();
+    private static readonly string[] _memModuleLoadRequestFieldNames = new string[] { "handle", "input", "key" };
+    private static readonly uint[] _memModuleLoadRequestFieldTags = new uint[] { 10, 26, 18 };
+    public static MemModuleLoadRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override MemModuleLoadRequest DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override MemModuleLoadRequest ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_MemModuleLoadRequest__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<MemModuleLoadRequest, MemModuleLoadRequest.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_MemModuleLoadRequest__FieldAccessorTable; }
+    }
+    
+    public const int HandleFieldNumber = 1;
+    private bool hasHandle;
+    private global::bnet.protocol.ContentHandle handle_;
+    public bool HasHandle {
+      get { return hasHandle; }
+    }
+    public global::bnet.protocol.ContentHandle Handle {
+      get { return handle_ ?? global::bnet.protocol.ContentHandle.DefaultInstance; }
+    }
+    
+    public const int KeyFieldNumber = 2;
+    private bool hasKey;
+    private pb::ByteString key_ = pb::ByteString.Empty;
+    public bool HasKey {
+      get { return hasKey; }
+    }
+    public pb::ByteString Key {
+      get { return key_; }
+    }
+    
+    public const int InputFieldNumber = 3;
+    private bool hasInput;
+    private pb::ByteString input_ = pb::ByteString.Empty;
+    public bool HasInput {
+      get { return hasInput; }
+    }
+    public pb::ByteString Input {
+      get { return input_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasHandle) return false;
+        if (!hasKey) return false;
+        if (!hasInput) return false;
+        if (!Handle.IsInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _memModuleLoadRequestFieldNames;
+      if (hasHandle) {
+        output.WriteMessage(1, field_names[0], Handle);
+      }
+      if (hasKey) {
+        output.WriteBytes(2, field_names[2], Key);
+      }
+      if (hasInput) {
+        output.WriteBytes(3, field_names[1], Input);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasHandle) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, Handle);
+        }
+        if (hasKey) {
+          size += pb::CodedOutputStream.ComputeBytesSize(2, Key);
+        }
+        if (hasInput) {
+          size += pb::CodedOutputStream.ComputeBytesSize(3, Input);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static MemModuleLoadRequest ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static MemModuleLoadRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static MemModuleLoadRequest ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static MemModuleLoadRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static MemModuleLoadRequest ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static MemModuleLoadRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static MemModuleLoadRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static MemModuleLoadRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static MemModuleLoadRequest ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static MemModuleLoadRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private MemModuleLoadRequest MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(MemModuleLoadRequest prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<MemModuleLoadRequest, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(MemModuleLoadRequest cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private MemModuleLoadRequest result;
+      
+      private MemModuleLoadRequest PrepareBuilder() {
+        if (resultIsReadOnly) {
+          MemModuleLoadRequest original = result;
+          result = new MemModuleLoadRequest();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override MemModuleLoadRequest MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.authentication.MemModuleLoadRequest.Descriptor; }
+      }
+      
+      public override MemModuleLoadRequest DefaultInstanceForType {
+        get { return global::bnet.protocol.authentication.MemModuleLoadRequest.DefaultInstance; }
+      }
+      
+      public override MemModuleLoadRequest BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is MemModuleLoadRequest) {
+          return MergeFrom((MemModuleLoadRequest) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(MemModuleLoadRequest other) {
+        if (other == global::bnet.protocol.authentication.MemModuleLoadRequest.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasHandle) {
+          MergeHandle(other.Handle);
+        }
+        if (other.HasKey) {
+          Key = other.Key;
+        }
+        if (other.HasInput) {
+          Input = other.Input;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_memModuleLoadRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _memModuleLoadRequestFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::bnet.protocol.ContentHandle.Builder subBuilder = global::bnet.protocol.ContentHandle.CreateBuilder();
+              if (result.hasHandle) {
+                subBuilder.MergeFrom(Handle);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              Handle = subBuilder.BuildPartial();
+              break;
+            }
+            case 18: {
+              result.hasKey = input.ReadBytes(ref result.key_);
+              break;
+            }
+            case 26: {
+              result.hasInput = input.ReadBytes(ref result.input_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasHandle {
+       get { return result.hasHandle; }
+      }
+      public global::bnet.protocol.ContentHandle Handle {
+        get { return result.Handle; }
+        set { SetHandle(value); }
+      }
+      public Builder SetHandle(global::bnet.protocol.ContentHandle value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasHandle = true;
+        result.handle_ = value;
+        return this;
+      }
+      public Builder SetHandle(global::bnet.protocol.ContentHandle.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasHandle = true;
+        result.handle_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeHandle(global::bnet.protocol.ContentHandle value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasHandle &&
+            result.handle_ != global::bnet.protocol.ContentHandle.DefaultInstance) {
+            result.handle_ = global::bnet.protocol.ContentHandle.CreateBuilder(result.handle_).MergeFrom(value).BuildPartial();
+        } else {
+          result.handle_ = value;
+        }
+        result.hasHandle = true;
+        return this;
+      }
+      public Builder ClearHandle() {
+        PrepareBuilder();
+        result.hasHandle = false;
+        result.handle_ = null;
+        return this;
+      }
+      
+      public bool HasKey {
+        get { return result.hasKey; }
+      }
+      public pb::ByteString Key {
+        get { return result.Key; }
+        set { SetKey(value); }
+      }
+      public Builder SetKey(pb::ByteString value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasKey = true;
+        result.key_ = value;
+        return this;
+      }
+      public Builder ClearKey() {
+        PrepareBuilder();
+        result.hasKey = false;
+        result.key_ = pb::ByteString.Empty;
+        return this;
+      }
+      
+      public bool HasInput {
+        get { return result.hasInput; }
+      }
+      public pb::ByteString Input {
+        get { return result.Input; }
+        set { SetInput(value); }
+      }
+      public Builder SetInput(pb::ByteString value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasInput = true;
+        result.input_ = value;
+        return this;
+      }
+      public Builder ClearInput() {
+        PrepareBuilder();
+        result.hasInput = false;
+        result.input_ = pb::ByteString.Empty;
+        return this;
+      }
+    }
+    static MemModuleLoadRequest() {
+      object.ReferenceEquals(global::bnet.protocol.authentication.AuthenticationService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class MemModuleLoadResponse : pb::GeneratedMessage<MemModuleLoadResponse, MemModuleLoadResponse.Builder> {
+    private MemModuleLoadResponse() { }
+    private static readonly MemModuleLoadResponse defaultInstance = new MemModuleLoadResponse().MakeReadOnly();
+    private static readonly string[] _memModuleLoadResponseFieldNames = new string[] { "data" };
+    private static readonly uint[] _memModuleLoadResponseFieldTags = new uint[] { 10 };
+    public static MemModuleLoadResponse DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override MemModuleLoadResponse DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override MemModuleLoadResponse ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_MemModuleLoadResponse__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<MemModuleLoadResponse, MemModuleLoadResponse.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_MemModuleLoadResponse__FieldAccessorTable; }
+    }
+    
+    public const int DataFieldNumber = 1;
+    private bool hasData;
+    private pb::ByteString data_ = pb::ByteString.Empty;
+    public bool HasData {
+      get { return hasData; }
+    }
+    public pb::ByteString Data {
+      get { return data_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasData) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _memModuleLoadResponseFieldNames;
+      if (hasData) {
+        output.WriteBytes(1, field_names[0], Data);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasData) {
+          size += pb::CodedOutputStream.ComputeBytesSize(1, Data);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static MemModuleLoadResponse ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static MemModuleLoadResponse ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static MemModuleLoadResponse ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static MemModuleLoadResponse ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static MemModuleLoadResponse ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static MemModuleLoadResponse ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static MemModuleLoadResponse ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static MemModuleLoadResponse ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static MemModuleLoadResponse ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static MemModuleLoadResponse ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private MemModuleLoadResponse MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(MemModuleLoadResponse prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<MemModuleLoadResponse, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(MemModuleLoadResponse cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private MemModuleLoadResponse result;
+      
+      private MemModuleLoadResponse PrepareBuilder() {
+        if (resultIsReadOnly) {
+          MemModuleLoadResponse original = result;
+          result = new MemModuleLoadResponse();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override MemModuleLoadResponse MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.authentication.MemModuleLoadResponse.Descriptor; }
+      }
+      
+      public override MemModuleLoadResponse DefaultInstanceForType {
+        get { return global::bnet.protocol.authentication.MemModuleLoadResponse.DefaultInstance; }
+      }
+      
+      public override MemModuleLoadResponse BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is MemModuleLoadResponse) {
+          return MergeFrom((MemModuleLoadResponse) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(MemModuleLoadResponse other) {
+        if (other == global::bnet.protocol.authentication.MemModuleLoadResponse.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasData) {
+          Data = other.Data;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_memModuleLoadResponseFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _memModuleLoadResponseFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              result.hasData = input.ReadBytes(ref result.data_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasData {
+        get { return result.hasData; }
+      }
+      public pb::ByteString Data {
+        get { return result.Data; }
+        set { SetData(value); }
+      }
+      public Builder SetData(pb::ByteString value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasData = true;
+        result.data_ = value;
+        return this;
+      }
+      public Builder ClearData() {
+        PrepareBuilder();
+        result.hasData = false;
+        result.data_ = pb::ByteString.Empty;
+        return this;
+      }
+    }
+    static MemModuleLoadResponse() {
+      object.ReferenceEquals(global::bnet.protocol.authentication.AuthenticationService.Descriptor, null);
+    }
+  }
+  
   #endregion
   
   #region Services
@@ -2847,6 +3576,10 @@ namespace bnet.protocol.authentication {
         pb::IRpcController controller,
         global::bnet.protocol.authentication.LogonResult request,
         global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
+    public abstract void MemModuleLoad(
+        pb::IRpcController controller,
+        global::bnet.protocol.authentication.MemModuleLoadRequest request,
+        global::System.Action<global::bnet.protocol.authentication.MemModuleLoadResponse> done);
     
     public static pbd::ServiceDescriptor Descriptor {
       get { return AuthenticationService.Descriptor.Services[0]; }
@@ -2890,6 +3623,11 @@ namespace bnet.protocol.authentication {
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
               done));
           return;
+        case 5:
+          this.MemModuleLoad(controller, (global::bnet.protocol.authentication.MemModuleLoadRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.authentication.MemModuleLoadResponse>(
+              done));
+          return;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2911,6 +3649,8 @@ namespace bnet.protocol.authentication {
           return global::bnet.protocol.authentication.ServerStateChangeRequest.DefaultInstance;
         case 4:
           return global::bnet.protocol.authentication.LogonResult.DefaultInstance;
+        case 5:
+          return global::bnet.protocol.authentication.MemModuleLoadRequest.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2932,6 +3672,8 @@ namespace bnet.protocol.authentication {
           return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         case 4:
           return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
+        case 5:
+          return global::bnet.protocol.authentication.MemModuleLoadResponse.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -2998,6 +3740,15 @@ namespace bnet.protocol.authentication {
         channel.CallMethod(Descriptor.Methods[4],
             controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
+      }
+      
+      public override void MemModuleLoad(
+          pb::IRpcController controller,
+          global::bnet.protocol.authentication.MemModuleLoadRequest request,
+          global::System.Action<global::bnet.protocol.authentication.MemModuleLoadResponse> done) {
+        channel.CallMethod(Descriptor.Methods[5],
+            controller, request, global::bnet.protocol.authentication.MemModuleLoadResponse.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.authentication.MemModuleLoadResponse, global::bnet.protocol.authentication.MemModuleLoadResponse.Builder>(done, global::bnet.protocol.authentication.MemModuleLoadResponse.DefaultInstance));
       }
     }
   }
