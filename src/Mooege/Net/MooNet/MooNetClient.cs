@@ -537,21 +537,13 @@ namespace Mooege.Net.MooNet
 
             var logonResponseBuilder = bnet.protocol.authentication.LogonResult.CreateBuilder();
 
-            // retail client somehow doesn't like our supplied bnet-entityid's for account and game account.
-            // below i hardcoded values from a proper dump and client doesn't disconnect but hang in the step now. /raist.
+            logonResponseBuilder.SetAccount(this.Account.BnetEntityId);
+            logonResponseBuilder.SetErrorCode(0);
 
-            //logonResponseBuilder.SetAccount(this.Account.BnetEntityId);
-            //logonResponseBuilder.SetErrorCode(0);
-
-            //foreach (var gameAccount in this.Account.GameAccounts)
-            //{
-            //    logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
-            //}
-
-            // hardcoded values from proper dump /raist.
-            logonResponseBuilder.SetAccount(
-                bnet.protocol.EntityId.CreateBuilder().SetHigh(72057594037927936).SetLow(79955545).Build())
-                .AddGameAccount(bnet.protocol.EntityId.CreateBuilder().SetHigh(144115192370840627).SetLow(8805124).Build());
+            foreach (var gameAccount in this.Account.GameAccounts)
+            {
+                logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
+            }
 
             this.MakeRPC(() =>
                 bnet.protocol.authentication.AuthenticationClient.CreateStub(this).LogonComplete(null, logonResponseBuilder.Build(), callback => { }));
