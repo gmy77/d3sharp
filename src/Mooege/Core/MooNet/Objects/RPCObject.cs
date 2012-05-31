@@ -70,6 +70,20 @@ namespace Mooege.Core.MooNet.Objects
         /// <param name="remoteObjectId">The client's dynamic ID.</param>
         public void AddSubscriber(MooNetClient client, ulong remoteObjectId)
         {
+            // [D3Inferno]
+            // Remove Subscribers that have been disconnected.
+            // Apparently the RPCObject is not being cleaned up properly.
+            // See the comment at the top for more info.
+            // Conver to an Array so we can remove as we iterate.
+            foreach (var subscriber in this.Subscribers.ToArray())
+            {
+                if (!subscriber.Connection.IsConnected)
+                {
+                    Logger.Warn("Removing disconnected subscriber {0}", subscriber);
+                    this.Subscribers.Remove(subscriber);
+                }
+            }
+
             // Map the subscriber's dynamic ID to to our dynamic ID so we know how to translate later on when the object makes a notify call
             client.MapLocalObjectID(this.DynamicId, remoteObjectId);
             this.Subscribers.Add(client);

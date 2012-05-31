@@ -34,62 +34,23 @@ namespace OpenSSL
 	/// </summary>
 	public enum CipherAlgorithmType
 	{
-		/// <summary>
-		/// 
-		/// </summary>
 		None,
-		/// <summary>
-		/// 
-		/// </summary>
 		Rc2,
-		/// <summary>
-		/// 
-		/// </summary>
 		Rc4,
-		/// <summary>
-		/// 
-		/// </summary>
 		Des,
-		/// <summary>
-		/// 
-		/// </summary>
 		Idea,
-		/// <summary>
-		/// 
-		/// </summary>
 		Fortezza,
-		/// <summary>
-		/// 
-		/// </summary>
 		Camellia128,
-		/// <summary>
-		/// 
-		/// </summary>
 		Camellia256,
-		/// <summary>
-		/// 
-		/// </summary>
 		Seed,
-		/// <summary>
-		/// 
-		/// </summary>
 		TripleDes,
-		/// <summary>
-		/// 
-		/// </summary>
 		Aes,
-		/// <summary>
-		/// 
-		/// </summary>
 		Aes128,
-		/// <summary>
-		/// 
-		/// </summary>
 		Aes192,
-		/// <summary>
-		/// 
-		/// </summary>
-		Aes256
+		Aes256,
+        eGOST2814789CNT,
+        Aes128GCM,
+        Aes256GCM
 	}
 
 	/// <summary>
@@ -97,18 +58,13 @@ namespace OpenSSL
 	/// </summary>
 	public enum HashAlgorithmType
 	{
-		/// <summary>
-		/// 
-		/// </summary>
 		None,
-		/// <summary>
-		/// 
-		/// </summary>
 		Md5,
-		/// <summary>
-		/// 
-		/// </summary>
-		Sha1
+		Sha1,
+        Gost94,
+        Gost89MAC,
+        Sha256,
+        Sha384
 	}
 
 	/// <summary>
@@ -116,34 +72,16 @@ namespace OpenSSL
 	/// </summary>
 	public enum ExchangeAlgorithmType
 	{
-		/// <summary>
-		/// 
-		/// </summary>
 		None,
-		/// <summary>
-		/// 
-		/// </summary>
 		RsaSign,
-		/// <summary>
-		/// 
-		/// </summary>
 		RsaKeyX,
-		/// <summary>
-		/// 
-		/// </summary>
 		DiffieHellman,
-		/// <summary>
-		/// 
-		/// </summary>
 		Kerberos,
-		/// <summary>
-		/// 
-		/// </summary>
 		Fortezza,
-		/// <summary>
-		/// 
-		/// </summary>
-		ECDiffieHellman
+		ECDiffieHellman,
+        PSK,
+        GOST,
+        SRP
 	}
 
 	/// <summary>
@@ -215,7 +153,9 @@ namespace OpenSSL
 		Dss,
 		DiffieHellman,
 		Kerberos,
-		ECDsa
+		ECDsa,
+        PSK,
+        GOST
 	}
 
 	enum HandshakeState

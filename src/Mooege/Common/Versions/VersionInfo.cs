@@ -94,6 +94,16 @@ namespace Mooege.Common.Versions
                 { MooNetClient.ClientPlatform.Mac,"bcfa324ab555fc66614976011d018d2be2b9dc23d0b54d94a3bd7d12472aa107".ToByteArray() },
             };
 
+            public static Dictionary<MooNetClient.ClientPlatform, byte[]> AgreementHashMap = new Dictionary<MooNetClient.ClientPlatform, byte[]>()
+            {
+                { MooNetClient.ClientPlatform.Win,"41686a009b345b9cbe622ded9c669373950a2969411012a12f7eaac7ea9826ed".ToByteArray() },
+                { MooNetClient.ClientPlatform.Mac,"41686a009b345b9cbe622ded9c669373950a2969411012a12f7eaac7ea9826ed".ToByteArray() },
+            };
+
+            public static byte[] TOS = "00736F74006167726500005553014970E37CCD158A64A2844D6D4C05FC1697988A617E049BB2E0407D71B6C6F2".ToByteArray();
+            public static byte[] EULA = "00616C75656167726500005553DDD1D77970291A4E8A64BB4FE25B2EA2D69D8915D35D53679AE9FDE5EAE47ECC".ToByteArray();
+            public static byte[] RMAH = "0068616D72616772650000555398A3FC047004D6D4A0A1519A874AC9B1FC5FBD62C3EAA23188E095D6793537D7".ToByteArray();
+
             public static Dictionary<string, uint> Regions = new Dictionary<string, uint>()
             {
                 { "US", 0x5553 },
@@ -159,7 +169,7 @@ namespace Mooege.Common.Versions
             public const int ProtocolHash = 0x33CABB38;
 
             // old hashes
-            // 0x33CABB38                   // 9183, 9327, 9359
+            // 0x33CABB38                   // 9183, 9327, 9359, 9749
             // unchecked((int)0x9726E2E3)   // 8896
             // 0x375AE194                   // 8815
             // unchecked((int)0xA8F17EC5)   // 8610

@@ -41,6 +41,27 @@ namespace OpenSSL
 		// Internal callback for client certificate selection
 		protected ClientCertCallbackHandler internalCertificateSelectionCallback;
 
+        // Internal callbacks for PSK
+        protected PskClientCallbackHandler internalPskClientCallback;
+        // Constructor to use for PSK 
+        public SslStreamClient(Stream stream,
+            bool ownStream,
+            string targetHost,
+            string pskCiphers,
+            string pskIdentity,
+            byte[] pskPsk)
+            : base(stream, ownStream)
+        {
+            this.targetHost = targetHost;
+            this.pskCiphers = pskCiphers;
+            this.pskIdentity = pskIdentity;
+            this.pskPsk = pskPsk;
+
+            this.internalPskClientCallback = new PskClientCallbackHandler(InternalPskClientCallback);
+
+            InitializeClientContextUsingPsk(this.pskCiphers);
+        }
+        
 		public SslStreamClient(Stream stream,
 			bool ownStream,
 			string targetHost,
@@ -109,6 +130,37 @@ namespace OpenSSL
 			read_bio.SetClose(BIO.CloseOption.Close);
 			write_bio.SetClose(BIO.CloseOption.Close);
 			// Set the Ssl object into Client mode
+			ssl.SetConnectState();
+		}
+
+        protected void InitializeClientContextUsingPsk(string pskCiphers)
+        {
+            // Initialize the context with the specified ssl version
+            //sslContext = new SslContext(SslMethod.SSLv23_client_method);
+            sslContext = new SslContext(SslMethod.TLSv1_client_method);
+            //sslContext = new SslContext(SslMethod.SSLv3_client_method);
+
+            // Remove support for protocols that should not be supported
+            sslContext.Options |= SslOptions.SSL_OP_NO_SSLv2;
+            sslContext.Options |= SslOptions.SSL_OP_NO_SSLv3;
+
+            // Set the enabled cipher list
+            // WARNING: Using PSK ciphers requires that the PSK callback be set and initialize the identity and psk value.
+            // Failure to do this will cause the PSK ciphers to be skipped when picking a shared cipher.
+            // The result will be an error because of "no shared ciphers".
+//            sslContext.SetCipherList("PSK-AES256-CBC-SHA:PSK-3DES-EDE-CBC-SHA:PSK-AES128-CBC-SHA:PSK-RC4-SHA");
+            sslContext.SetCipherList(pskCiphers);
+
+            // Set the PSK callbacks
+            sslContext.SetPskClientCallback(this.internalPskClientCallback);
+
+            // Set up the read/write bio's
+            read_bio = BIO.MemoryBuffer(false);
+            write_bio = BIO.MemoryBuffer(false);
+            ssl = new Ssl(sslContext);
+            ssl.SetBIO(read_bio, write_bio);
+            read_bio.SetClose(BIO.CloseOption.Close);
+            write_bio.SetClose(BIO.CloseOption.Close);
 			ssl.SetConnectState();
 		}
 
@@ -201,5 +253,14 @@ namespace OpenSSL
 
 			return nRet;
 		}
+
+        // PSK client callback
+        public int InternalPskClientCallback(Ssl ssl, String hint, out String identity, uint max_identity_len, out byte[] psk, uint max_psk_len)
+        {
+            identity = this.pskIdentity;
+            psk = this.pskPsk;
+
+            return 1; // success
+        }
 	}
 }
