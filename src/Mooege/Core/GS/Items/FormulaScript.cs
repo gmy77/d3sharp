@@ -25,7 +25,7 @@ using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Items
 {
-    static class FormulaScript
+    public static class FormulaScript
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 

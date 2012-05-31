@@ -75,20 +75,48 @@ namespace Mooege.Core.MooNet.Services
                         Logger.Error("Unknown command: {0} for Password module.", command);
                     break;
                 case MooNetClient.StreamedModule.Token:
-                    var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
-                        .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
-                            .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
-                            .SetUsage(0x61757468) // auth - RiskFingerprint.dll
-                            .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.RiskFingerprintHashMap[this.Client.Platform])))
-                        .SetMessage(ByteString.Empty)
-                        .Build();
 
-                    this.Client.LastRequestedModule = MooNetClient.StreamedModule.RiskFingerprint;
-                    this.Client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
+                    var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder();
+                    var moduleHandle = bnet.protocol.ContentHandle.CreateBuilder();
+                        moduleHandle.SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
+                            .SetUsage(0x61757468); // auth - RiskFingerprint.dll or Agreement.dll
+
+                    if (this.Client.HasAgreements())
+                    {
+                        moduleHandle.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AgreementHashMap[this.Client.Platform]));
+                        this.Client.LastRequestedModule = MooNetClient.StreamedModule.Agreement;
+                    }
+                    else
+                    {
+                        moduleHandle.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.RiskFingerprintHashMap[this.Client.Platform]));
+                        moduleLoadRequest.SetMessage(ByteString.Empty);
+                        this.Client.LastRequestedModule = MooNetClient.StreamedModule.RiskFingerprint;
+                    }
+
+                    moduleLoadRequest.SetModuleHandle(moduleHandle);
+                    this.Client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).ModuleLoad(null, moduleLoadRequest.Build(), ModuleLoadResponse));
                     break;
                 case MooNetClient.StreamedModule.RiskFingerprint:
                     Logger.Trace("Completing Authentication.");
                     this.Client.AuthenticationComplete();
+                    break;
+                case MooNetClient.StreamedModule.Agreement:
+                    switch (this.Client.LastAgreementSent)
+                    {
+                        case MooNetClient.AvailableAgreements.EULA:
+                            this.Client.Agreements.Add(MooNetClient.AvailableAgreements.EULA, true);
+                            break;
+                        case MooNetClient.AvailableAgreements.TOS:
+                            this.Client.Agreements.Add(MooNetClient.AvailableAgreements.TOS, true);
+                            break;
+                        case MooNetClient.AvailableAgreements.RMAH:
+                            this.Client.Agreements.Add(MooNetClient.AvailableAgreements.RMAH, true);
+                            break;
+                        default:
+                            Logger.Error("Unknown agreement.");
+                            break;
+                    }
+                    this.Client.SendAgreements();
                     break;
                 default:
                     Logger.Error("Unknown module message data.");
@@ -112,20 +140,35 @@ namespace Mooege.Core.MooNet.Services
 
             done(bnet.protocol.NoData.CreateBuilder().Build());
             this.Client.ClientModuleIds[this.Client.LastRequestedModule] = request.ModuleId;
-
+            var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder();
             switch (this.Client.LastRequestedModule)
             {
                 case MooNetClient.StreamedModule.Thumbprint:
-                    var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
-                        .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
+                    moduleLoadRequest.SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
                         .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
                         .SetUsage(0x61757468) // auth - password.dll
                         .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.PasswordHashMap[this.Client.Platform])))
-                        .SetMessage(ByteString.CopyFrom(AuthManager.OngoingAuthentications[this.Client].LogonChallenge))
-                        .Build();
+                        .SetMessage(ByteString.CopyFrom(AuthManager.OngoingAuthentications[this.Client].LogonChallenge));
 
                     this.Client.LastRequestedModule = MooNetClient.StreamedModule.Password;
-                    this.Client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
+                    this.Client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).ModuleLoad(null, moduleLoadRequest.Build(), ModuleLoadResponse));
+                    break;
+                case MooNetClient.StreamedModule.Agreement:
+                    if (this.Client.HasAgreements())
+                    {
+                        this.Client.SendAgreements();
+                    }
+                    else
+                    {
+                        moduleLoadRequest.SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
+                            .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
+                            .SetUsage(0x61757468) // auth - RiskFingerprint.dll
+                            .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.RiskFingerprintHashMap[this.Client.Platform])))
+                            .SetMessage(ByteString.Empty);
+
+                        this.Client.LastRequestedModule = MooNetClient.StreamedModule.RiskFingerprint;
+                        this.Client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this.Client).ModuleLoad(null, moduleLoadRequest.Build(), ModuleLoadResponse));
+                    }
                     break;
                 case MooNetClient.StreamedModule.Password:
                 case MooNetClient.StreamedModule.Token:

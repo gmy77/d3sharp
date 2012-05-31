@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.9558.*";
+            public const string Version = "1.9749.*";
         }
 
         /// <summary>
@@ -47,12 +47,13 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 9558;
+            public const int RequiredClientVersion = 9749;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
+                {"Aurora 8018401a9c_public", 9749},
                 {"Aurora 31c8df955a_public", 9558},
-                {"Aurora 8eac7d44dc_public", 9359}, //9327
+                {"Aurora 8eac7d44dc_public", 9359}, // also 9327
                 {"Aurora _public", 9183},
                 {"Aurora bcd3e50524_public", 8896},
                 {"Aurora 4a39a60e1b_public", 8815},
@@ -92,6 +93,16 @@ namespace Mooege.Common.Versions
                 { MooNetClient.ClientPlatform.Win,"bcfa324ab555fc66614976011d018d2be2b9dc23d0b54d94a3bd7d12472aa107".ToByteArray() },
                 { MooNetClient.ClientPlatform.Mac,"bcfa324ab555fc66614976011d018d2be2b9dc23d0b54d94a3bd7d12472aa107".ToByteArray() },
             };
+
+            public static Dictionary<MooNetClient.ClientPlatform, byte[]> AgreementHashMap = new Dictionary<MooNetClient.ClientPlatform, byte[]>()
+            {
+                { MooNetClient.ClientPlatform.Win,"41686a009b345b9cbe622ded9c669373950a2969411012a12f7eaac7ea9826ed".ToByteArray() },
+                { MooNetClient.ClientPlatform.Mac,"41686a009b345b9cbe622ded9c669373950a2969411012a12f7eaac7ea9826ed".ToByteArray() },
+            };
+
+            public static byte[] TOS = "00736F74006167726500005553014970E37CCD158A64A2844D6D4C05FC1697988A617E049BB2E0407D71B6C6F2".ToByteArray();
+            public static byte[] EULA = "00616C75656167726500005553DDD1D77970291A4E8A64BB4FE25B2EA2D69D8915D35D53679AE9FDE5EAE47ECC".ToByteArray();
+            public static byte[] RMAH = "0068616D72616772650000555398A3FC047004D6D4A0A1519A874AC9B1FC5FBD62C3EAA23188E095D6793537D7".ToByteArray();
 
             public static Dictionary<string, uint> Regions = new Dictionary<string, uint>()
             {
@@ -144,7 +155,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 9558;
+            public const int RequiredPatchVersion = 9749;
         }
 
         /// <summary>
@@ -158,7 +169,7 @@ namespace Mooege.Common.Versions
             public const int ProtocolHash = 0x33CABB38;
 
             // old hashes
-            // 0x33CABB38                   // 9183, 9327, 9359
+            // 0x33CABB38                   // 9183, 9327, 9359, 9749
             // unchecked((int)0x9726E2E3)   // 8896
             // 0x375AE194                   // 8815
             // unchecked((int)0xA8F17EC5)   // 8610
@@ -170,28 +181,29 @@ namespace Mooege.Common.Versions
             // 0x21EEE08D                   // 7446
 
             //This is the server version sent in VersionsMessage
-            public const string MajorVersion = "1.0.1";
-            public const string ServerBuild = "9558";
+            public const string MajorVersion = "1.0.2";
+            public const string ServerBuild = "9749";
             public const string VersionString = MajorVersion + ServerBuild;
 
             // old version strings.
+            // 1.0.2.9749   // 9749 Retail
             // 1.0.1.9558   // 9558 Retail
-            // 0.11.0.9359  // 9359 patch 18
-            // 0.11.0.9327  // 9327 patch 17
-            // 0.10.0.9236  // 9183 patch 16
-            // 0.9.0.8922   // 8896 patch 15
-            // 0.8.0.8834   // 8815 patch 14
-            // 0.7.0.8619   // 8610 patch 13
-            // 0.6.2.8392   // 8392 patch 12
-            // 0.6.1.8350   // 8350 patch 11
-            // 0.6.0.8318   // 8296 patch 10
-            // 0.5.1.8115   // 8101 patch 9
-            // 0.5.0.8059   // 8059 patch 8
-            // ??           // 7931 patch 7
-            // ??           // 7841 patch 6
-            // 0.3.1.7779   // 7728 patch 5
-            // 0.3.0.7484   // 7447 patch 4
-            // 0.3.0.7333   // 7733 patch 3
+            // 0.11.0.9359  // 9359 Beta Patch 18
+            // 0.11.0.9327  // 9327 Beta Patch 17
+            // 0.10.0.9236  // 9183 Beta Patch 16
+            // 0.9.0.8922   // 8896 Beta Patch 15
+            // 0.8.0.8834   // 8815 Beta Patch 14
+            // 0.7.0.8619   // 8610 Beta Patch 13
+            // 0.6.2.8392   // 8392 Beta Patch 12
+            // 0.6.1.8350   // 8350 Beta Patch 11
+            // 0.6.0.8318   // 8296 Beta Patch 10
+            // 0.5.1.8115   // 8101 Beta Patch 9
+            // 0.5.0.8059   // 8059 Beta Patch 8
+            // ??           // 7931 Beta Patch 7
+            // ??           // 7841 Beta Patch 6
+            // 0.3.1.7779   // 7728 Beta Patch 5
+            // 0.3.0.7484   // 7447 Beta Patch 4
+            // 0.3.0.7333   // 7733 Beta Patch 3
         }
     }
 }

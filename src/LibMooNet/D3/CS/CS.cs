@@ -42,32 +42,32 @@ namespace D3.CS {
           "CghDUy5wcm90bxIFRDMuQ1MaGUF0dHJpYnV0ZVNlcmlhbGl6ZXIucHJvdG8a" + 
           "C0l0ZW1zLnByb3RvGhNPbmxpbmVTZXJ2aWNlLnByb3RvGhJJdGVtQ3JhZnRp" + 
           "bmcucHJvdG8aCkhlcm8ucHJvdG8aDUFjY291bnQucHJvdG8aDVByb2ZpbGUu" + 
-          "cHJvdG8iqQIKB1Rvb2xUaXASKAoGaXRlbUlkGAEgAigLMhguRDMuT25saW5l" + 
+          "cHJvdG8ivgIKB1Rvb2xUaXASKAoGaXRlbUlkGAEgAigLMhguRDMuT25saW5l" + 
           "U2VydmljZS5JdGVtSWQSGAoQSXRlbVF1YWxpdHlMZXZlbBgCIAIoDRIMCgRO" + 
           "YW1lGAMgAigJEgwKBFR5cGUYBCACKAkSDwoHU2V0SXRlbRgFIAIoBRIOCgZG" + 
           "bGF2b3IYBiACKAkSDAoEQ29zdBgHIAIoCRISCgpEdXJhYmlsaXR5GAggAigJ" + 
           "EhEKCUNsYXNzUmVxcxgJIAIoCRIUCgxSZXF1aXJlbWVudHMYCiACKAkSEwoL" + 
           "RW5oYW5jZW1lbnQYCyACKAkSEgoKU3RhY2tDb3VudBgMIAIoBBISCgpOdW1T" + 
-          "b2NrZXRzGA0gAigNEhUKDUZpbGxlZFNvY2tldHMYDiACKA0iLwoLVG9vbHRp" + 
-          "cExpc3QSIAoIdG9vbHRpcHMYASADKAsyDi5EMy5DUy5Ub29sVGlwImUKCkZh" + 
-          "bGxlbkhlcm8SKAoHcHJvZmlsZRgBIAIoCzIXLkQzLlByb2ZpbGUuSGVyb1By" + 
-          "b2ZpbGUSHwoGZGlnZXN0GAIgAigLMg8uRDMuSGVyby5EaWdlc3QSDAoEdGlt" + 
-          "ZRgDIAIoCSKHAgoIU25hcHNob3QSDwoHdmVyc2lvbhgBIAIoBBIvCgpkZWZp" + 
-          "bml0aW9uGAIgAigLMhsuRDMuQWNjb3VudC5TYXZlZERlZmluaXRpb24SJwoF" + 
-          "aGVyb3MYAyADKAsyGC5EMy5IZXJvLlNhdmVkRGVmaW5pdGlvbhIzCg9hY2Nv" + 
-          "dW50X3Byb2ZpbGUYBCACKAsyGi5EMy5Qcm9maWxlLkFjY291bnRQcm9maWxl" + 
-          "EjIKDWhlcm9fcHJvZmlsZXMYBSACKAsyGy5EMy5Qcm9maWxlLkhlcm9Qcm9m" + 
-          "aWxlTGlzdBInCgxmYWxsZW5faGVyb3MYBiADKAsyES5EMy5DUy5GYWxsZW5I" + 
-          "ZXJvIkUKD1NuYXBzaG90VmVyc2lvbhIPCgd2ZXJzaW9uGAEgAigEEiEKCHNu" + 
-          "YXBzaG90GAIgAigLMg8uRDMuQ1MuU25hcHNob3QiPAoQU25hcHNob3RWZXJz" + 
-          "aW9ucxIoCgh2ZXJzaW9ucxgBIAMoCzIWLkQzLkNTLlNuYXBzaG90VmVyc2lv" + 
-          "bg==");
+          "b2NrZXRzGA0gAigNEhUKDUZpbGxlZFNvY2tldHMYDiACKA0SEwoLRGlzcGxh" + 
+          "eU5hbWUYDyACKAkiLwoLVG9vbHRpcExpc3QSIAoIdG9vbHRpcHMYASADKAsy" + 
+          "Di5EMy5DUy5Ub29sVGlwImUKCkZhbGxlbkhlcm8SKAoHcHJvZmlsZRgBIAIo" + 
+          "CzIXLkQzLlByb2ZpbGUuSGVyb1Byb2ZpbGUSHwoGZGlnZXN0GAIgAigLMg8u" + 
+          "RDMuSGVyby5EaWdlc3QSDAoEdGltZRgDIAIoCSKHAgoIU25hcHNob3QSDwoH" + 
+          "dmVyc2lvbhgBIAIoBBIvCgpkZWZpbml0aW9uGAIgAigLMhsuRDMuQWNjb3Vu" + 
+          "dC5TYXZlZERlZmluaXRpb24SJwoFaGVyb3MYAyADKAsyGC5EMy5IZXJvLlNh" + 
+          "dmVkRGVmaW5pdGlvbhIzCg9hY2NvdW50X3Byb2ZpbGUYBCACKAsyGi5EMy5Q" + 
+          "cm9maWxlLkFjY291bnRQcm9maWxlEjIKDWhlcm9fcHJvZmlsZXMYBSACKAsy" + 
+          "Gy5EMy5Qcm9maWxlLkhlcm9Qcm9maWxlTGlzdBInCgxmYWxsZW5faGVyb3MY" + 
+          "BiADKAsyES5EMy5DUy5GYWxsZW5IZXJvIkUKD1NuYXBzaG90VmVyc2lvbhIP" + 
+          "Cgd2ZXJzaW9uGAEgAigEEiEKCHNuYXBzaG90GAIgAigLMg8uRDMuQ1MuU25h" + 
+          "cHNob3QiPAoQU25hcHNob3RWZXJzaW9ucxIoCgh2ZXJzaW9ucxgBIAMoCzIW" + 
+          "LkQzLkNTLlNuYXBzaG90VmVyc2lvbg==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_CS_ToolTip__Descriptor = Descriptor.MessageTypes[0];
         internal__static_D3_CS_ToolTip__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.CS.ToolTip, global::D3.CS.ToolTip.Builder>(internal__static_D3_CS_ToolTip__Descriptor,
-                new string[] { "ItemId", "ItemQualityLevel", "Name", "Type", "SetItem", "Flavor", "Cost", "Durability", "ClassReqs", "Requirements", "Enhancement", "StackCount", "NumSockets", "FilledSockets", });
+                new string[] { "ItemId", "ItemQualityLevel", "Name", "Type", "SetItem", "Flavor", "Cost", "Durability", "ClassReqs", "Requirements", "Enhancement", "StackCount", "NumSockets", "FilledSockets", "DisplayName", });
         internal__static_D3_CS_TooltipList__Descriptor = Descriptor.MessageTypes[1];
         internal__static_D3_CS_TooltipList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.CS.TooltipList, global::D3.CS.TooltipList.Builder>(internal__static_D3_CS_TooltipList__Descriptor,
@@ -111,8 +111,8 @@ namespace D3.CS {
   public sealed partial class ToolTip : pb::GeneratedMessage<ToolTip, ToolTip.Builder> {
     private ToolTip() { }
     private static readonly ToolTip defaultInstance = new ToolTip().MakeReadOnly();
-    private static readonly string[] _toolTipFieldNames = new string[] { "ClassReqs", "Cost", "Durability", "Enhancement", "FilledSockets", "Flavor", "ItemQualityLevel", "Name", "NumSockets", "Requirements", "SetItem", "StackCount", "Type", "itemId" };
-    private static readonly uint[] _toolTipFieldTags = new uint[] { 74, 58, 66, 90, 112, 50, 16, 26, 104, 82, 40, 96, 34, 10 };
+    private static readonly string[] _toolTipFieldNames = new string[] { "ClassReqs", "Cost", "DisplayName", "Durability", "Enhancement", "FilledSockets", "Flavor", "ItemQualityLevel", "Name", "NumSockets", "Requirements", "SetItem", "StackCount", "Type", "itemId" };
+    private static readonly uint[] _toolTipFieldTags = new uint[] { 74, 58, 122, 66, 90, 112, 50, 16, 26, 104, 82, 40, 96, 34, 10 };
     public static ToolTip DefaultInstance {
       get { return defaultInstance; }
     }
@@ -273,6 +273,16 @@ namespace D3.CS {
       get { return filledSockets_; }
     }
     
+    public const int DisplayNameFieldNumber = 15;
+    private bool hasDisplayName;
+    private string displayName_ = "";
+    public bool HasDisplayName {
+      get { return hasDisplayName; }
+    }
+    public string DisplayName {
+      get { return displayName_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasItemId) return false;
@@ -289,6 +299,7 @@ namespace D3.CS {
         if (!hasStackCount) return false;
         if (!hasNumSockets) return false;
         if (!hasFilledSockets) return false;
+        if (!hasDisplayName) return false;
         if (!ItemId.IsInitialized) return false;
         return true;
       }
@@ -298,46 +309,49 @@ namespace D3.CS {
       int size = SerializedSize;
       string[] field_names = _toolTipFieldNames;
       if (hasItemId) {
-        output.WriteMessage(1, field_names[13], ItemId);
+        output.WriteMessage(1, field_names[14], ItemId);
       }
       if (hasItemQualityLevel) {
-        output.WriteUInt32(2, field_names[6], ItemQualityLevel);
+        output.WriteUInt32(2, field_names[7], ItemQualityLevel);
       }
       if (hasName) {
-        output.WriteString(3, field_names[7], Name);
+        output.WriteString(3, field_names[8], Name);
       }
       if (hasType) {
-        output.WriteString(4, field_names[12], Type);
+        output.WriteString(4, field_names[13], Type);
       }
       if (hasSetItem) {
-        output.WriteInt32(5, field_names[10], SetItem);
+        output.WriteInt32(5, field_names[11], SetItem);
       }
       if (hasFlavor) {
-        output.WriteString(6, field_names[5], Flavor);
+        output.WriteString(6, field_names[6], Flavor);
       }
       if (hasCost) {
         output.WriteString(7, field_names[1], Cost);
       }
       if (hasDurability) {
-        output.WriteString(8, field_names[2], Durability);
+        output.WriteString(8, field_names[3], Durability);
       }
       if (hasClassReqs) {
         output.WriteString(9, field_names[0], ClassReqs);
       }
       if (hasRequirements) {
-        output.WriteString(10, field_names[9], Requirements);
+        output.WriteString(10, field_names[10], Requirements);
       }
       if (hasEnhancement) {
-        output.WriteString(11, field_names[3], Enhancement);
+        output.WriteString(11, field_names[4], Enhancement);
       }
       if (hasStackCount) {
-        output.WriteUInt64(12, field_names[11], StackCount);
+        output.WriteUInt64(12, field_names[12], StackCount);
       }
       if (hasNumSockets) {
-        output.WriteUInt32(13, field_names[8], NumSockets);
+        output.WriteUInt32(13, field_names[9], NumSockets);
       }
       if (hasFilledSockets) {
-        output.WriteUInt32(14, field_names[4], FilledSockets);
+        output.WriteUInt32(14, field_names[5], FilledSockets);
+      }
+      if (hasDisplayName) {
+        output.WriteString(15, field_names[2], DisplayName);
       }
       UnknownFields.WriteTo(output);
     }
@@ -390,6 +404,9 @@ namespace D3.CS {
         }
         if (hasFilledSockets) {
           size += pb::CodedOutputStream.ComputeUInt32Size(14, FilledSockets);
+        }
+        if (hasDisplayName) {
+          size += pb::CodedOutputStream.ComputeStringSize(15, DisplayName);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -559,6 +576,9 @@ namespace D3.CS {
         if (other.HasFilledSockets) {
           FilledSockets = other.FilledSockets;
         }
+        if (other.HasDisplayName) {
+          DisplayName = other.DisplayName;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -661,6 +681,10 @@ namespace D3.CS {
             }
             case 112: {
               result.hasFilledSockets = input.ReadUInt32(ref result.filledSockets_);
+              break;
+            }
+            case 122: {
+              result.hasDisplayName = input.ReadString(ref result.displayName_);
               break;
             }
           }
@@ -978,6 +1002,27 @@ namespace D3.CS {
         PrepareBuilder();
         result.hasFilledSockets = false;
         result.filledSockets_ = 0;
+        return this;
+      }
+      
+      public bool HasDisplayName {
+        get { return result.hasDisplayName; }
+      }
+      public string DisplayName {
+        get { return result.DisplayName; }
+        set { SetDisplayName(value); }
+      }
+      public Builder SetDisplayName(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasDisplayName = true;
+        result.displayName_ = value;
+        return this;
+      }
+      public Builder ClearDisplayName() {
+        PrepareBuilder();
+        result.hasDisplayName = false;
+        result.displayName_ = "";
         return this;
       }
     }
