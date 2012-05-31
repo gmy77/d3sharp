@@ -104,7 +104,7 @@ namespace Mooege
             if (!DBSessions.AccountSession.Query<DBAccount>().Any())
             {
                 Logger.Info("Initing new database, creating first owner account (test@,123456)");
-                var account = AccountManager.CreateAccount("test@", "testpass", "test", Account.UserLevels.Owner);
+                var account = AccountManager.CreateAccount("test@", "123456", "test", Account.UserLevels.Owner);
                 var gameAccount = GameAccountManager.CreateGameAccount(account);
                 account.DBAccount.DBGameAccounts.Add(gameAccount.DBGameAccount);
                 account.SaveToDB();

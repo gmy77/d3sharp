@@ -217,8 +217,7 @@ namespace Mooege.Net.MooNet
 
         public bool HasAgreements()
         {
-            //Bypass agreements
-            //return false;
+            return false; // comment this line to enable EULA & TOS agreements.
 
             foreach (AvailableAgreements x in Enum.GetValues(typeof(AvailableAgreements)))
             {
@@ -394,14 +393,8 @@ namespace Mooege.Net.MooNet
             var serviceId = this.Services[serviceHash];
             var token = this._tokenCounter++;
 
-            if (NO_RESPONSE.Equals(responsePrototype))
-            {
-                Logger.Trace("The responsePrototype was NO_RESPONSE. Not adding it to RPCCallbacks.");
-            }
-            else
-            {
-            RPCCallbacks.Add(token, new RPCCallback(done, responsePrototype.WeakToBuilder()));
-            }
+            if (!NO_RESPONSE.Equals(responsePrototype)) // if expected responce is NoResponse, don't add the call to rpc-callbacks list.
+                RPCCallbacks.Add(token, new RPCCallback(done, responsePrototype.WeakToBuilder()));
 
             var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), (uint)token, this._listenerId, request);
             this.Connection.Send(packet);
@@ -543,12 +536,23 @@ namespace Mooege.Net.MooNet
             Logger.Trace("Sending logon response:");
 
             var logonResponseBuilder = bnet.protocol.authentication.LogonResult.CreateBuilder();
-            logonResponseBuilder.SetAccount(this.Account.BnetEntityId);
-            logonResponseBuilder.SetErrorCode(0);
-            foreach (var gameAccount in this.Account.GameAccounts)
-            {
-                logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
-            }
+
+            // retail client somehow doesn't like our supplied bnet-entityid's for account and game account.
+            // below i hardcoded values from a proper dump and client doesn't disconnect but hang in the step now. /raist.
+
+            //logonResponseBuilder.SetAccount(this.Account.BnetEntityId);
+            //logonResponseBuilder.SetErrorCode(0);
+
+            //foreach (var gameAccount in this.Account.GameAccounts)
+            //{
+            //    logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
+            //}
+
+            // hardcoded values from proper dump /raist.
+            logonResponseBuilder.SetAccount(
+                bnet.protocol.EntityId.CreateBuilder().SetHigh(72057594037927936).SetLow(79955545).Build())
+                .AddGameAccount(bnet.protocol.EntityId.CreateBuilder().SetHigh(144115192370840627).SetLow(8805124).Build());
+
             this.MakeRPC(() =>
                 bnet.protocol.authentication.AuthenticationClient.CreateStub(this).LogonComplete(null, logonResponseBuilder.Build(), callback => { }));
 

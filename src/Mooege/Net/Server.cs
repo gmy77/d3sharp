@@ -32,7 +32,7 @@ namespace Mooege.Net
         public int Port { get; private set; }
 
         protected Socket Listener;
-//        protected Dictionary<Socket, IConnection> Connections = new Dictionary<Socket, IConnection>();
+        // protected Dictionary<Socket, IConnection> Connections = new Dictionary<Socket, IConnection>();
         protected List<IConnection> Connections = new List<IConnection>();
         protected object ConnectionLock = new object();
 
@@ -140,9 +140,6 @@ namespace Mooege.Net
 
                 if (bytesRecv > 0)
                 {
-                    // [D3Inferno]
-                    Console.WriteLine("[Server] bytesRecv: {0}\n{1}", bytesRecv, connection.RecvBuffer.Enumerate(0, bytesRecv).ToArray().ToHexString());
-
                     OnDataReceived(new ConnectionDataEventArgs(connection, connection.RecvBuffer.Enumerate(0, bytesRecv))); // Raise the DataReceived event.
 
                     // [D3Inferno]
@@ -170,16 +167,9 @@ namespace Mooege.Net
                     {
                         // Begin receiving again on the socket, if it is connected.
                         if (connection.IsConnected)
-                        {
-                            // [D3Inferno]
-                            Console.WriteLine("[Server] connection.BeginReceive");
                             connection.BeginReceive(ReceiveCallback, connection);
-                        }
                         else
-                        {
-                            // [D3Inferno]
-                            Console.WriteLine("[Server] Connection is closed!");
-                        }
+                            Logger.Trace("Connection closed:" + connection.RemoteEndPoint.Address);
                     }
                     else
                     {
@@ -206,8 +196,7 @@ namespace Mooege.Net
         // If Tls was successful, it will now be handled by the SslStream.
         public void TlsAuthenticationComplete(Connection connection)
         {
-// [D3Inferno]
-Console.WriteLine("[Server] connection.BeginReceive (TlsAuthenticationComplete)");
+            Logger.Trace("TlsAuthenticationComplete");
 
             // Begin receiving again on the socket, if it is connected.
             if (connection.IsConnected)
@@ -219,7 +208,7 @@ Console.WriteLine("[Server] connection.BeginReceive (TlsAuthenticationComplete)"
                 catch (Exception e)
                 {
                     RemoveConnection(connection, true); // An error occured while receiving, the connection may have been disconnected.
-                    Logger.DebugException(e, "TlsAuthenticationComplete");
+                    Logger.DebugException(e, "TlsAuthenticationComplete()");
                 }
             }
         }
@@ -252,11 +241,7 @@ Console.WriteLine("[Server] connection.BeginReceive (TlsAuthenticationComplete)"
                     // Send the remaining data.
                     //int bytesSent = connection.Socket.Send(buffer, totalBytesSent, bytesRemaining, flags);
 
-                    Console.WriteLine("[Server] Sending bytes: {0} | {1}", totalBytesSent, bytesRemaining);
-
                     int bytesSent = connection._Send(buffer, totalBytesSent, bytesRemaining, flags);
-
-                    Console.WriteLine("[Server] bytesSent: {0}", bytesSent);
 
                     if (bytesSent > 0)
                         OnDataSent(new ConnectionDataEventArgs(connection, buffer.Enumerate(totalBytesSent, bytesSent))); // Raise the Data Sent event.
