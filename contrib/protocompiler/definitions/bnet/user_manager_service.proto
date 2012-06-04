@@ -75,31 +75,31 @@ service UserManagerService
 {
     rpc SubscribeToUserManager(.bnet.protocol.user_manager.SubscribeToUserManagerRequest) returns(.bnet.protocol.user_manager.SubscribeToUserManagerResponse)
     {
-        option (log) = 1;
+        option (method_id) = 1;
     }
     rpc AddRecentPlayers(.bnet.protocol.user_manager.AddRecentPlayersRequest) returns(.bnet.protocol.user_manager.AddRecentPlayersResponse)
     {
-        option (log) = 10;
+        option (method_id) = 10;
     }
     rpc ClearRecentPlayers(.bnet.protocol.NoData) returns(.bnet.protocol.user_manager.ClearRecentPlayersResponse)
     {
-        option (log) = 11;
+        option (method_id) = 11;
     }
     rpc BlockEntity(.bnet.protocol.user_manager.BlockEntityRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 20;
+        option (method_id) = 20;
     }
     rpc UnblockEntity(.bnet.protocol.user_manager.UnblockEntityRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 21;
+        option (method_id) = 21;
     }
     rpc BlockEntityForSession(.bnet.protocol.user_manager.BlockEntityRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 40;
+        option (method_id) = 40;
     }
     rpc LoadBlockList(.bnet.protocol.EntityId) returns(.bnet.protocol.NoData)
     {
-        option (log) = 50;
+        option (method_id) = 50;
     }
 }
 
@@ -107,19 +107,19 @@ service UserManagerNotify
 {
     rpc NotifyEntityBlocked(.bnet.protocol.user_manager.EntityBlockedNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 1;
+        option (method_id) = 1;
     }
     rpc NotifyEntityUnblocked(.bnet.protocol.user_manager.EntityUnblockedNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 2;
+        option (method_id) = 2;
     }
     rpc NotifyRecentPlayersAdded(.bnet.protocol.user_manager.RecentPlayersAddedNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 11;
+        option (method_id) = 11;
     }
     rpc NotifyRecentPlayersRemoved(.bnet.protocol.user_manager.RecentPlayersRemovedNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 12;
+        option (method_id) = 12;
     }
 }
 

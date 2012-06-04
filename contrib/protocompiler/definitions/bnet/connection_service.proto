@@ -78,31 +78,31 @@ service ConnectionService
 {
     rpc Connect(.bnet.protocol.connection.ConnectRequest) returns(.bnet.protocol.connection.ConnectResponse)
     {
-        option (log) = 1;
+        option (method_id) = 1;
     }
     rpc Bind(.bnet.protocol.connection.BindRequest) returns(.bnet.protocol.connection.BindResponse)
     {
-        option (log) = 2;
+        option (method_id) = 2;
     }
     rpc Echo(.bnet.protocol.connection.EchoRequest) returns(.bnet.protocol.connection.EchoResponse)
     {
-        option (log) = 3;
+        option (method_id) = 3;
     }
     rpc ForceDisconnect(.bnet.protocol.connection.DisconnectNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 4;
+        option (method_id) = 4;
     }
     rpc Null(.bnet.protocol.connection.NullRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 5;
+        option (method_id) = 5;
     }
     rpc Encrypt(.bnet.protocol.connection.EncryptRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 6;
+        option (method_id) = 6;
     }
     rpc RequestDisconnect(.bnet.protocol.connection.DisconnectRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 7;
+        option (method_id) = 7;
     }
 }
 

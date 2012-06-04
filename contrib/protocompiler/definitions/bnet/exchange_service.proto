@@ -403,187 +403,187 @@ service ExchangeService
 {
     rpc CreateOrderBook(.bnet.protocol.exchange.CreateOrderBookRequest) returns(.bnet.protocol.exchange.CreateOrderBookResponse)
     {
-        option (log) = 1;
+        option (method_id) = 1;
     }
     rpc PlaceOfferOnOrderBook(.bnet.protocol.exchange.PlaceOfferOnOrderBookRequest) returns(.bnet.protocol.exchange.PlaceOfferOnOrderBookResponse)
     {
-        option (log) = 2;
+        option (method_id) = 2;
     }
     rpc PlaceOfferCreateOrderBookIfNeeded(.bnet.protocol.exchange.PlaceOfferCreateOrderBookIfNeededRequest) returns(.bnet.protocol.exchange.PlaceOfferCreateOrderBookIfNeededResponse)
     {
-        option (log) = 3;
+        option (method_id) = 3;
     }
     rpc PlaceBidOnOrderBook(.bnet.protocol.exchange.PlaceBidOnOrderBookRequest) returns(.bnet.protocol.exchange.PlaceBidOnOrderBookResponse)
     {
-        option (log) = 4;
+        option (method_id) = 4;
     }
     rpc PlaceBidCreateOrderBookIfNeeded(.bnet.protocol.exchange.PlaceBidCreateOrderBookIfNeededRequest) returns(.bnet.protocol.exchange.PlaceBidCreateOrderBookIfNeededResponse)
     {
-        option (log) = 5;
+        option (method_id) = 5;
     }
     rpc QueryOffersByOrderBook(.bnet.protocol.exchange.QueryOffersByOrderBookRequest) returns(.bnet.protocol.exchange.QueryOffersByOrderBookResponse)
     {
-        option (log) = 6;
+        option (method_id) = 6;
     }
     rpc QueryBidsByOrderBook(.bnet.protocol.exchange.QueryBidsByOrderBookRequest) returns(.bnet.protocol.exchange.QueryBidsByOrderBookResponse)
     {
-        option (log) = 7;
+        option (method_id) = 7;
     }
     rpc QueryOffersByAccountForItem(.bnet.protocol.exchange.QueryOffersByAccountForItemRequest) returns(.bnet.protocol.exchange.QueryOffersByAccountForItemResponse)
     {
-        option (log) = 8;
+        option (method_id) = 8;
     }
     rpc QueryBidsByAccountForItem(.bnet.protocol.exchange.QueryBidsByAccountForItemRequest) returns(.bnet.protocol.exchange.QueryBidsByAccountForItemResponse)
     {
-        option (log) = 9;
+        option (method_id) = 9;
     }
     rpc QueryOrderBooksSummary(.bnet.protocol.exchange.QueryOrderBooksSummaryRequest) returns(.bnet.protocol.exchange.QueryOrderBooksSummaryResponse)
     {
-        option (log) = 11;
+        option (method_id) = 11;
     }
     rpc ReportAuthorize(.bnet.protocol.exchange_object_provider.ReportAuthorizeRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 13;
+        option (method_id) = 13;
     }
     rpc ReportSettle(.bnet.protocol.exchange_object_provider.ReportSettleRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 14;
+        option (method_id) = 14;
     }
     rpc ReportCancel(.bnet.protocol.exchange_object_provider.ReportCancelRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 15;
+        option (method_id) = 15;
     }
     rpc SubscribeOrderBookStatusChange(.bnet.protocol.exchange.SubscribeOrderBookStatusChangeRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 16;
+        option (method_id) = 16;
     }
     rpc UnsubscribeOrderBookStatusChange(.bnet.protocol.exchange.UnsubscribeOrderBookStatusChangeRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 17;
+        option (method_id) = 17;
     }
     rpc SubscribeOrderUpdate(.bnet.protocol.exchange.SubscribeOrderUpdateRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 18;
+        option (method_id) = 18;
     }
     rpc UnsubscribeOrderUpdate(.bnet.protocol.exchange.UnsubscribeOrderUpdateRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 19;
+        option (method_id) = 19;
     }
     rpc GetPaymentMethods(.bnet.protocol.exchange_object_provider.GetPaymentMethodsRequest) returns(.bnet.protocol.exchange_object_provider.GetPaymentMethodsResponse)
     {
-        option (log) = 20;
+        option (method_id) = 20;
     }
     rpc ClaimBidItem(.bnet.protocol.exchange.ClaimRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 21;
+        option (method_id) = 21;
     }
     rpc ClaimBidMoney(.bnet.protocol.exchange.ClaimRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 22;
+        option (method_id) = 22;
     }
     rpc ClaimOfferItem(.bnet.protocol.exchange.ClaimRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 23;
+        option (method_id) = 23;
     }
     rpc ClaimOfferMoney(.bnet.protocol.exchange.ClaimRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 24;
+        option (method_id) = 24;
     }
     rpc CancelBid(.bnet.protocol.exchange.CancelRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 25;
+        option (method_id) = 25;
     }
     rpc CancelOffer(.bnet.protocol.exchange.CancelRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 26;
+        option (method_id) = 26;
     }
     rpc GetConfiguration(.bnet.protocol.exchange.GetConfigurationRequest) returns(.bnet.protocol.exchange.GetConfigurationResponse)
     {
-        option (log) = 27;
+        option (method_id) = 27;
     }
     rpc GetBidFeeEstimation(.bnet.protocol.exchange.GetBidFeeEstimationRequest) returns(.bnet.protocol.exchange.GetFeeEstimationResponse)
     {
-        option (log) = 28;
+        option (method_id) = 28;
     }
     rpc GetOfferFeeEstimation(.bnet.protocol.exchange.GetOfferFeeEstimationRequest) returns(.bnet.protocol.exchange.GetFeeEstimationResponse)
     {
-        option (log) = 29;
+        option (method_id) = 29;
     }
     rpc QueryOrdersByAccountForItem(.bnet.protocol.exchange.QueryOrdersByAccountForItemRequest) returns(.bnet.protocol.exchange.QueryOrdersByAccountForItemResponse)
     {
-        option (log) = 30;
+        option (method_id) = 30;
     }
     rpc ReportAuthorizeRiskVerdict(.bnet.protocol.exchange_risk.ReportAuthorizeRiskVerdictRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 31;
+        option (method_id) = 31;
     }
     rpc ReportSettleRiskVerdict(.bnet.protocol.exchange_risk.ReportSettleRiskVerdictRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 32;
+        option (method_id) = 32;
     }
     rpc DelaySettleRiskVerdict(.bnet.protocol.exchange_risk.DelaySettleRiskVerdictRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 33;
+        option (method_id) = 33;
     }
     rpc GetFeeDetails(.bnet.protocol.exchange.GetFeeDetailsRequest) returns(.bnet.protocol.exchange.GetFeeDetailsResponse)
     {
-        option (log) = 34;
+        option (method_id) = 34;
     }
     rpc GetOrderBookStatistics(.bnet.protocol.exchange.GetOrderBookStatisticsRequest) returns(.bnet.protocol.exchange.GetOrderBookStatisticsResponse)
     {
-        option (log) = 35;
+        option (method_id) = 35;
     }
     rpc GetBidDetails(.bnet.protocol.exchange.GetBidDetailsRequest) returns(.bnet.protocol.exchange.GetBidDetailsResponse)
     {
-        option (log) = 36;
+        option (method_id) = 36;
     }
     rpc GetOfferDetails(.bnet.protocol.exchange.GetOfferDetailsRequest) returns(.bnet.protocol.exchange.GetOfferDetailsResponse)
     {
-        option (log) = 37;
+        option (method_id) = 37;
     }
     rpc GetSystemTime(.bnet.protocol.NoData) returns(.bnet.protocol.exchange.GetSystemTimeResponse)
     {
-        option (log) = 38;
+        option (method_id) = 38;
     }
     rpc CreateCSTrade(.bnet.protocol.exchange.CreateCSTradeRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 39;
+        option (method_id) = 39;
     }
     rpc RefundBid(.bnet.protocol.exchange.RefundRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 40;
+        option (method_id) = 40;
     }
     rpc ReportRefund(.bnet.protocol.exchange_object_provider.ReportRefundRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 41;
+        option (method_id) = 41;
     }
     rpc GetOrderCount(.bnet.protocol.exchange.GetOrderCountRequest) returns(.bnet.protocol.exchange.GetOrderCountResponse)
     {
-        option (log) = 42;
+        option (method_id) = 42;
     }
     rpc SubscribeAdvancedOrderUpdate(.bnet.protocol.exchange.SubscribeAdvancedOrderUpdateRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 43;
+        option (method_id) = 43;
     }
     rpc UnsubscribeAdvancedOrderUpdate(.bnet.protocol.exchange.UnsubscribeAdvancedOrderUpdateRequest) returns(.bnet.protocol.NoData)
     {
-        option (log) = 44;
+        option (method_id) = 44;
     }
     rpc SettleHistoriesForCS(.bnet.protocol.exchange.HistoriesForCSRequest) returns(.bnet.protocol.exchange.HistoriesForCSResponse)
     {
-        option (log) = 45;
+        option (method_id) = 45;
     }
     rpc CancelHistoriesForCS(.bnet.protocol.exchange.HistoriesForCSRequest) returns(.bnet.protocol.exchange.HistoriesForCSResponse)
     {
-        option (log) = 46;
+        option (method_id) = 46;
     }
     rpc CreateCSTradeItem(.bnet.protocol.exchange.CreateCSTradeItemRequest) returns(.bnet.protocol.exchange.CreateCSTradeResponse)
     {
-        option (log) = 47;
+        option (method_id) = 47;
     }
     rpc CreateCSTradeMoney(.bnet.protocol.exchange.CreateCSTradeMoneyRequest) returns(.bnet.protocol.exchange.CreateCSTradeResponse)
     {
-        option (log) = 48;
+        option (method_id) = 48;
     }
 }
 
@@ -591,19 +591,19 @@ service ExchangeNotify
 {
     rpc NotifyOrderBookStatusChange(.bnet.protocol.exchange.OrderBookNotificationRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 1;
+        option (method_id) = 1;
     }
     rpc NotifyOfferUpdate(.bnet.protocol.exchange.OfferNotificationRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 2;
+        option (method_id) = 2;
     }
     rpc NotifyBidUpdate(.bnet.protocol.exchange.BidNotificationRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 3;
+        option (method_id) = 3;
     }
     rpc NotifyCustomMessage(.bnet.protocol.exchange.CustomNotificationRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (log) = 4;
+        option (method_id) = 4;
     }
 }
 
