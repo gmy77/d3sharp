@@ -21,7 +21,7 @@ service SessionNotify
 {
     rpc Update(.bnet.protocol.session.SessionNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
 }
 

@@ -52,31 +52,31 @@ service PresenceService
 {
     rpc Subscribe(.bnet.protocol.presence.SubscribeRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc Unsubscribe(.bnet.protocol.presence.UnsubscribeRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc Update(.bnet.protocol.presence.UpdateRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
     rpc Query(.bnet.protocol.presence.QueryRequest) returns(.bnet.protocol.presence.QueryResponse)
     {
-        option (method_id) = 4;
+        option (log) = 4;
     }
     rpc Ownership(.bnet.protocol.presence.OwnershipRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 5;
+        option (log) = 5;
     }
     rpc Heal(.bnet.protocol.presence.UpdateRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 6;
+        option (log) = 6;
     }
     rpc SubscribeNotification(.bnet.protocol.presence.SubscribeNotificationRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 7;
+        option (log) = 7;
     }
 }
 

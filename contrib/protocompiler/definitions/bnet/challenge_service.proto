@@ -48,19 +48,19 @@ service ChallengeService
 {
     rpc ChallengePicked(.bnet.protocol.challenge.ChallengePickedRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc ChallengeAnswered(.bnet.protocol.challenge.ChallengeAnsweredRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc ChallengeCancelled(.bnet.protocol.NoData) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
     rpc SendChallengeToUser(.bnet.protocol.challenge.SendChallengeToUserRequest) returns(.bnet.protocol.challenge.SendChallengeToUserResponse)
     {
-        option (method_id) = 4;
+        option (log) = 4;
     }
 }
 
@@ -68,7 +68,7 @@ service ChallengeNotify
 {
     rpc ChallengeUser(.bnet.protocol.challenge.ChallengeUserRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
 }
 

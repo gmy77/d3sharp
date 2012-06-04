@@ -181,27 +181,27 @@ service AchievementsService
 {
     rpc PostUpdate(.bnet.protocol.achievements.PostUpdateRequest) returns(.bnet.protocol.achievements.PostUpdateResponse)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc RegisterWithService(.bnet.protocol.achievements.RegisterWithServiceRequest) returns(.bnet.protocol.achievements.RegisterWithServiceResponse)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc RequestSnapshot(.bnet.protocol.achievements.RequestSnapshotRequest) returns(.bnet.protocol.achievements.RequestSnapshotResponse)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
     rpc UnregisterFromService(.bnet.protocol.achievements.UnregisterFromServiceRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 4;
+        option (log) = 4;
     }
     rpc Initialize(.bnet.protocol.achievements.InitializeRequest) returns(.bnet.protocol.achievements.InitializeResponse)
     {
-        option (method_id) = 5;
+        option (log) = 5;
     }
     rpc ValidateStaticData(.bnet.protocol.achievements.ValidateStaticDataRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 6;
+        option (log) = 6;
     }
 }
 
@@ -209,11 +209,11 @@ service AchievementsNotify
 {
     rpc NotifySnapshotUpdate(.bnet.protocol.achievements.SnapshotUpdateNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc NotifyFlushFrequencyUpdate(.bnet.protocol.achievements.FlushFrequencyUpdateNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
 }
 
@@ -221,27 +221,27 @@ service AchievementsUtils
 {
     rpc GetAchievementStats(.bnet.protocol.achievements.GetAchievementStatsRequest) returns(.bnet.protocol.achievements.GetAchievementStatsResponse)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc GetCriteriaStats(.bnet.protocol.achievements.GetCriteriaStatsRequest) returns(.bnet.protocol.achievements.GetCriteriaStatsResponse)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc RevokeAchievement(.bnet.protocol.achievements.RevokeAchievementRequest) returns(.bnet.protocol.achievements.RevokeAchievementResponse)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
     rpc UpdateCriteria(.bnet.protocol.achievements.UpdateCriteriaRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 4;
+        option (log) = 4;
     }
     rpc GrantAchievement(.bnet.protocol.achievements.GrantAchievementRequest) returns(.bnet.protocol.achievements.GrantAchievementResponse)
     {
-        option (method_id) = 5;
+        option (log) = 5;
     }
     rpc CacheKill(.bnet.protocol.achievements.CacheKillRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 6;
+        option (log) = 6;
     }
 }
 

@@ -103,31 +103,31 @@ service Channel
 {
     rpc AddMember(.bnet.protocol.channel.AddMemberRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc RemoveMember(.bnet.protocol.channel.RemoveMemberRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc SendMessage(.bnet.protocol.channel.SendMessageRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
     rpc UpdateChannelState(.bnet.protocol.channel.UpdateChannelStateRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 4;
+        option (log) = 4;
     }
     rpc UpdateMemberState(.bnet.protocol.channel.UpdateMemberStateRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 5;
+        option (log) = 5;
     }
     rpc Dissolve(.bnet.protocol.channel.DissolveRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 6;
+        option (log) = 6;
     }
     rpc SetRoles(.bnet.protocol.channel.SetRolesRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 7;
+        option (log) = 7;
     }
 }
 
@@ -135,31 +135,31 @@ service ChannelSubscriber
 {
     rpc NotifyAdd(.bnet.protocol.channel.AddNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc NotifyJoin(.bnet.protocol.channel.JoinNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc NotifyRemove(.bnet.protocol.channel.RemoveNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
     rpc NotifyLeave(.bnet.protocol.channel.LeaveNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 4;
+        option (log) = 4;
     }
     rpc NotifySendMessage(.bnet.protocol.channel.SendMessageNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 5;
+        option (log) = 5;
     }
     rpc NotifyUpdateChannelState(.bnet.protocol.channel.UpdateChannelStateNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 6;
+        option (log) = 6;
     }
     rpc NotifyUpdateMemberState(.bnet.protocol.channel.UpdateMemberStateNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 7;
+        option (log) = 7;
     }
 }
 

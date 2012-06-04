@@ -31,8 +31,14 @@ message RemoveObjectsRequest
     required bytes end_id = 2;
 }
 
+message IndexBlacklistConfig
+{
+    repeated uint64 index = 1;
+}
+
 message SearchConfig
 {
+    optional .bnet.protocol.search.IndexBlacklistConfig index_blacklist = 1;
 }
 
 message SearchUniverseLicenseConfig
@@ -51,15 +57,15 @@ service SearchService
 {
     rpc FindMatches(.bnet.protocol.search.FindMatchesRequest) returns(.bnet.protocol.search.FindMatchesResponse)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc SetObject(.bnet.protocol.search.SetObjectRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc RemoveObjects(.bnet.protocol.search.RemoveObjectsRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
 }
 

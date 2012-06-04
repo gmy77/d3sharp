@@ -157,63 +157,63 @@ service GameMaster
 {
     rpc JoinGame(.bnet.protocol.game_master.JoinGameRequest) returns(.bnet.protocol.game_master.JoinGameResponse)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc ListFactories(.bnet.protocol.game_master.ListFactoriesRequest) returns(.bnet.protocol.game_master.ListFactoriesResponse)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc FindGame(.bnet.protocol.game_master.FindGameRequest) returns(.bnet.protocol.game_master.FindGameResponse)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
     rpc CancelGameEntry(.bnet.protocol.game_master.CancelGameEntryRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 4;
+        option (log) = 4;
     }
     rpc GameEnded(.bnet.protocol.game_master.GameEndedNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 5;
+        option (log) = 5;
     }
     rpc PlayerLeft(.bnet.protocol.game_master.PlayerLeftNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 6;
+        option (log) = 6;
     }
     rpc RegisterServer(.bnet.protocol.game_master.RegisterServerRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 7;
+        option (log) = 7;
     }
     rpc UnregisterServer(.bnet.protocol.game_master.UnregisterServerRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 8;
+        option (log) = 8;
     }
     rpc RegisterUtilities(.bnet.protocol.game_master.RegisterUtilitiesRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 9;
+        option (log) = 9;
     }
     rpc UnregisterUtilities(.bnet.protocol.game_master.UnregisterUtilitiesRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 10;
+        option (log) = 10;
     }
     rpc Subscribe(.bnet.protocol.game_master.SubscribeRequest) returns(.bnet.protocol.game_master.SubscribeResponse)
     {
-        option (method_id) = 11;
+        option (log) = 11;
     }
     rpc Unsubscribe(.bnet.protocol.game_master.UnsubscribeRequest) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 12;
+        option (log) = 12;
     }
     rpc ChangeGame(.bnet.protocol.game_master.ChangeGameRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 13;
+        option (log) = 13;
     }
     rpc GetFactoryInfo(.bnet.protocol.game_master.GetFactoryInfoRequest) returns(.bnet.protocol.game_master.GetFactoryInfoResponse)
     {
-        option (method_id) = 14;
+        option (log) = 14;
     }
     rpc GetGameStats(.bnet.protocol.game_master.GetGameStatsRequest) returns(.bnet.protocol.game_master.GetGameStatsResponse)
     {
-        option (method_id) = 15;
+        option (log) = 15;
     }
 }
 
@@ -221,7 +221,7 @@ service GameMasterSubscriber
 {
     rpc NotifyFactoryUpdate(.bnet.protocol.game_master.FactoryUpdateNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
 }
 
@@ -229,7 +229,7 @@ service GameFactorySubscriber
 {
     rpc NotifyGameFound(.bnet.protocol.game_master.GameFoundNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
 }
 

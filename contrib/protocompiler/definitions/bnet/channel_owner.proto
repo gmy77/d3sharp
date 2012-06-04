@@ -73,23 +73,23 @@ service ChannelOwner
 {
     rpc GetChannelId(.bnet.protocol.channel.GetChannelIdRequest) returns(.bnet.protocol.channel.GetChannelIdResponse)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc CreateChannel(.bnet.protocol.channel.CreateChannelRequest) returns(.bnet.protocol.channel.CreateChannelResponse)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc JoinChannel(.bnet.protocol.channel.JoinChannelRequest) returns(.bnet.protocol.channel.JoinChannelResponse)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
     rpc FindChannel(.bnet.protocol.channel.FindChannelRequest) returns(.bnet.protocol.channel.FindChannelResponse)
     {
-        option (method_id) = 4;
+        option (log) = 4;
     }
     rpc GetChannelInfo(.bnet.protocol.channel.GetChannelInfoRequest) returns(.bnet.protocol.channel.GetChannelInfoResponse)
     {
-        option (method_id) = 5;
+        option (log) = 5;
     }
 }
 

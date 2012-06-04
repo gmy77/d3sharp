@@ -77,35 +77,35 @@ service GameUtilities
 {
     rpc ProcessClientRequest(.bnet.protocol.game_utilities.ClientRequest) returns(.bnet.protocol.game_utilities.ClientResponse)
     {
-        option (method_id) = 1;
+        option (log) = 1;
     }
     rpc PresenceChannelCreated(.bnet.protocol.game_utilities.PresenceChannelCreatedRequest) returns(.bnet.protocol.NoData)
     {
-        option (method_id) = 2;
+        option (log) = 2;
     }
     rpc GetPlayerVariables(.bnet.protocol.game_utilities.PlayerVariablesRequest) returns(.bnet.protocol.game_utilities.VariablesResponse)
     {
-        option (method_id) = 3;
+        option (log) = 3;
     }
     rpc GetGameVariables(.bnet.protocol.game_utilities.GameVariablesRequest) returns(.bnet.protocol.game_utilities.VariablesResponse)
     {
-        option (method_id) = 4;
+        option (log) = 4;
     }
     rpc GetLoad(.bnet.protocol.server_pool.GetLoadRequest) returns(.bnet.protocol.server_pool.ServerState)
     {
-        option (method_id) = 5;
+        option (log) = 5;
     }
     rpc ProcessServerRequest(.bnet.protocol.game_utilities.ServerRequest) returns(.bnet.protocol.game_utilities.ServerResponse)
     {
-        option (method_id) = 6;
+        option (log) = 6;
     }
     rpc NotifyGameAccountOnline(.bnet.protocol.game_utilities.GameAccountOnlineNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 7;
+        option (log) = 7;
     }
     rpc NotifyGameAccountOffline(.bnet.protocol.game_utilities.GameAccountOfflineNotification) returns(.bnet.protocol.NO_RESPONSE)
     {
-        option (method_id) = 8;
+        option (log) = 8;
     }
 }
 
