@@ -15,7 +15,7 @@ namespace bnet.protocol.friends {
   
     #region Extension registration
     public static void RegisterAllExtensions(pb::ExtensionRegistry registry) {
-      registry.Add(global::bnet.protocol.friends.FriendInvitation.FriendInvitationProp);
+      registry.Add(global::bnet.protocol.friends.FriendInvitation.FriendInvitation);
       registry.Add(global::bnet.protocol.friends.FriendInvitationParams.FriendParams);
     }
     #endregion
@@ -62,7 +62,7 @@ namespace bnet.protocol.friends {
         internal__static_bnet_protocol_friends_FriendInvitation__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.FriendInvitation, global::bnet.protocol.friends.FriendInvitation.Builder>(internal__static_bnet_protocol_friends_FriendInvitation__Descriptor,
                 new string[] { "FirstReceived", "Role", });
-        global::bnet.protocol.friends.FriendInvitation.FriendInvitationProp = pb::GeneratedSingleExtension<global::bnet.protocol.friends.FriendInvitation>.CreateInstance(global::bnet.protocol.friends.FriendInvitation.Descriptor.Extensions[0]);
+        global::bnet.protocol.friends.FriendInvitation.FriendInvitation = pb::GeneratedSingleExtension<global::bnet.protocol.friends.FriendInvitation>.CreateInstance(global::bnet.protocol.friends.FriendInvitation.Descriptor.Extensions[0]);
         internal__static_bnet_protocol_friends_FriendInvitationParams__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_friends_FriendInvitationParams__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.friends.FriendInvitationParams, global::bnet.protocol.friends.FriendInvitationParams.Builder>(internal__static_bnet_protocol_friends_FriendInvitationParams__Descriptor,
@@ -636,7 +636,7 @@ namespace bnet.protocol.friends {
     }
     
     public const int FriendInvitationFieldNumber = 103;
-    public static pb::GeneratedExtensionBase<global::bnet.protocol.friends.FriendInvitation> FriendInvitationProp;
+    public static pb::GeneratedExtensionBase<global::bnet.protocol.friends.FriendInvitation> FriendInvitation;
     public const int FirstReceivedFieldNumber = 1;
     private bool hasFirstReceived;
     private bool firstReceived_;

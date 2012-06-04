@@ -38,6 +38,7 @@ message SendInvitationRequest
     optional .bnet.protocol.Identity agent_identity = 1;
     required .bnet.protocol.EntityId target_id = 2;
     required .bnet.protocol.invitation.InvitationParams params = 3;
+    optional .bnet.protocol.AccountInfo agent_info = 4;
 }
 
 message SendInvitationResponse

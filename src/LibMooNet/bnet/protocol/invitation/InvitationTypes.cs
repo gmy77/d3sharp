@@ -56,21 +56,22 @@ namespace bnet.protocol.invitation {
           "dGVlX25hbWUYBSABKAkSNQoUc3VnZ2VzdGVyX2FjY291bnRfaWQYBiABKAsy" + 
           "Fy5ibmV0LnByb3RvY29sLkVudGl0eUlkIlEKEEludml0YXRpb25QYXJhbXMS" + 
           "GgoSaW52aXRhdGlvbl9tZXNzYWdlGAEgASgJEhoKD2V4cGlyYXRpb25fdGlt" + 
-          "ZRgCIAEoBDoBMCoFCGQQkU4isAEKFVNlbmRJbnZpdGF0aW9uUmVxdWVzdBIv" + 
+          "ZRgCIAEoBDoBMCoFCGQQkU4i4AEKFVNlbmRJbnZpdGF0aW9uUmVxdWVzdBIv" + 
           "Cg5hZ2VudF9pZGVudGl0eRgBIAEoCzIXLmJuZXQucHJvdG9jb2wuSWRlbnRp" + 
           "dHkSKgoJdGFyZ2V0X2lkGAIgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJ" + 
           "ZBI6CgZwYXJhbXMYAyACKAsyKi5ibmV0LnByb3RvY29sLmludml0YXRpb24u" + 
-          "SW52aXRhdGlvblBhcmFtcyJSChZTZW5kSW52aXRhdGlvblJlc3BvbnNlEjgK" + 
-          "Cmludml0YXRpb24YAiABKAsyJC5ibmV0LnByb3RvY29sLmludml0YXRpb24u" + 
-          "SW52aXRhdGlvbiKdAQoXVXBkYXRlSW52aXRhdGlvblJlcXVlc3QSLwoOYWdl" + 
-          "bnRfaWRlbnRpdHkYASABKAsyFy5ibmV0LnByb3RvY29sLklkZW50aXR5EhUK" + 
-          "DWludml0YXRpb25faWQYAiACKAYSOgoGcGFyYW1zGAMgAigLMiouYm5ldC5w" + 
-          "cm90b2NvbC5pbnZpdGF0aW9uLkludml0YXRpb25QYXJhbXMi3wEKDkdlbmVy" + 
-          "aWNSZXF1ZXN0EikKCGFnZW50X2lkGAEgASgLMhcuYm5ldC5wcm90b2NvbC5F" + 
-          "bnRpdHlJZBIqCgl0YXJnZXRfaWQYAiABKAsyFy5ibmV0LnByb3RvY29sLkVu" + 
-          "dGl0eUlkEhUKDWludml0YXRpb25faWQYAyACKAYSFAoMaW52aXRlZV9uYW1l" + 
-          "GAQgASgJEhQKDGludml0ZXJfbmFtZRgFIAEoCRIZCg1wcmV2aW91c19yb2xl" + 
-          "GAYgAygNQgIQARIYCgxkZXNpcmVkX3JvbGUYByADKA1CAhAB");
+          "SW52aXRhdGlvblBhcmFtcxIuCgphZ2VudF9pbmZvGAQgASgLMhouYm5ldC5w" + 
+          "cm90b2NvbC5BY2NvdW50SW5mbyJSChZTZW5kSW52aXRhdGlvblJlc3BvbnNl" + 
+          "EjgKCmludml0YXRpb24YAiABKAsyJC5ibmV0LnByb3RvY29sLmludml0YXRp" + 
+          "b24uSW52aXRhdGlvbiKdAQoXVXBkYXRlSW52aXRhdGlvblJlcXVlc3QSLwoO" + 
+          "YWdlbnRfaWRlbnRpdHkYASABKAsyFy5ibmV0LnByb3RvY29sLklkZW50aXR5" + 
+          "EhUKDWludml0YXRpb25faWQYAiACKAYSOgoGcGFyYW1zGAMgAigLMiouYm5l" + 
+          "dC5wcm90b2NvbC5pbnZpdGF0aW9uLkludml0YXRpb25QYXJhbXMi3wEKDkdl" + 
+          "bmVyaWNSZXF1ZXN0EikKCGFnZW50X2lkGAEgASgLMhcuYm5ldC5wcm90b2Nv" + 
+          "bC5FbnRpdHlJZBIqCgl0YXJnZXRfaWQYAiABKAsyFy5ibmV0LnByb3RvY29s" + 
+          "LkVudGl0eUlkEhUKDWludml0YXRpb25faWQYAyACKAYSFAoMaW52aXRlZV9u" + 
+          "YW1lGAQgASgJEhQKDGludml0ZXJfbmFtZRgFIAEoCRIZCg1wcmV2aW91c19y" + 
+          "b2xlGAYgAygNQgIQARIYCgxkZXNpcmVkX3JvbGUYByADKA1CAhAB");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_invitation_Invitation__Descriptor = Descriptor.MessageTypes[0];
@@ -88,7 +89,7 @@ namespace bnet.protocol.invitation {
         internal__static_bnet_protocol_invitation_SendInvitationRequest__Descriptor = Descriptor.MessageTypes[3];
         internal__static_bnet_protocol_invitation_SendInvitationRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.invitation.SendInvitationRequest, global::bnet.protocol.invitation.SendInvitationRequest.Builder>(internal__static_bnet_protocol_invitation_SendInvitationRequest__Descriptor,
-                new string[] { "AgentIdentity", "TargetId", "Params", });
+                new string[] { "AgentIdentity", "TargetId", "Params", "AgentInfo", });
         internal__static_bnet_protocol_invitation_SendInvitationResponse__Descriptor = Descriptor.MessageTypes[4];
         internal__static_bnet_protocol_invitation_SendInvitationResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.invitation.SendInvitationResponse, global::bnet.protocol.invitation.SendInvitationResponse.Builder>(internal__static_bnet_protocol_invitation_SendInvitationResponse__Descriptor,
@@ -1681,8 +1682,8 @@ namespace bnet.protocol.invitation {
   public sealed partial class SendInvitationRequest : pb::GeneratedMessage<SendInvitationRequest, SendInvitationRequest.Builder> {
     private SendInvitationRequest() { }
     private static readonly SendInvitationRequest defaultInstance = new SendInvitationRequest().MakeReadOnly();
-    private static readonly string[] _sendInvitationRequestFieldNames = new string[] { "agent_identity", "params", "target_id" };
-    private static readonly uint[] _sendInvitationRequestFieldTags = new uint[] { 10, 26, 18 };
+    private static readonly string[] _sendInvitationRequestFieldNames = new string[] { "agent_identity", "agent_info", "params", "target_id" };
+    private static readonly uint[] _sendInvitationRequestFieldTags = new uint[] { 10, 34, 26, 18 };
     public static SendInvitationRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1733,6 +1734,16 @@ namespace bnet.protocol.invitation {
       get { return params_ ?? global::bnet.protocol.invitation.InvitationParams.DefaultInstance; }
     }
     
+    public const int AgentInfoFieldNumber = 4;
+    private bool hasAgentInfo;
+    private global::bnet.protocol.AccountInfo agentInfo_;
+    public bool HasAgentInfo {
+      get { return hasAgentInfo; }
+    }
+    public global::bnet.protocol.AccountInfo AgentInfo {
+      get { return agentInfo_ ?? global::bnet.protocol.AccountInfo.DefaultInstance; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasTargetId) return false;
@@ -1752,10 +1763,13 @@ namespace bnet.protocol.invitation {
         output.WriteMessage(1, field_names[0], AgentIdentity);
       }
       if (hasTargetId) {
-        output.WriteMessage(2, field_names[2], TargetId);
+        output.WriteMessage(2, field_names[3], TargetId);
       }
       if (hasParams) {
-        output.WriteMessage(3, field_names[1], Params);
+        output.WriteMessage(3, field_names[2], Params);
+      }
+      if (hasAgentInfo) {
+        output.WriteMessage(4, field_names[1], AgentInfo);
       }
       UnknownFields.WriteTo(output);
     }
@@ -1775,6 +1789,9 @@ namespace bnet.protocol.invitation {
         }
         if (hasParams) {
           size += pb::CodedOutputStream.ComputeMessageSize(3, Params);
+        }
+        if (hasAgentInfo) {
+          size += pb::CodedOutputStream.ComputeMessageSize(4, AgentInfo);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -1911,6 +1928,9 @@ namespace bnet.protocol.invitation {
         if (other.HasParams) {
           MergeParams(other.Params);
         }
+        if (other.HasAgentInfo) {
+          MergeAgentInfo(other.AgentInfo);
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1979,6 +1999,15 @@ namespace bnet.protocol.invitation {
               }
               input.ReadMessage(subBuilder, extensionRegistry);
               Params = subBuilder.BuildPartial();
+              break;
+            }
+            case 34: {
+              global::bnet.protocol.AccountInfo.Builder subBuilder = global::bnet.protocol.AccountInfo.CreateBuilder();
+              if (result.hasAgentInfo) {
+                subBuilder.MergeFrom(AgentInfo);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              AgentInfo = subBuilder.BuildPartial();
               break;
             }
           }
@@ -2108,6 +2137,46 @@ namespace bnet.protocol.invitation {
         PrepareBuilder();
         result.hasParams = false;
         result.params_ = null;
+        return this;
+      }
+      
+      public bool HasAgentInfo {
+       get { return result.hasAgentInfo; }
+      }
+      public global::bnet.protocol.AccountInfo AgentInfo {
+        get { return result.AgentInfo; }
+        set { SetAgentInfo(value); }
+      }
+      public Builder SetAgentInfo(global::bnet.protocol.AccountInfo value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasAgentInfo = true;
+        result.agentInfo_ = value;
+        return this;
+      }
+      public Builder SetAgentInfo(global::bnet.protocol.AccountInfo.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasAgentInfo = true;
+        result.agentInfo_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeAgentInfo(global::bnet.protocol.AccountInfo value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasAgentInfo &&
+            result.agentInfo_ != global::bnet.protocol.AccountInfo.DefaultInstance) {
+            result.agentInfo_ = global::bnet.protocol.AccountInfo.CreateBuilder(result.agentInfo_).MergeFrom(value).BuildPartial();
+        } else {
+          result.agentInfo_ = value;
+        }
+        result.hasAgentInfo = true;
+        return this;
+      }
+      public Builder ClearAgentInfo() {
+        PrepareBuilder();
+        result.hasAgentInfo = false;
+        result.agentInfo_ = null;
         return this;
       }
     }
