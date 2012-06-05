@@ -23,6 +23,7 @@ using System.Text.RegularExpressions;
 using CrystalMpq;
 using Mooege.Common.Logging;
 using Wintellect.PowerCollections;
+using System.IO;
 
 namespace Mooege.Common.MPQ
 {    
@@ -103,7 +104,7 @@ namespace Mooege.Common.MPQ
                 foreach(var mpq in pair.Value)
                 {
                     Logger.Trace("Applying file: {0}.", System.IO.Path.GetFileName(mpq));
-                    this.FileSystem.Archives.Add(new MpqArchive(mpq, true));
+                    this.FileSystem.Archives.Add(new MpqArchive(new FileStream(mpq, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), true));
                 }
             }
             Logger.Trace("All files successfully applied.");
