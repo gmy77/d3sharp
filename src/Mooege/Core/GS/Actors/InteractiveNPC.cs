@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify

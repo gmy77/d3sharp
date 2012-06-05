@@ -18,5 +18,6 @@ message AccountInfo
 {
     optional bool account_paid = 1 [default = false];
     optional fixed32 country_id = 2 [default = 0];
+    optional string battle_tag = 3;
 }
 

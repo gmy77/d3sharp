@@ -31,8 +31,14 @@ message RemoveObjectsRequest
     required bytes end_id = 2;
 }
 
+message IndexBlacklistConfig
+{
+    repeated uint64 index = 1;
+}
+
 message SearchConfig
 {
+    optional .bnet.protocol.search.IndexBlacklistConfig index_blacklist = 1;
 }
 
 message SearchUniverseLicenseConfig

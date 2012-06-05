@@ -341,6 +341,36 @@ message CreateCSTradeRequest
     required uint64 cs_user_id = 8;
 }
 
+message CreateCSTradeItemRequest
+{
+    optional .bnet.protocol.exchange.PartitionId partition_id = 1;
+    required .bnet.protocol.exchange.OrderBook order_book = 2;
+    required uint32 amount = 3;
+    required .bnet.protocol.EntityId bnet_account = 4;
+    optional .bnet.protocol.EntityId game_account = 5;
+    required .bnet.protocol.exchange.BlobFrom account_for_item = 6;
+    required string cs_notes = 7;
+    required uint64 cs_user_id = 8;
+}
+
+message CreateCSTradeMoneyRequest
+{
+    optional .bnet.protocol.exchange.PartitionId partition_id = 1;
+    required .bnet.protocol.exchange.OrderBook order_book = 2;
+    required uint32 amount = 3;
+    required .bnet.protocol.EntityId bnet_account = 4;
+    optional .bnet.protocol.EntityId game_account = 5;
+    required .bnet.protocol.exchange.BlobFrom account_for_item = 6;
+    required string cs_notes = 7;
+    required uint64 cs_user_id = 8;
+    optional .bnet.protocol.exchange.BlobFrom account_for_money = 9;
+}
+
+message CreateCSTradeResponse
+{
+    optional uint64 order_book_id = 1;
+}
+
 message GetOrderCountRequest
 {
     optional string currency = 1;
@@ -546,6 +576,14 @@ service ExchangeService
     rpc CancelHistoriesForCS(.bnet.protocol.exchange.HistoriesForCSRequest) returns(.bnet.protocol.exchange.HistoriesForCSResponse)
     {
         option (method_id) = 46;
+    }
+    rpc CreateCSTradeItem(.bnet.protocol.exchange.CreateCSTradeItemRequest) returns(.bnet.protocol.exchange.CreateCSTradeResponse)
+    {
+        option (method_id) = 47;
+    }
+    rpc CreateCSTradeMoney(.bnet.protocol.exchange.CreateCSTradeMoneyRequest) returns(.bnet.protocol.exchange.CreateCSTradeResponse)
+    {
+        option (method_id) = 48;
     }
 }
 

@@ -37,9 +37,9 @@ namespace bnet.protocol {
           "ZF9vcHRpb25zLnByb3RvIiUKCEVudGl0eUlkEgwKBGhpZ2gYASACKAYSCwoD" + 
           "bG93GAIgAigGImkKCElkZW50aXR5EisKCmFjY291bnRfaWQYASABKAsyFy5i" + 
           "bmV0LnByb3RvY29sLkVudGl0eUlkEjAKD2dhbWVfYWNjb3VudF9pZBgCIAEo" + 
-          "CzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQiQQoLQWNjb3VudEluZm8SGwoM" + 
+          "CzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQiVQoLQWNjb3VudEluZm8SGwoM" + 
           "YWNjb3VudF9wYWlkGAEgASgIOgVmYWxzZRIVCgpjb3VudHJ5X2lkGAIgASgH" + 
-          "OgEw");
+          "OgEwEhIKCmJhdHRsZV90YWcYAyABKAk=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_EntityId__Descriptor = Descriptor.MessageTypes[0];
@@ -53,7 +53,7 @@ namespace bnet.protocol {
         internal__static_bnet_protocol_AccountInfo__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_AccountInfo__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.AccountInfo, global::bnet.protocol.AccountInfo.Builder>(internal__static_bnet_protocol_AccountInfo__Descriptor,
-                new string[] { "AccountPaid", "CountryId", });
+                new string[] { "AccountPaid", "CountryId", "BattleTag", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -763,8 +763,8 @@ namespace bnet.protocol {
   public sealed partial class AccountInfo : pb::GeneratedMessage<AccountInfo, AccountInfo.Builder> {
     private AccountInfo() { }
     private static readonly AccountInfo defaultInstance = new AccountInfo().MakeReadOnly();
-    private static readonly string[] _accountInfoFieldNames = new string[] { "account_paid", "country_id" };
-    private static readonly uint[] _accountInfoFieldTags = new uint[] { 8, 21 };
+    private static readonly string[] _accountInfoFieldNames = new string[] { "account_paid", "battle_tag", "country_id" };
+    private static readonly uint[] _accountInfoFieldTags = new uint[] { 8, 26, 21 };
     public static AccountInfo DefaultInstance {
       get { return defaultInstance; }
     }
@@ -805,6 +805,16 @@ namespace bnet.protocol {
       get { return countryId_; }
     }
     
+    public const int BattleTagFieldNumber = 3;
+    private bool hasBattleTag;
+    private string battleTag_ = "";
+    public bool HasBattleTag {
+      get { return hasBattleTag; }
+    }
+    public string BattleTag {
+      get { return battleTag_; }
+    }
+    
     public override bool IsInitialized {
       get {
         return true;
@@ -818,7 +828,10 @@ namespace bnet.protocol {
         output.WriteBool(1, field_names[0], AccountPaid);
       }
       if (hasCountryId) {
-        output.WriteFixed32(2, field_names[1], CountryId);
+        output.WriteFixed32(2, field_names[2], CountryId);
+      }
+      if (hasBattleTag) {
+        output.WriteString(3, field_names[1], BattleTag);
       }
       UnknownFields.WriteTo(output);
     }
@@ -835,6 +848,9 @@ namespace bnet.protocol {
         }
         if (hasCountryId) {
           size += pb::CodedOutputStream.ComputeFixed32Size(2, CountryId);
+        }
+        if (hasBattleTag) {
+          size += pb::CodedOutputStream.ComputeStringSize(3, BattleTag);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -968,6 +984,9 @@ namespace bnet.protocol {
         if (other.HasCountryId) {
           CountryId = other.CountryId;
         }
+        if (other.HasBattleTag) {
+          BattleTag = other.BattleTag;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1019,6 +1038,10 @@ namespace bnet.protocol {
               result.hasCountryId = input.ReadFixed32(ref result.countryId_);
               break;
             }
+            case 26: {
+              result.hasBattleTag = input.ReadString(ref result.battleTag_);
+              break;
+            }
           }
         }
         
@@ -1066,6 +1089,27 @@ namespace bnet.protocol {
         PrepareBuilder();
         result.hasCountryId = false;
         result.countryId_ = 0;
+        return this;
+      }
+      
+      public bool HasBattleTag {
+        get { return result.hasBattleTag; }
+      }
+      public string BattleTag {
+        get { return result.BattleTag; }
+        set { SetBattleTag(value); }
+      }
+      public Builder SetBattleTag(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasBattleTag = true;
+        result.battleTag_ = value;
+        return this;
+      }
+      public Builder ClearBattleTag() {
+        PrepareBuilder();
+        result.hasBattleTag = false;
+        result.battleTag_ = "";
         return this;
       }
     }
