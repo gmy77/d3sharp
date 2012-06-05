@@ -5553,7 +5553,8 @@ namespace bnet.protocol.account {
     
     public override bool IsInitialized {
       get {
-        foreach (global::bnet.protocol.account.Wallet element in WalletsList) {
+          foreach (global::bnet.protocol.account.Wallet element in wallets_)
+          {
           if (!element.IsInitialized) return false;
         }
         return true;

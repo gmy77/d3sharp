@@ -15,7 +15,7 @@ namespace bnet.protocol.channel_invitation {
   
     #region Extension registration
     public static void RegisterAllExtensions(pb::ExtensionRegistry registry) {
-      registry.Add(global::bnet.protocol.channel_invitation.ChannelInvitation.ChannelInvitation);
+      registry.Add(global::bnet.protocol.channel_invitation.ChannelInvitation.ChannelInvitationProp);
       registry.Add(global::bnet.protocol.channel_invitation.ChannelInvitationParams.ChannelParams);
     }
     #endregion
@@ -60,7 +60,7 @@ namespace bnet.protocol.channel_invitation {
         internal__static_bnet_protocol_channel_invitation_ChannelInvitation__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.ChannelInvitation, global::bnet.protocol.channel_invitation.ChannelInvitation.Builder>(internal__static_bnet_protocol_channel_invitation_ChannelInvitation__Descriptor,
                 new string[] { "ChannelDescription", "Reserved", "Rejoin", "ServiceType", });
-        global::bnet.protocol.channel_invitation.ChannelInvitation.ChannelInvitation = pb::GeneratedSingleExtension<global::bnet.protocol.channel_invitation.ChannelInvitation>.CreateInstance(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor.Extensions[0]);
+        global::bnet.protocol.channel_invitation.ChannelInvitation.ChannelInvitationProp = pb::GeneratedSingleExtension<global::bnet.protocol.channel_invitation.ChannelInvitation>.CreateInstance(global::bnet.protocol.channel_invitation.ChannelInvitation.Descriptor.Extensions[0]);
         internal__static_bnet_protocol_channel_invitation_ChannelInvitationParams__Descriptor = Descriptor.MessageTypes[1];
         internal__static_bnet_protocol_channel_invitation_ChannelInvitationParams__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.ChannelInvitationParams, global::bnet.protocol.channel_invitation.ChannelInvitationParams.Builder>(internal__static_bnet_protocol_channel_invitation_ChannelInvitationParams__Descriptor,
@@ -112,7 +112,7 @@ namespace bnet.protocol.channel_invitation {
     }
     
     public const int ChannelInvitationFieldNumber = 105;
-    public static pb::GeneratedExtensionBase<global::bnet.protocol.channel_invitation.ChannelInvitation> ChannelInvitation;
+    public static pb::GeneratedExtensionBase<global::bnet.protocol.channel_invitation.ChannelInvitation> ChannelInvitationProp;
     public const int ChannelDescriptionFieldNumber = 1;
     private bool hasChannelDescription;
     private global::bnet.protocol.channel.ChannelDescription channelDescription_;

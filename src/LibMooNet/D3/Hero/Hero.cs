@@ -8030,7 +8030,7 @@ namespace D3.Hero {
     
     public const int QuestHistoryFieldNumber = 1;
     private pbc::PopsicleList<global::D3.Hero.QuestHistoryEntry> questHistory_ = new pbc::PopsicleList<global::D3.Hero.QuestHistoryEntry>();
-    public scg::IList<global::D3.Hero.QuestHistoryEntry> QuestHistoryList {
+    public scg::IList<global::D3.Hero.QuestHistoryEntry> QuestHistoryListProp {
       get { return questHistory_; }
     }
     public int QuestHistoryCount {
@@ -8042,7 +8042,7 @@ namespace D3.Hero {
     
     public override bool IsInitialized {
       get {
-        foreach (global::D3.Hero.QuestHistoryEntry element in QuestHistoryList) {
+        foreach (global::D3.Hero.QuestHistoryEntry element in QuestHistoryListProp) {
           if (!element.IsInitialized) return false;
         }
         return true;
@@ -8065,7 +8065,7 @@ namespace D3.Hero {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::D3.Hero.QuestHistoryEntry element in QuestHistoryList) {
+        foreach (global::D3.Hero.QuestHistoryEntry element in QuestHistoryListProp) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
         }
         size += UnknownFields.SerializedSize;
@@ -8638,7 +8638,7 @@ namespace D3.Hero {
     
     public const int QuestRewardHistoryFieldNumber = 1;
     private pbc::PopsicleList<global::D3.Hero.QuestRewardHistoryEntry> questRewardHistory_ = new pbc::PopsicleList<global::D3.Hero.QuestRewardHistoryEntry>();
-    public scg::IList<global::D3.Hero.QuestRewardHistoryEntry> QuestRewardHistoryList {
+    public scg::IList<global::D3.Hero.QuestRewardHistoryEntry> QuestRewardHistoryListProp {
       get { return questRewardHistory_; }
     }
     public int QuestRewardHistoryCount {
@@ -8650,7 +8650,7 @@ namespace D3.Hero {
     
     public override bool IsInitialized {
       get {
-        foreach (global::D3.Hero.QuestRewardHistoryEntry element in QuestRewardHistoryList) {
+        foreach (global::D3.Hero.QuestRewardHistoryEntry element in QuestRewardHistoryListProp) {
           if (!element.IsInitialized) return false;
         }
         return true;
@@ -8673,7 +8673,7 @@ namespace D3.Hero {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::D3.Hero.QuestRewardHistoryEntry element in QuestRewardHistoryList) {
+        foreach (global::D3.Hero.QuestRewardHistoryEntry element in QuestRewardHistoryListProp) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
         }
         size += UnknownFields.SerializedSize;
