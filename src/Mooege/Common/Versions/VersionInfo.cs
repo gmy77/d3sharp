@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.9749.*";
+            public const string Version = "1.9858.*";
         }
 
         /// <summary>
@@ -187,6 +187,7 @@ namespace Mooege.Common.Versions
             public const string VersionString = MajorVersion + ServerBuild;
 
             // old version strings.
+            //1.0.2.9858  // 9858 Retail
             // 1.0.2.9749   // 9749 Retail
             // 1.0.1.9558   // 9558 Retail
             // 0.11.0.9359  // 9359 Beta Patch 18
