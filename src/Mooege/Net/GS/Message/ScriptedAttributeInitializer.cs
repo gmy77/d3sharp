@@ -40,7 +40,7 @@ namespace Mooege.Net.GS.Message
     public class ScriptedAttributeInitializer
     {
         #region Pin() implementation for scripts to use.
-        public static int Pin(int a, int b, int c) 
+        public static int Pin(int a, int b, int c)
         {
             if (b > a)
                 return b;
@@ -89,65 +89,65 @@ namespace Mooege.Net.GS.Message
                 // also record all attributes used by script into each attribute's dependency list
                 script = Regex.Replace(script, @"([A-Za-z_]\w*)(\.Agg)?(\#[A-Za-z_]\w*)?(?=[^\(\w]|\z)( \?)?",
                     (match) =>
-                {
-                    // lookup attribute object
-                    string identifierName = match.Groups[1].Value;
-                    if (!attributeLookup.ContainsKey(identifierName))
-                        throw new ScriptedAttributeInitializerError("invalid identifer parsed: " + identifierName);
-
-                    GameAttribute identifier = attributeLookup[identifierName];
-
-                    // key selection
-                    int? key = null;
-                    string keyString = "_key";
-                    bool usesExplicitKey = false;
-
-                    if (match.Groups[3].Success)
                     {
-                        switch (match.Groups[3].Value.ToUpper())
+                        // lookup attribute object
+                        string identifierName = match.Groups[1].Value;
+                        if (!attributeLookup.ContainsKey(identifierName))
+                            throw new ScriptedAttributeInitializerError("invalid identifer parsed: " + identifierName);
+
+                        GameAttribute identifier = attributeLookup[identifierName];
+
+                        // key selection
+                        int? key = null;
+                        string keyString = "_key";
+                        bool usesExplicitKey = false;
+
+                        if (match.Groups[3].Success)
                         {
-                            case "#NONE": key = null; break;
-                            case "#PHYSICAL": key = 0; break;
-                            case "#FIRE": key = 1; break;
-                            case "#LIGHTNING": key = 2; break;
-                            case "#COLD": key = 3; break;
-                            case "#POISON": key = 4; break;
-                            case "#ARCANE": key = 5; break;
-                            case "#HOLY": key = 6; break;
-                            default:
-                                throw new ScriptedAttributeInitializerError("error processing attribute script, invalid key in identifier: " + match.Groups[3].Value);
+                            switch (match.Groups[3].Value.ToUpper())
+                            {
+                                case "#NONE": key = null; break;
+                                case "#PHYSICAL": key = 0; break;
+                                case "#FIRE": key = 1; break;
+                                case "#LIGHTNING": key = 2; break;
+                                case "#COLD": key = 3; break;
+                                case "#POISON": key = 4; break;
+                                case "#ARCANE": key = 5; break;
+                                case "#HOLY": key = 6; break;
+                                default:
+                                    throw new ScriptedAttributeInitializerError("error processing attribute script, invalid key in identifier: " + match.Groups[3].Value);
+                            }
+
+                            if (key == null)
+                                keyString = "null";
+                            else
+                                keyString = key.ToString();
+
+                            usesExplicitKey = true;
                         }
 
-                        if (key == null)
-                            keyString = "null";
-                        else
-                            keyString = key.ToString();
+                        // add comparsion for int attributes that are directly used in an ?: expression.
+                        string compare = "";
+                        if (match.Groups[4].Success)
+                            compare = identifier is GameAttributeI ? " > 0 ?" : " ?";
 
-                        usesExplicitKey = true;
-                    }
+                        // handle self-referring lookup. example: Resource.Agg
+                        if (match.Groups[2].Success)
+                        {
+                            attr.ScriptedAndSettable = true;
+                            return "_map._RawGetAttribute(GameAttribute." + identifierName
+                                + ", " + keyString + ")" + compare;
+                        }
 
-                    // add comparsion for int attributes that are directly used in an ?: expression.
-                    string compare = "";
-                    if (match.Groups[4].Success)
-                        compare = identifier is GameAttributeI ? " > 0 ?" : " ?";
+                        // record dependency
+                        if (identifier.Dependents == null)
+                            identifier.Dependents = new List<GameAttributeDependency>();
 
-                    // handle self-referring lookup. example: Resource.Agg
-                    if (match.Groups[2].Success)
-                    {
-                        attr.ScriptedAndSettable = true;
-                        return "_map._RawGetAttribute(GameAttribute." + identifierName
-                            + ", " + keyString + ")" + compare;
-                    }
+                        identifier.Dependents.Add(new GameAttributeDependency(attr, key, usesExplicitKey, false));
 
-                    // record dependency
-                    if (identifier.Dependents == null)
-                        identifier.Dependents = new List<GameAttributeDependency>();
-
-                    identifier.Dependents.Add(new GameAttributeDependency(attr, key, usesExplicitKey, false));
-
-                    // generate normal lookup
-                    return "_map[GameAttribute." + identifierName + ", " + keyString + "]" + compare;
-                });
+                        // generate normal lookup
+                        return "_map[GameAttribute." + identifierName + ", " + keyString + "]" + compare;
+                    });
 
                 // transform function calls into C# equivalents
                 script = Regex.Replace(script, @"floor\(", "(float)Math.Floor(", RegexOptions.IgnoreCase);

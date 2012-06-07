@@ -29,7 +29,7 @@ namespace Mooege.Common.Logging
         /// Minimum level of messages to emit.
         /// </summary>
         public Logger.Level MinimumLevel { get; protected set; }
-        
+
         /// <summary>
         /// Maximum level of messages to emit.
         /// </summary>
@@ -62,5 +62,5 @@ namespace Mooege.Common.Logging
         {
             throw new NotSupportedException("Vanilla log-targets are not supported! Instead use a log-target implementation.");
         }
-    }     
+    }
 }

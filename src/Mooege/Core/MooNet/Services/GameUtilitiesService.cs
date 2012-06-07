@@ -233,11 +233,11 @@ namespace Mooege.Core.MooNet.Services
         {
             var oldToon = this.Client.Account.CurrentGameAccount.CurrentToon;
             var newtoon = ToonManager.GetToonByLowID(hero.IdLow);
-            
+
 
             Logger.Trace("SelectToon() {0}", this.Client.Account.CurrentGameAccount.CurrentToon);
 
-            if (oldToon!=newtoon)
+            if (oldToon != newtoon)
             {
                 this.Client.Account.CurrentGameAccount.CurrentToon = newtoon;
                 this.Client.Account.CurrentGameAccount.NotifyUpdate();

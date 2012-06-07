@@ -212,7 +212,7 @@ namespace Mooege.Net.MooNet
 
             moduleLoadRequest.SetModuleHandle(moduleHandle);
             this.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this).ModuleLoad(null, moduleLoadRequest.Build(), callback => { }));
-            }
+        }
 
 
         public bool HasAgreements()

@@ -337,7 +337,7 @@ namespace Mooege.Core.MooNet.Toons
             : base(dbToon.Id)
         {
             this.D3EntityID = D3.OnlineService.EntityId.CreateBuilder().SetIdHigh((ulong)EntityIdHelper.HighIdType.ToonId).SetIdLow(this.PersistentID).Build();
-            
+
             this.DBToon = dbToon;
             this.HeroTable = HeroData.Heros.Find(item => item.Name == this.Class.ToString());
             this.ExperienceNext = Player.LevelBorders[this.Level];
@@ -359,7 +359,7 @@ namespace Mooege.Core.MooNet.Toons
             var visualToSlotMapping = new Dictionary<int, int> { { 1, 0 }, { 2, 1 }, { 7, 2 }, { 5, 3 }, { 4, 4 }, { 3, 5 }, { 8, 6 }, { 9, 7 } };
 
             //add visual equipment from DB, only the visualizable equipment, not everything
-            var visibleEquipment = DBSessions.AccountSession.Query<DBInventory>().Where(inv => inv.DBItemInstance!=null && inv.DBToon.Id == dbToon.Id && inv.EquipmentSlot != -1).ToList();
+            var visibleEquipment = DBSessions.AccountSession.Query<DBInventory>().Where(inv => inv.DBItemInstance != null && inv.DBToon.Id == dbToon.Id && inv.EquipmentSlot != -1).ToList();
 
             foreach (var inv in visibleEquipment)
             {
@@ -558,7 +558,7 @@ namespace Mooege.Core.MooNet.Toons
     public enum ToonClass// : uint
     {
         Barbarian,// = 0x4FB91EE2,
-        Monk ,//= 0x3DAC15,
+        Monk,//= 0x3DAC15,
         DemonHunter,// = 0xC88B9649,
         WitchDoctor,// = 0x343C22A,
         Wizard,// = 0x1D4681B1

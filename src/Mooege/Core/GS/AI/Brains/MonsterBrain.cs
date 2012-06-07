@@ -66,7 +66,7 @@ namespace Mooege.Core.GS.AI.Brains
         {
             // this needed? /mdz
             if (this.Body is NPC) return;
-            
+
             // check if in disabled state, if so cancel any action then do nothing
             if (this.Body.Attributes[GameAttribute.Frozen] ||
                 this.Body.Attributes[GameAttribute.Stunned] ||
@@ -91,7 +91,7 @@ namespace Mooege.Core.GS.AI.Brains
                 // do a little delay so groups of monsters don't all execute at once
                 if (_powerDelay == null)
                     _powerDelay = new SecondsTickTimer(this.Body.World.Game, (float)RandomHelper.NextDouble());
-                
+
 
                 if (_powerDelay.TimedOut)
                 {
@@ -133,7 +133,7 @@ namespace Mooege.Core.GS.AI.Brains
                     powerSNO, this.Body.ActorSNO.Name);
                 return;
             }
-            
+
             this.PresetPowers.Add(powerSNO);
         }
 

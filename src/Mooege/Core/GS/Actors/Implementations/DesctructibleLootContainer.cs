@@ -64,8 +64,8 @@ namespace Mooege.Core.GS.Actors.Implementations
 
         public void Die()
         {
-            if(this.TreasureClass != null)
-                foreach(var player in this.GetPlayersInRange(30))
+            if (this.TreasureClass != null)
+                foreach (var player in this.GetPlayersInRange(30))
                     World.DropItem(this, null, this.TreasureClass.CreateDrop(player));
 
             World.BroadcastIfRevealed(new PlayAnimationMessage

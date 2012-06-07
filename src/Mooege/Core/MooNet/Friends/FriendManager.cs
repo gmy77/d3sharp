@@ -108,7 +108,7 @@ namespace Mooege.Core.MooNet.Friends
                 .SetReason((uint)InvitationRemoveReason.Accepted) // success?
                 .Build();
 
-            AddFriendshipToDB(inviter,invitee);
+            AddFriendshipToDB(inviter, invitee);
 
             // send friend added notifications
             var friendAddedNotificationToInviter = bnet.protocol.friends.FriendNotification.CreateBuilder().SetTarget(inviteeAsFriend).SetGameAccountId(invitee.BnetEntityId).Build();

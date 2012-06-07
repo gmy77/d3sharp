@@ -43,21 +43,21 @@ namespace Mooege.Core.GS.Items.Implementations
             }
         }
 
-/*
-  // Items are NOT constructed with tags!
-        protected override void ReadTags()
-        {
-            base.ReadTags();
-            if (this.Tags.ContainsKey((int)MarkerTagTypes.LoreSNOId))
-            {
-                LoreSNOId = Tags[(int)MarkerTagTypes.LoreSNOId].Int2;
-            }
-            else
-            {
-                LoreSNOId = -1;
-            }
-        }
-*/
+        /*
+          // Items are NOT constructed with tags!
+                protected override void ReadTags()
+                {
+                    base.ReadTags();
+                    if (this.Tags.ContainsKey((int)MarkerTagTypes.LoreSNOId))
+                    {
+                        LoreSNOId = Tags[(int)MarkerTagTypes.LoreSNOId].Int2;
+                    }
+                    else
+                    {
+                        LoreSNOId = -1;
+                    }
+                }
+        */
         public override void OnTargeted(Player player, TargetMessage message)
         {
             //Logger.Trace("OnTargeted");

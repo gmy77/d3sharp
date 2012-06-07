@@ -32,7 +32,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Minions
 
             Attributes[GameAttribute.Damage_Weapon_Min, 0] = 5f;
             Attributes[GameAttribute.Damage_Weapon_Delta, 0] = 7f;
-            
+
             Attributes[GameAttribute.Pet_Type] = 0x8;
             //Pet_Owner and Pet_Creator seems to be 0
             (context.User as Player).InGameClient.SendMessage(new PetMessage()

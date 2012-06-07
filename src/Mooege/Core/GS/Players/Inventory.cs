@@ -77,7 +77,7 @@ namespace Mooege.Core.GS.Players
                  Field2 = 1 // what does this do?  // 0 - source item not disappearing from inventory, 1 - Moving, any other possibilities? its an int32
              }); */
         }
-        public List<Item>  GetBackPackItems()
+        public List<Item> GetBackPackItems()
         {
             return new List<Item>(this._inventoryGrid.Items.Values);
         }

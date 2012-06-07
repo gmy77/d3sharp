@@ -497,7 +497,7 @@ namespace Mooege.Core.GS.Powers.Implementations
             proj.OnCollision = (hit) =>
             {
                 hit.PlayEffectGroup(RuneSelect(221164, 222107, 222120, 222133, 221164, 222146));
-                
+
                 AttackPayload attack = new AttackPayload(this);
                 attack.SetSingleTarget(hit);
                 attack.AddWeaponDamage(ScriptFormula(0), DamageType.Physical);

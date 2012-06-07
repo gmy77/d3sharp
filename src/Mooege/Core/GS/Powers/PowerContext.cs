@@ -121,7 +121,7 @@ namespace Mooege.Core.GS.Powers
                 (User as Player).UseSecondaryResource(amount);
             }
         }
-        
+
         public void WeaponDamage(Actor target, float damageMultiplier, DamageType damageType)
         {
             AttackPayload payload = new AttackPayload(this);
@@ -293,7 +293,7 @@ namespace Mooege.Core.GS.Powers
                 Speed = speed,
             }, actor);
         }
-        
+
         public TickTimer Knockback(Actor target, float magnitude, float arcHeight = 3.0f, float arcGravity = -0.03f)
         {
             var buff = new Implementations.KnockbackBuff(magnitude, arcHeight, arcGravity);

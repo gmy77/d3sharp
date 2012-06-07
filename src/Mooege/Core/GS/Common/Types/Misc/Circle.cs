@@ -48,7 +48,7 @@ namespace Mooege.Core.GS.Common.Types.Misc
         /// Constructs a new circle. 
         /// </summary> 
         public Circle(float x, float y, float radius)
-            :this(new Vector2F(x,y),radius)
+            : this(new Vector2F(x, y), radius)
         { }
 
         /// <summary> 

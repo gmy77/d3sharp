@@ -134,7 +134,7 @@ namespace Mooege.Common.MPQ.FileFormats
             I6 = (short)stream.ReadValueS32(); // i6 is a word, but struct is 28 bytes - DarkLotus
             //<Field Type="DT_WORD#30" Offset="24" Flags="1" EncodedBits="16" />
             //<Field Offset="28" Flags="0" />
-            
+
         }
     }
 

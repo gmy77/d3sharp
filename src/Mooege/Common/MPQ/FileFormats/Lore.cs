@@ -45,7 +45,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.SNOConversation = stream.ReadValueS32();
             this.I3 = stream.ReadValueS32();
             stream.Close();
-        }       
+        }
     }
     public enum LoreCategory
     {

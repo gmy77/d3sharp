@@ -22,16 +22,16 @@ namespace Mooege.Net.MooNet.Packets
 {
     public class PacketIn
     {
-        public MooNetClient Client {get; private set;}
+        public MooNetClient Client { get; private set; }
 
-        public bnet.protocol.Header Header {get; private set;}
+        public bnet.protocol.Header Header { get; private set; }
 
         public PacketIn(MooNetClient client, bnet.protocol.Header header)
         {
             this.Client = client;
             this.Header = header;
         }
-       
+
         //private void Read()
         //{
         //    this.HeaderSize = (this.Stream.ReadRawByte() << 8) | this.Stream.ReadRawByte(); // header size.
@@ -42,7 +42,7 @@ namespace Mooege.Net.MooNet.Packets
         public IMessage ReadMessage(IBuilder builder)
         {
             byte[] data = Client.IncomingMooNetStream.GetPacketData((int)this.Header.Size);
-            
+
             return builder.WeakMergeFrom(ByteString.CopyFrom(data)).WeakBuild();
         }
 

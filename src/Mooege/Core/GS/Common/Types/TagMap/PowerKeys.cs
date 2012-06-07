@@ -21,7 +21,7 @@ using System.Reflection;
 
 namespace Mooege.Core.GS.Common.Types.TagMap
 {
-   public class PowerKeys
+    public class PowerKeys
     {
         # region compile a dictionary to access keys from ids. If you need a readable name for a TagID, look up its key and get its name
         private static Dictionary<int, TagKey> tags = new Dictionary<int, TagKey>();
@@ -152,7 +152,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public static TagKeyScript ScriptFormula8 = new TagKeyScript(266624);
         public static TagKeyScript ScriptFormula1 = new TagKeyScript(266512);
         public static TagKeyScript ScriptFormula6 = new TagKeyScript(266592);
-        public static TagKeyInt ContactFrameType = new TagKeyInt( 328224 );
+        public static TagKeyInt ContactFrameType = new TagKeyInt(328224);
         public static TagKeyScript PayloadParam0 = new TagKeyScript(329776);
         public static TagKeyInt PayloadType = new TagKeyInt(329760);
         public static TagKeyInt TargetEnemies = new TagKeyInt(328112);
@@ -423,7 +423,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public static TagKeyScript RootTimerModificationPerStruggle = new TagKeyScript(360960);
         public static TagKeyScript PercentofDamageThatShieldCanAbsorb = new TagKeyScript(332641);
         public static TagKeyScript AnatomyCritBonusPercent = new TagKeyScript(413696);
-        public static TagKeyScript VanishDuration = new TagKeyScript( 458752 );
+        public static TagKeyScript VanishDuration = new TagKeyScript(458752);
         public static TagKeyScript HitpointsThatShieldCanAbsorb = new TagKeyScript(332640);
         public static TagKeyScript ShrineBuffRadius = new TagKeyScript(633603);
         public static TagKeyInt ShrineBuffAllies = new TagKeyInt(633602);

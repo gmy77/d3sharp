@@ -42,6 +42,6 @@ namespace Mooege.Net
                 // If user enables NAT, LAN-clients (and even local-computer if d3 is configured to use lan-ip) will not able to connect in gs.
                 // That needs a full implementation similar to pvpgn where we currently pretty miss the time for /raist.
             }
-        }       
+        }
     }
 }

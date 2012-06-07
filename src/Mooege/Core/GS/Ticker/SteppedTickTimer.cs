@@ -143,7 +143,7 @@ namespace Mooege.Core.GS.Ticker
         /// <param name="stepCallback">The action to be called on each step.</param>
         /// <param name="completionCallback">The completition action to be called on timeout.</param>
         public SteppedRelativeTickTimer(Game game, int ticksPerStep, int ticks, Action<int> stepCallback, Action<int> completionCallback)
-            :base(game, ticksPerStep, game.TickCounter + ticks, stepCallback, completionCallback)
+            : base(game, ticksPerStep, game.TickCounter + ticks, stepCallback, completionCallback)
         { }
     }
 

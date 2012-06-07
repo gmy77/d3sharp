@@ -73,26 +73,26 @@ namespace Mooege.Common.Logging
         {
             switch (level)
             {
-                case Logger.Level.Trace: 
+                case Logger.Level.Trace:
                 case Logger.Level.PacketDump:
-                    Console.ForegroundColor = ConsoleColor.DarkGray; 
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
                     break;
-                case Logger.Level.Debug: 
-                    Console.ForegroundColor = ConsoleColor.Cyan; 
+                case Logger.Level.Debug:
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     break;
-                case Logger.Level.Info: 
-                    Console.ForegroundColor = ConsoleColor.White; 
+                case Logger.Level.Info:
+                    Console.ForegroundColor = ConsoleColor.White;
                     break;
-                case Logger.Level.Warn: 
-                    Console.ForegroundColor = ConsoleColor.Yellow; 
+                case Logger.Level.Warn:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     break;
-                case Logger.Level.Error: 
-                    Console.ForegroundColor = ConsoleColor.Magenta; 
+                case Logger.Level.Error:
+                    Console.ForegroundColor = ConsoleColor.Magenta;
                     break;
-                case Logger.Level.Fatal: 
-                    Console.ForegroundColor = ConsoleColor.Red; 
+                case Logger.Level.Fatal:
+                    Console.ForegroundColor = ConsoleColor.Red;
                     break;
-                default: 
+                default:
                     break;
             }
         }

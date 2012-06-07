@@ -73,7 +73,7 @@ namespace Mooege.Net.GS
                         if (message.Consumer != Consumers.None)
                         {
                             if (message.Consumer == Consumers.ClientManager) ClientManager.Instance.Consume(this, message); // Client should be greeted by ClientManager and sent initial game-setup messages.
-                            else this.Game.Route(this, message); 
+                            else this.Game.Route(this, message);
                         }
 
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
@@ -118,7 +118,7 @@ namespace Mooege.Net.GS
             lock (this._bufferLock)
             {
                 if (_outgoingBuffer.Length <= 32) return;
-                
+
                 var data = _outgoingBuffer.GetPacketAndReset();
                 Connection.Send(data);
             }

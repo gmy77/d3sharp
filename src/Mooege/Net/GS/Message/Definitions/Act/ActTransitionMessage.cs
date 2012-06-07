@@ -26,7 +26,7 @@ namespace Mooege.Net.GS.Message.Definitions.Act
         public int Field0;
         public bool Field1;
 
-        public ActTransitionMessage():base(Opcodes.ActTransitionMessage) { }
+        public ActTransitionMessage() : base(Opcodes.ActTransitionMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

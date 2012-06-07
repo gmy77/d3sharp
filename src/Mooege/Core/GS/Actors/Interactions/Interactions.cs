@@ -110,5 +110,5 @@ namespace Mooege.Core.GS.Actors.Interactions
             };
         }
     }
-   
+
 }

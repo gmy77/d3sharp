@@ -90,7 +90,7 @@ namespace Mooege.Core.GS.Common.Types.QuadTrees
         /// <summary>
         /// List of contained objects.
         /// </summary>
-        public ConcurrentDictionary<uint, WorldObject> ContainedObjects = new ConcurrentDictionary<uint,WorldObject>();
+        public ConcurrentDictionary<uint, WorldObject> ContainedObjects = new ConcurrentDictionary<uint, WorldObject>();
 
         /// <summary>
         /// The bounds for node.

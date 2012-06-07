@@ -316,13 +316,13 @@ namespace Mooege.Core.GS.Items
 
         }
 
-        
-        
+
+
         public static void DeleteFromDB(Item item)
         {
-            if (item.DBItemInstance==null)
+            if (item.DBItemInstance == null)
                 return;
-            if (item.DBInventory!=null)
+            if (item.DBInventory != null)
                 return;//should be deleted by inventory.
             Logger.Debug("Deleting Item instance #{0} from DB", item.DBItemInstance.Id);
             if (item.World.CachedItems.ContainsKey(item.DBItemInstance.Id))
@@ -331,7 +331,7 @@ namespace Mooege.Core.GS.Items
             DBSessions.AccountSession.Flush();
             item.DBItemInstance = null;
         }
-        
+
 
         public static Item LoadFromDBInstance(Player owner, DBItemInstance instance)//  int dbID, int gbid, string attributesSer, string affixesSer)
         {

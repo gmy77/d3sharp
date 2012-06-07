@@ -43,7 +43,7 @@ namespace Mooege.Core.MooNet.Authentication
         {
             client.LoginEmail = request.Email;
             var account = AccountManager.GetAccountByEmail(request.Email.ToLower()); // check if account exists.
-            
+
             if (account == null) // we should be returning an error to client /raist.
             {
                 client.AuthenticationErrorCode = AuthenticationErrorCodes.NoGameAccount;
@@ -71,7 +71,7 @@ namespace Mooege.Core.MooNet.Authentication
 
         public static void HandleAuthResponse(MooNetClient client, int moduleId, byte[] authMessage)
         {
-            if(!OngoingAuthentications.ContainsKey(client)) return; // TODO: disconnect him also. /raist.
+            if (!OngoingAuthentications.ContainsKey(client)) return; // TODO: disconnect him also. /raist.
 
             var srp6 = OngoingAuthentications[client];
             byte[] A = authMessage.Skip(1).Take(128).ToArray(); // client's public ephemeral
@@ -80,7 +80,7 @@ namespace Mooege.Core.MooNet.Authentication
 
             var success = srp6.Verify(A, M_client, seed);
             //if (Config.Instance.DisablePasswordChecks || success)
-            if (success) 
+            if (success)
             {
                 client.SessionKey = srp6.SessionKey;
                 // send the logon proof.
@@ -103,7 +103,7 @@ namespace Mooege.Core.MooNet.Authentication
                 //end authentication
                 client.AuthenticationComplete();
             }
-             
+
             OngoingAuthentications.Remove(client);
         }
 

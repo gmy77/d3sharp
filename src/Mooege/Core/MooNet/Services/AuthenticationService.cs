@@ -33,7 +33,7 @@ using Mooege.Common.Extensions;
 namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x1, serviceName: "bnet.protocol.authentication.AuthenticationServer")]
-    public class AuthenticationService:bnet.protocol.authentication.AuthenticationServer, IServerService
+    public class AuthenticationService : bnet.protocol.authentication.AuthenticationServer, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
@@ -78,8 +78,8 @@ namespace Mooege.Core.MooNet.Services
 
                     var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder();
                     var moduleHandle = bnet.protocol.ContentHandle.CreateBuilder();
-                        moduleHandle.SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
-                            .SetUsage(0x61757468); // auth - RiskFingerprint.dll or Agreement.dll
+                    moduleHandle.SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
+                        .SetUsage(0x61757468); // auth - RiskFingerprint.dll or Agreement.dll
 
                     if (this.Client.HasAgreements())
                     {

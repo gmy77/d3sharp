@@ -40,12 +40,12 @@ namespace Mooege.Core.GS.Powers
             public PowerScript Script;
         }
         private List<ExecutingScript> _executingScripts = new List<ExecutingScript>();
-        
+
         // list of actors that were killed and are waiting to be deleted
         // rather ugly hack needed because deleting actors immediatly when they have visual buff effects
         // applied causes the effects to stay around forever.
         private Dictionary<Actor, TickTimer> _deletingActors = new Dictionary<Actor, TickTimer>();
-        
+
         public PowerManager()
         {
         }
@@ -83,7 +83,7 @@ namespace Mooege.Core.GS.Powers
             _StartScript(power);
             return true;
         }
-        
+
         public bool RunPower(Actor user, int powerSNO, uint targetId = uint.MaxValue, Vector3D targetPosition = null,
                                TargetMessage targetMessage = null)
         {

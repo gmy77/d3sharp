@@ -26,7 +26,7 @@ using Mooege.Common.Storage;
 
 namespace Mooege.Core.GS.Common.Types.SNO
 {
-    public class InvalidSnoException : Exception { public InvalidSnoException(string message):base(message) {} }
+    public class InvalidSnoException : Exception { public InvalidSnoException(string message) : base(message) { } }
 
     public class SNOHandle
     {
@@ -48,7 +48,8 @@ namespace Mooege.Core.GS.Common.Types.SNO
         /// <summary>
         /// The id of the referenced object
         /// </summary>
-        [PersistentProperty("Id")] public int Id { get; private set; }
+        [PersistentProperty("Id")]
+        public int Id { get; private set; }
 
         /// <summary>
         /// The target object this handle refers to.
@@ -82,12 +83,12 @@ namespace Mooege.Core.GS.Common.Types.SNO
             get
             {
                 if (!_isInitialized) Initialize();
-                return _name;              
+                return _name;
             }
         }
 
         private string _name = "";
-        private FileFormat _target = null;      
+        private FileFormat _target = null;
         private SNOGroup? _group = null;
         private bool _isValid = false;
         private bool _isInitialized = false;
@@ -185,7 +186,7 @@ namespace Mooege.Core.GS.Common.Types.SNO
 
         public override string ToString()
         {
-            if(IsValid)
+            if (IsValid)
                 return string.Format("[{0}] {1} - {2}", this.Group, this.Id, this.Name);
             else
                 return string.Format("[{0}] {1} - Invalid handle", _group, this.Id);

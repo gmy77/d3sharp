@@ -65,5 +65,4 @@ namespace Mooege.Common.MPQ.FileFormats
             this.TriggeredEvent.Read(stream);
         }
     }
-   
 }

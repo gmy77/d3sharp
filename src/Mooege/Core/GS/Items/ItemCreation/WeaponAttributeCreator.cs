@@ -28,7 +28,7 @@ namespace Mooege.Core.GS.Items.ItemCreation
         {
             item.Attributes[GameAttribute.Skill, 0x7780] = 1;
             item.Attributes[GameAttribute.IdentifyCost] = 1;
-       
+
             const float heroAttackspeed = 1.2f; // musst be calculated by Skills + passives + affixes  + ...
             const float heroMaxDmg = 50f; // musst be calculated by Skills + passives + affixes  + ...
             const float heroMinDmg = 10f; // musst be calculated by Skills + passives + affixes  + ...
@@ -60,7 +60,7 @@ namespace Mooege.Core.GS.Items.ItemCreation
             item.Attributes[GameAttribute.Damage_Weapon_Max, 0xFFFFF] = weaponDmg;
             item.Attributes[GameAttribute.Damage_Weapon_Max_Total, 0] = weaponDmg + heroMaxDmg;
             item.Attributes[GameAttribute.Damage_Weapon_Max_Total, 0xFFFFF] = weaponDmg + heroMaxDmg;
-            
+
             item.Attributes[GameAttribute.Damage_Weapon_Delta, 0] = weaponDmg - minWeaponDmg;
             item.Attributes[GameAttribute.Damage_Weapon_Delta_SubTotal, 0] = (weaponDmg + heroMaxDmg) - (minWeaponDmg + heroMinDmg);
             item.Attributes[GameAttribute.Damage_Weapon_Delta_Total, 0] = (weaponDmg + heroMaxDmg) - (minWeaponDmg + heroMinDmg);

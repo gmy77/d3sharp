@@ -107,7 +107,7 @@ namespace Mooege.Core.GS.Powers
             _UpdatePosition();
             return this.Arrived;
         }
-        
+
         private void _SetupMove(Vector3D destination, float speed)
         {
             Vector3D dir_normal = PowerMath.Normalize(new Vector3D(destination.X - this.Target.Position.X,

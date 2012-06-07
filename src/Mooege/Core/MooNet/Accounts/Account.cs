@@ -76,7 +76,7 @@ namespace Mooege.Core.MooNet.Accounts
                 return val;
             }
         }
-            
+
 
 
         public IntPresenceField LastOnlineField
@@ -242,7 +242,7 @@ namespace Mooege.Core.MooNet.Accounts
             //TODO: Create delegate inside Persistence field so IsOnline can be removed
             //this.AccountOnlineField.Value = this.IsOnline;
             //TODO: Create delegate-move this out
-            
+
             /*
             this.GameAccountListField.Value.Clear();
             foreach (var pair in this.GameAccounts)

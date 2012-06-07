@@ -58,7 +58,7 @@ namespace Mooege.Core.GS.AI
         {
             this.Actions.Enqueue(action);
         }
-       
+
         public virtual void Update(int tickCounter)
         {
             if (this.State == BrainState.Dead || this.Body == null || this.Body.World == null || this.State == BrainState.Off)
@@ -110,6 +110,6 @@ namespace Mooege.Core.GS.AI
 
             if (this.CurrentAction.Done)
                 this.CurrentAction = null;
-        }        
+        }
     }
 }

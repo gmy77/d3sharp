@@ -65,7 +65,7 @@ namespace Mooege.Core.GS.Actors
         {
             // The following two seems to be shared with monsters. One wonders why there isn't a specific actortype for minions.
             this.Master = master;
-            this.Field2 = 0x8; 
+            this.Field2 = 0x8;
             this.GBHandle.Type = (int)GBHandleType.Monster; this.GBHandle.GBID = 1;
             this.Attributes[GameAttribute.Summoned_By_ACDID] = (int)master.DynamicID;
             this.Attributes[GameAttribute.TeamID] = master.Attributes[GameAttribute.TeamID];

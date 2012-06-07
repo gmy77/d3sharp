@@ -27,7 +27,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Artisans
 {
     [HandledSNO(0x0002FA63 /* PT_Blacksmith_ForgeWeaponShortcut.acr */,
         0x0002FA64 /*PT_Blacksmith_ForgeArmorShortcut.acr */,
-        0x0002FA62 /*PT_Blacksmith_RepairShortcut.acr */, 
+        0x0002FA62 /*PT_Blacksmith_RepairShortcut.acr */,
         212519 /* Actor PT_Jeweler_AddSocketShortcut */,
         212517 /* Actor PT_Jeweler_CombineShortcut */,
         212521 /* Actor PT_Jeweler_RemoveGemShortcut */,

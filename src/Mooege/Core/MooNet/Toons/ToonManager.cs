@@ -121,14 +121,14 @@ namespace Mooege.Core.MooNet.Toons
                 DBSessions.AccountSession.Delete(inv);
             }
 
-            
-            
+
+
 
             //remove lastplayed hero if it was toon
             if (toon.DBToon.DBGameAccount.LastPlayedHero != null && toon.DBToon.DBGameAccount.LastPlayedHero.Id == toon.DBToon.Id)
                 toon.DBToon.DBGameAccount.LastPlayedHero = null;
 
-            
+
             //remove toon from dbgameaccount
             while (toon.DBToon.DBGameAccount.DBToons.Contains(toon.DBToon))
                 toon.DBToon.DBGameAccount.DBToons.Remove(toon.DBToon);
@@ -138,7 +138,7 @@ namespace Mooege.Core.MooNet.Toons
             DBSessions.AccountSession.Delete(toon.DBToon);
             DBSessions.AccountSession.Flush();
 
-            
+
             //remove toon from loadedToon list
             if (LoadedToons.Contains(toon))
                 LoadedToons.Remove(toon);

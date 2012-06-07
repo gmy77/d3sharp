@@ -245,9 +245,9 @@ namespace Mooege.Core.GS.Actors
         public override void Destroy()
         {
             if (_questRange != null)
-                if (World==null)
-                    Logger.Debug("World is null? {0}",this.GetType());
-                else if (World.Game==null)
+                if (World == null)
+                    Logger.Debug("World is null? {0}", this.GetType());
+                else if (World.Game == null)
                     Logger.Debug("Game is null? {0}", this.GetType());
                 else if (World.Game.Quests != null)
                     foreach (var quest in World.Game.Quests)

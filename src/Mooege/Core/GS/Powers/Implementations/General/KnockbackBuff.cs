@@ -50,7 +50,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 return false;
 
             Vector3D destination = PowerMath.TranslateDirection2D(User.Position, Target.Position,
-                                                                   _magnitude < 0f ? User.Position : Target.Position, 
+                                                                   _magnitude < 0f ? User.Position : Target.Position,
                                                                    (float)Math.Sqrt(Math.Abs(_magnitude)));
 
             _mover = new ActorMover(Target);

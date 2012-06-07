@@ -19,10 +19,10 @@
 namespace Mooege.Net.WebServices
 {
     public sealed class Config : Common.Config.Config
-    {        
+    {
         public bool Enabled { get { return this.GetBoolean("Enabled", true); } set { this.Set("Enabled", value); } }
         public string Address { get { return this.GetString("Address", ""); } set { this.Set("Address", value); } }
-   
+
         private static readonly Config _instance = new Config();
         public static Config Instance { get { return _instance; } }
         private Config() : base("WebServices") { }

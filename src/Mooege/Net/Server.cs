@@ -79,9 +79,9 @@ namespace Mooege.Net
             // * IPv6Only - false - create a dual-socket that both supports IPv4 and IPv6 - check the IPv6 support note above.
             Listener.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
             Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
-			#if !__MonoCS__
+#if !__MonoCS__
             if (NetworkingConfig.Instance.EnableIPv6) Listener.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
-			#endif
+#endif
 
             try
             {
@@ -362,7 +362,7 @@ namespace Mooege.Net
                 {
                     // Disconnect and raise the OnDisconnect event.
                     connection.Disconnect();
-//                    connection.Socket.Disconnect(false);
+                    //                    connection.Socket.Disconnect(false);
                     OnClientDisconnect(new ConnectionEventArgs(connection));
                 }
 
@@ -372,15 +372,15 @@ namespace Mooege.Net
 
         public virtual void Disconnect(Connection connection)
         {
-//            if (connection == null) throw new ArgumentNullException("connection");
-//            if (!connection.IsConnected) return;
+            //            if (connection == null) throw new ArgumentNullException("connection");
+            //            if (!connection.IsConnected) return;
 
             if (connection == null)
                 return;
 
             connection.Disconnect();
 
-//            connection.Socket.Disconnect(false);
+            //            connection.Socket.Disconnect(false);
             _RemoveConnection(connection, true);
         }
 
@@ -450,7 +450,7 @@ namespace Mooege.Net
             }
 
             // Disconnect the clients.
-            foreach(var connection in this.Connections.ToList()) // use ToList() so we don't get collection modified exception there
+            foreach (var connection in this.Connections.ToList()) // use ToList() so we don't get collection modified exception there
             {
                 connection.Disconnect();
             }

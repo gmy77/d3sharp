@@ -182,7 +182,7 @@ namespace Mooege.Core.GS.Games
         {
             this.game = game;
             SNOHandle = new SNOHandle(SNOGroup.Quest, SNOQuest);
-            asset = SNOHandle.Target as  Mooege.Common.MPQ.FileFormats.Quest;
+            asset = SNOHandle.Target as Mooege.Common.MPQ.FileFormats.Quest;
             CurrentStep = new QuestStep(asset.QuestUnassignedStep, this);
         }
 

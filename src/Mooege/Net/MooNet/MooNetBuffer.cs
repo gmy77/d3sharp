@@ -27,19 +27,19 @@ namespace Mooege.Net.MooNet
             if (Length < 2)
                 return false;
 
-            int headerSize = (_data[Position] << 8) | _data[Position+1]; // header size.
+            int headerSize = (_data[Position] << 8) | _data[Position + 1]; // header size.
 
             if (Length < headerSize + 2)
                 return false;
 
             var tempData = new byte[headerSize];
-            Array.Copy(_data, Position+2, tempData, 0, headerSize);
+            Array.Copy(_data, Position + 2, tempData, 0, headerSize);
 
             var headerData = bnet.protocol.Header.ParseFrom(tempData); // header data.
 
             if (Length < headerData.Size + headerSize + 2)
                 return false;
-            
+
             return true;
         }
 
@@ -54,7 +54,7 @@ namespace Mooege.Net.MooNet
                 throw new Exception("GetPacketHeader when insuficient data avaliable");
 
             var tempData = new byte[headerSize];
-            Array.Copy(_data, Position+2, tempData, 0, headerSize);
+            Array.Copy(_data, Position + 2, tempData, 0, headerSize);
 
             var headerData = bnet.protocol.Header.ParseFrom(tempData); // header data.
             Position += 2 + headerSize;

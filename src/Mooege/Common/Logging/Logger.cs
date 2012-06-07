@@ -296,7 +296,7 @@ namespace Mooege.Common.Logging
 
         #endregion
 
-        
+
         #region utility functions
 
         private void Log(Level level, string message, object[] args) // sends logs to log-router.
@@ -322,5 +322,5 @@ namespace Mooege.Common.Logging
         }
 
         #endregion
-    }   
+    }
 }

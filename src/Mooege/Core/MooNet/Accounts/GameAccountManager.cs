@@ -99,7 +99,7 @@ namespace Mooege.Core.MooNet.Accounts
 
         public static void DeleteGameAccount(GameAccount gameAccount)
         {
-            if (gameAccount==null)
+            if (gameAccount == null)
                 return;
             if (LoadedGameAccounts.Contains(gameAccount))
                 LoadedGameAccounts.Remove(gameAccount);
@@ -110,7 +110,7 @@ namespace Mooege.Core.MooNet.Accounts
                 ToonManager.DeleteToon(toon);
 
 
-            var inventoryToDelete = DBSessions.AccountSession.Query<DBInventory>().Where(inv => inv.DBGameAccount.Id==gameAccount.DBGameAccount.Id);
+            var inventoryToDelete = DBSessions.AccountSession.Query<DBInventory>().Where(inv => inv.DBGameAccount.Id == gameAccount.DBGameAccount.Id);
             foreach (var inv in inventoryToDelete)
                 DBSessions.AccountSession.Delete(inv);
 

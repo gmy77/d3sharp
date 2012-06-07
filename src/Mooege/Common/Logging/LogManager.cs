@@ -51,7 +51,7 @@ namespace Mooege.Common.Logging
         {
             var frame = new StackFrame(1, false); // read stack frame.
             var name = frame.GetMethod().DeclaringType.Name; // get declaring type's name.
-            
+
             if (name == null) // see if we got a name.
                 throw new Exception("Error getting full name for declaring type.");
 
@@ -82,5 +82,5 @@ namespace Mooege.Common.Logging
         {
             Targets.Add(target);
         }
-    }  
+    }
 }

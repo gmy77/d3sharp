@@ -42,7 +42,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public Power(MpqFile file)
         {
-            var stream = file.Open();   
+            var stream = file.Open();
             this.Header = new Header(stream);
             LuaName = stream.ReadString(64, true);
             stream.Position += 4; // pad 1

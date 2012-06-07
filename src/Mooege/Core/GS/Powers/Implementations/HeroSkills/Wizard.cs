@@ -1359,7 +1359,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Logger.Info("Tried to Teleport to unwalkable location");
                 User.PlayEffectGroup(RuneSelect(170232, 170232, 170232, 192053, 192080, 192152));
 
-                TeleRevertBuff buff = User.World.BuffManager.GetFirstBuff<TeleRevertBuff>(User);                
+                TeleRevertBuff buff = User.World.BuffManager.GetFirstBuff<TeleRevertBuff>(User);
                 if (buff != null)
                 {
                     yield return WaitSeconds(0.3f);

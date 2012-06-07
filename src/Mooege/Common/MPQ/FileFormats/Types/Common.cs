@@ -146,7 +146,7 @@ namespace Mooege.Common.MPQ.FileFormats.Types
             I0 = stream.ReadValueS32();
         }
     }
-    
+
     public class TriggerConditions
     {
         public int Percent { get; private set; } //0-255

@@ -94,7 +94,7 @@ namespace Mooege.Net.MooNet
             var proto = service.GetRequestPrototype(method);
             var builder = proto.WeakCreateBuilderForType();
             var message = packet.ReadMessage(builder);
-            
+
             Logger.LogIncomingPacket(message, packet.Header);
 
             try

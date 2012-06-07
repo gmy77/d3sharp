@@ -118,7 +118,7 @@ namespace Mooege.Core.GS.Generators
                     RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                     SceneGroupSNO = -1
                 };
-               
+
                 // If the scene has a subscene (cluster ID is set), choose a random subscenes from the cluster load it and attach it to parent scene /farmy
                 if (sceneChunk.SceneSpecification.ClusterID != -1)
                 {
@@ -442,7 +442,7 @@ namespace Mooege.Core.GS.Generators
             exitTypes.Add(TileExits.North, positionNorth);
             exitTypes.Add(TileExits.South, positionSouth);
 
-            if(!isRandom)
+            if (!isRandom)
                 return exitTypes;
 
             //randomize
@@ -707,7 +707,7 @@ namespace Mooege.Core.GS.Generators
                                     // Adventure are basically made up of a markerSet that has relative PRTransforms
                                     // it has some other fields that are always 0 and a reference to a symbol actor
                                     // no idea what they are used for - farmy
-                                    
+
                                     var adventure = spawnEntry.SNOHandle.Target as Adventure;
                                     var markerSet = new SNOHandle(adventure.SNOMarkerSet).Target as MarkerSet;
 
@@ -776,7 +776,7 @@ namespace Mooege.Core.GS.Generators
                             if ((scene.NavMesh.Squares[y * scene.NavMesh.SquaresCountX + x].Flags & Mooege.Common.MPQ.FileFormats.Scene.NavCellFlags.NoSpawn) == 0)
                             {
                                 loadActor(
-                                    new SNOHandle(monsterActors[RandomHelper.Next(monsterActors.Length)]), 
+                                    new SNOHandle(monsterActors[RandomHelper.Next(monsterActors.Length)]),
                                     new PRTransform
                                     {
                                         Vector3D = new Vector3D

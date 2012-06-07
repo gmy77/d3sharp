@@ -89,14 +89,14 @@ namespace Mooege.Net
         /// Gets underlying socket.
         /// </summary>
         Socket Socket { get; }
-        
+
         /// <summary>
         /// Sends a <see cref="PacketOut"/> to remote endpoint.
         /// </summary>
         /// <param name="packet"><see cref="PacketOut"/> to send.</param>
         /// <returns>Returns count of sent bytes.</returns>
         int Send(PacketOut packet);
-        
+
         /// <summary>
         /// Sends byte buffer to remote endpoint.
         /// </summary>

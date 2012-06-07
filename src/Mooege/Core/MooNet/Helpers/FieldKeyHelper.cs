@@ -44,7 +44,7 @@ namespace Mooege.Core.MooNet.Helpers
         public static FieldKey Create(Program program, OriginatingClass originatingClass, uint field, ulong index)
         {
             return
-                FieldKey.CreateBuilder().SetProgram((uint) program).SetGroup((uint) originatingClass).SetField(
+                FieldKey.CreateBuilder().SetProgram((uint)program).SetGroup((uint)originatingClass).SetField(
                     field).SetIndex(index).Build();
         }
 
@@ -100,5 +100,5 @@ namespace Mooege.Core.MooNet.Helpers
             this._FieldValues.Clear();
         }
 
-    } 
+    }
 }

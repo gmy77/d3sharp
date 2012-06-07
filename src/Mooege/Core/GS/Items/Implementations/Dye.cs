@@ -29,7 +29,7 @@ namespace Mooege.Core.GS.Items.Implementations
     [HandledType("Dye")]
     public class Dye : Item
     {
-        private static Dictionary<int, int> DyeColorMap = new Dictionary<int,int>();
+        private static Dictionary<int, int> DyeColorMap = new Dictionary<int, int>();
 
         public Dye(World world, Mooege.Common.MPQ.FileFormats.ItemTable definition)
             : base(world, definition)

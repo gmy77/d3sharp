@@ -28,7 +28,7 @@ using Mooege.Net.MooNet;
 namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x6, serviceName: "bnet.protocol.friends.FriendsService")]
-    public class FriendsService : bnet.protocol.friends.FriendsService,IServerService
+    public class FriendsService : bnet.protocol.friends.FriendsService, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }

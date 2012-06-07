@@ -100,7 +100,7 @@ namespace Mooege.Core.GS.Powers
         {
             Vector3D baseRotation = targetPosition - center;
             float spacing = spacingDegrees * DegreesToRadians;
-            float median = count % 2 == 0 ? spacing * (count+1) / 2.0f : spacing * (float)Math.Ceiling(count / 2.0f);
+            float median = count % 2 == 0 ? spacing * (count + 1) / 2.0f : spacing * (float)Math.Ceiling(count / 2.0f);
             Vector3D[] output = new Vector3D[count];
 
             float offset = 1f;
