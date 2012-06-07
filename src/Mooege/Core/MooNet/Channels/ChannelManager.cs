@@ -46,7 +46,8 @@ namespace Mooege.Core.MooNet.Channels
         public static void DissolveChannel(ulong id)
         {
             Logger.Debug("Dissolving channel {0}", id);
-            if (!Channels.ContainsKey(id)) {
+            if (!Channels.ContainsKey(id))
+            {
                 Logger.Warn("Attempted to delete a non-existent channel with ID {0}", id);
                 return;
             }

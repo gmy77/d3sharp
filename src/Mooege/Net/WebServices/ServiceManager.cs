@@ -31,7 +31,7 @@ namespace Mooege.Net.WebServices
         private static readonly Logger Logger = LogManager.CreateLogger();
 
         private readonly List<ServiceHost> _serviceHosts = new List<ServiceHost>();
-        private readonly Dictionary<Type, ServiceContractAttribute> _webServices = new Dictionary<Type, ServiceContractAttribute>();        
+        private readonly Dictionary<Type, ServiceContractAttribute> _webServices = new Dictionary<Type, ServiceContractAttribute>();
 
         public ServiceManager()
         {
@@ -50,14 +50,14 @@ namespace Mooege.Net.WebServices
         }
 
         public void Run()
-        {            
+        {
             foreach (var pair in this._webServices)
             {
                 var uri = new Uri(string.Format("{0}/{1}", Config.Instance.Address, pair.Value.Name));
                 var serviceHost = new ServiceHost(pair.Key, uri);
 
                 serviceHost.Description.Behaviors.Add(new ServiceMetadataBehavior { HttpGetEnabled = true });
-                var debugBehavior = (ServiceDebugBehavior) serviceHost.Description.Behaviors[typeof (ServiceDebugBehavior)];
+                var debugBehavior = (ServiceDebugBehavior)serviceHost.Description.Behaviors[typeof(ServiceDebugBehavior)];
                 debugBehavior.IncludeExceptionDetailInFaults = true;
 
                 serviceHost.AddServiceEndpoint(typeof(IMetadataExchange), new BasicHttpBinding(), "Mex");

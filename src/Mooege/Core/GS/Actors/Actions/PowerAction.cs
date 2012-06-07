@@ -71,7 +71,7 @@ namespace Mooege.Core.GS.Actors.Actions
 
                 return;
             }
-            
+
             // try to get nearest target if no target yet acquired
             if (_target == null)
             {

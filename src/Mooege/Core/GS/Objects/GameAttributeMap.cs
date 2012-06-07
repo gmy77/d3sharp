@@ -79,7 +79,7 @@ namespace Mooege.Core.GS.Objects
 
                 if (serialized.Length > 0)
                     serialized += ";";
-                
+
 
                 var values = RawGetAttributeValue(gameAttribute, pair.Key.Key);
 

@@ -78,7 +78,7 @@ namespace Mooege.Core.Cryptography
         /// Server's public ephemeral value
         /// </summary>
         private readonly BigInteger B;
-                
+
         /// <summary>
         /// Returns server's logon challenge message.
         /// command = 0 
@@ -95,7 +95,7 @@ namespace Mooege.Core.Cryptography
         /// byte M_server[32] - server's proof of session key.
         /// byte secondProof[128]; // for veriyfing second challenge.
         /// </summary>
-        public byte[] LogonProof { get; private set; }        
+        public byte[] LogonProof { get; private set; }
 
         public SRP6a(Account account)
         {
@@ -190,7 +190,7 @@ namespace Mooege.Core.Cryptography
             if (M.CompareTo(M_client)) // successful authentication session.
                 return true;
             else // authentication failed because of invalid credentals.
-                return false;            
+                return false;
         }
 
         public static byte[] GetRandomBytes(int count)

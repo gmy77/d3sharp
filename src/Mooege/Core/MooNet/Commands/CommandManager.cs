@@ -37,7 +37,7 @@ namespace Mooege.Core.MooNet.Commands
 
         private static void RegisterCommandGroups()
         {
-            foreach(var type in Assembly.GetExecutingAssembly().GetTypes())
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
                 if (!type.IsSubclassOf(typeof(CommandGroup))) continue;
 
@@ -48,9 +48,9 @@ namespace Mooege.Core.MooNet.Commands
                 if (CommandGroups.ContainsKey(groupAttribute))
                     Logger.Warn("There exists an already registered command group named '{0}'.", groupAttribute.Name);
 
-                var commandGroup = (CommandGroup) Activator.CreateInstance(type);
+                var commandGroup = (CommandGroup)Activator.CreateInstance(type);
                 commandGroup.Register(groupAttribute);
-                CommandGroups.Add(groupAttribute, commandGroup);                   
+                CommandGroups.Add(groupAttribute, commandGroup);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Mooege.Core.MooNet.Commands
             if (line == null) return;
             if (line.Trim() == string.Empty) return;
 
-            if(!ExtractCommandAndParameters(line, out command, out parameters))
+            if (!ExtractCommandAndParameters(line, out command, out parameters))
             {
                 output = "Unknown command: " + line;
                 Logger.Info(output);
@@ -110,7 +110,7 @@ namespace Mooege.Core.MooNet.Commands
             if (!ExtractCommandAndParameters(line, out command, out parameters))
                 return false;
 
-            foreach(var pair in CommandGroups) 
+            foreach (var pair in CommandGroups)
             {
                 if (pair.Key.Name != command) continue;
                 output = pair.Value.Handle(parameters, invokerClient);
@@ -121,7 +121,7 @@ namespace Mooege.Core.MooNet.Commands
             if (found == false)
                 output = string.Format("Unknown command: {0} {1}", command, parameters);
 
-            if (output == string.Empty) 
+            if (output == string.Empty)
                 return true;
 
             output = "[mooege] " + output;
@@ -151,13 +151,13 @@ namespace Mooege.Core.MooNet.Commands
             return true;
         }
 
-        [CommandGroup("commands","Lists available commands for your user-level.")]
+        [CommandGroup("commands", "Lists available commands for your user-level.")]
         public class CommandsCommandGroup : CommandGroup
         {
             public override string Fallback(string[] parameters = null, MooNetClient invokerClient = null)
             {
                 var output = "Available commands: ";
-                foreach(var pair in CommandGroups)
+                foreach (var pair in CommandGroups)
                 {
                     if (invokerClient != null && pair.Key.MinUserLevel > invokerClient.Account.UserLevel) continue;
                     output += pair.Key.Name + ", ";
@@ -185,9 +185,9 @@ namespace Mooege.Core.MooNet.Commands
                 bool found = false;
                 var @params = parameters.Split(' ');
                 var group = @params[0];
-                var command = @params.Count()>1 ? @params[1] : string.Empty;
+                var command = @params.Count() > 1 ? @params[1] : string.Empty;
 
-                foreach(var pair in CommandGroups)
+                foreach (var pair in CommandGroups)
                 {
                     if (group != pair.Key.Name)
                         continue;

@@ -18,7 +18,7 @@
 
 namespace Mooege.Core.MooNet.Commands
 {
-    public sealed class Config: Mooege.Common.Config.Config
+    public sealed class Config : Mooege.Common.Config.Config
     {
         public char CommandPrefix { get { return this.GetString("CommandPrefix", "!")[0]; } set { this.Set("CommandPrefix", value); } }
 

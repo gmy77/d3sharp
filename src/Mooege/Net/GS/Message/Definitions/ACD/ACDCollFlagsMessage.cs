@@ -26,7 +26,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public uint ActorID; // The actor's DynamicID
         public int CollFlags;
 
-        public ACDCollFlagsMessage() : base(Opcodes.ACDCollFlagsMessage) {}
+        public ACDCollFlagsMessage() : base(Opcodes.ACDCollFlagsMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

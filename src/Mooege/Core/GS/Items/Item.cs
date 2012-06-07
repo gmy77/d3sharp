@@ -56,7 +56,7 @@ namespace Mooege.Core.GS.Items
     public class Item : Actor
     {
         public DBInventory DBInventory = null;
-        public DBItemInstance DBItemInstance=null;
+        public DBItemInstance DBItemInstance = null;
 
         private static readonly Logger Logger = LogManager.CreateLogger();
         public bool ItemHasChanges { get; private set; }//needed in Future, set this to true if Item affixes or item attributes have changed.

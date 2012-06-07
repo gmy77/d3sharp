@@ -33,7 +33,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public uint ItemID; // Item's DynamicID
         public Reasons Reason;
 
-        public ACDPickupFailedMessage() : base(Opcodes.ACDPickupFailedMessage) {}
+        public ACDPickupFailedMessage() : base(Opcodes.ACDPickupFailedMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

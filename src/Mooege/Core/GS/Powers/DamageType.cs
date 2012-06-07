@@ -43,8 +43,8 @@ namespace Mooege.Core.GS.Powers
         public TagKeyInt DeathAnimationTag;
 
         public static readonly DamageType Physical = new DamageType
-        { 
-            HitEffect = HitEffectType.Physical, 
+        {
+            HitEffect = HitEffectType.Physical,
             AttributeKey = 0,
             DeathAnimationTag = AnimationSetKeys.DeathDefault,
         };
@@ -60,7 +60,7 @@ namespace Mooege.Core.GS.Powers
             AttributeKey = 3,
             DeathAnimationTag = AnimationSetKeys.DeathCold,
         };
-        public static readonly DamageType Fire = new DamageType 
+        public static readonly DamageType Fire = new DamageType
         {
             HitEffect = HitEffectType.Fire,
             AttributeKey = 1,

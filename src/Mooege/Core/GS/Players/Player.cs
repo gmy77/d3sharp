@@ -1691,7 +1691,7 @@ namespace Mooege.Core.GS.Players
             // 1 tick = 1/60s, so multiply ticks in seconds against resource regen per-second to get the amount to update
             float tickSeconds = 1f / 60f * (this.InGameClient.Game.TickCounter - _lastResourceUpdateTick);
             _lastResourceUpdateTick = this.InGameClient.Game.TickCounter;
-            
+
             GeneratePrimaryResource(tickSeconds * this.Attributes[GameAttribute.Resource_Regen_Total,
                                                                   this.Attributes[GameAttribute.Resource_Type_Primary]]);
             GenerateSecondaryResource(tickSeconds * this.Attributes[GameAttribute.Resource_Regen_Total,

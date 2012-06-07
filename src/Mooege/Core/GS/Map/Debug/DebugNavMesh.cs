@@ -61,7 +61,7 @@ namespace Mooege.Core.GS.Map.Debug
         private readonly Brush _walkableBrush = Brushes.Blue;
         private readonly Pen _walkablePen = new Pen(Color.Blue, 1.0f);
         private readonly Pen _playerProximityPen = new Pen(Brushes.DarkViolet, 2.0f);
-        private readonly Font _sceneFont = new Font("Verdana", 7);        
+        private readonly Font _sceneFont = new Font("Verdana", 7);
 
         public DebugNavMesh(World world, Player player = null)
         {
@@ -146,7 +146,7 @@ namespace Mooege.Core.GS.Map.Debug
 
         #endregion
 
-        #region drawing 
+        #region drawing
 
         public Bitmap Draw()
         {
@@ -173,10 +173,10 @@ namespace Mooege.Core.GS.Map.Debug
                     bottomMostScene = scene;
             }
 
-            if (rightMostScene == null || bottomMostScene == null) 
+            if (rightMostScene == null || bottomMostScene == null)
                 return null;
 
-            var maxX = (int) (rightMostScene.Bounds.X + rightMostScene.Bounds.Width) + 1;
+            var maxX = (int)(rightMostScene.Bounds.X + rightMostScene.Bounds.Width) + 1;
             var maxY = (int)(bottomMostScene.Bounds.Y + bottomMostScene.Bounds.Height) + 1;
 
             var bitmap = new Bitmap(maxX, maxY, System.Drawing.Imaging.PixelFormat.Format16bppRgb555);
@@ -257,10 +257,10 @@ namespace Mooege.Core.GS.Map.Debug
                 }
             }
 
-            if(this.DrawPlayerProximityCircle)
+            if (this.DrawPlayerProximityCircle)
                 this.DrawProximityCircle(graphics);
 
-            if(this.DrawPlayerProximityRectangle)
+            if (this.DrawPlayerProximityRectangle)
                 this.DrawProximityRectangle(graphics);
         }
 
@@ -275,7 +275,7 @@ namespace Mooege.Core.GS.Map.Debug
             foreach (var cell in this.WalkableCells)
             {
                 var rect = new Rectangle(new System.Drawing.Point((int)cell.Left, (int)cell.Top), new System.Drawing.Size((int)cell.Width, (int)cell.Height));
-                
+
                 if (this.FillCells)
                     graphics.FillRectangle(_walkableBrush, rect);
                 else
@@ -288,7 +288,7 @@ namespace Mooege.Core.GS.Map.Debug
             foreach (var cell in this.UnWalkableCells)
             {
                 var rect = new Rectangle(new System.Drawing.Point((int)cell.Left, (int)cell.Top), new System.Drawing.Size((int)cell.Width, (int)cell.Height));
-                
+
                 if (this.FillCells)
                     graphics.FillRectangle(_unwalkableBrush, rect);
                 else
@@ -304,7 +304,7 @@ namespace Mooege.Core.GS.Map.Debug
 
         private void DrawProximityCircle(Graphics graphics)
         {
-            if (this.Player == null) 
+            if (this.Player == null)
                 return;
 
             var rect = new RectangleF(this.Player.Position.X - Actor.DefaultQueryProximityRadius,
@@ -321,8 +321,8 @@ namespace Mooege.Core.GS.Map.Debug
                 return;
 
             graphics.DrawRectangle(this._playerProximityPen,
-                                   this.Player.Position.X - Actor.DefaultQueryProximityLenght/2,
-                                   this.Player.Position.Y - Actor.DefaultQueryProximityLenght/2,
+                                   this.Player.Position.X - Actor.DefaultQueryProximityLenght / 2,
+                                   this.Player.Position.Y - Actor.DefaultQueryProximityLenght / 2,
                                    Actor.DefaultQueryProximityLenght,
                                    Actor.DefaultQueryProximityLenght);
         }

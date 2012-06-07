@@ -31,7 +31,7 @@ namespace Mooege.Core.MooNet.Authentication
             int versionMatch = -1;
             string clientVersionSignature = request.HasVersion ? request.Version.Substring(0, 24) : string.Empty; // get client's version string signature - the very first 24 chars like; "Aurora b4367eba86_public".
 
-            foreach(var pair in VersionInfo.MooNet.ClientVersionMaps) // see if client's version signature matches anyone in our client versions map.
+            foreach (var pair in VersionInfo.MooNet.ClientVersionMaps) // see if client's version signature matches anyone in our client versions map.
             {
                 if (pair.Key != clientVersionSignature)
                     continue;
@@ -55,7 +55,7 @@ namespace Mooege.Core.MooNet.Authentication
             }
 
             // set client locale
-            switch(request.Locale)
+            switch (request.Locale)
             {
                 case "deDE":
                     client.Locale = MooNetClient.ClientLocale.deDE;
@@ -111,7 +111,7 @@ namespace Mooege.Core.MooNet.Authentication
             }
 
             Logger.Trace("Client Info: user: {0} program: {1}  platform: {2} locale: {3} version: {4} [{5}]  app_version: {6}.",
-                request.Email, request.Program, request.Platform, request.Locale, versionMatch != -1 ? versionMatch.ToString() : "Unknown", request.Version,request.ApplicationVersion);
+                request.Email, request.Program, request.Platform, request.Locale, versionMatch != -1 ? versionMatch.ToString() : "Unknown", request.Version, request.ApplicationVersion);
 
             //return versionMatch == VersionInfo.MooNet.RequiredClientVersion; // see if the client fits our required version.
             return request.ApplicationVersion == VersionInfo.MooNet.RequiredClientVersion;

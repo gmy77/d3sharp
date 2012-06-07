@@ -28,7 +28,7 @@ namespace Mooege.Common.Logging
         /// </summary>
         public string LoggingRoot
         {
-            get { return this.GetString("Root", @"logs"); } 
+            get { return this.GetString("Root", @"logs"); }
             set { this.Set("Root", value); }
         }
 
@@ -48,7 +48,7 @@ namespace Mooege.Common.Logging
         private LogConfig() :
             base("Logging") // Call the base ctor with section name 'Logging'.
         { }
-        
+
         /// <summary>
         /// Singleton instance.
         /// </summary>
@@ -70,7 +70,7 @@ namespace Mooege.Common.Logging
         /// </summary>
         public bool Enabled
         {
-            get { return this.GetBoolean("Enabled", true); } 
+            get { return this.GetBoolean("Enabled", true); }
             set { this.Set("Enabled", value); }
         }
 
@@ -79,7 +79,7 @@ namespace Mooege.Common.Logging
         /// </summary>
         public string Target
         {
-            get { return this.GetString("Target", "Console"); } 
+            get { return this.GetString("Target", "Console"); }
             set { this.GetString("Target", value); }
         }
 
@@ -97,7 +97,7 @@ namespace Mooege.Common.Logging
         /// </summary>
         public string FileName
         {
-            get { return this.GetString("FileName", ""); } 
+            get { return this.GetString("FileName", ""); }
             set { this.GetString("FileName", value); }
         }
 
@@ -106,8 +106,8 @@ namespace Mooege.Common.Logging
         /// </summary>
         public Logger.Level MinimumLevel
         {
-            get { return (Logger.Level)( this.GetInt("MinimumLevel", (int)Logger.Level.Info, true)); } 
-            set { this.Set("MinimumLevel", (int)value ); }
+            get { return (Logger.Level)(this.GetInt("MinimumLevel", (int)Logger.Level.Info, true)); }
+            set { this.Set("MinimumLevel", (int)value); }
         }
 
         /// <summary>
@@ -115,20 +115,20 @@ namespace Mooege.Common.Logging
         /// </summary>
         public Logger.Level MaximumLevel
         {
-            get { return (Logger.Level)(this.GetInt("MaximumLevel", (int)Logger.Level.Fatal, true)); } 
+            get { return (Logger.Level)(this.GetInt("MaximumLevel", (int)Logger.Level.Fatal, true)); }
             set { this.Set("MaximumLevel", (int)value); }
-        }      
+        }
 
         /// <summary>
         /// Reset log file on startup?
         /// </summary>
         public bool ResetOnStartup
         {
-            get { return this.GetBoolean("ResetOnStartup", false); } 
+            get { return this.GetBoolean("ResetOnStartup", false); }
             set { this.Set("ResetOnStartup", value); }
         }
 
-        public LogTargetConfig(string loggerName) 
+        public LogTargetConfig(string loggerName)
             : base(loggerName) { }
     }
 }

@@ -31,24 +31,24 @@ namespace Mooege.Core.GS.Items
     {
         public static List<Item> CreateLoot(Player owner, int treasureClassId)
         {
-            
+
             List<Item> items = new List<Item>();
             if (MPQStorage.Data.Assets[SNOGroup.TreasureClass].ContainsKey(treasureClassId))
             {
                 TreasureClass treasureClass = (TreasureClass)MPQStorage.Data.Assets[SNOGroup.TreasureClass][treasureClassId].Data;
                 foreach (LootDropModifier modifier in treasureClass.LootDropModifiers)
-                {                    
+                {
                     ItemTable definition = ItemGenerator.GetItemDefinition(modifier.ItemSpecifier.ItemGBId);
                     if (definition != null)
                     {
                         Item item = ItemGenerator.CreateItem(owner, definition);
-                        item.Attributes[GameAttribute.Item_Quality_Level] = (modifier.GBIdQualityClass > 0) ? modifier.GBIdQualityClass : 0;                        
+                        item.Attributes[GameAttribute.Item_Quality_Level] = (modifier.GBIdQualityClass > 0) ? modifier.GBIdQualityClass : 0;
                         items.Add(item);
                     }
                 }
             }
 
             return items;
-        }      
+        }
     }
 }

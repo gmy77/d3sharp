@@ -152,15 +152,15 @@ namespace Mooege.Core.GS.Powers
                         break;
                     case 5: // external identifier
                         if (!LoadIdentifier(powerSNO, scriptTag, attributes, rand,
-                                            BitConverter.ToInt32(script, pos + 4*1),
-                                            BitConverter.ToInt32(script, pos + 4*2),
-                                            BitConverter.ToInt32(script, pos + 4*3),
-                                            BitConverter.ToInt32(script, pos + 4*4),
+                                            BitConverter.ToInt32(script, pos + 4 * 1),
+                                            BitConverter.ToInt32(script, pos + 4 * 2),
+                                            BitConverter.ToInt32(script, pos + 4 * 3),
+                                            BitConverter.ToInt32(script, pos + 4 * 4),
                                             out temp))
                             return false;
 
                         stack.Push(temp);
-                        pos += 4*4;
+                        pos += 4 * 4;
                         break;
 
                     case 6: // push float
@@ -266,7 +266,7 @@ namespace Mooege.Core.GS.Powers
             return BitConverter.ToSingle(array, 0);
         }
 
-        private static bool LoadIdentifier(int powerSNO, TagKeyScript scriptTag, GameAttributeMap attributes, Random rand, 
+        private static bool LoadIdentifier(int powerSNO, TagKeyScript scriptTag, GameAttributeMap attributes, Random rand,
                                            int numb1, int numb2, int numb3, int numb4,
                                            out float result)
         {
@@ -332,12 +332,12 @@ namespace Mooege.Core.GS.Powers
                 else result = attributes[(GameAttributeF)attr];
 
                 return true;
-            }            
+            }
             else if (attr is GameAttributeI)
             {
                 if (needs_key) result = (float)attributes[(GameAttributeI)attr, powerSNO];
                 else result = (float)attributes[(GameAttributeI)attr];
-                
+
                 return true;
             }
             else if (attr is GameAttributeB)

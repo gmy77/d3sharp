@@ -27,7 +27,7 @@ namespace Mooege.Core.MooNet.Web
     /// <summary>
     /// Web service that can return statistics on online players and so.
     /// </summary>
-    [ServiceContract(Name="MooNet")]
+    [ServiceContract(Name = "MooNet")]
     public class MooNetWebService : IWebService
     {
         /// <summary>

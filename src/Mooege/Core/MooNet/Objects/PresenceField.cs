@@ -145,7 +145,7 @@ namespace Mooege.Core.MooNet.Objects
     public class StringPresenceField : PresenceField<String>, IPresenceField
     {
         public StringPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index, string defaultValue = default(string))
-            :base(Program, OriginatingClass, FieldNumber, Index, defaultValue)
+            : base(Program, OriginatingClass, FieldNumber, Index, defaultValue)
         {
         }
 
@@ -167,7 +167,7 @@ namespace Mooege.Core.MooNet.Objects
     public class ByteStringPresenceField<T> : PresenceField<T>, IPresenceField where T : IMessageLite<T> //Used IMessageLite to get ToByteString(), might need refactoring later
     {
         public ByteStringPresenceField(FieldKeyHelper.Program Program, FieldKeyHelper.OriginatingClass OriginatingClass, uint FieldNumber, uint Index, T defaultValue = default(T))
-            :base(Program, OriginatingClass, FieldNumber, Index, defaultValue)
+            : base(Program, OriginatingClass, FieldNumber, Index, defaultValue)
         {
         }
 
@@ -199,7 +199,7 @@ namespace Mooege.Core.MooNet.Objects
         public uint FieldNumber { get; private set; }
         public uint Index { get; private set; }
 
-        public PresenceField(FieldKeyHelper.Program program, FieldKeyHelper.OriginatingClass originatingClass , uint fieldNumber, uint index, T defaultValue)
+        public PresenceField(FieldKeyHelper.Program program, FieldKeyHelper.OriginatingClass originatingClass, uint fieldNumber, uint index, T defaultValue)
         {
             Value = defaultValue;
             FieldNumber = fieldNumber;

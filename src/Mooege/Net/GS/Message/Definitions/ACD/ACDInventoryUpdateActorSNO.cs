@@ -26,7 +26,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public uint ItemID; // The item's DynamicID
         public int /* sno */ ItemSNO;
 
-        public ACDInventoryUpdateActorSNO() : base(Opcodes.ACDInventoryUpdateActorSNO) {}
+        public ACDInventoryUpdateActorSNO() : base(Opcodes.ACDInventoryUpdateActorSNO) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

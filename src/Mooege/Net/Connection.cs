@@ -115,18 +115,18 @@ namespace Mooege.Net
         /// The recieve buffer.
         /// </summary>
         private readonly byte[] _recvBuffer = new byte[BufferSize];
-                
+
         public Connection(Server server, Socket socket)
         {
-            if (server == null) 
+            if (server == null)
                 throw new ArgumentNullException("server");
 
-            if (socket == null) 
+            if (socket == null)
                 throw new ArgumentNullException("socket");
 
             this._server = server;
             this.Socket = socket;
-        }       
+        }
 
         #region socket stuff
 
@@ -280,7 +280,7 @@ namespace Mooege.Net
             if (_server == null)
             {
                 throw new Exception("[Connection] _server is null in Send");
-            } 
+            }
             return _server.Send(this, data, flags);
         }
 
@@ -340,7 +340,7 @@ namespace Mooege.Net
             if (Socket == null)
                 return "No Socket!";
             else
-            return Socket.RemoteEndPoint != null ? Socket.RemoteEndPoint.ToString() : "Not Connected!";
+                return Socket.RemoteEndPoint != null ? Socket.RemoteEndPoint.ToString() : "Not Connected!";
         }
 
         #endregion

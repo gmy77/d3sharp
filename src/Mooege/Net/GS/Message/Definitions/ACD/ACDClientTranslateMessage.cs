@@ -43,7 +43,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             Speed = buffer.ReadFloat32();
             Field5 = buffer.ReadInt(32);
             AnimationTag = buffer.ReadInt(21) + (-1);
-            if(buffer.ReadBool())
+            if (buffer.ReadBool())
                 Field7 = buffer.ReadInt(32);
         }
 
@@ -56,7 +56,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             buffer.WriteFloat32(Speed);
             buffer.WriteInt(32, Field5);
             buffer.WriteInt(21, AnimationTag - (-1));
-            if(Field7.HasValue)
+            if (Field7.HasValue)
                 buffer.WriteInt(32, Field7.Value);
         }
 

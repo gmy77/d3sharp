@@ -135,7 +135,7 @@ namespace Mooege.Core.GS.Powers
             Circle startCircle = new Circle(_prevUpdatePosition.X, _prevUpdatePosition.Y, radius);
             // make a velocity representing the change to the current position
             Vector2F velocity = PowerMath.VectorWithoutZ(this.Position - _prevUpdatePosition);
-            
+
             Actor hit = null;
             TargetList targets = this.Context.GetEnemiesInRadius(this.Position, radius + 25f);
             if (CollisionFilter != null)
@@ -155,7 +155,7 @@ namespace Mooege.Core.GS.Powers
             if (hit != null)
                 OnCollision(hit);
         }
-        
+
         public void Update(int tickCounter)
         {
             if (!_spawned) return;

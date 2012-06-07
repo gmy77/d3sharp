@@ -83,7 +83,7 @@ namespace Mooege.Common.MPQ.FileFormats
             CompiledScript = Encoding.ASCII.GetString(stream.ReadSerializedByteArray());
             stream.Position += 40;
             this.SNOBossEncounter = stream.ReadValueS32();
-            stream.Close();        
+            stream.Close();
         }
 
         public string AsText(string filename)
@@ -100,7 +100,7 @@ namespace Mooege.Common.MPQ.FileFormats
             s.Append("I5:" + I5 + "   ");
             s.AppendLine("I6:" + I6);
 
-            s.AppendLine("SNOQuest:" + SNOQuest);    
+            s.AppendLine("SNOQuest:" + SNOQuest);
             s.AppendLine("SNOConvPiggyBack:" + SNOConvPiggyback);
             s.AppendLine("SNOConvUnlock:" + SNOConvUnlock);
             s.AppendLine("CompiledScript:" + (CompiledScript.Length != 0).ToString());
@@ -161,7 +161,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
         public void AsText(StringBuilder s, int pad)
         {
-            s.Append(' ', pad); 
+            s.Append(' ', pad);
             s.Append("I0:" + I0 + "   ");
             s.Append("I1:" + I1 + "   ");
             s.Append("LineID:" + LineID + "   ");

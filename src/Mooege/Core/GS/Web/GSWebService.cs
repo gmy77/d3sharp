@@ -24,7 +24,7 @@ namespace Mooege.Core.GS.Web
     /// <summary>
     /// Web service that can return statistics on online players and so.
     /// </summary>
-    [ServiceContract(Name="GS")]
+    [ServiceContract(Name = "GS")]
     public class GSWebService : IWebService
     {
         /// <summary>

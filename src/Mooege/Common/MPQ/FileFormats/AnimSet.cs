@@ -37,30 +37,34 @@ namespace Mooege.Common.MPQ.FileFormats
         public TagMap TagMapAnimDefault { get; private set; }
         public TagMap[] AnimSetTagMaps;
 
-        
+
         private Dictionary<int, int> _animations;
-        public Dictionary<int, int> Animations { get {
-            if (_animations == null)
+        public Dictionary<int, int> Animations
+        {
+            get
             {
-                _animations = new Dictionary<int, int>();
-                foreach (var x in TagMapAnimDefault.TagMapEntries)
+                if (_animations == null)
                 {
-                    _animations.Add(x.TagID, x.Int);
-                }
-                //not sure how better to do this, cant load parents anims on init as they may not be loaded first. - DarkLotus
-                if (SNOParentAnimSet != -1)
-                {
-                    var ani = (FileFormats.AnimSet)MPQStorage.Data.Assets[SNOGroup.AnimSet][SNOParentAnimSet].Data;
-                    foreach (var x in ani.Animations)
+                    _animations = new Dictionary<int, int>();
+                    foreach (var x in TagMapAnimDefault.TagMapEntries)
                     {
-                        if (!_animations.ContainsKey(x.Key))
-                            _animations.Add(x.Key, x.Value);
+                        _animations.Add(x.TagID, x.Int);
                     }
-                }
-               
-            } return _animations;
-        } }
-        
+                    //not sure how better to do this, cant load parents anims on init as they may not be loaded first. - DarkLotus
+                    if (SNOParentAnimSet != -1)
+                    {
+                        var ani = (FileFormats.AnimSet)MPQStorage.Data.Assets[SNOGroup.AnimSet][SNOParentAnimSet].Data;
+                        foreach (var x in ani.Animations)
+                        {
+                            if (!_animations.ContainsKey(x.Key))
+                                _animations.Add(x.Key, x.Value);
+                        }
+                    }
+
+                } return _animations;
+            }
+        }
+
         public AnimSet(MpqFile file)
         {
             var stream = file.Open();
@@ -74,7 +78,7 @@ namespace Mooege.Common.MPQ.FileFormats
                 AnimSetTagMaps[i] = stream.ReadSerializedItem<TagMap>();
                 stream.Position += 8;
             }
-           
+
             stream.Close();
         }
         public int GetAniSNO(AnimationTags type)
@@ -111,7 +115,7 @@ namespace Mooege.Common.MPQ.FileFormats
             while (ani == -1)
             {
                 Array values = Enum.GetValues(typeof(DeathTags));
-                ani = GetAniSNO((AnimationTags)values.GetValue(RandomHelper.Next(0, values.Length -1)));
+                ani = GetAniSNO((AnimationTags)values.GetValue(RandomHelper.Next(0, values.Length - 1)));
             }
             return ani;
         }
@@ -174,5 +178,4 @@ namespace Mooege.Common.MPQ.FileFormats
         DeathSpirit = 74064,
         DeathFlyingOrDefault = 71424
     }
-    
 }

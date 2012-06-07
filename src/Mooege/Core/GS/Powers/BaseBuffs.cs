@@ -129,7 +129,7 @@ namespace Mooege.Core.GS.Powers
             base.Stack(buff);
 
             bool canStack = this.IsCountingStacks && StackCount != MaxStackCount;
-            
+
             if (this.Timeout != null)
             {
                 Target.Attributes[_Buff_Icon_Start_TickN, PowerSNO] = this.Timeout.TimeoutTick;

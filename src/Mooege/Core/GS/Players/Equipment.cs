@@ -46,7 +46,7 @@ namespace Mooege.Core.GS.Players
             this._owner = owner;
             this.Items = new Dictionary<uint, Item>();
         }
-       
+
         /// <summary>
         /// Equips an item in an equipment slot
         /// </summary>
@@ -89,7 +89,7 @@ namespace Mooege.Core.GS.Players
             }
 
             return 0;
-        }     
+        }
 
         /// <summary>
         /// Returns whether an item is equipped

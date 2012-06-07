@@ -106,7 +106,7 @@ namespace Mooege.Core.GS.Common.Types.Scene
             b.AppendLine("Unknown4:");
             b.Append(' ', pad);
             b.AppendLine("{");
-            for (int i = 0; i < Unknown4.Length;)
+            for (int i = 0; i < Unknown4.Length; )
             {
                 b.Append(' ', pad + 1);
                 for (int j = 0; j < 8 && i < Unknown4.Length; j++, i++)

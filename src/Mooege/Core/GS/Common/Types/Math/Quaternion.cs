@@ -39,7 +39,7 @@ namespace Mooege.Core.GS.Common.Types.Math
         {
             return new Quaternion
             {
-                W  = (float)System.Math.Cos(facingAngle / 2f),
+                W = (float)System.Math.Cos(facingAngle / 2f),
                 Vector3D = new Vector3D(0, 0, (float)System.Math.Sin(facingAngle / 2f))
             };
         }

@@ -163,5 +163,4 @@ namespace Mooege.Common.MPQ.FileFormats
         GizmoLocationY = 74,
         GizmoLocationZ = 75,
     }
-
 }

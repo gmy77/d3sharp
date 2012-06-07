@@ -28,10 +28,10 @@ namespace Mooege.Core.GS.Actors.Movement
 
         public SteppedRelativeTickTimer Timer;
 
-        public MoveToPointAction(Actor owner, Vector3D heading) 
+        public MoveToPointAction(Actor owner, Vector3D heading)
             : base(owner)
         {
-            this.Heading = heading;            
+            this.Heading = heading;
         }
 
         public override void Start(int tickCounter)
@@ -40,13 +40,13 @@ namespace Mooege.Core.GS.Actors.Movement
             var facingAngle = MovementHelpers.GetFacingAngle(this.Owner, this.Heading);
             this.Owner.Move(this.Heading, facingAngle);
 
-            Logger.Trace("Heading: " + this.Heading); 
+            Logger.Trace("Heading: " + this.Heading);
             Logger.Trace("Start point: " + this.Owner.Position);
 
-            this.Timer = new SteppedRelativeTickTimer(this.Owner.World.Game, 6, (int)(distance/this.Owner.WalkSpeed), 
+            this.Timer = new SteppedRelativeTickTimer(this.Owner.World.Game, 6, (int)(distance / this.Owner.WalkSpeed),
             (tick) =>
             {
-                this.Owner.Position = MovementHelpers.GetMovementPosition(this.Owner.Position, this.Owner.WalkSpeed, facingAngle, 6);                
+                this.Owner.Position = MovementHelpers.GetMovementPosition(this.Owner.Position, this.Owner.WalkSpeed, facingAngle, 6);
                 Logger.Trace("Step: " + this.Owner.Position);
             },
             (tick) =>

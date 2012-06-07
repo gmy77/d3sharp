@@ -317,7 +317,7 @@ namespace Mooege.Core.GS.Games
 
             foreach (var item in bpItems)
             {
-                var msg = new InventoryDropItemMessage {ItemID = item.DynamicID};
+                var msg = new InventoryDropItemMessage { ItemID = item.DynamicID };
                 player.Inventory.Consume(invokerClient.InGameClient, msg);
             }
             return string.Format("Dropped {0} Items for you", bpItems.Count);

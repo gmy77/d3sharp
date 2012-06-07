@@ -68,7 +68,7 @@ namespace Mooege.Common.MPQ.FileFormats
 
         [PersistentProperty("ItemLevelModifiers")]
         public List<ItemLevelModifier> ItemLevelModifiers { get; private set; }
-        
+
         [PersistentProperty("QualityClasses")]
         public List<QualityClass> QualityClasses { get; private set; }
         public List<HirelingTable> Hirelings { get; private set; }
@@ -1821,5 +1821,4 @@ namespace Mooege.Common.MPQ.FileFormats
         Dexterity,
         Intelligence,
     }
-
 }

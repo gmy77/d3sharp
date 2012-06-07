@@ -156,7 +156,7 @@ namespace Mooege.Core.GS.Common.Types.Scene
             b.AppendLine("arSnoLevelAreas:");
             b.Append(' ', pad);
             b.AppendLine("{");
-            for (int i = 0; i < SNOLevelAreas.Length;)
+            for (int i = 0; i < SNOLevelAreas.Length; )
             {
                 b.Append(' ', pad + 1);
                 for (int j = 0; j < 8 && i < SNOLevelAreas.Length; j++, i++)

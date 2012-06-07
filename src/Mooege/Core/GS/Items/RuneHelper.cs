@@ -32,7 +32,7 @@ namespace Mooege.Core.GS.Items
 
         static RuneHelper()
         {
-            foreach(var entry in MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.SkillKit].Values)
+            foreach (var entry in MPQStorage.Data.Assets[Common.Types.SNO.SNOGroup.SkillKit].Values)
             {
                 if (entry.Data == null) continue;
 

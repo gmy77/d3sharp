@@ -67,7 +67,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
                 foreach (FieldInfo field in t.GetFields())
                 {
                     TagKey key = field.GetValue(null) as TagKey;
-                    if(!tags.ContainsKey(key.ID))
+                    if (!tags.ContainsKey(key.ID))
                         tags.Add(key.ID, new List<TagKey>());
 
                     tags[key.ID].Add(key);
@@ -182,7 +182,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public TagKey(int id) { ID = id; }
     }
 
-    public class TagKeyInt : TagKey { public TagKeyInt(int id) : base(id) { } public int GetValue(TagMapEntry entry) { return entry.Int; }  }
+    public class TagKeyInt : TagKey { public TagKeyInt(int id) : base(id) { } public int GetValue(TagMapEntry entry) { return entry.Int; } }
     public class TagKeyFloat : TagKey { public TagKeyFloat(int id) : base(id) { } public float GetValue(TagMapEntry entry) { return entry.Float; } }
     public class TagKeyScript : TagKey { public TagKeyScript(int id) : base(id) { } public ScriptFormula GetValue(TagMapEntry entry) { return entry.ScriptFormula; } }
     public class TagKeySNO : TagKey { public TagKeySNO(int id) : base(id) { } public SNOHandle GetValue(TagMapEntry entry) { return new SNOHandle(entry.Int); } }
@@ -217,8 +217,8 @@ namespace Mooege.Core.GS.Common.Types.TagMap
         public override string ToString()
         {
             List<TagKey> keys = TagMap.GetKeys(TagID);
- 
-            if(keys.Count == 0)
+
+            if (keys.Count == 0)
                 switch (Type)
                 {
                     case 1: return String.Format("{0} = {1}", TagID.ToString(), Float);
@@ -231,7 +231,7 @@ namespace Mooege.Core.GS.Common.Types.TagMap
                 var value = keys.First().GetType().GetMethod("GetValue").Invoke(keys.First(), new object[] { this });
                 return String.Format("{0} = {1}", keys.First().Name, value == null ? "null" : value.ToString());
             }
- 
+
             return String.Format("Ambigious key: Depending of the context it one of {0}", String.Join(",", keys.Select(x => x.Name).ToArray()));
 
         }

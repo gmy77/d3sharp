@@ -81,7 +81,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             if (info.Skill1SNOId != -1)
             {
                 //scripted //this.Attributes[GameAttribute.Skill_Total, info.Skill1SNOId] = 1;
-                this.Attributes[GameAttribute.Skill, info.Skill1SNOId] = 1;                
+                this.Attributes[GameAttribute.Skill, info.Skill1SNOId] = 1;
             }
 
             if (info.Skill2SNOId != -1)
@@ -211,7 +211,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 
             if (IsHireling || IsProxy)
                 return; // This really shouldn't happen.. /fasbat
-            
+
             this.Unreveal(player);
             var hireling = CreateHireling(this.World, hirelingSNO, this.Tags);
             hireling.SetUpAttributes(player);
@@ -230,7 +230,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             hireling.EnterWorld(this.Position);
             player.ActiveHireling = hireling;
             this.Destroy();
-            player.SelectedNPC = null;            
+            player.SelectedNPC = null;
         }
 
         public override void OnInventory(Player player)
@@ -241,7 +241,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             if (IsHireling || IsProxy)
                 return;
 
-            if (player.ActiveHireling != null && 
+            if (player.ActiveHireling != null &&
                 player.ActiveHireling.Attributes[GameAttribute.Hireling_Class] == this.Attributes[GameAttribute.Hireling_Class])
                 return;
 
@@ -266,7 +266,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             hireling.RotationAxis = this.RotationAxis;
 
             hireling.EnterWorld(this.Position);
-            player.ActiveHirelingProxy = hireling;            
+            player.ActiveHirelingProxy = hireling;
         }
 
         public void Dismiss(Player player)
@@ -290,7 +290,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             else if (IsProxy && owner != player)
                 return false;
 
-            if(!base.Reveal(player))
+            if (!base.Reveal(player))
                 return false;
 
             if (IsProxy)
@@ -433,7 +433,5 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
 
             return true;
         }
-
-
     }
 }

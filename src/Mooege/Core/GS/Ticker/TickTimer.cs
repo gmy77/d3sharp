@@ -55,7 +55,7 @@ namespace Mooege.Core.GS.Ticker
             // already be timed out doesn't seem necessary and having to worry about it just complicates things. /mdz
             //if (timeoutTick <= game.TickCounter)
             //    throw new ArgumentOutOfRangeException("timeoutTick", string.Format("timeoutTick value {0} can not be equal or less then timer's belonging game's current TickCounter value {1}.", timeoutTick, game.TickCounter));
-                                                          
+
             this.Game = game;
             this.TimeoutTick = timeoutTick;
             this.CompletionAction = completionCallback;

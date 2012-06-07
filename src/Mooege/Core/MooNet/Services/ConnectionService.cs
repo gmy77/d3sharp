@@ -28,7 +28,7 @@ using Mooege.Net.MooNet;
 namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x0, serviceHash: 0x0)]
-    public class ConnectionService :  bnet.protocol.connection.ConnectionService,  IServerService
+    public class ConnectionService : bnet.protocol.connection.ConnectionService, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
@@ -66,7 +66,7 @@ namespace Mooege.Core.MooNet.Services
                 var serviceID = Service.GetByHash(serviceHash);
                 requestedServiceIDs.Add(serviceID);
 
-                Logger.Trace("[export] Hash: 0x{0} Id: 0x{1} Service: {2} ", serviceHash.ToString("X8"),serviceID.ToString("X2"), Service.GetByID(serviceID) != null ? Service.GetByID(serviceID).GetType().Name : "N/A");                
+                Logger.Trace("[export] Hash: 0x{0} Id: 0x{1} Service: {2} ", serviceHash.ToString("X8"), serviceID.ToString("X2"), Service.GetByID(serviceID) != null ? Service.GetByID(serviceID).GetType().Name : "N/A");
             }
 
             // read services supplied by client..
@@ -80,7 +80,7 @@ namespace Mooege.Core.MooNet.Services
 
             var builder = bnet.protocol.connection.BindResponse.CreateBuilder();
             foreach (var serviceId in requestedServiceIDs) builder.AddImportedServiceId(serviceId);
-            
+
             done(builder.Build());
         }
 

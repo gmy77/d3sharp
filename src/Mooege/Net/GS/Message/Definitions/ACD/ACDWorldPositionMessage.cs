@@ -27,7 +27,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
         public uint ActorID; // Actor's DynamicID
         public WorldLocationMessageData WorldLocation;
 
-        public ACDWorldPositionMessage() : base(Opcodes.ACDWorldPositionMessage) {}
+        public ACDWorldPositionMessage() : base(Opcodes.ACDWorldPositionMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

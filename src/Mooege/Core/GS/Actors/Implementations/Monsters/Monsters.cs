@@ -32,7 +32,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
     //
     //54862 - spawn goblin portal
     //
-    [HandledSNO(5984)] 
+    [HandledSNO(5984)]
     public class TreasureGoblin : Monster
     {
         public TreasureGoblin(World world, int snoId, TagMap tags)
@@ -41,7 +41,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         }
     }
 
-    [HandledSNO(5985)] 
+    [HandledSNO(5985)]
     public class TreasureSeeker : Monster
     {
         public TreasureSeeker(World world, int snoId, TagMap tags)
@@ -111,7 +111,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
     }
     #endregion
     #region Ghost
-	//Enraged phantom 370, 136943
+    //Enraged phantom 370, 136943
     [HandledSNO(370, 136943)]
     public class EnragedPhantom : Monster
     {
@@ -174,7 +174,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
     }
     #endregion
     #region Zombies
-    [HandledSNO(6652)] 
+    [HandledSNO(6652)]
     public class WalkingCorpse : Monster
     {
         public WalkingCorpse(World world, int snoId, TagMap tags)
@@ -182,7 +182,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         {
         }
     }
-    [HandledSNO(6653)] 
+    [HandledSNO(6653)]
     public class HungryCorpse : Monster
     {
         public HungryCorpse(World world, int snoId, TagMap tags)
@@ -190,7 +190,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         {
         }
     }
-    [HandledSNO(6654)] 
+    [HandledSNO(6654)]
     public class BloatedCorpse : Monster
     {
         public BloatedCorpse(World world, int snoId, TagMap tags)
@@ -198,7 +198,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         {
         }
     }
-    [HandledSNO(204256)] 
+    [HandledSNO(204256)]
     public class RancidStumbler : Monster
     {
         public RancidStumbler(World world, int snoId, TagMap tags)
@@ -263,7 +263,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         {
         }
     }
-     #endregion
+    #endregion
     #region Skeleton
     [HandledSNO(539)]
     public class Skeleton : Monster
@@ -336,7 +336,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
     #endregion
     #region Skeleton_Summoner
     //No Uniques Added
-	// Tomb Guardian -> All
+    // Tomb Guardian -> All
     [HandledSNO(5387)]
     public class TombGuardian : Monster
     {
@@ -406,7 +406,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
         }
     }
     #endregion
-    #region Grotesque	
+    #region Grotesque
     [HandledSNO(3847)]
     public class Grotesque : Monster
     {
@@ -523,7 +523,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Monsters
             (Brain as MonsterBrain).RemovePresetPower(30592);
             (Brain as MonsterBrain).AddPresetPower(117580);
         }
-        
+
     }
     #endregion
     #region Wretched Mothers
