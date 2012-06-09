@@ -1,1 +1,0 @@
-Patcher for battle.net.dll to bypass thumbprint and second-challenge checks.
