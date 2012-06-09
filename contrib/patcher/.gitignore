@@ -1,0 +1,6 @@
+*.suo
+bin/
+obj/
+/*.csproj.user
+/_ReSharper.loader/
+/_ReSharper.patcher/
