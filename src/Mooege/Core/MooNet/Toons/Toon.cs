@@ -342,46 +342,44 @@ namespace Mooege.Core.MooNet.Toons
             this.HeroTable = HeroData.Heros.Find(item => item.Name == this.Class.ToString());
             this.ExperienceNext = Player.LevelBorders[this.Level];
 
-            var visualItems = new[]
-            {                                
-                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Head
-                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Chest
-                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Feet
-                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Hands
-                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Weapon (1)
-                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Weapon (2)
-                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Shoulders
-                D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Legs
-            };
+            // FIXME: somehow d3.hero.visualitem builder doesn't want to build - need to fixed. /raist.
 
+            //var visualItems = new[]
+            //{   
+            //    D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Head
+            //    D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Chest
+            //    D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Feet
+            //    D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Hands
+            //    D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Weapon (1)
+            //    D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Weapon (2)
+            //    D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Shoulders
+            //    D3.Hero.VisualItem.CreateBuilder().SetEffectLevel(0).Build(), // Legs
+            //};
 
-            // Load Visual Equipment
-            var visualToSlotMapping = new Dictionary<int, int> { { 1, 0 }, { 2, 1 }, { 7, 2 }, { 5, 3 }, { 4, 4 }, { 3, 5 }, { 8, 6 }, { 9, 7 } };
+            //// Load Visual Equipment
+            //var visualToSlotMapping = new Dictionary<int, int> { { 1, 0 }, { 2, 1 }, { 7, 2 }, { 5, 3 }, { 4, 4 }, { 3, 5 }, { 8, 6 }, { 9, 7 } };
 
-            //add visual equipment from DB, only the visualizable equipment, not everything
-            var visibleEquipment = DBSessions.AccountSession.Query<DBInventory>().Where(inv => inv.DBItemInstance != null && inv.DBToon.Id == dbToon.Id && inv.EquipmentSlot != -1).ToList();
+            ////add visual equipment from DB, only the visualizable equipment, not everything
+            //var visibleEquipment = DBSessions.AccountSession.Query<DBInventory>().Where(inv => inv.DBItemInstance != null && inv.DBToon.Id == dbToon.Id && inv.EquipmentSlot != -1).ToList();
 
-            foreach (var inv in visibleEquipment)
-            {
-                var slot = inv.EquipmentSlot;
-                if (!visualToSlotMapping.ContainsKey(slot))
-                    continue;
-                // decode vislual slot from equipment slot
-                slot = visualToSlotMapping[slot];
-                var gbid = inv.DBItemInstance.GbId;
-                visualItems[slot] = D3.Hero.VisualItem.CreateBuilder()
-                    .SetGbid(gbid)
-                    .SetEffectLevel(0)
-                    .Build();
-            }
+            //foreach (var inv in visibleEquipment)
+            //{
+            //    var slot = inv.EquipmentSlot;
+            //    if (!visualToSlotMapping.ContainsKey(slot))
+            //        continue;
+            //    // decode vislual slot from equipment slot
+            //    slot = visualToSlotMapping[slot];
+            //    var gbid = inv.DBItemInstance.GbId;
+            //    visualItems[slot] = D3.Hero.VisualItem.CreateBuilder()
+            //        .SetGbid(gbid)
+            //        .SetEffectLevel(0)
+            //        .Build();
+            //}
 
-            this.HeroVisualEquipmentField.Value = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
-
-
-
-
+            //this.HeroVisualEquipmentField.Value = D3.Hero.VisualEquipment.CreateBuilder().AddRangeVisualItem(visualItems).Build();
         }
-        /*
+
+        /* old non-db toon creation ctor. /raist.
         public Toon(string name, int hashCode, int classId, ToonFlags flags, byte level, GameAccount account) // Toon with **newly generated** persistent ID
             : base(StringHashHelper.HashIdentity(name + "#" + hashCode.ToString("D3")))
         {
