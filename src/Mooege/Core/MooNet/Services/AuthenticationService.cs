@@ -47,7 +47,20 @@ namespace Mooege.Core.MooNet.Services
             if (!VersionChecker.Check(this.Client, request)) // if the client trying to connect doesn't match required version, disconnect him.
             {
                 Logger.Error("Client [{0}] doesn't match required version {1}, disconnecting..", request.Email, VersionInfo.MooNet.RequiredClientVersion);
-                this.Client.Connection.Disconnect(); // TODO: We should be actually notifying the client with wrong version message. /raist.
+
+                // create the disconnection reason.
+                var reason = bnet.protocol.connection.DisconnectNotification.CreateBuilder()
+                    .SetErrorCode(3018).Build();
+
+                // Error 3018 => A new patch for Diablo III is available. The game will now close and apply the patch automatically. You will be able to continue playing after the patch has been applied.
+
+                // FIXME: D3 client somehow doesn't show the correct error message yet, and in debug output we only miss a message like [ Recv ] service_id: 254 token: 6 status: 28 
+                // when I compare mooege's output. That could be the reason. /raist.
+
+                // force disconnect the client as it does not satisfy required version. /raist.
+                this.Client.MakeRPC(() => bnet.protocol.connection.ConnectionService.CreateStub(this.Client).ForceDisconnect(null, reason, callback => { }));
+                this.Client.Connection.Disconnect();
+
                 return;
             }
 
