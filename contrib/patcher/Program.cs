@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace loader
+namespace patcher
 {
     class Program
     {
