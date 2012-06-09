@@ -39,6 +39,9 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("Subscribe() {0}", this.Client);
 
+            //FIXME: This causes an exception with the retail client /raist.
+
+            /*
             FriendManager.Instance.AddSubscriber(this.Client, request.ObjectId);
 
             var builder = bnet.protocol.friends.SubscribeToFriendsResponse.CreateBuilder()
@@ -70,6 +73,9 @@ namespace Mooege.Core.MooNet.Services
                 builder.AddRangeReceivedInvitations(invitations);
 
             done(builder.Build());
+             */
+
+            throw new NotImplementedException();
         }
 
         public override void SendInvitation(IRpcController controller, bnet.protocol.invitation.SendInvitationRequest request, Action<bnet.protocol.NoData> done)

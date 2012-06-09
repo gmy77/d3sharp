@@ -110,9 +110,12 @@ namespace Mooege.Core.MooNet.Services
                 case 16: //? - Client expecting D3.Client.Preferences
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(D3.Client.Preferences.CreateBuilder().SetVersion(106).Build().ToByteString()).Build());
                     break;
-                case 19: //D3.GameMessage.GetHeroIds -> D3.Hero.HeroList
-                    var HeroList = GetHeroList(D3.GameMessage.GetHeroIds.ParseFrom(request.GetAttribute(2).Value.MessageValue));
-                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(HeroList).Build());
+                case 19: // unknown (related to versions) - beta client was using this for D3.GameMessage.GetHeroIds -> D3.Hero.HeroList but retail doesn't seem to so. /raist                    
+                    /* beta client code;
+                     * var HeroList = GetHeroList(D3.GameMessage.GetHeroIds.ParseFrom(request.GetAttribute(2).Value.MessageValue));
+                     *  attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(HeroList).Build()); 
+                     */
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(ByteString.Empty).Build());
                     break;
                 case 20: //D3.GameMessage.UndeleteHero -> D3.Hero.Digest
                     var UndeletedHero = UndeleteHero(D3.GameMessage.UndeleteHero.ParseFrom(request.GetAttribute(2).Value.MessageValue));
