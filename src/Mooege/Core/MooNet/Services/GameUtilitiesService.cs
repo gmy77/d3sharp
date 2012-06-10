@@ -46,13 +46,9 @@ namespace Mooege.Core.MooNet.Services
             var attr = bnet.protocol.attribute.Attribute.CreateBuilder();
             switch (MessageId)
             {
-                case 0: // unknown? - beta client was using this for D3.GameMessage.HeroDigestListRequest -> D3.GameMessage.HeroDigestListResponse but retail doesn't seem to so. /raist                    
-                    /* beta client code 
-                     * var digestList = GetHeroDigestList(D3.GameMessage.HeroDigestListRequest.ParseFrom(request.GetAttribute(2).Value.MessageValue));
-                     * attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(digestList).Build());
-                     */
-                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(ByteString.Empty).Build());
-                    // client error; ERROR: >>> (no hero selected) BnetGameAccount::HeroCreate_OnReceivedHeroDigests no hero digests resolved for createdHeroEntityId={ high: 0 low: 5 }
+                case 0: //D3.GameMessage.HeroDigestListRequest -> D3.GameMessage.HeroDigestListResponse
+                    var digestList = GetHeroDigestList(D3.GameMessage.HeroDigestListRequest.ParseFrom(request.GetAttribute(2).Value.MessageValue));
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(digestList).Build());
                     break;
                 case 1: //D3.GameMessage.GetAccountDigest -> D3.Account.Digest
                     var accountDigest = GetAccountDigest();
@@ -114,12 +110,9 @@ namespace Mooege.Core.MooNet.Services
                 case 16: //? - Client expecting D3.Client.Preferences
                     attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(D3.Client.Preferences.CreateBuilder().SetVersion(106).Build().ToByteString()).Build());
                     break;
-                case 19: // unknown? - beta client was using this for D3.GameMessage.GetHeroIds -> D3.Hero.HeroList but retail doesn't seem to so. /raist                    
-                    /* beta client code;
-                     * var HeroList = GetHeroList(D3.GameMessage.GetHeroIds.ParseFrom(request.GetAttribute(2).Value.MessageValue));
-                     *  attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(HeroList).Build()); 
-                     */
-                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(ByteString.Empty).Build());
+                case 19: //D3.GameMessage.GetHeroIds -> D3.Hero.HeroList
+                    var HeroList = GetHeroList(D3.GameMessage.GetHeroIds.ParseFrom(request.GetAttribute(2).Value.MessageValue));
+                    attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(HeroList).Build());
                     break;
                 case 20: //D3.GameMessage.UndeleteHero -> D3.Hero.Digest
                     var UndeletedHero = UndeleteHero(D3.GameMessage.UndeleteHero.ParseFrom(request.GetAttribute(2).Value.MessageValue));
@@ -136,7 +129,6 @@ namespace Mooege.Core.MooNet.Services
                         attr.SetValue(bnet.protocol.attribute.Variant.CreateBuilder().SetMessageValue(DeletedHero).Build());
                     else
                         this.Status = 395003;
-                    //LastCallHeader = LastCallHeader.ToBuilder().SetStatus(395003).Build();
                     break;
                 default:
                     Logger.Warn("Unknown CustomMessageId {0}: {1}", MessageId, request.AttributeCount > 2 ? request.GetAttribute(2).Value.ToString() : "No CustomMessage?");

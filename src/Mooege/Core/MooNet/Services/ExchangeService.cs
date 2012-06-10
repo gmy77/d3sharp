@@ -22,6 +22,7 @@ using Google.ProtocolBuffers;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
 using Mooege.Core.MooNet.Helpers;
+using Mooege.Common.Extensions;
 
 namespace Mooege.Core.MooNet.Services
 {
@@ -63,14 +64,7 @@ namespace Mooege.Core.MooNet.Services
                         .SetMinTotalPrice(100)
                         .SetMinUnitPrice(100)
                         .SetMaxUnitPrice(100000000000)
-                        .SetMaxTotalPrice(100000000000).Build())
-                    .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
-                        .SetCurrency("PTR")
-                        .SetTickSize(1)
-                        .SetMinTotalPrice(150)
-                        .SetMinUnitPrice(150)
-                        .SetMaxUnitPrice(1000000)
-                        .SetMaxTotalPrice(1000000).Build()))
+                        .SetMaxTotalPrice(100000000000).Build()))
                 .AddConfigs(bnet.protocol.exchange.SpecialistConfig.CreateBuilder()
                     .SetSpecialist(2)
                     .AddAuctionDurations(2880)
@@ -96,14 +90,9 @@ namespace Mooege.Core.MooNet.Services
                         .SetMinTotalPrice(100)
                         .SetMinUnitPrice(100)
                         .SetMaxUnitPrice(100000000000)
-                        .SetMaxTotalPrice(100000000000).Build())
-                    .AddCurrencyConfig(bnet.protocol.exchange.CurrencyConfig.CreateBuilder()
-                        .SetCurrency("PTR")
-                        .SetTickSize(1)
-                        .SetMinTotalPrice(150)
-                        .SetMinUnitPrice(150)
-                        .SetMaxUnitPrice(1000000)
-                        .SetMaxTotalPrice(1000000).Build()));
+                        .SetMaxTotalPrice(100000000000).Build()))
+                .SetRecommendedDefaultRmtCurrency("USD")
+                .SetRmtRestrictedByLicense(bnet.protocol.account.AccountLicense.CreateBuilder().SetId(222).SetExpires(1337724000000000));
 
             done(builder.Build());
         }
@@ -352,7 +341,10 @@ namespace Mooege.Core.MooNet.Services
 
         public override void GetSystemTime(IRpcController controller, bnet.protocol.NoData request, Action<bnet.protocol.exchange.GetSystemTimeResponse> done)
         {
-            throw new NotImplementedException();
+            var builder = bnet.protocol.exchange.GetSystemTimeResponse.CreateBuilder()
+                .SetTime(DateTime.Now.ToExtendedEpoch());
+
+            done(builder.Build());
         }
 
         public override void GetOrderCount(IRpcController controller, bnet.protocol.exchange.GetOrderCountRequest request, Action<bnet.protocol.exchange.GetOrderCountResponse> done)

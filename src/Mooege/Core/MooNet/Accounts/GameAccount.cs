@@ -343,8 +343,8 @@ namespace Mooege.Core.MooNet.Accounts
             {
                 Digest.Builder builder = Digest.CreateBuilder().SetVersion(107)
                     // 7447=>99, 7728=> 100, 8801=>102, 8296=>105, 8610=>106, 8815=>106, 8896=>106, 9183=>107
-                    .SetBannerConfiguration(BannerConfigurationField.Value)
-                    .SetFlags(0)
+                    .SetBannerConfiguration(this.BannerConfiguration)
+                    .SetFlags(2) //Enable Hardcore
                     .SetLastPlayedHeroId(LastPlayedHeroId);
 
                 return builder.Build();

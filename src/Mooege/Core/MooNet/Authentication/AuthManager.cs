@@ -112,6 +112,7 @@ namespace Mooege.Core.MooNet.Authentication
             var accset = new bnet.protocol.authentication.AccountSettingsNotification.Builder();
             accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(111));
             accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(227));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(168)); //Full Game - Removes upgrade banner
             client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).AccountSettings(null, accset.Build(), delegate(bnet.protocol.NO_RESPONSE a) { }));
         }
 

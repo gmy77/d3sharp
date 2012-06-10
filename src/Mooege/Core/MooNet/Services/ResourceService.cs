@@ -64,11 +64,10 @@ namespace Mooege.Core.MooNet.Services
                         break;
                     default:
                         Logger.Warn("Unknown StreamId: 0x{0:X8}", request.StreamId);
+                        builder.SetHash(ByteString.Empty);
+                        Status = 4;
                         break;
                 }
-                if (!builder.HasHash)
-                    Status = 4;
-
                 done(builder.Build());
             }
         }
