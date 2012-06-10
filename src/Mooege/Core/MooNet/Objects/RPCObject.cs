@@ -137,7 +137,8 @@ namespace Mooege.Core.MooNet.Objects
         protected void NotifySubscriptionAdded(MooNetClient client)
         {
             var operations = GetSubscriptionNotifications();
-            MakeRPC(client, operations);
+            if (operations.Count > 0)
+                MakeRPC(client, operations);
         }
 
         public virtual void NotifyUpdate() { }

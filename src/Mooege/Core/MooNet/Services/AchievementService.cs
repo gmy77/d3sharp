@@ -52,6 +52,7 @@ namespace Mooege.Core.MooNet.Services
                 snapshot.AddCriteriaSnapshot(criteria);
 
             var response = bnet.protocol.achievements.RegisterWithServiceResponse.CreateBuilder()
+                .SetRegistrationFlags(3)
                 .SetSnapshot(snapshot);
 
             done(response.Build());
