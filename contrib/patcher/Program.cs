@@ -48,8 +48,9 @@ namespace patcher
         //static string version = "8018401a9c";
         #endregion
 
-        #region Build 1.0.2.9858
-        static Int32 offset = 0x000BA8A2;
+        #region Build 1.0.2.9858 & 1.0.2.9950
+        static Int32 serverOffset = 0x000BA8A2;
+        static Int32 challengeOffset = 0x000BA863;
         static string version = "79fef7ae8e";
         #endregion
 
@@ -88,20 +89,25 @@ namespace patcher
                         if (baseAddr == IntPtr.Zero)
                             throw new Exception("Failed to locate battle.net.dll");
 
-                        var JMPAddr = baseAddr.ToInt32() + offset;
+                        var serverAddr = baseAddr.ToInt32() + serverOffset;
+                        var challengeAddr = baseAddr.ToInt32() + challengeOffset;
                         var BytesWritten = IntPtr.Zero;
                         byte[] JMP = new byte[] { 0xEB };
                         Console.WriteLine("battle.net.dll address: 0x{0:X8}", baseAddr.ToInt32());
-                        var prevByte = ReadByte(hWnd, JMPAddr);
+                        var prevByte = ReadByte(hWnd, serverAddr);
                         if (prevByte != 0x75)
                             throw new Exception(string.Format("File already patched or unknown battle.net.dll version. 0x{0:X2} != 0x75",prevByte));
+                        prevByte = ReadByte(hWnd, challengeAddr);
+                        if (prevByte != 0x74)
+                            throw new Exception(string.Format("File already patched or unknown battle.net.dll version. 0x{0:X2} != 0x74", prevByte));
 
                         // patch thumbprint.
-                        WriteProcessMemory(hWnd, new IntPtr(JMPAddr), JMP, 1, out BytesWritten);
+                        WriteProcessMemory(hWnd, new IntPtr(serverAddr), JMP, 1, out BytesWritten);
+                        if (BytesWritten.ToInt32() < 1)
+                            throw new Exception("Failed to write to process.");
 
                         //disable second challenge checks
-                        WriteProcessMemory(hWnd, new IntPtr(baseAddr.ToInt32() + 0x000BA836), JMP, 1, out BytesWritten);
-                        WriteProcessMemory(hWnd, new IntPtr(baseAddr.ToInt32() + 0x000BA863), JMP, 1, out BytesWritten);
+                        WriteProcessMemory(hWnd, new IntPtr(challengeAddr), JMP, 1, out BytesWritten);
 
                         //Console.WriteLine("After write: 0x{0:X2}", ReadByte(hWnd, JMPAddr));
 
