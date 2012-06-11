@@ -169,7 +169,7 @@ namespace Mooege.Net
                         if (connection.IsConnected)
                             connection.BeginReceive(ReceiveCallback, connection);
                         else
-                            Logger.Trace("Connection closed:" + connection.RemoteEndPoint.Address);
+                            Logger.Trace("Connection closed:" + connection.Client);
                     }
                     else
                     {
@@ -208,7 +208,10 @@ namespace Mooege.Net
                 catch (Exception e)
                 {
                     RemoveConnection(connection, true); // An error occured while receiving, the connection may have been disconnected.
-                    Logger.DebugException(e, "TlsAuthenticationComplete()");
+                    if (e is System.IO.IOException)
+                        Logger.Trace("{0} unexpectedly closed connection, client is not patched.", connection.Client);
+                    else
+                        Logger.DebugException(e, "TlsAuthenticationComplete()");
                 }
             }
         }
