@@ -127,12 +127,12 @@ namespace D3.Hero {
           "LlF1ZXN0UmV3YXJkSGlzdG9yeUVudHJ5IhgKCE5hbWVUZXh0EgwKBG5hbWUY" + 
           "ASACKAkiOAoISGVyb0xpc3QSLAoIaGVyb19pZHMYASADKAsyGi5EMy5Pbmxp" + 
           "bmVTZXJ2aWNlLkVudGl0eUlkIi4KCkRpZ2VzdExpc3QSIAoHZGlnZXN0cxgB" + 
-          "IAMoCzIPLkQzLkhlcm8uRGlnZXN0IkUKEFF1ZXN0SGlzdG9yeUxpc3QSMQoN" + 
-          "cXVlc3RfaGlzdG9yeRgBIAMoCzIaLkQzLkhlcm8uUXVlc3RIaXN0b3J5RW50" + 
-          "cnkiOwoOU2F2ZWRRdWVzdExpc3QSKQoMc2F2ZWRfcXVlc3RzGAEgAygLMhMu" + 
-          "RDMuSGVyby5TYXZlZFF1ZXN0IlgKFlF1ZXN0UmV3YXJkSGlzdG9yeUxpc3QS" + 
-          "PgoUcXVlc3RfcmV3YXJkX2hpc3RvcnkYASADKAsyIC5EMy5IZXJvLlF1ZXN0" + 
-          "UmV3YXJkSGlzdG9yeUVudHJ5");
+          "IAMoCzIPLkQzLkhlcm8uRGlnZXN0Ij8KEFF1ZXN0SGlzdG9yeUxpc3QSKwoH" + 
+          "aGlzdG9yeRgBIAMoCzIaLkQzLkhlcm8uUXVlc3RIaXN0b3J5RW50cnkiOwoO" + 
+          "U2F2ZWRRdWVzdExpc3QSKQoMc2F2ZWRfcXVlc3RzGAEgAygLMhMuRDMuSGVy" + 
+          "by5TYXZlZFF1ZXN0IlIKFlF1ZXN0UmV3YXJkSGlzdG9yeUxpc3QSOAoOcmV3" + 
+          "YXJkX2hpc3RvcnkYASADKAsyIC5EMy5IZXJvLlF1ZXN0UmV3YXJkSGlzdG9y" + 
+          "eUVudHJ5");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_Hero_VisualItem__Descriptor = Descriptor.MessageTypes[0];
@@ -203,18 +203,18 @@ namespace D3.Hero {
         internal__static_D3_Hero_DigestList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.DigestList, global::D3.Hero.DigestList.Builder>(internal__static_D3_Hero_DigestList__Descriptor,
                 new string[] { "Digests", });
-/*        internal__static_D3_Hero_QuestHistoryList__Descriptor = Descriptor.MessageTypes[17];
+        internal__static_D3_Hero_QuestHistoryList__Descriptor = Descriptor.MessageTypes[17];
         internal__static_D3_Hero_QuestHistoryList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.QuestHistoryList, global::D3.Hero.QuestHistoryList.Builder>(internal__static_D3_Hero_QuestHistoryList__Descriptor,
-                new string[] { "QuestHistory", });*/
+                new string[] { "History", });
         internal__static_D3_Hero_SavedQuestList__Descriptor = Descriptor.MessageTypes[18];
         internal__static_D3_Hero_SavedQuestList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.SavedQuestList, global::D3.Hero.SavedQuestList.Builder>(internal__static_D3_Hero_SavedQuestList__Descriptor,
                 new string[] { "SavedQuests", });
-/*        internal__static_D3_Hero_QuestRewardHistoryList__Descriptor = Descriptor.MessageTypes[19];
+        internal__static_D3_Hero_QuestRewardHistoryList__Descriptor = Descriptor.MessageTypes[19];
         internal__static_D3_Hero_QuestRewardHistoryList__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.Hero.QuestRewardHistoryList, global::D3.Hero.QuestRewardHistoryList.Builder>(internal__static_D3_Hero_QuestRewardHistoryList__Descriptor,
-                new string[] { "QuestRewardHistory", });*/
+                new string[] { "RewardHistory", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -8006,7 +8006,7 @@ namespace D3.Hero {
   public sealed partial class QuestHistoryList : pb::GeneratedMessage<QuestHistoryList, QuestHistoryList.Builder> {
     private QuestHistoryList() { }
     private static readonly QuestHistoryList defaultInstance = new QuestHistoryList().MakeReadOnly();
-    private static readonly string[] _questHistoryListFieldNames = new string[] { "quest_history" };
+    private static readonly string[] _questHistoryListFieldNames = new string[] { "history" };
     private static readonly uint[] _questHistoryListFieldTags = new uint[] { 10 };
     public static QuestHistoryList DefaultInstance {
       get { return defaultInstance; }
@@ -8028,21 +8028,21 @@ namespace D3.Hero {
       get { return global::D3.Hero.Hero.internal__static_D3_Hero_QuestHistoryList__FieldAccessorTable; }
     }
     
-    public const int QuestHistoryFieldNumber = 1;
-    private pbc::PopsicleList<global::D3.Hero.QuestHistoryEntry> questHistory_ = new pbc::PopsicleList<global::D3.Hero.QuestHistoryEntry>();
-    public scg::IList<global::D3.Hero.QuestHistoryEntry> QuestHistoryListProp {
-      get { return questHistory_; }
+    public const int HistoryFieldNumber = 1;
+    private pbc::PopsicleList<global::D3.Hero.QuestHistoryEntry> history_ = new pbc::PopsicleList<global::D3.Hero.QuestHistoryEntry>();
+    public scg::IList<global::D3.Hero.QuestHistoryEntry> HistoryList {
+      get { return history_; }
     }
-    public int QuestHistoryCount {
-      get { return questHistory_.Count; }
+    public int HistoryCount {
+      get { return history_.Count; }
     }
-    public global::D3.Hero.QuestHistoryEntry GetQuestHistory(int index) {
-      return questHistory_[index];
+    public global::D3.Hero.QuestHistoryEntry GetHistory(int index) {
+      return history_[index];
     }
     
     public override bool IsInitialized {
       get {
-        foreach (global::D3.Hero.QuestHistoryEntry element in QuestHistoryListProp) {
+        foreach (global::D3.Hero.QuestHistoryEntry element in HistoryList) {
           if (!element.IsInitialized) return false;
         }
         return true;
@@ -8052,8 +8052,8 @@ namespace D3.Hero {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _questHistoryListFieldNames;
-      if (questHistory_.Count > 0) {
-        output.WriteMessageArray(1, field_names[0], questHistory_);
+      if (history_.Count > 0) {
+        output.WriteMessageArray(1, field_names[0], history_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -8065,7 +8065,7 @@ namespace D3.Hero {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::D3.Hero.QuestHistoryEntry element in QuestHistoryListProp) {
+        foreach (global::D3.Hero.QuestHistoryEntry element in HistoryList) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
         }
         size += UnknownFields.SerializedSize;
@@ -8105,7 +8105,7 @@ namespace D3.Hero {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private QuestHistoryList MakeReadOnly() {
-      questHistory_.MakeReadOnly();
+      history_.MakeReadOnly();
       return this;
     }
     
@@ -8195,8 +8195,8 @@ namespace D3.Hero {
       public override Builder MergeFrom(QuestHistoryList other) {
         if (other == global::D3.Hero.QuestHistoryList.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.questHistory_.Count != 0) {
-          result.questHistory_.Add(other.questHistory_);
+        if (other.history_.Count != 0) {
+          result.history_.Add(other.history_);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -8242,7 +8242,7 @@ namespace D3.Hero {
               break;
             }
             case 10: {
-              input.ReadMessageArray(tag, field_name, result.questHistory_, global::D3.Hero.QuestHistoryEntry.DefaultInstance, extensionRegistry);
+              input.ReadMessageArray(tag, field_name, result.history_, global::D3.Hero.QuestHistoryEntry.DefaultInstance, extensionRegistry);
               break;
             }
           }
@@ -8255,47 +8255,47 @@ namespace D3.Hero {
       }
       
       
-      public pbc::IPopsicleList<global::D3.Hero.QuestHistoryEntry> QuestHistoryList {
-        get { return PrepareBuilder().questHistory_; }
+      public pbc::IPopsicleList<global::D3.Hero.QuestHistoryEntry> HistoryList {
+        get { return PrepareBuilder().history_; }
       }
-      public int QuestHistoryCount {
-        get { return result.QuestHistoryCount; }
+      public int HistoryCount {
+        get { return result.HistoryCount; }
       }
-      public global::D3.Hero.QuestHistoryEntry GetQuestHistory(int index) {
-        return result.GetQuestHistory(index);
+      public global::D3.Hero.QuestHistoryEntry GetHistory(int index) {
+        return result.GetHistory(index);
       }
-      public Builder SetQuestHistory(int index, global::D3.Hero.QuestHistoryEntry value) {
+      public Builder SetHistory(int index, global::D3.Hero.QuestHistoryEntry value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.questHistory_[index] = value;
+        result.history_[index] = value;
         return this;
       }
-      public Builder SetQuestHistory(int index, global::D3.Hero.QuestHistoryEntry.Builder builderForValue) {
+      public Builder SetHistory(int index, global::D3.Hero.QuestHistoryEntry.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.questHistory_[index] = builderForValue.Build();
+        result.history_[index] = builderForValue.Build();
         return this;
       }
-      public Builder AddQuestHistory(global::D3.Hero.QuestHistoryEntry value) {
+      public Builder AddHistory(global::D3.Hero.QuestHistoryEntry value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.questHistory_.Add(value);
+        result.history_.Add(value);
         return this;
       }
-      public Builder AddQuestHistory(global::D3.Hero.QuestHistoryEntry.Builder builderForValue) {
+      public Builder AddHistory(global::D3.Hero.QuestHistoryEntry.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.questHistory_.Add(builderForValue.Build());
+        result.history_.Add(builderForValue.Build());
         return this;
       }
-      public Builder AddRangeQuestHistory(scg::IEnumerable<global::D3.Hero.QuestHistoryEntry> values) {
+      public Builder AddRangeHistory(scg::IEnumerable<global::D3.Hero.QuestHistoryEntry> values) {
         PrepareBuilder();
-        result.questHistory_.Add(values);
+        result.history_.Add(values);
         return this;
       }
-      public Builder ClearQuestHistory() {
+      public Builder ClearHistory() {
         PrepareBuilder();
-        result.questHistory_.Clear();
+        result.history_.Clear();
         return this;
       }
     }
@@ -8614,7 +8614,7 @@ namespace D3.Hero {
   public sealed partial class QuestRewardHistoryList : pb::GeneratedMessage<QuestRewardHistoryList, QuestRewardHistoryList.Builder> {
     private QuestRewardHistoryList() { }
     private static readonly QuestRewardHistoryList defaultInstance = new QuestRewardHistoryList().MakeReadOnly();
-    private static readonly string[] _questRewardHistoryListFieldNames = new string[] { "quest_reward_history" };
+    private static readonly string[] _questRewardHistoryListFieldNames = new string[] { "reward_history" };
     private static readonly uint[] _questRewardHistoryListFieldTags = new uint[] { 10 };
     public static QuestRewardHistoryList DefaultInstance {
       get { return defaultInstance; }
@@ -8636,21 +8636,21 @@ namespace D3.Hero {
       get { return global::D3.Hero.Hero.internal__static_D3_Hero_QuestRewardHistoryList__FieldAccessorTable; }
     }
     
-    public const int QuestRewardHistoryFieldNumber = 1;
-    private pbc::PopsicleList<global::D3.Hero.QuestRewardHistoryEntry> questRewardHistory_ = new pbc::PopsicleList<global::D3.Hero.QuestRewardHistoryEntry>();
-    public scg::IList<global::D3.Hero.QuestRewardHistoryEntry> QuestRewardHistoryListProp {
-      get { return questRewardHistory_; }
+    public const int RewardHistoryFieldNumber = 1;
+    private pbc::PopsicleList<global::D3.Hero.QuestRewardHistoryEntry> rewardHistory_ = new pbc::PopsicleList<global::D3.Hero.QuestRewardHistoryEntry>();
+    public scg::IList<global::D3.Hero.QuestRewardHistoryEntry> RewardHistoryList {
+      get { return rewardHistory_; }
     }
-    public int QuestRewardHistoryCount {
-      get { return questRewardHistory_.Count; }
+    public int RewardHistoryCount {
+      get { return rewardHistory_.Count; }
     }
-    public global::D3.Hero.QuestRewardHistoryEntry GetQuestRewardHistory(int index) {
-      return questRewardHistory_[index];
+    public global::D3.Hero.QuestRewardHistoryEntry GetRewardHistory(int index) {
+      return rewardHistory_[index];
     }
     
     public override bool IsInitialized {
       get {
-        foreach (global::D3.Hero.QuestRewardHistoryEntry element in QuestRewardHistoryListProp) {
+        foreach (global::D3.Hero.QuestRewardHistoryEntry element in RewardHistoryList) {
           if (!element.IsInitialized) return false;
         }
         return true;
@@ -8660,8 +8660,8 @@ namespace D3.Hero {
     public override void WriteTo(pb::ICodedOutputStream output) {
       int size = SerializedSize;
       string[] field_names = _questRewardHistoryListFieldNames;
-      if (questRewardHistory_.Count > 0) {
-        output.WriteMessageArray(1, field_names[0], questRewardHistory_);
+      if (rewardHistory_.Count > 0) {
+        output.WriteMessageArray(1, field_names[0], rewardHistory_);
       }
       UnknownFields.WriteTo(output);
     }
@@ -8673,7 +8673,7 @@ namespace D3.Hero {
         if (size != -1) return size;
         
         size = 0;
-        foreach (global::D3.Hero.QuestRewardHistoryEntry element in QuestRewardHistoryListProp) {
+        foreach (global::D3.Hero.QuestRewardHistoryEntry element in RewardHistoryList) {
           size += pb::CodedOutputStream.ComputeMessageSize(1, element);
         }
         size += UnknownFields.SerializedSize;
@@ -8713,7 +8713,7 @@ namespace D3.Hero {
       return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
     }
     private QuestRewardHistoryList MakeReadOnly() {
-      questRewardHistory_.MakeReadOnly();
+      rewardHistory_.MakeReadOnly();
       return this;
     }
     
@@ -8803,8 +8803,8 @@ namespace D3.Hero {
       public override Builder MergeFrom(QuestRewardHistoryList other) {
         if (other == global::D3.Hero.QuestRewardHistoryList.DefaultInstance) return this;
         PrepareBuilder();
-        if (other.questRewardHistory_.Count != 0) {
-          result.questRewardHistory_.Add(other.questRewardHistory_);
+        if (other.rewardHistory_.Count != 0) {
+          result.rewardHistory_.Add(other.rewardHistory_);
         }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -8850,7 +8850,7 @@ namespace D3.Hero {
               break;
             }
             case 10: {
-              input.ReadMessageArray(tag, field_name, result.questRewardHistory_, global::D3.Hero.QuestRewardHistoryEntry.DefaultInstance, extensionRegistry);
+              input.ReadMessageArray(tag, field_name, result.rewardHistory_, global::D3.Hero.QuestRewardHistoryEntry.DefaultInstance, extensionRegistry);
               break;
             }
           }
@@ -8863,47 +8863,47 @@ namespace D3.Hero {
       }
       
       
-      public pbc::IPopsicleList<global::D3.Hero.QuestRewardHistoryEntry> QuestRewardHistoryList {
-        get { return PrepareBuilder().questRewardHistory_; }
+      public pbc::IPopsicleList<global::D3.Hero.QuestRewardHistoryEntry> RewardHistoryList {
+        get { return PrepareBuilder().rewardHistory_; }
       }
-      public int QuestRewardHistoryCount {
-        get { return result.QuestRewardHistoryCount; }
+      public int RewardHistoryCount {
+        get { return result.RewardHistoryCount; }
       }
-      public global::D3.Hero.QuestRewardHistoryEntry GetQuestRewardHistory(int index) {
-        return result.GetQuestRewardHistory(index);
+      public global::D3.Hero.QuestRewardHistoryEntry GetRewardHistory(int index) {
+        return result.GetRewardHistory(index);
       }
-      public Builder SetQuestRewardHistory(int index, global::D3.Hero.QuestRewardHistoryEntry value) {
+      public Builder SetRewardHistory(int index, global::D3.Hero.QuestRewardHistoryEntry value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.questRewardHistory_[index] = value;
+        result.rewardHistory_[index] = value;
         return this;
       }
-      public Builder SetQuestRewardHistory(int index, global::D3.Hero.QuestRewardHistoryEntry.Builder builderForValue) {
+      public Builder SetRewardHistory(int index, global::D3.Hero.QuestRewardHistoryEntry.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.questRewardHistory_[index] = builderForValue.Build();
+        result.rewardHistory_[index] = builderForValue.Build();
         return this;
       }
-      public Builder AddQuestRewardHistory(global::D3.Hero.QuestRewardHistoryEntry value) {
+      public Builder AddRewardHistory(global::D3.Hero.QuestRewardHistoryEntry value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.questRewardHistory_.Add(value);
+        result.rewardHistory_.Add(value);
         return this;
       }
-      public Builder AddQuestRewardHistory(global::D3.Hero.QuestRewardHistoryEntry.Builder builderForValue) {
+      public Builder AddRewardHistory(global::D3.Hero.QuestRewardHistoryEntry.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.questRewardHistory_.Add(builderForValue.Build());
+        result.rewardHistory_.Add(builderForValue.Build());
         return this;
       }
-      public Builder AddRangeQuestRewardHistory(scg::IEnumerable<global::D3.Hero.QuestRewardHistoryEntry> values) {
+      public Builder AddRangeRewardHistory(scg::IEnumerable<global::D3.Hero.QuestRewardHistoryEntry> values) {
         PrepareBuilder();
-        result.questRewardHistory_.Add(values);
+        result.rewardHistory_.Add(values);
         return this;
       }
-      public Builder ClearQuestRewardHistory() {
+      public Builder ClearRewardHistory() {
         PrepareBuilder();
-        result.questRewardHistory_.Clear();
+        result.rewardHistory_.Clear();
         return this;
       }
     }

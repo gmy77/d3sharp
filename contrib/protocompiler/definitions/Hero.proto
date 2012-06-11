@@ -150,7 +150,7 @@ message DigestList
 
 message QuestHistoryList
 {
-    repeated .D3.Hero.QuestHistoryEntry quest_history = 1;
+    repeated .D3.Hero.QuestHistoryEntry history = 1;
 }
 
 message SavedQuestList
@@ -160,6 +160,6 @@ message SavedQuestList
 
 message QuestRewardHistoryList
 {
-    repeated .D3.Hero.QuestRewardHistoryEntry quest_reward_history = 1;
+    repeated .D3.Hero.QuestRewardHistoryEntry reward_history = 1;
 }
 

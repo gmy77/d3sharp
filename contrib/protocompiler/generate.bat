@@ -1,4 +1,10 @@
-@CHOICE /C:YN /M:"Have you made sure field 'item' in QuestProto.QuestReward has been renamed to 'item_granted'"
+@ECHO Have you made the following changes:
+@ECHO QuestProto.QuestReward - 'item' ^> 'item_granted'
+@ECHO HeroProto.QuestHistoryList - 'quest_history' ^> 'history'
+@ECHO HeroProto.QuestRewardHistoryList - 'quest_reward_history' ^> 'reward_history'
+@ECHO AuctionHouseProto.Escrow - 'item' ^> 'auction_item'
+
+@CHOICE /C:YN
 @IF ERRORLEVEL 2 goto :end
 
 CD definitions
