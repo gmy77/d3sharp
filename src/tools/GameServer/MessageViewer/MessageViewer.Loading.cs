@@ -96,6 +96,13 @@ namespace GameMessageViewer
             return "unknown";
         }
 
+        public bool HasVersion(string version, string stream)
+        {
+            if (stream.Contains(Encode(version)))
+                return true;
+
+            return false;
+        }
 
 
         //private void LoadWiresharkHex(string text)
@@ -166,10 +173,21 @@ namespace GameMessageViewer
                 // if only one stream is found, or more are found but only one is tagged with mooege protocol version load that one
                 if (gsStreams.Count > 0)
                 {
-                    var correct = gsStreams.Where(x => GetVersion(x).Equals(Mooege.Common.Versions.VersionInfo.Ingame.VersionString));
+                    var correct = gsStreams.Where(x => HasVersion(Mooege.Common.Versions.VersionInfo.Ingame.MajorVersion,x)).ToList();
 
-                    if (correct.Count() == 1)
-                        LoadDump(correct.First());
+                    if (correct.Count() > 0)
+                    {
+                        if (correct.Count() == 1)
+                            LoadDump(correct.First());
+                        else
+                        {
+                            Streams StreamDialog = new Streams(correct);
+                            if (StreamDialog.ShowDialog() == DialogResult.OK)
+                            {
+                                LoadDump(correct[StreamDialog.stream]);
+                            }
+                        }
+                    }
                     else
                     {
                         if (gsStreams.Count() == 1)

@@ -183,8 +183,8 @@ namespace Mooege.Common.Versions
 
             //This is the server version sent in VersionsMessage
             public const string MajorVersion = "1.0.2";
-            public const string ServerBuild = "9950";
-            public const string VersionString = MajorVersion + ServerBuild;
+            public const string ServerBuild = "10005";
+            public const string VersionString = MajorVersion + "." + ServerBuild;
 
             // old version strings.
             // 1.0.2.9950   // 9950 Retail
