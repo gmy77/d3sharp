@@ -40,7 +40,7 @@ message Escrow
     }
 
     required uint32 version = 1;
-    optional .D3.AuctionHouse.Item item = 2;
+    optional .D3.AuctionHouse.Item auction_item = 2;
     optional .D3.Hero.SavedData hero = 3;
     repeated .D3.OnlineService.EntityId serviced_tokens = 4;
 }
