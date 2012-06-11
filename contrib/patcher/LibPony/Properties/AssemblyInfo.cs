@@ -6,13 +6,13 @@ using PonyLib;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PonyLib")]
+[assembly: AssemblyTitle("LibPony")]
 [assembly: AssemblyDescription("mooege - an educational game server emulator.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("mooege.org")]
-[assembly: AssemblyProduct("PonyLib")]
+[assembly: AssemblyProduct("LibPony")]
 [assembly: AssemblyCopyright("Copyright © 2011 - 2012, mooege project.")]
-[assembly: AssemblyTrademark("PonyLib")]
+[assembly: AssemblyTrademark("LibPony")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

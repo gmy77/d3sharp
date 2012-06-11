@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PonyPatcher", "PonyPatcher.csproj", "{B30D37BA-120C-41F0-89B7-4DDE1E204B91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PonyLib", "PonyLib\PonyLib.csproj", "{F6092522-5F0B-4111-A8BF-FCCDA2D6DB71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibPony", "LibPony\LibPony.csproj", "{F6092522-5F0B-4111-A8BF-FCCDA2D6DB71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
