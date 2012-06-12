@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace patcher
 {
@@ -56,6 +59,11 @@ namespace patcher
 
         static void Main(string[] args)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any mpq-reading problems (mostly because of number formats).
+            var guiThread = new Thread(c => Application.Run(new MainForm()));
+            guiThread.CurrentCulture = CultureInfo.InvariantCulture;
+            guiThread.Start();
+
             var foundD3 = false;
             var hWnd = IntPtr.Zero;
             try

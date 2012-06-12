@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "patcher", "patcher.csproj", "{B30D37BA-120C-41F0-89B7-4DDE1E204B91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PonyPatcher", "PonyPatcher.csproj", "{B30D37BA-120C-41F0-89B7-4DDE1E204B91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
