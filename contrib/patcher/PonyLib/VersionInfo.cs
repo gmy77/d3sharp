@@ -16,14 +16,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Collections.Generic;
-
-namespace PonyPatcher.Utilities
+namespace PonyLib
 {
     /// <summary>
-    /// Supported Versions Info.
+    /// Supported versions info for PonyLib.
     /// </summary>
-    /// <remarks>Put anything related to versions here.</remarks>
     public static class VersionInfo
     {
         /// <summary>
@@ -38,7 +35,7 @@ namespace PonyPatcher.Utilities
         }
 
         /// <summary>
-        /// MooNet versions info.
+        /// Client version info.
         /// </summary>
         public static class Client
         {
@@ -46,7 +43,6 @@ namespace PonyPatcher.Utilities
             /// Required client version.
             /// </summary>
             public const int RequiredClientVersion = 9950;
-
         }       
     }
 }

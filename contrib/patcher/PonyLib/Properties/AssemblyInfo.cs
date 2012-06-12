@@ -6,13 +6,13 @@ using PonyLib;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PonyPatcher")]
+[assembly: AssemblyTitle("PonyLib")]
 [assembly: AssemblyDescription("mooege - an educational game server emulator.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("mooege.org")]
-[assembly: AssemblyProduct("PonyPatcher")]
+[assembly: AssemblyProduct("PonyLib")]
 [assembly: AssemblyCopyright("Copyright © 2011 - 2012, mooege project.")]
-[assembly: AssemblyTrademark("PonyPatcher")]
+[assembly: AssemblyTrademark("PonyLib")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -21,7 +21,7 @@ using PonyLib;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("52ca2c50-25ca-4120-a951-f98f5fdddd5d")]
+[assembly: Guid("dab4ba4d-5a09-48d1-a735-b6c2c5559683")]
 
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,

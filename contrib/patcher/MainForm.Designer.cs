@@ -1,4 +1,4 @@
-﻿namespace patcher
+﻿namespace PonyPatcher
 {
     partial class MainForm
     {
@@ -42,6 +42,7 @@
             this.buttonPatch.TabIndex = 2;
             this.buttonPatch.Text = "&Patch";
             this.buttonPatch.UseVisualStyleBackColor = true;
+            this.buttonPatch.Click += new System.EventHandler(this.buttonPatch_Click);
             // 
             // textBox1
             // 

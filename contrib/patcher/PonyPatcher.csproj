@@ -65,7 +65,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\VersionInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -82,6 +81,15 @@
   <ItemGroup>
     <None Include="assets\pony.png" />
     <Content Include="pony.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="PonyLib\PonyLib.csproj">
+      <Project>{F6092522-5F0B-4111-A8BF-FCCDA2D6DB71}</Project>
+      <Name>PonyLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

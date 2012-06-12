@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
-using PonyPatcher.Utilities;
+using PonyLib;
 
-namespace patcher
+namespace PonyPatcher
 {
     public partial class MainForm : Form
     {
@@ -21,6 +15,11 @@ namespace patcher
         private void MainForm_Load(object sender, EventArgs e)
         {
             this.Text = string.Format("Pony Patcher [v{0}]", Assembly.GetExecutingAssembly().GetName().Version);
+        }
+
+        private void buttonPatch_Click(object sender, EventArgs e)
+        {
+            Patcher.Patch();
         }
     }
 }
