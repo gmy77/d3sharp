@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.9950.*";
+            public const string Version = "1.9991.*";
         }
 
         /// <summary>
@@ -47,10 +47,11 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 9950;
+            public const int RequiredClientVersion = 9991;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
+                {"Aurora 24e2d13e54_public", 9991},
                 {"Aurora 79fef7ae8e_public", 9950}, // also 9858
                 {"Aurora 8018401a9c_public", 9749},
                 {"Aurora 31c8df955a_public", 9558},
@@ -156,7 +157,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 9950;
+            public const int RequiredPatchVersion = 9991;
         }
 
         /// <summary>
@@ -170,7 +171,7 @@ namespace Mooege.Common.Versions
             public const int ProtocolHash = 0x33CABB38; //9950
 
             // old hashes
-            // 0x33CABB38                   // 9183, 9327, 9359, 9749
+            // 0x33CABB38                   // 9183, 9327, 9359, 9749, 9858, 9950, 9991
             // unchecked((int)0x9726E2E3)   // 8896
             // 0x375AE194                   // 8815
             // unchecked((int)0xA8F17EC5)   // 8610
@@ -183,7 +184,7 @@ namespace Mooege.Common.Versions
 
             //This is the server version sent in VersionsMessage
             public const string MajorVersion = "1.0.2";
-            public const string ServerBuild = "10005";
+            public const string ServerBuild = "10039";
             public const string VersionString = MajorVersion + "." + ServerBuild;
 
             // old version strings.

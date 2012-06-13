@@ -49,9 +49,15 @@ namespace patcher
         #endregion
 
         #region Build 1.0.2.9858 & 1.0.2.9950
-        static Int32 serverOffset = 0x000BA8A2;
-        static Int32 challengeOffset = 0x000BA863;
-        static string version = "79fef7ae8e";
+        //static Int32 serverOffset = 0x000BA8A2;
+        //static Int32 challengeOffset = 0x000BA863;
+        //static string version = "79fef7ae8e";
+        #endregion
+
+        #region Build 1.0.2.9991
+        static Int32 serverOffset = 0x000BC25C;
+        static Int32 challengeOffset = 0x000BC219;
+        static string version = "24e2d13e54";
         #endregion
 
         static void Main(string[] args)
