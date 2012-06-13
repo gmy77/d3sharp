@@ -50,6 +50,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public int SNOScript { get; private set; }
         public int Int6 { get; private set; }
 
+        public List<ServerData> ServerData { get; private set; }
+
         public World(MpqFile file)
         {
             var stream = file.Open();
@@ -57,37 +59,40 @@ namespace Mooege.Common.MPQ.FileFormats
             this.Header = new Header(stream);
 
             this.IsGenerated = (stream.ReadValueS32() != 0);
-            this.Int1 = stream.ReadValueS32();
-            this.Int2 = stream.ReadValueS32();
+            stream.Position += 8;
+            this.ServerData = stream.ReadSerializedData<ServerData>();
 
-            //this.DRLGParams = stream.ReadSerializedData<DRLGParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/120) /raist
-            stream.Position += 8; // skips reading of DRLG Pointer
-            stream.Position += (2 * 4);
-            this.SceneParams = stream.ReadSerializedItem<SceneParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/24) /raist
+            //this.Int1 = stream.ReadValueS32();
+            //this.Int2 = stream.ReadValueS32();
 
-            stream.Position += (2 * 4);
+            ////this.DRLGParams = stream.ReadSerializedData<DRLGParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/120) /raist
+            //stream.Position += 8; // skips reading of DRLG Pointer
+            //stream.Position += (2 * 4);
+            //this.SceneParams = stream.ReadSerializedItem<SceneParams>(); // I'm not sure if we can have a list of drlgparams. (then should be calling it with pointer.Size/24) /raist
+
+            //stream.Position += (2 * 4);
             this.MarkerSets = stream.ReadSerializedInts();
 
             stream.Position += (14 * 4);
             this.Environment = new Environment(stream);
 
-            stream.Position += 4;
-            LabelRuleSet = new LabelRuleSet(stream);
-            this.Int4 = stream.ReadValueS32();
+            //stream.Position += 4;
+            //LabelRuleSet = new LabelRuleSet(stream);
+            //this.Int4 = stream.ReadValueS32();
 
-            stream.Position += 4;
-            this.SceneClusterSet = new SceneClusterSet(stream);
+            //stream.Position += 4;
+            //this.SceneClusterSet = new SceneClusterSet(stream);
 
-            for (int i = 0; i < SNONavMeshFunctions.Length; i++)
-            {
-                SNONavMeshFunctions[i] = stream.ReadValueS32();
-            }
+            //for (int i = 0; i < SNONavMeshFunctions.Length; i++)
+            //{
+            //    SNONavMeshFunctions[i] = stream.ReadValueS32();
+            //}
 
-            stream.Position += 4;
+            //stream.Position += 4;
             Float0 = stream.ReadValueF32();
             Int5 = stream.ReadValueS32();
-            SNOScript = stream.ReadValueS32();
-            Int6 = stream.ReadValueS32();
+            //SNOScript = stream.ReadValueS32();
+            //Int6 = stream.ReadValueS32();
 
             stream.Close();
         }
@@ -519,4 +524,34 @@ namespace Mooege.Common.MPQ.FileFormats
     }
 
     #endregion
+
+    public class ServerData : ISerializableData
+    {
+        public List<DRLGParams> DRLGParams { get; private set; }
+        public SceneParams SceneParams { get; private set; }
+        public LabelRuleSet LabelRuleSet { get; private set; }
+        public int Int1 { get; private set; }
+        public SceneClusterSet SceneClusterSet { get; private set; }
+        public int[] SNONavMeshFunctions = new int[4];
+        public int SNOScript { get; private set; }
+        public int Int2 { get; private set; }
+
+        public void Read(MpqFileStream stream)
+        {
+            this.DRLGParams = stream.ReadSerializedData<DRLGParams>();
+            stream.Position += 8;
+            this.SceneParams = stream.ReadSerializedItem<SceneParams>();
+            stream.Position += 8;
+            LabelRuleSet = new LabelRuleSet(stream);
+            this.Int1 = stream.ReadValueS32();
+            this.SceneClusterSet = new SceneClusterSet(stream);
+            for (int i = 0; i < SNONavMeshFunctions.Length; i++)
+            {
+                SNONavMeshFunctions[i] = stream.ReadValueS32();
+            }
+            SNOScript = stream.ReadValueS32();
+            Int2 = stream.ReadValueS32();
+        }
+    }
+
 }
