@@ -70,6 +70,8 @@ namespace Mooege.Net.GS
                     if (message == null) continue;
                     try
                     {
+                        Logger.LogIncomingPacket(message); // change ConsoleTarget's level to Level.Dump in program.cs if u want to see messages on console.
+
                         if (message.Consumer != Consumers.None)
                         {
                             if (message.Consumer == Consumers.ClientManager) ClientManager.Instance.Consume(this, message); // Client should be greeted by ClientManager and sent initial game-setup messages.
@@ -79,7 +81,6 @@ namespace Mooege.Net.GS
                         else if (message is ISelfHandler) (message as ISelfHandler).Handle(this); // if message is able to handle itself, let it do so.
                         else Logger.Warn("{0} - ID:{1} has no consumer or self-handler.", message.GetType(), message.Id);
 
-                        Logger.LogIncomingPacket(message); // change ConsoleTarget's level to Level.Dump in program.cs if u want to see messages on console.
                     }
                     catch (NotImplementedException)
                     {
