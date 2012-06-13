@@ -92,7 +92,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="LibPony\LibPony.csproj">
+    <ProjectReference Include="..\LibPony\LibPony.csproj">
       <Project>{F6092522-5F0B-4111-A8BF-FCCDA2D6DB71}</Project>
       <Name>LibPony</Name>
     </ProjectReference>
