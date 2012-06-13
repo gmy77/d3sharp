@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace PonyLib
@@ -41,60 +42,53 @@ namespace PonyLib
         {
             _processhWnd = IntPtr.Zero;
 
-            try
+            _process = Process.GetProcesses().FirstOrDefault(process => process.ProcessName.Trim() == "Diablo III");
+
+            if(_process==null)
             {
-                _process = Process.GetProcesses().FirstOrDefault(process => process.ProcessName.Trim() == "Diablo III");
-
-                if(_process==null)
-                {
-                    _isProcessOpen = false;
-                    throw  new Exception("Can not find client process!");
-                }
-
-                _processhWnd = Win32.OpenProcess(0x001F0FFF, false, _process.Id); // 0x001F0FFF = PROCESS_ALL_ACCESS
-
-                if (_processhWnd == IntPtr.Zero)
-                {
-                    _isProcessOpen = false;
-                    throw new Exception("Failed to open client process!");
-                }
-
-                _isProcessOpen = true;
-
-                var processModules = _process.Modules;
-                ProcessModule bnetModule = null;
-
-                foreach (ProcessModule module in processModules)
-                {
-                    if (module.ModuleName != "battle.net.dll")
-                        continue;
-
-                    if (module.FileVersionInfo.FileDescription != PatchInfo.RequiredBnetModuleVersion)
-                        throw new Exception("battle.net.dll module version is different than expected!");
-
-                    bnetModule = module;
-                    break;
-                }
-
-                var baseAddr = IntPtr.Zero;
-                baseAddr = bnetModule.BaseAddress;
-
-                if (baseAddr == IntPtr.Zero)
-                    throw new Exception("Failed to locate battle.net.dll");
-
-                _serverIpCheckAddr = baseAddr.ToInt32() + PatchInfo.ServerIPCheckOffset;
-                _secondChallengeCheckAddr = baseAddr.ToInt32() + PatchInfo.SecondChallengeCheckOffset;
-
-                var serverIPCheckByte = ReadByte(_processhWnd, _serverIpCheckAddr);
-                var secondChallengeCheckByte = ReadByte(_processhWnd, _secondChallengeCheckAddr);
-
-                if (serverIPCheckByte != 0x75 || secondChallengeCheckByte != 0x74)
-                    _isAlreadyPatched = true;
+                _isProcessOpen = false;
+                throw  new Exception("Can not find client process!");
             }
-            finally
+
+            _processhWnd = Win32.OpenProcess(0x001F0FFF, false, _process.Id); // 0x001F0FFF = PROCESS_ALL_ACCESS
+
+            if (_processhWnd == IntPtr.Zero)
             {
-                Cleanup();
+                _isProcessOpen = false;
+                throw new Exception("Failed to open client process!");
             }
+
+            _isProcessOpen = true;
+
+            var processModules = _process.Modules;
+            ProcessModule bnetModule = null;
+
+            foreach (ProcessModule module in processModules)
+            {
+                if (module.ModuleName != "battle.net.dll")
+                    continue;
+
+                if (module.FileVersionInfo.FileDescription != PatchInfo.RequiredBnetModuleVersion)
+                    throw new Exception("battle.net.dll module version is different than expected!");
+
+                bnetModule = module;
+                break;
+            }
+
+            var baseAddr = IntPtr.Zero;
+            baseAddr = bnetModule.BaseAddress;
+
+            if (baseAddr == IntPtr.Zero)
+                throw new Exception("Failed to locate battle.net.dll");
+
+            _serverIpCheckAddr = baseAddr.ToInt32() + PatchInfo.ServerIPCheckOffset;
+            _secondChallengeCheckAddr = baseAddr.ToInt32() + PatchInfo.SecondChallengeCheckOffset;
+
+            var serverIPCheckByte = ReadByte(_processhWnd, _serverIpCheckAddr);
+            var secondChallengeCheckByte = ReadByte(_processhWnd, _secondChallengeCheckAddr);
+
+            if (serverIPCheckByte != 0x75 || secondChallengeCheckByte != 0x74)
+                _isAlreadyPatched = true;
         }
 
         public static bool Patch()
@@ -108,15 +102,25 @@ namespace PonyLib
             var bytesWritten = IntPtr.Zero;
 
             // patch thumbprint (game server ip check).
-            Win32.WriteProcessMemory(_processhWnd, new IntPtr(_serverIpCheckAddr), JmpOpcode, 1, out bytesWritten);
+            var retVal = Win32.WriteProcessMemory(_processhWnd, new IntPtr(_serverIpCheckAddr), JmpOpcode, 1, out bytesWritten);
 
-            if (bytesWritten.ToInt32() < 1)
+            if(!retVal) // on win32 api error
+            {
+                var win32ErrorCode = Marshal.GetLastWin32Error();
+                throw new Exception(string.Format("Failed to write to process [win32 error code: 0x{0:X}]", win32ErrorCode));
+            }
+            else if (bytesWritten.ToInt32() < 1)
                 throw new Exception("Failed to write to process.");
 
             // patch second challenge check.
-            Win32.WriteProcessMemory(_processhWnd, new IntPtr(_secondChallengeCheckAddr), JmpOpcode, 1, out bytesWritten);
+            retVal = Win32.WriteProcessMemory(_processhWnd, new IntPtr(_secondChallengeCheckAddr), JmpOpcode, 1, out bytesWritten);
 
-            if (bytesWritten.ToInt32() < 1)
+            if (!retVal) // on win32 api error
+            {
+                var win32ErrorCode = Marshal.GetLastWin32Error();
+                throw new Exception(string.Format("Failed to write to process [win32 error code: {0}", win32ErrorCode));
+            }
+            else if (bytesWritten.ToInt32() < 1)
                 throw new Exception("Failed to write to process.");
 
             return true;
@@ -126,6 +130,9 @@ namespace PonyLib
         {
             if (_isProcessOpen && _processhWnd != IntPtr.Zero)
                 Win32.CloseHandle(_processhWnd);
+
+            _isProcessOpen = false;
+            _processhWnd = IntPtr.Zero;
         }
 
         private static byte ReadByte(IntPtr handle, int offset)

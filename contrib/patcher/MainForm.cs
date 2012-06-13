@@ -28,7 +28,7 @@ namespace PonyPatcher
                 }
                 else if (Patcher.IsClientRunning())
                 {
-                    labelStatus.Text = "Client is running and ready to be patched..";
+                    labelStatus.Text = "Client is running and ready for patching..";
                     labelStatus.ForeColor = Color.DarkGoldenrod;
                     buttonPatch.Enabled = true;
                 }
@@ -67,6 +67,11 @@ namespace PonyPatcher
             {
                 Patcher.Cleanup();
             }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Patcher.Cleanup();
         }
     }
 }
