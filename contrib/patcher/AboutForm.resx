@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="textBox1.Text" xml:space="preserve">
+    <value>mooege's focus is entirely on education, and we would like to keep it that way.
+
+Since any public and/or commercial use of this software is considered illegal
+in many countries (please refer to your local law), the mooege team
+will not provide any help nor support with such usage in any way.
+Every user of this software is encouraged to make sure no law is being broken
+in his/her country.
+
+The mooege team cannot take any responsibility for the use of this software
+by end-users.</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

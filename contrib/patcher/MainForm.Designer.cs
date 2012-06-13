@@ -30,40 +30,28 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.buttonPatch = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.labelStatus = new System.Windows.Forms.Label();
             this.buttonAbout = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonPatch
             // 
             this.buttonPatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonPatch.Location = new System.Drawing.Point(134, 177);
+            this.buttonPatch.Location = new System.Drawing.Point(12, 90);
             this.buttonPatch.Name = "buttonPatch";
-            this.buttonPatch.Size = new System.Drawing.Size(76, 23);
+            this.buttonPatch.Size = new System.Drawing.Size(273, 23);
             this.buttonPatch.TabIndex = 0;
             this.buttonPatch.Text = "&Patch!";
             this.buttonPatch.UseVisualStyleBackColor = true;
             this.buttonPatch.Click += new System.EventHandler(this.buttonPatch_Click);
             // 
-            // textBox1
-            // 
-            this.textBox1.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.textBox1.HideSelection = false;
-            this.textBox1.Location = new System.Drawing.Point(2, 3);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(339, 121);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.TabStop = false;
-            this.textBox1.Text = resources.GetString("textBox1.Text");
-            // 
             // labelStatus
             // 
-            this.labelStatus.Location = new System.Drawing.Point(2, 136);
+            this.labelStatus.Location = new System.Drawing.Point(82, 9);
             this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(339, 38);
+            this.labelStatus.Size = new System.Drawing.Size(234, 67);
             this.labelStatus.TabIndex = 4;
             this.labelStatus.Text = "status";
             this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -71,21 +59,32 @@
             // buttonAbout
             // 
             this.buttonAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonAbout.Location = new System.Drawing.Point(316, 177);
+            this.buttonAbout.Location = new System.Drawing.Point(291, 90);
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Size = new System.Drawing.Size(25, 23);
             this.buttonAbout.TabIndex = 1;
             this.buttonAbout.Text = "?";
             this.buttonAbout.UseVisualStyleBackColor = true;
+            this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::PonyPatcher.Properties.Resources.pony;
+            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(64, 64);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox1.TabIndex = 5;
+            this.pictureBox1.TabStop = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(346, 208);
+            this.ClientSize = new System.Drawing.Size(327, 123);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.buttonAbout);
             this.Controls.Add(this.labelStatus);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.buttonPatch);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -95,6 +94,7 @@
             this.Text = "Pony Patcher";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -103,8 +103,8 @@
         #endregion
 
         private System.Windows.Forms.Button buttonPatch;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.Button buttonAbout;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

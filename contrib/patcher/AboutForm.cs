@@ -16,18 +16,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-using System.Globalization;
-using System.Threading;
+using System;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace PonyPatcher
 {
-    public class Program
+    public partial class AboutForm : Form
     {
-        static void Main(string[] args)
+        public AboutForm()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            Application.Run(new MainForm());
-        }        
+            InitializeComponent();
+        }
+
+        private void AboutForm_Load(object sender, EventArgs e)
+        {
+            labelVersion.Text = string.Format("v{0}", Assembly.GetExecutingAssembly().GetName().Version);
+        }
     }
 }
