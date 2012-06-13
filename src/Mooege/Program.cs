@@ -24,6 +24,7 @@ using Mooege.Common.Logging;
 using Mooege.Common.MPQ;
 using Mooege.Common.Storage;
 using Mooege.Common.Storage.AccountDataBase.Entities;
+using Mooege.Common.Versions;
 using Mooege.Core.GS.Items;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Commands;
@@ -86,6 +87,7 @@ namespace Mooege
             InitLoggers(); // init logging facility.
 
             Logger.Info("mooege v{0} warming-up..", Assembly.GetExecutingAssembly().GetName().Version);
+            Logger.Info("Required client version: {0}.", VersionInfo.MooNet.RequiredClientVersion);
 
             // init openssl & wrapper.
             try
@@ -94,7 +96,7 @@ namespace Mooege
             }
             catch (Exception e)
             {
-                Logger.ErrorException(e, "OpenSSL init error");
+                Logger.ErrorException(e, "OpenSSL init error.");
                 Console.ReadLine();
                 return;
             }
