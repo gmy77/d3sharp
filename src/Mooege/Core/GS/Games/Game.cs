@@ -280,9 +280,7 @@ namespace Mooege.Core.GS.Games
             });
 
             //joinedPlayer.EnterWorld(this.StartingWorld.StartingPoints.First().Position);
-            //joinedPlayer.EnterWorld(this.StartingWorld.StartingPoints.Find(x => x.ActorSNO.Name == "Start_Location_Team_0").Position);
-            //hardcoded to top of new tristram hill
-            joinedPlayer.EnterWorld(new Common.Types.Math.Vector3D(3143.75f, 2828.75f, 59.07559f));
+            joinedPlayer.EnterWorld(this.StartingWorld.StartingPoints.Find(x => x.ActorSNO.Name == "Start_Location_Team_0").Position);
 
             joinedPlayer.InGameClient.TickingEnabled = true; // it seems bnet-servers only start ticking after player is completely in-game. /raist
         }
