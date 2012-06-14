@@ -21,14 +21,18 @@ using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Common.MPQ;
 using Mooege.Net.GS.Message;
+using Mooege.Common.Storage;
 
 namespace Mooege.Core.GS.Common.Types.Math
 {
     public class Vector3D : ISerializableData
     {
-        public float X;
-        public float Y;
-        public float Z;
+        [PersistentProperty("X")]
+        public float X { get; set; }
+        [PersistentProperty("Y")]
+        public float Y { get; set; }
+        [PersistentProperty("Z")]
+        public float Z { get; set; }
 
         public Vector3D()
         {

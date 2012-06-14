@@ -20,13 +20,16 @@ using System.Text;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Net.GS.Message;
+using Mooege.Common.Storage;
 
 namespace Mooege.Core.GS.Common.Types.Math
 {
     public class Quaternion
     {
-        public float W;
-        public Vector3D Vector3D;
+        [PersistentProperty("W")]
+        public float W { get; set; }
+        [PersistentProperty("Vector3D")]
+        public Vector3D Vector3D { get; set; }
 
         public Quaternion() { }
 

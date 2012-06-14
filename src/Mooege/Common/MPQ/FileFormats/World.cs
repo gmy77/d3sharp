@@ -38,11 +38,15 @@ namespace Mooege.Common.MPQ.FileFormats
 
         [PersistentProperty("DRLGParams")]
         public List<DRLGParams> DRLGParams { get; private set; }
+        [PersistentProperty("SceneParams")]
         public SceneParams SceneParams { get; private set; }
         public List<int> MarkerSets = new List<int>();
         public Environment Environment { get; private set; }
+        [PersistentProperty("LabelRuleSet")]
         public LabelRuleSet LabelRuleSet { get; private set; }
+        [PersistentProperty("SceneClusterSet")]
         public SceneClusterSet SceneClusterSet { get; private set; }
+        [PersistentProperty("SNONavMeshFunctions", 4)]
         public int[] SNONavMeshFunctions = new int[4];
         public int Int4 { get; private set; }
         public float Float0 { get; private set; }
@@ -51,6 +55,8 @@ namespace Mooege.Common.MPQ.FileFormats
         public int Int6 { get; private set; }
 
         public List<ServerData> ServerData { get; private set; }
+
+        public World() { }
 
         public World(MpqFile file)
         {
@@ -102,8 +108,12 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SceneParams : ISerializableData
     {
-        public List<SceneChunk> SceneChunks = new List<SceneChunk>();
+        [PersistentProperty("SceneChunks")]
+        public List<SceneChunk> SceneChunks { get; private set; }
+        [PersistentProperty("ChunkCount")]
         public int ChunkCount { get; set; }
+
+        public SceneParams() { }
 
         public void Read(MpqFileStream stream)
         {
@@ -115,9 +125,14 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SceneChunk : ISerializableData
     {
+        [PersistentProperty("SNOHandle")]
         public SNOHandle SNOHandle { get; set; }
+        [PersistentProperty("PRTransform")]
         public PRTransform PRTransform { get; set; }
+        [PersistentProperty("SceneSpecification")]
         public SceneSpecification SceneSpecification { get; set; }
+
+        public SceneChunk() { }
 
         public void Read(MpqFileStream stream)
         {
@@ -320,8 +335,12 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SceneClusterSet
     {
+        [PersistentProperty("ClusterCount")]
         public int ClusterCount { get; private set; }
-        public List<SceneCluster> SceneClusters = new List<SceneCluster>();
+        [PersistentProperty("SceneClusters")]
+        public List<SceneCluster> SceneClusters { get; private set; }
+
+        public SceneClusterSet() { }
 
         public SceneClusterSet(MpqFileStream stream)
         {
@@ -333,11 +352,17 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SceneCluster : ISerializableData
     {
+        [PersistentProperty("Name")]
         public string Name { get; private set; }
+        [PersistentProperty("ClusterId")]
         public int ClusterId { get; private set; }
+        [PersistentProperty("GroupCount")]
         public int GroupCount { get; private set; }
-        public List<SubSceneGroup> SubSceneGroups = new List<SubSceneGroup>();
+        [PersistentProperty("SubSceneGroups")]
+        public List<SubSceneGroup> SubSceneGroups { get; private set; }
         public SubSceneGroup Default { get; private set; }
+
+        public SceneCluster() { }
 
         public void Read(MpqFileStream stream)
         {
@@ -353,9 +378,12 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SubSceneGroup : ISerializableData
     {
+        [PersistentProperty("I0")]
         public int I0 { get; private set; }
+        [PersistentProperty("SubSceneCount")]
         public int SubSceneCount { get; private set; }
-        public List<SubSceneEntry> Entries = new List<SubSceneEntry>();
+        [PersistentProperty("Entries")]
+        public List<SubSceneEntry> Entries { get; private set; }
 
         public SubSceneGroup() { }
 
@@ -375,10 +403,16 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SubSceneEntry : ISerializableData
     {
+        [PersistentProperty("SNOScene")]
         public int SNOScene { get; private set; }
+        [PersistentProperty("Probability")]
         public int Probability { get; private set; }
+        [PersistentProperty("LabelCount")]
         public int LabelCount { get; private set; }
-        public List<SubSceneLabel> Labels = new List<SubSceneLabel>();
+        [PersistentProperty("Labels")]
+        public List<SubSceneLabel> Labels { get; private set; }
+
+        public SubSceneEntry() { }
 
         public void Read(MpqFileStream stream)
         {
@@ -392,7 +426,9 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class SubSceneLabel : ISerializableData
     {
+        [PersistentProperty("GBId")]
         public int GBId { get; private set; }
+        [PersistentProperty("I0")]
         public int I0 { get; private set; }
 
         public void Read(MpqFileStream stream)
@@ -408,8 +444,12 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LabelRuleSet
     {
+        [PersistentProperty("Rulecount")]
         public int Rulecount { get; private set; }
-        public List<LabelRule> LabelRules = new List<LabelRule>();
+        [PersistentProperty("LabelRules")]
+        public List<LabelRule> LabelRules { get; private set; }
+
+        public LabelRuleSet() { }
 
         public LabelRuleSet(MpqFileStream stream)
         {
@@ -421,11 +461,18 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LabelRule : ISerializableData
     {
+        [PersistentProperty("Name")]
         public string Name { get; private set; }
+        [PersistentProperty("LabelCondition")]
         public LabelCondition LabelCondition { get; private set; }
+        [PersistentProperty("Int0")]
         public int Int0 { get; private set; }
+        [PersistentProperty("LabelCount")]
         public int LabelCount { get; private set; }
-        public List<LabelEntry> Entries = new List<LabelEntry>();
+        [PersistentProperty("Entries")]
+        public List<LabelEntry> Entries { get; private set; }
+
+        public LabelRule() { }
 
         public void Read(MpqFileStream stream)
         {
@@ -440,11 +487,18 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LabelEntry : ISerializableData
     {
+        [PersistentProperty("GBIdLabel")]
         public int GBIdLabel { get; private set; }
+        [PersistentProperty("Int0")]
         public int Int0 { get; private set; }
+        [PersistentProperty("Float0")]
         public float Float0 { get; private set; }
+        [PersistentProperty("Int1")]
         public int Int1 { get; private set; }
+        [PersistentProperty("Int2")]
         public int Int2 { get; private set; }
+
+        public LabelEntry() { }
 
         public void Read(MpqFileStream stream)
         {
@@ -458,9 +512,14 @@ namespace Mooege.Common.MPQ.FileFormats
 
     public class LabelCondition
     {
+        [PersistentProperty("Enum0")]
         public DT_ENUM0 Enum0 { get; private set; }
+        [PersistentProperty("Int0")]
         public int Int0 { get; private set; }
+        [PersistentProperty("Int1",4)]
         public int[] Int1 { get; private set; }
+
+        public LabelCondition() { }
 
         public LabelCondition(MpqFileStream stream)
         {

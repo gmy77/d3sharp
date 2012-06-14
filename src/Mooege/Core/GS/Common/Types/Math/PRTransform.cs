@@ -19,13 +19,16 @@
 using System.Text;
 using CrystalMpq;
 using Mooege.Net.GS.Message;
+using Mooege.Common.Storage;
 
 namespace Mooege.Core.GS.Common.Types.Math
 {
     public class PRTransform
     {
-        public Quaternion Quaternion;
-        public Vector3D Vector3D;
+        [PersistentProperty("Quaternion")]
+        public Quaternion Quaternion { get; set; }
+        [PersistentProperty("Vector3D")]
+        public Vector3D Vector3D { get; set; }
 
         public PRTransform() { }
 
