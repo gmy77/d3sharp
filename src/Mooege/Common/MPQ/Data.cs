@@ -191,7 +191,7 @@ namespace Mooege.Common.MPQ
                     }
                     catch (Exception e)
                     {
-                        Logger.Error("Error parsing {0}.\nMessage: {1}\n InnerException:{2}\nStack Trace:{3}", asset.FileName, e.Message, e.InnerException.Message, e.StackTrace);
+                        Logger.Error("Error parsing {0}.\nMessage: {1}\n InnerException:{2}\nStack Trace:{3}", asset.FileName, e.Message, e.InnerException == null ? "(null)" : e.InnerException.Message, e.StackTrace);
                     }
                 }
             }
@@ -207,10 +207,7 @@ namespace Mooege.Common.MPQ
         {
             MpqFile file = null;
 
-            //Ignore loading wrl and lvl files for now.
-            //if (fileName.Contains(".wrl") || fileName.Contains(".lvl"))
-            //    return null;
-
+            //Ignore loading lvl files for now.
             if (fileName.Contains(".lvl"))
                 return null;
 

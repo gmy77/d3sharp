@@ -21,13 +21,16 @@ using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message;
+using Mooege.Common.Storage;
 
 namespace Mooege.Core.GS.Common.Types.Collision
 {
     public class AABB
     {
-        public Vector3D Min;
-        public Vector3D Max;
+        [PersistentProperty("Min")]
+        public Vector3D Min { get; private set; }
+        [PersistentProperty("Max")]
+        public Vector3D Max { get; private set; }
 
         public AABB() { }
 
