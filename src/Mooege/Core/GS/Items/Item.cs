@@ -16,10 +16,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System.Collections.Generic;
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
+using Mooege.Core.GS.Objects;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message.Definitions.World;
 using Mooege.Net.GS.Message.Definitions.Misc;
@@ -52,7 +55,12 @@ namespace Mooege.Core.GS.Items
     */
     public class Item : Actor
     {
+        public DBInventory DBInventory = null;
+        public DBItemInstance DBItemInstance = null;
+
         private static readonly Logger Logger = LogManager.CreateLogger();
+        public bool ItemHasChanges { get; private set; }//needed in Future, set this to true if Item affixes or item attributes have changed.
+
 
         public override ActorType ActorType { get { return ActorType.Item; } }
 
@@ -134,11 +142,38 @@ namespace Mooege.Core.GS.Items
             }
         }
 
-        public Item(GS.Map.World world, ItemTable definition)
+        public Item(GS.Map.World world, ItemTable definition, IEnumerable<Affix> affixList, string serializedGameAttributeMap)
             : base(world, definition.SNOActor)
         {
-            this.ItemDefinition = definition;
+            SetInitialValues(definition);
+            this.Attributes.FillBySerialized(serializedGameAttributeMap);
+            this.AffixList.Clear();
+            this.AffixList.AddRange(affixList);
 
+            // level requirement
+            // Attributes[GameAttribute.Requirement, 38] = definition.RequiredLevel;
+            /*
+            Attributes[GameAttribute.Item_Quality_Level] = 1;
+            if (Item.IsArmor(this.ItemType) || Item.IsWeapon(this.ItemType) || Item.IsOffhand(this.ItemType))
+                Attributes[GameAttribute.Item_Quality_Level] = RandomHelper.Next(6);
+            if (this.ItemType.Flags.HasFlag(ItemFlags.AtLeastMagical) && Attributes[GameAttribute.Item_Quality_Level] < 3)
+                Attributes[GameAttribute.Item_Quality_Level] = 3;
+            */
+            //Attributes[GameAttribute.ItemStackQuantityLo] = 1;
+            //Attributes[GameAttribute.Seed] = RandomHelper.Next(); //unchecked((int)2286800181);
+            /*
+            RandomGenerator = new ItemRandomHelper(Attributes[GameAttribute.Seed]);
+            RandomGenerator.Next();
+            if (Item.IsArmor(this.ItemType))
+                RandomGenerator.Next(); // next value is used but unknown if armor
+            RandomGenerator.ReinitSeed();*/
+        }
+
+
+        private void SetInitialValues(ItemTable definition)
+        {
+            this.ItemDefinition = definition;
+            this.ItemLevel = definition.ItemLevel;
             this.GBHandle.Type = (int)GBHandleType.Gizmo;
             this.GBHandle.GBID = definition.Hash;
             this.ItemType = ItemGroup.FromHash(definition.ItemType1);
@@ -153,8 +188,17 @@ namespace Mooege.Core.GS.Items
             this.NameSNOId = -1;      // I think it is ignored anyways - farmy
             this.Field10 = 0x00;
 
-            this.ItemLevel = definition.ItemLevel;
 
+
+
+
+
+        }
+        public Item(GS.Map.World world, ItemTable definition)
+            : base(world, definition.SNOActor)
+        {
+            SetInitialValues(definition);
+            this.ItemHasChanges = true;//initial, this is set to true.
             // level requirement
             // Attributes[GameAttribute.Requirement, 38] = definition.RequiredLevel;
 
@@ -184,6 +228,9 @@ namespace Mooege.Core.GS.Items
                 affixNumber = Attributes[GameAttribute.Item_Quality_Level] - 2;
             AffixGenerator.Generate(this, affixNumber);
         }
+
+
+
 
         private void ApplyWeaponSpecificOptions(ItemTable definition)
         {
@@ -431,7 +478,7 @@ namespace Mooege.Core.GS.Items
 
         public override bool Unreveal(Player player)
         {
-            if (CurrentState == ItemState.PickingUp && player == Owner) 
+            if (CurrentState == ItemState.PickingUp && player == Owner)
             {
                 return false;
             }

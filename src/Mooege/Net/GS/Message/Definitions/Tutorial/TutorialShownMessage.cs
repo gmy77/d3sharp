@@ -23,8 +23,8 @@ namespace Mooege.Net.GS.Message.Definitions.Tutorial
     /// <summary>
     /// Sent by the client after it has shown a tutorial
     /// </summary>
-    [Message(Opcodes.TutorialShownMessage)]
-    public class TutorialShownMessage : GameMessage, ISelfHandler
+    [Message(Opcodes.TutorialShownMessage, Consumers.Player)]
+    public class TutorialShownMessage : GameMessage
     {
         public int SNOTutorial;
 
@@ -47,22 +47,6 @@ namespace Mooege.Net.GS.Message.Definitions.Tutorial
             b.Append(' ', pad); b.AppendLine("SNOTutorial: 0x" + SNOTutorial.ToString("X8"));
             b.Append(' ', --pad);
             b.AppendLine("}");
-        }
-
-
-        /// <summary>
-        /// Server only has to save what tutorials are shown, so the player
-        /// does not have to see them over and over...
-        /// </summary>
-        /// <param name="client"></param>
-        public void Handle(GameClient client)
-        {
-            for (int i = 0; i < client.Player.SeenTutorials.Length; i++)
-                if (client.Player.SeenTutorials[i] == -1)
-                {
-                    client.Player.SeenTutorials[i] = SNOTutorial;
-                    break;
-                }
         }
     }
 }

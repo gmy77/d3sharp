@@ -27,10 +27,10 @@ namespace Mooege.Core.GS.Common.Types.Math
     public class Vector2D
     {
         [PersistentProperty("X")]
-        public int X;
+        public int X { get; set; }
 
         [PersistentProperty("Y")]
-        public int Y;
+        public int Y { get; set; }
 
         public Vector2D() { }
 

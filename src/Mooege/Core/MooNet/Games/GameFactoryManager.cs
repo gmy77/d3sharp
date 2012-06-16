@@ -62,12 +62,12 @@ namespace Mooege.Core.MooNet.Games
             return null;
         }
         public static GameFactory FindGame(MooNetClient client, bnet.protocol.game_master.FindGameRequest request, ulong requestId)
-        { 
+        {
             List<GameFactory> matchingGames = FindMatchingGames(request);
             var rand = new Random();
             GameFactory gameFactory = null;
 
-            if (!request.Properties.Create && matchingGames.Count > 0)                
+            if (!request.Properties.Create && matchingGames.Count > 0)
                 gameFactory = matchingGames[rand.Next(matchingGames.Count)];
             else
                 gameFactory = CreateGame(client, request, requestId);
@@ -113,7 +113,7 @@ namespace Mooege.Core.MooNet.Games
 
             List<GameFactory> matches = new List<GameFactory>();
             foreach (GameFactory game in GameCreators.Values)
-            {   
+            {
                 //FIXME: don't currently track max players allowed in a game, hardcoded 4 /dustinconrad
                 if (game.InGame != null && game.InGame.Players.Count < 4)
                 {
@@ -165,7 +165,7 @@ namespace Mooege.Core.MooNet.Games
 
             uint games = 0;
             int players = 0;
-            foreach(GameFactory game in GameCreators.Values)
+            foreach (GameFactory game in GameCreators.Values)
             {
                 if (game.InGame != null)
                 {
@@ -183,7 +183,7 @@ namespace Mooege.Core.MooNet.Games
                 .SetActivePlayers((uint)players)
                 .SetFormingGames(0)
                 .SetWaitingPlayers(0);
-                
+
             return bucket;
         }
     }

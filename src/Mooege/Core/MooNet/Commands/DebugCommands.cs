@@ -40,7 +40,7 @@ namespace Mooege.Core.MooNet.Commands
         {
             var client = invokerClient;
 
-            if(client==null && @params.Count() < 1)
+            if (client == null && @params.Count() < 1)
                 return "Invalid arguments. Type 'help services client' to get help.";
             var output = "";
             if (client == null)
@@ -55,7 +55,7 @@ namespace Mooege.Core.MooNet.Commands
                     return string.Format("Account '{0}' is not logged in.", email);
 
                 var gameAccounts = GameAccountManager.GetGameAccountsForAccount(account);
-                foreach (var gameAccount in gameAccounts.Values)
+                foreach (var gameAccount in gameAccounts)
                 {
                     output += this.ClientServices(null, gameAccount.LoggedInClient);
                 }
@@ -113,7 +113,7 @@ namespace Mooege.Core.MooNet.Commands
             if (!ulong.TryParse(id, out localId))
                 return string.Format("Can not parse '{0}' as valid id.", id);
 
-            if(!RPCObjectManager.Objects.ContainsKey(localId))
+            if (!RPCObjectManager.Objects.ContainsKey(localId))
                 return string.Format("There exists no RPCObject with dynamidId: {0}", localId);
 
             var rpcObject = RPCObjectManager.Objects[localId];
@@ -121,7 +121,7 @@ namespace Mooege.Core.MooNet.Commands
                                        rpcObject.GetType().Name, rpcObject);
 
             output += "[Subscribers]\n";
-            foreach(var client in rpcObject.Subscribers)
+            foreach (var client in rpcObject.Subscribers)
             {
                 var remoteId = client.GetRemoteObjectId(rpcObject.DynamicId);
                 output += string.Format("RemoteId: 0x{0} - {1}\n", remoteId.ToString("X8"), client.Account.Email);

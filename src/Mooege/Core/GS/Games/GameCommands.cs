@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -31,6 +32,7 @@ using Mooege.Core.GS.Items;
 using Mooege.Core.GS.Map;
 using Mooege.Core.MooNet.Commands;
 using Mooege.Core.MooNet.Games;
+using Mooege.Net.GS.Message.Definitions.Inventory;
 using Mooege.Net.MooNet;
 using System.Text;
 using Monster = Mooege.Core.GS.Actors.Monster;
@@ -71,7 +73,7 @@ namespace Mooege.Core.GS.Games
 
             return "Invalid arguments. Type 'help tp' to get help.";
         }
-    }    
+    }
 
     [CommandGroup("allskills", "Activates all skills.")]
     public class AllSkillsCommand : CommandGroup
@@ -146,8 +148,8 @@ namespace Mooege.Core.GS.Games
 
             for (int i = 0; i < amount; i++)
             {
-                var position = new Vector3D(player.Position.X + (float) RandomHelper.NextDouble()*20f,
-                                            player.Position.Y + (float) RandomHelper.NextDouble()*20f,
+                var position = new Vector3D(player.Position.X + (float)RandomHelper.NextDouble() * 20f,
+                                            player.Position.Y + (float)RandomHelper.NextDouble() * 20f,
                                             player.Position.Z);
 
                 player.World.SpawnMonster(actorSNO, position);
@@ -298,8 +300,30 @@ namespace Mooege.Core.GS.Games
 
             return string.Format("Spawned {0} items with type: {1}", amount, name);
         }
+
+        [Command("dropall", "Drops all items in Backpack.\nUsage: item dropall")]
+        public string DropAll(string[] @params, MooNetClient invokerClient)
+        {
+            if (invokerClient == null)
+                return "You can not invoke this command from console.";
+
+            if (invokerClient.InGameClient == null)
+                return "You can only invoke this command while ingame.";
+
+            var player = invokerClient.InGameClient.Player;
+
+            var bpItems = new List<Item>(player.Inventory.GetBackPackItems());
+
+
+            foreach (var item in bpItems)
+            {
+                var msg = new InventoryDropItemMessage { ItemID = item.DynamicID };
+                player.Inventory.Consume(invokerClient.InGameClient, msg);
+            }
+            return string.Format("Dropped {0} Items for you", bpItems.Count);
+        }
     }
-    
+
     [CommandGroup("conversation", "Starts a conversation. \n Usage: conversation snoConversation")]
     public class ConversationCommand : CommandGroup
     {
@@ -341,7 +365,7 @@ namespace Mooege.Core.GS.Games
             if (invokerClient.InGameClient == null)
                 return "You can only invoke this command while ingame.";
 
-             return "";
+            return "";
         }
 
         [Command("advance", "Advances a quest by a single step\n Usage advance snoQuest")]

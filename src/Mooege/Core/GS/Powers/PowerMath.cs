@@ -67,6 +67,15 @@ namespace Mooege.Core.GS.Powers
                                     Math.Pow(a.Y - b.Y, 2));
         }
 
+        public static Vector3D TranslateDirection(Vector3D source, Vector3D destination, Vector3D point, float amount)
+        {
+            Vector3D norm = Normalize(new Vector3D(destination.X - source.X, destination.Y - source.Y,
+                                                   destination.Z - source.Z));
+            return new Vector3D(point.X + norm.X * amount,
+                                point.Y + norm.Y * amount,
+                                point.Z + norm.Z * amount);
+        }
+
         public static Vector3D TranslateDirection2D(Vector3D source, Vector3D destination, Vector3D point, float amount)
         {
             Vector3D norm = Normalize(new Vector3D(destination.X - source.X, destination.Y - source.Y, 0f));
@@ -91,7 +100,7 @@ namespace Mooege.Core.GS.Powers
         {
             Vector3D baseRotation = targetPosition - center;
             float spacing = spacingDegrees * DegreesToRadians;
-            float median = count % 2 == 0 ? spacing * (count+1) / 2.0f : spacing * (float)Math.Ceiling(count / 2.0f);
+            float median = count % 2 == 0 ? spacing * (count + 1) / 2.0f : spacing * (float)Math.Ceiling(count / 2.0f);
             Vector3D[] output = new Vector3D[count];
 
             float offset = 1f;

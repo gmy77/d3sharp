@@ -43,14 +43,16 @@ namespace Mooege.Core.GS.Actors.Actions
         private ActorMover _ownerMover;
         private TickTimer _pathUpdateTimer;
 
-        public PowerAction(Actor owner, int powerSNO)
+        public PowerAction(Actor owner, int powerSNO, Actor target = null)
             : base(owner)
         {
             _power = PowerLoader.CreateImplementationForPowerSNO(powerSNO);
+            _power.World = owner.World;
             _power.User = owner;
             _powerRan = false;
             _baseAttackRadius = this.Owner.ActorData.Cylinder.Ax2 + _power.EvalTag(PowerKeys.AttackRadius) + 1.5f;
             _ownerMover = new ActorMover(owner);
+            _target = target;
         }
 
         public override void Start(int tickCounter)
@@ -69,13 +71,22 @@ namespace Mooege.Core.GS.Actors.Actions
 
                 return;
             }
-            
+
             // try to get nearest target if no target yet acquired
             if (_target == null)
             {
-                _target = this.Owner.GetPlayersInRange(MaxTargetRange).OrderBy(
-                    (player) => PowerMath.Distance2D(player.Position, this.Owner.Position))
-                    .FirstOrDefault();
+                if (this.Owner is Minion) // assume minions are player controlled and are targeting monsters
+                {
+                    _target = this.Owner.GetMonstersInRange(MaxTargetRange).OrderBy(
+                        (monster) => PowerMath.Distance2D(monster.Position, this.Owner.Position))
+                        .FirstOrDefault();
+                }
+                else  // monsters targeting players
+                {
+                    _target = this.Owner.GetPlayersInRange(MaxTargetRange).OrderBy(
+                        (player) => PowerMath.Distance2D(player.Position, this.Owner.Position))
+                        .FirstOrDefault();
+                }
             }
 
             if (_target != null)
@@ -90,8 +101,7 @@ namespace Mooege.Core.GS.Actors.Actions
                 else if (targetDistance < _baseAttackRadius + _target.ActorData.Cylinder.Ax2)  // run power if within range
                 {
                     // stop any movement
-                    this.Owner.Move(this.Owner.Position, MovementHelpers.GetFacingAngle(this.Owner, _target));
-                    //this.Owner.TranslateFacing(_target.Position, true);
+                    _ownerMover.Move(this.Owner.Position, this.Owner.WalkSpeed);
 
                     this.Owner.World.PowerManager.RunPower(this.Owner, _power, _target, _target.Position);
                     _powerFinishTimer = new SecondsTickTimer(this.Owner.World.Game,
@@ -105,16 +115,31 @@ namespace Mooege.Core.GS.Actors.Actions
                     {
                         _pathUpdateTimer = new SecondsTickTimer(this.Owner.World.Game, PathUpdateDelay);
 
-                        // move the space between each path update
-                        Vector3D movePos = PowerMath.TranslateDirection2D(this.Owner.Position, _target.Position, this.Owner.Position,
-                            this.Owner.WalkSpeed * (_pathUpdateTimer.TimeoutTick - this.Owner.World.Game.TickCounter));
+                        // move the space between each path update, or up to target.
+                        float moveAmount = this.Owner.WalkSpeed *
+                                           (_pathUpdateTimer.TimeoutTick - this.Owner.World.Game.TickCounter);
+                        if (targetDistance < moveAmount)
+                            moveAmount = targetDistance; // -(_baseAttackRadius + _target.ActorData.Cylinder.Ax2) - 0.1f;
+                        Vector3D movePos = PowerMath.TranslateDirection2D(this.Owner.Position, _target.Position,
+                                                                          this.Owner.Position, moveAmount);
 
                         this.Owner.TranslateFacing(_target.Position, false);
+
+                        // find suitable movement animation
+                        int aniTag;
+                        if (this.Owner.AnimationSet == null)
+                            aniTag = -1;
+                        else if (this.Owner.AnimationSet.TagExists(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk))
+                            aniTag = this.Owner.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk);
+                        else if (this.Owner.AnimationSet.TagExists(Mooege.Common.MPQ.FileFormats.AnimationTags.Run))
+                            aniTag = this.Owner.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Run);
+                        else
+                            aniTag = -1;
 
                         _ownerMover.Move(movePos, this.Owner.WalkSpeed, new ACDTranslateNormalMessage
                         {
                             TurnImmediately = false,
-                            AnimationTag = this.Owner.AnimationSet == null ? 0 : this.Owner.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk)
+                            AnimationTag = aniTag
                         });
                     }
                     else

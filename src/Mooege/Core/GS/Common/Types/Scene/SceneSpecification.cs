@@ -21,31 +21,52 @@ using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Net.GS.Message;
+using Mooege.Common.Storage;
 
 namespace Mooege.Core.GS.Common.Types.Scene
 {
     public class SceneSpecification
     {
-        public int CellZ;           // Position.Z rounded down
-        public Vector2D Cell;
-        public int[] SNOLevelAreas; // Area names - MaxLength = 4
-        public int SNOPrevWorld;
-        public int Unknown1;
-        public int SNOPrevLevelArea;
-        public int SNONextWorld;
-        public int Unknown2;
-        public int SNONextLevelArea;
-        public int SNOMusic;
-        public int SNOCombatMusic;
-        public int SNOAmbient;
-        public int SNOReverb;
-        public int SNOWeather;
-        public int SNOPresetWorld;
-        public int Unknown3;
-        public int Unknown4;
-        public int Unknown5;
-        public int ClusterID;
-        public SceneCachedValues SceneCachedValues;
+        [PersistentProperty("CellZ")]
+        public int CellZ { get; set; } // Position.Z rounded down
+        [PersistentProperty("Cell")]
+        public Vector2D Cell { get; set; }
+        [PersistentProperty("SNOLevelAreas", 4)]
+        public int[] SNOLevelAreas { get; set; } // Area names - MaxLength = 4
+        [PersistentProperty("SNOPrevWorld")]
+        public int SNOPrevWorld { get; set; }
+        [PersistentProperty("Unknown1")]
+        public int Unknown1 { get; set; }
+        [PersistentProperty("SNOPrevLevelArea")]
+        public int SNOPrevLevelArea { get; set; }
+        [PersistentProperty("SNONextWorld")]
+        public int SNONextWorld { get; set; }
+        [PersistentProperty("Unknown2")]
+        public int Unknown2 { get; set; }
+        [PersistentProperty("SNONextLevelArea")]
+        public int SNONextLevelArea { get; set; }
+        [PersistentProperty("SNOMusic")]
+        public int SNOMusic { get; set; }
+        [PersistentProperty("SNOCombatMusic")]
+        public int SNOCombatMusic { get; set; }
+        [PersistentProperty("SNOAmbient")]
+        public int SNOAmbient { get; set; }
+        [PersistentProperty("SNOReverb")]
+        public int SNOReverb { get; set; }
+        [PersistentProperty("SNOWeather")]
+        public int SNOWeather { get; set; }
+        [PersistentProperty("SNOPresetWorld")]
+        public int SNOPresetWorld { get; set; }
+        [PersistentProperty("Unknown3")]
+        public int Unknown3 { get; set; }
+        [PersistentProperty("Unknown4")]
+        public int Unknown4 { get; set; }
+        [PersistentProperty("Unknown5")]
+        public int Unknown5 { get; set; }
+        [PersistentProperty("ClusterID")]
+        public int ClusterID { get; set; }
+        [PersistentProperty("SceneCachedValues")]
+        public SceneCachedValues SceneCachedValues { get; set; }
 
         public SceneSpecification() { }
 
@@ -156,7 +177,7 @@ namespace Mooege.Core.GS.Common.Types.Scene
             b.AppendLine("arSnoLevelAreas:");
             b.Append(' ', pad);
             b.AppendLine("{");
-            for (int i = 0; i < SNOLevelAreas.Length;)
+            for (int i = 0; i < SNOLevelAreas.Length; )
             {
                 b.Append(' ', pad + 1);
                 for (int j = 0; j < 8 && i < SNOLevelAreas.Length; j++, i++)

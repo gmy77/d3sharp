@@ -68,54 +68,56 @@ namespace bnet.protocol.channel_invitation {
             "YXRpb24uSW52aXRhdGlvbkNvbGxlY3Rpb24SQQoTcmVjZWl2ZWRfaW52aXRh" + 
             "dGlvbhgCIAMoCzIkLmJuZXQucHJvdG9jb2wuaW52aXRhdGlvbi5JbnZpdGF0" + 
             "aW9uIj8KElVuc3Vic2NyaWJlUmVxdWVzdBIpCghhZ2VudF9pZBgBIAEoCzIX" + 
-            "LmJuZXQucHJvdG9jb2wuRW50aXR5SWQizAEKGFN1Z2dlc3RJbnZpdGF0aW9u" + 
+            "LmJuZXQucHJvdG9jb2wuRW50aXR5SWQi/wEKGFN1Z2dlc3RJbnZpdGF0aW9u" + 
             "UmVxdWVzdBIpCghhZ2VudF9pZBgBIAEoCzIXLmJuZXQucHJvdG9jb2wuRW50" + 
             "aXR5SWQSKwoKY2hhbm5lbF9pZBgCIAIoCzIXLmJuZXQucHJvdG9jb2wuRW50" + 
             "aXR5SWQSKgoJdGFyZ2V0X2lkGAMgAigLMhcuYm5ldC5wcm90b2NvbC5FbnRp" + 
             "dHlJZBIsCgthcHByb3ZhbF9pZBgEIAEoCzIXLmJuZXQucHJvdG9jb2wuRW50" + 
-            "aXR5SWQitAEKF1Jldm9rZUludml0YXRpb25SZXF1ZXN0EikKCGFnZW50X2lk" + 
-            "GAEgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBIqCgl0YXJnZXRfaWQY" + 
-            "AiABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEhUKDWludml0YXRpb25f" + 
-            "aWQYAyACKAYSKwoKY2hhbm5lbF9pZBgEIAIoCzIXLmJuZXQucHJvdG9jb2wu" + 
-            "RW50aXR5SWQiMwobSGFzUm9vbUZvckludml0YXRpb25SZXF1ZXN0EhQKDHNl" + 
-            "cnZpY2VfdHlwZRgBIAIoDSJXChtJbnZpdGF0aW9uQWRkZWROb3RpZmljYXRp" + 
-            "b24SOAoKaW52aXRhdGlvbhgBIAIoCzIkLmJuZXQucHJvdG9jb2wuaW52aXRh" + 
-            "dGlvbi5JbnZpdGF0aW9uImkKHUludml0YXRpb25SZW1vdmVkTm90aWZpY2F0" + 
-            "aW9uEjgKCmludml0YXRpb24YASACKAsyJC5ibmV0LnByb3RvY29sLmludml0" + 
-            "YXRpb24uSW52aXRhdGlvbhIOCgZyZWFzb24YAiABKA0iVwobU3VnZ2VzdGlv" + 
-            "bkFkZGVkTm90aWZpY2F0aW9uEjgKCnN1Z2dlc3Rpb24YASACKAsyJC5ibmV0" + 
-            "LnByb3RvY29sLmludml0YXRpb24uU3VnZ2VzdGlvbjK7BgoYQ2hhbm5lbElu" + 
-            "dml0YXRpb25TZXJ2aWNlEnoKCVN1YnNjcmliZRIyLmJuZXQucHJvdG9jb2wu" + 
-            "Y2hhbm5lbF9pbnZpdGF0aW9uLlN1YnNjcmliZVJlcXVlc3QaMy5ibmV0LnBy" + 
-            "b3RvY29sLmNoYW5uZWxfaW52aXRhdGlvbi5TdWJzY3JpYmVSZXNwb25zZSIE" + 
-            "gLUYARJgCgtVbnN1YnNjcmliZRI0LmJuZXQucHJvdG9jb2wuY2hhbm5lbF9p" + 
-            "bnZpdGF0aW9uLlVuc3Vic2NyaWJlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wu" + 
-            "Tm9EYXRhIgSAtRgCEnkKDlNlbmRJbnZpdGF0aW9uEi8uYm5ldC5wcm90b2Nv" + 
-            "bC5pbnZpdGF0aW9uLlNlbmRJbnZpdGF0aW9uUmVxdWVzdBowLmJuZXQucHJv" + 
-            "dG9jb2wuaW52aXRhdGlvbi5TZW5kSW52aXRhdGlvblJlc3BvbnNlIgSAtRgD" + 
-            "Eo8BChBBY2NlcHRJbnZpdGF0aW9uEjkuYm5ldC5wcm90b2NvbC5jaGFubmVs" + 
-            "X2ludml0YXRpb24uQWNjZXB0SW52aXRhdGlvblJlcXVlc3QaOi5ibmV0LnBy" + 
-            "b3RvY29sLmNoYW5uZWxfaW52aXRhdGlvbi5BY2NlcHRJbnZpdGF0aW9uUmVz" + 
-            "cG9uc2UiBIC1GAQSWgoRRGVjbGluZUludml0YXRpb24SKC5ibmV0LnByb3Rv" + 
-            "Y29sLmludml0YXRpb24uR2VuZXJpY1JlcXVlc3QaFS5ibmV0LnByb3RvY29s" + 
-            "Lk5vRGF0YSIEgLUYBRJqChBSZXZva2VJbnZpdGF0aW9uEjkuYm5ldC5wcm90" + 
-            "b2NvbC5jaGFubmVsX2ludml0YXRpb24uUmV2b2tlSW52aXRhdGlvblJlcXVl" + 
-            "c3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYBhJsChFTdWdnZXN0SW52" + 
-            "aXRhdGlvbhI6LmJuZXQucHJvdG9jb2wuY2hhbm5lbF9pbnZpdGF0aW9uLlN1" + 
-            "Z2dlc3RJbnZpdGF0aW9uUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRh" + 
-            "IgSAtRgHMpoEChdDaGFubmVsSW52aXRhdGlvbk5vdGlmeRKAAQodTm90aWZ5" + 
-            "UmVjZWl2ZWRJbnZpdGF0aW9uQWRkZWQSPS5ibmV0LnByb3RvY29sLmNoYW5u" + 
-            "ZWxfaW52aXRhdGlvbi5JbnZpdGF0aW9uQWRkZWROb3RpZmljYXRpb24aGi5i" + 
-            "bmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgBEoQBCh9Ob3RpZnlSZWNl" + 
-            "aXZlZEludml0YXRpb25SZW1vdmVkEj8uYm5ldC5wcm90b2NvbC5jaGFubmVs" + 
-            "X2ludml0YXRpb24uSW52aXRhdGlvblJlbW92ZWROb3RpZmljYXRpb24aGi5i" + 
-            "bmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgCEoABCh1Ob3RpZnlSZWNl" + 
-            "aXZlZFN1Z2dlc3Rpb25BZGRlZBI9LmJuZXQucHJvdG9jb2wuY2hhbm5lbF9p" + 
-            "bnZpdGF0aW9uLlN1Z2dlc3Rpb25BZGRlZE5vdGlmaWNhdGlvbhoaLmJuZXQu" + 
-            "cHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAMScgoUSGFzUm9vbUZvckludml0" + 
-            "YXRpb24SPS5ibmV0LnByb3RvY29sLmNoYW5uZWxfaW52aXRhdGlvbi5IYXNS" + 
-            "b29tRm9ySW52aXRhdGlvblJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0" + 
-            "YSIEgLUYBEIggAEAwj4aEhhDaGFubmVsSW52aXRhdGlvblNlcnZpY2U=");
+            "aXR5SWQSMQoQYWdlbnRfYWNjb3VudF9pZBgFIAEoCzIXLmJuZXQucHJvdG9j" + 
+            "b2wuRW50aXR5SWQitAEKF1Jldm9rZUludml0YXRpb25SZXF1ZXN0EikKCGFn" + 
+            "ZW50X2lkGAEgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBIqCgl0YXJn" + 
+            "ZXRfaWQYAiABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEhUKDWludml0" + 
+            "YXRpb25faWQYAyACKAYSKwoKY2hhbm5lbF9pZBgEIAIoCzIXLmJuZXQucHJv" + 
+            "dG9jb2wuRW50aXR5SWQiMwobSGFzUm9vbUZvckludml0YXRpb25SZXF1ZXN0" + 
+            "EhQKDHNlcnZpY2VfdHlwZRgBIAIoDSJXChtJbnZpdGF0aW9uQWRkZWROb3Rp" + 
+            "ZmljYXRpb24SOAoKaW52aXRhdGlvbhgBIAIoCzIkLmJuZXQucHJvdG9jb2wu" + 
+            "aW52aXRhdGlvbi5JbnZpdGF0aW9uImkKHUludml0YXRpb25SZW1vdmVkTm90" + 
+            "aWZpY2F0aW9uEjgKCmludml0YXRpb24YASACKAsyJC5ibmV0LnByb3RvY29s" + 
+            "Lmludml0YXRpb24uSW52aXRhdGlvbhIOCgZyZWFzb24YAiABKA0iVwobU3Vn" + 
+            "Z2VzdGlvbkFkZGVkTm90aWZpY2F0aW9uEjgKCnN1Z2dlc3Rpb24YASACKAsy" + 
+            "JC5ibmV0LnByb3RvY29sLmludml0YXRpb24uU3VnZ2VzdGlvbjK7BgoYQ2hh" + 
+            "bm5lbEludml0YXRpb25TZXJ2aWNlEnoKCVN1YnNjcmliZRIyLmJuZXQucHJv" + 
+            "dG9jb2wuY2hhbm5lbF9pbnZpdGF0aW9uLlN1YnNjcmliZVJlcXVlc3QaMy5i" + 
+            "bmV0LnByb3RvY29sLmNoYW5uZWxfaW52aXRhdGlvbi5TdWJzY3JpYmVSZXNw" + 
+            "b25zZSIEgLUYARJgCgtVbnN1YnNjcmliZRI0LmJuZXQucHJvdG9jb2wuY2hh" + 
+            "bm5lbF9pbnZpdGF0aW9uLlVuc3Vic2NyaWJlUmVxdWVzdBoVLmJuZXQucHJv" + 
+            "dG9jb2wuTm9EYXRhIgSAtRgCEnkKDlNlbmRJbnZpdGF0aW9uEi8uYm5ldC5w" + 
+            "cm90b2NvbC5pbnZpdGF0aW9uLlNlbmRJbnZpdGF0aW9uUmVxdWVzdBowLmJu" + 
+            "ZXQucHJvdG9jb2wuaW52aXRhdGlvbi5TZW5kSW52aXRhdGlvblJlc3BvbnNl" + 
+            "IgSAtRgDEo8BChBBY2NlcHRJbnZpdGF0aW9uEjkuYm5ldC5wcm90b2NvbC5j" + 
+            "aGFubmVsX2ludml0YXRpb24uQWNjZXB0SW52aXRhdGlvblJlcXVlc3QaOi5i" + 
+            "bmV0LnByb3RvY29sLmNoYW5uZWxfaW52aXRhdGlvbi5BY2NlcHRJbnZpdGF0" + 
+            "aW9uUmVzcG9uc2UiBIC1GAQSWgoRRGVjbGluZUludml0YXRpb24SKC5ibmV0" + 
+            "LnByb3RvY29sLmludml0YXRpb24uR2VuZXJpY1JlcXVlc3QaFS5ibmV0LnBy" + 
+            "b3RvY29sLk5vRGF0YSIEgLUYBRJqChBSZXZva2VJbnZpdGF0aW9uEjkuYm5l" + 
+            "dC5wcm90b2NvbC5jaGFubmVsX2ludml0YXRpb24uUmV2b2tlSW52aXRhdGlv" + 
+            "blJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYBhJsChFTdWdn" + 
+            "ZXN0SW52aXRhdGlvbhI6LmJuZXQucHJvdG9jb2wuY2hhbm5lbF9pbnZpdGF0" + 
+            "aW9uLlN1Z2dlc3RJbnZpdGF0aW9uUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wu" + 
+            "Tm9EYXRhIgSAtRgHMpoEChdDaGFubmVsSW52aXRhdGlvbk5vdGlmeRKAAQod" + 
+            "Tm90aWZ5UmVjZWl2ZWRJbnZpdGF0aW9uQWRkZWQSPS5ibmV0LnByb3RvY29s" + 
+            "LmNoYW5uZWxfaW52aXRhdGlvbi5JbnZpdGF0aW9uQWRkZWROb3RpZmljYXRp" + 
+            "b24aGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgBEoQBCh9Ob3Rp" + 
+            "ZnlSZWNlaXZlZEludml0YXRpb25SZW1vdmVkEj8uYm5ldC5wcm90b2NvbC5j" + 
+            "aGFubmVsX2ludml0YXRpb24uSW52aXRhdGlvblJlbW92ZWROb3RpZmljYXRp" + 
+            "b24aGi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgCEoABCh1Ob3Rp" + 
+            "ZnlSZWNlaXZlZFN1Z2dlc3Rpb25BZGRlZBI9LmJuZXQucHJvdG9jb2wuY2hh" + 
+            "bm5lbF9pbnZpdGF0aW9uLlN1Z2dlc3Rpb25BZGRlZE5vdGlmaWNhdGlvbhoa" + 
+            "LmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAMScgoUSGFzUm9vbUZv" + 
+            "ckludml0YXRpb24SPS5ibmV0LnByb3RvY29sLmNoYW5uZWxfaW52aXRhdGlv" + 
+            "bi5IYXNSb29tRm9ySW52aXRhdGlvblJlcXVlc3QaFS5ibmV0LnByb3RvY29s" + 
+            "Lk5vRGF0YSIEgLUYBEIggAEAwj4aEhhDaGFubmVsSW52aXRhdGlvblNlcnZp" + 
+            "Y2U=");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_channel_invitation_AcceptInvitationRequest__Descriptor = Descriptor.MessageTypes[0];
@@ -141,7 +143,7 @@ namespace bnet.protocol.channel_invitation {
           internal__static_bnet_protocol_channel_invitation_SuggestInvitationRequest__Descriptor = Descriptor.MessageTypes[5];
           internal__static_bnet_protocol_channel_invitation_SuggestInvitationRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.SuggestInvitationRequest, global::bnet.protocol.channel_invitation.SuggestInvitationRequest.Builder>(internal__static_bnet_protocol_channel_invitation_SuggestInvitationRequest__Descriptor,
-                  new string[] { "AgentId", "ChannelId", "TargetId", "ApprovalId", });
+                  new string[] { "AgentId", "ChannelId", "TargetId", "ApprovalId", "AgentAccountId", });
           internal__static_bnet_protocol_channel_invitation_RevokeInvitationRequest__Descriptor = Descriptor.MessageTypes[6];
           internal__static_bnet_protocol_channel_invitation_RevokeInvitationRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.channel_invitation.RevokeInvitationRequest, global::bnet.protocol.channel_invitation.RevokeInvitationRequest.Builder>(internal__static_bnet_protocol_channel_invitation_RevokeInvitationRequest__Descriptor,
@@ -1956,8 +1958,8 @@ namespace bnet.protocol.channel_invitation {
   public sealed partial class SuggestInvitationRequest : pb::GeneratedMessage<SuggestInvitationRequest, SuggestInvitationRequest.Builder> {
     private SuggestInvitationRequest() { }
     private static readonly SuggestInvitationRequest defaultInstance = new SuggestInvitationRequest().MakeReadOnly();
-    private static readonly string[] _suggestInvitationRequestFieldNames = new string[] { "agent_id", "approval_id", "channel_id", "target_id" };
-    private static readonly uint[] _suggestInvitationRequestFieldTags = new uint[] { 10, 34, 18, 26 };
+    private static readonly string[] _suggestInvitationRequestFieldNames = new string[] { "agent_account_id", "agent_id", "approval_id", "channel_id", "target_id" };
+    private static readonly uint[] _suggestInvitationRequestFieldTags = new uint[] { 42, 10, 34, 18, 26 };
     public static SuggestInvitationRequest DefaultInstance {
       get { return defaultInstance; }
     }
@@ -2018,6 +2020,16 @@ namespace bnet.protocol.channel_invitation {
       get { return approvalId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
     }
     
+    public const int AgentAccountIdFieldNumber = 5;
+    private bool hasAgentAccountId;
+    private global::bnet.protocol.EntityId agentAccountId_;
+    public bool HasAgentAccountId {
+      get { return hasAgentAccountId; }
+    }
+    public global::bnet.protocol.EntityId AgentAccountId {
+      get { return agentAccountId_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasChannelId) return false;
@@ -2030,6 +2042,9 @@ namespace bnet.protocol.channel_invitation {
         if (HasApprovalId) {
           if (!ApprovalId.IsInitialized) return false;
         }
+        if (HasAgentAccountId) {
+          if (!AgentAccountId.IsInitialized) return false;
+        }
         return true;
       }
     }
@@ -2038,16 +2053,19 @@ namespace bnet.protocol.channel_invitation {
       int size = SerializedSize;
       string[] field_names = _suggestInvitationRequestFieldNames;
       if (hasAgentId) {
-        output.WriteMessage(1, field_names[0], AgentId);
+        output.WriteMessage(1, field_names[1], AgentId);
       }
       if (hasChannelId) {
-        output.WriteMessage(2, field_names[2], ChannelId);
+        output.WriteMessage(2, field_names[3], ChannelId);
       }
       if (hasTargetId) {
-        output.WriteMessage(3, field_names[3], TargetId);
+        output.WriteMessage(3, field_names[4], TargetId);
       }
       if (hasApprovalId) {
-        output.WriteMessage(4, field_names[1], ApprovalId);
+        output.WriteMessage(4, field_names[2], ApprovalId);
+      }
+      if (hasAgentAccountId) {
+        output.WriteMessage(5, field_names[0], AgentAccountId);
       }
       UnknownFields.WriteTo(output);
     }
@@ -2070,6 +2088,9 @@ namespace bnet.protocol.channel_invitation {
         }
         if (hasApprovalId) {
           size += pb::CodedOutputStream.ComputeMessageSize(4, ApprovalId);
+        }
+        if (hasAgentAccountId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(5, AgentAccountId);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -2209,6 +2230,9 @@ namespace bnet.protocol.channel_invitation {
         if (other.HasApprovalId) {
           MergeApprovalId(other.ApprovalId);
         }
+        if (other.HasAgentAccountId) {
+          MergeAgentAccountId(other.AgentAccountId);
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -2286,6 +2310,15 @@ namespace bnet.protocol.channel_invitation {
               }
               input.ReadMessage(subBuilder, extensionRegistry);
               ApprovalId = subBuilder.BuildPartial();
+              break;
+            }
+            case 42: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasAgentAccountId) {
+                subBuilder.MergeFrom(AgentAccountId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              AgentAccountId = subBuilder.BuildPartial();
               break;
             }
           }
@@ -2455,6 +2488,46 @@ namespace bnet.protocol.channel_invitation {
         PrepareBuilder();
         result.hasApprovalId = false;
         result.approvalId_ = null;
+        return this;
+      }
+      
+      public bool HasAgentAccountId {
+       get { return result.hasAgentAccountId; }
+      }
+      public global::bnet.protocol.EntityId AgentAccountId {
+        get { return result.AgentAccountId; }
+        set { SetAgentAccountId(value); }
+      }
+      public Builder SetAgentAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasAgentAccountId = true;
+        result.agentAccountId_ = value;
+        return this;
+      }
+      public Builder SetAgentAccountId(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasAgentAccountId = true;
+        result.agentAccountId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeAgentAccountId(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasAgentAccountId &&
+            result.agentAccountId_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.agentAccountId_ = global::bnet.protocol.EntityId.CreateBuilder(result.agentAccountId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.agentAccountId_ = value;
+        }
+        result.hasAgentAccountId = true;
+        return this;
+      }
+      public Builder ClearAgentAccountId() {
+        PrepareBuilder();
+        result.hasAgentAccountId = false;
+        result.agentAccountId_ = null;
         return this;
       }
     }

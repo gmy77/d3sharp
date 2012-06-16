@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.9359.*";
+            public const string Version = "1.9991.*";
         }
 
         /// <summary>
@@ -47,11 +47,15 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 9359;
+            public const int RequiredClientVersion = 9991;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
-                {"Aurora 8eac7d44dc_public", 9359}, //9327
+                {"Aurora 24e2d13e54_public", 9991},
+                {"Aurora 79fef7ae8e_public", 9950}, // also 9858
+                {"Aurora 8018401a9c_public", 9749},
+                {"Aurora 31c8df955a_public", 9558},
+                {"Aurora 8eac7d44dc_public", 9359}, // also 9327
                 {"Aurora _public", 9183},
                 {"Aurora bcd3e50524_public", 8896},
                 {"Aurora 4a39a60e1b_public", 8815},
@@ -65,13 +69,12 @@ namespace Mooege.Common.Versions
             };
 
             /// <summary>
-            /// Auth module's hash map for client platforms.
+            /// Auth modules' hash maps for client platforms.
             /// </summary>
-            public static Dictionary<MooNetClient.ClientPlatform, byte[]> AuthModuleHashMap = new Dictionary<MooNetClient.ClientPlatform, byte[]>()
+            //TODO: Get Hashes for Mac client.
+            public static Dictionary<MooNetClient.ClientPlatform, byte[]> PasswordHashMap = new Dictionary<MooNetClient.ClientPlatform, byte[]>()
             {
-                //{ MooNetClient.ClientPlatform.Win,"bfa574bcff509b3c92f7c4b25b2dc2d1decb962209f8c9c8582ddf4f26aac176".ToByteArray() },
-                //{ MooNetClient.ClientPlatform.Win,"72dd40a65ccadc04fe4ece1323effd3177f4afb9f88a96905a7a30db42c0ae0f".ToByteArray() },
-                { MooNetClient.ClientPlatform.Win,"8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray() }, //2nd
+                { MooNetClient.ClientPlatform.Win,"8F52906A2C85B416A595702251570F96D3522F39237603115F2F1AB24962043C".ToByteArray() },
                 { MooNetClient.ClientPlatform.Mac,"63BC118937E6EA2FAA7B7192676DAEB1B7CA87A9C24ED9F5ACD60E630B4DD7A4".ToByteArray() }
             };
 
@@ -81,16 +84,44 @@ namespace Mooege.Common.Versions
                 { MooNetClient.ClientPlatform.Mac,"36b27cd911b33c61730a8b82c8b2495fd16e8024fc3b2dde08861c77a852941c".ToByteArray() },
             };
 
-            public static uint Region = 0x5858; //XX
-                //0x5553 //US
+            public static Dictionary<MooNetClient.ClientPlatform, byte[]> TokenHashMap = new Dictionary<MooNetClient.ClientPlatform, byte[]>()
+            {
+                { MooNetClient.ClientPlatform.Win,"bfa574bcff509b3c92f7c4b25b2dc2d1decb962209f8c9c8582ddf4f26aac176".ToByteArray() },
+                { MooNetClient.ClientPlatform.Mac,"bfa574bcff509b3c92f7c4b25b2dc2d1decb962209f8c9c8582ddf4f26aac176".ToByteArray() },
+            };
+
+            public static Dictionary<MooNetClient.ClientPlatform, byte[]> RiskFingerprintHashMap = new Dictionary<MooNetClient.ClientPlatform, byte[]>()
+            {
+                { MooNetClient.ClientPlatform.Win,"bcfa324ab555fc66614976011d018d2be2b9dc23d0b54d94a3bd7d12472aa107".ToByteArray() },
+                { MooNetClient.ClientPlatform.Mac,"bcfa324ab555fc66614976011d018d2be2b9dc23d0b54d94a3bd7d12472aa107".ToByteArray() },
+            };
+
+            public static Dictionary<MooNetClient.ClientPlatform, byte[]> AgreementHashMap = new Dictionary<MooNetClient.ClientPlatform, byte[]>()
+            {
+                { MooNetClient.ClientPlatform.Win,"41686a009b345b9cbe622ded9c669373950a2969411012a12f7eaac7ea9826ed".ToByteArray() },
+                { MooNetClient.ClientPlatform.Mac,"41686a009b345b9cbe622ded9c669373950a2969411012a12f7eaac7ea9826ed".ToByteArray() },
+            };
+
+            public static byte[] TOS = "00736F74006167726500005553014970E37CCD158A64A2844D6D4C05FC1697988A617E049BB2E0407D71B6C6F2".ToByteArray();
+            public static byte[] EULA = "00616C75656167726500005553DDD1D77970291A4E8A64BB4FE25B2EA2D69D8915D35D53679AE9FDE5EAE47ECC".ToByteArray();
+            public static byte[] RMAH = "0068616D72616772650000555398A3FC047004D6D4A0A1519A874AC9B1FC5FBD62C3EAA23188E095D6793537D7".ToByteArray();
+
+            public static Dictionary<string, uint> Regions = new Dictionary<string, uint>()
+            {
+                { "US", 0x5553 },
+                { "XX", 0x5858 }, //Beta Region
+            };
+
+            public static string Region = "US";
 
             public static class Resources
             {
-                public static string ProfanityFilterHash = "1d9bdf93a409c93cd82a49670deccb36eca150c3f22ab2741666524a7368eb94"; //8896
+                public static string ProfanityFilterHash = "de1862793fdbabb6eb1edec6ad1c95dd99e2fd3fc6ca730ab95091d694318a24"; //9558
                 public static string AvailableActs = "89dd44c90f3b7dca32bd7a289d5c09b253c1398b81e7dbf860cd5e635cb4a763"; //8815
                 public static string AvailableQuests = "e2aeeb41ad31eadd710f7e3729411b249195123d0a804a1b3bf18883f9011b04"; //8815
 
                 //public static string ProfanityFilterHash = "068fec3c7426b8ba9497225a73437c6dffaa92de962c2b05589b5f46fbe5f5b0"; //8815
+                //public static string ProfanityFilterHash = "1d9bdf93a409c93cd82a49670deccb36eca150c3f22ab2741666524a7368eb94"; //8896
             }
 
             public static class Achievements
@@ -102,7 +133,8 @@ namespace Mooege.Common.Versions
                 //public static string AchievementFileHash = "ef29e59b9394e7c6f694afbb92b70a74c4fd4c96961a8ec490e770371b72e6ab"; // ??
                 //public static string AchievementFileHash = "0b61aeee74bba6ba02b93c9e15089404daf5d3cd1c7e631d7c108685894b3feb"; //8101
                 //public static string AchievementFileHash = "c06c3a43f760b9ef2c7965ac229531d17e93279cd2666bf1b9f130b8db5cb2f9"; //8296,8815
-                public static string AchievementFileHash = "99b7ccad605818c95e965b21ce3bf35b8406202ea616f54705c4ebaf45c4c7f2"; //8896
+                //public static string AchievementFileHash = "99b7ccad605818c95e965b21ce3bf35b8406202ea616f54705c4ebaf45c4c7f2"; //8896
+                public static string AchievementFileHash = "e3440d1a1430864371175afabb81e0b124c2824ea93def5d994cf8250cc1082b"; //9558
 
                 /// <summary>
                 /// AchievementFile filename.
@@ -112,7 +144,7 @@ namespace Mooege.Common.Versions
                 /// <summary>
                 /// AchievementFile download URL.
                 /// </summary>
-                public static string AchievementURL = "http://XX.depot.battle.net:1119/" + AchievementFilename;
+                public static string AchievementURL = "http://" + MooNet.Region + ".depot.battle.net:1119/" + AchievementFilename;
 
             }
         }
@@ -125,7 +157,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 9359;
+            public const int RequiredPatchVersion = 9991;
         }
 
         /// <summary>
@@ -136,10 +168,10 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Ingame protocol hash.
             /// </summary>
-            public const int ProtocolHash = 0x33CABB38;
+            public const int ProtocolHash = 0x33CABB38; //9950
 
             // old hashes
-            // 0x33CABB38                   // 9183, 9327, 9359
+            // 0x33CABB38                   // 9183, 9327, 9359, 9749, 9858, 9950, 9991
             // unchecked((int)0x9726E2E3)   // 8896
             // 0x375AE194                   // 8815
             // unchecked((int)0xA8F17EC5)   // 8610
@@ -151,27 +183,31 @@ namespace Mooege.Common.Versions
             // 0x21EEE08D                   // 7446
 
             //This is the server version sent in VersionsMessage
-            public const string MajorVersion = "0.11.0";
-            public const string ServerBuild = "9359";
-            public const string VersionString = MajorVersion + ServerBuild;
+            public const string MajorVersion = "1.0.2";
+            public const string ServerBuild = "10039";
+            public const string VersionString = MajorVersion + "." + ServerBuild;
 
             // old version strings.
-            // 0.11.0.9359  // 9359 patch 18
-            // 0.11.0.9327  // 9327 patch 17
-            // 0.10.0.9236  // 9183 patch 16
-            // 0.9.0.8922   // 8896 patch 15
-            // 0.8.0.8834   // 8815 patch 14
-            // 0.7.0.8619   // 8610 patch 13
-            // 0.6.2.8392   // 8392 patch 12
-            // 0.6.1.8350   // 8350 patch 11
-            // 0.6.0.8318   // 8296 patch 10
-            // 0.5.1.8115   // 8101 patch 9
-            // 0.5.0.8059   // 8059 patch 8
-            // ??           // 7931 patch 7
-            // ??           // 7841 patch 6
-            // 0.3.1.7779   // 7728 patch 5
-            // 0.3.0.7484   // 7447 patch 4
-            // 0.3.0.7333   // 7733 patch 3
+            // 1.0.2.9950   // 9950 Retail
+            // 1.0.2.9858   // 9858 Retail
+            // 1.0.2.9749   // 9749 Retail
+            // 1.0.1.9558   // 9558 Retail
+            // 0.11.0.9359  // 9359 Beta Patch 18
+            // 0.11.0.9327  // 9327 Beta Patch 17
+            // 0.10.0.9236  // 9183 Beta Patch 16
+            // 0.9.0.8922   // 8896 Beta Patch 15
+            // 0.8.0.8834   // 8815 Beta Patch 14
+            // 0.7.0.8619   // 8610 Beta Patch 13
+            // 0.6.2.8392   // 8392 Beta Patch 12
+            // 0.6.1.8350   // 8350 Beta Patch 11
+            // 0.6.0.8318   // 8296 Beta Patch 10
+            // 0.5.1.8115   // 8101 Beta Patch 9
+            // 0.5.0.8059   // 8059 Beta Patch 8
+            // ??           // 7931 Beta Patch 7
+            // ??           // 7841 Beta Patch 6
+            // 0.3.1.7779   // 7728 Beta Patch 5
+            // 0.3.0.7484   // 7447 Beta Patch 4
+            // 0.3.0.7333   // 7733 Beta Patch 3
         }
     }
 }

@@ -172,7 +172,7 @@ namespace Mooege.Net.GS.Message.Fields
             b.Append(' ', pad);
             b.AppendLine("TextClass: 0x" + ((int)TextClass).ToString("X8") + " (" + TextClass + ")");
             b.Append(' ', pad);
-            b.AppendLine("Gender: 0x" + ((int)Gender).ToString("X8") + " (" + Gender + ")");
+            b.AppendLine("Flags: 0x" + ((int)Gender).ToString("X8") + " (" + Gender + ")");
             b.Append(' ', pad);
             b.AppendLine("AudioClass: 0x" + ((int)AudioClass).ToString("X8") + " (" + AudioClass + ")");
             b.Append(' ', pad);

@@ -166,7 +166,7 @@ namespace Mooege.Core.MooNet.Channels
             //}
             //else
             //{
-                addedMember.AddRole((isOwner) ? Member.Role.ChannelCreator : Member.Role.ChannelMember);
+            addedMember.AddRole((isOwner) ? Member.Role.ChannelCreator : Member.Role.ChannelMember);
             //}
 
             // This needs to be here so that the foreach below will also send to the client that was just added

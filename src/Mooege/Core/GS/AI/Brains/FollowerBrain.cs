@@ -20,9 +20,10 @@ using Mooege.Core.GS.Actors;
 
 namespace Mooege.Core.GS.AI.Brains
 {
-    public class FollowerBrain:Brain
+    public class FollowerBrain : Brain
     {
-        protected FollowerBrain(Actor body) : base(body)
+        protected FollowerBrain(Actor body)
+            : base(body)
         { }
 
         public override void Think(int tickCounter)

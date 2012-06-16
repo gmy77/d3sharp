@@ -20,6 +20,8 @@ using System;
 using Mooege.Common.Helpers.Math;
 using Mooege.Core.GS.Map;
 using Mooege.Core.GS.Players;
+using Mooege.Core.GS.Powers;
+using Mooege.Core.GS.Powers.Payloads;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Animation;
 using Mooege.Core.GS.Common.Types.TagMap;
@@ -71,9 +73,15 @@ namespace Mooege.Core.GS.Actors
                         AnimationSNO = this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Idle)
                     });
                 }
-               
+
             }
             return true;
+        }
+
+        public void Kill(PowerContext context = null, bool lootAndExp = false)
+        {
+            var deathload = new DeathPayload(context, Powers.DamageType.Physical, this, lootAndExp);
+            deathload.Apply();
         }
     }
 }

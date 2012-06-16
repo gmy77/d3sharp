@@ -30,7 +30,7 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
         // MaxLength = 3
         public PlayAnimationMessageSpec[] tAnim;
 
-        public PlayAnimationMessage() : base(Opcodes.PlayAnimationMessage) {}
+        public PlayAnimationMessage() : base(Opcodes.PlayAnimationMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

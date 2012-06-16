@@ -14,10 +14,9 @@ message AchievementUpdateRecord
 
 message CriteriaUpdateRecord
 {
-    required uint64 criteria_Id = 1;
-    optional uint64 start_time = 2 [default = 0];
-    optional uint64 quantity = 3 [default = 0];
-    optional uint32 flags = 4 [default = 0];
+    required uint32 criteria_Id_32_and_flags_8 = 1;
+    optional uint32 start_time_32 = 2 [default = 0];
+    optional uint32 quantity_32 = 3 [default = 0];
 }
 
 message PostUpdateRecord
@@ -64,6 +63,7 @@ message Snapshot
 {
     repeated .bnet.protocol.achievements.AchievementUpdateRecord achievement_snapshot = 1;
     repeated .bnet.protocol.achievements.CriteriaUpdateRecord criteria_snapshot = 2;
+    optional uint64 header = 3 [default = 0];
 }
 
 message RequestSnapshotRequest

@@ -1,3 +1,10 @@
+###Current Status:
+* You can Login and create characters.
+* Client requires patching.
+* YOU **CANNOT** START A GAME.
+
+***
+
 # Stay awhile and listen
 
 * Read the [FAQ](http://wiki.mooege.org/FAQ) and check the [wiki](http://wiki.mooege.org/) before asking!

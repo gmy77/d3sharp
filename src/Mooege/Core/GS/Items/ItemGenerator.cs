@@ -17,17 +17,22 @@
  */
 
 using System;
+using System.Data.SQLite;
+using System.Diagnostics;
 using System.Linq;
 using System.Collections.Generic;
 using Mooege.Common.Helpers.Hash;
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
+using Mooege.Common.Storage;
+using Mooege.Common.Storage.AccountDataBase.Entities;
 using Mooege.Core.GS.Players;
 using Mooege.Net.GS.Message;
 using Mooege.Common.MPQ.FileFormats;
 using Mooege.Common.MPQ;
 using Mooege.Core.GS.Common.Types.SNO;
 using System.Reflection;
+using World = Mooege.Core.GS.Map.World;
 
 // FIXME: Most of this stuff should be elsewhere and not explicitly generate items to the player's GroundItems collection / komiga?
 
@@ -41,6 +46,11 @@ namespace Mooege.Core.GS.Items
         private static readonly Dictionary<int, Type> GBIDHandlers = new Dictionary<int, Type>();
         private static readonly Dictionary<int, Type> TypeHandlers = new Dictionary<int, Type>();
         private static readonly HashSet<int> AllowedItemTypes = new HashSet<int>();
+
+        //private static readonly Dictionary<Player, List<Item>> DbItems = new Dictionary<Player, List<Item>>(); //we need this list to delete item_instances from items which have no owner anymore.
+        //private static readonly Dictionary<int, Item> CachedItems = new Dictionary<int, Item>();
+
+
 
         public static int TotalItems
         {
@@ -111,13 +121,15 @@ namespace Mooege.Core.GS.Items
                 AllowedItemTypes.Add(hash);
             foreach (int hash in TypeHandlers.Keys)
             {
-                if (AllowedItemTypes.Contains(hash)) {
+                if (AllowedItemTypes.Contains(hash))
+                {
                     // already added structure
                     continue;
                 }
                 foreach (int subhash in ItemGroup.SubTypesToHashList(ItemGroup.FromHash(hash).Name))
                 {
-                    if (AllowedItemTypes.Contains(subhash)) {
+                    if (AllowedItemTypes.Contains(subhash))
+                    {
                         // already added structure
                         continue;
                     }
@@ -154,7 +166,7 @@ namespace Mooege.Core.GS.Items
                 itemDefinition = pool[RandomHelper.Next(0, pool.Count() - 1)];
 
                 if (itemDefinition.SNOActor == -1) continue;
-                
+
                 // if ((itemDefinition.ItemType1 == StringHashHelper.HashItemName("Book")) && (itemDefinition.BaseGoldValue != 0)) return itemDefinition; // testing books /xsochor
                 // if (itemDefinition.ItemType1 != StringHashHelper.HashItemName("Book")) continue; // testing books /xsochor
                 // if (!ItemGroup.SubTypesToHashList("SpellRune").Contains(itemDefinition.ItemType1)) continue; // testing spellrunes /xsochor
@@ -171,7 +183,7 @@ namespace Mooege.Core.GS.Items
 
                 if (!GBIDHandlers.ContainsKey(itemDefinition.Hash) &&
                     !AllowedItemTypes.Contains(itemDefinition.ItemType1)) continue;
-                              
+
                 found = true;
             }
 
@@ -199,6 +211,13 @@ namespace Mooege.Core.GS.Items
             }
 
             return type;
+        }
+
+        public static Item CloneItem(Item originalItem)
+        {
+            var clonedItem = CreateItem(originalItem.Owner, originalItem.ItemDefinition);
+            AffixGenerator.CloneIntoItem(originalItem, clonedItem);
+            return clonedItem;
         }
 
         // Creates an item based on supplied definition.
@@ -259,6 +278,88 @@ namespace Mooege.Core.GS.Items
         public static bool IsValidItem(string name)
         {
             return Items.ContainsKey(StringHashHelper.HashItemName(name));
+        }
+
+        public static void SaveToDB(Item item)
+        {
+            var timestart = DateTime.Now;
+
+
+
+            if (!item.ItemHasChanges && item.DBItemInstance != null)
+            {
+                //Logger.Debug("Item instance not saved, is already in DB and NOT CHANGED.");
+            }
+            else
+            {
+                if (item.DBItemInstance == null)
+                    item.DBItemInstance = new DBItemInstance();
+                var affixSer = SerializeAffixList(item.AffixList);
+                var attributesSer = item.Attributes.Serialize();
+                item.DBItemInstance.Affixes = affixSer;
+                item.DBItemInstance.Attributes = attributesSer;
+                item.DBItemInstance.GbId = item.GBHandle.GBID;
+                DBSessions.AccountSession.SaveOrUpdate(item.DBItemInstance);
+                if (item.DBInventory != null)
+                {
+                    item.DBInventory.DBItemInstance = item.DBItemInstance;
+                    DBSessions.AccountSession.SaveOrUpdate(item.DBInventory);
+                }
+
+                DBSessions.AccountSession.Flush();
+            }
+
+
+
+            var timeTaken = DateTime.Now - timestart;
+            //Logger.Debug("Save item instance #{0}, took {1} msec", item.DBItemInstance.Id, timeTaken.TotalMilliseconds);
+
+        }
+
+
+
+        public static void DeleteFromDB(Item item)
+        {
+            if (item.DBItemInstance == null)
+                return;
+            if (item.DBInventory != null)
+                return;//should be deleted by inventory.
+            Logger.Debug("Deleting Item instance #{0} from DB", item.DBItemInstance.Id);
+            if (item.World.CachedItems.ContainsKey(item.DBItemInstance.Id))
+                item.World.CachedItems.Remove(item.DBItemInstance.Id);
+            DBSessions.AccountSession.Delete(item.DBItemInstance);
+            DBSessions.AccountSession.Flush();
+            item.DBItemInstance = null;
+        }
+
+
+        public static Item LoadFromDBInstance(Player owner, DBItemInstance instance)//  int dbID, int gbid, string attributesSer, string affixesSer)
+        {
+            var table = Items[instance.GbId];
+            var itm = new Item(owner.World, table, DeSerializeAffixList(instance.Affixes), instance.Attributes);
+            itm.DBItemInstance = instance;
+
+            if (!owner.World.DbItems.ContainsKey(owner.World))
+                owner.World.DbItems.Add(owner.World, new List<Item>());
+            if (!owner.World.DbItems[owner.World].Contains(itm))
+                owner.World.DbItems[owner.World].Add(itm);
+
+            owner.World.CachedItems[instance.Id] = itm;
+            return itm;
+        }
+
+        public static string SerializeAffixList(List<Affix> affixList)
+        {
+            var affixgbIdList = affixList.Select(af => af.AffixGbid);
+            var affixSer = affixgbIdList.Aggregate(",", (current, affixId) => current + (affixId + ",")).Trim(new[] { ',' });
+            return affixSer;
+        }
+
+        public static List<Affix> DeSerializeAffixList(string serializedAffixList)
+        {
+            var affixListStr = serializedAffixList.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var affixList = affixListStr.Select(int.Parse).Select(affixId => new Affix(affixId)).ToList();
+            return affixList;
         }
     }
 

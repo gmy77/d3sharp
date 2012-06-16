@@ -24,12 +24,15 @@ using System.Threading;
 using Google.ProtocolBuffers;
 using Google.ProtocolBuffers.Descriptors;
 using Mooege.Common.Helpers.Hash;
+using Mooege.Common.Extensions;
 using Mooege.Common.Logging;
+using Mooege.Common.Versions;
 using Mooege.Core.Cryptography.SSL;
 using Mooege.Core.MooNet.Accounts;
 using Mooege.Core.MooNet.Authentication;
 using Mooege.Core.MooNet.Channels;
 using Mooege.Core.MooNet.Objects;
+using Mooege.Core.MooNet.Services; // Service
 using Mooege.Net.GS;
 using Mooege.Net.MooNet.Packets;
 using Mooege.Net.MooNet.RPC;
@@ -40,6 +43,18 @@ namespace Mooege.Net.MooNet
     public class MooNetClient : IClient, IRpcChannel
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
+
+        // [D3Inferno]
+        // Create the NO_RESPONSE.
+        // Do not send packets back to server when the response is NO_RESPONSE!
+        public static bnet.protocol.NO_RESPONSE NO_RESPONSE = bnet.protocol.NO_RESPONSE.CreateBuilder().Build();
+
+        // [D3Inferno]
+        public const string PSK_CIPHERS = "PSK-AES256-CBC-SHA:PSK-3DES-EDE-CBC-SHA:PSK-AES128-CBC-SHA:PSK-RC4-SHA";
+
+        // The SRP-6a SessionKey. It is the PSK for the PSK ciphers.
+        public byte[] SessionKey { get; set; }
+
 
         /// <summary>
         /// TCP connection.
@@ -97,8 +112,37 @@ namespace Mooege.Net.MooNet
         /// </summary>
         public AuthManager.AuthenticationErrorCodes AuthenticationErrorCode;
 
-        public bool ThumbprintReq = false;
-        public bool PasswordReq = false;
+        /// <summary>
+        /// The client's ModuleIds for all the streamed modules.
+        /// </summary>
+        public Dictionary<StreamedModule, int> ClientModuleIds = new Dictionary<StreamedModule, int>();
+
+        /// <summary>
+        /// The last module client was instructed to load.
+        /// </summary>
+        public StreamedModule LastRequestedModule = StreamedModule.None;
+
+        public enum StreamedModule
+        {
+            None,
+            Thumbprint,
+            Password,
+            Token,
+            RiskFingerprint,
+            Agreement,
+        }
+
+        public AvailableAgreements LastAgreementSent = AvailableAgreements.None;
+
+        public enum AvailableAgreements
+        {
+            None,
+            EULA,
+            TOS,
+            RMAH,
+        }
+
+        public Dictionary<AvailableAgreements, bool> Agreements = new Dictionary<AvailableAgreements, bool>();
 
         /// <summary>
         /// Callback list for issued client RPCs.
@@ -134,7 +178,11 @@ namespace Mooege.Net.MooNet
 
             this.Connection = connection;
             if (this.Connection != null)
+            {
                 this.NetworkStream = new NetworkStream(this.Connection.Socket, true);
+                this.Connection.IsEncryptRequestSent = false;
+                this.Connection.IsTlsHandshaking = false;
+            }
 
             this.Services = new Dictionary<uint, uint>();
             this.Services.Add(0x65446991, 0x0); // connection-service is always bound by default. /raist.
@@ -149,6 +197,118 @@ namespace Mooege.Net.MooNet
             if (toon && this.Account.CurrentGameAccount.CurrentToon != null)
                 Logger.Warn("DEPRECATED: GetIdentity called with toon.");
             return identityBuilder.Build();
+        }
+
+
+        private void LoadAgreementModule()
+        {
+            var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder();
+            var moduleHandle = bnet.protocol.ContentHandle.CreateBuilder()
+                .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
+                .SetUsage(0x61757468) // auth
+                .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AgreementHashMap[this.Platform]));
+
+            this.LastRequestedModule = StreamedModule.Agreement;
+
+            moduleLoadRequest.SetModuleHandle(moduleHandle);
+            this.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this).ModuleLoad(null, moduleLoadRequest.Build(), callback => { }));
+        }
+
+
+        public bool HasAgreements()
+        {
+            return false; // comment this line to enable EULA & TOS agreements.
+
+            foreach (AvailableAgreements x in Enum.GetValues(typeof(AvailableAgreements)))
+            {
+                if (x != AvailableAgreements.None && !Agreements.ContainsKey(x))
+                    return true;
+            }
+            return false;
+        }
+
+        public void SendAgreements()
+        {
+
+            var moduleMessageRequest = bnet.protocol.authentication.ModuleMessageRequest.CreateBuilder()
+                .SetModuleId(this.ClientModuleIds[StreamedModule.Agreement]);
+
+            //Account has not agreed to TOS
+            if (!Agreements.ContainsKey(AvailableAgreements.TOS))
+            {
+                moduleMessageRequest.SetMessage(ByteString.CopyFrom(VersionInfo.MooNet.TOS));
+                Logger.Trace("Sending TOS to client {0}", this);
+                this.LastAgreementSent = AvailableAgreements.TOS;
+            }
+            //Account has not agreed to EULA
+            else if (!Agreements.ContainsKey(AvailableAgreements.EULA))
+            {
+                moduleMessageRequest.SetMessage(ByteString.CopyFrom(VersionInfo.MooNet.EULA));
+                Logger.Trace("Sending EULA to client {0}", this);
+                this.LastAgreementSent = AvailableAgreements.EULA;
+            }
+            //Account has not agreed to RMAH
+            else if (!Agreements.ContainsKey(AvailableAgreements.RMAH))
+            {
+                moduleMessageRequest.SetMessage(ByteString.CopyFrom(VersionInfo.MooNet.RMAH));
+                Logger.Trace("Sending RMAH to client {0}", this);
+                this.LastAgreementSent = AvailableAgreements.RMAH;
+            }
+            else
+            {
+                //Account has no more agreements to see.
+                var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder();
+                var moduleHandle = bnet.protocol.ContentHandle.CreateBuilder()
+                    .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
+                    .SetUsage(0x61757468); // auth
+
+                moduleHandle.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.RiskFingerprintHashMap[this.Platform]));
+                moduleLoadRequest.SetMessage(ByteString.Empty);
+                this.LastRequestedModule = StreamedModule.RiskFingerprint;
+                moduleLoadRequest.SetModuleHandle(moduleHandle);
+
+                this.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this).ModuleLoad(null, moduleLoadRequest.Build(), callback => { }));
+                return;
+            }
+
+            this.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this).ModuleMessage(null, moduleMessageRequest.Build(), callback => { }));
+        }
+
+        public void CheckAuthenticator()
+        {
+            var HasAuthenticator = false;
+            var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder();
+            var moduleHandle = bnet.protocol.ContentHandle.CreateBuilder()
+                .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
+                .SetUsage(0x61757468); // auth
+
+            //Account has Authenticator attached, load Token module
+            if (HasAuthenticator)
+            {
+                moduleHandle.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.TokenHashMap[this.Platform]));
+                moduleLoadRequest.SetMessage(ByteString.CopyFrom("0012F1BF6506277817890210A8529A4BB7BDD1E08EB397A4B0CABF174F6266B7CAF7F2CE7A298F001958F8".ToByteArray()));
+
+                this.LastRequestedModule = StreamedModule.Token;
+            }
+            //Account does not have Authenticator, Check Agreements or load RiskFingerprint module
+            else
+            {
+                if (this.HasAgreements())
+                {
+                    moduleHandle.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.AgreementHashMap[this.Platform]));
+                    this.LastRequestedModule = StreamedModule.Agreement;
+                }
+                else
+                {
+                    moduleHandle.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.RiskFingerprintHashMap[this.Platform]));
+                    moduleLoadRequest.SetMessage(ByteString.Empty);
+                    this.LastRequestedModule = StreamedModule.RiskFingerprint;
+                }
+            }
+
+            moduleLoadRequest.SetModuleHandle(moduleHandle);
+
+            this.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(this).ModuleLoad(null, moduleLoadRequest.Build(), callback => { }));
         }
 
         public void AuthenticationComplete()
@@ -233,7 +393,8 @@ namespace Mooege.Net.MooNet
             var serviceId = this.Services[serviceHash];
             var token = this._tokenCounter++;
 
-            RPCCallbacks.Add(token, new RPCCallback(done, responsePrototype.WeakToBuilder()));
+            if (!NO_RESPONSE.Equals(responsePrototype)) // if expected responce is NoResponse, don't add the call to rpc-callbacks list.
+                RPCCallbacks.Add(token, new RPCCallback(done, responsePrototype.WeakToBuilder()));
 
             var packet = new PacketOut((byte)serviceId, MooNetRouter.GetMethodId(method), (uint)token, this._listenerId, request);
             this.Connection.Send(packet);
@@ -303,37 +464,57 @@ namespace Mooege.Net.MooNet
 
         public void EnableEncryption()
         {
+            //AuthenticationService service = (AuthenticationService)Service.GetByID(0x01);
+            //service.TEMPORARY_AUTHENTICATOR();
             // enable the encryption.
             var encryptRequest = bnet.protocol.connection.EncryptRequest.CreateBuilder().Build();
-            this.MakeRPC(() => bnet.protocol.connection.ConnectionService.CreateStub(this).Encrypt(null, encryptRequest, callback => StartupTSLHandshake()));
+            this.MakeRPC(() => bnet.protocol.connection.ConnectionService.CreateStub(this).Encrypt(null, encryptRequest, callback => StartupTLSHandshake()));
+
+            Logger.Trace("Setting IsEncryptRequestSent = true");
+            this.Connection.IsEncryptRequestSent = true;
+
         }
 
-        private void StartupTSLHandshake()
+        public void StartupTLSHandshake()
         {
+            Logger.Trace("StartupTLSHandshake");
+            this.Connection.IsTlsHandshaking = true;
             this.TLSStream = new SslStream(this.NetworkStream, false);
 
             try
             {
-                this.TLSStream.BeginAuthenticateAsServer(CertificateHelper.Certificate, true, null, SslProtocols.Tls, SslStrength.All, false, this.OnTSLAuthentication, this.TLSStream);
+                //this.TLSStream.BeginAuthenticateAsServer(CertificateHelper.Certificate, true, null, SslProtocols.Tls, SslStrength.All, false, this.OnTLSAuthentication, this.TLSStream);
+                this.TLSStream.BeginAuthenticateAsServerUsingPsk(PSK_CIPHERS, this.SessionKey, this.OnTLSAuthentication, this.TLSStream);
             }
             catch (Exception e)
             {
-                Logger.FatalException(e, "Certificate exception: ");
+                Logger.FatalException(e, "BeginAuthenticateAsServerUsingPsk exception: ");
             }
+            Logger.Trace("BeginAuthenticateAsServerUsingPsk complete. Waiting on OnTLSAuthentication callback...");
         }
 
-        void OnTSLAuthentication(IAsyncResult result)
+        void OnTLSAuthentication(IAsyncResult result)
         {
             try
             {
                 this.TLSStream.EndAuthenticateAsServer(result);
+                if (this.TLSStream.IsEncrypted)
+                {
+                    Connection.SetEncrypted(this.TLSStream);
+                }
             }
             catch (Exception e)
             {
-                Logger.FatalException(e, "OnTSLAuthentication() exception: ");
+                Logger.FatalException(e, "OnTLSAuthentication() exception: ");
+            }
+            finally
+            {
+                this.Connection.IsTlsHandshaking = false;
+                this.Connection.IsEncryptRequestSent = false;
             }
 
-            if (!this.TLSStream.IsAuthenticated) return;
+            // This check does nothing except test whether the underlying SslStreamBase is null which is useless.
+            //if (!this.TLSStream.IsAuthenticated) return;
 
             Logger.Trace("TLSStream: authenticated: {0}, signed: {1}, encrypted: {2}, cipher: {3} cipher-strength: {4}, hash algorithm: {5}, hash-strength: {6}, key-exchange algorithm: {7}, key-exchange strength: {8}, protocol: {9}",
                 this.TLSStream.IsAuthenticated,
@@ -344,18 +525,26 @@ namespace Mooege.Net.MooNet
                 this.TLSStream.KeyExchangeAlgorithm, this.TLSStream.KeyExchangeStrength,
                 this.TLSStream.SslProtocol);
 
-            if (this.TLSStream.LocalCertificate != null)
-                Logger.Trace("Local certificate was issued to {0} by {1} and is valid from {2} until {3}.", this.TLSStream.LocalCertificate.Subject, this.TLSStream.LocalCertificate.Issuer, this.TLSStream.LocalCertificate.NotBefore, this.TLSStream.LocalCertificate.NotAfter);
+            //if (this.TLSStream.LocalCertificate != null)
+            //    Logger.Trace("Local certificate was issued to {0} by {1} and is valid from {2} until {3}.", this.TLSStream.LocalCertificate.Subject, this.TLSStream.LocalCertificate.Issuer, this.TLSStream.LocalCertificate.NotBefore, this.TLSStream.LocalCertificate.NotAfter);
+
+            // Pause briefly to prevent the prevent an encrypted packet from being sent to the client
+            // before it has a chance to complete the TLS Handshake and switch into encrypted mode.
+            // Note that this is only an issue when the game client is running on the same machine as Mooege.
+            Thread.Sleep(100);
 
             Logger.Trace("Sending logon response:");
 
             var logonResponseBuilder = bnet.protocol.authentication.LogonResult.CreateBuilder();
+
             logonResponseBuilder.SetAccount(this.Account.BnetEntityId);
             logonResponseBuilder.SetErrorCode(0);
-            foreach (var gameAccount in this.Account.GameAccounts.Values)
+
+            foreach (var gameAccount in this.Account.GameAccounts)
             {
                 logonResponseBuilder.AddGameAccount(gameAccount.BnetEntityId);
             }
+
             this.MakeRPC(() =>
                 bnet.protocol.authentication.AuthenticationClient.CreateStub(this).LogonComplete(null, logonResponseBuilder.Build(), callback => { }));
 
@@ -363,8 +552,15 @@ namespace Mooege.Net.MooNet
 
             Mooege.Core.MooNet.Authentication.AuthManager.SendAccountSettings(this);
 
+            // [D3Inferno]
+            // PSK ciphers do not use certificates.
             //if (this.TLSStream.RemoteCertificate != null) // throws exception too, should be fixed /raist.
             // Logger.Warn("Remote certificate was issued to {0} by {1} and is valid from {2} until {3}.", this.TLSStream.RemoteCertificate.Subject, this.TLSStream.RemoteCertificate.Issuer, this.TLSStream.RemoteCertificate.NotBefore, this.TLSStream.RemoteCertificate.NotAfter);
+
+            // [D3Inferno]
+            // Notify that Tls Authentication is complete (but perhaps not successful) so that it can once
+            // again start listening for client data, but from now on, using the SslStream if successful.
+            this.Connection.TlsAuthenticationComplete();
         }
 
         #endregion
@@ -480,9 +676,78 @@ namespace Mooege.Net.MooNet
         /// </summary>
         public enum ClientLocale
         {
+            /// <summary>
+            /// Unknown client locale state.
+            /// </summary>
             Unknown,
+            /// <summary>
+            /// Invalid client locale.
+            /// </summary>
             Invalid,
-            enUS
+            /// <summary>
+            /// Deutsch.
+            /// </summary>
+            deDE,
+            /// <summary>
+            /// English (EU)
+            /// </summary>
+            enGB,
+            /// <summary>
+            /// English (Singapore)
+            /// </summary>
+            enSG,
+            /// <summary>
+            /// English (US)
+            /// </summary>
+            enUS,
+            /// <summary>
+            /// Espanol
+            /// </summary>
+            esES,
+            /// <summary>
+            /// Espanol (Mexico)
+            /// </summary>
+            esMX,
+            /// <summary>
+            /// French
+            /// </summary>
+            frFR,
+            /// <summary>
+            /// Italian
+            /// </summary>
+            itIT,
+            /// <summary>
+            /// Korean
+            /// </summary>
+            koKR,
+            /// <summary>
+            /// Polish
+            /// </summary>
+            plPL,
+            /// <summary>
+            /// Portuguese
+            /// </summary>
+            ptPT,
+            /// <summary>
+            /// Portuguese (Brazil)
+            /// </summary>
+            ptBR,
+            /// <summary>
+            /// Russian
+            /// </summary>
+            ruRU,
+            /// <summary>
+            /// Turkish
+            /// </summary>
+            trTR,
+            /// <summary>
+            /// Chinese
+            /// </summary>
+            zhCN,
+            /// <summary>
+            /// Chinese (Taiwan)
+            /// </summary>
+            zhTW
         }
     }
 }

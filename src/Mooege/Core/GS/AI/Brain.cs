@@ -58,10 +58,10 @@ namespace Mooege.Core.GS.AI
         {
             this.Actions.Enqueue(action);
         }
-       
+
         public virtual void Update(int tickCounter)
         {
-            if(this.State == BrainState.Dead || this.Body == null || this.Body.World == null)
+            if (this.State == BrainState.Dead || this.Body == null || this.Body.World == null || this.State == BrainState.Off)
                 return;
 
             this.Think(tickCounter); // let the brain think.
@@ -87,6 +87,17 @@ namespace Mooege.Core.GS.AI
             this.State = BrainState.Dead;
         }
 
+        public void Activate()
+        {
+            if (this.State == BrainState.Off)
+                this.State = BrainState.Idle;
+        }
+
+        public void DeActivate()
+        {
+            this.State = BrainState.Off;
+        }
+
         private void Perform(int tickCounter)
         {
             if (this.CurrentAction == null)
@@ -99,6 +110,6 @@ namespace Mooege.Core.GS.AI
 
             if (this.CurrentAction.Done)
                 this.CurrentAction = null;
-        }        
+        }
     }
 }

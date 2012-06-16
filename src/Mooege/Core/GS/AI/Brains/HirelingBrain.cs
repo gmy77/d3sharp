@@ -20,12 +20,13 @@ using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Players;
 
 namespace Mooege.Core.GS.AI.Brains
-{    
-    public class HirelingBrain:Brain
+{
+    public class HirelingBrain : Brain
     {
         public Player Owner { get; private set; }
 
-        protected HirelingBrain(Actor body) : base(body)
+        protected HirelingBrain(Actor body)
+            : base(body)
         { }
 
         public override void Think(int tickCounter)

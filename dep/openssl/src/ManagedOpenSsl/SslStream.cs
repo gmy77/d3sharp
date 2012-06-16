@@ -488,6 +488,16 @@ namespace OpenSSL
 			get { return sslStream.CipherList; }
 		}
 
+        public string CipherDescription
+        {
+            get
+            {
+                if (!IsAuthenticated)
+                    return null;
+                return sslStream.CipherDescription;
+            }
+        }
+
 		#endregion //Properties
 
 		#region Methods
@@ -564,6 +574,27 @@ namespace OpenSSL
 			// set the internal stream
 			sslStream = client_stream;
 			// start the write operation
+			return BeginWrite(new byte[0], 0, 0, asyncCallback, asyncState);
+		}
+        // PSK authentication
+        public virtual IAsyncResult BeginAuthenticateAsClientUsingPsk(
+            string targetHost,
+            string pskCiphers,
+            string pskIdentity,
+            byte[] pskPsk,
+            AsyncCallback asyncCallback,
+            Object asyncState)
+        {
+            if (IsAuthenticated)
+            {
+                throw new InvalidOperationException("SslStream is already authenticated");
+            }
+
+            // Create the stream
+            SslStreamClient client_stream = new SslStreamClient(InnerStream, false, targetHost, pskCiphers, pskIdentity, pskPsk);
+            // set the internal stream
+            sslStream = client_stream;
+            // start the write operation
 			return BeginWrite(new byte[0], 0, 0, asyncCallback, asyncState);
 		}
 
@@ -654,6 +685,24 @@ namespace OpenSSL
 			// Set the internal sslStream
 			sslStream = server_stream;
 			// Start the read operation
+			return BeginRead(new byte[0], 0, 0, asyncCallback, asyncState);
+		}
+        // PSK authentication
+        public virtual IAsyncResult BeginAuthenticateAsServerUsingPsk(
+            string pskCiphers,
+            byte[] pskPsk,
+            AsyncCallback asyncCallback,
+            Object asyncState)
+        {
+            if (IsAuthenticated)
+            {
+                throw new InvalidOperationException("SslStream is already authenticated");
+            }
+            // Initialize the server stream
+            SslStreamServer server_stream = new SslStreamServer(InnerStream, false, pskCiphers, pskPsk);
+            // Set the internal sslStream
+            sslStream = server_stream;
+            // Start the read operation
 			return BeginRead(new byte[0], 0, 0, asyncCallback, asyncState);
 		}
 

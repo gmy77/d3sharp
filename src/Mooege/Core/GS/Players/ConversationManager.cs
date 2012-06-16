@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
@@ -125,9 +125,25 @@ namespace Mooege.Core.GS.Players
                 logger.Warn("Found more than one actors in range");
             if (actors.Count() == 0)
             {
+                // HACK: fixes client crashing when you talk to vendors.
+                // This seems to be cause by a mismatch in
+                // world actors and their conversations, probably caused by our hacky back-patched mpq data.
+                // the conv is requesting an alternate actor SNO than what's revealed to the player, and apparently
+                // the client doesn't like it when the player actor is used to play vendor conversations.
+                // so for now I do a substring-search for requested actor's name looking for a similar one that actually
+                // is revealed.
+                string reqName = new Mooege.Core.GS.Common.Types.SNO.SNOHandle(Common.Types.SNO.SNOGroup.Actor, sno).Name;
+                reqName = System.Text.RegularExpressions.Regex.Replace(reqName, @"_\d+$", "");  // remove _01 etc from end
+                var replacementActor = player.RevealedObjects.Values.Where(a => a is Mooege.Core.GS.Actors.Actor)
+                                                                    .Cast<Mooege.Core.GS.Actors.Actor>()
+                                                                    .FirstOrDefault(a => a.ActorSNO.Name.Contains(reqName));
+                if (replacementActor != null)
+                    return replacementActor;
+
                 logger.Warn("Actor not found, using player actor instead");
                 return player;
             }
+
             return actors.First() as Mooege.Core.GS.Actors.Actor;
         }
 

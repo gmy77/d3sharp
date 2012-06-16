@@ -206,7 +206,7 @@ namespace bnet.protocol.exchange {
             "Y29sLmV4Y2hhbmdlLlBhcnRpdGlvbklkEj0KEG1heF9wYXJ0aXRpb25faWQY" + 
             "AyACKAsyIy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBhcnRpdGlvbklkEg8K" + 
             "B3Byb2dyYW0YBCACKAcSDgoGc3RhdHVzGAUgAigFEhAKCGN1cnJlbmN5GAYg" + 
-            "ASgJEhIKCnNwZWNpYWxpc3QYByABKAUSEQoJYm9vdHN0cmFwGAggASgIEiUK" + 
+            "AigJEhIKCnNwZWNpYWxpc3QYByACKAUSEQoJYm9vdHN0cmFwGAggASgIEiUK" + 
             "HWJvb3RzdHJhcF9vbGRlc3RfY3JlYXRlZF90aW1lGAkgASgEIikKJ1Vuc3Vi" + 
             "c2NyaWJlT3JkZXJCb29rU3RhdHVzQ2hhbmdlUmVxdWVzdCJbChtTdWJzY3Jp" + 
             "YmVPcmRlclVwZGF0ZVJlcXVlc3QSKQoIYWdlbnRfaWQYASACKAsyFy5ibmV0" + 
@@ -8059,6 +8059,8 @@ namespace bnet.protocol.exchange {
         if (!hasMaxPartitionId) return false;
         if (!hasProgram) return false;
         if (!hasStatus) return false;
+        if (!hasCurrency) return false;
+        if (!hasSpecialist) return false;
         if (!MinPartitionId.IsInitialized) return false;
         if (!MaxPartitionId.IsInitialized) return false;
         return true;

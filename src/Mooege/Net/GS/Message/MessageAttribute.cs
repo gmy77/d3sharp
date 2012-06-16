@@ -29,7 +29,7 @@ namespace Mooege.Net.GS.Message
 
         public MessageAttribute(Opcodes opcode, Consumers consumer = Consumers.None)
         {
-            this.Opcodes = new List<Opcodes> {opcode};
+            this.Opcodes = new List<Opcodes> { opcode };
             this.Consumer = consumer;
         }
 
@@ -41,7 +41,7 @@ namespace Mooege.Net.GS.Message
             foreach (var opcode in opcodes)
             {
                 this.Opcodes.Add(opcode);
-            }            
+            }
         }
     }
 }

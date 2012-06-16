@@ -21,18 +21,26 @@ using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Core.GS.Common.Types.Collision;
 using Mooege.Net.GS.Message;
+using Mooege.Common.Storage;
 
 namespace Mooege.Core.GS.Common.Types.Scene
 {
     public class SceneCachedValues
     {
-        public int Unknown1;
-        public int Unknown2;
-        public int Unknown3;
-        public AABB AABB1;
-        public AABB AABB2;
-        public int[] Unknown4;    // MaxLength = 4
-        public int Unknown5;
+        [PersistentProperty("Unknown1")]
+        public int Unknown1 { get; set; }
+        [PersistentProperty("Unknown2")]
+        public int Unknown2 { get; set; }
+        [PersistentProperty("Unknown3")]
+        public int Unknown3 { get; set; }
+        [PersistentProperty("AABB1")]
+        public AABB AABB1 { get; set; }
+        [PersistentProperty("AABB2")]
+        public AABB AABB2 { get; set; }
+        [PersistentProperty("Unknown4", 4)]
+        public int[] Unknown4 { get; set; }    // MaxLength = 4
+        [PersistentProperty("Unknown5")]
+        public int Unknown5 { get; set; }
 
         public SceneCachedValues() { }
 
@@ -106,7 +114,7 @@ namespace Mooege.Core.GS.Common.Types.Scene
             b.AppendLine("Unknown4:");
             b.Append(' ', pad);
             b.AppendLine("{");
-            for (int i = 0; i < Unknown4.Length;)
+            for (int i = 0; i < Unknown4.Length; )
             {
                 b.Append(' ', pad + 1);
                 for (int j = 0; j < 8 && i < Unknown4.Length; j++, i++)

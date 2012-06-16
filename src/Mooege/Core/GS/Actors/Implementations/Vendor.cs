@@ -28,7 +28,14 @@ using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
-    [HandledSNO(178396 /* Fence_In_Town_01? */)] //TODO this is just a test, do it properly for all vendors?
+    // TODO: this is just a test, do it properly for all vendors?
+    [HandledSNO(
+        // Miner_InTown + variations
+        177320, 178396, 178401, 178403, 229372, 229373, 229374, 229375, 229376,
+        // Fence_InTown + variations
+        177319, 178388, 178390, 178392, 229367, 229368, 229369, 229370, 229371,
+        // Collector_InTown + variations
+        107535, 178362, 178383, 178385, 229362, 229363, 229364, 229365, 229366)]
     public class Vendor : InteractiveNPC
     {
         private InventoryGrid _vendorGrid;
@@ -37,7 +44,7 @@ namespace Mooege.Core.GS.Actors.Implementations
             : base(world, snoId, tags)
         {
             this.Attributes[GameAttribute.MinimapActive] = true;
-            _vendorGrid = new InventoryGrid(this, 1, 20, (int) EquipmentSlotId.Vendor);
+            _vendorGrid = new InventoryGrid(this, 1, 20, (int)EquipmentSlotId.Vendor);
             PopulateItems();
         }
 

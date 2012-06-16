@@ -47,7 +47,7 @@ namespace Mooege.Core.MooNet.Toons
         public ToonHandleHelper(D3.OnlineService.EntityId entityID)
         {
             var stream = CodedInputStream.CreateInstance(entityID.ToByteArray());
-            ulong tmp=0;
+            ulong tmp = 0;
             // I believe this actually calls ReadRawVarint64(), but just to be sure..
             stream.ReadUInt64(ref tmp);
             this.ID = tmp;

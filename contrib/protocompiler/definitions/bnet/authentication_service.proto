@@ -33,6 +33,7 @@ message LogonRequest
     optional string email = 4;
     optional string version = 5;
     optional int32 application_version = 6;
+    optional bool cookie_only = 7;
 }
 
 message LogonResult
@@ -57,6 +58,18 @@ message ServerStateChangeRequest
     required uint64 event_time = 2;
 }
 
+message MemModuleLoadRequest
+{
+    required .bnet.protocol.ContentHandle handle = 1;
+    required bytes key = 2;
+    required bytes input = 3;
+}
+
+message MemModuleLoadResponse
+{
+    required bytes data = 1;
+}
+
 service AuthenticationClient
 {
     rpc ModuleLoad(.bnet.protocol.authentication.ModuleLoadRequest) returns(.bnet.protocol.NO_RESPONSE)
@@ -78,6 +91,10 @@ service AuthenticationClient
     rpc LogonComplete(.bnet.protocol.authentication.LogonResult) returns(.bnet.protocol.NO_RESPONSE)
     {
         option (method_id) = 5;
+    }
+    rpc MemModuleLoad(.bnet.protocol.authentication.MemModuleLoadRequest) returns(.bnet.protocol.authentication.MemModuleLoadResponse)
+    {
+        option (method_id) = 6;
     }
 }
 

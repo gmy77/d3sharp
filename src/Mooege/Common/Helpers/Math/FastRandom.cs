@@ -23,7 +23,7 @@ using System;
 
 namespace Mooege.Common.Helpers.Math
 {
-	/// <summary>
+    /// <summary>
     /// A fast random number generator for .NET
     /// Colin Green, January 2005
     /// 
@@ -70,7 +70,7 @@ namespace Mooege.Common.Helpers.Math
     public class FastRandom
     {
         #region Static Fields
-		
+
         /// <summary>
         /// A static RNG that is used to generate seed values when constructing new instances of FastRandom.
         /// This overcomes the problem whereby multiple FastRandom instances are instantiated within the same
@@ -78,20 +78,20 @@ namespace Mooege.Common.Helpers.Math
         /// in some cases depending on how the RNG is used.
         /// </summary>
         private static readonly FastRandom __seedRng = new FastRandom((int)Environment.TickCount);
-		
-		/// <summary>
-		/// Creates a static FastRandom instance.
-		/// </summary>
-		public static readonly FastRandom Instance = new FastRandom();
-		
+
+        /// <summary>
+        /// Creates a static FastRandom instance.
+        /// </summary>
+        public static readonly FastRandom Instance = new FastRandom();
+
         #endregion
 
         #region Instance Fields
 
         // The +1 ensures NextDouble doesn't generate 1.0
-        const double REAL_UNIT_INT = 1.0/((double)int.MaxValue+1.0);
-        const double REAL_UNIT_UINT = 1.0/((double)uint.MaxValue+1.0);
-        const uint Y=842502087, Z=3579807591, W=273326509;
+        const double REAL_UNIT_INT = 1.0 / ((double)int.MaxValue + 1.0);
+        const double REAL_UNIT_UINT = 1.0 / ((double)uint.MaxValue + 1.0);
+        const uint Y = 842502087, Z = 3579807591, W = 273326509;
 
         uint _x, _y, _z, _w;
 
@@ -135,7 +135,7 @@ namespace Mooege.Common.Helpers.Math
             _w = W;
 
             _bitBuffer = 0;
-            _bitMask=1;
+            _bitMask = 1;
         }
 
         #endregion
@@ -155,17 +155,18 @@ namespace Mooege.Common.Helpers.Math
         /// </summary>
         public int Next()
         {
-            uint t = _x^(_x<<11);
-            _x=_y; _y=_z; _z=_w;
-            _w = (_w^(_w>>19))^(t^(t>>8));
+            uint t = _x ^ (_x << 11);
+            _x = _y; _y = _z; _z = _w;
+            _w = (_w ^ (_w >> 19)) ^ (t ^ (t >> 8));
 
             // Handle the special case where the value int.MaxValue is generated. This is outside of 
             // the range of permitted values, so we therefore call Next() to try again.
-            uint rtn = _w&0x7FFFFFFF;
-            if(rtn==0x7FFFFFFF) {
+            uint rtn = _w & 0x7FFFFFFF;
+            if (rtn == 0x7FFFFFFF)
+            {
                 return Next();
             }
-            return (int)rtn;            
+            return (int)rtn;
         }
 
         /// <summary>
@@ -173,17 +174,18 @@ namespace Mooege.Common.Helpers.Math
         /// </summary>
         public int Next(int upperBound)
         {
-            if(upperBound<0) {
+            if (upperBound < 0)
+            {
                 throw new ArgumentOutOfRangeException("upperBound", upperBound, "upperBound must be >=0");
             }
 
-            uint t = _x^(_x<<11);
-            _x=_y; _y=_z; _z=_w;
+            uint t = _x ^ (_x << 11);
+            _x = _y; _y = _z; _z = _w;
 
             // ENHANCEMENT: Can we do this without converting to a double and back again?
             // The explicit int cast before the first multiplication gives better performance.
             // See comments in NextDouble.
-            return (int)((REAL_UNIT_INT*(int)(0x7FFFFFFF&(_w=(_w^(_w>>19))^(t^(t>>8)))))*upperBound);
+            return (int)((REAL_UNIT_INT * (int)(0x7FFFFFFF & (_w = (_w ^ (_w >> 19)) ^ (t ^ (t >> 8))))) * upperBound);
         }
 
         /// <summary>
@@ -192,34 +194,35 @@ namespace Mooege.Common.Helpers.Math
         /// </summary>
         public int Next(int lowerBound, int upperBound)
         {
-            if(lowerBound>upperBound) {
+            if (lowerBound > upperBound)
+            {
                 throw new ArgumentOutOfRangeException("upperBound", upperBound, "upperBound must be >=lowerBound");
             }
 
-            uint t = _x^(_x<<11);
-            _x=_y; _y=_z; _z=_w;
+            uint t = _x ^ (_x << 11);
+            _x = _y; _y = _z; _z = _w;
 
             // The explicit int cast before the first multiplication gives better performance.
             // See comments in NextDouble.
-            int range = upperBound-lowerBound;
-            if(range<0)
+            int range = upperBound - lowerBound;
+            if (range < 0)
             {   // If range is <0 then an overflow has occured and must resort to using long integer arithmetic instead (slower).
                 // We also must use all 32 bits of precision, instead of the normal 31, which again is slower.  
-                return lowerBound+(int)((REAL_UNIT_UINT*(double)(_w=(_w^(_w>>19))^(t^(t>>8))))*(double)((long)upperBound-(long)lowerBound));
+                return lowerBound + (int)((REAL_UNIT_UINT * (double)(_w = (_w ^ (_w >> 19)) ^ (t ^ (t >> 8)))) * (double)((long)upperBound - (long)lowerBound));
             }
-                
+
             // 31 bits of precision will suffice if range<=int.MaxValue. This allows us to cast to an int and gain
             // a little more performance.
-            return lowerBound+(int)((REAL_UNIT_INT*(double)(int)(0x7FFFFFFF&(_w=(_w^(_w>>19))^(t^(t>>8)))))*(double)range);
+            return lowerBound + (int)((REAL_UNIT_INT * (double)(int)(0x7FFFFFFF & (_w = (_w ^ (_w >> 19)) ^ (t ^ (t >> 8))))) * (double)range);
         }
 
         /// <summary>
         /// Generates a random double. Values returned are from 0.0 up to but not including 1.0.
         /// </summary>
         public double NextDouble()
-        {   
-            uint t = _x^(_x<<11);
-            _x=_y; _y=_z; _z=_w;
+        {
+            uint t = _x ^ (_x << 11);
+            _x = _y; _y = _z; _z = _w;
 
             // Here we can gain a 2x speed improvement by generating a value that can be cast to 
             // an int instead of the more easily available uint. If we then explicitly cast to an 
@@ -230,7 +233,7 @@ namespace Mooege.Common.Helpers.Math
             //
             // Also note that the loss of one bit of precision is equivalent to what occurs within 
             // System.Random.
-            return REAL_UNIT_INT*(int)(0x7FFFFFFF&(_w=(_w^(_w>>19))^(t^(t>>8))));         
+            return REAL_UNIT_INT * (int)(0x7FFFFFFF & (_w = (_w ^ (_w >> 19)) ^ (t ^ (t >> 8))));
         }
 
         /// <summary>
@@ -240,86 +243,86 @@ namespace Mooege.Common.Helpers.Math
         public void NextBytes(byte[] buffer)
         {
             // Fill up the bulk of the buffer in chunks of 4 bytes at a time.
-            uint x=this._x, y=this._y, z=this._z, w=this._w;
-            int i=0;
+            uint x = this._x, y = this._y, z = this._z, w = this._w;
+            int i = 0;
             uint t;
-            for(int bound=buffer.Length-3; i<bound;)
-            {   
+            for (int bound = buffer.Length - 3; i < bound; )
+            {
                 // Generate 4 bytes. 
                 // Increased performance is achieved by generating 4 random bytes per loop.
                 // Also note that no mask needs to be applied to zero out the higher order bytes before
                 // casting because the cast ignores thos bytes. Thanks to Stefan Trosch�tz for pointing this out.
-                t = x^(x<<11);
-                x=y; y=z; z=w;
-                w=(w^(w>>19))^(t^(t>>8));
+                t = x ^ (x << 11);
+                x = y; y = z; z = w;
+                w = (w ^ (w >> 19)) ^ (t ^ (t >> 8));
 
                 buffer[i++] = (byte)w;
-                buffer[i++] = (byte)(w>>8);
-                buffer[i++] = (byte)(w>>16);
-                buffer[i++] = (byte)(w>>24);
+                buffer[i++] = (byte)(w >> 8);
+                buffer[i++] = (byte)(w >> 16);
+                buffer[i++] = (byte)(w >> 24);
             }
 
             // Fill up any remaining bytes in the buffer.
-            if(i<buffer.Length)
+            if (i < buffer.Length)
             {
                 // Generate 4 bytes.
-                t = x^(x<<11);
-                x=y; y=z; z=w;
-                w=(w^(w>>19))^(t^(t>>8));
+                t = x ^ (x << 11);
+                x = y; y = z; z = w;
+                w = (w ^ (w >> 19)) ^ (t ^ (t >> 8));
 
                 buffer[i++] = (byte)w;
-                if(i<buffer.Length)
+                if (i < buffer.Length)
                 {
-                    buffer[i++]=(byte)(w>>8);
-                    if(i<buffer.Length)
-                    {   
-                        buffer[i++] = (byte)(w>>16);
-                        if(i<buffer.Length)
-                        {   
-                            buffer[i] = (byte)(w>>24);
+                    buffer[i++] = (byte)(w >> 8);
+                    if (i < buffer.Length)
+                    {
+                        buffer[i++] = (byte)(w >> 16);
+                        if (i < buffer.Length)
+                        {
+                            buffer[i] = (byte)(w >> 24);
                         }
                     }
                 }
             }
-            this._x=x; this._y=y; this._z=z; this._w=w;
+            this._x = x; this._y = y; this._z = z; this._w = w;
         }
 
-      ///// <summary>
-      ///// A version of NextBytes that uses a pointer to set 4 bytes of the byte buffer in one operation
-      ///// thus providing a nice speedup. The loop is also partially unrolled to allow out-of-order-execution,
-      ///// this results in about a x2 speedup on an AMD Athlon. Thus performance may vary wildly on different CPUs
-      ///// depending on the number of execution units available.
-      ///// 
-      ///// Another significant speedup is obtained by setting the 4 bytes by indexing pDWord (e.g. pDWord[i++]=_w)
-      ///// instead of dereferencing it (e.g. *pDWord++=_w).
-      ///// 
-      ///// Note that this routine requires the unsafe compilation flag to be specified and so is commented out by default.
-      ///// </summary>
-      ///// <param name="buffer"></param>
-//      public unsafe void NextBytesUnsafe(byte[] buffer)
-//      {
-//          if(buffer.Length % 8 != 0)
-//              throw new ArgumentException("Buffer length must be divisible by 8", "buffer");
-//
-//          uint _x=this._x, _y=this._y, _z=this._z, _w=this._w;
-//          
-//          fixed(byte* pByte0 = buffer)
-//          {
-//              uint* pDWord = (uint*)pByte0;
-//              for(int i=0, len=buffer.Length>>2; i < len; i+=2) 
-//              {
-//                  uint t=(_x^(_x<<11));
-//                  _x=_y; _y=_z; _z=_w;
-//                  pDWord[i] = _w = (_w^(_w>>19))^(t^(t>>8));
-//
-//                  t=(_x^(_x<<11));
-//                  _x=_y; _y=_z; _z=_w;
-//                  pDWord[i+1] = _w = (_w^(_w>>19))^(t^(t>>8));
-//              }
-//          }
-//
-//          this._x=_x; this._y=_y; this._z=_z; this._w=_w;
-//      }
+        ///// <summary>
+        ///// A version of NextBytes that uses a pointer to set 4 bytes of the byte buffer in one operation
+        ///// thus providing a nice speedup. The loop is also partially unrolled to allow out-of-order-execution,
+        ///// this results in about a x2 speedup on an AMD Athlon. Thus performance may vary wildly on different CPUs
+        ///// depending on the number of execution units available.
+        ///// 
+        ///// Another significant speedup is obtained by setting the 4 bytes by indexing pDWord (e.g. pDWord[i++]=_w)
+        ///// instead of dereferencing it (e.g. *pDWord++=_w).
+        ///// 
+        ///// Note that this routine requires the unsafe compilation flag to be specified and so is commented out by default.
+        ///// </summary>
+        ///// <param name="buffer"></param>
+        //      public unsafe void NextBytesUnsafe(byte[] buffer)
+        //      {
+        //          if(buffer.Length % 8 != 0)
+        //              throw new ArgumentException("Buffer length must be divisible by 8", "buffer");
+        //
+        //          uint _x=this._x, _y=this._y, _z=this._z, _w=this._w;
+        //          
+        //          fixed(byte* pByte0 = buffer)
+        //          {
+        //              uint* pDWord = (uint*)pByte0;
+        //              for(int i=0, len=buffer.Length>>2; i < len; i+=2) 
+        //              {
+        //                  uint t=(_x^(_x<<11));
+        //                  _x=_y; _y=_z; _z=_w;
+        //                  pDWord[i] = _w = (_w^(_w>>19))^(t^(t>>8));
+        //
+        //                  t=(_x^(_x<<11));
+        //                  _x=_y; _y=_z; _z=_w;
+        //                  pDWord[i+1] = _w = (_w^(_w>>19))^(t^(t>>8));
+        //              }
+        //          }
+        //
+        //          this._x=_x; this._y=_y; this._z=_z; this._w=_w;
+        //      }
         #endregion
 
         #region Public Methods [Methods not present on System.Random]
@@ -334,9 +337,9 @@ namespace Mooege.Common.Helpers.Math
         /// </summary>
         public uint NextUInt()
         {
-            uint t = _x^(_x<<11);
-            _x=_y; _y=_z; _z=_w;
-            return _w=(_w^(_w>>19))^(t^(t>>8));
+            uint t = _x ^ (_x << 11);
+            _x = _y; _y = _z; _z = _w;
+            return _w = (_w ^ (_w >> 19)) ^ (t ^ (t >> 8));
         }
 
         /// <summary>
@@ -349,9 +352,9 @@ namespace Mooege.Common.Helpers.Math
         /// </summary>
         public int NextInt()
         {
-            uint t = _x^(_x<<11);
-            _x=_y; _y=_z; _z=_w;
-            return (int)(0x7FFFFFFF&(_w=(_w^(_w>>19))^(t^(t>>8))));
+            uint t = _x ^ (_x << 11);
+            _x = _y; _y = _z; _z = _w;
+            return (int)(0x7FFFFFFF & (_w = (_w ^ (_w >> 19)) ^ (t ^ (t >> 8))));
         }
 
         // Buffer 32 bits in bitBuffer, return 1 at a time, keep track of how many have been returned
@@ -366,19 +369,19 @@ namespace Mooege.Common.Helpers.Math
         /// </summary>
         public bool NextBool()
         {
-            if(0 == _bitMask)
-            {   
+            if (0 == _bitMask)
+            {
                 // Generate 32 more bits.
-                uint t = _x^(_x<<11);
-                _x=_y; _y=_z; _z=_w;
-                _bitBuffer=_w=(_w^(_w>>19))^(t^(t>>8));
+                uint t = _x ^ (_x << 11);
+                _x = _y; _y = _z; _z = _w;
+                _bitBuffer = _w = (_w ^ (_w >> 19)) ^ (t ^ (t >> 8));
 
                 // Reset the bitMask that tells us which bit to read next.
                 _bitMask = 0x80000000;
-                return (_bitBuffer & _bitMask)==0;
+                return (_bitBuffer & _bitMask) == 0;
             }
 
-            return (_bitBuffer & (_bitMask>>=1))==0;
+            return (_bitBuffer & (_bitMask >>= 1)) == 0;
         }
 
         // Buffer of random bytes. A single UInt32 is used to buffer 4 bytes.
@@ -394,17 +397,17 @@ namespace Mooege.Common.Helpers.Math
         /// </summary>
         public byte NextByte()
         {
-            if(0 == _byteBufferState)
+            if (0 == _byteBufferState)
             {
                 // Generate 4 more bytes.
-                uint t = _x^(_x<<11);
-                _x=_y; _y=_z; _z=_w;
-                _byteBuffer = _w=(_w^(_w>>19))^(t^(t>>8));
+                uint t = _x ^ (_x << 11);
+                _x = _y; _y = _z; _z = _w;
+                _byteBuffer = _w = (_w ^ (_w >> 19)) ^ (t ^ (t >> 8));
                 _byteBufferState = 0x4;
                 return (byte)_byteBuffer;  // Note. Masking with 0xFF is unnecessary.
             }
             _byteBufferState >>= 1;
-            return (byte)(_byteBuffer >>=1);
+            return (byte)(_byteBuffer >>= 1);
         }
 
         #endregion

@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
-    [Message( Opcodes.LoopingAnimationPowerMessage)]
+    [Message(Opcodes.LoopingAnimationPowerMessage)]
     class LoopingAnimationPowerMessage : GameMessage
     {
         public int snoPower;

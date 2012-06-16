@@ -21,7 +21,7 @@ using D3.ItemCrafting;
 
 namespace Mooege.Net.GS.Message.Definitions.Artisan
 {
-    [Message(new Opcodes[]{Opcodes.BlacksmithDataInitialMessage})]
+    [Message(new Opcodes[] { Opcodes.BlacksmithDataInitialMessage })]
     public class BlacksmithDataInitialMessage : GameMessage
     {
 

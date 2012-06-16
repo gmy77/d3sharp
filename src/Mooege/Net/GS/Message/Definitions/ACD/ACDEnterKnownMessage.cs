@@ -160,6 +160,6 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             }
             b.Append(' ', --pad);
             b.AppendLine("}");
-        }        
+        }
     }
 }

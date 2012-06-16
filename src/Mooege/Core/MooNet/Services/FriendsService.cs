@@ -28,7 +28,7 @@ using Mooege.Net.MooNet;
 namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x6, serviceName: "bnet.protocol.friends.FriendsService")]
-    public class FriendsService : bnet.protocol.friends.FriendsService,IServerService
+    public class FriendsService : bnet.protocol.friends.FriendsService, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
@@ -39,6 +39,9 @@ namespace Mooege.Core.MooNet.Services
         {
             Logger.Trace("Subscribe() {0}", this.Client);
 
+            //FIXME: This causes an exception with the retail client /raist.
+
+
             FriendManager.Instance.AddSubscriber(this.Client, request.ObjectId);
 
             var builder = bnet.protocol.friends.SubscribeToFriendsResponse.CreateBuilder()
@@ -48,9 +51,12 @@ namespace Mooege.Core.MooNet.Services
                 .AddRole(bnet.protocol.Role.CreateBuilder().SetId(1).SetName("battle_tag_friend").Build())
                 .AddRole(bnet.protocol.Role.CreateBuilder().SetId(2).SetName("real_id_friend").Build());
 
-            foreach (var friend in FriendManager.Friends[this.Client.Account.BnetEntityId.Low]) // send friends list.
+
+            foreach (var dbAccountFriend in this.Client.Account.DBAccount.Friends) // send friends list.
             {
-                builder.AddFriends(friend);
+                var friendAccount = AccountManager.GetAccountByDBAccount(dbAccountFriend);
+                var resp = bnet.protocol.friends.Friend.CreateBuilder().SetId(friendAccount.BnetEntityId).Build();
+                builder.AddFriends(resp);
             }
 
             var invitations = new List<bnet.protocol.invitation.Invitation>();
@@ -108,7 +114,7 @@ namespace Mooege.Core.MooNet.Services
                 return;
             }
 
-            Account invitee = null;
+            Account invitee;
 
             if (friendRequest.HasTargetEmail)
                 invitee = AccountManager.GetAccountByEmail(friendRequest.TargetEmail);

@@ -23,6 +23,7 @@ using System.Linq;
 using System.Windows;
 using Mooege.Common.Helpers.Math;
 using Mooege.Common.Logging;
+using Mooege.Common.Storage;
 using Mooege.Core.GS.Actors.Implementations;
 using Mooege.Core.GS.Common.Types.Math;
 using Mooege.Core.GS.Common.Types.QuadTrees;
@@ -45,6 +46,10 @@ namespace Mooege.Core.GS.Map
     public sealed class World : DynamicObject, IRevealable, IUpdateable
     {
         static readonly Logger Logger = LogManager.CreateLogger();
+        public readonly Dictionary<World, List<Item>> DbItems = new Dictionary<World, List<Item>>(); //we need this list to delete item_instances from items which have no owner anymore.
+        public readonly Dictionary<ulong, Item> CachedItems = new Dictionary<ulong, Item>();
+
+
 
         /// <summary>
         /// Game that the world belongs to.
@@ -735,6 +740,76 @@ namespace Mooege.Core.GS.Map
         }
 
         #endregion
+
+        public bool CheckLocationForFlag(Vector3D location, Mooege.Common.MPQ.FileFormats.Scene.NavCellFlags flags)
+        {
+            // We loop Scenes as its far quicker than looking thru the QuadTree - DarkLotus
+
+            foreach (Scene s in this._scenes.Values)
+            {
+                if (s.Bounds.IntersectsWith(new Rect(location.X, location.Y, 1f, 1f)))
+                {
+                    /*if (s.DynamicID != QuadTree.Query<Scene>(new Common.Types.Misc.Circle(location.X, location.Y, 2f)).FirstOrDefault().DynamicID)
+                    {
+                        Logger.Debug("Quadtree");// This is here because quadtree has the same problem finding the master scene instead of subscene
+                    }*/
+                    Scene scene = s;
+                    if (s.Parent != null) { scene = s.Parent; }
+                    if (s.Subscenes.Count > 0)
+                    {
+                        foreach (var subscene in s.Subscenes)
+                        {
+                            if (subscene.Bounds.IntersectsWith(new Rect(location.X, location.Y, 1f, 1f)))
+                            {
+                                scene = subscene;
+                            }
+                        }
+                    }
+
+                    int x = (int)((location.X - scene.Bounds.Left) / 2.5f);
+                    int y = (int)((location.Y - scene.Bounds.Top) / 2.5f);
+                    /*if (s.NavMesh.WalkGrid[x, y] == 1)
+                    {
+                        return true;
+                    }*/
+                    int total = (int)((y * scene.NavMesh.SquaresCountY) + x);
+                    if (total < 0 || total > scene.NavMesh.NavMeshSquareCount)
+                    {
+                        Logger.Error("DarkLotus Cant Code:( Navmesh overflow");
+                        return false;
+                    }
+                    if (scene.NavMesh.Squares[total].Flags.HasFlag(flags))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        Logger.Debug("Flags: " + scene.NavMesh.Squares[total].Flags.ToString());
+                        return false;
+                    }
+                    //return false;
+
+                }
+            }
+            // Location not inside a known scene - DarkLotus
+            return false;
+        }
+
+        public void CleanupItemInstances()
+        {
+            if (DbItems.ContainsKey(this))
+            {
+                var itemInstancesToDelete = DbItems[this].Where(dbi => dbi.Owner == null);
+                foreach (var itm in itemInstancesToDelete)
+                {
+                    if (itm.DBInventory == null)
+                        ItemGenerator.DeleteFromDB(itm);
+                }
+                DbItems.Remove(this);
+            }
+
+        }
+
 
         public override string ToString()
         {

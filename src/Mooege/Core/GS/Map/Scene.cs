@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using Mooege.Common.Logging;
@@ -81,7 +82,7 @@ namespace Mooege.Core.GS.Map
         /// Applied labels.
         /// Not sure on usage /raist.
         /// </summary>
-        public int[] AppliedLabels;       
+        public int[] AppliedLabels;
 
         /// <summary>
         /// PRTransform for the scene.
@@ -139,22 +140,24 @@ namespace Mooege.Core.GS.Map
             this.SceneSNO = new SNOHandle(SNOGroup.Scene, snoId);
             this.Parent = parent;
             this.Subscenes = new List<Scene>();
-            this.Scale = 1.0f;                   
+            this.Scale = 1.0f;
             this.AppliedLabels = new int[0];
             this.LoadSceneData(); // load data from mpqs.
-
-            this.Size = new Size(this.NavZone.V0.X*this.NavZone.Float0, this.NavZone.V0.Y*this.NavZone.Float0);
+            this.Size = new Size(this.NavZone.V0.X * this.NavZone.Float0, this.NavZone.V0.Y * this.NavZone.Float0);
             this.Position = position;
             this.World.AddScene(this); // add scene to the world.
         }
 
-        #region mpq-data 
+        #region mpq-data
 
         /// <summary>
         /// Loads scene data from mpqs.
         /// </summary>
         private void LoadSceneData()
         {
+            // oh yeah, this really happens to me sometimes, i dont know why! ~weltmeyer
+            if (!MPQStorage.Data.Assets[SNOGroup.Scene].ContainsKey(this.SceneSNO.Id))
+                Logger.Debug("AssetsForScene not found in MPQ Storage:Scene:{0}, Asset:{1}", SNOGroup.Scene, this.SceneSNO.Id);
             var data = MPQStorage.Data.Assets[SNOGroup.Scene][this.SceneSNO.Id].Data as Mooege.Common.MPQ.FileFormats.Scene;
             if (data == null) return;
 
@@ -291,7 +294,7 @@ namespace Mooege.Core.GS.Map
 
         #endregion
 
-        #region scene revealing & unrevealing 
+        #region scene revealing & unrevealing
 
         /// <summary>
         /// Returns true if the actor is revealed to player.
@@ -312,8 +315,8 @@ namespace Mooege.Core.GS.Map
         {
             if (player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // return if already revealed.
 
-            player.InGameClient.SendMessage(this.RevealMessage,true); // reveal the scene itself.
-            player.InGameClient.SendMessage(this.MapRevealMessage,true); // reveal the scene in minimap.
+            player.InGameClient.SendMessage(this.RevealMessage, true); // reveal the scene itself.
+            player.InGameClient.SendMessage(this.MapRevealMessage, true); // reveal the scene in minimap.
 
             foreach (var sub in this.Subscenes) // reveal subscenes too.
             {
@@ -333,8 +336,8 @@ namespace Mooege.Core.GS.Map
         {
             if (!player.RevealedObjects.ContainsKey(this.DynamicID)) return false; // if it's not revealed already, just return.
 
-            player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID },true); // send the unreveal message.
-            
+            player.InGameClient.SendMessage(new DestroySceneMessage() { WorldID = this.World.DynamicID, SceneID = this.DynamicID }, true); // send the unreveal message.
+
             foreach (var subScene in this.Subscenes) // unreveal subscenes too.
             {
                 subScene.Unreveal(player);

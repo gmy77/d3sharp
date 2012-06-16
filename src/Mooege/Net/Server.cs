@@ -32,7 +32,8 @@ namespace Mooege.Net
         public int Port { get; private set; }
 
         protected Socket Listener;
-        protected Dictionary<Socket, IConnection> Connections = new Dictionary<Socket, IConnection>();
+        // protected Dictionary<Socket, IConnection> Connections = new Dictionary<Socket, IConnection>();
+        protected List<IConnection> Connections = new List<IConnection>();
         protected object ConnectionLock = new object();
 
         public delegate void ConnectionEventHandler(object sender, ConnectionEventArgs e);
@@ -78,9 +79,9 @@ namespace Mooege.Net
             // * IPv6Only - false - create a dual-socket that both supports IPv4 and IPv6 - check the IPv6 support note above.
             Listener.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
             Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
-			#if !__MonoCS__
+#if !__MonoCS__
             if (NetworkingConfig.Instance.EnableIPv6) Listener.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
-			#endif
+#endif
 
             try
             {
@@ -114,7 +115,7 @@ namespace Mooege.Net
                 var socket = Listener.EndAccept(result); // Finish accepting the incoming connection.
                 var connection = new Connection(this, socket); // Add the new connection to the dictionary.
 
-                lock (ConnectionLock) Connections[socket] = connection; // add the connection to list.
+                lock (ConnectionLock) Connections.Add(connection); // add the connection to list.
 
                 OnClientConnection(new ConnectionEventArgs(connection)); // Raise the OnConnect event.
 
@@ -141,18 +142,77 @@ namespace Mooege.Net
                 {
                     OnDataReceived(new ConnectionDataEventArgs(connection, connection.RecvBuffer.Enumerate(0, bytesRecv))); // Raise the DataReceived event.
 
-                    if (connection.IsConnected) connection.BeginReceive(ReceiveCallback, connection); // Begin receiving again on the socket, if it is connected.
-                    else RemoveConnection(connection, true); // else remove it from connection list.
+                    // [D3Inferno]
+                    // Only receive again if we did not just send the EncryptRequest.
+                    // If we did, then the current received packet should be the EncryptRequest NoData service response.
+                    //
+                    // WARNING: Probably need to explicitly test for this packet since we can get data out-of-order from the client.
+                    // However, I would imagine the D3 game client has to do a flush before sending the EncryptRequest response,
+                    // otherwise, anything sent after that would break since it would be handled by the TLS layer which would throw
+                    // some kind of SSL error (most likely invalid version).
+                    //
+                    if ((connection.IsEncryptRequestSent) && (!connection.IsTlsHandshaking))
+                    {
+                        Logger.Trace("Waiting for the EncryptRequest NoData service response from the client.");
+
+                        // [D3Inferno]
+                        // We need to receive the EncryptRequest NoData service response from the client.
+                        // However, the packet containing the response can also contain the Tls client_hello message.
+                        // If we read it from the Socket, Tls Authentication will hang as the server will wait forever.
+                        // So process just the next incoming message as a synchronous call.
+                        if (connection.IsConnected)
+                            this.ReceiveEncryptRequestServiceResponse(connection);
+                    }
+                    else if (!connection.IsTlsHandshaking)
+                    {
+                        // Begin receiving again on the socket, if it is connected.
+                        if (connection.IsConnected)
+                            connection.BeginReceive(ReceiveCallback, connection);
+                        else
+                            Logger.Trace("Connection closed:" + connection.Client);
+                    }
+                    else
+                    {
+                        Logger.Trace("No longer receiving unencrypted data.");
+                    }
                 }
                 else RemoveConnection(connection, true); // Connection was lost.
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
                 RemoveConnection(connection, true); // An error occured while receiving, connection has disconnected.
+                Logger.DebugException(e, "ReceiveCallback");
             }
             catch (Exception e)
             {
+                RemoveConnection(connection, true); // An error occured while receiving, the connection may have been disconnected.
                 Logger.DebugException(e, "ReceiveCallback");
+            }
+        }
+
+        // [D3Inferno]
+        // Tls authentication is complete, although it may have failed.
+        // Regardless, start receiving data again.
+        // If Tls was successful, it will now be handled by the SslStream.
+        public void TlsAuthenticationComplete(Connection connection)
+        {
+            Logger.Trace("TlsAuthenticationComplete");
+
+            // Begin receiving again on the socket, if it is connected.
+            if (connection.IsConnected)
+            {
+                try
+                {
+                    connection.BeginReceive(ReceiveCallback, connection);
+                }
+                catch (Exception e)
+                {
+                    RemoveConnection(connection, true); // An error occured while receiving, the connection may have been disconnected.
+                    if (e is System.IO.IOException)
+                        Logger.Trace("{0} unexpectedly closed connection, client is not patched.", connection.Client);
+                    else
+                        Logger.DebugException(e, "TlsAuthenticationComplete()");
+                }
             }
         }
 
@@ -177,7 +237,15 @@ namespace Mooege.Net
             {
                 while (bytesRemaining > 0) // Ensure we send every byte.
                 {
-                    var bytesSent = connection.Socket.Send(buffer, totalBytesSent, bytesRemaining, flags); // Send the remaining data.
+                    // [D3Inferno]
+                    // Use Connection wrapper to send the data so that it can be sent either over
+                    // the normal NetworkStream (prior to Tls Authentication) or over the encrypted
+                    // SslStream.
+                    // Send the remaining data.
+                    //int bytesSent = connection.Socket.Send(buffer, totalBytesSent, bytesRemaining, flags);
+
+                    int bytesSent = connection._Send(buffer, totalBytesSent, bytesRemaining, flags);
+
                     if (bytesSent > 0)
                         OnDataSent(new ConnectionDataEventArgs(connection, buffer.Enumerate(totalBytesSent, bytesSent))); // Raise the Data Sent event.
 
@@ -192,10 +260,58 @@ namespace Mooege.Net
             }
             catch (Exception e)
             {
+                RemoveConnection(connection, true); // An error occured while sending, it is possible that the connection has a problem.
                 Logger.DebugException(e, "Send");
             }
 
             return totalBytesSent;
+        }
+
+        #endregion
+
+        #region Encryption Support
+
+        // [D3Inferno]
+        // This method is called once 
+        private void ReceiveEncryptRequestServiceResponse(IConnection connection)
+        {
+            if (connection == null) return;
+
+            int totalBytesRevc = 0;
+            int pos = 0;
+
+            int bytesRecv = connection.Receive(pos, 2);
+            totalBytesRevc += bytesRecv;
+            if (bytesRecv != 2)
+                throw new Exception("Server Socket could not read header size bytes for EncryptRequest Service Response.");
+
+            pos += 2;
+            int headerSize = (connection.RecvBuffer[0] << 8) | connection.RecvBuffer[1];
+
+            bytesRecv = connection.Receive(pos, headerSize);
+            totalBytesRevc += bytesRecv;
+            if (bytesRecv != headerSize)
+                throw new Exception("Server Socket could not read header bytes (size = " + headerSize + ") for EncryptRequest Service Response.");
+
+            // Create the bnet.protocol.Header object.
+            byte[] headerBytes = new byte[headerSize];
+            Array.Copy(connection.RecvBuffer, pos, headerBytes, 0, headerSize);
+            var headerData = bnet.protocol.Header.ParseFrom(headerBytes);
+
+            pos += headerSize;
+            bytesRecv = connection.Receive(pos, (int)headerData.Size);
+            totalBytesRevc += bytesRecv;
+            if (bytesRecv != headerData.Size)
+                throw new Exception("Server Socket could not read data (size = " + headerData.Size + ") for EncryptRequest Service Response.");
+
+            // We could verify that the packet corresponds to EncryptRequest service response.
+            // However, this would require looking into the MooNetClient's RPCCallbacks for the token,
+            // and then verifying that it is of the correct type.
+
+            if (totalBytesRevc > 0)
+            {
+                OnDataReceived(new ConnectionDataEventArgs(connection, connection.RecvBuffer.Enumerate(0, totalBytesRevc))); // Raise the DataReceived event.
+            }
         }
 
         #endregion
@@ -205,7 +321,7 @@ namespace Mooege.Net
         public IEnumerable<IConnection> GetConnections()
         {
             lock (ConnectionLock)
-                foreach (IConnection connection in Connections.Values)
+                foreach (IConnection connection in Connections)
                     yield return connection;
         }
 
@@ -245,10 +361,11 @@ namespace Mooege.Net
         {
             lock (ConnectionLock)
             {
-                foreach (var connection in Connections.Values.Cast<Connection>().Where(conn => conn.IsConnected)) // Check if the connection is connected.
+                foreach (var connection in Connections.Cast<Connection>()) // Check if the connection is connected.
                 {
                     // Disconnect and raise the OnDisconnect event.
-                    connection.Socket.Disconnect(false);
+                    connection.Disconnect();
+                    //                    connection.Socket.Disconnect(false);
                     OnClientDisconnect(new ConnectionEventArgs(connection));
                 }
 
@@ -258,19 +375,66 @@ namespace Mooege.Net
 
         public virtual void Disconnect(Connection connection)
         {
-            if (connection == null) throw new ArgumentNullException("connection");
-            if (!connection.IsConnected) return;
+            //            if (connection == null) throw new ArgumentNullException("connection");
+            //            if (!connection.IsConnected) return;
 
-            connection.Socket.Disconnect(false);
-            RemoveConnection(connection, true);
+            if (connection == null)
+                return;
+
+            connection.Disconnect();
+
+            //            connection.Socket.Disconnect(false);
+            _RemoveConnection(connection, true);
+        }
+
+        private void _Disconnect(Connection connection)
+        {
+            if (connection == null)
+                return;
+
+            connection.Disconnect();
         }
 
         private void RemoveConnection(Connection connection, bool raiseEvent)
         {
+            if (connection == null)
+                return;
+
+            // [D3Inferno]
+            // The whole Server.Disconnect vs Server.RemoveConnection vs Connection.Disconnect is a complete mess.
+            // Trying to modify the code so everything gets cleaned up properly without causing an infinite recursion.
+            connection.Disconnect();
+
             // Remove the connection from the dictionary and raise the OnDisconnection event.
             lock (ConnectionLock)
-                if (Connections.Remove(connection.Socket) && raiseEvent)
-                    OnClientDisconnect(new ConnectionEventArgs(connection));
+            {
+                if (Connections.Contains(connection))
+                    Connections.Remove(connection);
+            }
+
+            if (raiseEvent)
+                NotifyRemoveConnection(connection);
+        }
+
+        private void _RemoveConnection(Connection connection, bool raiseEvent)
+        {
+            if (connection == null)
+                return;
+
+            // Remove the connection from the dictionary and raise the OnDisconnection event.
+            lock (ConnectionLock)
+            {
+                if (Connections.Contains(connection))
+                    Connections.Remove(connection);
+            }
+
+            if (raiseEvent)
+                NotifyRemoveConnection(connection);
+        }
+
+        private void NotifyRemoveConnection(Connection connection)
+        {
+            OnClientDisconnect(new ConnectionEventArgs(connection));
         }
 
         public virtual void Shutdown()
@@ -289,9 +453,9 @@ namespace Mooege.Net
             }
 
             // Disconnect the clients.
-            foreach(var connection in this.Connections.ToList()) // use ToList() so we don't get collection modified exception there
+            foreach (var connection in this.Connections.ToList()) // use ToList() so we don't get collection modified exception there
             {
-                connection.Value.Disconnect();
+                connection.Disconnect();
             }
 
             Listener = null;

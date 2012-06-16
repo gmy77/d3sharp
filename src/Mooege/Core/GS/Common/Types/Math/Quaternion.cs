@@ -20,15 +20,32 @@ using System.Text;
 using CrystalMpq;
 using Gibbed.IO;
 using Mooege.Net.GS.Message;
+using Mooege.Common.Storage;
 
 namespace Mooege.Core.GS.Common.Types.Math
 {
     public class Quaternion
     {
-        public float W;
-        public Vector3D Vector3D;
+        [PersistentProperty("W")]
+        public float W { get; set; }
+        [PersistentProperty("Vector3D")]
+        public Vector3D Vector3D { get; set; }
 
         public Quaternion() { }
+
+        /// <summary>
+        /// Creates an quaternion that rotates along the Z-axis by the specified "facing" angle. 
+        /// </summary>
+        /// <param name="facingAngle">The angle in radians.</param>
+        /// <returns></returns>
+        public static Quaternion FacingRotation(float facingAngle)
+        {
+            return new Quaternion
+            {
+                W = (float)System.Math.Cos(facingAngle / 2f),
+                Vector3D = new Vector3D(0, 0, (float)System.Math.Sin(facingAngle / 2f))
+            };
+        }
 
         /// <summary>
         /// Reads Quaternion from given MPQFileStream.

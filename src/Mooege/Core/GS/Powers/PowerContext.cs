@@ -121,7 +121,7 @@ namespace Mooege.Core.GS.Powers
                 (User as Player).UseSecondaryResource(amount);
             }
         }
-        
+
         public void WeaponDamage(Actor target, float damageMultiplier, DamageType damageType)
         {
             AttackPayload payload = new AttackPayload(this);
@@ -260,10 +260,10 @@ namespace Mooege.Core.GS.Powers
         {
             get
             {
-                if (User is Player)
+                if (User is Player || User is Minion)
                     return (actor) => actor is Monster;
                 else
-                    return (actor) => actor is Player;
+                    return (actor) => actor is Player || actor is Minion;
             }
         }
 
@@ -271,8 +271,8 @@ namespace Mooege.Core.GS.Powers
         {
             get
             {
-                if (User is Player)
-                    return (actor) => actor is Player;
+                if (User is Player || User is Minion)
+                    return (actor) => actor is Player || actor is Minion;
                 else
                     return (actor) => actor is Monster;
             }
@@ -293,7 +293,7 @@ namespace Mooege.Core.GS.Powers
                 Speed = speed,
             }, actor);
         }
-        
+
         public TickTimer Knockback(Actor target, float magnitude, float arcHeight = 3.0f, float arcGravity = -0.03f)
         {
             var buff = new Implementations.KnockbackBuff(magnitude, arcHeight, arcGravity);

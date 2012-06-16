@@ -106,21 +106,32 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryTemplate.cs" />
     <Compile Include="SNOAliases.cs" />
+    <Compile Include="Streams.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Streams.Designer.cs">
+      <DependentUpon>Streams.cs</DependentUpon>
+    </Compile>
     <Compile Include="TCPRecon.cs" />
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="CustomLinqQuery.resx">
       <DependentUpon>CustomLinqQuery.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Find.resx">
       <DependentUpon>Find.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MessageViewer.resx">
       <DependentUpon>MessageViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MessageFilter.resx">
       <DependentUpon>MessageFilter.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -132,6 +143,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Streams.resx">
+      <DependentUpon>Streams.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -76,7 +76,7 @@ namespace Mooege.Common.MPQ.FileFormats
             this.SNOPhysMesh = stream.ReadValueS32();
             stream.Close();
         }
-        
+
         public class NavMeshDef
         {
             public int SquaresCountX { get; private set; }
@@ -96,18 +96,26 @@ namespace Mooege.Common.MPQ.FileFormats
                 this.NavMeshSquareCount = stream.ReadValueS32();
                 this.Float0 = stream.ReadValueF32();
                 this.Squares = stream.ReadSerializedData<NavMeshSquare>();
-               
-                if (SquaresCountX < 64 && SquaresCountY < 64)
+
+                if (SquaresCountX <= 64 && SquaresCountY <= 64)
                 {
                     WalkGrid = new byte[64, 64];
                 }
-                else if (SquaresCountX < 128 && SquaresCountY < 128)
+                else if (SquaresCountX <= 128 && SquaresCountY <= 128)
                 {
                     WalkGrid = new byte[128, 128]; //96*96
                 }
-                else if (SquaresCountX > 128 || SquaresCountY > 128)
+                else if (SquaresCountX <= 256 && SquaresCountY <= 256)
                 {
                     WalkGrid = new byte[256, 256];
+                }
+                else if (SquaresCountX <= 384 && SquaresCountY <= 384)
+                {
+                    WalkGrid = new byte[384, 384];
+                }
+                else if (SquaresCountX > 384 || SquaresCountY > 384)
+                {
+                    WalkGrid = new byte[512, 512];
                 }
 
 
@@ -115,7 +123,7 @@ namespace Mooege.Common.MPQ.FileFormats
                 for (int i = 0; i < NavMeshSquareCount; i++)
                 {
                     WalkGrid[i % SquaresCountX, i / SquaresCountY] = (byte)(Squares[i].Flags & Scene.NavCellFlags.AllowWalk);
-                   // Set the grid to 0x1 if its walkable, left as 0 if not. - DarkLotus
+                    // Set the grid to 0x1 if its walkable, left as 0 if not. - DarkLotus
                 }
 
                 stream.Position += (3 * 4);
@@ -186,7 +194,7 @@ namespace Mooege.Common.MPQ.FileFormats
             public NavCellFlags Flags { get; private set; }
             public short NeighbourCount { get; private set; }
             public int NeighborsIndex { get; private set; }
-            public System.Windows.Rect Bounds { get { return new System.Windows.Rect(Min.X, Min.Y, Max.X - Min.X, Max.Y - Min.Y); } } 
+            public System.Windows.Rect Bounds { get { return new System.Windows.Rect(Min.X, Min.Y, Max.X - Min.X, Max.Y - Min.Y); } }
             public void Read(MpqFileStream stream)
             {
                 this.Min = new Vector3D(stream.ReadValueF32(), stream.ReadValueF32(), stream.ReadValueF32());

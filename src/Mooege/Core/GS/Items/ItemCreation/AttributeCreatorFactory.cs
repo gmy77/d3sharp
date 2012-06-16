@@ -25,7 +25,7 @@ namespace Mooege.Core.GS.Items.ItemCreation
     {
         public List<IItemAttributeCreator> Create(ItemTypeTable itemType)
         {
-            var creatorList = new List<IItemAttributeCreator> {new DefaultAttributeCreator()};
+            var creatorList = new List<IItemAttributeCreator> { new DefaultAttributeCreator() };
 
             //if (Item.IsWeapon(itemType)) creatorList.Add(new WeaponAttributeCreator());
             //else if (Item.IsPotion(itemType))  creatorList.Add(new PotionAttributeCreator());

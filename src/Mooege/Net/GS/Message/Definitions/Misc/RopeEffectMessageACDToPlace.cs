@@ -24,26 +24,28 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
     [Message(Opcodes.RopeEffectMessageACDToPlace)]
     public class RopeEffectMessageACDToPlace : GameMessage
     {
-        public int /* sno */ Field0;
-        public int Field1;
-        public int Field2;
-        public WorldPlace Field3;
+        public int /* sno */ RopeSNO;
+        public int StartSourceActorId;
+        public int Field2;  // always seem to be 4
+        public WorldPlace EndPosition;
+
+        public RopeEffectMessageACDToPlace() : base(Opcodes.RopeEffectMessageACDToPlace) {}
 
         public override void Parse(GameBitBuffer buffer)
         {
-            Field0 = buffer.ReadInt(32);
-            Field1 = buffer.ReadInt(32);
+            RopeSNO = buffer.ReadInt(32);
+            StartSourceActorId = buffer.ReadInt(32);
             Field2 = buffer.ReadInt(5);
-            Field3 = new WorldPlace();
-            Field3.Parse(buffer);
+            EndPosition = new WorldPlace();
+            EndPosition.Parse(buffer);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
-            buffer.WriteInt(32, Field0);
-            buffer.WriteInt(32, Field1);
+            buffer.WriteInt(32, RopeSNO);
+            buffer.WriteInt(32, StartSourceActorId);
             buffer.WriteInt(5, Field2);
-            Field3.Encode(buffer);
+            EndPosition.Encode(buffer);
         }
 
         public override void AsText(StringBuilder b, int pad)
@@ -52,10 +54,10 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
             b.AppendLine("RopeEffectMessageACDToPlace:");
             b.Append(' ', pad++);
             b.AppendLine("{");
-            b.Append(' ', pad); b.AppendLine("Field0: 0x" + Field0.ToString("X8"));
-            b.Append(' ', pad); b.AppendLine("Field1: 0x" + Field1.ToString("X8") + " (" + Field1 + ")");
+            b.Append(' ', pad); b.AppendLine("RopeSNO: 0x" + RopeSNO.ToString("X8"));
+            b.Append(' ', pad); b.AppendLine("StartSourceActorId: 0x" + StartSourceActorId.ToString("X8") + " (" + StartSourceActorId + ")");
             b.Append(' ', pad); b.AppendLine("Field2: 0x" + Field2.ToString("X8") + " (" + Field2 + ")");
-            Field3.AsText(b, pad);
+            EndPosition.AsText(b, pad);
             b.Append(' ', --pad);
             b.AppendLine("}");
         }

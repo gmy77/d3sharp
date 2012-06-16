@@ -35,7 +35,7 @@ namespace Mooege.Net.GS.Message.Definitions.ACD
             this.ActorId = actorID;
         }
 
-        public ACDCreateActorMessage() 
+        public ACDCreateActorMessage()
             : base(Opcodes.ACDCreateActorMessage)
         { }
 

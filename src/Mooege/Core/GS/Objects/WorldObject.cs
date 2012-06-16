@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Windows;
 using Mooege.Core.GS.Actors;
 using Mooege.Core.GS.Common.Types.Math;
@@ -43,7 +44,8 @@ namespace Mooege.Core.GS.Objects
         public Vector3D Position
         {
             get { return _position; }
-            set { 
+            set
+            {
                 _position = value;
                 this.Bounds = new Rect(this.Position.X, this.Position.Y, this.Size.Width, this.Size.Height);
                 var handler = PositionChanged;
@@ -76,16 +78,6 @@ namespace Mooege.Core.GS.Objects
         public float RotationW { get; set; }
 
         /// <summary>
-        /// Replaces the object rotation with one that rotates along the Z-axis by the specified "facing" angle. 
-        /// </summary>
-        /// <param name="facingAngle">The angle in radians.</param>
-        public void SetFacingRotation(float facingAngle)
-        {
-            this.RotationW = (float)Math.Cos(facingAngle / 2f);
-            this.RotationAxis = new Vector3D(0, 0, (float)Math.Sin(facingAngle / 2f));
-        }
-
-        /// <summary>
         /// Creates a new world object.
         /// </summary>
         /// <param name="world">The world object belongs to.</param>
@@ -93,6 +85,7 @@ namespace Mooege.Core.GS.Objects
         protected WorldObject(World world, uint dynamicID)
             : base(dynamicID)
         {
+            Debug.Assert(world != null);
             this.World = world;
             this.World.Game.StartTracking(this); // track the object.
             this.RotationAxis = new Vector3D();

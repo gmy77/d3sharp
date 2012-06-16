@@ -30,7 +30,7 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
             : base(world, snoId, tags)
         {
             mainSNO = 4538;
-            hirelingSNO = 0x0000CDD5;  
+            hirelingSNO = 0x0000CDD5;
             proxySNO = 0x0002F1AC;
             skillKit = 0x8AFB;
             hirelingGBID = StringHashHelper.HashItemName("Templar");
@@ -41,5 +41,5 @@ namespace Mooege.Core.GS.Actors.Implementations.Hirelings
         {
             return new Templar(world, snoId, tags);
         }
-    }   
+    }
 }

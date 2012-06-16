@@ -30,6 +30,7 @@ using Mooege.Core.GS.Players;
 using Mooege.Net.GS;
 using Mooege.Net.GS.Message;
 using Mooege.Net.GS.Message.Definitions.Game;
+using Mooege.Net.GS.Message.Definitions.Misc;
 using Mooege.Net.GS.Message.Definitions.Player;
 using Mooege.Net.GS.Message.Fields;
 
@@ -69,7 +70,7 @@ namespace Mooege.Core.GS.Games
         /// Starting world for the game.
         /// </summary>
         public World StartingWorld { get { return GetWorld(this.StartingWorldSNOId); } }
-        
+
         /// <summary>
         /// Player index counter.
         /// </summary>
@@ -89,7 +90,7 @@ namespace Mooege.Core.GS.Games
         /// Tick counter.
         /// </summary>
         private int _tickCounter;
-        
+
         /// <summary>
         /// Returns the latest tick count.
         /// </summary>
@@ -116,7 +117,7 @@ namespace Mooege.Core.GS.Games
         /// <summary>
         /// DynamicId counter for scene.
         /// </summary>
-        private uint _lastSceneID  = 0x04000000;
+        private uint _lastSceneID = 0x04000000;
 
         /// <summary>
         /// Returns a new dynamicId for scenes.
@@ -126,7 +127,7 @@ namespace Mooege.Core.GS.Games
         /// <summary>
         /// DynamicId counter for worlds.
         /// </summary>
-        private uint _lastWorldID  = 0x07000000;
+        private uint _lastWorldID = 0x07000000;
 
         /// <summary>
         /// Returns a new dynamicId for worlds.
@@ -169,17 +170,21 @@ namespace Mooege.Core.GS.Games
                 this._tickWatch.Restart();
                 Interlocked.Add(ref this._tickCounter, this.TickRate); // +6 ticks per 100ms. Verified by setting LogoutTickTimeMessage.Ticks to 600 which eventually renders a 10 sec logout timer on client. /raist
 
-                // only update worlds with active players in it - so mob brain()'s in empty worlds doesn't get called and take actions for nothing. /raist.
-                foreach (var pair in this._worlds.Where(pair => pair.Value.HasPlayersIn)) 
+                // Lock Game instance to prevent incoming messages from modifying state while updating
+                lock (this)
                 {
-                    pair.Value.Update(this._tickCounter);
+                    // only update worlds with active players in it - so mob brain()'s in empty worlds doesn't get called and take actions for nothing. /raist.
+                    foreach (var pair in this._worlds.Where(pair => pair.Value.HasPlayersIn))
+                    {
+                        pair.Value.Update(this._tickCounter);
+                    }
                 }
 
                 this._tickWatch.Stop();
 
-                var compensation = (int) (this.UpdateFrequency - this._tickWatch.ElapsedMilliseconds); // the compensation value we need to sleep in order to get consistent 100 ms Game.Update().
+                var compensation = (int)(this.UpdateFrequency - this._tickWatch.ElapsedMilliseconds); // the compensation value we need to sleep in order to get consistent 100 ms Game.Update().
 
-                if(this._tickWatch.ElapsedMilliseconds > this.UpdateFrequency)
+                if (this._tickWatch.ElapsedMilliseconds > this.UpdateFrequency)
                     Logger.Warn("Game.Update() took [{0}ms] more than Game.UpdateFrequency [{1}ms].", this._tickWatch.ElapsedMilliseconds, this.UpdateFrequency); // TODO: We may need to eventually use dynamic tickRate / updateFrenquencies. /raist.
                 else
                     Thread.Sleep(compensation); // sleep until next Update().
@@ -197,34 +202,37 @@ namespace Mooege.Core.GS.Games
         /// <param name="message"></param>
         public void Route(GameClient client, GameMessage message)
         {
-            try
+            lock (this)
             {
-                switch (message.Consumer)
+                try
                 {
-                    case Consumers.Game:
-                        this.Consume(client, message);
-                        break;
-                    case Consumers.Inventory:
-                        client.Player.Inventory.Consume(client, message);
-                        break;
-                    case Consumers.Player:
-                        client.Player.Consume(client, message);
-                        break;
+                    switch (message.Consumer)
+                    {
+                        case Consumers.Game:
+                            this.Consume(client, message);
+                            break;
+                        case Consumers.Inventory:
+                            client.Player.Inventory.Consume(client, message);
+                            break;
+                        case Consumers.Player:
+                            client.Player.Consume(client, message);
+                            break;
 
-                    case Consumers.Conversations:
-                        client.Player.Conversations.Consume(client, message);
-                        break;
+                        case Consumers.Conversations:
+                            client.Player.Conversations.Consume(client, message);
+                            break;
 
-                    case Consumers.SelectedNPC:
-                        if (client.Player.SelectedNPC != null)
-                            client.Player.SelectedNPC.Consume(client, message);
-                        break;
+                        case Consumers.SelectedNPC:
+                            if (client.Player.SelectedNPC != null)
+                                client.Player.SelectedNPC.Consume(client, message);
+                            break;
 
+                    }
                 }
-            }
-            catch(Exception e)
-            {
-                Logger.DebugException(e, "Unhandled exception caught:");
+                catch (Exception e)
+                {
+                    Logger.DebugException(e, "Unhandled exception caught:");
+                }
             }
         }
 
@@ -233,7 +241,7 @@ namespace Mooege.Core.GS.Games
 
         #endregion
 
-        #region player-handling 
+        #region player-handling
 
         /// <summary>
         /// Allows a player to join the game.
@@ -266,8 +274,8 @@ namespace Mooege.Core.GS.Games
                                 Field4 = 0x0,
                                 Field5 = 0x0,
                                 Field6 = 0x0,
-                                Field7 = new[] {0x0, 0x0},
-                                Field8 = new[] {0x0, 0x0}
+                                Field7 = new[] { 0x0, 0x0 },
+                                Field8 = new[] { 0x0, 0x0 }
                             }
             });
 
@@ -291,7 +299,7 @@ namespace Mooege.Core.GS.Games
                 GameAccountId = new EntityId() { High = (long)joinedPlayer.Toon.GameAccount.BnetEntityId.High, Low = (long)joinedPlayer.Toon.GameAccount.BnetEntityId.Low }, //GameAccount
                 ToonName = joinedPlayer.Toon.Name,
                 Field3 = 0x00000002, //party frame class
-                Field4 = target!=joinedPlayer? 0x2 : 0x4, //party frame level /boyc - may mean something different /raist.
+                Field4 = target != joinedPlayer ? 0x2 : 0x4, //party frame level /boyc - may mean something different /raist.
                 snoActorPortrait = joinedPlayer.ClassSNO, //party frame portrait
                 Field6 = joinedPlayer.Toon.Level,
                 StateData = joinedPlayer.GetStateData(),

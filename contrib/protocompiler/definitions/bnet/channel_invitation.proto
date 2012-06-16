@@ -47,6 +47,8 @@ message SuggestInvitationRequest
     required .bnet.protocol.EntityId channel_id = 2;
     required .bnet.protocol.EntityId target_id = 3;
     optional .bnet.protocol.EntityId approval_id = 4;
+    optional .bnet.protocol.Identity agent_identity = 5;
+    optional .bnet.protocol.AccountInfo agent_info = 6;
 }
 
 message RevokeInvitationRequest

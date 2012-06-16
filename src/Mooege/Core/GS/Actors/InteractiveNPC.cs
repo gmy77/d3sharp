@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2011 - 2012 mooege project - http://www.mooege.org
  *
  * This program is free software; you can redistribute it and/or modify
@@ -38,7 +38,7 @@ namespace Mooege.Core.GS.Actors
     {
         public List<IInteraction> Interactions { get; private set; }
         public List<ConversationInteraction> Conversations { get; private set; }
-        
+
         public InteractiveNPC(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
         {
@@ -48,7 +48,7 @@ namespace Mooege.Core.GS.Actors
             Interactions = new List<IInteraction>();
             Conversations = new List<ConversationInteraction>();
 
-            foreach(var quest in World.Game.Quests)
+            foreach (var quest in World.Game.Quests)
                 quest.OnQuestProgress += new Games.Quest.QuestProgressDelegate(quest_OnQuestProgress);
             UpdateConversationList(); // show conversations with no quest dependency
         }
@@ -117,13 +117,13 @@ namespace Mooege.Core.GS.Actors
             NPCInteraction[] npcInters = new NPCInteraction[count];
 
             var it = 0;
-            foreach(var conv in Conversations)
+            foreach (var conv in Conversations)
             {
                 npcInters[it] = conv.AsNPCInteraction(this, player);
                 it++;
             }
 
-            foreach(var inter in Interactions)
+            foreach (var inter in Interactions)
             {
                 npcInters[it] = inter.AsNPCInteraction(this, player);
                 it++;
@@ -134,7 +134,7 @@ namespace Mooege.Core.GS.Actors
             {
                 ActorID = this.DynamicID,
                 tNPCInteraction = npcInters,
-                Type = NPCInteractOptionsType.Normal             
+                Type = NPCInteractOptionsType.Normal
             });
 
             // TODO: this has no effect, why is it sent?
@@ -142,7 +142,7 @@ namespace Mooege.Core.GS.Actors
             {
                 ActorId = this.DynamicID,
                 Effect = Net.GS.Message.Definitions.Effect.Effect.Unknown36
-            }); 
+            });
         }
 
         public void Consume(GameClient client, GameMessage message)
@@ -172,7 +172,7 @@ namespace Mooege.Core.GS.Actors
         private void OnSelectConversation(Player player, NPCSelectConversationMessage message)
         {
             var conversation = Conversations.FirstOrDefault(conv => conv.ConversationSNO == message.ConversationSNO);
-            if (conversation == null) 
+            if (conversation == null)
                 return;
 
             player.Conversations.StartConversation(conversation.ConversationSNO);

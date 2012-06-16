@@ -38,7 +38,7 @@ namespace Mooege.Core.MooNet.Services
         }
 
         public ServiceAttribute(uint serviceID, string serviceName)
-            : this(serviceID, (uint) StringHashHelper.HashIdentity(serviceName))
+            : this(serviceID, (uint)StringHashHelper.HashIdentity(serviceName))
         {
         }
     }
@@ -48,7 +48,7 @@ namespace Mooege.Core.MooNet.Services
         private static uint _notImplementedServiceCounter = 99;
         public readonly static Dictionary<Type, ServiceAttribute> ProvidedServices = new Dictionary<Type, ServiceAttribute>();
         public readonly static Dictionary<Type, IService> Services = new Dictionary<Type, IService>();
-       
+
         static Service()
         {
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(type => type.GetInterface("IServerService") != null))

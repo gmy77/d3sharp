@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Google.ProtocolBuffers;
+using Mooege.Common.Versions;
 using Mooege.Common.Extensions;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet;
@@ -26,7 +28,7 @@ using Mooege.Net.MooNet;
 namespace Mooege.Core.MooNet.Services
 {
     [Service(serviceID: 0x0, serviceHash: 0x0)]
-    public class ConnectionService :  bnet.protocol.connection.ConnectionService,  IServerService
+    public class ConnectionService : bnet.protocol.connection.ConnectionService, IServerService
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
         public MooNetClient Client { get; set; }
@@ -44,6 +46,12 @@ namespace Mooege.Core.MooNet.Services
             if (request.HasClientId)
                 builder.SetClientId(request.ClientId);
 
+            builder.SetContentHandleArray(bnet.protocol.connection.ConnectionMeteringContentHandles.CreateBuilder()
+                .AddContentHandle(bnet.protocol.ContentHandle.CreateBuilder()
+                    .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
+                    .SetUsage(0x6D74727A) //mtrz
+                    .SetHash(ByteString.CopyFrom("18e98cde12837149621988ceee55123bf2be839a6dc1d6bb00a399520656b2a6".ToByteArray()))));
+
             done(builder.Build());
         }
 
@@ -58,7 +66,7 @@ namespace Mooege.Core.MooNet.Services
                 var serviceID = Service.GetByHash(serviceHash);
                 requestedServiceIDs.Add(serviceID);
 
-                Logger.Trace("[export] Hash: 0x{0} Id: 0x{1} Service: {2} ", serviceHash.ToString("X8"),serviceID.ToString("X2"), Service.GetByID(serviceID) != null ? Service.GetByID(serviceID).GetType().Name : "N/A");                
+                Logger.Trace("[export] Hash: 0x{0} Id: 0x{1} Service: {2} ", serviceHash.ToString("X8"), serviceID.ToString("X2"), Service.GetByID(serviceID) != null ? Service.GetByID(serviceID).GetType().Name : "N/A");
             }
 
             // read services supplied by client..
@@ -72,7 +80,7 @@ namespace Mooege.Core.MooNet.Services
 
             var builder = bnet.protocol.connection.BindResponse.CreateBuilder();
             foreach (var serviceId in requestedServiceIDs) builder.AddImportedServiceId(serviceId);
-            
+
             done(builder.Build());
         }
 
@@ -101,10 +109,10 @@ namespace Mooege.Core.MooNet.Services
             Logger.Trace("RequestDisconnect()");
             if (this.Client.Account != null)
             {
-                this.Client.Account.SaveToDB();
+                Accounts.AccountManager.SaveToDB(this.Client.Account);
                 if (this.Client.Account.CurrentGameAccount != null)
                 {
-                    this.Client.Account.CurrentGameAccount.SaveToDB();
+                    Accounts.GameAccountManager.SaveToDB(this.Client.Account.CurrentGameAccount);
                     this.Client.Account.CurrentGameAccount.LoggedInClient.Connection.Disconnect();
                 }
             }

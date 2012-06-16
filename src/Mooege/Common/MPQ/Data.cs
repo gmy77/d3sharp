@@ -39,7 +39,7 @@ namespace Mooege.Common.MPQ
         private readonly List<Task> _tasks = new List<Task>();
         private static readonly SNOGroup[] PatchExceptions = new[] { SNOGroup.TimedEvent, SNOGroup.Script, SNOGroup.AiBehavior, SNOGroup.AiState, SNOGroup.Conductor, SNOGroup.FlagSet, SNOGroup.Code };
 
-        protected static readonly Logger Logger = LogManager.CreateLogger();
+        protected static new readonly Logger Logger = LogManager.CreateLogger();
 
         public Data()
             : base(VersionInfo.MPQ.RequiredPatchVersion, new List<string> { "CoreData.mpq", "ClientData.mpq" }, "/base/d3-update-base-(?<version>.*?).mpq")
@@ -72,7 +72,6 @@ namespace Mooege.Common.MPQ
         private void LoadCatalogs()
         {
             this.LoadCatalog("CoreTOC.dat"); // as of patch beta patch 7841, blizz renamed TOC.dat as CoreTOC.dat
-            this.LoadCatalog("TOC.dat", true, PatchExceptions.ToList()); // used for reading assets patched to zero bytes and removed from mainCatalog file.  
             this.LoadDBCatalog();
         }
 
@@ -127,7 +126,7 @@ namespace Mooege.Common.MPQ
 
             var elapsedTime = DateTime.Now - timerStart;
 
-            if(Storage.Config.Instance.LazyLoading)
+            if (Storage.Config.Instance.LazyLoading)
                 Logger.Trace("Found a total of {0} assets from {1} catalog and postponed loading because lazy loading is activated.", assetsCount, fileName);
             else
                 Logger.Trace("Found a total of {0} assets from {1} catalog and parsed {2} of them in {3:c}.", assetsCount, fileName, this._tasks.Count, elapsedTime);
@@ -192,7 +191,7 @@ namespace Mooege.Common.MPQ
                     }
                     catch (Exception e)
                     {
-                        Logger.Error("Error parsing {0}.\nMessage: {1}\n InnerException:{2}\nStack Trace:{3}", asset.FileName, e.Message, e.InnerException.Message, e.StackTrace);
+                        Logger.Error("Error parsing {0}.\nMessage: {1}\n InnerException:{2}\nStack Trace:{3}", asset.FileName, e.Message, e.InnerException == null ? "(null)" : e.InnerException.Message, e.StackTrace);
                     }
                 }
             }
@@ -208,19 +207,9 @@ namespace Mooege.Common.MPQ
         {
             MpqFile file = null;
 
-            if (fileName.Contains(".wrl") || fileName.Contains(".lvl"))
-            {
-                var i = 0;
-                foreach (MpqArchive archive in this.FileSystem.Archives)
-                {
-                    if (i++ < 11) continue;
-
-                    file = archive.FindFile(fileName);
-                    if (file != null)
-                        return file;
-                }
-                return file;
-            }
+            //Ignore loading lvl files for now.
+            if (fileName.Contains(".lvl"))
+                return null;
 
             if (!startSearchingFromBaseMPQ)
                 file = this.FileSystem.FindFile(fileName);

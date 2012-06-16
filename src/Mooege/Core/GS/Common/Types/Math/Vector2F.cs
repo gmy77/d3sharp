@@ -65,7 +65,7 @@ namespace Mooege.Core.GS.Common.Types.Math
         {
             CultureInfo currentCulture = CultureInfo.CurrentCulture;
             return string.Format(currentCulture, "{{X:{0} Y:{1}}}",
-                                 new object[] {this.X.ToString(currentCulture), this.Y.ToString(currentCulture)});
+                                 new object[] { this.X.ToString(currentCulture), this.Y.ToString(currentCulture) });
         }
 
         public bool Equals(Vector2F other)
@@ -78,7 +78,7 @@ namespace Mooege.Core.GS.Common.Types.Math
             bool flag = false;
             if (obj is Vector2F)
             {
-                flag = this.Equals((Vector2F) obj);
+                flag = this.Equals((Vector2F)obj);
             }
             return flag;
         }
@@ -90,59 +90,59 @@ namespace Mooege.Core.GS.Common.Types.Math
 
         public float Length()
         {
-            float num = (this.X*this.X) + (this.Y*this.Y);
-            return (float) System.Math.Sqrt((double) num);
+            float num = (this.X * this.X) + (this.Y * this.Y);
+            return (float)System.Math.Sqrt((double)num);
         }
 
         public float LengthSquared()
         {
-            return ((this.X*this.X) + (this.Y*this.Y));
+            return ((this.X * this.X) + (this.Y * this.Y));
         }
 
         public static float Distance(Vector2F value1, Vector2F value2)
         {
             float num2 = value1.X - value2.X;
             float num = value1.Y - value2.Y;
-            float num3 = (num2*num2) + (num*num);
-            return (float) System.Math.Sqrt((double) num3);
+            float num3 = (num2 * num2) + (num * num);
+            return (float)System.Math.Sqrt((double)num3);
         }
 
         public static void Distance(ref Vector2F value1, ref Vector2F value2, out float result)
         {
             float num2 = value1.X - value2.X;
             float num = value1.Y - value2.Y;
-            float num3 = (num2*num2) + (num*num);
-            result = (float) System.Math.Sqrt((double) num3);
+            float num3 = (num2 * num2) + (num * num);
+            result = (float)System.Math.Sqrt((double)num3);
         }
 
         public static float DistanceSquared(Vector2F value1, Vector2F value2)
         {
             float num2 = value1.X - value2.X;
             float num = value1.Y - value2.Y;
-            return ((num2*num2) + (num*num));
+            return ((num2 * num2) + (num * num));
         }
 
         public static void DistanceSquared(ref Vector2F value1, ref Vector2F value2, out float result)
         {
             float num2 = value1.X - value2.X;
             float num = value1.Y - value2.Y;
-            result = (num2*num2) + (num*num);
+            result = (num2 * num2) + (num * num);
         }
 
         public static float Dot(Vector2F value1, Vector2F value2)
         {
-            return ((value1.X*value2.X) + (value1.Y*value2.Y));
+            return ((value1.X * value2.X) + (value1.Y * value2.Y));
         }
 
         public static void Dot(ref Vector2F value1, ref Vector2F value2, out float result)
         {
-            result = (value1.X*value2.X) + (value1.Y*value2.Y);
+            result = (value1.X * value2.X) + (value1.Y * value2.Y);
         }
 
         public void Normalize()
         {
-            float num2 = (this.X*this.X) + (this.Y*this.Y);
-            float num = 1f/((float) System.Math.Sqrt((double) num2));
+            float num2 = (this.X * this.X) + (this.Y * this.Y);
+            float num = 1f / ((float)System.Math.Sqrt((double)num2));
             this.X *= num;
             this.Y *= num;
         }
@@ -150,19 +150,19 @@ namespace Mooege.Core.GS.Common.Types.Math
         public static Vector2F Normalize(Vector2F value)
         {
             Vector2F vector;
-            float num2 = (value.X*value.X) + (value.Y*value.Y);
-            float num = 1f/((float) System.Math.Sqrt((double) num2));
-            vector.X = value.X*num;
-            vector.Y = value.Y*num;
+            float num2 = (value.X * value.X) + (value.Y * value.Y);
+            float num = 1f / ((float)System.Math.Sqrt((double)num2));
+            vector.X = value.X * num;
+            vector.Y = value.Y * num;
             return vector;
         }
 
         public static void Normalize(ref Vector2F value, out Vector2F result)
         {
-            float num2 = (value.X*value.X) + (value.Y*value.Y);
-            float num = 1f/((float) System.Math.Sqrt((double) num2));
-            result.X = value.X*num;
-            result.Y = value.Y*num;
+            float num2 = (value.X * value.X) + (value.Y * value.Y);
+            float num = 1f / ((float)System.Math.Sqrt((double)num2));
+            result.X = value.X * num;
+            result.Y = value.Y * num;
         }
 
         /// <summary>
@@ -189,17 +189,17 @@ namespace Mooege.Core.GS.Common.Types.Math
         public static Vector2F Reflect(Vector2F vector, Vector2F normal)
         {
             Vector2F vector2F;
-            float num = (vector.X*normal.X) + (vector.Y*normal.Y);
-            vector2F.X = vector.X - ((2f*num)*normal.X);
-            vector2F.Y = vector.Y - ((2f*num)*normal.Y);
+            float num = (vector.X * normal.X) + (vector.Y * normal.Y);
+            vector2F.X = vector.X - ((2f * num) * normal.X);
+            vector2F.Y = vector.Y - ((2f * num) * normal.Y);
             return vector2F;
         }
 
         public static void Reflect(ref Vector2F vector, ref Vector2F normal, out Vector2F result)
         {
-            float num = (vector.X*normal.X) + (vector.Y*normal.Y);
-            result.X = vector.X - ((2f*num)*normal.X);
-            result.Y = vector.Y - ((2f*num)*normal.Y);
+            float num = (vector.X * normal.X) + (vector.Y * normal.Y);
+            result.X = vector.X - ((2f * num) * normal.X);
+            result.Y = vector.Y - ((2f * num) * normal.Y);
         }
 
         public static Vector2F Min(Vector2F value1, Vector2F value2)
@@ -259,17 +259,17 @@ namespace Mooege.Core.GS.Common.Types.Math
         public static Vector2F Lerp(Vector2F value1, Vector2F value2, float amount)
         {
             Vector2F vector;
-            vector.X = value1.X + ((value2.X - value1.X)*amount);
-            vector.Y = value1.Y + ((value2.Y - value1.Y)*amount);
+            vector.X = value1.X + ((value2.X - value1.X) * amount);
+            vector.Y = value1.Y + ((value2.Y - value1.Y) * amount);
             return vector;
         }
 
         public static void Lerp(ref Vector2F value1, ref Vector2F value2, float amount, out Vector2F result)
         {
-            result.X = value1.X + ((value2.X - value1.X)*amount);
-            result.Y = value1.Y + ((value2.Y - value1.Y)*amount);
+            result.X = value1.X + ((value2.X - value1.X) * amount);
+            result.Y = value1.Y + ((value2.Y - value1.Y) * amount);
         }
-     
+
         public static Vector2F Negate(Vector2F value)
         {
             Vector2F vector;
@@ -315,59 +315,59 @@ namespace Mooege.Core.GS.Common.Types.Math
         public static Vector2F Multiply(Vector2F value1, Vector2F value2)
         {
             Vector2F vector;
-            vector.X = value1.X*value2.X;
-            vector.Y = value1.Y*value2.Y;
+            vector.X = value1.X * value2.X;
+            vector.Y = value1.Y * value2.Y;
             return vector;
         }
 
         public static void Multiply(ref Vector2F value1, ref Vector2F value2, out Vector2F result)
         {
-            result.X = value1.X*value2.X;
-            result.Y = value1.Y*value2.Y;
+            result.X = value1.X * value2.X;
+            result.Y = value1.Y * value2.Y;
         }
 
         public static Vector2F Multiply(Vector2F value1, float scaleFactor)
         {
             Vector2F vector;
-            vector.X = value1.X*scaleFactor;
-            vector.Y = value1.Y*scaleFactor;
+            vector.X = value1.X * scaleFactor;
+            vector.Y = value1.Y * scaleFactor;
             return vector;
         }
 
         public static void Multiply(ref Vector2F value1, float scaleFactor, out Vector2F result)
         {
-            result.X = value1.X*scaleFactor;
-            result.Y = value1.Y*scaleFactor;
+            result.X = value1.X * scaleFactor;
+            result.Y = value1.Y * scaleFactor;
         }
 
         public static Vector2F Divide(Vector2F value1, Vector2F value2)
         {
             Vector2F vector;
-            vector.X = value1.X/value2.X;
-            vector.Y = value1.Y/value2.Y;
+            vector.X = value1.X / value2.X;
+            vector.Y = value1.Y / value2.Y;
             return vector;
         }
 
         public static void Divide(ref Vector2F value1, ref Vector2F value2, out Vector2F result)
         {
-            result.X = value1.X/value2.X;
-            result.Y = value1.Y/value2.Y;
+            result.X = value1.X / value2.X;
+            result.Y = value1.Y / value2.Y;
         }
 
         public static Vector2F Divide(Vector2F value1, float divider)
         {
             Vector2F vector;
-            float num = 1f/divider;
-            vector.X = value1.X*num;
-            vector.Y = value1.Y*num;
+            float num = 1f / divider;
+            vector.X = value1.X * num;
+            vector.Y = value1.Y * num;
             return vector;
         }
 
         public static void Divide(ref Vector2F value1, float divider, out Vector2F result)
         {
-            float num = 1f/divider;
-            result.X = value1.X*num;
-            result.Y = value1.Y*num;
+            float num = 1f / divider;
+            result.X = value1.X * num;
+            result.Y = value1.Y * num;
         }
 
         public static Vector2F operator -(Vector2F value)
@@ -411,41 +411,41 @@ namespace Mooege.Core.GS.Common.Types.Math
         public static Vector2F operator *(Vector2F value1, Vector2F value2)
         {
             Vector2F vector;
-            vector.X = value1.X*value2.X;
-            vector.Y = value1.Y*value2.Y;
+            vector.X = value1.X * value2.X;
+            vector.Y = value1.Y * value2.Y;
             return vector;
         }
 
         public static Vector2F operator *(Vector2F value, float scaleFactor)
         {
             Vector2F vector;
-            vector.X = value.X*scaleFactor;
-            vector.Y = value.Y*scaleFactor;
+            vector.X = value.X * scaleFactor;
+            vector.Y = value.Y * scaleFactor;
             return vector;
         }
 
         public static Vector2F operator *(float scaleFactor, Vector2F value)
         {
             Vector2F vector;
-            vector.X = value.X*scaleFactor;
-            vector.Y = value.Y*scaleFactor;
+            vector.X = value.X * scaleFactor;
+            vector.Y = value.Y * scaleFactor;
             return vector;
         }
 
         public static Vector2F operator /(Vector2F value1, Vector2F value2)
         {
             Vector2F vector;
-            vector.X = value1.X/value2.X;
-            vector.Y = value1.Y/value2.Y;
+            vector.X = value1.X / value2.X;
+            vector.Y = value1.Y / value2.Y;
             return vector;
         }
 
         public static Vector2F operator /(Vector2F value1, float divider)
         {
             Vector2F vector;
-            float num = 1f/divider;
-            vector.X = value1.X*num;
-            vector.Y = value1.Y*num;
+            float num = 1f / divider;
+            vector.X = value1.X * num;
+            vector.Y = value1.Y * num;
             return vector;
         }
 

@@ -35,6 +35,10 @@ namespace OpenSSL
 {
 	delegate int ClientCertCallbackHandler(Ssl ssl, out X509Certificate cert, out CryptoKey key);
 
+    #region PSK delegates
+    delegate int PskClientCallbackHandler(Ssl ssl, String hint, out String identity, uint max_identity_len, out byte[] psk, uint max_psk_len);
+    delegate int PskServerCallbackHandler(Ssl ssl, String identity, out byte[] psk, uint max_psk_len);
+    #endregion
 	/// <summary>
 	/// Wraps the SST_CTX structure and methods
 	/// </summary>
@@ -134,10 +138,26 @@ namespace OpenSSL
 			public IntPtr tlsext_ticket_key_cb; //int (*tlsext_ticket_key_cb)(SSL *ssl,unsigned char *name, unsigned char *iv,EVP_CIPHER_CTX *ectx,HMAC_CTX *hctx, int enc);
 			public IntPtr tlsext_status_cb; //int (*tlsext_status_cb)(SSL *ssl, void *arg);
 			public IntPtr tlsext_status_arg;
+            // **************************   WARNING   **************************
+            // This StructLayout is not correct! Do not use it directly!
+            // Only use the provided callbacks to interact with the SslContext.
+            // *****************************************************************
+            public IntPtr tlsext_opaque_prf_input_callback; // int (*tlsext_opaque_prf_input_callback)(SSL *, void *peerinput, size_t len, void *arg);
+            public IntPtr tlsext_opaque_prf_input_callback_arg; // void *tlsext_opaque_prf_input_callback_arg;
 			//#endif
+            // Note that you should not set these values directly, but use the provided callback setters.
+            //#ifndef OPENSSL_NO_PSK
+            public IntPtr psk_identity_hint; //char *psk_identity_hint;
+            public IntPtr psk_client_callback; //unsigned int (*psk_client_callback)(SSL *ssl, const char *hint, char *identity, unsigned int max_identity_len, unsigned char *psk, unsigned int max_psk_len);
+            public IntPtr psk_server_callback; //unsigned int (*psk_server_callback)(SSL *ssl, const char *identity, unsigned char *psk, unsigned int max_psk_len);
+            //#endif
 		}
 		#endregion
 
+        #region PSK Callbacks
+        private PskClientCallbackThunk _pskClientCallbackThunk;
+        private PskServerCallbackThunk _pskServerCallbackThunk;
+        #endregion
 		#region Members
 
 		//private SSL_CTX raw;
@@ -427,6 +447,193 @@ namespace OpenSSL
 
 		#endregion
 
+        #region PSK callback functions
+        internal class PskClientCallbackThunk
+        {
+            private PskClientCallbackHandler OnPskClientCallback;
+            private Native.psk_client_callback nativeCallback;
+
+            public Native.psk_client_callback Callback
+            {
+                get
+                {
+                    if (this.OnPskClientCallback == null)
+                    {
+                        return null;
+                    }
+                    if (this.nativeCallback != null)
+                    {
+                        return this.nativeCallback;
+                    }
+                    else
+                    {
+                        this.nativeCallback = new Native.psk_client_callback(this.OnPskClientThunk);
+                        return this.nativeCallback;
+                    }
+                }
+            }
+
+            public PskClientCallbackThunk(PskClientCallbackHandler callback)
+            {
+                this.OnPskClientCallback = callback;
+            }
+
+            // void SSL_CTX_set_psk_client_callback(SSL_CTX *ctx, unsigned int (*psk_client_callback)
+            //  (SSL *ssl, const char *hint, char *identity, unsigned int max_identity_len, unsigned char *psk,	unsigned int max_psk_len));
+            // 	return psk_len;
+            //
+            // Note that the buffers where we will put the results were allocated by the native code.
+            internal int OnPskClientThunk(IntPtr ssl_ptr, IntPtr hint_ptr, IntPtr identity_ptr, uint max_identity_len, IntPtr psk_ptr, uint max_psk_len)
+            {
+                // Note that the ssl reference is not needed by this function.
+
+                String hint = null; // hint passed by server for selecting identity; ignore it (not used by bnet)
+                String identity = null;
+                byte[] psk = null;
+
+                int nRet = OnPskClientCallback(null, hint, out identity, max_identity_len, out psk, max_psk_len);
+                if (nRet == 0)
+                    return nRet;
+
+                if (psk == null)
+                    throw new ArgumentNullException("PSK Client callback psk cannot be set to null.");
+
+                if (identity.Length > max_identity_len - 1) // need 1 byte for NULL terminator
+                    throw new ArgumentOutOfRangeException("PSK Client callback identity length (" + identity.Length + ") is greater than max_identity_len (" + (max_identity_len-1) + ").");
+                if (psk.Length > max_psk_len)
+                    throw new ArgumentOutOfRangeException("PSK Client callback psk length (" + psk.Length + ") is greater than max_psk_len (" + max_psk_len + ").");
+
+                CopyStringValueToNativeCharBuffer(identity, identity_ptr);
+                CopyBytesToNativeCharBuffer(psk, psk_ptr);
+
+                // Must return the length of the psk.
+                return psk.Length;
+            }
+        }
+
+        internal class PskServerCallbackThunk
+        {
+            private PskServerCallbackHandler OnPskServerCallback;
+            private Native.psk_server_callback nativeCallback;
+
+            public Native.psk_server_callback Callback
+            {
+                get
+                {
+                    if (this.OnPskServerCallback == null)
+                    {
+                        return null;
+                    }
+                    if (this.nativeCallback != null)
+                    {
+                        return this.nativeCallback;
+                    }
+                    else
+                    {
+                        this.nativeCallback = new Native.psk_server_callback(this.OnPskServerThunk);
+                        return this.nativeCallback;
+                    }
+                }
+            }
+
+            public PskServerCallbackThunk(PskServerCallbackHandler callback)
+            {
+                this.OnPskServerCallback = callback;
+            }
+
+            // void SSL_CTX_set_psk_server_callback(SSL_CTX *ctx, unsigned int (*psk_server_callback)
+            //  (SSL *ssl, const char *identity, unsigned char *psk, unsigned int max_psk_len)); 
+            // 	return psk_len;
+            //
+            // Note that the buffers where we will put the results were allocated by the native code.
+            internal int OnPskServerThunk(IntPtr ssl_ptr, IntPtr identity_ptr, IntPtr psk_ptr, uint max_psk_len)
+            {
+                // Note that the ssl reference is not needed by this function.
+
+                byte[] psk = null;
+
+                // Convert the raw C char buffer into a string.
+                // Note that the trailing NULLs (0x00) need to be stripped.
+                const int max_identity_len = 0x80;
+                byte[] identity_bytes = new byte[max_identity_len]; 
+                Marshal.Copy(identity_ptr, identity_bytes, 0, max_identity_len);
+                int index = Array.FindIndex(identity_bytes, 0, (b) => b == 0);
+                if (index > max_identity_len )
+                    throw new ArgumentOutOfRangeException("PSK Server callback identity could not be determined from native char buffer.");
+
+                byte[] identity_bytes_null_stripped = new byte[index];
+                for (int i = 0; i < index; i++)
+                {
+                    identity_bytes_null_stripped[i] = identity_bytes[i];
+                }
+                String identity = System.Text.ASCIIEncoding.ASCII.GetString(identity_bytes_null_stripped);
+
+                int nRet = OnPskServerCallback(null, identity, out psk, max_psk_len);
+                if (nRet == 0)
+                    return nRet;
+
+                if (psk == null)
+                    throw new ArgumentNullException("PSK Server callback psk cannot be set to null.");
+
+                if (psk.Length > max_psk_len)
+                    throw new ArgumentOutOfRangeException("PSK Server callback psk length (" + psk.Length + ") is greater than max_psk_len (" + max_psk_len + ").");
+
+                CopyBytesToNativeCharBuffer(psk, psk_ptr);
+
+                // Must return the length of the psk.
+                return psk.Length;
+            }
+        }
+
+        public void SetPskClientCallback(PskClientCallbackHandler callback)
+        {
+            _pskClientCallbackThunk = new PskClientCallbackThunk(callback);
+            Native.SSL_CTX_set_psk_client_callback(this.ptr, _pskClientCallbackThunk.Callback);
+        }
+
+        public void SetPskServerCallback(PskServerCallbackHandler callback)
+        {
+            _pskServerCallbackThunk = new PskServerCallbackThunk(callback);
+            Native.SSL_CTX_set_psk_server_callback(this.ptr, _pskServerCallbackThunk.Callback);
+        }
+
+
+        // Copy the given Managed byte array into a pre-allocated native char buffer.
+        private static void CopyBytesToNativeCharBuffer(byte[] bytes, IntPtr intPtr)
+        {
+            Marshal.Copy(bytes, 0, intPtr, bytes.Length);
+        }
+
+        // Copy the value of the given Managed string into a pre-allocated native char buffer.
+        private static void CopyStringValueToNativeCharBuffer(string str, IntPtr intPtr)
+        {
+            if (str == null)
+            {
+                Marshal.Copy(new byte[] { 0x00 } , 0, intPtr, 1);
+            }
+            else
+            {
+                Marshal.Copy(ConvertStringToBytes(str), 0, intPtr, str.Length + 1);
+            }
+        }
+
+        // Convert the given string into a null-terminated byte array.
+        private static byte[] ConvertStringToBytes(string str)
+        {
+            byte[] bytes = new byte[str.Length + 1]; // add 1 for null terminator
+
+            int i = 0;
+            foreach (char c in str)
+            {
+                bytes[i] = (byte)c;
+                i++;
+            }
+            bytes[i] = 0x00; // null terminate
+
+            return bytes;
+        }
+
+        #endregion
 		#region IDisposable Members
 
 		/// <summary>

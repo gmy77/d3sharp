@@ -24,25 +24,19 @@ using Mooege.Core.GS.Common.Types.TagMap;
 
 namespace Mooege.Core.GS.Actors.Implementations
 {
-    [HandledSNO(3533 /* Ho-ho-horadrim */)]
+    [HandledSNO(3533)] //Cain
     public class Cain : InteractiveNPC
     {
         public Cain(World world, int snoId, TagMap tags)
             : base(world, snoId, tags)
-        {
-            this.Attributes[GameAttribute.MinimapActive] = true;
-            Conversations.Add(new ConversationInteraction(72416));
-            Conversations.Add(new ConversationInteraction(198588));
-            Conversations.Add(new ConversationInteraction(73171));
-            Interactions.Add(new IdentifyAllInteraction());
-        }
+        { }
 
-        public override bool Reveal(Player player)
+        protected override void ReadTags()
         {
-            if (!base.Reveal(player))
-                return false;
+            if (!Tags.ContainsKey(MarkerKeys.ConversationList))
+                Tags.Add(MarkerKeys.ConversationList, new TagMapEntry(MarkerKeys.ConversationList.ID, 108832, 2));
 
-            return true;
+            base.ReadTags();
         }
     }
 }

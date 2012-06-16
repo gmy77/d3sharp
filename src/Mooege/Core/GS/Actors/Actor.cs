@@ -95,6 +95,17 @@ namespace Mooege.Core.GS.Actors
         }
 
         /// <summary>
+        /// Replaces the actor's rotation with one that rotates along the Z-axis by the specified "facing" angle. 
+        /// </summary>
+        /// <param name="facingAngle">The angle in radians.</param>
+        public void SetFacingRotation(float facingAngle)
+        {
+            Quaternion q = Quaternion.FacingRotation(facingAngle);
+            this.RotationW = q.W;
+            this.RotationAxis = q.Vector3D;
+        }
+
+        /// <summary>
         /// Tags read from MPQ's for the actor.
         /// </summary>
         public TagMap Tags { get; private set; }
@@ -234,8 +245,13 @@ namespace Mooege.Core.GS.Actors
         public override void Destroy()
         {
             if (_questRange != null)
-                foreach (var quest in World.Game.Quests)
-                    quest.OnQuestProgress -= quest_OnQuestProgress;
+                if (World == null)
+                    Logger.Debug("World is null? {0}", this.GetType());
+                else if (World.Game == null)
+                    Logger.Debug("Game is null? {0}", this.GetType());
+                else if (World.Game.Quests != null)
+                    foreach (var quest in World.Game.Quests)
+                        quest.OnQuestProgress -= quest_OnQuestProgress;
 
             base.Destroy();
         }
@@ -303,7 +319,7 @@ namespace Mooege.Core.GS.Actors
         }
 
         #endregion
-        
+
         #region Movement/Translation
 
         public void TranslateFacing(Vector3D target, bool immediately = false)
@@ -359,7 +375,7 @@ namespace Mooege.Core.GS.Actors
         {
             if (this.World == null) return;
 
-            World.BroadcastIfRevealed(new PlayEffectMessage
+            this.World.BroadcastIfRevealed(new PlayEffectMessage
             {
                 ActorId = this.DynamicID,
                 Effect = effect,
@@ -371,13 +387,12 @@ namespace Mooege.Core.GS.Actors
         {
             if (target == null || target.World == null || this.World == null) return;
 
-            World.BroadcastIfRevealed(new RopeEffectMessageACDToACD
+            this.World.BroadcastIfRevealed(new RopeEffectMessageACDToACD
             {
-                Id = (int)Opcodes.RopeEffectMessageACDToACD,
-                Field0 = ropeSNO,
-                Field1 = (int)DynamicID,
+                RopeSNO = ropeSNO,
+                StartSourceActorId = (int)DynamicID,
                 Field2 = 4,
-                Field3 = (int)target.DynamicID,
+                DestinationActorId = (int)target.DynamicID,
                 Field4 = 1
             }, this);
         }
@@ -388,11 +403,10 @@ namespace Mooege.Core.GS.Actors
 
             this.World.BroadcastIfRevealed(new RopeEffectMessageACDToPlace
             {
-                Id = (int)Opcodes.RopeEffectMessageACDToPlace,
-                Field0 = ropeSNO,
-                Field1 = (int)this.DynamicID,
+                RopeSNO = ropeSNO,
+                StartSourceActorId = (int)this.DynamicID,
                 Field2 = 4,
-                Field3 = new WorldPlace { Position = target, WorldID = this.World.DynamicID }
+                EndPosition = new WorldPlace { Position = target, WorldID = this.World.DynamicID }
             }, this);
         }
 
@@ -400,17 +414,15 @@ namespace Mooege.Core.GS.Actors
         {
             if (target == null || target.World == null || this.World == null) return;
 
-            // TODO: Might need to track complex effects
-            World.BroadcastIfRevealed(new ComplexEffectAddMessage
+            this.World.BroadcastIfRevealed(new ComplexEffectAddMessage
             {
-                Id = (int)Opcodes.ComplexEffectAddMessage,
-                Field0 = (int)World.NewActorID, // TODO: maybe not use actor ids?
-                Field1 = 1,  // 0=efg, 1=efg, 2=rope
-                Field2 = effectGroupSNO, // efgSNO or ropeSNO
-                Field3 = (int)this.DynamicID, // source
-                Field4 = (int)target.DynamicID, // target
-                Field5 = 0, // 0=efg, 4=rope1, 3=rope2
-                Field6 = 0 // 0=efg, 1=rope1, 3=rope2
+                EffectId = (int)this.World.NewActorID, // TODO: maybe not use actor ids?
+                Field1 = 1,
+                EffectSNO = effectGroupSNO,
+                SourceActorId = (int)this.DynamicID,
+                TargetActorId = (int)target.DynamicID,
+                Field5 = 0,
+                Field6 = 0
             }, target);
         }
 
@@ -667,7 +679,7 @@ namespace Mooege.Core.GS.Actors
 
         public virtual void OnTeleport()
         {
-            
+
         }
 
         /// <summary>
@@ -726,7 +738,7 @@ namespace Mooege.Core.GS.Actors
 
             // load scale from actor data and override it with marker tags if one is set
             this.Scale = ActorData.TagMap.ContainsKey(ActorKeys.Scale) ? ActorData.TagMap[ActorKeys.Scale] : 1;
-            this.Scale = Tags.ContainsKey(MarkerKeys.Scale) ? Tags[MarkerKeys.Scale] : this.Scale ;
+            this.Scale = Tags.ContainsKey(MarkerKeys.Scale) ? Tags[MarkerKeys.Scale] : this.Scale;
 
 
             if (Tags.ContainsKey(MarkerKeys.QuestRange))
@@ -734,7 +746,7 @@ namespace Mooege.Core.GS.Actors
                 int snoQuestRange = Tags[MarkerKeys.QuestRange].Id;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange].ContainsKey(snoQuestRange))
                     _questRange = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.QuestRange][snoQuestRange].Data as Mooege.Common.MPQ.FileFormats.QuestRange;
-                //else Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", SNOId, snoQuestRange);
+                else Logger.Warn("Actor {0} is tagged with unknown QuestRange {1}", NameSNOId, snoQuestRange);
             }
 
             if (Tags.ContainsKey(MarkerKeys.ConversationList))
@@ -742,7 +754,7 @@ namespace Mooege.Core.GS.Actors
                 int snoConversationList = Tags[MarkerKeys.ConversationList].Id;
                 if (Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList].ContainsKey(snoConversationList))
                     ConversationList = Mooege.Common.MPQ.MPQStorage.Data.Assets[SNOGroup.ConversationList][snoConversationList].Data as Mooege.Common.MPQ.FileFormats.ConversationList;
-                //else Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", SNOId, snoConversationList);
+                else Logger.Warn("Actor {0} is tagged with unknown ConversationList {1}", NameSNOId, snoConversationList);
             }
 
 
@@ -756,7 +768,19 @@ namespace Mooege.Core.GS.Actors
 
         public void Move(Vector3D point, float facingAngle)
         {
+            this.Position = point;  // TODO: will need update Position over time, not instantly.
             this.SetFacingRotation(facingAngle);
+
+            // find suitable movement animation
+            int aniTag;
+            if (this.AnimationSet == null)
+                aniTag = -1;
+            else if (this.AnimationSet.TagExists(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk))
+                aniTag = this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk);
+            else if (this.AnimationSet.TagExists(Mooege.Common.MPQ.FileFormats.AnimationTags.Run))
+                aniTag = this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Run);
+            else
+                aniTag = -1;
 
             var movementMessage = new ACDTranslateNormalMessage
             {
@@ -766,10 +790,25 @@ namespace Mooege.Core.GS.Actors
                 TurnImmediately = false,
                 Speed = this.WalkSpeed,
                 Field5 = 0,
-                AnimationTag = this.AnimationSet == null ? 0 : this.AnimationSet.GetAnimationTag(Mooege.Common.MPQ.FileFormats.AnimationTags.Walk)
+                AnimationTag = aniTag
             };
 
             this.World.BroadcastIfRevealed(movementMessage, this);
+        }
+
+        public void MoveSnapped(Vector3D point, float facingAngle)
+        {
+            this.Position = point;
+            this.SetFacingRotation(facingAngle);
+
+            this.World.BroadcastIfRevealed(new ACDTranslateSnappedMessage
+            {
+                ActorId = (int)this.DynamicID,
+                Position = point,
+                Angle = facingAngle,
+                Field3 = false,
+                Field4 = 0x900  // TODO: figure out when to use this field
+            }, this);
         }
 
         #endregion

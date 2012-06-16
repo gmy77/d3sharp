@@ -19,7 +19,7 @@
 using System;
 
 namespace Mooege.Net
-{    
+{
     public class ConnectionEventArgs : EventArgs
     {
         public IConnection Connection { get; private set; }

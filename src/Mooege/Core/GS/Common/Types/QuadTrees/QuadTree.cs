@@ -70,20 +70,20 @@ namespace Mooege.Core.GS.Common.Types.QuadTrees
         {
             if (RootNode == null) // create a new root-node if it does not exist yet.
             {
-                var rootSize = new Size(System.Math.Ceiling(@object.Bounds.Width/MinimumLeafSize.Width),
-                                        System.Math.Ceiling(@object.Bounds.Height/MinimumLeafSize.Height));
+                var rootSize = new Size(System.Math.Ceiling(@object.Bounds.Width / MinimumLeafSize.Width),
+                                        System.Math.Ceiling(@object.Bounds.Height / MinimumLeafSize.Height));
 
                 double multiplier = System.Math.Max(rootSize.Width, rootSize.Height);
-                rootSize = new Size(MinimumLeafSize.Width*multiplier, MinimumLeafSize.Height*multiplier);
-                var center = new Point(@object.Bounds.X + @object.Bounds.Width/2,
-                                       @object.Bounds.Y + @object.Bounds.Height/2);
-                var rootOrigin = new Point(center.X - rootSize.Width/2, center.Y - rootSize.Height/2);
+                rootSize = new Size(MinimumLeafSize.Width * multiplier, MinimumLeafSize.Height * multiplier);
+                var center = new Point(@object.Bounds.X + @object.Bounds.Width / 2,
+                                       @object.Bounds.Y + @object.Bounds.Height / 2);
+                var rootOrigin = new Point(center.X - rootSize.Width / 2, center.Y - rootSize.Height / 2);
 
                 this.RootNode = new QuadNode(new Rect(rootOrigin, rootSize));
             }
 
             while (!RootNode.Bounds.Contains(@object.Bounds))
-                // if root-node's bounds does not contain object, expand the root.
+            // if root-node's bounds does not contain object, expand the root.
             {
                 this.ExpandRoot(@object.Bounds);
             }
@@ -182,7 +182,7 @@ namespace Mooege.Core.GS.Common.Types.QuadTrees
                               ? RootNode.Bounds.Y
                               : RootNode.Bounds.Y - RootNode.Bounds.Height;
 
-            var newRootBounds = new Rect(newX, newY, RootNode.Bounds.Width*2, RootNode.Bounds.Height*2);
+            var newRootBounds = new Rect(newX, newY, RootNode.Bounds.Width * 2, RootNode.Bounds.Height * 2);
             var newRoot = new QuadNode(newRootBounds);
 
             this.SetupChildNodes(newRoot);
@@ -306,14 +306,14 @@ namespace Mooege.Core.GS.Common.Types.QuadTrees
         /// <param name="node">The node.</param>
         private void SetupChildNodes(QuadNode node)
         {
-            if (this.MinimumLeafSize.Width > node.Bounds.Width/2 || this.MinimumLeafSize.Height > node.Bounds.Height/2)
+            if (this.MinimumLeafSize.Width > node.Bounds.Width / 2 || this.MinimumLeafSize.Height > node.Bounds.Height / 2)
                 // make sure we obey MinimumLeafSize.
                 return;
 
-            node[Direction.NorthWest] = new QuadNode(node.Bounds.X, node.Bounds.Y, node.Bounds.Width/2, node.Bounds.Height/2);
-            node[Direction.NorthEast] = new QuadNode(node.Bounds.X + node.Bounds.Width/2, node.Bounds.Y, node.Bounds.Width/2, node.Bounds.Height/2);
-            node[Direction.SouthWest] = new QuadNode(node.Bounds.X, node.Bounds.Y + node.Bounds.Height/2, node.Bounds.Width/2, node.Bounds.Height/2);
-            node[Direction.SouthEast] = new QuadNode(node.Bounds.X + node.Bounds.Width/2, node.Bounds.Y + node.Bounds.Height/2, node.Bounds.Width/2, node.Bounds.Height/2);
+            node[Direction.NorthWest] = new QuadNode(node.Bounds.X, node.Bounds.Y, node.Bounds.Width / 2, node.Bounds.Height / 2);
+            node[Direction.NorthEast] = new QuadNode(node.Bounds.X + node.Bounds.Width / 2, node.Bounds.Y, node.Bounds.Width / 2, node.Bounds.Height / 2);
+            node[Direction.SouthWest] = new QuadNode(node.Bounds.X, node.Bounds.Y + node.Bounds.Height / 2, node.Bounds.Width / 2, node.Bounds.Height / 2);
+            node[Direction.SouthEast] = new QuadNode(node.Bounds.X + node.Bounds.Width / 2, node.Bounds.Y + node.Bounds.Height / 2, node.Bounds.Width / 2, node.Bounds.Height / 2);
         }
 
         /// <summary>
@@ -394,7 +394,7 @@ namespace Mooege.Core.GS.Common.Types.QuadTrees
                 }
 
                 if (numQuadrantsWithObjects == 1)
-                    // if we have only one quadrand with objects, make it the new rootNode.
+                // if we have only one quadrand with objects, make it the new rootNode.
                 {
                     foreach (QuadNode childNode in node.Nodes)
                     {

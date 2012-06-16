@@ -52,7 +52,8 @@ namespace Mooege.Core.GS.Generators
             {
                 Logger.Error("World {0} [{1}] is a dynamic world! Can't generate proper dynamic worlds yet!", worldAsset.Name, worldAsset.SNOId);
 
-                GenerateRandomDungeon(worldSNO, worldData);
+                //GenerateRandomDungeon(worldSNO, worldData);
+                return null;
             }
 
             var world = new World(game, worldSNO);
@@ -102,8 +103,13 @@ namespace Mooege.Core.GS.Generators
 
                 while (count > 0) // Fill the rest with defaults /fasbat
                 {
-                    var subSceneEntry = RandomHelper.RandomItem(clusters[cID].Default.Entries, entry => entry.Probability);
-                    selected.Add(subSceneEntry);
+                    //Default subscenes are not currently stored in db, use first if available
+                    //var subSceneEntry = RandomHelper.RandomItem(clusters[cID].Default.Entries, entry => entry.Probability);
+                    if (clusters[cID].SubSceneGroups.Count > 0)
+                    {
+                        var subSceneEntry = RandomHelper.RandomItem(clusters[cID].SubSceneGroups.First().Entries, entry => entry.Probability);
+                        selected.Add(subSceneEntry);
+                    }
                     count--;
                 }
             }
@@ -118,7 +124,7 @@ namespace Mooege.Core.GS.Generators
                     RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
                     SceneGroupSNO = -1
                 };
-               
+
                 // If the scene has a subscene (cluster ID is set), choose a random subscenes from the cluster load it and attach it to parent scene /farmy
                 if (sceneChunk.SceneSpecification.ClusterID != -1)
                 {
@@ -149,16 +155,28 @@ namespace Mooege.Core.GS.Generators
                         }
                         else
                         {
-                            var subScenePosition = scene.Position + pos;
-                            var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
+                            // subSceneEntry is null is there is no subSceneGroups, until we get default subScene saved in DB.
+                            if (subSceneEntry != null)
                             {
-                                MiniMapVisibility = true,
-                                RotationW = sceneChunk.PRTransform.Quaternion.W,
-                                RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
-                                Specification = sceneChunk.SceneSpecification
-                            };
-                            scene.Subscenes.Add(subscene);
-                            subscene.LoadMarkers();
+                                // HACK: avoid trying to create scenes with SNOs that aren't valid
+                                if (MPQStorage.Data.Assets[SNOGroup.Scene].ContainsKey(subSceneEntry.SNOScene))
+                                {
+                                    var subScenePosition = scene.Position + pos;
+                                    var subscene = new Scene(world, subScenePosition, subSceneEntry.SNOScene, scene)
+                                    {
+                                        MiniMapVisibility = true,
+                                        RotationW = sceneChunk.PRTransform.Quaternion.W,
+                                        RotationAxis = sceneChunk.PRTransform.Quaternion.Vector3D,
+                                        Specification = sceneChunk.SceneSpecification
+                                    };
+                                    scene.Subscenes.Add(subscene);
+                                    subscene.LoadMarkers();
+                                }
+                                else
+                                {
+                                    Logger.Error("Scene not found in mpq storage: {0}", subSceneEntry.SNOScene);
+                                }
+                            }
                         }
                     }
 
@@ -434,7 +452,7 @@ namespace Mooege.Core.GS.Generators
             exitTypes.Add(TileExits.North, positionNorth);
             exitTypes.Add(TileExits.South, positionSouth);
 
-            if(!isRandom)
+            if (!isRandom)
                 return exitTypes;
 
             //randomize
@@ -699,7 +717,7 @@ namespace Mooege.Core.GS.Generators
                                     // Adventure are basically made up of a markerSet that has relative PRTransforms
                                     // it has some other fields that are always 0 and a reference to a symbol actor
                                     // no idea what they are used for - farmy
-                                    
+
                                     var adventure = spawnEntry.SNOHandle.Target as Adventure;
                                     var markerSet = new SNOHandle(adventure.SNOMarkerSet).Target as MarkerSet;
 
@@ -753,6 +771,9 @@ namespace Mooege.Core.GS.Generators
                     if (MPQStorage.Data.Assets[SNOGroup.Scene][scene.SceneSNO.Id].Name.StartsWith("trOut_Tristram_"))
                         continue;
 
+                    // a little variety in monsters spawned
+                    int[] monsterActors = { 6652, 219725, 5346, 6356, 5393, 434, 4982 };
+
                     for (int i = 0; i < 100; i++)
                     {
                         if (RandomHelper.NextDouble() > 0.8)
@@ -765,7 +786,7 @@ namespace Mooege.Core.GS.Generators
                             if ((scene.NavMesh.Squares[y * scene.NavMesh.SquaresCountX + x].Flags & Mooege.Common.MPQ.FileFormats.Scene.NavCellFlags.NoSpawn) == 0)
                             {
                                 loadActor(
-                                    new SNOHandle(6652), 
+                                    new SNOHandle(monsterActors[RandomHelper.Next(monsterActors.Length)]),
                                     new PRTransform
                                     {
                                         Vector3D = new Vector3D
@@ -774,11 +795,7 @@ namespace Mooege.Core.GS.Generators
                                             Y = (float)(y * 2.5 + scene.Position.Y),
                                             Z = scene.NavMesh.Squares[y * scene.NavMesh.SquaresCountX + x].Z + scene.Position.Z
                                         },
-                                        Quaternion = new Quaternion
-                                        {
-                                            W = (float)(RandomHelper.NextDouble() * System.Math.PI * 2),
-                                            Vector3D = new Vector3D(0, 0, 1)
-                                        }
+                                        Quaternion = Quaternion.FacingRotation((float)(RandomHelper.NextDouble() * System.Math.PI * 2))
                                     },
                                     world,
                                     new TagMap()

@@ -36,12 +36,12 @@ namespace Mooege.Net.GS
         protected static readonly Logger Logger = LogManager.CreateLogger();
         private static readonly ClientManager _instance = new ClientManager();
         public static ClientManager Instance { get { return _instance; } }
-        
+
 
         public void OnConnect(object sender, ConnectionEventArgs e)
         {
             Logger.Trace("Game-Client connected: {0}", e.Connection.ToString());
-            
+
             var gameClient = new GameClient(e.Connection);
             e.Connection.Client = gameClient;
         }
@@ -68,7 +68,7 @@ namespace Mooege.Net.GS
             }
             lock (game)
             {
-                var toon = ToonManager.GetToonByLowID((ulong) message.ToonEntityId.Low);
+                var toon = ToonManager.GetToonByLowID((ulong)message.ToonEntityId.Low);
 
                 client.Game = game;
 
@@ -119,10 +119,10 @@ namespace Mooege.Net.GS
                 });
 
                 toon.LoginTime = DateTimeExtensions.ToUnixTime(DateTime.UtcNow);
-                Logger.Trace("Log in time:"+toon.LoginTime.ToString());
+                Logger.Trace("Log in time:" + toon.LoginTime.ToString());
 
                 game.Enter(client.Player);
             }
-        }    
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace Mooege.Net.GS.Message.Definitions.Animation
         public uint ActorID;
         public int AnimationSNO;
 
-        public SetIdleAnimationMessage() : base(Opcodes.SetIdleAnimationMessage) {}
+        public SetIdleAnimationMessage() : base(Opcodes.SetIdleAnimationMessage) { }
 
         public override void Parse(GameBitBuffer buffer)
         {

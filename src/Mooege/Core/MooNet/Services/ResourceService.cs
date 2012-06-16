@@ -40,7 +40,7 @@ namespace Mooege.Core.MooNet.Services
             if (request.ProgramId == (uint)FieldKeyHelper.Program.BNet)
             {
                 var builder = bnet.protocol.ContentHandle.CreateBuilder()
-                    .SetRegion(VersionInfo.MooNet.Region)
+                    .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
                     .SetUsage(0x70667479) //pfty - ProfanityFilter
                     .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.Resources.ProfanityFilterHash.ToByteArray()));
 
@@ -49,7 +49,7 @@ namespace Mooege.Core.MooNet.Services
             else if (request.ProgramId == (uint)FieldKeyHelper.Program.D3)
             {
                 var builder = bnet.protocol.ContentHandle.CreateBuilder()
-                    .SetRegion(VersionInfo.MooNet.Region)
+                    .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
                     .SetUsage(0x643373); //d3s - d3 Schema
                 switch (request.StreamId)
                 {
@@ -64,11 +64,10 @@ namespace Mooege.Core.MooNet.Services
                         break;
                     default:
                         Logger.Warn("Unknown StreamId: 0x{0:X8}", request.StreamId);
+                        builder.SetHash(ByteString.Empty);
+                        Status = 4;
                         break;
                 }
-                if (!builder.HasHash)
-                    Status = 4;
-
                 done(builder.Build());
             }
         }

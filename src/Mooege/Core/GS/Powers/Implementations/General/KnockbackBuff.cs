@@ -50,7 +50,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 return false;
 
             Vector3D destination = PowerMath.TranslateDirection2D(User.Position, Target.Position,
-                                                                   _magnitude < 0f ? User.Position : Target.Position, 
+                                                                   _magnitude < 0f ? User.Position : Target.Position,
                                                                    (float)Math.Sqrt(Math.Abs(_magnitude)));
 
             _mover = new ActorMover(Target);
@@ -59,7 +59,7 @@ namespace Mooege.Core.GS.Powers.Implementations
                 Field3 = 0x2006, // wtf?
                 FlyingAnimationTagID = AnimationSetKeys.KnockBack.ID,
                 LandingAnimationTagID = AnimationSetKeys.KnockBackLand.ID,
-                Field7 = PowerSNO
+                PowerSNO = PowerSNO
             });
 
             return true;

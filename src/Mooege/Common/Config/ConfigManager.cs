@@ -47,7 +47,7 @@ namespace Mooege.Common.Config
             finally
             {
                 // adds aliases so we can use On and Off directives in ini files.
-                Parser.Alias.AddAlias("On", true); 
+                Parser.Alias.AddAlias("On", true);
                 Parser.Alias.AddAlias("Off", false);
 
                 // logger level aliases.

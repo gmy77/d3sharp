@@ -23,9 +23,10 @@ using System.Text.RegularExpressions;
 using CrystalMpq;
 using Mooege.Common.Logging;
 using Wintellect.PowerCollections;
+using System.IO;
 
 namespace Mooege.Common.MPQ
-{    
+{
     public class MPQPatchChain
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
@@ -37,15 +38,15 @@ namespace Mooege.Common.MPQ
         public readonly OrderedMultiDictionary<int, string> MPQFileList = new OrderedMultiDictionary<int, string>(false);
         public readonly MpqFileSystem FileSystem = new MpqFileSystem();
 
-        protected MPQPatchChain(int requiredVersion, IEnumerable<string> baseFiles, string patchPattern=null)
+        protected MPQPatchChain(int requiredVersion, IEnumerable<string> baseFiles, string patchPattern = null)
         {
             this.Loaded = false;
             this.RequiredVersion = requiredVersion;
 
-            foreach(var file in baseFiles)
+            foreach (var file in baseFiles)
             {
                 var mpqFile = MPQStorage.GetMPQFile(file);
-                if(mpqFile == null)
+                if (mpqFile == null)
                 {
                     Logger.Error("Cannot find base MPQ file: {0}.", file);
                     return;
@@ -53,23 +54,23 @@ namespace Mooege.Common.MPQ
                 this.BaseMPQFiles.Add(mpqFile);
                 Logger.Trace("Added base-mpq file: {0}.", file);
             }
-                        
+
             this.PatchPattern = patchPattern;
             this.ConstructChain();
 
             var topMostMPQVersion = this.MPQFileList.Reverse().First().Key; // check required version.
-            if (topMostMPQVersion == this.RequiredVersion) 
+            if (topMostMPQVersion == this.RequiredVersion)
                 this.Loaded = true;
             else
             {
                 Logger.Error("Required patch-chain version {0} is not satified (found version: {1}).", this.RequiredVersion, topMostMPQVersion);
-            }            
+            }
         }
 
         private void ConstructChain()
-        {            
+        {
             // add base mpq files;
-            foreach(var mpqFile in this.BaseMPQFiles)
+            foreach (var mpqFile in this.BaseMPQFiles)
             {
                 MPQFileList.Add(0, mpqFile);
             }
@@ -78,7 +79,7 @@ namespace Mooege.Common.MPQ
 
             /* match the mpq files for the patch chain */
             var patchRegex = new Regex(this.PatchPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            foreach(var file in MPQStorage.MPQList)
+            foreach (var file in MPQStorage.MPQList)
             {
                 var match = patchRegex.Match(file);
                 if (!match.Success) continue;
@@ -94,16 +95,16 @@ namespace Mooege.Common.MPQ
                 }
 
                 MPQFileList.Add(patchVersion, file);
-                Logger.Trace("Added patch file: {0}.", patchName);
+                Logger.Trace("Found patch file: {0}.", patchName);
             }
 
             /* add mpq's to mpq-file system in reverse-order (highest version first) */
-            foreach(var pair in this.MPQFileList.Reverse())
+            foreach (var pair in this.MPQFileList.Reverse())
             {
-                foreach(var mpq in pair.Value)
+                foreach (var mpq in pair.Value)
                 {
-                    Logger.Trace("Applying file: {0}.", System.IO.Path.GetFileName(mpq));
-                    this.FileSystem.Archives.Add(new MpqArchive(mpq, true));
+                    Logger.Trace("Applying patch file: {0}.", System.IO.Path.GetFileName(mpq));
+                    this.FileSystem.Archives.Add(new MpqArchive(new FileStream(mpq, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), true));
                 }
             }
             Logger.Trace("All files successfully applied.");

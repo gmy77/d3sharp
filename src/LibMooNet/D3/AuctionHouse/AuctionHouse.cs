@@ -53,19 +53,19 @@ namespace D3.AuctionHouse {
           "SW52ZW50b3J5T3BlcmF0aW9ucxI3CgpvcGVyYXRpb25zGAEgAygLMiMuRDMu" + 
           "QXVjdGlvbkhvdXNlLkludmVudG9yeU9wZXJhdGlvbiJUCgRJdGVtEiQKAmlk" + 
           "GAEgAigLMhguRDMuT25saW5lU2VydmljZS5JdGVtSWQSJgoJZ2VuZXJhdG9y" + 
-          "GAIgAigLMhMuRDMuSXRlbXMuR2VuZXJhdG9yIrUBCgZFc2Nyb3cSDwoHdmVy" + 
-          "c2lvbhgBIAIoDRIjCgRpdGVtGAIgASgLMhUuRDMuQXVjdGlvbkhvdXNlLkl0" + 
-          "ZW0SIAoEaGVybxgDIAEoCzISLkQzLkhlcm8uU2F2ZWREYXRhEjMKD3NlcnZp" + 
-          "Y2VkX3Rva2VucxgEIAMoCzIaLkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQi" + 
-          "HgoHVmVyc2lvbhITCg9DVVJSRU5UX1ZFUlNJT04QASKkAQoNQXV0aG9yaXpl" + 
-          "SW5mbxIvCgtsb2NhdGlvbl9pZBgBIAIoCzIaLkQzLk9ubGluZVNlcnZpY2Uu" + 
-          "RW50aXR5SWQSNwoTdHJhbnNhY3Rpb25faGVyb19pZBgCIAIoCzIaLkQzLk9u" + 
-          "bGluZVNlcnZpY2UuRW50aXR5SWQSKQoHaXRlbV9pZBgDIAEoCzIYLkQzLk9u" + 
-          "bGluZVNlcnZpY2UuSXRlbUlkIkQKCUNsYWltSW5mbxI3ChN0cmFuc2FjdGlv" + 
-          "bl9oZXJvX2lkGAEgAigLMhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZCJs" + 
-          "CgtBY2NvdW50SW5mbxIuCgphY2NvdW50X2lkGAEgAigLMhouRDMuT25saW5l" + 
-          "U2VydmljZS5FbnRpdHlJZBItCgllc2Nyb3dfaWQYAiACKAsyGi5EMy5Pbmxp" + 
-          "bmVTZXJ2aWNlLkVudGl0eUlk");
+          "GAIgAigLMhMuRDMuSXRlbXMuR2VuZXJhdG9yIr0BCgZFc2Nyb3cSDwoHdmVy" + 
+          "c2lvbhgBIAIoDRIrCgxhdWN0aW9uX2l0ZW0YAiABKAsyFS5EMy5BdWN0aW9u" + 
+          "SG91c2UuSXRlbRIgCgRoZXJvGAMgASgLMhIuRDMuSGVyby5TYXZlZERhdGES" + 
+          "MwoPc2VydmljZWRfdG9rZW5zGAQgAygLMhouRDMuT25saW5lU2VydmljZS5F" + 
+          "bnRpdHlJZCIeCgdWZXJzaW9uEhMKD0NVUlJFTlRfVkVSU0lPThABIqQBCg1B" + 
+          "dXRob3JpemVJbmZvEi8KC2xvY2F0aW9uX2lkGAEgAigLMhouRDMuT25saW5l" + 
+          "U2VydmljZS5FbnRpdHlJZBI3ChN0cmFuc2FjdGlvbl9oZXJvX2lkGAIgAigL" + 
+          "MhouRDMuT25saW5lU2VydmljZS5FbnRpdHlJZBIpCgdpdGVtX2lkGAMgASgL" + 
+          "MhguRDMuT25saW5lU2VydmljZS5JdGVtSWQiRAoJQ2xhaW1JbmZvEjcKE3Ry" + 
+          "YW5zYWN0aW9uX2hlcm9faWQYASACKAsyGi5EMy5PbmxpbmVTZXJ2aWNlLkVu" + 
+          "dGl0eUlkImwKC0FjY291bnRJbmZvEi4KCmFjY291bnRfaWQYASACKAsyGi5E" + 
+          "My5PbmxpbmVTZXJ2aWNlLkVudGl0eUlkEi0KCWVzY3Jvd19pZBgCIAIoCzIa" + 
+          "LkQzLk9ubGluZVNlcnZpY2UuRW50aXR5SWQ=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_D3_AuctionHouse_InventoryOperation__Descriptor = Descriptor.MessageTypes[0];
@@ -83,7 +83,7 @@ namespace D3.AuctionHouse {
         internal__static_D3_AuctionHouse_Escrow__Descriptor = Descriptor.MessageTypes[3];
         internal__static_D3_AuctionHouse_Escrow__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.AuctionHouse.Escrow, global::D3.AuctionHouse.Escrow.Builder>(internal__static_D3_AuctionHouse_Escrow__Descriptor,
-                new string[] { "Version", "Item", "Hero", "ServicedTokens", });
+                new string[] { "Version", "AuctionItem", "Hero", "ServicedTokens", });
         internal__static_D3_AuctionHouse_AuthorizeInfo__Descriptor = Descriptor.MessageTypes[4];
         internal__static_D3_AuctionHouse_AuthorizeInfo__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::D3.AuctionHouse.AuthorizeInfo, global::D3.AuctionHouse.AuthorizeInfo.Builder>(internal__static_D3_AuctionHouse_AuthorizeInfo__Descriptor,
@@ -1386,8 +1386,8 @@ namespace D3.AuctionHouse {
   public sealed partial class Escrow : pb::GeneratedMessage<Escrow, Escrow.Builder> {
     private Escrow() { }
     private static readonly Escrow defaultInstance = new Escrow().MakeReadOnly();
-    private static readonly string[] _escrowFieldNames = new string[] { "hero", "item", "serviced_tokens", "version" };
-    private static readonly uint[] _escrowFieldTags = new uint[] { 26, 18, 34, 8 };
+    private static readonly string[] _escrowFieldNames = new string[] { "auction_item", "hero", "serviced_tokens", "version" };
+    private static readonly uint[] _escrowFieldTags = new uint[] { 18, 26, 34, 8 };
     public static Escrow DefaultInstance {
       get { return defaultInstance; }
     }
@@ -1432,14 +1432,14 @@ namespace D3.AuctionHouse {
       get { return version_; }
     }
     
-    public const int ItemFieldNumber = 2;
-    private bool hasItem;
-    private global::D3.AuctionHouse.Item item_;
-    public bool HasItem {
-      get { return hasItem; }
+    public const int AuctionItemFieldNumber = 2;
+    private bool hasAuctionItem;
+    private global::D3.AuctionHouse.Item auctionItem_;
+    public bool HasAuctionItem {
+      get { return hasAuctionItem; }
     }
-    public global::D3.AuctionHouse.Item Item {
-      get { return item_ ?? global::D3.AuctionHouse.Item.DefaultInstance; }
+    public global::D3.AuctionHouse.Item AuctionItem {
+      get { return auctionItem_ ?? global::D3.AuctionHouse.Item.DefaultInstance; }
     }
     
     public const int HeroFieldNumber = 3;
@@ -1467,8 +1467,8 @@ namespace D3.AuctionHouse {
     public override bool IsInitialized {
       get {
         if (!hasVersion) return false;
-        if (HasItem) {
-          if (!Item.IsInitialized) return false;
+        if (HasAuctionItem) {
+          if (!AuctionItem.IsInitialized) return false;
         }
         if (HasHero) {
           if (!Hero.IsInitialized) return false;
@@ -1486,11 +1486,11 @@ namespace D3.AuctionHouse {
       if (hasVersion) {
         output.WriteUInt32(1, field_names[3], Version);
       }
-      if (hasItem) {
-        output.WriteMessage(2, field_names[1], Item);
+      if (hasAuctionItem) {
+        output.WriteMessage(2, field_names[0], AuctionItem);
       }
       if (hasHero) {
-        output.WriteMessage(3, field_names[0], Hero);
+        output.WriteMessage(3, field_names[1], Hero);
       }
       if (servicedTokens_.Count > 0) {
         output.WriteMessageArray(4, field_names[2], servicedTokens_);
@@ -1508,8 +1508,8 @@ namespace D3.AuctionHouse {
         if (hasVersion) {
           size += pb::CodedOutputStream.ComputeUInt32Size(1, Version);
         }
-        if (hasItem) {
-          size += pb::CodedOutputStream.ComputeMessageSize(2, Item);
+        if (hasAuctionItem) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, AuctionItem);
         }
         if (hasHero) {
           size += pb::CodedOutputStream.ComputeMessageSize(3, Hero);
@@ -1647,8 +1647,8 @@ namespace D3.AuctionHouse {
         if (other.HasVersion) {
           Version = other.Version;
         }
-        if (other.HasItem) {
-          MergeItem(other.Item);
+        if (other.HasAuctionItem) {
+          MergeAuctionItem(other.AuctionItem);
         }
         if (other.HasHero) {
           MergeHero(other.Hero);
@@ -1705,11 +1705,11 @@ namespace D3.AuctionHouse {
             }
             case 18: {
               global::D3.AuctionHouse.Item.Builder subBuilder = global::D3.AuctionHouse.Item.CreateBuilder();
-              if (result.hasItem) {
-                subBuilder.MergeFrom(Item);
+              if (result.hasAuctionItem) {
+                subBuilder.MergeFrom(AuctionItem);
               }
               input.ReadMessage(subBuilder, extensionRegistry);
-              Item = subBuilder.BuildPartial();
+              AuctionItem = subBuilder.BuildPartial();
               break;
             }
             case 26: {
@@ -1755,43 +1755,43 @@ namespace D3.AuctionHouse {
         return this;
       }
       
-      public bool HasItem {
-       get { return result.hasItem; }
+      public bool HasAuctionItem {
+       get { return result.hasAuctionItem; }
       }
-      public global::D3.AuctionHouse.Item Item {
-        get { return result.Item; }
-        set { SetItem(value); }
+      public global::D3.AuctionHouse.Item AuctionItem {
+        get { return result.AuctionItem; }
+        set { SetAuctionItem(value); }
       }
-      public Builder SetItem(global::D3.AuctionHouse.Item value) {
+      public Builder SetAuctionItem(global::D3.AuctionHouse.Item value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        result.hasItem = true;
-        result.item_ = value;
+        result.hasAuctionItem = true;
+        result.auctionItem_ = value;
         return this;
       }
-      public Builder SetItem(global::D3.AuctionHouse.Item.Builder builderForValue) {
+      public Builder SetAuctionItem(global::D3.AuctionHouse.Item.Builder builderForValue) {
         pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
         PrepareBuilder();
-        result.hasItem = true;
-        result.item_ = builderForValue.Build();
+        result.hasAuctionItem = true;
+        result.auctionItem_ = builderForValue.Build();
         return this;
       }
-      public Builder MergeItem(global::D3.AuctionHouse.Item value) {
+      public Builder MergeAuctionItem(global::D3.AuctionHouse.Item value) {
         pb::ThrowHelper.ThrowIfNull(value, "value");
         PrepareBuilder();
-        if (result.hasItem &&
-            result.item_ != global::D3.AuctionHouse.Item.DefaultInstance) {
-            result.item_ = global::D3.AuctionHouse.Item.CreateBuilder(result.item_).MergeFrom(value).BuildPartial();
+        if (result.hasAuctionItem &&
+            result.auctionItem_ != global::D3.AuctionHouse.Item.DefaultInstance) {
+            result.auctionItem_ = global::D3.AuctionHouse.Item.CreateBuilder(result.auctionItem_).MergeFrom(value).BuildPartial();
         } else {
-          result.item_ = value;
+          result.auctionItem_ = value;
         }
-        result.hasItem = true;
+        result.hasAuctionItem = true;
         return this;
       }
-      public Builder ClearItem() {
+      public Builder ClearAuctionItem() {
         PrepareBuilder();
-        result.hasItem = false;
-        result.item_ = null;
+        result.hasAuctionItem = false;
+        result.auctionItem_ = null;
         return this;
       }
       

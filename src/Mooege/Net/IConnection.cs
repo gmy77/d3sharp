@@ -21,6 +21,8 @@ using System.Net;
 using System.Net.Sockets;
 using Mooege.Net.MooNet.Packets;
 
+using OpenSSL;
+
 namespace Mooege.Net
 {
     /// <summary>
@@ -28,6 +30,41 @@ namespace Mooege.Net
     /// </summary>
     public interface IConnection
     {
+        // [D3Inferno]
+        // Returns true if the connection is now encrypted.
+        // This will be true once Tls handshaking is complete and successful.
+        bool IsEncrypted { get; }
+
+        // Returns true is the EncryptRequest message has been sent to the client.
+        // The last unencrypted packet should be the EncryptRequest NoData service response.
+        bool IsEncryptRequestSent { get; set; }
+
+        // Returns true if the connection is trying to establish a Tls connection.
+        bool IsTlsHandshaking { get; set; }
+
+        /// The underlying TLS stream. Required for encrypted communication.
+        SslStream TLSStream { get; }
+
+        // Notify the Connection of the encrypted TLSStream.
+        void SetEncrypted(SslStream TLSStream);
+
+        // Notify that Tls Authentication is complete (but perhaps not successful) so that it can once
+        // again start listening for client data, but from now on, using the SslStream if successful.
+        void TlsAuthenticationComplete();
+
+        // Wrapper for the Send method that will send the data either to the
+        // Socket (unecnrypted) or to the TLSStream (encrypted).
+        // Note that the flags will be ignored for TLSStream.
+        int _Send(byte[] buffer, int start, int count, SocketFlags flags);
+
+        // Read bytes from the Sokcet into the buffer in a non-blocking call.
+        // This allows us to read no more than the specified count number of bytes.
+        int Receive(int start, int count);
+
+        // Expose the RecvBuffer.
+        byte[] RecvBuffer { get; }
+
+
         /// <summary>
         /// Returns true if there exists an active connection.
         /// </summary>
@@ -52,14 +89,14 @@ namespace Mooege.Net
         /// Gets underlying socket.
         /// </summary>
         Socket Socket { get; }
-        
+
         /// <summary>
         /// Sends a <see cref="PacketOut"/> to remote endpoint.
         /// </summary>
         /// <param name="packet"><see cref="PacketOut"/> to send.</param>
         /// <returns>Returns count of sent bytes.</returns>
         int Send(PacketOut packet);
-        
+
         /// <summary>
         /// Sends byte buffer to remote endpoint.
         /// </summary>

@@ -87,6 +87,7 @@ namespace Mooege.Core.MooNet.Accounts
 
             var account = AccountManager.CreateAccount(email, password, battleTagName, userLevel);
             var gameAccount = GameAccountManager.CreateGameAccount(account);
+            account.DBAccount.DBGameAccounts.Add(gameAccount.DBGameAccount);
             return string.Format("Created new account {0} [user-level: {1}] Full BattleTag: {2}.", account.Email, account.UserLevel, account.BattleTag);
         }
 
@@ -103,7 +104,7 @@ namespace Mooege.Core.MooNet.Accounts
 
             //Delete game accounts for account
             //which in turn will delete toons for each game account
-            foreach (var gameAccount in GameAccountManager.GetGameAccountsForAccount(account).Values)
+            foreach (var gameAccount in GameAccountManager.GetGameAccountsForAccount(account))
             {
                 GameAccountManager.DeleteGameAccount(gameAccount);
             }
@@ -130,7 +131,7 @@ namespace Mooege.Core.MooNet.Accounts
             if (password.Length < 8 || password.Length > 16)
                 return "Password should be a minimum of 8 and a maximum of 16 characters.";
 
-            account.UpdatePassword(password);
+            AccountManager.UpdatePassword(account, password);
             return string.Format("Updated password for account {0}.", email);
         }
 
@@ -166,8 +167,7 @@ namespace Mooege.Core.MooNet.Accounts
                 default:
                     return level + " is not a valid user level.";
             }
-
-            account.UpdateUserLevel(userLevel);
+            AccountManager.UpdateUserLevel(account, userLevel);
             return string.Format("Updated user level for account {0} [user-level: {1}].", email, userLevel);
         }
     }

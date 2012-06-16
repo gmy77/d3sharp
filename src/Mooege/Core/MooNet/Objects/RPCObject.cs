@@ -36,7 +36,7 @@ namespace Mooege.Core.MooNet.Objects
     public class RPCObject
     {
         protected static readonly Logger Logger = LogManager.CreateLogger();
-        
+
         /// <summary>
         /// The dynamic ID of the object, which is set on memory instantiation and changes over sessions.
         /// RPCObjectManager will track all dynamic IDs so that we don't get a duplicate.
@@ -61,7 +61,7 @@ namespace Mooege.Core.MooNet.Objects
             // Let RPCObjectManager generate a new dynamic ID for us
             RPCObjectManager.Init(this);
             this.Subscribers = new List<MooNetClient>();
-        }       
+        }
 
         /// <summary>
         /// Adds a client subscriber to object, which will eventually be notified whenever the object changes state.
@@ -70,6 +70,20 @@ namespace Mooege.Core.MooNet.Objects
         /// <param name="remoteObjectId">The client's dynamic ID.</param>
         public void AddSubscriber(MooNetClient client, ulong remoteObjectId)
         {
+            // [D3Inferno]
+            // Remove Subscribers that have been disconnected.
+            // Apparently the RPCObject is not being cleaned up properly.
+            // See the comment at the top for more info.
+            // Conver to an Array so we can remove as we iterate.
+            foreach (var subscriber in this.Subscribers.ToArray())
+            {
+                if (!subscriber.Connection.IsConnected)
+                {
+                    Logger.Warn("Removing disconnected subscriber {0}", subscriber);
+                    this.Subscribers.Remove(subscriber);
+                }
+            }
+
             // Map the subscriber's dynamic ID to to our dynamic ID so we know how to translate later on when the object makes a notify call
             client.MapLocalObjectID(this.DynamicId, remoteObjectId);
             this.Subscribers.Add(client);
@@ -105,7 +119,7 @@ namespace Mooege.Core.MooNet.Objects
         /// Once the notification system is smart enough to determine which value/property to update this would be eliminated and put under GetUpdateNotifications
         /// </summary>
         /// <returns></returns>
-        public virtual List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications() 
+        public virtual List<bnet.protocol.presence.FieldOperation> GetSubscriptionNotifications()
         {
             return new List<bnet.protocol.presence.FieldOperation>();
         }
@@ -123,10 +137,11 @@ namespace Mooege.Core.MooNet.Objects
         protected void NotifySubscriptionAdded(MooNetClient client)
         {
             var operations = GetSubscriptionNotifications();
-            MakeRPC(client, operations);
+            if (operations.Count > 0)
+                MakeRPC(client, operations);
         }
 
-        public virtual void NotifyUpdate() {}
+        public virtual void NotifyUpdate() { }
 
         public void UpdateSubscribers(List<MooNetClient> subscribers, List<bnet.protocol.presence.FieldOperation> operations)
         {
@@ -224,7 +239,7 @@ namespace Mooege.Core.MooNet.Objects
             // Finalizer called by the runtime. We should only dispose unmanaged objects and should NOT reference managed ones
             Dispose(false);
         }
-        
+
         #endregion
     }
 }

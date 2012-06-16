@@ -41,13 +41,13 @@ namespace Mooege.Net.MooNet
 
         private void MooNetServer_OnDisconnect(object sender, ConnectionEventArgs e)
         {
-            var client = ((MooNetClient) e.Connection.Client);
+            var client = ((MooNetClient)e.Connection.Client);
 
             Logger.Trace("Client disconnected: {0}", e.Connection.ToString());
             if (client.Account != null && client.Account.CurrentGameAccount != null) client.Account.CurrentGameAccount.LoggedInClient = null;
             PlayerManager.PlayerDisconnected((MooNetClient)e.Connection.Client);
         }
-        
+
         public override void Run()
         {
             // we can't listen for port 1119 because D3 and the launcher (agent) communicates on that port through loopback.

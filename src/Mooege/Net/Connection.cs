@@ -23,6 +23,8 @@ using System.Net.Sockets;
 using Mooege.Common.Logging;
 using Mooege.Net.MooNet.Packets;
 
+using OpenSSL;
+
 namespace Mooege.Net
 {
     /// <summary>
@@ -31,6 +33,63 @@ namespace Mooege.Net
     public class Connection : IConnection
     {
         protected static readonly Logger Logger = LogManager.CreateLogger(); // the logger.
+
+        // [D3Inferno]
+        /// Returns true if the connection is encrypted.
+        public bool IsEncrypted { get; private set; }
+
+        // Returns true is the EncryptRequest message has been sent to the client.
+        // The last unencrypted packet should be the EncryptRequest NoData service response.
+        public bool IsEncryptRequestSent { get; set; }
+
+        // Returns true if the connection is trying to establish a Tls connection.
+        public bool IsTlsHandshaking { get; set; }
+
+        /// The underlying TLS stream. Required for encrypted communication.
+        public SslStream TLSStream { get; private set; }
+
+        // Notify the Connection of the encrypted TLSStream
+        public void SetEncrypted(SslStream TLSStream)
+        {
+            this.TLSStream = TLSStream;
+            this.IsEncrypted = true;
+        }
+
+        // Notify that Tls Authentication is complete (but perhaps not successful) so that it can once
+        // again start listening for client data, but from now on, using the SslStream if successful.
+        public void TlsAuthenticationComplete()
+        {
+            if (this._server == null)
+            {
+                Logger.Warn("Server is null in TlsAuthenticationComplete");
+                return;
+            }
+            this._server.TlsAuthenticationComplete(this);
+        }
+
+        // Read bytes from the Socket into the buffer in a non-blocking call.
+        // This allows us to read no more than the specified count number of bytes.\
+        // Note that this method should only be called prior to encryption!
+        public int Receive(int start, int count)
+        {
+            return this.Socket.Receive(_recvBuffer, start, count, SocketFlags.None);
+        }
+
+        // Wrapper for the Send method that will send the data either to the
+        // Socket (unecnrypted) or to the TLSStream (encrypted).
+        public int _Send(byte[] buffer, int start, int count, SocketFlags flags)
+        {
+            if (!IsEncrypted)
+            {
+                return this.Socket.Send(buffer, start, count, flags);
+            }
+            else
+            {
+                // Does this Write operation guarantee that all bytes will be written?
+                this.TLSStream.Write(buffer, start, count);
+                return count;
+            }
+        }
 
         /// <summary>
         /// Gets underlying socket.
@@ -50,24 +109,24 @@ namespace Mooege.Net
         /// <summary>
         /// The server that connection is bound to.
         /// </summary>
-        private readonly Server _server;
+        private Server _server;
 
         /// <summary>
         /// The recieve buffer.
         /// </summary>
         private readonly byte[] _recvBuffer = new byte[BufferSize];
-                
+
         public Connection(Server server, Socket socket)
         {
-            if (server == null) 
+            if (server == null)
                 throw new ArgumentNullException("server");
 
-            if (socket == null) 
+            if (socket == null)
                 throw new ArgumentNullException("socket");
 
             this._server = server;
             this.Socket = socket;
-        }       
+        }
 
         #region socket stuff
 
@@ -76,7 +135,7 @@ namespace Mooege.Net
         /// </summary>
         public bool IsConnected
         {
-            get { return Socket.Connected; }
+            get { return (Socket == null) ? false : Socket.Connected; }
         }
 
         /// <summary>
@@ -84,7 +143,7 @@ namespace Mooege.Net
         /// </summary>
         public IPEndPoint RemoteEndPoint
         {
-            get { return Socket.RemoteEndPoint as IPEndPoint; }
+            get { return (Socket == null) ? null : Socket.RemoteEndPoint as IPEndPoint; }
         }
 
         /// <summary>
@@ -111,12 +170,26 @@ namespace Mooege.Net
         /// <returns>Returns <see cref="IAsyncResult"/></returns>
         public IAsyncResult BeginReceive(AsyncCallback callback, object state)
         {
-            return Socket.BeginReceive(_recvBuffer, 0, BufferSize, SocketFlags.None, callback, state);
+            if (!IsEncrypted)
+            {
+                return this.Socket.BeginReceive(_recvBuffer, 0, BufferSize, SocketFlags.None, callback, state);
+            }
+            else
+            {
+                return this.TLSStream.BeginRead(_recvBuffer, 0, BufferSize, callback, state);
+            }
         }
 
         public int EndReceive(IAsyncResult result)
         {
-            return Socket.EndReceive(result);
+            if (!IsEncrypted)
+            {
+                return this.Socket.EndReceive(result);
+            }
+            else
+            {
+                return this.TLSStream.EndRead(result);
+            }
         }
 
         /// <summary>
@@ -177,6 +250,10 @@ namespace Mooege.Net
         public int Send(byte[] buffer, int start, int count, SocketFlags flags)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
+            if (_server == null)
+            {
+                throw new Exception("[Connection] _server is null in Send");
+            }
             return _server.Send(this, buffer, start, count, flags);
         }
 
@@ -200,6 +277,10 @@ namespace Mooege.Net
         public int Send(IEnumerable<byte> data, SocketFlags flags)
         {
             if (data == null) throw new ArgumentNullException("data");
+            if (_server == null)
+            {
+                throw new Exception("[Connection] _server is null in Send");
+            }
             return _server.Send(this, data, flags);
         }
 
@@ -208,8 +289,46 @@ namespace Mooege.Net
         /// </summary>
         public void Disconnect()
         {
-            if (this.IsConnected)
-                _server.Disconnect(this);
+            Logger.Trace("Disconnect() | server: " + _server);
+
+            if (_server != null)
+            {
+                // Use temp assignment to preven recursion.
+                Server tempServer = _server;
+                _server = null;
+                tempServer.Disconnect(this);
+            }
+
+            if (this.TLSStream != null)
+            {
+                try
+                {
+                    this.TLSStream.Close();
+                }
+                finally
+                {
+                    this.TLSStream.Dispose();
+                    this.TLSStream = null;
+                }
+            }
+
+            if (this.Socket != null)
+            {
+                try
+                {
+                    this.Socket.Shutdown(SocketShutdown.Both);
+                    this.Socket.Close();
+                }
+                catch (Exception)
+                {
+                    // Ignore any exceptions that might occur during attempt to close the Socket.
+                }
+                finally
+                {
+                    this.Socket.Dispose();
+                    this.Socket = null;
+                }
+            }
         }
 
         /// <summary>
@@ -218,7 +337,10 @@ namespace Mooege.Net
         /// <returns>Connection state string.</returns>
         public override string ToString()
         {
-            return Socket.RemoteEndPoint != null ? Socket.RemoteEndPoint.ToString() : "Not Connected!";
+            if (Socket == null)
+                return "No Socket!";
+            else
+                return Socket.RemoteEndPoint != null ? Socket.RemoteEndPoint.ToString() : "Not Connected!";
         }
 
         #endregion

@@ -236,6 +236,14 @@ class LibMooege
         
         return $response->CreateAccountResult;
     }
+	
+	public function ChangePassword($email, $password)
+	{
+	  if(!$this->connected)
+		return false;			   
+
+	  return $response=$this->accounts->ChangePassword(array('email' => $email, 'password' => $password));
+	}
     
     /**
      * Returns true if an account exists for given email address, false otherwise.

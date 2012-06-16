@@ -43,7 +43,7 @@ namespace Mooege.Core.MooNet.Authentication
         {
             client.LoginEmail = request.Email;
             var account = AccountManager.GetAccountByEmail(request.Email.ToLower()); // check if account exists.
-            
+
             if (account == null) // we should be returning an error to client /raist.
             {
                 client.AuthenticationErrorCode = AuthenticationErrorCodes.NoGameAccount;
@@ -59,19 +59,19 @@ namespace Mooege.Core.MooNet.Authentication
             // request client to load thumbprint.dll for authentication.
             var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
                 .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
-                    .SetRegion(0x00005858) // XX
+                    .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
                     .SetUsage(0x61757468) // auth - thumbprint.dll
                     .SetHash(ByteString.CopyFrom(VersionInfo.MooNet.ThumbprintHashMap[client.Platform])))
                 .SetMessage(ByteString.CopyFrom(thumbprintData))
                 .Build();
 
-            client.ThumbprintReq = true;
+            client.LastRequestedModule = MooNetClient.StreamedModule.Thumbprint;
             client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, callback => { }));
         }
 
         public static void HandleAuthResponse(MooNetClient client, int moduleId, byte[] authMessage)
         {
-            if(!OngoingAuthentications.ContainsKey(client)) return; // TODO: disconnect him also. /raist.
+            if (!OngoingAuthentications.ContainsKey(client)) return; // TODO: disconnect him also. /raist.
 
             var srp6 = OngoingAuthentications[client];
             byte[] A = authMessage.Skip(1).Take(128).ToArray(); // client's public ephemeral
@@ -79,8 +79,10 @@ namespace Mooege.Core.MooNet.Authentication
             byte[] seed = authMessage.Skip(1 + 32 + 128).Take(128).ToArray(); // client's second challenge.
 
             var success = srp6.Verify(A, M_client, seed);
-            if (Config.Instance.DisablePasswordChecks || success) // if authentication is sucesseful or password check's are disabled.
+            //if (Config.Instance.DisablePasswordChecks || success)
+            if (success)
             {
+                client.SessionKey = srp6.SessionKey;
                 // send the logon proof.
                 var message = bnet.protocol.authentication.ModuleMessageRequest.CreateBuilder()
                     .SetModuleId(moduleId)
@@ -88,18 +90,7 @@ namespace Mooege.Core.MooNet.Authentication
                     .Build();
 
                 client.MakeRPC(() =>
-                    bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => client.AuthenticationComplete()));
-                /*
-                var moduleLoadRequest = bnet.protocol.authentication.ModuleLoadRequest.CreateBuilder()
-                    .SetModuleHandle(bnet.protocol.ContentHandle.CreateBuilder()
-                        .SetRegion(0x00005858) // XX
-                        .SetUsage(0x61757468) // auth - RiskFingerprint.dll
-                        .SetHash(ByteString.CopyFrom("bcfa324ab555fc66614976011d018d2be2b9dc23d0b54d94a3bd7d12472aa107".ToByteArray())))
-                    .SetMessage(ByteString.Empty)
-                    .Build();
-
-                client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleLoad(null, moduleLoadRequest, ModuleLoadResponse));
-                */
+                    bnet.protocol.authentication.AuthenticationClient.CreateStub(client).ModuleMessage(null, message, callback => client.CheckAuthenticator()));
 
                 client.Account = AccountManager.GetAccountByEmail(srp6.Account.Email);
                 //if (client.Account.LoggedInClient != null)
@@ -109,21 +100,19 @@ namespace Mooege.Core.MooNet.Authentication
             else // authentication failed because of invalid credentals.
             {
                 client.AuthenticationErrorCode = AuthenticationErrorCodes.InvalidCredentials;
+                //end authentication
+                client.AuthenticationComplete();
             }
-             
+
             OngoingAuthentications.Remove(client);
         }
 
         public static void SendAccountSettings(MooNetClient client)
         {
             var accset = new bnet.protocol.authentication.AccountSettingsNotification.Builder();
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(168));
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(184));
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(185));
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(186));
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(187));
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(188));
-            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(193));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(111));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(227));
+            accset.AddLicenses(new bnet.protocol.account.AccountLicense.Builder().SetId(168)); //Full Game - Removes upgrade banner
             client.MakeRPC(() => bnet.protocol.authentication.AuthenticationClient.CreateStub(client).AccountSettings(null, accset.Build(), delegate(bnet.protocol.NO_RESPONSE a) { }));
         }
 

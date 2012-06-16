@@ -20,7 +20,7 @@ using Mooege.Net.GS.Message;
 
 namespace Mooege.Core.GS.Items.ItemCreation
 {
-    class PotionAttributeCreator: IItemAttributeCreator
+    class PotionAttributeCreator : IItemAttributeCreator
     {
         public void CreateAttributes(Item item)
         {

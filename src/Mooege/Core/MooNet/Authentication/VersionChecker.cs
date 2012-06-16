@@ -31,7 +31,7 @@ namespace Mooege.Core.MooNet.Authentication
             int versionMatch = -1;
             string clientVersionSignature = request.HasVersion ? request.Version.Substring(0, 24) : string.Empty; // get client's version string signature - the very first 24 chars like; "Aurora b4367eba86_public".
 
-            foreach(var pair in VersionInfo.MooNet.ClientVersionMaps) // see if client's version signature matches anyone in our client versions map.
+            foreach (var pair in VersionInfo.MooNet.ClientVersionMaps) // see if client's version signature matches anyone in our client versions map.
             {
                 if (pair.Key != clientVersionSignature)
                     continue;
@@ -55,10 +55,55 @@ namespace Mooege.Core.MooNet.Authentication
             }
 
             // set client locale
-            switch(request.Locale)
+            switch (request.Locale)
             {
+                case "deDE":
+                    client.Locale = MooNetClient.ClientLocale.deDE;
+                    break;
+                case "enGB":
+                    client.Locale = MooNetClient.ClientLocale.enGB;
+                    break;
+                case "enSG":
+                    client.Locale = MooNetClient.ClientLocale.enSG;
+                    break;
                 case "enUS":
                     client.Locale = MooNetClient.ClientLocale.enUS;
+                    break;
+                case "esES":
+                    client.Locale = MooNetClient.ClientLocale.esES;
+                    break;
+                case "esMX":
+                    client.Locale = MooNetClient.ClientLocale.esMX;
+                    break;
+                case "frFR":
+                    client.Locale = MooNetClient.ClientLocale.frFR;
+                    break;
+                case "itIT":
+                    client.Locale = MooNetClient.ClientLocale.itIT;
+                    break;
+                case "koKR":
+                    client.Locale = MooNetClient.ClientLocale.koKR;
+                    break;
+                case "plPL":
+                    client.Locale = MooNetClient.ClientLocale.plPL;
+                    break;
+                case "ptPT":
+                    client.Locale = MooNetClient.ClientLocale.ptPT;
+                    break;
+                case "ptBR":
+                    client.Locale = MooNetClient.ClientLocale.ptBR;
+                    break;
+                case "ruRU":
+                    client.Locale = MooNetClient.ClientLocale.ruRU;
+                    break;
+                case "trTR":
+                    client.Locale = MooNetClient.ClientLocale.trTR;
+                    break;
+                case "zhCN":
+                    client.Locale = MooNetClient.ClientLocale.zhCN;
+                    break;
+                case "zhTW":
+                    client.Locale = MooNetClient.ClientLocale.zhTW;
                     break;
                 default:
                     client.Locale = MooNetClient.ClientLocale.Invalid;
@@ -66,7 +111,7 @@ namespace Mooege.Core.MooNet.Authentication
             }
 
             Logger.Trace("Client Info: user: {0} program: {1}  platform: {2} locale: {3} version: {4} [{5}]  app_version: {6}.",
-                request.Email, request.Program, request.Platform, request.Locale, versionMatch != -1 ? versionMatch.ToString() : "Unknown", request.Version,request.ApplicationVersion);
+                request.Email, request.Program, request.Platform, request.Locale, versionMatch != -1 ? versionMatch.ToString() : "Unknown", request.Version, request.ApplicationVersion);
 
             //return versionMatch == VersionInfo.MooNet.RequiredClientVersion; // see if the client fits our required version.
             return request.ApplicationVersion == VersionInfo.MooNet.RequiredClientVersion;

@@ -92,6 +92,9 @@ namespace Mooege.Core.GS.Powers.Payloads
 
         public void Apply()
         {
+            if (this.Targets == null)
+                this.Targets = new TargetList();
+
             if (this.Target.World != null)
                 this.Target.World.BuffManager.SendTargetPayload(this.Target, this);
 

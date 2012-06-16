@@ -51,7 +51,7 @@ namespace Mooege.Net.MooNet.Packets
                 builder.SetMethodId(methodId);
 
             if (serviceId != MooNetRouter.ServiceReply && objectId != 0x0)
-                    builder.SetObjectId(objectId);
+                builder.SetObjectId(objectId);
 
             var header = builder.Build();
             var headerSize = (short)(header.SerializedSize);
@@ -68,7 +68,7 @@ namespace Mooege.Net.MooNet.Packets
 
                 output.Flush();
                 this.Data = stream.ToArray();
-                Logger.LogOutgoing(message, header);
+                Logger.LogOutgoingPacket(message, header);
             }
         }
     }
