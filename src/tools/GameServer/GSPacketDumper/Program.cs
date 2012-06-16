@@ -48,7 +48,7 @@ namespace GSPacketDumper
             if (File.Exists(outputFile)) File.Delete(outputFile);
 
             LogManager.Enabled = true;
-            LogManager.AttachLogTarget(new FileTarget(outputFile, Logger.Level.Dump, Logger.Level.Dump, true, true));
+            LogManager.AttachLogTarget(new FileTarget(outputFile, Logger.Level.PacketDump, Logger.Level.PacketDump, true, true));
 
             Console.WriteLine("Demystifying packets:");
             PacketReader.Read(args[0]);
