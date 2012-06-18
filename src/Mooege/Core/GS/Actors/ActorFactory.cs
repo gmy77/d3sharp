@@ -82,7 +82,11 @@ namespace Mooege.Core.GS.Actors
                         case GizmoGroup.Barricade:
                             return new DesctructibleLootContainer(world, snoId, tags);
                         case GizmoGroup.Portal:
-                            return new Portal(world, snoId, tags);
+                            //Prevent Development Hell portal from showing
+                            if (tags[MarkerKeys.DestinationWorld].Id != 222591)
+                                return new Portal(world, snoId, tags);
+                            else
+                                return null;
                         case GizmoGroup.BossPortal:
                             Logger.Warn("Skipping loading of boss portals");
                             return null;
@@ -134,7 +138,10 @@ namespace Mooege.Core.GS.Actors
         private static Actor CreateGizmo(World world, int snoId, TagMap tags)
         {
             if (tags.ContainsKey(MarkerKeys.DestinationWorld))
-                return new Portal(world, snoId, tags);
+            {
+                if (tags[MarkerKeys.DestinationWorld].Id != 222591)
+                    return new Portal(world, snoId, tags);
+            }
 
             return new Gizmo(world, snoId, tags);
         }
