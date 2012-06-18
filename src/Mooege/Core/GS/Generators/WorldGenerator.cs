@@ -52,8 +52,8 @@ namespace Mooege.Core.GS.Generators
             {
                 Logger.Error("World {0} [{1}] is a dynamic world! Can't generate proper dynamic worlds yet!", worldAsset.Name, worldAsset.SNOId);
 
-                //GenerateRandomDungeon(worldSNO, worldData);
-                return null;
+                if (!GenerateRandomDungeon(worldSNO, worldData))
+                    return null;
             }
 
             var world = new World(game, worldSNO);
@@ -212,8 +212,11 @@ namespace Mooege.Core.GS.Generators
             Open //"path" in that direction
         }
 
-        private static void GenerateRandomDungeon(int worldSNO, Mooege.Common.MPQ.FileFormats.World worldData)
+        private static bool GenerateRandomDungeon(int worldSNO, Mooege.Common.MPQ.FileFormats.World worldData)
         {
+            if (worldData.DRLGParams.Count == 0)
+                return false;
+
             Dictionary<int, TileInfo> tiles = new Dictionary<int, TileInfo>();
 
             //Each DRLGParam is a level
@@ -257,6 +260,7 @@ namespace Mooege.Core.GS.Generators
             //AddTile(world, tiles[132203], new Vector3D(480, 240, 0));
             //AddTile(world, tiles[132263], new Vector3D(240, 480, 0));
             //return world;
+            return true;
         }
 
 
