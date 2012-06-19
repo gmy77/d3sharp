@@ -24,28 +24,33 @@ namespace PonyLib
     {
         #region current
 
-        // Build 1.0.2.9991
+        // Build 1.0.3.10057
 
         /// <summary>
         /// Offset for server-ip check.
         /// </summary>
-        public const Int32 ServerIPCheckOffset = 0x000BC25C;
+        public const Int32 ServerIPCheckOffset = 0x000BC2CC;
 
         /// <summary>
         /// Offset for second challenge check.
         /// </summary>
-        public const Int32 SecondChallengeCheckOffset = 0x000BC219;
+        public const Int32 SecondChallengeCheckOffset = 0x000BC289;
 
         /// <summary>
         /// Required bnet module version.
         /// </summary>
-        public const string RequiredBnetModuleVersion = "24e2d13e54";
+        public const string RequiredBnetModuleVersion = "ab0ebd5e2c";
 
         #endregion
 
         #region old offsets
 
         // add previous offset information to here once you update current region!
+
+        //1.2.9991
+        //public const Int32 ServerIPCheckOffset = 0x000BC25C;
+        //public const Int32 SecondChallengeCheckOffset = 0x000BC219;
+        //public const string RequiredBnetModuleVersion = "24e2d13e54";
 
         // 1.0.2.9858, 1.0.2.9950
         //public const Int32 ServerIPCheckOffset = 0x000BA8A2;

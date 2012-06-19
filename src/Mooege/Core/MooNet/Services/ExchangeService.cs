@@ -371,5 +371,15 @@ namespace Mooege.Core.MooNet.Services
         {
             throw new NotImplementedException();
         }
+
+        public override void CreateCSTradeItem(IRpcController controller, bnet.protocol.exchange.CreateCSTradeItemRequest request, Action<bnet.protocol.exchange.CreateCSTradeResponse> done)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void CreateCSTradeMoney(IRpcController controller, bnet.protocol.exchange.CreateCSTradeMoneyRequest request, Action<bnet.protocol.exchange.CreateCSTradeResponse> done)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

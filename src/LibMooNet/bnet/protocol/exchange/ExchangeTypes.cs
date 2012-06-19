@@ -146,66 +146,66 @@ namespace bnet.protocol.exchange {
           "LkJpZEV4dGVuZGVkEj0KDm9mZmVyX2V4dGVuZGVkGAMgASgLMiUuYm5ldC5w" + 
           "cm90b2NvbC5leGNoYW5nZS5PZmZlckV4dGVuZGVkIlMKFFF1ZXJ5RmlsdGVy" + 
           "QnlPcmRlcklkEhIKCm1heF9yZXN1bHQYASACKA0SFAoMcmVmX29yZGVyX2lk" + 
-          "GAIgASgEEhEKCXJlZl9wcmljZRgDIAEoBCJIChhRdWVyeUZpbHRlckJ5Q3Jl" + 
+          "GAIgASgEEhEKCXJlZl9wcmljZRgDIAEoBCJaChhRdWVyeUZpbHRlckJ5Q3Jl" + 
           "YXRlZFRpbWUSEgoKbWF4X3Jlc3VsdBgBIAIoDRIYChByZWZfY3JlYXRlZF90" + 
-          "aW1lGAIgASgEIvYBChBRdWVyeU9yZGVyRmlsdGVyEhAKCGN1cnJlbmN5GAEg" + 
-          "ASgJEhIKCnNwZWNpYWxpc3QYAiABKA0SEgoKb3JkZXJfdHlwZRgDIAEoDRIU" + 
-          "CgljbGFpbWFibGUYBCABKA06ATASGQoRb3JkZXJfc3RhdHVzX21hc2sYBSAB" + 
-          "KA0SFQoGcm9sbHVwGAYgASgIOgVmYWxzZRJFCgt0aW1lX2ZpbHRlchgHIAIo" + 
-          "CzIwLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUXVlcnlGaWx0ZXJCeUNyZWF0" + 
-          "ZWRUaW1lEhkKEW9yZGVyX2Jvb2tfc3RhdHVzGAggASgNIpcBCg5DdXJyZW5j" + 
-          "eUNvbmZpZxIQCghjdXJyZW5jeRgBIAIoCRIRCgl0aWNrX3NpemUYAiABKAQS" + 
-          "FgoObWluX3VuaXRfcHJpY2UYAyABKAQSFgoObWF4X3VuaXRfcHJpY2UYBCAB" + 
-          "KAQSFwoPbWluX3RvdGFsX3ByaWNlGAUgASgEEhcKD21heF90b3RhbF9wcmlj" + 
-          "ZRgGIAEoBCKvAwoQU3BlY2lhbGlzdENvbmZpZxISCgpzcGVjaWFsaXN0GAEg" + 
-          "AigFEh0KEWF1Y3Rpb25fZHVyYXRpb25zGAIgAygEQgIQARIgChRhdWN0aW9u" + 
-          "X3N0YXJ0X2RlbGF5cxgDIAMoBEICEAESJAocYW50aV9zbmlwaW5nX2V4dGVu" + 
-          "c2lvbl9kZWxheRgEIAEoBBIbChBtYXhfaXRlbXNfYW1vdW50GAUgASgEOgEw" + 
-          "EiAKGHN0YXJ0aW5nX3VuaXRfcHJpY2VfcnVsZRgGIAEoBRIgChhyZXNlcnZl" + 
-          "ZF91bml0X3ByaWNlX3J1bGUYByABKAUSIQoZdHJhZGVfbm93X3VuaXRfcHJp" + 
-          "Y2VfcnVsZRgIIAEoBRIfChdjdXJyZW50X3VuaXRfcHJpY2VfcnVsZRgJIAEo" + 
-          "BRIfChdtYXhpbXVtX3VuaXRfcHJpY2VfcnVsZRgKIAEoBRI/Cg9jdXJyZW5j" + 
-          "eV9jb25maWcYCyADKAsyJi5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkN1cnJl" + 
-          "bmN5Q29uZmlnEhkKEWZpbGxfb3Jfa2lsbF9ydWxlGAwgASgFIvUBChFGZWVF" + 
-          "c3RpbWF0aW9uRGF0YRIPCgdwcm9ncmFtGAEgAigHEhIKCnNwZWNpYWxpc3QY" + 
-          "AiACKAUSEAoIY3VycmVuY3kYAyACKAkSDgoGc291cmNlGAQgAigHEhQKDG1v" + 
-          "bmV5X2Ftb3VudBgFIAIoBBITCgtpdGVtX2Ftb3VudBgGIAIoBBItCgxibmV0" + 
-          "X2FjY291bnQYByABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0eUlkEj8KD2Jp" + 
-          "bGxpbmdfYWRkcmVzcxgIIAEoCzImLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
-          "QmlsbGluZ0FkZHJlc3MioQMKCUZlZURldGFpbBIOCgZyb3dudW0YASACKAQS" + 
-          "GgoSZmVlX2F1dGhfZGV0YWlsX2lkGAIgAigEEg4KBmZlZV9pZBgDIAEoBBIS" + 
-          "CgpmZWVfYW1vdW50GAQgASgEEhcKD2Rpc2NvdW50X2Ftb3VudBgFIAEoBBIU" + 
-          "CgxmZWVfZ3JvdXBfaWQYBiABKAQSFgoOZmVlX2dyb3VwX25hbWUYByABKAkS" + 
-          "FwoPZmxhdF9mZWVfYW1vdW50GAggASgEEhgKEHNjYWxpbmdfZmVlX3JhdGUY" + 
-          "CSABKAISFgoObWF4X2ZlZV9hbW91bnQYCiABKAQSFwoPZmVlX2Rlc2NyaXB0" + 
-          "aW9uGAsgASgJEg4KBmlzX3RheBgMIAIoCBIWCg5jb3Vwb25fYm9va19pZBgN" + 
-          "IAEoBBITCgtjb3Vwb25fdHlwZRgOIAEoBBIaChJjb3Vwb25fZGVzY3JpcHRp" + 
-          "b24YDyABKAkSHwoXbGVmdF9vdmVyX2NvdXBvbl9jcmVkaXQYECABKAQSHwoX" + 
-          "bGVmdF9vdmVyX2NvdXBvbl9jaGFyZ2UYESABKAQiMgoLUHJpY2VEZXRhaWwS" + 
-          "EwoLdHJhZGVfcHJpY2UYASACKAQSDgoGYW1vdW50GAIgAigEIiUKBUNvdW50" + 
-          "Eg0KBWNvdW50GAEgAigNEg0KBWxpbWl0GAIgASgNIkYKFEFkdmFuY2VkU3Vi" + 
-          "c2NyaXB0aW9uEg8KB3Byb2dyYW0YASACKAcSDQoFZXZlbnQYAiACKA0SDgoG" + 
-          "cmVhc29uGAMgAygNIoMHCgtIaXN0b3J5RGF0YRIVCg1vcmRlcl9ib29rX2lk" + 
-          "GAEgAigEEjkKDHBhcnRpdGlvbl9pZBgCIAIoCzIjLmJuZXQucHJvdG9jb2wu" + 
-          "ZXhjaGFuZ2UuUGFydGl0aW9uSWQSEQoJYWN0aW9uX2lkGAMgAigEEhgKEHBh" + 
-          "cmVudF9zZXR0bGVfaWQYBCABKAQSFgoOcGFyZW50X3NldHRsZWQYBSABKAgS" + 
-          "GQoRYXV0aG9yaXplZF9hbW91bnQYBiACKAQSHQoVYXV0aG9yaXplZF9mZWVf" + 
-          "YW1vdW50GAcgASgEEg4KBmFtb3VudBgIIAIoBBISCgpmZWVfYW1vdW50GAkg" + 
-          "ASgEEhAKCGRlZmVycmVkGAogAigIEhkKEWhhc19iZWVuX2RlZmVycmVkGAsg" + 
-          "AigIEhAKCHByb2dyZXNzGAwgAigEEg8KB2NyZWF0ZWQYDSACKAQSFgoOcmlz" + 
-          "a19jb21wbGV0ZWQYDiABKAQSEwoLcmlza19yZXN1bHQYDyABKAQSFAoMcmlz" + 
-          "a192ZXJkaWN0GBAgASgEEhEKCWNvbXBsZXRlZBgRIAEoBBITCgtyZXN1bHRf" + 
-          "Y29kZRgSIAEoBBI6ChBhY2NvdW50X2Zvcl9pdGVtGBMgAigLMiAuYm5ldC5w" + 
-          "cm90b2NvbC5leGNoYW5nZS5CbG9iRnJvbRI7ChFhY2NvdW50X2Zvcl9tb25l" + 
-          "eRgUIAIoCzIgLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmxvYkZyb20SEgoK" + 
-          "b3JkZXJfdHlwZRgVIAIoDRIQCghvcmRlcl9pZBgWIAIoBBIPCgdhdXRoX2lk" + 
-          "GBcgAigEEhgKEGF1dGhfb2JqZWN0X3R5cGUYGCACKA0SFwoPdHJhbnNfZGly" + 
-          "ZWN0aW9uGBkgAigJEh4KFmF1dGhfY29tcGxldGVfcHJvZ3Jlc3MYGiACKAQS" + 
-          "HAoUYXV0aF9maWxsZWRfcHJvZ3Jlc3MYGyACKAQSGwoTYXV0aF90b3RhbF9w" + 
-          "cm9ncmVzcxgcIAIoBBI7CgthdXRoX2hhbmRsZRgdIAIoCzImLmJuZXQucHJv" + 
-          "dG9jb2wuZXhjaGFuZ2UuQmxvYkZyb21PZlR5cGUSFQoNYXV0aF9kZWZlcnJl" + 
-          "ZBgeIAIoCBIyCgV0b2tlbhgfIAIoCzIjLmJuZXQucHJvdG9jb2wuZXhjaGFu" + 
-          "Z2UuUGFydGl0aW9uSWQ=");
+          "aW1lGAIgASgEEhAKCGN1cnJlbmN5GAMgASgJIvYBChBRdWVyeU9yZGVyRmls" + 
+          "dGVyEhAKCGN1cnJlbmN5GAEgASgJEhIKCnNwZWNpYWxpc3QYAiABKA0SEgoK" + 
+          "b3JkZXJfdHlwZRgDIAEoDRIUCgljbGFpbWFibGUYBCABKA06ATASGQoRb3Jk" + 
+          "ZXJfc3RhdHVzX21hc2sYBSABKA0SFQoGcm9sbHVwGAYgASgIOgVmYWxzZRJF" + 
+          "Cgt0aW1lX2ZpbHRlchgHIAIoCzIwLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
+          "UXVlcnlGaWx0ZXJCeUNyZWF0ZWRUaW1lEhkKEW9yZGVyX2Jvb2tfc3RhdHVz" + 
+          "GAggASgNIpcBCg5DdXJyZW5jeUNvbmZpZxIQCghjdXJyZW5jeRgBIAIoCRIR" + 
+          "Cgl0aWNrX3NpemUYAiABKAQSFgoObWluX3VuaXRfcHJpY2UYAyABKAQSFgoO" + 
+          "bWF4X3VuaXRfcHJpY2UYBCABKAQSFwoPbWluX3RvdGFsX3ByaWNlGAUgASgE" + 
+          "EhcKD21heF90b3RhbF9wcmljZRgGIAEoBCKvAwoQU3BlY2lhbGlzdENvbmZp" + 
+          "ZxISCgpzcGVjaWFsaXN0GAEgAigFEh0KEWF1Y3Rpb25fZHVyYXRpb25zGAIg" + 
+          "AygEQgIQARIgChRhdWN0aW9uX3N0YXJ0X2RlbGF5cxgDIAMoBEICEAESJAoc" + 
+          "YW50aV9zbmlwaW5nX2V4dGVuc2lvbl9kZWxheRgEIAEoBBIbChBtYXhfaXRl" + 
+          "bXNfYW1vdW50GAUgASgEOgEwEiAKGHN0YXJ0aW5nX3VuaXRfcHJpY2VfcnVs" + 
+          "ZRgGIAEoBRIgChhyZXNlcnZlZF91bml0X3ByaWNlX3J1bGUYByABKAUSIQoZ" + 
+          "dHJhZGVfbm93X3VuaXRfcHJpY2VfcnVsZRgIIAEoBRIfChdjdXJyZW50X3Vu" + 
+          "aXRfcHJpY2VfcnVsZRgJIAEoBRIfChdtYXhpbXVtX3VuaXRfcHJpY2VfcnVs" + 
+          "ZRgKIAEoBRI/Cg9jdXJyZW5jeV9jb25maWcYCyADKAsyJi5ibmV0LnByb3Rv" + 
+          "Y29sLmV4Y2hhbmdlLkN1cnJlbmN5Q29uZmlnEhkKEWZpbGxfb3Jfa2lsbF9y" + 
+          "dWxlGAwgASgFIvUBChFGZWVFc3RpbWF0aW9uRGF0YRIPCgdwcm9ncmFtGAEg" + 
+          "AigHEhIKCnNwZWNpYWxpc3QYAiACKAUSEAoIY3VycmVuY3kYAyACKAkSDgoG" + 
+          "c291cmNlGAQgAigHEhQKDG1vbmV5X2Ftb3VudBgFIAIoBBITCgtpdGVtX2Ft" + 
+          "b3VudBgGIAIoBBItCgxibmV0X2FjY291bnQYByABKAsyFy5ibmV0LnByb3Rv" + 
+          "Y29sLkVudGl0eUlkEj8KD2JpbGxpbmdfYWRkcmVzcxgIIAEoCzImLmJuZXQu" + 
+          "cHJvdG9jb2wuZXhjaGFuZ2UuQmlsbGluZ0FkZHJlc3MioQMKCUZlZURldGFp" + 
+          "bBIOCgZyb3dudW0YASACKAQSGgoSZmVlX2F1dGhfZGV0YWlsX2lkGAIgAigE" + 
+          "Eg4KBmZlZV9pZBgDIAEoBBISCgpmZWVfYW1vdW50GAQgASgEEhcKD2Rpc2Nv" + 
+          "dW50X2Ftb3VudBgFIAEoBBIUCgxmZWVfZ3JvdXBfaWQYBiABKAQSFgoOZmVl" + 
+          "X2dyb3VwX25hbWUYByABKAkSFwoPZmxhdF9mZWVfYW1vdW50GAggASgEEhgK" + 
+          "EHNjYWxpbmdfZmVlX3JhdGUYCSABKAISFgoObWF4X2ZlZV9hbW91bnQYCiAB" + 
+          "KAQSFwoPZmVlX2Rlc2NyaXB0aW9uGAsgASgJEg4KBmlzX3RheBgMIAIoCBIW" + 
+          "Cg5jb3Vwb25fYm9va19pZBgNIAEoBBITCgtjb3Vwb25fdHlwZRgOIAEoBBIa" + 
+          "ChJjb3Vwb25fZGVzY3JpcHRpb24YDyABKAkSHwoXbGVmdF9vdmVyX2NvdXBv" + 
+          "bl9jcmVkaXQYECABKAQSHwoXbGVmdF9vdmVyX2NvdXBvbl9jaGFyZ2UYESAB" + 
+          "KAQiMgoLUHJpY2VEZXRhaWwSEwoLdHJhZGVfcHJpY2UYASACKAQSDgoGYW1v" + 
+          "dW50GAIgAigEIiUKBUNvdW50Eg0KBWNvdW50GAEgAigNEg0KBWxpbWl0GAIg" + 
+          "ASgNIkYKFEFkdmFuY2VkU3Vic2NyaXB0aW9uEg8KB3Byb2dyYW0YASACKAcS" + 
+          "DQoFZXZlbnQYAiACKA0SDgoGcmVhc29uGAMgAygNIoMHCgtIaXN0b3J5RGF0" + 
+          "YRIVCg1vcmRlcl9ib29rX2lkGAEgAigEEjkKDHBhcnRpdGlvbl9pZBgCIAIo" + 
+          "CzIjLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQSEQoJYWN0" + 
+          "aW9uX2lkGAMgAigEEhgKEHBhcmVudF9zZXR0bGVfaWQYBCABKAQSFgoOcGFy" + 
+          "ZW50X3NldHRsZWQYBSABKAgSGQoRYXV0aG9yaXplZF9hbW91bnQYBiACKAQS" + 
+          "HQoVYXV0aG9yaXplZF9mZWVfYW1vdW50GAcgASgEEg4KBmFtb3VudBgIIAIo" + 
+          "BBISCgpmZWVfYW1vdW50GAkgASgEEhAKCGRlZmVycmVkGAogAigIEhkKEWhh" + 
+          "c19iZWVuX2RlZmVycmVkGAsgAigIEhAKCHByb2dyZXNzGAwgAigEEg8KB2Ny" + 
+          "ZWF0ZWQYDSACKAQSFgoOcmlza19jb21wbGV0ZWQYDiABKAQSEwoLcmlza19y" + 
+          "ZXN1bHQYDyABKAQSFAoMcmlza192ZXJkaWN0GBAgASgEEhEKCWNvbXBsZXRl" + 
+          "ZBgRIAEoBBITCgtyZXN1bHRfY29kZRgSIAEoBBI6ChBhY2NvdW50X2Zvcl9p" + 
+          "dGVtGBMgAigLMiAuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5CbG9iRnJvbRI7" + 
+          "ChFhY2NvdW50X2Zvcl9tb25leRgUIAIoCzIgLmJuZXQucHJvdG9jb2wuZXhj" + 
+          "aGFuZ2UuQmxvYkZyb20SEgoKb3JkZXJfdHlwZRgVIAIoDRIQCghvcmRlcl9p" + 
+          "ZBgWIAIoBBIPCgdhdXRoX2lkGBcgAigEEhgKEGF1dGhfb2JqZWN0X3R5cGUY" + 
+          "GCACKA0SFwoPdHJhbnNfZGlyZWN0aW9uGBkgAigJEh4KFmF1dGhfY29tcGxl" + 
+          "dGVfcHJvZ3Jlc3MYGiACKAQSHAoUYXV0aF9maWxsZWRfcHJvZ3Jlc3MYGyAC" + 
+          "KAQSGwoTYXV0aF90b3RhbF9wcm9ncmVzcxgcIAIoBBI7CgthdXRoX2hhbmRs" + 
+          "ZRgdIAIoCzImLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmxvYkZyb21PZlR5" + 
+          "cGUSFQoNYXV0aF9kZWZlcnJlZBgeIAIoCBIyCgV0b2tlbhgfIAIoCzIjLmJu" + 
+          "ZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQ=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_exchange_OrderBook__Descriptor = Descriptor.MessageTypes[0];
@@ -267,7 +267,7 @@ namespace bnet.protocol.exchange {
         internal__static_bnet_protocol_exchange_QueryFilterByCreatedTime__Descriptor = Descriptor.MessageTypes[14];
         internal__static_bnet_protocol_exchange_QueryFilterByCreatedTime__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.QueryFilterByCreatedTime, global::bnet.protocol.exchange.QueryFilterByCreatedTime.Builder>(internal__static_bnet_protocol_exchange_QueryFilterByCreatedTime__Descriptor,
-                new string[] { "MaxResult", "RefCreatedTime", });
+                new string[] { "MaxResult", "RefCreatedTime", "Currency", });
         internal__static_bnet_protocol_exchange_QueryOrderFilter__Descriptor = Descriptor.MessageTypes[15];
         internal__static_bnet_protocol_exchange_QueryOrderFilter__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.QueryOrderFilter, global::bnet.protocol.exchange.QueryOrderFilter.Builder>(internal__static_bnet_protocol_exchange_QueryOrderFilter__Descriptor,
@@ -8173,8 +8173,8 @@ namespace bnet.protocol.exchange {
   public sealed partial class QueryFilterByCreatedTime : pb::GeneratedMessage<QueryFilterByCreatedTime, QueryFilterByCreatedTime.Builder> {
     private QueryFilterByCreatedTime() { }
     private static readonly QueryFilterByCreatedTime defaultInstance = new QueryFilterByCreatedTime().MakeReadOnly();
-    private static readonly string[] _queryFilterByCreatedTimeFieldNames = new string[] { "max_result", "ref_created_time" };
-    private static readonly uint[] _queryFilterByCreatedTimeFieldTags = new uint[] { 8, 16 };
+    private static readonly string[] _queryFilterByCreatedTimeFieldNames = new string[] { "currency", "max_result", "ref_created_time" };
+    private static readonly uint[] _queryFilterByCreatedTimeFieldTags = new uint[] { 26, 8, 16 };
     public static QueryFilterByCreatedTime DefaultInstance {
       get { return defaultInstance; }
     }
@@ -8215,6 +8215,16 @@ namespace bnet.protocol.exchange {
       get { return refCreatedTime_; }
     }
     
+    public const int CurrencyFieldNumber = 3;
+    private bool hasCurrency;
+    private string currency_ = "";
+    public bool HasCurrency {
+      get { return hasCurrency; }
+    }
+    public string Currency {
+      get { return currency_; }
+    }
+    
     public override bool IsInitialized {
       get {
         if (!hasMaxResult) return false;
@@ -8226,10 +8236,13 @@ namespace bnet.protocol.exchange {
       int size = SerializedSize;
       string[] field_names = _queryFilterByCreatedTimeFieldNames;
       if (hasMaxResult) {
-        output.WriteUInt32(1, field_names[0], MaxResult);
+        output.WriteUInt32(1, field_names[1], MaxResult);
       }
       if (hasRefCreatedTime) {
-        output.WriteUInt64(2, field_names[1], RefCreatedTime);
+        output.WriteUInt64(2, field_names[2], RefCreatedTime);
+      }
+      if (hasCurrency) {
+        output.WriteString(3, field_names[0], Currency);
       }
       UnknownFields.WriteTo(output);
     }
@@ -8246,6 +8259,9 @@ namespace bnet.protocol.exchange {
         }
         if (hasRefCreatedTime) {
           size += pb::CodedOutputStream.ComputeUInt64Size(2, RefCreatedTime);
+        }
+        if (hasCurrency) {
+          size += pb::CodedOutputStream.ComputeStringSize(3, Currency);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -8379,6 +8395,9 @@ namespace bnet.protocol.exchange {
         if (other.HasRefCreatedTime) {
           RefCreatedTime = other.RefCreatedTime;
         }
+        if (other.HasCurrency) {
+          Currency = other.Currency;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -8430,6 +8449,10 @@ namespace bnet.protocol.exchange {
               result.hasRefCreatedTime = input.ReadUInt64(ref result.refCreatedTime_);
               break;
             }
+            case 26: {
+              result.hasCurrency = input.ReadString(ref result.currency_);
+              break;
+            }
           }
         }
         
@@ -8477,6 +8500,27 @@ namespace bnet.protocol.exchange {
         PrepareBuilder();
         result.hasRefCreatedTime = false;
         result.refCreatedTime_ = 0UL;
+        return this;
+      }
+      
+      public bool HasCurrency {
+        get { return result.hasCurrency; }
+      }
+      public string Currency {
+        get { return result.Currency; }
+        set { SetCurrency(value); }
+      }
+      public Builder SetCurrency(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasCurrency = true;
+        result.currency_ = value;
+        return this;
+      }
+      public Builder ClearCurrency() {
+        PrepareBuilder();
+        result.hasCurrency = false;
+        result.currency_ = "";
         return this;
       }
     }

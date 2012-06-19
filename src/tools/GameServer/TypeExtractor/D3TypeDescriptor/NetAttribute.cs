@@ -30,6 +30,7 @@ namespace D3TypeDescriptor
         //FloatMinMax,
         Float16,
         Float16Or32,
+        Float32,
     }
 
     public class NetAttribute

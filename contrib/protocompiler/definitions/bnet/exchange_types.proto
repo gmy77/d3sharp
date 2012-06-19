@@ -154,6 +154,7 @@ message QueryFilterByCreatedTime
 {
     required uint32 max_result = 1;
     optional uint64 ref_created_time = 2;
+    optional string currency = 3;
 }
 
 message QueryOrderFilter

@@ -36,7 +36,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Main assemblies version.
             /// </summary>
-            public const string Version = "1.9991.*";
+            public const string Version = "1.10057.*";
         }
 
         /// <summary>
@@ -47,10 +47,11 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required client version.
             /// </summary>
-            public const int RequiredClientVersion = 9991;
+            public const int RequiredClientVersion = 10057;
 
             public static Dictionary<string, int> ClientVersionMaps = new Dictionary<string, int>
             {
+                {"Aurora ab0ebd5e2c_public", 10057},
                 {"Aurora 24e2d13e54_public", 9991},
                 {"Aurora 79fef7ae8e_public", 9950}, // also 9858
                 {"Aurora 8018401a9c_public", 9749},
@@ -157,7 +158,7 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Required MPQ patch version.
             /// </summary>
-            public const int RequiredPatchVersion = 9991;
+            public const int RequiredPatchVersion = 10057;
         }
 
         /// <summary>
@@ -168,9 +169,10 @@ namespace Mooege.Common.Versions
             /// <summary>
             /// Ingame protocol hash.
             /// </summary>
-            public const int ProtocolHash = 0x33CABB38; //9950
+            public const int ProtocolHash = unchecked((int)0xFDD6012B); //10057
 
             // old hashes
+            //unchecked((int)0xFDD6012B)    // 10057
             // 0x33CABB38                   // 9183, 9327, 9359, 9749, 9858, 9950, 9991
             // unchecked((int)0x9726E2E3)   // 8896
             // 0x375AE194                   // 8815
@@ -183,8 +185,8 @@ namespace Mooege.Common.Versions
             // 0x21EEE08D                   // 7446
 
             //This is the server version sent in VersionsMessage
-            public const string MajorVersion = "1.0.2";
-            public const string ServerBuild = "10039";
+            public const string MajorVersion = "1.0.3";
+            public const string ServerBuild = "10057";
             public const string VersionString = MajorVersion + "." + ServerBuild;
 
             // old version strings.
