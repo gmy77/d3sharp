@@ -403,6 +403,8 @@
     <Compile Include="Core\MooNet\Toons\ToonHandleHelper.cs" />
     <Compile Include="Core\MooNet\Toons\ToonManager.cs" />
     <Compile Include="Net\GS\Message\Definitions\ACD\ACDTranslateAckMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Hireling\HirelingRetrainMessage.cs" />
+    <Compile Include="Net\GS\Message\Definitions\Inventory\InventoryIdentifyItem.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\PlayerKickTimerMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Player\UnlockDifficultyMessage.cs" />
     <Compile Include="Net\GS\Message\Definitions\Skill\AssignTraitsMessage.cs" />

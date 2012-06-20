@@ -108,7 +108,7 @@ namespace Mooege.Net.GS.Message
         DWordDataMessage5 = 91, // len: 	12
         TryChatMessage = 92, // len: 	528
         ChatMessage = 93, // len: 	528
-        ANNDataMessage9 = 94, // len: 	12
+        DropItemMessage = 94, // len: 	12 former ANNDataMessage9
         InventoryRequestMoveMessage1 = 95, // len: 	28
         InventoryRequestQuickMoveMessage = 96, // len:  28
         InventoryRequestSocketMessage = 97, // len: 	16
@@ -117,7 +117,7 @@ namespace Mooege.Net.GS.Message
         InventoryDropStackPortionMessage = 100, //len:   24
         InventoryStackTransferMessage = 101, // len: 	24
         ANNDataMessage10 = 102, // len: 	12
-        ANNDataMessageXX = 103, //len: 12
+        IdentifyItemMessage = 103, //len: 12 former ANNDataMessageXX
         SimpleMessage47 = 104, //len 8 added in 7841
         ANNDataMessage11 = 105, // len: 	12
         InventoryRequestUseMessage = 106, // len: 	36
@@ -287,8 +287,8 @@ namespace Mooege.Net.GS.Message
         BossZoomMessage = 272, // len: 	16
         EnchantItemMessage = 273, // len: 	16
         ANNDataMessage29 = 274, // len: 	12
-        SimpleMessage31 = 275, // len: 	8
-        SimpleMessage32 = 276, // len: 	8
+        RepairAllMessage = 275, // len: 	8 former SimpleMessage31
+        RepairEquippedMessage = 276, // len: 	8 former SimpleMessage32
         RequestTrainArtisanMessage = 277, // len: 	8   former SimpleMessage33
         IntDataMessage6 = 278, // len: 	12
         DebugDrawPrimMessage = 279, // len: 	188
@@ -300,13 +300,13 @@ namespace Mooege.Net.GS.Message
         IntDataMessage7 = 285, // len: 	12
         UnlockDifficultyMessage = 286, // len:  16 added patch 13
         IntDataMessage8 = 287, // len: 	12
-        SimpleMessage35 = 288, // len: 	8
+        HirelingRetrainMessage = 288, // len: 	8 former SimpleMessage35
         SimpleMessage36 = 289, // len: 	8
         GameTestingSamplingStartMessage = 290, // len: 	16
         SimpleMessage37 = 291, // len: 	8
         TutorialShownMessage = 292, // len: 	12 former SNODataMessage5
         RequestBuffCancelMessage = 293, // len: 	16
-        SimpleMessage38 = 294, // len: 	8
+        CancelCinematicsMessage = 294, // len: 	8 fomer Simplemessage38
         PlayerIndexMessage7 = 295, // len: 	12
         SimpleMessage39 = 296, // len: 	8
         SimpleMessage40 = 297, // len: 	8

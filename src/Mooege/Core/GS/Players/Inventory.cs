@@ -468,9 +468,19 @@ namespace Mooege.Core.GS.Players
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
             else if (message is RequestBuySharedStashSlotsMessage) OnBuySharedStashSlots(message as RequestBuySharedStashSlotsMessage);
             else if (message is InventoryRequestUseMessage) OnInventoryRequestUseMessage(message as InventoryRequestUseMessage);
+            else if (message is InventoryIdentifyItemMessage) OnInventoryIdentifyItemMessage(message as InventoryIdentifyItemMessage);
 
             _owner.SetAttributesByItems();
             _owner.Attributes.BroadcastChangedIfRevealed();
+        }
+
+        private void OnInventoryIdentifyItemMessage(InventoryIdentifyItemMessage msg)
+        {
+            var item = GetItem(msg.ItemID);
+            if (item == null)
+                return;
+
+            Logger.Warn("Identifying items not implemented yet");
         }
 
         private void OnBuySharedStashSlots(RequestBuySharedStashSlotsMessage requestBuySharedStashSlotsMessage)
