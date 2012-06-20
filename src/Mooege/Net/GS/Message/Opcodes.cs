@@ -66,7 +66,7 @@ namespace Mooege.Net.GS.Message
         SimpleMessage48 = 49, //Len: 8  added 8058
         ConnectionEstablishedMessage = 50, // len: 	20
         GameSetupMessage = 51, // len: 	20
-        SimpleMessage7 = 52, // len: 	8
+        GameSetupMessageAck = 52, // len: 	8 former SimpleMessage7
         NewPlayerMessage = 53, // len: 	16916
         PlayerKickTimerMessage = 54, //len: 16
         PlayerBannerMessage = 55, // len: 	former GenericBlobMessage7
