@@ -50,7 +50,7 @@ namespace Mooege.Core.MooNet.Services
                 .AddContentHandle(bnet.protocol.ContentHandle.CreateBuilder()
                     .SetRegion(VersionInfo.MooNet.Regions[VersionInfo.MooNet.Region])
                     .SetUsage(0x6D74727A) //mtrz
-                    .SetHash(ByteString.CopyFrom("18e98cde12837149621988ceee55123bf2be839a6dc1d6bb00a399520656b2a6".ToByteArray()))));
+                    .SetHash(ByteString.CopyFrom("acaeab71f005567974a656cf1207f74bb9a5365c84e9f22f1f82ffec3d1367a8".ToByteArray()))));
 
             done(builder.Build());
         }

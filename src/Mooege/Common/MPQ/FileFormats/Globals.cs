@@ -39,23 +39,22 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F3 { get; private set; }
         public RGBAColor[] Colors { get; private set; }
         public int I1 { get; private set; }
-        public float F4 { get; private set; }
         public int I2 { get; private set; }
+        public float F4 { get; private set; }
         public float F5 { get; private set; }
-        public float F6 { get; private set; }
         public int I3 { get; private set; }
-        public int I4 { get; private set; }
+        public float F6 { get; private set; }
         public float F7 { get; private set; }
         public float F8 { get; private set; }
         public float F9 { get; private set; }
-        public int I5 { get; private set; }
+        public float F10 { get; private set; }
+        public int I4 { get; private set; }
         public int[] I6 { get; private set; }
         public BannerParams BannerParams { get; private set; }
+        public int I5 { get; private set; }
         public int I7 { get; private set; }
         public int I8 { get; private set; }
         public int I9 { get; private set; }
-        public int I10 { get; private set; }
-        public float F10 { get; private set; }
         public float F11 { get; private set; }
         public float F12 { get; private set; }
         public float F13 { get; private set; }
@@ -63,6 +62,7 @@ namespace Mooege.Common.MPQ.FileFormats
         public float F15 { get; private set; }
         public float F16 { get; private set; }
         public float F17 { get; private set; }
+        public float F18 { get; private set; }
 
         public Globals(MpqFile file)
         {
@@ -87,34 +87,34 @@ namespace Mooege.Common.MPQ.FileFormats
             for (int i = 0; i < 400; i++)
                 Colors[i] = new RGBAColor(stream);
 
-            this.I1 = stream.ReadValueS32(); //1672
-            this.F4 = stream.ReadValueF32(); //1676
-            this.I2 = stream.ReadValueS32(); //1680
-            this.F5 = stream.ReadValueF32(); //1684
-            this.F6 = stream.ReadValueF32(); //1688
-            this.I3 = stream.ReadValueS32(); //1692
-            this.I4 = stream.ReadValueS32(); //1696
-            this.F7 = stream.ReadValueF32(); //1700
-            this.F8 = stream.ReadValueF32(); //1704
-            this.F9 = stream.ReadValueF32(); //1708
-            this.I5 = stream.ReadValueS32(); //1712
-            this.I6 = new int[4]; //1716
+            this.I1 = stream.ReadValueS32();
+            this.I2 = stream.ReadValueS32();
+            this.F4 = stream.ReadValueF32();
+            this.F5 = stream.ReadValueF32();
+            this.I3 = stream.ReadValueS32();
+            this.F6 = stream.ReadValueF32();
+            this.F7 = stream.ReadValueF32();
+            this.F8 = stream.ReadValueF32();
+            this.F9 = stream.ReadValueF32();
+            this.F10 = stream.ReadValueF32();
+            this.I4 = stream.ReadValueS32();
+            this.I6 = new int[4];
             for (int i = 0; i < 4; i++)
                 this.I6[i] = stream.ReadValueS32();
             stream.Position += 4;
-            this.BannerParams = new BannerParams(stream); //1736
-            this.I7 = stream.ReadValueS32(); //1968
-            this.I8 = stream.ReadValueS32(); //1972
-            this.I9 = stream.ReadValueS32(); //1976
-            this.I10 = stream.ReadValueS32(); //1980
-            this.F10 = stream.ReadValueF32(); //1984
-            this.F11 = stream.ReadValueF32(); //1988
-            this.F12 = stream.ReadValueF32(); //1992
-            this.F13 = stream.ReadValueF32(); //1996
-            this.F14 = stream.ReadValueF32(); //2000
-            this.F15 = stream.ReadValueF32(); //2004
-            this.F16 = stream.ReadValueF32(); //2008
-            this.F17 = stream.ReadValueF32(); //2012
+            this.BannerParams = new BannerParams(stream);
+            this.I5 = stream.ReadValueS32();
+            this.I7 = stream.ReadValueS32();
+            this.I8 = stream.ReadValueS32();
+            this.I9 = stream.ReadValueS32();
+            this.F11 = stream.ReadValueF32();
+            this.F12 = stream.ReadValueF32();
+            this.F13 = stream.ReadValueF32();
+            this.F14 = stream.ReadValueF32();
+            this.F15 = stream.ReadValueF32();
+            this.F16 = stream.ReadValueF32();
+            this.F17 = stream.ReadValueF32();
+            this.F18 = stream.ReadValueF32();
             stream.Close();
         }
     }

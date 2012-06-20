@@ -42,7 +42,7 @@ namespace Mooege.Net.GS.Message.Definitions.Misc
         public override void AsText(StringBuilder b, int pad)
         {
             b.Append(' ', pad);
-            b.AppendLine("BoolDataMessage:");
+            b.AppendLine("PlayerBusyMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
             b.Append(' ', pad); b.AppendLine("Busy: " + (Busy ? "true" : "false"));

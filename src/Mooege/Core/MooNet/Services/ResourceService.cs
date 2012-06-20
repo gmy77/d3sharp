@@ -60,7 +60,7 @@ namespace Mooege.Core.MooNet.Services
                         builder.SetHash(ByteString.CopyFrom(VersionInfo.MooNet.Resources.AvailableQuests.ToByteArray()));
                         break;
                     case 0x72707273: //rprs - RichPresence
-                        builder.SetHash(ByteString.CopyFrom("3c2d2031f603f912b9963cc6c8deb810ee207efbadbd3fbe01eb2edb905ae507".ToByteArray()));
+                        builder.SetHash(ByteString.CopyFrom("bb41b5176f172cd217a137e7c19d19a4827c48877fe5a2ec94e2d3658612afdf".ToByteArray()));
                         break;
                     default:
                         Logger.Warn("Unknown StreamId: 0x{0:X8}", request.StreamId);

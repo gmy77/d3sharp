@@ -196,16 +196,29 @@ namespace D3TypeDump
         #endregion
 
         #region build 9950 addresses
-        const int OpcodeSwitch_Address = 0x008E53B0;
-        const int TypeDescriptorsAddress = 0x01573FDC; 
+        //const int OpcodeSwitch_Address = 0x008E53B0;
+        //const int TypeDescriptorsAddress = 0x01573FDC; 
+        //const int TypeDescriptorsOffset = 40;
+        //const int AttributesAddress = 0x01557518;
+        //const int AttributeCount = 823;
+        //const int Attribute_Int = 0x01353168;
+        //const int Attribute_IntMinMax = 0x01353170;
+        //const int Attribute_FloatMinMax = 0x01353178;
+        //const int Attribute_Float16 = 0x01353180;
+        //const int Attribute_Float16Or32 = 0x01353188;
+        #endregion
+
+        #region build 10057 addresses
+        const int OpcodeSwitch_Address = 0x008E6240;
+        const int TypeDescriptorsAddress = 0x0159A19C;
         const int TypeDescriptorsOffset = 40;
-        const int AttributesAddress = 0x01557518;
-        const int AttributeCount = 823;
-        const int Attribute_Int = 0x01353168;
-        const int Attribute_IntMinMax = 0x01353170;
-        const int Attribute_FloatMinMax = 0x01353178;
-        const int Attribute_Float16 = 0x01353180;
-        const int Attribute_Float16Or32 = 0x01353188;       
+        const int AttributesAddress = 0x0157D518;
+        const int AttributeCount = 826;
+        const int Attribute_Int = 0x01373660;
+        const int Attribute_IntMinMax = 0x01373668;
+        const int Attribute_FloatMinMax = 0x01373670;
+        const int Attribute_Float16 = 0x01373678;
+        const int Attribute_Float16Or32 = 0x01373680;
         #endregion
 
         class GameMessageInfo
@@ -394,7 +407,10 @@ namespace D3TypeDump
                     case Attribute_Int:
                         {
                             int bitCount = decoder[12].Int32;
-                            NetAttribute.Attributes[id] = new NetAttribute(id, u2, u3, u4, u5, scriptA, scriptB, name, NetAttributeEncoding.Int, u10, 0, 0, bitCount);
+                            if (u5 == 1)
+                                NetAttribute.Attributes[id] = new NetAttribute(id, u2, u3, u4, u5, scriptA, scriptB, name, NetAttributeEncoding.Int, u10, 0, 0, bitCount);
+                            else
+                                NetAttribute.Attributes[id] = new NetAttribute(id, u2, u3, u4, u5, scriptA, scriptB, name, NetAttributeEncoding.Float32, u10, 0, 0, bitCount);
                             break;
                         }
                     case Attribute_IntMinMax:
