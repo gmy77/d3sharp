@@ -28,6 +28,8 @@ namespace bnet.protocol.authentication {
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonRequest, global::bnet.protocol.authentication.LogonRequest.Builder> internal__static_bnet_protocol_authentication_LogonRequest__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_LogonResult__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonResult, global::bnet.protocol.authentication.LogonResult.Builder> internal__static_bnet_protocol_authentication_LogonResult__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_LogonUpdateRequest__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonUpdateRequest, global::bnet.protocol.authentication.LogonUpdateRequest.Builder> internal__static_bnet_protocol_authentication_LogonUpdateRequest__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_AccountSettingsNotification__Descriptor;
     internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.AccountSettingsNotification, global::bnet.protocol.authentication.AccountSettingsNotification.Builder> internal__static_bnet_protocol_authentication_AccountSettingsNotification__FieldAccessorTable;
     internal static pbd::MessageDescriptor internal__static_bnet_protocol_authentication_ServerStateChangeRequest__Descriptor;
@@ -59,39 +61,42 @@ namespace bnet.protocol.authentication {
           "b29raWVfb25seRgHIAEoCCJ6CgtMb2dvblJlc3VsdBISCgplcnJvcl9jb2Rl" + 
           "GAEgAigNEigKB2FjY291bnQYAiABKAsyFy5ibmV0LnByb3RvY29sLkVudGl0" + 
           "eUlkEi0KDGdhbWVfYWNjb3VudBgDIAMoCzIXLmJuZXQucHJvdG9jb2wuRW50" + 
-          "aXR5SWQivAEKG0FjY291bnRTZXR0aW5nc05vdGlmaWNhdGlvbhI3CghsaWNl" + 
-          "bnNlcxgBIAMoCzIlLmJuZXQucHJvdG9jb2wuYWNjb3VudC5BY2NvdW50TGlj" + 
-          "ZW5zZRIUCgxpc191c2luZ19yaWQYAiABKAgSGwoTaXNfcGxheWluZ19mcm9t" + 
-          "X2lnchgDIAEoCBIZChFjYW5fcmVjZWl2ZV92b2ljZRgEIAEoCBIWCg5jYW5f" + 
-          "c2VuZF92b2ljZRgFIAEoCCI9ChhTZXJ2ZXJTdGF0ZUNoYW5nZVJlcXVlc3QS" + 
-          "DQoFc3RhdGUYASACKA0SEgoKZXZlbnRfdGltZRgCIAIoBCJgChRNZW1Nb2R1" + 
-          "bGVMb2FkUmVxdWVzdBIsCgZoYW5kbGUYASACKAsyHC5ibmV0LnByb3RvY29s" + 
-          "LkNvbnRlbnRIYW5kbGUSCwoDa2V5GAIgAigMEg0KBWlucHV0GAMgAigMIiUK" + 
-          "FU1lbU1vZHVsZUxvYWRSZXNwb25zZRIMCgRkYXRhGAEgAigMMpYFChRBdXRo" + 
-          "ZW50aWNhdGlvbkNsaWVudBJfCgpNb2R1bGVMb2FkEi8uYm5ldC5wcm90b2Nv" + 
-          "bC5hdXRoZW50aWNhdGlvbi5Nb2R1bGVMb2FkUmVxdWVzdBoaLmJuZXQucHJv" + 
-          "dG9jb2wuTk9fUkVTUE9OU0UiBIC1GAESYAoNTW9kdWxlTWVzc2FnZRIyLmJu" + 
-          "ZXQucHJvdG9jb2wuYXV0aGVudGljYXRpb24uTW9kdWxlTWVzc2FnZVJlcXVl" + 
-          "c3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYAhJuCg9BY2NvdW50U2V0" + 
-          "dGluZ3MSOS5ibmV0LnByb3RvY29sLmF1dGhlbnRpY2F0aW9uLkFjY291bnRT" + 
-          "ZXR0aW5nc05vdGlmaWNhdGlvbhoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9O" + 
-          "U0UiBIC1GAMSbQoRU2VydmVyU3RhdGVDaGFuZ2USNi5ibmV0LnByb3RvY29s" + 
-          "LmF1dGhlbnRpY2F0aW9uLlNlcnZlclN0YXRlQ2hhbmdlUmVxdWVzdBoaLmJu" + 
-          "ZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAQSXAoNTG9nb25Db21wbGV0" + 
-          "ZRIpLmJuZXQucHJvdG9jb2wuYXV0aGVudGljYXRpb24uTG9nb25SZXN1bHQa" + 
-          "Gi5ibmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgFEn4KDU1lbU1vZHVs" + 
-          "ZUxvYWQSMi5ibmV0LnByb3RvY29sLmF1dGhlbnRpY2F0aW9uLk1lbU1vZHVs" + 
-          "ZUxvYWRSZXF1ZXN0GjMuYm5ldC5wcm90b2NvbC5hdXRoZW50aWNhdGlvbi5N" + 
-          "ZW1Nb2R1bGVMb2FkUmVzcG9uc2UiBIC1GAYy9AIKFEF1dGhlbnRpY2F0aW9u" + 
-          "U2VydmVyElAKBUxvZ29uEiouYm5ldC5wcm90b2NvbC5hdXRoZW50aWNhdGlv" + 
-          "bi5Mb2dvblJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYARJd" + 
-          "CgxNb2R1bGVOb3RpZnkSMC5ibmV0LnByb3RvY29sLmF1dGhlbnRpY2F0aW9u" + 
-          "Lk1vZHVsZU5vdGlmaWNhdGlvbhoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSA" + 
-          "tRgCEmAKDU1vZHVsZU1lc3NhZ2USMi5ibmV0LnByb3RvY29sLmF1dGhlbnRp" + 
-          "Y2F0aW9uLk1vZHVsZU1lc3NhZ2VSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5O" + 
-          "b0RhdGEiBIC1GAMSSQoRU2VsZWN0R2FtZUFjY291bnQSFy5ibmV0LnByb3Rv" + 
-          "Y29sLkVudGl0eUlkGhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GARCA4AB" + 
-          "AA==");
+          "aXR5SWQiKAoSTG9nb25VcGRhdGVSZXF1ZXN0EhIKCmVycm9yX2NvZGUYASAC" + 
+          "KA0ivAEKG0FjY291bnRTZXR0aW5nc05vdGlmaWNhdGlvbhI3CghsaWNlbnNl" + 
+          "cxgBIAMoCzIlLmJuZXQucHJvdG9jb2wuYWNjb3VudC5BY2NvdW50TGljZW5z" + 
+          "ZRIUCgxpc191c2luZ19yaWQYAiABKAgSGwoTaXNfcGxheWluZ19mcm9tX2ln" + 
+          "chgDIAEoCBIZChFjYW5fcmVjZWl2ZV92b2ljZRgEIAEoCBIWCg5jYW5fc2Vu" + 
+          "ZF92b2ljZRgFIAEoCCI9ChhTZXJ2ZXJTdGF0ZUNoYW5nZVJlcXVlc3QSDQoF" + 
+          "c3RhdGUYASACKA0SEgoKZXZlbnRfdGltZRgCIAIoBCJgChRNZW1Nb2R1bGVM" + 
+          "b2FkUmVxdWVzdBIsCgZoYW5kbGUYASACKAsyHC5ibmV0LnByb3RvY29sLkNv" + 
+          "bnRlbnRIYW5kbGUSCwoDa2V5GAIgAigMEg0KBWlucHV0GAMgAigMIiUKFU1l" + 
+          "bU1vZHVsZUxvYWRSZXNwb25zZRIMCgRkYXRhGAEgAigMMvkFChRBdXRoZW50" + 
+          "aWNhdGlvbkNsaWVudBJfCgpNb2R1bGVMb2FkEi8uYm5ldC5wcm90b2NvbC5h" + 
+          "dXRoZW50aWNhdGlvbi5Nb2R1bGVMb2FkUmVxdWVzdBoaLmJuZXQucHJvdG9j" + 
+          "b2wuTk9fUkVTUE9OU0UiBIC1GAESYAoNTW9kdWxlTWVzc2FnZRIyLmJuZXQu" + 
+          "cHJvdG9jb2wuYXV0aGVudGljYXRpb24uTW9kdWxlTWVzc2FnZVJlcXVlc3Qa" + 
+          "FS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYAhJuCg9BY2NvdW50U2V0dGlu" + 
+          "Z3MSOS5ibmV0LnByb3RvY29sLmF1dGhlbnRpY2F0aW9uLkFjY291bnRTZXR0" + 
+          "aW5nc05vdGlmaWNhdGlvbhoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0Ui" + 
+          "BIC1GAMSbQoRU2VydmVyU3RhdGVDaGFuZ2USNi5ibmV0LnByb3RvY29sLmF1" + 
+          "dGhlbnRpY2F0aW9uLlNlcnZlclN0YXRlQ2hhbmdlUmVxdWVzdBoaLmJuZXQu" + 
+          "cHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAQSXAoNTG9nb25Db21wbGV0ZRIp" + 
+          "LmJuZXQucHJvdG9jb2wuYXV0aGVudGljYXRpb24uTG9nb25SZXN1bHQaGi5i" + 
+          "bmV0LnByb3RvY29sLk5PX1JFU1BPTlNFIgSAtRgFEn4KDU1lbU1vZHVsZUxv" + 
+          "YWQSMi5ibmV0LnByb3RvY29sLmF1dGhlbnRpY2F0aW9uLk1lbU1vZHVsZUxv" + 
+          "YWRSZXF1ZXN0GjMuYm5ldC5wcm90b2NvbC5hdXRoZW50aWNhdGlvbi5NZW1N" + 
+          "b2R1bGVMb2FkUmVzcG9uc2UiBIC1GAYSYQoLTG9nb25VcGRhdGUSMC5ibmV0" + 
+          "LnByb3RvY29sLmF1dGhlbnRpY2F0aW9uLkxvZ29uVXBkYXRlUmVxdWVzdBoa" + 
+          "LmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAoy9AIKFEF1dGhlbnRp" + 
+          "Y2F0aW9uU2VydmVyElAKBUxvZ29uEiouYm5ldC5wcm90b2NvbC5hdXRoZW50" + 
+          "aWNhdGlvbi5Mb2dvblJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIE" + 
+          "gLUYARJdCgxNb2R1bGVOb3RpZnkSMC5ibmV0LnByb3RvY29sLmF1dGhlbnRp" + 
+          "Y2F0aW9uLk1vZHVsZU5vdGlmaWNhdGlvbhoVLmJuZXQucHJvdG9jb2wuTm9E" + 
+          "YXRhIgSAtRgCEmAKDU1vZHVsZU1lc3NhZ2USMi5ibmV0LnByb3RvY29sLmF1" + 
+          "dGhlbnRpY2F0aW9uLk1vZHVsZU1lc3NhZ2VSZXF1ZXN0GhUuYm5ldC5wcm90" + 
+          "b2NvbC5Ob0RhdGEiBIC1GAMSSQoRU2VsZWN0R2FtZUFjY291bnQSFy5ibmV0" + 
+          "LnByb3RvY29sLkVudGl0eUlkGhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1" + 
+          "GARCA4ABAA==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_authentication_ModuleLoadRequest__Descriptor = Descriptor.MessageTypes[0];
@@ -114,19 +119,23 @@ namespace bnet.protocol.authentication {
         internal__static_bnet_protocol_authentication_LogonResult__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonResult, global::bnet.protocol.authentication.LogonResult.Builder>(internal__static_bnet_protocol_authentication_LogonResult__Descriptor,
                 new string[] { "ErrorCode", "Account", "GameAccount", });
-        internal__static_bnet_protocol_authentication_AccountSettingsNotification__Descriptor = Descriptor.MessageTypes[5];
+        internal__static_bnet_protocol_authentication_LogonUpdateRequest__Descriptor = Descriptor.MessageTypes[5];
+        internal__static_bnet_protocol_authentication_LogonUpdateRequest__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.LogonUpdateRequest, global::bnet.protocol.authentication.LogonUpdateRequest.Builder>(internal__static_bnet_protocol_authentication_LogonUpdateRequest__Descriptor,
+                new string[] { "ErrorCode", });
+        internal__static_bnet_protocol_authentication_AccountSettingsNotification__Descriptor = Descriptor.MessageTypes[6];
         internal__static_bnet_protocol_authentication_AccountSettingsNotification__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.AccountSettingsNotification, global::bnet.protocol.authentication.AccountSettingsNotification.Builder>(internal__static_bnet_protocol_authentication_AccountSettingsNotification__Descriptor,
                 new string[] { "Licenses", "IsUsingRid", "IsPlayingFromIgr", "CanReceiveVoice", "CanSendVoice", });
-        internal__static_bnet_protocol_authentication_ServerStateChangeRequest__Descriptor = Descriptor.MessageTypes[6];
+        internal__static_bnet_protocol_authentication_ServerStateChangeRequest__Descriptor = Descriptor.MessageTypes[7];
         internal__static_bnet_protocol_authentication_ServerStateChangeRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.ServerStateChangeRequest, global::bnet.protocol.authentication.ServerStateChangeRequest.Builder>(internal__static_bnet_protocol_authentication_ServerStateChangeRequest__Descriptor,
                 new string[] { "State", "EventTime", });
-        internal__static_bnet_protocol_authentication_MemModuleLoadRequest__Descriptor = Descriptor.MessageTypes[7];
+        internal__static_bnet_protocol_authentication_MemModuleLoadRequest__Descriptor = Descriptor.MessageTypes[8];
         internal__static_bnet_protocol_authentication_MemModuleLoadRequest__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.MemModuleLoadRequest, global::bnet.protocol.authentication.MemModuleLoadRequest.Builder>(internal__static_bnet_protocol_authentication_MemModuleLoadRequest__Descriptor,
                 new string[] { "Handle", "Key", "Input", });
-        internal__static_bnet_protocol_authentication_MemModuleLoadResponse__Descriptor = Descriptor.MessageTypes[8];
+        internal__static_bnet_protocol_authentication_MemModuleLoadResponse__Descriptor = Descriptor.MessageTypes[9];
         internal__static_bnet_protocol_authentication_MemModuleLoadResponse__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.authentication.MemModuleLoadResponse, global::bnet.protocol.authentication.MemModuleLoadResponse.Builder>(internal__static_bnet_protocol_authentication_MemModuleLoadResponse__Descriptor,
                 new string[] { "Data", });
@@ -2090,6 +2099,281 @@ namespace bnet.protocol.authentication {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class LogonUpdateRequest : pb::GeneratedMessage<LogonUpdateRequest, LogonUpdateRequest.Builder> {
+    private LogonUpdateRequest() { }
+    private static readonly LogonUpdateRequest defaultInstance = new LogonUpdateRequest().MakeReadOnly();
+    private static readonly string[] _logonUpdateRequestFieldNames = new string[] { "error_code" };
+    private static readonly uint[] _logonUpdateRequestFieldTags = new uint[] { 8 };
+    public static LogonUpdateRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override LogonUpdateRequest DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override LogonUpdateRequest ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_LogonUpdateRequest__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<LogonUpdateRequest, LogonUpdateRequest.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.authentication.AuthenticationService.internal__static_bnet_protocol_authentication_LogonUpdateRequest__FieldAccessorTable; }
+    }
+    
+    public const int ErrorCodeFieldNumber = 1;
+    private bool hasErrorCode;
+    private uint errorCode_;
+    public bool HasErrorCode {
+      get { return hasErrorCode; }
+    }
+    public uint ErrorCode {
+      get { return errorCode_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasErrorCode) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _logonUpdateRequestFieldNames;
+      if (hasErrorCode) {
+        output.WriteUInt32(1, field_names[0], ErrorCode);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasErrorCode) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(1, ErrorCode);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static LogonUpdateRequest ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static LogonUpdateRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static LogonUpdateRequest ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static LogonUpdateRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static LogonUpdateRequest ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static LogonUpdateRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static LogonUpdateRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static LogonUpdateRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static LogonUpdateRequest ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static LogonUpdateRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private LogonUpdateRequest MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(LogonUpdateRequest prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<LogonUpdateRequest, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(LogonUpdateRequest cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private LogonUpdateRequest result;
+      
+      private LogonUpdateRequest PrepareBuilder() {
+        if (resultIsReadOnly) {
+          LogonUpdateRequest original = result;
+          result = new LogonUpdateRequest();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override LogonUpdateRequest MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.authentication.LogonUpdateRequest.Descriptor; }
+      }
+      
+      public override LogonUpdateRequest DefaultInstanceForType {
+        get { return global::bnet.protocol.authentication.LogonUpdateRequest.DefaultInstance; }
+      }
+      
+      public override LogonUpdateRequest BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is LogonUpdateRequest) {
+          return MergeFrom((LogonUpdateRequest) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(LogonUpdateRequest other) {
+        if (other == global::bnet.protocol.authentication.LogonUpdateRequest.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasErrorCode) {
+          ErrorCode = other.ErrorCode;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_logonUpdateRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _logonUpdateRequestFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasErrorCode = input.ReadUInt32(ref result.errorCode_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasErrorCode {
+        get { return result.hasErrorCode; }
+      }
+      public uint ErrorCode {
+        get { return result.ErrorCode; }
+        set { SetErrorCode(value); }
+      }
+      public Builder SetErrorCode(uint value) {
+        PrepareBuilder();
+        result.hasErrorCode = true;
+        result.errorCode_ = value;
+        return this;
+      }
+      public Builder ClearErrorCode() {
+        PrepareBuilder();
+        result.hasErrorCode = false;
+        result.errorCode_ = 0;
+        return this;
+      }
+    }
+    static LogonUpdateRequest() {
+      object.ReferenceEquals(global::bnet.protocol.authentication.AuthenticationService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
   public sealed partial class AccountSettingsNotification : pb::GeneratedMessage<AccountSettingsNotification, AccountSettingsNotification.Builder> {
     private AccountSettingsNotification() { }
     private static readonly AccountSettingsNotification defaultInstance = new AccountSettingsNotification().MakeReadOnly();
@@ -3580,6 +3864,10 @@ namespace bnet.protocol.authentication {
         pb::IRpcController controller,
         global::bnet.protocol.authentication.MemModuleLoadRequest request,
         global::System.Action<global::bnet.protocol.authentication.MemModuleLoadResponse> done);
+    public abstract void LogonUpdate(
+        pb::IRpcController controller,
+        global::bnet.protocol.authentication.LogonUpdateRequest request,
+        global::System.Action<global::bnet.protocol.NO_RESPONSE> done);
     
     public static pbd::ServiceDescriptor Descriptor {
       get { return AuthenticationService.Descriptor.Services[0]; }
@@ -3628,6 +3916,11 @@ namespace bnet.protocol.authentication {
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.authentication.MemModuleLoadResponse>(
               done));
           return;
+        case 6:
+          this.LogonUpdate(controller, (global::bnet.protocol.authentication.LogonUpdateRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.NO_RESPONSE>(
+              done));
+          return;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -3651,6 +3944,8 @@ namespace bnet.protocol.authentication {
           return global::bnet.protocol.authentication.LogonResult.DefaultInstance;
         case 5:
           return global::bnet.protocol.authentication.MemModuleLoadRequest.DefaultInstance;
+        case 6:
+          return global::bnet.protocol.authentication.LogonUpdateRequest.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -3674,6 +3969,8 @@ namespace bnet.protocol.authentication {
           return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         case 5:
           return global::bnet.protocol.authentication.MemModuleLoadResponse.DefaultInstance;
+        case 6:
+          return global::bnet.protocol.NO_RESPONSE.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -3749,6 +4046,15 @@ namespace bnet.protocol.authentication {
         channel.CallMethod(Descriptor.Methods[5],
             controller, request, global::bnet.protocol.authentication.MemModuleLoadResponse.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.authentication.MemModuleLoadResponse, global::bnet.protocol.authentication.MemModuleLoadResponse.Builder>(done, global::bnet.protocol.authentication.MemModuleLoadResponse.DefaultInstance));
+      }
+      
+      public override void LogonUpdate(
+          pb::IRpcController controller,
+          global::bnet.protocol.authentication.LogonUpdateRequest request,
+          global::System.Action<global::bnet.protocol.NO_RESPONSE> done) {
+        channel.CallMethod(Descriptor.Methods[6],
+            controller, request, global::bnet.protocol.NO_RESPONSE.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.NO_RESPONSE, global::bnet.protocol.NO_RESPONSE.Builder>(done, global::bnet.protocol.NO_RESPONSE.DefaultInstance));
       }
     }
   }

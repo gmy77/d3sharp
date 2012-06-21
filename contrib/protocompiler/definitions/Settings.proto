@@ -20,6 +20,7 @@ message GameAccountSettings
     optional string rmt_last_used_currency = 3;
     optional int32 coop_last_create_game_privacy = 4 [default = 1];
     optional string rmt_preferred_currency = 5;
+    repeated string auto_join_channels = 6;
 }
 
 message Preferences
@@ -51,6 +52,12 @@ message Preferences
         NOTIFY_DISPLAY_WINDOW = 28;
         MATURE_LANGUAGE_FILTER = 29;
         ALLOW_QUICK_JOIN = 30;
+    }
+
+    enum Flags2
+    {
+        USE_COMMAND_AS_CONTROL = 1;
+        USE_COMMAND_CLICK_AS_RIGHT_CLICK = 2;
     }
 
     required int32 version = 1;
@@ -117,6 +124,9 @@ message Preferences
     optional .D3.Client.ActionBinding action_binding_rmb = 62;
     optional .D3.Client.ActionBinding action_binding_walk = 63;
     optional .D3.Client.ActionBinding action_binding_systemtogglefps = 64;
+    optional .D3.Client.ActionBinding action_binding_chatpageup = 65;
+    optional .D3.Client.ActionBinding action_binding_chatpagedown = 66;
     optional uint32 notify_duration = 100 [default = 0];
+    optional uint32 flags2 = 200 [default = 0];
 }
 

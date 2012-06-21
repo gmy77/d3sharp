@@ -37,9 +37,10 @@ namespace bnet.protocol {
           "ZF9vcHRpb25zLnByb3RvIiUKCEVudGl0eUlkEgwKBGhpZ2gYASACKAYSCwoD" + 
           "bG93GAIgAigGImkKCElkZW50aXR5EisKCmFjY291bnRfaWQYASABKAsyFy5i" + 
           "bmV0LnByb3RvY29sLkVudGl0eUlkEjAKD2dhbWVfYWNjb3VudF9pZBgCIAEo" + 
-          "CzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQiVQoLQWNjb3VudEluZm8SGwoM" + 
+          "CzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQicwoLQWNjb3VudEluZm8SGwoM" + 
           "YWNjb3VudF9wYWlkGAEgASgIOgVmYWxzZRIVCgpjb3VudHJ5X2lkGAIgASgH" + 
-          "OgEwEhIKCmJhdHRsZV90YWcYAyABKAk=");
+          "OgEwEhIKCmJhdHRsZV90YWcYAyABKAkSHAoNbWFudWFsX3JldmlldxgEIAEo" + 
+          "CDoFZmFsc2U=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
         internal__static_bnet_protocol_EntityId__Descriptor = Descriptor.MessageTypes[0];
@@ -53,7 +54,7 @@ namespace bnet.protocol {
         internal__static_bnet_protocol_AccountInfo__Descriptor = Descriptor.MessageTypes[2];
         internal__static_bnet_protocol_AccountInfo__FieldAccessorTable = 
             new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.AccountInfo, global::bnet.protocol.AccountInfo.Builder>(internal__static_bnet_protocol_AccountInfo__Descriptor,
-                new string[] { "AccountPaid", "CountryId", "BattleTag", });
+                new string[] { "AccountPaid", "CountryId", "BattleTag", "ManualReview", });
         return null;
       };
       pbd::FileDescriptor.InternalBuildGeneratedFileFrom(descriptorData,
@@ -763,8 +764,8 @@ namespace bnet.protocol {
   public sealed partial class AccountInfo : pb::GeneratedMessage<AccountInfo, AccountInfo.Builder> {
     private AccountInfo() { }
     private static readonly AccountInfo defaultInstance = new AccountInfo().MakeReadOnly();
-    private static readonly string[] _accountInfoFieldNames = new string[] { "account_paid", "battle_tag", "country_id" };
-    private static readonly uint[] _accountInfoFieldTags = new uint[] { 8, 26, 21 };
+    private static readonly string[] _accountInfoFieldNames = new string[] { "account_paid", "battle_tag", "country_id", "manual_review" };
+    private static readonly uint[] _accountInfoFieldTags = new uint[] { 8, 26, 21, 32 };
     public static AccountInfo DefaultInstance {
       get { return defaultInstance; }
     }
@@ -815,6 +816,16 @@ namespace bnet.protocol {
       get { return battleTag_; }
     }
     
+    public const int ManualReviewFieldNumber = 4;
+    private bool hasManualReview;
+    private bool manualReview_;
+    public bool HasManualReview {
+      get { return hasManualReview; }
+    }
+    public bool ManualReview {
+      get { return manualReview_; }
+    }
+    
     public override bool IsInitialized {
       get {
         return true;
@@ -832,6 +843,9 @@ namespace bnet.protocol {
       }
       if (hasBattleTag) {
         output.WriteString(3, field_names[1], BattleTag);
+      }
+      if (hasManualReview) {
+        output.WriteBool(4, field_names[3], ManualReview);
       }
       UnknownFields.WriteTo(output);
     }
@@ -851,6 +865,9 @@ namespace bnet.protocol {
         }
         if (hasBattleTag) {
           size += pb::CodedOutputStream.ComputeStringSize(3, BattleTag);
+        }
+        if (hasManualReview) {
+          size += pb::CodedOutputStream.ComputeBoolSize(4, ManualReview);
         }
         size += UnknownFields.SerializedSize;
         memoizedSerializedSize = size;
@@ -987,6 +1004,9 @@ namespace bnet.protocol {
         if (other.HasBattleTag) {
           BattleTag = other.BattleTag;
         }
+        if (other.HasManualReview) {
+          ManualReview = other.ManualReview;
+        }
         this.MergeUnknownFields(other.UnknownFields);
         return this;
       }
@@ -1040,6 +1060,10 @@ namespace bnet.protocol {
             }
             case 26: {
               result.hasBattleTag = input.ReadString(ref result.battleTag_);
+              break;
+            }
+            case 32: {
+              result.hasManualReview = input.ReadBool(ref result.manualReview_);
               break;
             }
           }
@@ -1110,6 +1134,26 @@ namespace bnet.protocol {
         PrepareBuilder();
         result.hasBattleTag = false;
         result.battleTag_ = "";
+        return this;
+      }
+      
+      public bool HasManualReview {
+        get { return result.hasManualReview; }
+      }
+      public bool ManualReview {
+        get { return result.ManualReview; }
+        set { SetManualReview(value); }
+      }
+      public Builder SetManualReview(bool value) {
+        PrepareBuilder();
+        result.hasManualReview = true;
+        result.manualReview_ = value;
+        return this;
+      }
+      public Builder ClearManualReview() {
+        PrepareBuilder();
+        result.hasManualReview = false;
+        result.manualReview_ = false;
         return this;
       }
     }

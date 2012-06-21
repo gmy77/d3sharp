@@ -23,8 +23,9 @@ using Mooege.Net.GS.Message;
 using PcapDotNet.Core;
 using PcapDotNet.Packets;
 
-namespace GSPacketDumper {
-    public static class PacketReader 
+namespace GSPacketDumper
+{
+    public static class PacketReader
     {
         private static readonly Logger Logger = LogManager.CreateLogger();
 
@@ -41,11 +42,11 @@ namespace GSPacketDumper {
             // Open the capture file
             using (PacketCommunicator communicator =
                 selectedDevice.Open(65536, // portion of the packet to capture
-                                    // 65536 guarantees that the whole packet will be captured on all the link layers
+                // 65536 guarantees that the whole packet will be captured on all the link layers
                                     PacketDeviceOpenAttributes.Promiscuous, // promiscuous mode
                                     1000)) // read timeout
             {
-                communicator.SetFilter("tcp port 1119 and ip net "+ GameServerRange);
+                communicator.SetFilter("tcp port 1119 and ip net " + GameServerRange);
 
                 // Read and dispatch packets until EOF is reached
                 communicator.ReceivePackets(0, DispatcherHandler);
@@ -59,13 +60,13 @@ namespace GSPacketDumper {
             while (IncomingBuffer.IsPacketAvailable())
             {
                 int end = IncomingBuffer.Position;
-                end += IncomingBuffer.ReadInt(32)*8;
+                end += IncomingBuffer.ReadInt(32) * 8;
                 while ((end - IncomingBuffer.Position) >= 9)
                 {
                     var msg = IncomingBuffer.ParseMessage();
                     if (msg == null) continue;
 
-                    Logger.LogIncoming(msg);
+                    Logger.LogIncomingPacket(msg);
                 }
 
                 IncomingBuffer.Position = end;
@@ -87,7 +88,7 @@ namespace GSPacketDumper {
                     var msg = OutgoingBuffer.ParseMessage();
                     if (msg == null) continue;
 
-                    Logger.LogOutgoing(msg);
+                    Logger.LogOutgoingPacket(msg);
                 }
 
                 OutgoingBuffer.Position = end;

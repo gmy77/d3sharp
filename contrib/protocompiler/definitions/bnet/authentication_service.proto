@@ -43,6 +43,11 @@ message LogonResult
     repeated .bnet.protocol.EntityId game_account = 3;
 }
 
+message LogonUpdateRequest
+{
+    required uint32 error_code = 1;
+}
+
 message AccountSettingsNotification
 {
     repeated .bnet.protocol.account.AccountLicense licenses = 1;
@@ -95,6 +100,10 @@ service AuthenticationClient
     rpc MemModuleLoad(.bnet.protocol.authentication.MemModuleLoadRequest) returns(.bnet.protocol.authentication.MemModuleLoadResponse)
     {
         option (method_id) = 6;
+    }
+    rpc LogonUpdate(.bnet.protocol.authentication.LogonUpdateRequest) returns(.bnet.protocol.NO_RESPONSE)
+    {
+        option (method_id) = 10;
     }
 }
 

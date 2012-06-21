@@ -5149,18 +5149,18 @@
     {
         public bool Field0;
         int _Field1;
-        public int Field1 { get { return _Field1; } set { if(value < 0 || value > 2) throw new ArgumentOutOfRangeException(); _Field1 = value; } }
+        public int Field1 { get { return _Field1; } set { if(value < 0 || value > 13) throw new ArgumentOutOfRangeException(); _Field1 = value; } }
 
         public override void Parse(GameBitBuffer buffer)
         {
             Field0 = buffer.ReadBool();
-            Field1 = buffer.ReadInt(2);
+            Field1 = buffer.ReadInt(4);
         }
 
         public override void Encode(GameBitBuffer buffer)
         {
             buffer.WriteBool(Field0);
-            buffer.WriteInt(2, Field1);
+            buffer.WriteInt(4, Field1);
         }
 
     }

@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Mooege.Net.GS.Message.Definitions.Inventory
 {
-    [Message(Opcodes.ANNDataMessage9, Consumers.Inventory)]
+    [Message(Opcodes.DropItemMessage, Consumers.Inventory)]
     public class InventoryDropItemMessage : GameMessage
     {
         public uint ItemID; // Item's DynamicID

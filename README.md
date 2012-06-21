@@ -1,7 +1,6 @@
 ###Current Status:
-* You can Login and create characters.
+* You can Login, create characters and enter world.
 * Client requires patching.
-* YOU **CANNOT** START A GAME.
 
 ***
 

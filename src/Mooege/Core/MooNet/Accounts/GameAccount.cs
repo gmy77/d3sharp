@@ -72,8 +72,7 @@ namespace Mooege.Core.MooNet.Accounts
             get
             {
                 var val = new ByteStringPresenceField<EntityId>(FieldKeyHelper.Program.D3,
-                                                                FieldKeyHelper.OriginatingClass.
-                                                                    GameAccount, 1, 0)
+                                                                FieldKeyHelper.OriginatingClass.GameAccount, 2, 0)
                               {
                                   Value = LastPlayedHeroId
                               };

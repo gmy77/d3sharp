@@ -120,6 +120,12 @@ namespace bnet.protocol.exchange {
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetSystemTimeResponse, global::bnet.protocol.exchange.GetSystemTimeResponse.Builder> internal__static_bnet_protocol_exchange_GetSystemTimeResponse__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_CreateCSTradeRequest__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CreateCSTradeRequest, global::bnet.protocol.exchange.CreateCSTradeRequest.Builder> internal__static_bnet_protocol_exchange_CreateCSTradeRequest__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_CreateCSTradeItemRequest__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CreateCSTradeItemRequest, global::bnet.protocol.exchange.CreateCSTradeItemRequest.Builder> internal__static_bnet_protocol_exchange_CreateCSTradeItemRequest__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_CreateCSTradeMoneyRequest__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CreateCSTradeMoneyRequest, global::bnet.protocol.exchange.CreateCSTradeMoneyRequest.Builder> internal__static_bnet_protocol_exchange_CreateCSTradeMoneyRequest__FieldAccessorTable;
+      internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_CreateCSTradeResponse__Descriptor;
+      internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CreateCSTradeResponse, global::bnet.protocol.exchange.CreateCSTradeResponse.Builder> internal__static_bnet_protocol_exchange_CreateCSTradeResponse__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_GetOrderCountRequest__Descriptor;
       internal static pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetOrderCountRequest, global::bnet.protocol.exchange.GetOrderCountRequest.Builder> internal__static_bnet_protocol_exchange_GetOrderCountRequest__FieldAccessorTable;
       internal static pbd::MessageDescriptor internal__static_bnet_protocol_exchange_GetOrderCountResponse__Descriptor;
@@ -296,148 +302,172 @@ namespace bnet.protocol.exchange {
             "Y2NvdW50GAUgASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBI6ChBhY2Nv" + 
             "dW50X2Zvcl9pdGVtGAYgAigLMiAuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5C" + 
             "bG9iRnJvbRIQCghjc19ub3RlcxgHIAIoCRISCgpjc191c2VyX2lkGAggAigE" + 
-            "IrkBChRHZXRPcmRlckNvdW50UmVxdWVzdBIQCghjdXJyZW5jeRgBIAEoCRIO" + 
-            "CgZzb3VyY2UYAiABKAcSLQoMYm5ldF9hY2NvdW50GAMgASgLMhcuYm5ldC5w" + 
-            "cm90b2NvbC5FbnRpdHlJZBIlChZub3RfY2xvc2VkX29mZmVyX2NvdW50GAQg" + 
-            "ASgIOgVmYWxzZRIpChpvcmRlcl93aXRoX2NsYWltYWJsZV9jb3VudBgFIAEo" + 
-            "CDoFZmFsc2UimQEKFUdldE9yZGVyQ291bnRSZXNwb25zZRI9ChZub3RfY2xv" + 
-            "c2VkX29mZmVyX2NvdW50GAEgASgLMh0uYm5ldC5wcm90b2NvbC5leGNoYW5n" + 
-            "ZS5Db3VudBJBChpvcmRlcl93aXRoX2NsYWltYWJsZV9jb3VudBgCIAEoCzId" + 
-            "LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQ291bnQigAEKFUhpc3Rvcmllc0Zv" + 
-            "ckNTUmVxdWVzdBItCgxibmV0X2FjY291bnQYASACKAsyFy5ibmV0LnByb3Rv" + 
-            "Y29sLkVudGl0eUlkEg8KB3Byb2dyYW0YAiACKAcSEgoKbG93ZXJfdGltZRgD" + 
-            "IAIoBBITCgtoaWdoZXJfdGltZRgEIAIoBCJTChZIaXN0b3JpZXNGb3JDU1Jl" + 
-            "c3BvbnNlEjkKDGhpc3RvcnlfZGF0YRgBIAMoCzIjLmJuZXQucHJvdG9jb2wu" + 
-            "ZXhjaGFuZ2UuSGlzdG9yeURhdGEy6CkKD0V4Y2hhbmdlU2VydmljZRJ4Cg9D" + 
-            "cmVhdGVPcmRlckJvb2sSLi5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkNyZWF0" + 
-            "ZU9yZGVyQm9va1JlcXVlc3QaLy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkNy" + 
-            "ZWF0ZU9yZGVyQm9va1Jlc3BvbnNlIgSAtRgBEooBChVQbGFjZU9mZmVyT25P" + 
-            "cmRlckJvb2sSNC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBsYWNlT2ZmZXJP" + 
-            "bk9yZGVyQm9va1JlcXVlc3QaNS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBs" + 
-            "YWNlT2ZmZXJPbk9yZGVyQm9va1Jlc3BvbnNlIgSAtRgCEq4BCiFQbGFjZU9m" + 
-            "ZmVyQ3JlYXRlT3JkZXJCb29rSWZOZWVkZWQSQC5ibmV0LnByb3RvY29sLmV4" + 
-            "Y2hhbmdlLlBsYWNlT2ZmZXJDcmVhdGVPcmRlckJvb2tJZk5lZWRlZFJlcXVl" + 
-            "c3QaQS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBsYWNlT2ZmZXJDcmVhdGVP" + 
-            "cmRlckJvb2tJZk5lZWRlZFJlc3BvbnNlIgSAtRgDEoQBChNQbGFjZUJpZE9u" + 
-            "T3JkZXJCb29rEjIuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5QbGFjZUJpZE9u" + 
-            "T3JkZXJCb29rUmVxdWVzdBozLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGxh" + 
-            "Y2VCaWRPbk9yZGVyQm9va1Jlc3BvbnNlIgSAtRgEEqgBCh9QbGFjZUJpZENy" + 
-            "ZWF0ZU9yZGVyQm9va0lmTmVlZGVkEj4uYm5ldC5wcm90b2NvbC5leGNoYW5n" + 
-            "ZS5QbGFjZUJpZENyZWF0ZU9yZGVyQm9va0lmTmVlZGVkUmVxdWVzdBo/LmJu" + 
-            "ZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGxhY2VCaWRDcmVhdGVPcmRlckJvb2tJ" + 
-            "Zk5lZWRlZFJlc3BvbnNlIgSAtRgFEo0BChZRdWVyeU9mZmVyc0J5T3JkZXJC" + 
-            "b29rEjUuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5RdWVyeU9mZmVyc0J5T3Jk" + 
-            "ZXJCb29rUmVxdWVzdBo2LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUXVlcnlP" + 
-            "ZmZlcnNCeU9yZGVyQm9va1Jlc3BvbnNlIgSAtRgGEocBChRRdWVyeUJpZHNC" + 
-            "eU9yZGVyQm9vaxIzLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUXVlcnlCaWRz" + 
-            "QnlPcmRlckJvb2tSZXF1ZXN0GjQuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5R" + 
-            "dWVyeUJpZHNCeU9yZGVyQm9va1Jlc3BvbnNlIgSAtRgHEpwBChtRdWVyeU9m" + 
-            "ZmVyc0J5QWNjb3VudEZvckl0ZW0SOi5ibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
-            "LlF1ZXJ5T2ZmZXJzQnlBY2NvdW50Rm9ySXRlbVJlcXVlc3QaOy5ibmV0LnBy" + 
-            "b3RvY29sLmV4Y2hhbmdlLlF1ZXJ5T2ZmZXJzQnlBY2NvdW50Rm9ySXRlbVJl" + 
-            "c3BvbnNlIgSAtRgIEpYBChlRdWVyeUJpZHNCeUFjY291bnRGb3JJdGVtEjgu" + 
-            "Ym5ldC5wcm90b2NvbC5leGNoYW5nZS5RdWVyeUJpZHNCeUFjY291bnRGb3JJ" + 
-            "dGVtUmVxdWVzdBo5LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUXVlcnlCaWRz" + 
-            "QnlBY2NvdW50Rm9ySXRlbVJlc3BvbnNlIgSAtRgJEo0BChZRdWVyeU9yZGVy" + 
-            "Qm9va3NTdW1tYXJ5EjUuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5RdWVyeU9y" + 
-            "ZGVyQm9va3NTdW1tYXJ5UmVxdWVzdBo2LmJuZXQucHJvdG9jb2wuZXhjaGFu" + 
-            "Z2UuUXVlcnlPcmRlckJvb2tzU3VtbWFyeVJlc3BvbnNlIgSAtRgLEm4KD1Jl" + 
-            "cG9ydEF1dGhvcml6ZRI+LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Vfb2JqZWN0" + 
-            "X3Byb3ZpZGVyLlJlcG9ydEF1dGhvcml6ZVJlcXVlc3QaFS5ibmV0LnByb3Rv" + 
-            "Y29sLk5vRGF0YSIEgLUYDRJoCgxSZXBvcnRTZXR0bGUSOy5ibmV0LnByb3Rv" + 
-            "Y29sLmV4Y2hhbmdlX29iamVjdF9wcm92aWRlci5SZXBvcnRTZXR0bGVSZXF1" + 
-            "ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GA4SaAoMUmVwb3J0Q2Fu" + 
-            "Y2VsEjsuYm5ldC5wcm90b2NvbC5leGNoYW5nZV9vYmplY3RfcHJvdmlkZXIu" + 
-            "UmVwb3J0Q2FuY2VsUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSA" + 
-            "tRgPEnwKHlN1YnNjcmliZU9yZGVyQm9va1N0YXR1c0NoYW5nZRI9LmJuZXQu" + 
-            "cHJvdG9jb2wuZXhjaGFuZ2UuU3Vic2NyaWJlT3JkZXJCb29rU3RhdHVzQ2hh" + 
-            "bmdlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgQEoABCiBV" + 
-            "bnN1YnNjcmliZU9yZGVyQm9va1N0YXR1c0NoYW5nZRI/LmJuZXQucHJvdG9j" + 
-            "b2wuZXhjaGFuZ2UuVW5zdWJzY3JpYmVPcmRlckJvb2tTdGF0dXNDaGFuZ2VS" + 
-            "ZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GBESaAoUU3Vic2Ny" + 
-            "aWJlT3JkZXJVcGRhdGUSMy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlN1YnNj" + 
-            "cmliZU9yZGVyVXBkYXRlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRh" + 
-            "IgSAtRgSEmwKFlVuc3Vic2NyaWJlT3JkZXJVcGRhdGUSNS5ibmV0LnByb3Rv" + 
-            "Y29sLmV4Y2hhbmdlLlVuc3Vic2NyaWJlT3JkZXJVcGRhdGVSZXF1ZXN0GhUu" + 
-            "Ym5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GBMSngEKEUdldFBheW1lbnRNZXRo" + 
-            "b2RzEkAuYm5ldC5wcm90b2NvbC5leGNoYW5nZV9vYmplY3RfcHJvdmlkZXIu" + 
-            "R2V0UGF5bWVudE1ldGhvZHNSZXF1ZXN0GkEuYm5ldC5wcm90b2NvbC5leGNo" + 
-            "YW5nZV9vYmplY3RfcHJvdmlkZXIuR2V0UGF5bWVudE1ldGhvZHNSZXNwb25z" + 
-            "ZSIEgLUYFBJRCgxDbGFpbUJpZEl0ZW0SJC5ibmV0LnByb3RvY29sLmV4Y2hh" + 
-            "bmdlLkNsYWltUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgV" + 
-            "ElIKDUNsYWltQmlkTW9uZXkSJC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkNs" + 
-            "YWltUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgWElMKDkNs" + 
-            "YWltT2ZmZXJJdGVtEiQuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5DbGFpbVJl" + 
-            "cXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYFxJUCg9DbGFpbU9m" + 
-            "ZmVyTW9uZXkSJC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkNsYWltUmVxdWVz" + 
-            "dBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgYEk8KCUNhbmNlbEJpZBIl" + 
-            "LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQ2FuY2VsUmVxdWVzdBoVLmJuZXQu" + 
-            "cHJvdG9jb2wuTm9EYXRhIgSAtRgZElEKC0NhbmNlbE9mZmVyEiUuYm5ldC5w" + 
-            "cm90b2NvbC5leGNoYW5nZS5DYW5jZWxSZXF1ZXN0GhUuYm5ldC5wcm90b2Nv" + 
-            "bC5Ob0RhdGEiBIC1GBoSewoQR2V0Q29uZmlndXJhdGlvbhIvLmJuZXQucHJv" + 
-            "dG9jb2wuZXhjaGFuZ2UuR2V0Q29uZmlndXJhdGlvblJlcXVlc3QaMC5ibmV0" + 
-            "LnByb3RvY29sLmV4Y2hhbmdlLkdldENvbmZpZ3VyYXRpb25SZXNwb25zZSIE" + 
-            "gLUYGxKBAQoTR2V0QmlkRmVlRXN0aW1hdGlvbhIyLmJuZXQucHJvdG9jb2wu" + 
-            "ZXhjaGFuZ2UuR2V0QmlkRmVlRXN0aW1hdGlvblJlcXVlc3QaMC5ibmV0LnBy" + 
-            "b3RvY29sLmV4Y2hhbmdlLkdldEZlZUVzdGltYXRpb25SZXNwb25zZSIEgLUY" + 
-            "HBKFAQoVR2V0T2ZmZXJGZWVFc3RpbWF0aW9uEjQuYm5ldC5wcm90b2NvbC5l" + 
-            "eGNoYW5nZS5HZXRPZmZlckZlZUVzdGltYXRpb25SZXF1ZXN0GjAuYm5ldC5w" + 
-            "cm90b2NvbC5leGNoYW5nZS5HZXRGZWVFc3RpbWF0aW9uUmVzcG9uc2UiBIC1" + 
-            "GB0SnAEKG1F1ZXJ5T3JkZXJzQnlBY2NvdW50Rm9ySXRlbRI6LmJuZXQucHJv" + 
-            "dG9jb2wuZXhjaGFuZ2UuUXVlcnlPcmRlcnNCeUFjY291bnRGb3JJdGVtUmVx" + 
-            "dWVzdBo7LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUXVlcnlPcmRlcnNCeUFj" + 
-            "Y291bnRGb3JJdGVtUmVzcG9uc2UiBIC1GB4SeQoaUmVwb3J0QXV0aG9yaXpl" + 
-            "Umlza1ZlcmRpY3QSPi5ibmV0LnByb3RvY29sLmV4Y2hhbmdlX3Jpc2suUmVw" + 
-            "b3J0QXV0aG9yaXplUmlza1ZlcmRpY3RSZXF1ZXN0GhUuYm5ldC5wcm90b2Nv" + 
-            "bC5Ob0RhdGEiBIC1GB8ScwoXUmVwb3J0U2V0dGxlUmlza1ZlcmRpY3QSOy5i" + 
-            "bmV0LnByb3RvY29sLmV4Y2hhbmdlX3Jpc2suUmVwb3J0U2V0dGxlUmlza1Zl" + 
-            "cmRpY3RSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GCAScQoW" + 
-            "RGVsYXlTZXR0bGVSaXNrVmVyZGljdBI6LmJuZXQucHJvdG9jb2wuZXhjaGFu" + 
-            "Z2Vfcmlzay5EZWxheVNldHRsZVJpc2tWZXJkaWN0UmVxdWVzdBoVLmJuZXQu" + 
-            "cHJvdG9jb2wuTm9EYXRhIgSAtRghEnIKDUdldEZlZURldGFpbHMSLC5ibmV0" + 
-            "LnByb3RvY29sLmV4Y2hhbmdlLkdldEZlZURldGFpbHNSZXF1ZXN0Gi0uYm5l" + 
-            "dC5wcm90b2NvbC5leGNoYW5nZS5HZXRGZWVEZXRhaWxzUmVzcG9uc2UiBIC1" + 
-            "GCISjQEKFkdldE9yZGVyQm9va1N0YXRpc3RpY3MSNS5ibmV0LnByb3RvY29s" + 
-            "LmV4Y2hhbmdlLkdldE9yZGVyQm9va1N0YXRpc3RpY3NSZXF1ZXN0GjYuYm5l" + 
-            "dC5wcm90b2NvbC5leGNoYW5nZS5HZXRPcmRlckJvb2tTdGF0aXN0aWNzUmVz" + 
-            "cG9uc2UiBIC1GCMScgoNR2V0QmlkRGV0YWlscxIsLmJuZXQucHJvdG9jb2wu" + 
-            "ZXhjaGFuZ2UuR2V0QmlkRGV0YWlsc1JlcXVlc3QaLS5ibmV0LnByb3RvY29s" + 
-            "LmV4Y2hhbmdlLkdldEJpZERldGFpbHNSZXNwb25zZSIEgLUYJBJ4Cg9HZXRP" + 
-            "ZmZlckRldGFpbHMSLi5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkdldE9mZmVy" + 
-            "RGV0YWlsc1JlcXVlc3QaLy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkdldE9m" + 
-            "ZmVyRGV0YWlsc1Jlc3BvbnNlIgSAtRglElsKDUdldFN5c3RlbVRpbWUSFS5i" + 
-            "bmV0LnByb3RvY29sLk5vRGF0YRotLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
-            "R2V0U3lzdGVtVGltZVJlc3BvbnNlIgSAtRgmEloKDUNyZWF0ZUNTVHJhZGUS" + 
-            "LC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkNyZWF0ZUNTVHJhZGVSZXF1ZXN0" + 
-            "GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GCcSTwoJUmVmdW5kQmlkEiUu" + 
-            "Ym5ldC5wcm90b2NvbC5leGNoYW5nZS5SZWZ1bmRSZXF1ZXN0GhUuYm5ldC5w" + 
-            "cm90b2NvbC5Ob0RhdGEiBIC1GCgSaAoMUmVwb3J0UmVmdW5kEjsuYm5ldC5w" + 
-            "cm90b2NvbC5leGNoYW5nZV9vYmplY3RfcHJvdmlkZXIuUmVwb3J0UmVmdW5k" + 
-            "UmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgpEnIKDUdldE9y" + 
-            "ZGVyQ291bnQSLC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkdldE9yZGVyQ291" + 
-            "bnRSZXF1ZXN0Gi0uYm5ldC5wcm90b2NvbC5leGNoYW5nZS5HZXRPcmRlckNv" + 
-            "dW50UmVzcG9uc2UiBIC1GCoSeAocU3Vic2NyaWJlQWR2YW5jZWRPcmRlclVw" + 
-            "ZGF0ZRI7LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuU3Vic2NyaWJlQWR2YW5j" + 
-            "ZWRPcmRlclVwZGF0ZVJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIE" + 
-            "gLUYKxJ8Ch5VbnN1YnNjcmliZUFkdmFuY2VkT3JkZXJVcGRhdGUSPS5ibmV0" + 
-            "LnByb3RvY29sLmV4Y2hhbmdlLlVuc3Vic2NyaWJlQWR2YW5jZWRPcmRlclVw" + 
-            "ZGF0ZVJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYLBJ7ChRT" + 
-            "ZXR0bGVIaXN0b3JpZXNGb3JDUxItLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
-            "SGlzdG9yaWVzRm9yQ1NSZXF1ZXN0Gi4uYm5ldC5wcm90b2NvbC5leGNoYW5n" + 
-            "ZS5IaXN0b3JpZXNGb3JDU1Jlc3BvbnNlIgSAtRgtEnsKFENhbmNlbEhpc3Rv" + 
-            "cmllc0ZvckNTEi0uYm5ldC5wcm90b2NvbC5leGNoYW5nZS5IaXN0b3JpZXNG" + 
-            "b3JDU1JlcXVlc3QaLi5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkhpc3Rvcmll" + 
-            "c0ZvckNTUmVzcG9uc2UiBIC1GC4ywQMKDkV4Y2hhbmdlTm90aWZ5EnUKG05v" + 
-            "dGlmeU9yZGVyQm9va1N0YXR1c0NoYW5nZRI0LmJuZXQucHJvdG9jb2wuZXhj" + 
-            "aGFuZ2UuT3JkZXJCb29rTm90aWZpY2F0aW9uUmVxdWVzdBoaLmJuZXQucHJv" + 
-            "dG9jb2wuTk9fUkVTUE9OU0UiBIC1GAESZwoRTm90aWZ5T2ZmZXJVcGRhdGUS" + 
-            "MC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLk9mZmVyTm90aWZpY2F0aW9uUmVx" + 
-            "dWVzdBoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0UiBIC1GAISYwoPTm90" + 
-            "aWZ5QmlkVXBkYXRlEi4uYm5ldC5wcm90b2NvbC5leGNoYW5nZS5CaWROb3Rp" + 
+            "ItwCChhDcmVhdGVDU1RyYWRlSXRlbVJlcXVlc3QSOQoMcGFydGl0aW9uX2lk" + 
+            "GAEgASgLMiMuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5QYXJ0aXRpb25JZBI1" + 
+            "CgpvcmRlcl9ib29rGAIgAigLMiEuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5P" + 
+            "cmRlckJvb2sSDgoGYW1vdW50GAMgAigNEi0KDGJuZXRfYWNjb3VudBgEIAIo" + 
+            "CzIXLmJuZXQucHJvdG9jb2wuRW50aXR5SWQSLQoMZ2FtZV9hY2NvdW50GAUg" + 
+            "ASgLMhcuYm5ldC5wcm90b2NvbC5FbnRpdHlJZBI6ChBhY2NvdW50X2Zvcl9p" + 
+            "dGVtGAYgAigLMiAuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5CbG9iRnJvbRIQ" + 
+            "Cghjc19ub3RlcxgHIAIoCRISCgpjc191c2VyX2lkGAggAigEIpoDChlDcmVh" + 
+            "dGVDU1RyYWRlTW9uZXlSZXF1ZXN0EjkKDHBhcnRpdGlvbl9pZBgBIAEoCzIj" + 
+            "LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGFydGl0aW9uSWQSNQoKb3JkZXJf" + 
+            "Ym9vaxgCIAIoCzIhLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuT3JkZXJCb29r" + 
+            "Eg4KBmFtb3VudBgDIAIoDRItCgxibmV0X2FjY291bnQYBCACKAsyFy5ibmV0" + 
+            "LnByb3RvY29sLkVudGl0eUlkEi0KDGdhbWVfYWNjb3VudBgFIAEoCzIXLmJu" + 
+            "ZXQucHJvdG9jb2wuRW50aXR5SWQSOgoQYWNjb3VudF9mb3JfaXRlbRgGIAIo" + 
+            "CzIgLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmxvYkZyb20SEAoIY3Nfbm90" + 
+            "ZXMYByACKAkSEgoKY3NfdXNlcl9pZBgIIAIoBBI7ChFhY2NvdW50X2Zvcl9t" + 
+            "b25leRgJIAEoCzIgLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQmxvYkZyb20i" + 
+            "LgoVQ3JlYXRlQ1NUcmFkZVJlc3BvbnNlEhUKDW9yZGVyX2Jvb2tfaWQYASAB" + 
+            "KAQiuQEKFEdldE9yZGVyQ291bnRSZXF1ZXN0EhAKCGN1cnJlbmN5GAEgASgJ" + 
+            "Eg4KBnNvdXJjZRgCIAEoBxItCgxibmV0X2FjY291bnQYAyABKAsyFy5ibmV0" + 
+            "LnByb3RvY29sLkVudGl0eUlkEiUKFm5vdF9jbG9zZWRfb2ZmZXJfY291bnQY" + 
+            "BCABKAg6BWZhbHNlEikKGm9yZGVyX3dpdGhfY2xhaW1hYmxlX2NvdW50GAUg" + 
+            "ASgIOgVmYWxzZSKZAQoVR2V0T3JkZXJDb3VudFJlc3BvbnNlEj0KFm5vdF9j" + 
+            "bG9zZWRfb2ZmZXJfY291bnQYASABKAsyHS5ibmV0LnByb3RvY29sLmV4Y2hh" + 
+            "bmdlLkNvdW50EkEKGm9yZGVyX3dpdGhfY2xhaW1hYmxlX2NvdW50GAIgASgL" + 
+            "Mh0uYm5ldC5wcm90b2NvbC5leGNoYW5nZS5Db3VudCKAAQoVSGlzdG9yaWVz" + 
+            "Rm9yQ1NSZXF1ZXN0Ei0KDGJuZXRfYWNjb3VudBgBIAIoCzIXLmJuZXQucHJv" + 
+            "dG9jb2wuRW50aXR5SWQSDwoHcHJvZ3JhbRgCIAIoBxISCgpsb3dlcl90aW1l" + 
+            "GAMgAigEEhMKC2hpZ2hlcl90aW1lGAQgAigEIlMKFkhpc3Rvcmllc0ZvckNT" + 
+            "UmVzcG9uc2USOQoMaGlzdG9yeV9kYXRhGAEgAygLMiMuYm5ldC5wcm90b2Nv" + 
+            "bC5leGNoYW5nZS5IaXN0b3J5RGF0YTLiKwoPRXhjaGFuZ2VTZXJ2aWNlEngK" + 
+            "D0NyZWF0ZU9yZGVyQm9vaxIuLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQ3Jl" + 
+            "YXRlT3JkZXJCb29rUmVxdWVzdBovLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
+            "Q3JlYXRlT3JkZXJCb29rUmVzcG9uc2UiBIC1GAESigEKFVBsYWNlT2ZmZXJP" + 
+            "bk9yZGVyQm9vaxI0LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGxhY2VPZmZl" + 
+            "ck9uT3JkZXJCb29rUmVxdWVzdBo1LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
+            "UGxhY2VPZmZlck9uT3JkZXJCb29rUmVzcG9uc2UiBIC1GAISrgEKIVBsYWNl" + 
+            "T2ZmZXJDcmVhdGVPcmRlckJvb2tJZk5lZWRlZBJALmJuZXQucHJvdG9jb2wu" + 
+            "ZXhjaGFuZ2UuUGxhY2VPZmZlckNyZWF0ZU9yZGVyQm9va0lmTmVlZGVkUmVx" + 
+            "dWVzdBpBLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuUGxhY2VPZmZlckNyZWF0" + 
+            "ZU9yZGVyQm9va0lmTmVlZGVkUmVzcG9uc2UiBIC1GAMShAEKE1BsYWNlQmlk" + 
+            "T25PcmRlckJvb2sSMi5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlBsYWNlQmlk" + 
+            "T25PcmRlckJvb2tSZXF1ZXN0GjMuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5Q" + 
+            "bGFjZUJpZE9uT3JkZXJCb29rUmVzcG9uc2UiBIC1GAQSqAEKH1BsYWNlQmlk" + 
+            "Q3JlYXRlT3JkZXJCb29rSWZOZWVkZWQSPi5ibmV0LnByb3RvY29sLmV4Y2hh" + 
+            "bmdlLlBsYWNlQmlkQ3JlYXRlT3JkZXJCb29rSWZOZWVkZWRSZXF1ZXN0Gj8u" + 
+            "Ym5ldC5wcm90b2NvbC5leGNoYW5nZS5QbGFjZUJpZENyZWF0ZU9yZGVyQm9v" + 
+            "a0lmTmVlZGVkUmVzcG9uc2UiBIC1GAUSjQEKFlF1ZXJ5T2ZmZXJzQnlPcmRl" + 
+            "ckJvb2sSNS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlF1ZXJ5T2ZmZXJzQnlP" + 
+            "cmRlckJvb2tSZXF1ZXN0GjYuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5RdWVy" + 
+            "eU9mZmVyc0J5T3JkZXJCb29rUmVzcG9uc2UiBIC1GAYShwEKFFF1ZXJ5Qmlk" + 
+            "c0J5T3JkZXJCb29rEjMuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5RdWVyeUJp" + 
+            "ZHNCeU9yZGVyQm9va1JlcXVlc3QaNC5ibmV0LnByb3RvY29sLmV4Y2hhbmdl" + 
+            "LlF1ZXJ5Qmlkc0J5T3JkZXJCb29rUmVzcG9uc2UiBIC1GAcSnAEKG1F1ZXJ5" + 
+            "T2ZmZXJzQnlBY2NvdW50Rm9ySXRlbRI6LmJuZXQucHJvdG9jb2wuZXhjaGFu" + 
+            "Z2UuUXVlcnlPZmZlcnNCeUFjY291bnRGb3JJdGVtUmVxdWVzdBo7LmJuZXQu" + 
+            "cHJvdG9jb2wuZXhjaGFuZ2UuUXVlcnlPZmZlcnNCeUFjY291bnRGb3JJdGVt" + 
+            "UmVzcG9uc2UiBIC1GAgSlgEKGVF1ZXJ5Qmlkc0J5QWNjb3VudEZvckl0ZW0S" + 
+            "OC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlF1ZXJ5Qmlkc0J5QWNjb3VudEZv" + 
+            "ckl0ZW1SZXF1ZXN0GjkuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5RdWVyeUJp" + 
+            "ZHNCeUFjY291bnRGb3JJdGVtUmVzcG9uc2UiBIC1GAkSjQEKFlF1ZXJ5T3Jk" + 
+            "ZXJCb29rc1N1bW1hcnkSNS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlF1ZXJ5" + 
+            "T3JkZXJCb29rc1N1bW1hcnlSZXF1ZXN0GjYuYm5ldC5wcm90b2NvbC5leGNo" + 
+            "YW5nZS5RdWVyeU9yZGVyQm9va3NTdW1tYXJ5UmVzcG9uc2UiBIC1GAsSbgoP" + 
+            "UmVwb3J0QXV0aG9yaXplEj4uYm5ldC5wcm90b2NvbC5leGNoYW5nZV9vYmpl" + 
+            "Y3RfcHJvdmlkZXIuUmVwb3J0QXV0aG9yaXplUmVxdWVzdBoVLmJuZXQucHJv" + 
+            "dG9jb2wuTm9EYXRhIgSAtRgNEmgKDFJlcG9ydFNldHRsZRI7LmJuZXQucHJv" + 
+            "dG9jb2wuZXhjaGFuZ2Vfb2JqZWN0X3Byb3ZpZGVyLlJlcG9ydFNldHRsZVJl" + 
+            "cXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYDhJoCgxSZXBvcnRD" + 
+            "YW5jZWwSOy5ibmV0LnByb3RvY29sLmV4Y2hhbmdlX29iamVjdF9wcm92aWRl" + 
+            "ci5SZXBvcnRDYW5jZWxSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEi" + 
+            "BIC1GA8SfAoeU3Vic2NyaWJlT3JkZXJCb29rU3RhdHVzQ2hhbmdlEj0uYm5l" + 
+            "dC5wcm90b2NvbC5leGNoYW5nZS5TdWJzY3JpYmVPcmRlckJvb2tTdGF0dXND" + 
+            "aGFuZ2VSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GBASgAEK" + 
+            "IFVuc3Vic2NyaWJlT3JkZXJCb29rU3RhdHVzQ2hhbmdlEj8uYm5ldC5wcm90" + 
+            "b2NvbC5leGNoYW5nZS5VbnN1YnNjcmliZU9yZGVyQm9va1N0YXR1c0NoYW5n" + 
+            "ZVJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYERJoChRTdWJz" + 
+            "Y3JpYmVPcmRlclVwZGF0ZRIzLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuU3Vi" + 
+            "c2NyaWJlT3JkZXJVcGRhdGVSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0Rh" + 
+            "dGEiBIC1GBISbAoWVW5zdWJzY3JpYmVPcmRlclVwZGF0ZRI1LmJuZXQucHJv" + 
+            "dG9jb2wuZXhjaGFuZ2UuVW5zdWJzY3JpYmVPcmRlclVwZGF0ZVJlcXVlc3Qa" + 
+            "FS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYExKeAQoRR2V0UGF5bWVudE1l" + 
+            "dGhvZHMSQC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlX29iamVjdF9wcm92aWRl" + 
+            "ci5HZXRQYXltZW50TWV0aG9kc1JlcXVlc3QaQS5ibmV0LnByb3RvY29sLmV4" + 
+            "Y2hhbmdlX29iamVjdF9wcm92aWRlci5HZXRQYXltZW50TWV0aG9kc1Jlc3Bv" + 
+            "bnNlIgSAtRgUElEKDENsYWltQmlkSXRlbRIkLmJuZXQucHJvdG9jb2wuZXhj" + 
+            "aGFuZ2UuQ2xhaW1SZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1" + 
+            "GBUSUgoNQ2xhaW1CaWRNb25leRIkLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Uu" + 
+            "Q2xhaW1SZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GBYSUwoO" + 
+            "Q2xhaW1PZmZlckl0ZW0SJC5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkNsYWlt" + 
+            "UmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgXElQKD0NsYWlt" + 
+            "T2ZmZXJNb25leRIkLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQ2xhaW1SZXF1" + 
+            "ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GBgSTwoJQ2FuY2VsQmlk" + 
+            "EiUuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5DYW5jZWxSZXF1ZXN0GhUuYm5l" + 
+            "dC5wcm90b2NvbC5Ob0RhdGEiBIC1GBkSUQoLQ2FuY2VsT2ZmZXISJS5ibmV0" + 
+            "LnByb3RvY29sLmV4Y2hhbmdlLkNhbmNlbFJlcXVlc3QaFS5ibmV0LnByb3Rv" + 
+            "Y29sLk5vRGF0YSIEgLUYGhJ7ChBHZXRDb25maWd1cmF0aW9uEi8uYm5ldC5w" + 
+            "cm90b2NvbC5leGNoYW5nZS5HZXRDb25maWd1cmF0aW9uUmVxdWVzdBowLmJu" + 
+            "ZXQucHJvdG9jb2wuZXhjaGFuZ2UuR2V0Q29uZmlndXJhdGlvblJlc3BvbnNl" + 
+            "IgSAtRgbEoEBChNHZXRCaWRGZWVFc3RpbWF0aW9uEjIuYm5ldC5wcm90b2Nv" + 
+            "bC5leGNoYW5nZS5HZXRCaWRGZWVFc3RpbWF0aW9uUmVxdWVzdBowLmJuZXQu" + 
+            "cHJvdG9jb2wuZXhjaGFuZ2UuR2V0RmVlRXN0aW1hdGlvblJlc3BvbnNlIgSA" + 
+            "tRgcEoUBChVHZXRPZmZlckZlZUVzdGltYXRpb24SNC5ibmV0LnByb3RvY29s" + 
+            "LmV4Y2hhbmdlLkdldE9mZmVyRmVlRXN0aW1hdGlvblJlcXVlc3QaMC5ibmV0" + 
+            "LnByb3RvY29sLmV4Y2hhbmdlLkdldEZlZUVzdGltYXRpb25SZXNwb25zZSIE" + 
+            "gLUYHRKcAQobUXVlcnlPcmRlcnNCeUFjY291bnRGb3JJdGVtEjouYm5ldC5w" + 
+            "cm90b2NvbC5leGNoYW5nZS5RdWVyeU9yZGVyc0J5QWNjb3VudEZvckl0ZW1S" + 
+            "ZXF1ZXN0GjsuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5RdWVyeU9yZGVyc0J5" + 
+            "QWNjb3VudEZvckl0ZW1SZXNwb25zZSIEgLUYHhJ5ChpSZXBvcnRBdXRob3Jp" + 
+            "emVSaXNrVmVyZGljdBI+LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Vfcmlzay5S" + 
+            "ZXBvcnRBdXRob3JpemVSaXNrVmVyZGljdFJlcXVlc3QaFS5ibmV0LnByb3Rv" + 
+            "Y29sLk5vRGF0YSIEgLUYHxJzChdSZXBvcnRTZXR0bGVSaXNrVmVyZGljdBI7" + 
+            "LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2Vfcmlzay5SZXBvcnRTZXR0bGVSaXNr" + 
+            "VmVyZGljdFJlcXVlc3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYIBJx" + 
+            "ChZEZWxheVNldHRsZVJpc2tWZXJkaWN0EjouYm5ldC5wcm90b2NvbC5leGNo" + 
+            "YW5nZV9yaXNrLkRlbGF5U2V0dGxlUmlza1ZlcmRpY3RSZXF1ZXN0GhUuYm5l" + 
+            "dC5wcm90b2NvbC5Ob0RhdGEiBIC1GCEScgoNR2V0RmVlRGV0YWlscxIsLmJu" + 
+            "ZXQucHJvdG9jb2wuZXhjaGFuZ2UuR2V0RmVlRGV0YWlsc1JlcXVlc3QaLS5i" + 
+            "bmV0LnByb3RvY29sLmV4Y2hhbmdlLkdldEZlZURldGFpbHNSZXNwb25zZSIE" + 
+            "gLUYIhKNAQoWR2V0T3JkZXJCb29rU3RhdGlzdGljcxI1LmJuZXQucHJvdG9j" + 
+            "b2wuZXhjaGFuZ2UuR2V0T3JkZXJCb29rU3RhdGlzdGljc1JlcXVlc3QaNi5i" + 
+            "bmV0LnByb3RvY29sLmV4Y2hhbmdlLkdldE9yZGVyQm9va1N0YXRpc3RpY3NS" + 
+            "ZXNwb25zZSIEgLUYIxJyCg1HZXRCaWREZXRhaWxzEiwuYm5ldC5wcm90b2Nv" + 
+            "bC5leGNoYW5nZS5HZXRCaWREZXRhaWxzUmVxdWVzdBotLmJuZXQucHJvdG9j" + 
+            "b2wuZXhjaGFuZ2UuR2V0QmlkRGV0YWlsc1Jlc3BvbnNlIgSAtRgkEngKD0dl" + 
+            "dE9mZmVyRGV0YWlscxIuLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuR2V0T2Zm" + 
+            "ZXJEZXRhaWxzUmVxdWVzdBovLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuR2V0" + 
+            "T2ZmZXJEZXRhaWxzUmVzcG9uc2UiBIC1GCUSWwoNR2V0U3lzdGVtVGltZRIV" + 
+            "LmJuZXQucHJvdG9jb2wuTm9EYXRhGi0uYm5ldC5wcm90b2NvbC5leGNoYW5n" + 
+            "ZS5HZXRTeXN0ZW1UaW1lUmVzcG9uc2UiBIC1GCYSWgoNQ3JlYXRlQ1NUcmFk" + 
+            "ZRIsLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQ3JlYXRlQ1NUcmFkZVJlcXVl" + 
+            "c3QaFS5ibmV0LnByb3RvY29sLk5vRGF0YSIEgLUYJxJPCglSZWZ1bmRCaWQS" + 
+            "JS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLlJlZnVuZFJlcXVlc3QaFS5ibmV0" + 
+            "LnByb3RvY29sLk5vRGF0YSIEgLUYKBJoCgxSZXBvcnRSZWZ1bmQSOy5ibmV0" + 
+            "LnByb3RvY29sLmV4Y2hhbmdlX29iamVjdF9wcm92aWRlci5SZXBvcnRSZWZ1" + 
+            "bmRSZXF1ZXN0GhUuYm5ldC5wcm90b2NvbC5Ob0RhdGEiBIC1GCkScgoNR2V0" + 
+            "T3JkZXJDb3VudBIsLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuR2V0T3JkZXJD" + 
+            "b3VudFJlcXVlc3QaLS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkdldE9yZGVy" + 
+            "Q291bnRSZXNwb25zZSIEgLUYKhJ4ChxTdWJzY3JpYmVBZHZhbmNlZE9yZGVy" + 
+            "VXBkYXRlEjsuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5TdWJzY3JpYmVBZHZh" + 
+            "bmNlZE9yZGVyVXBkYXRlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRh" + 
+            "IgSAtRgrEnwKHlVuc3Vic2NyaWJlQWR2YW5jZWRPcmRlclVwZGF0ZRI9LmJu" + 
+            "ZXQucHJvdG9jb2wuZXhjaGFuZ2UuVW5zdWJzY3JpYmVBZHZhbmNlZE9yZGVy" + 
+            "VXBkYXRlUmVxdWVzdBoVLmJuZXQucHJvdG9jb2wuTm9EYXRhIgSAtRgsEnsK" + 
+            "FFNldHRsZUhpc3Rvcmllc0ZvckNTEi0uYm5ldC5wcm90b2NvbC5leGNoYW5n" + 
+            "ZS5IaXN0b3JpZXNGb3JDU1JlcXVlc3QaLi5ibmV0LnByb3RvY29sLmV4Y2hh" + 
+            "bmdlLkhpc3Rvcmllc0ZvckNTUmVzcG9uc2UiBIC1GC0SewoUQ2FuY2VsSGlz" + 
+            "dG9yaWVzRm9yQ1MSLS5ibmV0LnByb3RvY29sLmV4Y2hhbmdlLkhpc3Rvcmll" + 
+            "c0ZvckNTUmVxdWVzdBouLmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuSGlzdG9y" + 
+            "aWVzRm9yQ1NSZXNwb25zZSIEgLUYLhJ6ChFDcmVhdGVDU1RyYWRlSXRlbRIw" + 
+            "LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuQ3JlYXRlQ1NUcmFkZUl0ZW1SZXF1" + 
+            "ZXN0Gi0uYm5ldC5wcm90b2NvbC5leGNoYW5nZS5DcmVhdGVDU1RyYWRlUmVz" + 
+            "cG9uc2UiBIC1GC8SfAoSQ3JlYXRlQ1NUcmFkZU1vbmV5EjEuYm5ldC5wcm90" + 
+            "b2NvbC5leGNoYW5nZS5DcmVhdGVDU1RyYWRlTW9uZXlSZXF1ZXN0Gi0uYm5l" + 
+            "dC5wcm90b2NvbC5leGNoYW5nZS5DcmVhdGVDU1RyYWRlUmVzcG9uc2UiBIC1" + 
+            "GDAywQMKDkV4Y2hhbmdlTm90aWZ5EnUKG05vdGlmeU9yZGVyQm9va1N0YXR1" + 
+            "c0NoYW5nZRI0LmJuZXQucHJvdG9jb2wuZXhjaGFuZ2UuT3JkZXJCb29rTm90" + 
+            "aWZpY2F0aW9uUmVxdWVzdBoaLmJuZXQucHJvdG9jb2wuTk9fUkVTUE9OU0Ui" + 
+            "BIC1GAESZwoRTm90aWZ5T2ZmZXJVcGRhdGUSMC5ibmV0LnByb3RvY29sLmV4" + 
+            "Y2hhbmdlLk9mZmVyTm90aWZpY2F0aW9uUmVxdWVzdBoaLmJuZXQucHJvdG9j" + 
+            "b2wuTk9fUkVTUE9OU0UiBIC1GAISYwoPTm90aWZ5QmlkVXBkYXRlEi4uYm5l" + 
+            "dC5wcm90b2NvbC5leGNoYW5nZS5CaWROb3RpZmljYXRpb25SZXF1ZXN0Ghou" + 
+            "Ym5ldC5wcm90b2NvbC5OT19SRVNQT05TRSIEgLUYAxJqChNOb3RpZnlDdXN0" + 
+            "b21NZXNzYWdlEjEuYm5ldC5wcm90b2NvbC5leGNoYW5nZS5DdXN0b21Ob3Rp" + 
             "ZmljYXRpb25SZXF1ZXN0GhouYm5ldC5wcm90b2NvbC5OT19SRVNQT05TRSIE" + 
-            "gLUYAxJqChNOb3RpZnlDdXN0b21NZXNzYWdlEjEuYm5ldC5wcm90b2NvbC5l" + 
-            "eGNoYW5nZS5DdXN0b21Ob3RpZmljYXRpb25SZXF1ZXN0GhouYm5ldC5wcm90" + 
-            "b2NvbC5OT19SRVNQT05TRSIEgLUYBEIDgAEA");
+            "gLUYBEIDgAEA");
         pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
           descriptor = root;
           internal__static_bnet_protocol_exchange_CreateOrderBookRequest__Descriptor = Descriptor.MessageTypes[0];
@@ -640,19 +670,31 @@ namespace bnet.protocol.exchange {
           internal__static_bnet_protocol_exchange_CreateCSTradeRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CreateCSTradeRequest, global::bnet.protocol.exchange.CreateCSTradeRequest.Builder>(internal__static_bnet_protocol_exchange_CreateCSTradeRequest__Descriptor,
                   new string[] { "PartitionId", "OrderBook", "Amount", "BnetAccount", "GameAccount", "AccountForItem", "CsNotes", "CsUserId", });
-          internal__static_bnet_protocol_exchange_GetOrderCountRequest__Descriptor = Descriptor.MessageTypes[50];
+          internal__static_bnet_protocol_exchange_CreateCSTradeItemRequest__Descriptor = Descriptor.MessageTypes[50];
+          internal__static_bnet_protocol_exchange_CreateCSTradeItemRequest__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CreateCSTradeItemRequest, global::bnet.protocol.exchange.CreateCSTradeItemRequest.Builder>(internal__static_bnet_protocol_exchange_CreateCSTradeItemRequest__Descriptor,
+                  new string[] { "PartitionId", "OrderBook", "Amount", "BnetAccount", "GameAccount", "AccountForItem", "CsNotes", "CsUserId", });
+          internal__static_bnet_protocol_exchange_CreateCSTradeMoneyRequest__Descriptor = Descriptor.MessageTypes[51];
+          internal__static_bnet_protocol_exchange_CreateCSTradeMoneyRequest__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CreateCSTradeMoneyRequest, global::bnet.protocol.exchange.CreateCSTradeMoneyRequest.Builder>(internal__static_bnet_protocol_exchange_CreateCSTradeMoneyRequest__Descriptor,
+                  new string[] { "PartitionId", "OrderBook", "Amount", "BnetAccount", "GameAccount", "AccountForItem", "CsNotes", "CsUserId", "AccountForMoney", });
+          internal__static_bnet_protocol_exchange_CreateCSTradeResponse__Descriptor = Descriptor.MessageTypes[52];
+          internal__static_bnet_protocol_exchange_CreateCSTradeResponse__FieldAccessorTable = 
+              new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.CreateCSTradeResponse, global::bnet.protocol.exchange.CreateCSTradeResponse.Builder>(internal__static_bnet_protocol_exchange_CreateCSTradeResponse__Descriptor,
+                  new string[] { "OrderBookId", });
+          internal__static_bnet_protocol_exchange_GetOrderCountRequest__Descriptor = Descriptor.MessageTypes[53];
           internal__static_bnet_protocol_exchange_GetOrderCountRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetOrderCountRequest, global::bnet.protocol.exchange.GetOrderCountRequest.Builder>(internal__static_bnet_protocol_exchange_GetOrderCountRequest__Descriptor,
                   new string[] { "Currency", "Source", "BnetAccount", "NotClosedOfferCount", "OrderWithClaimableCount", });
-          internal__static_bnet_protocol_exchange_GetOrderCountResponse__Descriptor = Descriptor.MessageTypes[51];
+          internal__static_bnet_protocol_exchange_GetOrderCountResponse__Descriptor = Descriptor.MessageTypes[54];
           internal__static_bnet_protocol_exchange_GetOrderCountResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.GetOrderCountResponse, global::bnet.protocol.exchange.GetOrderCountResponse.Builder>(internal__static_bnet_protocol_exchange_GetOrderCountResponse__Descriptor,
                   new string[] { "NotClosedOfferCount", "OrderWithClaimableCount", });
-          internal__static_bnet_protocol_exchange_HistoriesForCSRequest__Descriptor = Descriptor.MessageTypes[52];
+          internal__static_bnet_protocol_exchange_HistoriesForCSRequest__Descriptor = Descriptor.MessageTypes[55];
           internal__static_bnet_protocol_exchange_HistoriesForCSRequest__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.HistoriesForCSRequest, global::bnet.protocol.exchange.HistoriesForCSRequest.Builder>(internal__static_bnet_protocol_exchange_HistoriesForCSRequest__Descriptor,
                   new string[] { "BnetAccount", "Program", "LowerTime", "HigherTime", });
-          internal__static_bnet_protocol_exchange_HistoriesForCSResponse__Descriptor = Descriptor.MessageTypes[53];
+          internal__static_bnet_protocol_exchange_HistoriesForCSResponse__Descriptor = Descriptor.MessageTypes[56];
           internal__static_bnet_protocol_exchange_HistoriesForCSResponse__FieldAccessorTable = 
               new pb::FieldAccess.FieldAccessorTable<global::bnet.protocol.exchange.HistoriesForCSResponse, global::bnet.protocol.exchange.HistoriesForCSResponse.Builder>(internal__static_bnet_protocol_exchange_HistoriesForCSResponse__Descriptor,
                   new string[] { "HistoryData", });
@@ -19907,6 +19949,1783 @@ namespace bnet.protocol.exchange {
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class CreateCSTradeItemRequest : pb::GeneratedMessage<CreateCSTradeItemRequest, CreateCSTradeItemRequest.Builder> {
+    private CreateCSTradeItemRequest() { }
+    private static readonly CreateCSTradeItemRequest defaultInstance = new CreateCSTradeItemRequest().MakeReadOnly();
+    private static readonly string[] _createCSTradeItemRequestFieldNames = new string[] { "account_for_item", "amount", "bnet_account", "cs_notes", "cs_user_id", "game_account", "order_book", "partition_id" };
+    private static readonly uint[] _createCSTradeItemRequestFieldTags = new uint[] { 50, 24, 34, 58, 64, 42, 18, 10 };
+    public static CreateCSTradeItemRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override CreateCSTradeItemRequest DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override CreateCSTradeItemRequest ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_CreateCSTradeItemRequest__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<CreateCSTradeItemRequest, CreateCSTradeItemRequest.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_CreateCSTradeItemRequest__FieldAccessorTable; }
+    }
+    
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
+    }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    }
+    
+    public const int OrderBookFieldNumber = 2;
+    private bool hasOrderBook;
+    private global::bnet.protocol.exchange.OrderBook orderBook_;
+    public bool HasOrderBook {
+      get { return hasOrderBook; }
+    }
+    public global::bnet.protocol.exchange.OrderBook OrderBook {
+      get { return orderBook_ ?? global::bnet.protocol.exchange.OrderBook.DefaultInstance; }
+    }
+    
+    public const int AmountFieldNumber = 3;
+    private bool hasAmount;
+    private uint amount_;
+    public bool HasAmount {
+      get { return hasAmount; }
+    }
+    public uint Amount {
+      get { return amount_; }
+    }
+    
+    public const int BnetAccountFieldNumber = 4;
+    private bool hasBnetAccount;
+    private global::bnet.protocol.EntityId bnetAccount_;
+    public bool HasBnetAccount {
+      get { return hasBnetAccount; }
+    }
+    public global::bnet.protocol.EntityId BnetAccount {
+      get { return bnetAccount_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int GameAccountFieldNumber = 5;
+    private bool hasGameAccount;
+    private global::bnet.protocol.EntityId gameAccount_;
+    public bool HasGameAccount {
+      get { return hasGameAccount; }
+    }
+    public global::bnet.protocol.EntityId GameAccount {
+      get { return gameAccount_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int AccountForItemFieldNumber = 6;
+    private bool hasAccountForItem;
+    private global::bnet.protocol.exchange.BlobFrom accountForItem_;
+    public bool HasAccountForItem {
+      get { return hasAccountForItem; }
+    }
+    public global::bnet.protocol.exchange.BlobFrom AccountForItem {
+      get { return accountForItem_ ?? global::bnet.protocol.exchange.BlobFrom.DefaultInstance; }
+    }
+    
+    public const int CsNotesFieldNumber = 7;
+    private bool hasCsNotes;
+    private string csNotes_ = "";
+    public bool HasCsNotes {
+      get { return hasCsNotes; }
+    }
+    public string CsNotes {
+      get { return csNotes_; }
+    }
+    
+    public const int CsUserIdFieldNumber = 8;
+    private bool hasCsUserId;
+    private ulong csUserId_;
+    public bool HasCsUserId {
+      get { return hasCsUserId; }
+    }
+    public ulong CsUserId {
+      get { return csUserId_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasOrderBook) return false;
+        if (!hasAmount) return false;
+        if (!hasBnetAccount) return false;
+        if (!hasAccountForItem) return false;
+        if (!hasCsNotes) return false;
+        if (!hasCsUserId) return false;
+        if (HasPartitionId) {
+          if (!PartitionId.IsInitialized) return false;
+        }
+        if (!OrderBook.IsInitialized) return false;
+        if (!BnetAccount.IsInitialized) return false;
+        if (HasGameAccount) {
+          if (!GameAccount.IsInitialized) return false;
+        }
+        if (!AccountForItem.IsInitialized) return false;
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _createCSTradeItemRequestFieldNames;
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[7], PartitionId);
+      }
+      if (hasOrderBook) {
+        output.WriteMessage(2, field_names[6], OrderBook);
+      }
+      if (hasAmount) {
+        output.WriteUInt32(3, field_names[1], Amount);
+      }
+      if (hasBnetAccount) {
+        output.WriteMessage(4, field_names[2], BnetAccount);
+      }
+      if (hasGameAccount) {
+        output.WriteMessage(5, field_names[5], GameAccount);
+      }
+      if (hasAccountForItem) {
+        output.WriteMessage(6, field_names[0], AccountForItem);
+      }
+      if (hasCsNotes) {
+        output.WriteString(7, field_names[3], CsNotes);
+      }
+      if (hasCsUserId) {
+        output.WriteUInt64(8, field_names[4], CsUserId);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
+        }
+        if (hasOrderBook) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, OrderBook);
+        }
+        if (hasAmount) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(3, Amount);
+        }
+        if (hasBnetAccount) {
+          size += pb::CodedOutputStream.ComputeMessageSize(4, BnetAccount);
+        }
+        if (hasGameAccount) {
+          size += pb::CodedOutputStream.ComputeMessageSize(5, GameAccount);
+        }
+        if (hasAccountForItem) {
+          size += pb::CodedOutputStream.ComputeMessageSize(6, AccountForItem);
+        }
+        if (hasCsNotes) {
+          size += pb::CodedOutputStream.ComputeStringSize(7, CsNotes);
+        }
+        if (hasCsUserId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(8, CsUserId);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static CreateCSTradeItemRequest ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static CreateCSTradeItemRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static CreateCSTradeItemRequest ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static CreateCSTradeItemRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static CreateCSTradeItemRequest ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static CreateCSTradeItemRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static CreateCSTradeItemRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static CreateCSTradeItemRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static CreateCSTradeItemRequest ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static CreateCSTradeItemRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private CreateCSTradeItemRequest MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(CreateCSTradeItemRequest prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<CreateCSTradeItemRequest, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(CreateCSTradeItemRequest cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private CreateCSTradeItemRequest result;
+      
+      private CreateCSTradeItemRequest PrepareBuilder() {
+        if (resultIsReadOnly) {
+          CreateCSTradeItemRequest original = result;
+          result = new CreateCSTradeItemRequest();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override CreateCSTradeItemRequest MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.CreateCSTradeItemRequest.Descriptor; }
+      }
+      
+      public override CreateCSTradeItemRequest DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.CreateCSTradeItemRequest.DefaultInstance; }
+      }
+      
+      public override CreateCSTradeItemRequest BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is CreateCSTradeItemRequest) {
+          return MergeFrom((CreateCSTradeItemRequest) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(CreateCSTradeItemRequest other) {
+        if (other == global::bnet.protocol.exchange.CreateCSTradeItemRequest.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
+        }
+        if (other.HasOrderBook) {
+          MergeOrderBook(other.OrderBook);
+        }
+        if (other.HasAmount) {
+          Amount = other.Amount;
+        }
+        if (other.HasBnetAccount) {
+          MergeBnetAccount(other.BnetAccount);
+        }
+        if (other.HasGameAccount) {
+          MergeGameAccount(other.GameAccount);
+        }
+        if (other.HasAccountForItem) {
+          MergeAccountForItem(other.AccountForItem);
+        }
+        if (other.HasCsNotes) {
+          CsNotes = other.CsNotes;
+        }
+        if (other.HasCsUserId) {
+          CsUserId = other.CsUserId;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_createCSTradeItemRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _createCSTradeItemRequestFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              PartitionId = subBuilder.BuildPartial();
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.exchange.OrderBook.Builder subBuilder = global::bnet.protocol.exchange.OrderBook.CreateBuilder();
+              if (result.hasOrderBook) {
+                subBuilder.MergeFrom(OrderBook);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              OrderBook = subBuilder.BuildPartial();
+              break;
+            }
+            case 24: {
+              result.hasAmount = input.ReadUInt32(ref result.amount_);
+              break;
+            }
+            case 34: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasBnetAccount) {
+                subBuilder.MergeFrom(BnetAccount);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              BnetAccount = subBuilder.BuildPartial();
+              break;
+            }
+            case 42: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasGameAccount) {
+                subBuilder.MergeFrom(GameAccount);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              GameAccount = subBuilder.BuildPartial();
+              break;
+            }
+            case 50: {
+              global::bnet.protocol.exchange.BlobFrom.Builder subBuilder = global::bnet.protocol.exchange.BlobFrom.CreateBuilder();
+              if (result.hasAccountForItem) {
+                subBuilder.MergeFrom(AccountForItem);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              AccountForItem = subBuilder.BuildPartial();
+              break;
+            }
+            case 58: {
+              result.hasCsNotes = input.ReadString(ref result.csNotes_);
+              break;
+            }
+            case 64: {
+              result.hasCsUserId = input.ReadUInt64(ref result.csUserId_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
+      }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
+      }
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
+        return this;
+      }
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.partitionId_ = value;
+        }
+        result.hasPartitionId = true;
+        return this;
+      }
+      public Builder ClearPartitionId() {
+        PrepareBuilder();
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
+        return this;
+      }
+      
+      public bool HasOrderBook {
+       get { return result.hasOrderBook; }
+      }
+      public global::bnet.protocol.exchange.OrderBook OrderBook {
+        get { return result.OrderBook; }
+        set { SetOrderBook(value); }
+      }
+      public Builder SetOrderBook(global::bnet.protocol.exchange.OrderBook value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasOrderBook = true;
+        result.orderBook_ = value;
+        return this;
+      }
+      public Builder SetOrderBook(global::bnet.protocol.exchange.OrderBook.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasOrderBook = true;
+        result.orderBook_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeOrderBook(global::bnet.protocol.exchange.OrderBook value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasOrderBook &&
+            result.orderBook_ != global::bnet.protocol.exchange.OrderBook.DefaultInstance) {
+            result.orderBook_ = global::bnet.protocol.exchange.OrderBook.CreateBuilder(result.orderBook_).MergeFrom(value).BuildPartial();
+        } else {
+          result.orderBook_ = value;
+        }
+        result.hasOrderBook = true;
+        return this;
+      }
+      public Builder ClearOrderBook() {
+        PrepareBuilder();
+        result.hasOrderBook = false;
+        result.orderBook_ = null;
+        return this;
+      }
+      
+      public bool HasAmount {
+        get { return result.hasAmount; }
+      }
+      public uint Amount {
+        get { return result.Amount; }
+        set { SetAmount(value); }
+      }
+      public Builder SetAmount(uint value) {
+        PrepareBuilder();
+        result.hasAmount = true;
+        result.amount_ = value;
+        return this;
+      }
+      public Builder ClearAmount() {
+        PrepareBuilder();
+        result.hasAmount = false;
+        result.amount_ = 0;
+        return this;
+      }
+      
+      public bool HasBnetAccount {
+       get { return result.hasBnetAccount; }
+      }
+      public global::bnet.protocol.EntityId BnetAccount {
+        get { return result.BnetAccount; }
+        set { SetBnetAccount(value); }
+      }
+      public Builder SetBnetAccount(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasBnetAccount = true;
+        result.bnetAccount_ = value;
+        return this;
+      }
+      public Builder SetBnetAccount(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasBnetAccount = true;
+        result.bnetAccount_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeBnetAccount(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasBnetAccount &&
+            result.bnetAccount_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.bnetAccount_ = global::bnet.protocol.EntityId.CreateBuilder(result.bnetAccount_).MergeFrom(value).BuildPartial();
+        } else {
+          result.bnetAccount_ = value;
+        }
+        result.hasBnetAccount = true;
+        return this;
+      }
+      public Builder ClearBnetAccount() {
+        PrepareBuilder();
+        result.hasBnetAccount = false;
+        result.bnetAccount_ = null;
+        return this;
+      }
+      
+      public bool HasGameAccount {
+       get { return result.hasGameAccount; }
+      }
+      public global::bnet.protocol.EntityId GameAccount {
+        get { return result.GameAccount; }
+        set { SetGameAccount(value); }
+      }
+      public Builder SetGameAccount(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasGameAccount = true;
+        result.gameAccount_ = value;
+        return this;
+      }
+      public Builder SetGameAccount(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasGameAccount = true;
+        result.gameAccount_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeGameAccount(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasGameAccount &&
+            result.gameAccount_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.gameAccount_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccount_).MergeFrom(value).BuildPartial();
+        } else {
+          result.gameAccount_ = value;
+        }
+        result.hasGameAccount = true;
+        return this;
+      }
+      public Builder ClearGameAccount() {
+        PrepareBuilder();
+        result.hasGameAccount = false;
+        result.gameAccount_ = null;
+        return this;
+      }
+      
+      public bool HasAccountForItem {
+       get { return result.hasAccountForItem; }
+      }
+      public global::bnet.protocol.exchange.BlobFrom AccountForItem {
+        get { return result.AccountForItem; }
+        set { SetAccountForItem(value); }
+      }
+      public Builder SetAccountForItem(global::bnet.protocol.exchange.BlobFrom value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasAccountForItem = true;
+        result.accountForItem_ = value;
+        return this;
+      }
+      public Builder SetAccountForItem(global::bnet.protocol.exchange.BlobFrom.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasAccountForItem = true;
+        result.accountForItem_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeAccountForItem(global::bnet.protocol.exchange.BlobFrom value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasAccountForItem &&
+            result.accountForItem_ != global::bnet.protocol.exchange.BlobFrom.DefaultInstance) {
+            result.accountForItem_ = global::bnet.protocol.exchange.BlobFrom.CreateBuilder(result.accountForItem_).MergeFrom(value).BuildPartial();
+        } else {
+          result.accountForItem_ = value;
+        }
+        result.hasAccountForItem = true;
+        return this;
+      }
+      public Builder ClearAccountForItem() {
+        PrepareBuilder();
+        result.hasAccountForItem = false;
+        result.accountForItem_ = null;
+        return this;
+      }
+      
+      public bool HasCsNotes {
+        get { return result.hasCsNotes; }
+      }
+      public string CsNotes {
+        get { return result.CsNotes; }
+        set { SetCsNotes(value); }
+      }
+      public Builder SetCsNotes(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasCsNotes = true;
+        result.csNotes_ = value;
+        return this;
+      }
+      public Builder ClearCsNotes() {
+        PrepareBuilder();
+        result.hasCsNotes = false;
+        result.csNotes_ = "";
+        return this;
+      }
+      
+      public bool HasCsUserId {
+        get { return result.hasCsUserId; }
+      }
+      public ulong CsUserId {
+        get { return result.CsUserId; }
+        set { SetCsUserId(value); }
+      }
+      public Builder SetCsUserId(ulong value) {
+        PrepareBuilder();
+        result.hasCsUserId = true;
+        result.csUserId_ = value;
+        return this;
+      }
+      public Builder ClearCsUserId() {
+        PrepareBuilder();
+        result.hasCsUserId = false;
+        result.csUserId_ = 0UL;
+        return this;
+      }
+    }
+    static CreateCSTradeItemRequest() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.Proto.ExchangeService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class CreateCSTradeMoneyRequest : pb::GeneratedMessage<CreateCSTradeMoneyRequest, CreateCSTradeMoneyRequest.Builder> {
+    private CreateCSTradeMoneyRequest() { }
+    private static readonly CreateCSTradeMoneyRequest defaultInstance = new CreateCSTradeMoneyRequest().MakeReadOnly();
+    private static readonly string[] _createCSTradeMoneyRequestFieldNames = new string[] { "account_for_item", "account_for_money", "amount", "bnet_account", "cs_notes", "cs_user_id", "game_account", "order_book", "partition_id" };
+    private static readonly uint[] _createCSTradeMoneyRequestFieldTags = new uint[] { 50, 74, 24, 34, 58, 64, 42, 18, 10 };
+    public static CreateCSTradeMoneyRequest DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override CreateCSTradeMoneyRequest DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override CreateCSTradeMoneyRequest ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_CreateCSTradeMoneyRequest__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<CreateCSTradeMoneyRequest, CreateCSTradeMoneyRequest.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_CreateCSTradeMoneyRequest__FieldAccessorTable; }
+    }
+    
+    public const int PartitionIdFieldNumber = 1;
+    private bool hasPartitionId;
+    private global::bnet.protocol.exchange.PartitionId partitionId_;
+    public bool HasPartitionId {
+      get { return hasPartitionId; }
+    }
+    public global::bnet.protocol.exchange.PartitionId PartitionId {
+      get { return partitionId_ ?? global::bnet.protocol.exchange.PartitionId.DefaultInstance; }
+    }
+    
+    public const int OrderBookFieldNumber = 2;
+    private bool hasOrderBook;
+    private global::bnet.protocol.exchange.OrderBook orderBook_;
+    public bool HasOrderBook {
+      get { return hasOrderBook; }
+    }
+    public global::bnet.protocol.exchange.OrderBook OrderBook {
+      get { return orderBook_ ?? global::bnet.protocol.exchange.OrderBook.DefaultInstance; }
+    }
+    
+    public const int AmountFieldNumber = 3;
+    private bool hasAmount;
+    private uint amount_;
+    public bool HasAmount {
+      get { return hasAmount; }
+    }
+    public uint Amount {
+      get { return amount_; }
+    }
+    
+    public const int BnetAccountFieldNumber = 4;
+    private bool hasBnetAccount;
+    private global::bnet.protocol.EntityId bnetAccount_;
+    public bool HasBnetAccount {
+      get { return hasBnetAccount; }
+    }
+    public global::bnet.protocol.EntityId BnetAccount {
+      get { return bnetAccount_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int GameAccountFieldNumber = 5;
+    private bool hasGameAccount;
+    private global::bnet.protocol.EntityId gameAccount_;
+    public bool HasGameAccount {
+      get { return hasGameAccount; }
+    }
+    public global::bnet.protocol.EntityId GameAccount {
+      get { return gameAccount_ ?? global::bnet.protocol.EntityId.DefaultInstance; }
+    }
+    
+    public const int AccountForItemFieldNumber = 6;
+    private bool hasAccountForItem;
+    private global::bnet.protocol.exchange.BlobFrom accountForItem_;
+    public bool HasAccountForItem {
+      get { return hasAccountForItem; }
+    }
+    public global::bnet.protocol.exchange.BlobFrom AccountForItem {
+      get { return accountForItem_ ?? global::bnet.protocol.exchange.BlobFrom.DefaultInstance; }
+    }
+    
+    public const int CsNotesFieldNumber = 7;
+    private bool hasCsNotes;
+    private string csNotes_ = "";
+    public bool HasCsNotes {
+      get { return hasCsNotes; }
+    }
+    public string CsNotes {
+      get { return csNotes_; }
+    }
+    
+    public const int CsUserIdFieldNumber = 8;
+    private bool hasCsUserId;
+    private ulong csUserId_;
+    public bool HasCsUserId {
+      get { return hasCsUserId; }
+    }
+    public ulong CsUserId {
+      get { return csUserId_; }
+    }
+    
+    public const int AccountForMoneyFieldNumber = 9;
+    private bool hasAccountForMoney;
+    private global::bnet.protocol.exchange.BlobFrom accountForMoney_;
+    public bool HasAccountForMoney {
+      get { return hasAccountForMoney; }
+    }
+    public global::bnet.protocol.exchange.BlobFrom AccountForMoney {
+      get { return accountForMoney_ ?? global::bnet.protocol.exchange.BlobFrom.DefaultInstance; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        if (!hasOrderBook) return false;
+        if (!hasAmount) return false;
+        if (!hasBnetAccount) return false;
+        if (!hasAccountForItem) return false;
+        if (!hasCsNotes) return false;
+        if (!hasCsUserId) return false;
+        if (HasPartitionId) {
+          if (!PartitionId.IsInitialized) return false;
+        }
+        if (!OrderBook.IsInitialized) return false;
+        if (!BnetAccount.IsInitialized) return false;
+        if (HasGameAccount) {
+          if (!GameAccount.IsInitialized) return false;
+        }
+        if (!AccountForItem.IsInitialized) return false;
+        if (HasAccountForMoney) {
+          if (!AccountForMoney.IsInitialized) return false;
+        }
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _createCSTradeMoneyRequestFieldNames;
+      if (hasPartitionId) {
+        output.WriteMessage(1, field_names[8], PartitionId);
+      }
+      if (hasOrderBook) {
+        output.WriteMessage(2, field_names[7], OrderBook);
+      }
+      if (hasAmount) {
+        output.WriteUInt32(3, field_names[2], Amount);
+      }
+      if (hasBnetAccount) {
+        output.WriteMessage(4, field_names[3], BnetAccount);
+      }
+      if (hasGameAccount) {
+        output.WriteMessage(5, field_names[6], GameAccount);
+      }
+      if (hasAccountForItem) {
+        output.WriteMessage(6, field_names[0], AccountForItem);
+      }
+      if (hasCsNotes) {
+        output.WriteString(7, field_names[4], CsNotes);
+      }
+      if (hasCsUserId) {
+        output.WriteUInt64(8, field_names[5], CsUserId);
+      }
+      if (hasAccountForMoney) {
+        output.WriteMessage(9, field_names[1], AccountForMoney);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasPartitionId) {
+          size += pb::CodedOutputStream.ComputeMessageSize(1, PartitionId);
+        }
+        if (hasOrderBook) {
+          size += pb::CodedOutputStream.ComputeMessageSize(2, OrderBook);
+        }
+        if (hasAmount) {
+          size += pb::CodedOutputStream.ComputeUInt32Size(3, Amount);
+        }
+        if (hasBnetAccount) {
+          size += pb::CodedOutputStream.ComputeMessageSize(4, BnetAccount);
+        }
+        if (hasGameAccount) {
+          size += pb::CodedOutputStream.ComputeMessageSize(5, GameAccount);
+        }
+        if (hasAccountForItem) {
+          size += pb::CodedOutputStream.ComputeMessageSize(6, AccountForItem);
+        }
+        if (hasCsNotes) {
+          size += pb::CodedOutputStream.ComputeStringSize(7, CsNotes);
+        }
+        if (hasCsUserId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(8, CsUserId);
+        }
+        if (hasAccountForMoney) {
+          size += pb::CodedOutputStream.ComputeMessageSize(9, AccountForMoney);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static CreateCSTradeMoneyRequest ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static CreateCSTradeMoneyRequest ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static CreateCSTradeMoneyRequest ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static CreateCSTradeMoneyRequest ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static CreateCSTradeMoneyRequest ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static CreateCSTradeMoneyRequest ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static CreateCSTradeMoneyRequest ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static CreateCSTradeMoneyRequest ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static CreateCSTradeMoneyRequest ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static CreateCSTradeMoneyRequest ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private CreateCSTradeMoneyRequest MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(CreateCSTradeMoneyRequest prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<CreateCSTradeMoneyRequest, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(CreateCSTradeMoneyRequest cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private CreateCSTradeMoneyRequest result;
+      
+      private CreateCSTradeMoneyRequest PrepareBuilder() {
+        if (resultIsReadOnly) {
+          CreateCSTradeMoneyRequest original = result;
+          result = new CreateCSTradeMoneyRequest();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override CreateCSTradeMoneyRequest MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.CreateCSTradeMoneyRequest.Descriptor; }
+      }
+      
+      public override CreateCSTradeMoneyRequest DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.CreateCSTradeMoneyRequest.DefaultInstance; }
+      }
+      
+      public override CreateCSTradeMoneyRequest BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is CreateCSTradeMoneyRequest) {
+          return MergeFrom((CreateCSTradeMoneyRequest) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(CreateCSTradeMoneyRequest other) {
+        if (other == global::bnet.protocol.exchange.CreateCSTradeMoneyRequest.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasPartitionId) {
+          MergePartitionId(other.PartitionId);
+        }
+        if (other.HasOrderBook) {
+          MergeOrderBook(other.OrderBook);
+        }
+        if (other.HasAmount) {
+          Amount = other.Amount;
+        }
+        if (other.HasBnetAccount) {
+          MergeBnetAccount(other.BnetAccount);
+        }
+        if (other.HasGameAccount) {
+          MergeGameAccount(other.GameAccount);
+        }
+        if (other.HasAccountForItem) {
+          MergeAccountForItem(other.AccountForItem);
+        }
+        if (other.HasCsNotes) {
+          CsNotes = other.CsNotes;
+        }
+        if (other.HasCsUserId) {
+          CsUserId = other.CsUserId;
+        }
+        if (other.HasAccountForMoney) {
+          MergeAccountForMoney(other.AccountForMoney);
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_createCSTradeMoneyRequestFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _createCSTradeMoneyRequestFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 10: {
+              global::bnet.protocol.exchange.PartitionId.Builder subBuilder = global::bnet.protocol.exchange.PartitionId.CreateBuilder();
+              if (result.hasPartitionId) {
+                subBuilder.MergeFrom(PartitionId);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              PartitionId = subBuilder.BuildPartial();
+              break;
+            }
+            case 18: {
+              global::bnet.protocol.exchange.OrderBook.Builder subBuilder = global::bnet.protocol.exchange.OrderBook.CreateBuilder();
+              if (result.hasOrderBook) {
+                subBuilder.MergeFrom(OrderBook);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              OrderBook = subBuilder.BuildPartial();
+              break;
+            }
+            case 24: {
+              result.hasAmount = input.ReadUInt32(ref result.amount_);
+              break;
+            }
+            case 34: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasBnetAccount) {
+                subBuilder.MergeFrom(BnetAccount);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              BnetAccount = subBuilder.BuildPartial();
+              break;
+            }
+            case 42: {
+              global::bnet.protocol.EntityId.Builder subBuilder = global::bnet.protocol.EntityId.CreateBuilder();
+              if (result.hasGameAccount) {
+                subBuilder.MergeFrom(GameAccount);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              GameAccount = subBuilder.BuildPartial();
+              break;
+            }
+            case 50: {
+              global::bnet.protocol.exchange.BlobFrom.Builder subBuilder = global::bnet.protocol.exchange.BlobFrom.CreateBuilder();
+              if (result.hasAccountForItem) {
+                subBuilder.MergeFrom(AccountForItem);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              AccountForItem = subBuilder.BuildPartial();
+              break;
+            }
+            case 58: {
+              result.hasCsNotes = input.ReadString(ref result.csNotes_);
+              break;
+            }
+            case 64: {
+              result.hasCsUserId = input.ReadUInt64(ref result.csUserId_);
+              break;
+            }
+            case 74: {
+              global::bnet.protocol.exchange.BlobFrom.Builder subBuilder = global::bnet.protocol.exchange.BlobFrom.CreateBuilder();
+              if (result.hasAccountForMoney) {
+                subBuilder.MergeFrom(AccountForMoney);
+              }
+              input.ReadMessage(subBuilder, extensionRegistry);
+              AccountForMoney = subBuilder.BuildPartial();
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasPartitionId {
+       get { return result.hasPartitionId; }
+      }
+      public global::bnet.protocol.exchange.PartitionId PartitionId {
+        get { return result.PartitionId; }
+        set { SetPartitionId(value); }
+      }
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasPartitionId = true;
+        result.partitionId_ = value;
+        return this;
+      }
+      public Builder SetPartitionId(global::bnet.protocol.exchange.PartitionId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasPartitionId = true;
+        result.partitionId_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergePartitionId(global::bnet.protocol.exchange.PartitionId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasPartitionId &&
+            result.partitionId_ != global::bnet.protocol.exchange.PartitionId.DefaultInstance) {
+            result.partitionId_ = global::bnet.protocol.exchange.PartitionId.CreateBuilder(result.partitionId_).MergeFrom(value).BuildPartial();
+        } else {
+          result.partitionId_ = value;
+        }
+        result.hasPartitionId = true;
+        return this;
+      }
+      public Builder ClearPartitionId() {
+        PrepareBuilder();
+        result.hasPartitionId = false;
+        result.partitionId_ = null;
+        return this;
+      }
+      
+      public bool HasOrderBook {
+       get { return result.hasOrderBook; }
+      }
+      public global::bnet.protocol.exchange.OrderBook OrderBook {
+        get { return result.OrderBook; }
+        set { SetOrderBook(value); }
+      }
+      public Builder SetOrderBook(global::bnet.protocol.exchange.OrderBook value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasOrderBook = true;
+        result.orderBook_ = value;
+        return this;
+      }
+      public Builder SetOrderBook(global::bnet.protocol.exchange.OrderBook.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasOrderBook = true;
+        result.orderBook_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeOrderBook(global::bnet.protocol.exchange.OrderBook value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasOrderBook &&
+            result.orderBook_ != global::bnet.protocol.exchange.OrderBook.DefaultInstance) {
+            result.orderBook_ = global::bnet.protocol.exchange.OrderBook.CreateBuilder(result.orderBook_).MergeFrom(value).BuildPartial();
+        } else {
+          result.orderBook_ = value;
+        }
+        result.hasOrderBook = true;
+        return this;
+      }
+      public Builder ClearOrderBook() {
+        PrepareBuilder();
+        result.hasOrderBook = false;
+        result.orderBook_ = null;
+        return this;
+      }
+      
+      public bool HasAmount {
+        get { return result.hasAmount; }
+      }
+      public uint Amount {
+        get { return result.Amount; }
+        set { SetAmount(value); }
+      }
+      public Builder SetAmount(uint value) {
+        PrepareBuilder();
+        result.hasAmount = true;
+        result.amount_ = value;
+        return this;
+      }
+      public Builder ClearAmount() {
+        PrepareBuilder();
+        result.hasAmount = false;
+        result.amount_ = 0;
+        return this;
+      }
+      
+      public bool HasBnetAccount {
+       get { return result.hasBnetAccount; }
+      }
+      public global::bnet.protocol.EntityId BnetAccount {
+        get { return result.BnetAccount; }
+        set { SetBnetAccount(value); }
+      }
+      public Builder SetBnetAccount(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasBnetAccount = true;
+        result.bnetAccount_ = value;
+        return this;
+      }
+      public Builder SetBnetAccount(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasBnetAccount = true;
+        result.bnetAccount_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeBnetAccount(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasBnetAccount &&
+            result.bnetAccount_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.bnetAccount_ = global::bnet.protocol.EntityId.CreateBuilder(result.bnetAccount_).MergeFrom(value).BuildPartial();
+        } else {
+          result.bnetAccount_ = value;
+        }
+        result.hasBnetAccount = true;
+        return this;
+      }
+      public Builder ClearBnetAccount() {
+        PrepareBuilder();
+        result.hasBnetAccount = false;
+        result.bnetAccount_ = null;
+        return this;
+      }
+      
+      public bool HasGameAccount {
+       get { return result.hasGameAccount; }
+      }
+      public global::bnet.protocol.EntityId GameAccount {
+        get { return result.GameAccount; }
+        set { SetGameAccount(value); }
+      }
+      public Builder SetGameAccount(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasGameAccount = true;
+        result.gameAccount_ = value;
+        return this;
+      }
+      public Builder SetGameAccount(global::bnet.protocol.EntityId.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasGameAccount = true;
+        result.gameAccount_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeGameAccount(global::bnet.protocol.EntityId value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasGameAccount &&
+            result.gameAccount_ != global::bnet.protocol.EntityId.DefaultInstance) {
+            result.gameAccount_ = global::bnet.protocol.EntityId.CreateBuilder(result.gameAccount_).MergeFrom(value).BuildPartial();
+        } else {
+          result.gameAccount_ = value;
+        }
+        result.hasGameAccount = true;
+        return this;
+      }
+      public Builder ClearGameAccount() {
+        PrepareBuilder();
+        result.hasGameAccount = false;
+        result.gameAccount_ = null;
+        return this;
+      }
+      
+      public bool HasAccountForItem {
+       get { return result.hasAccountForItem; }
+      }
+      public global::bnet.protocol.exchange.BlobFrom AccountForItem {
+        get { return result.AccountForItem; }
+        set { SetAccountForItem(value); }
+      }
+      public Builder SetAccountForItem(global::bnet.protocol.exchange.BlobFrom value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasAccountForItem = true;
+        result.accountForItem_ = value;
+        return this;
+      }
+      public Builder SetAccountForItem(global::bnet.protocol.exchange.BlobFrom.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasAccountForItem = true;
+        result.accountForItem_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeAccountForItem(global::bnet.protocol.exchange.BlobFrom value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasAccountForItem &&
+            result.accountForItem_ != global::bnet.protocol.exchange.BlobFrom.DefaultInstance) {
+            result.accountForItem_ = global::bnet.protocol.exchange.BlobFrom.CreateBuilder(result.accountForItem_).MergeFrom(value).BuildPartial();
+        } else {
+          result.accountForItem_ = value;
+        }
+        result.hasAccountForItem = true;
+        return this;
+      }
+      public Builder ClearAccountForItem() {
+        PrepareBuilder();
+        result.hasAccountForItem = false;
+        result.accountForItem_ = null;
+        return this;
+      }
+      
+      public bool HasCsNotes {
+        get { return result.hasCsNotes; }
+      }
+      public string CsNotes {
+        get { return result.CsNotes; }
+        set { SetCsNotes(value); }
+      }
+      public Builder SetCsNotes(string value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasCsNotes = true;
+        result.csNotes_ = value;
+        return this;
+      }
+      public Builder ClearCsNotes() {
+        PrepareBuilder();
+        result.hasCsNotes = false;
+        result.csNotes_ = "";
+        return this;
+      }
+      
+      public bool HasCsUserId {
+        get { return result.hasCsUserId; }
+      }
+      public ulong CsUserId {
+        get { return result.CsUserId; }
+        set { SetCsUserId(value); }
+      }
+      public Builder SetCsUserId(ulong value) {
+        PrepareBuilder();
+        result.hasCsUserId = true;
+        result.csUserId_ = value;
+        return this;
+      }
+      public Builder ClearCsUserId() {
+        PrepareBuilder();
+        result.hasCsUserId = false;
+        result.csUserId_ = 0UL;
+        return this;
+      }
+      
+      public bool HasAccountForMoney {
+       get { return result.hasAccountForMoney; }
+      }
+      public global::bnet.protocol.exchange.BlobFrom AccountForMoney {
+        get { return result.AccountForMoney; }
+        set { SetAccountForMoney(value); }
+      }
+      public Builder SetAccountForMoney(global::bnet.protocol.exchange.BlobFrom value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        result.hasAccountForMoney = true;
+        result.accountForMoney_ = value;
+        return this;
+      }
+      public Builder SetAccountForMoney(global::bnet.protocol.exchange.BlobFrom.Builder builderForValue) {
+        pb::ThrowHelper.ThrowIfNull(builderForValue, "builderForValue");
+        PrepareBuilder();
+        result.hasAccountForMoney = true;
+        result.accountForMoney_ = builderForValue.Build();
+        return this;
+      }
+      public Builder MergeAccountForMoney(global::bnet.protocol.exchange.BlobFrom value) {
+        pb::ThrowHelper.ThrowIfNull(value, "value");
+        PrepareBuilder();
+        if (result.hasAccountForMoney &&
+            result.accountForMoney_ != global::bnet.protocol.exchange.BlobFrom.DefaultInstance) {
+            result.accountForMoney_ = global::bnet.protocol.exchange.BlobFrom.CreateBuilder(result.accountForMoney_).MergeFrom(value).BuildPartial();
+        } else {
+          result.accountForMoney_ = value;
+        }
+        result.hasAccountForMoney = true;
+        return this;
+      }
+      public Builder ClearAccountForMoney() {
+        PrepareBuilder();
+        result.hasAccountForMoney = false;
+        result.accountForMoney_ = null;
+        return this;
+      }
+    }
+    static CreateCSTradeMoneyRequest() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.Proto.ExchangeService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+  public sealed partial class CreateCSTradeResponse : pb::GeneratedMessage<CreateCSTradeResponse, CreateCSTradeResponse.Builder> {
+    private CreateCSTradeResponse() { }
+    private static readonly CreateCSTradeResponse defaultInstance = new CreateCSTradeResponse().MakeReadOnly();
+    private static readonly string[] _createCSTradeResponseFieldNames = new string[] { "order_book_id" };
+    private static readonly uint[] _createCSTradeResponseFieldTags = new uint[] { 8 };
+    public static CreateCSTradeResponse DefaultInstance {
+      get { return defaultInstance; }
+    }
+    
+    public override CreateCSTradeResponse DefaultInstanceForType {
+      get { return DefaultInstance; }
+    }
+    
+    protected override CreateCSTradeResponse ThisMessage {
+      get { return this; }
+    }
+    
+    public static pbd::MessageDescriptor Descriptor {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_CreateCSTradeResponse__Descriptor; }
+    }
+    
+    protected override pb::FieldAccess.FieldAccessorTable<CreateCSTradeResponse, CreateCSTradeResponse.Builder> InternalFieldAccessors {
+      get { return global::bnet.protocol.exchange.Proto.ExchangeService.internal__static_bnet_protocol_exchange_CreateCSTradeResponse__FieldAccessorTable; }
+    }
+    
+    public const int OrderBookIdFieldNumber = 1;
+    private bool hasOrderBookId;
+    private ulong orderBookId_;
+    public bool HasOrderBookId {
+      get { return hasOrderBookId; }
+    }
+    public ulong OrderBookId {
+      get { return orderBookId_; }
+    }
+    
+    public override bool IsInitialized {
+      get {
+        return true;
+      }
+    }
+    
+    public override void WriteTo(pb::ICodedOutputStream output) {
+      int size = SerializedSize;
+      string[] field_names = _createCSTradeResponseFieldNames;
+      if (hasOrderBookId) {
+        output.WriteUInt64(1, field_names[0], OrderBookId);
+      }
+      UnknownFields.WriteTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public override int SerializedSize {
+      get {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+        
+        size = 0;
+        if (hasOrderBookId) {
+          size += pb::CodedOutputStream.ComputeUInt64Size(1, OrderBookId);
+        }
+        size += UnknownFields.SerializedSize;
+        memoizedSerializedSize = size;
+        return size;
+      }
+    }
+    
+    public static CreateCSTradeResponse ParseFrom(pb::ByteString data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static CreateCSTradeResponse ParseFrom(pb::ByteString data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static CreateCSTradeResponse ParseFrom(byte[] data) {
+      return ((Builder) CreateBuilder().MergeFrom(data)).BuildParsed();
+    }
+    public static CreateCSTradeResponse ParseFrom(byte[] data, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(data, extensionRegistry)).BuildParsed();
+    }
+    public static CreateCSTradeResponse ParseFrom(global::System.IO.Stream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static CreateCSTradeResponse ParseFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    public static CreateCSTradeResponse ParseDelimitedFrom(global::System.IO.Stream input) {
+      return CreateBuilder().MergeDelimitedFrom(input).BuildParsed();
+    }
+    public static CreateCSTradeResponse ParseDelimitedFrom(global::System.IO.Stream input, pb::ExtensionRegistry extensionRegistry) {
+      return CreateBuilder().MergeDelimitedFrom(input, extensionRegistry).BuildParsed();
+    }
+    public static CreateCSTradeResponse ParseFrom(pb::ICodedInputStream input) {
+      return ((Builder) CreateBuilder().MergeFrom(input)).BuildParsed();
+    }
+    public static CreateCSTradeResponse ParseFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+      return ((Builder) CreateBuilder().MergeFrom(input, extensionRegistry)).BuildParsed();
+    }
+    private CreateCSTradeResponse MakeReadOnly() {
+      return this;
+    }
+    
+    public static Builder CreateBuilder() { return new Builder(); }
+    public override Builder ToBuilder() { return CreateBuilder(this); }
+    public override Builder CreateBuilderForType() { return new Builder(); }
+    public static Builder CreateBuilder(CreateCSTradeResponse prototype) {
+      return new Builder(prototype);
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
+    public sealed partial class Builder : pb::GeneratedBuilder<CreateCSTradeResponse, Builder> {
+      protected override Builder ThisBuilder {
+        get { return this; }
+      }
+      public Builder() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+      }
+      internal Builder(CreateCSTradeResponse cloneFrom) {
+        result = cloneFrom;
+        resultIsReadOnly = true;
+      }
+      
+      private bool resultIsReadOnly;
+      private CreateCSTradeResponse result;
+      
+      private CreateCSTradeResponse PrepareBuilder() {
+        if (resultIsReadOnly) {
+          CreateCSTradeResponse original = result;
+          result = new CreateCSTradeResponse();
+          resultIsReadOnly = false;
+          MergeFrom(original);
+        }
+        return result;
+      }
+      
+      public override bool IsInitialized {
+        get { return result.IsInitialized; }
+      }
+      
+      protected override CreateCSTradeResponse MessageBeingBuilt {
+        get { return PrepareBuilder(); }
+      }
+      
+      public override Builder Clear() {
+        result = DefaultInstance;
+        resultIsReadOnly = true;
+        return this;
+      }
+      
+      public override Builder Clone() {
+        if (resultIsReadOnly) {
+          return new Builder(result);
+        } else {
+          return new Builder().MergeFrom(result);
+        }
+      }
+      
+      public override pbd::MessageDescriptor DescriptorForType {
+        get { return global::bnet.protocol.exchange.CreateCSTradeResponse.Descriptor; }
+      }
+      
+      public override CreateCSTradeResponse DefaultInstanceForType {
+        get { return global::bnet.protocol.exchange.CreateCSTradeResponse.DefaultInstance; }
+      }
+      
+      public override CreateCSTradeResponse BuildPartial() {
+        if (resultIsReadOnly) {
+          return result;
+        }
+        resultIsReadOnly = true;
+        return result.MakeReadOnly();
+      }
+      
+      public override Builder MergeFrom(pb::IMessage other) {
+        if (other is CreateCSTradeResponse) {
+          return MergeFrom((CreateCSTradeResponse) other);
+        } else {
+          base.MergeFrom(other);
+          return this;
+        }
+      }
+      
+      public override Builder MergeFrom(CreateCSTradeResponse other) {
+        if (other == global::bnet.protocol.exchange.CreateCSTradeResponse.DefaultInstance) return this;
+        PrepareBuilder();
+        if (other.HasOrderBookId) {
+          OrderBookId = other.OrderBookId;
+        }
+        this.MergeUnknownFields(other.UnknownFields);
+        return this;
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input) {
+        return MergeFrom(input, pb::ExtensionRegistry.Empty);
+      }
+      
+      public override Builder MergeFrom(pb::ICodedInputStream input, pb::ExtensionRegistry extensionRegistry) {
+        PrepareBuilder();
+        pb::UnknownFieldSet.Builder unknownFields = null;
+        uint tag;
+        string field_name;
+        while (input.ReadTag(out tag, out field_name)) {
+          if(tag == 0 && field_name != null) {
+            int field_ordinal = global::System.Array.BinarySearch(_createCSTradeResponseFieldNames, field_name, global::System.StringComparer.Ordinal);
+            if(field_ordinal >= 0)
+              tag = _createCSTradeResponseFieldTags[field_ordinal];
+            else {
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              continue;
+            }
+          }
+          switch (tag) {
+            case 0: {
+              throw pb::InvalidProtocolBufferException.InvalidTag();
+            }
+            default: {
+              if (pb::WireFormat.IsEndGroupTag(tag)) {
+                if (unknownFields != null) {
+                  this.UnknownFields = unknownFields.Build();
+                }
+                return this;
+              }
+              if (unknownFields == null) {
+                unknownFields = pb::UnknownFieldSet.CreateBuilder(this.UnknownFields);
+              }
+              ParseUnknownField(input, unknownFields, extensionRegistry, tag, field_name);
+              break;
+            }
+            case 8: {
+              result.hasOrderBookId = input.ReadUInt64(ref result.orderBookId_);
+              break;
+            }
+          }
+        }
+        
+        if (unknownFields != null) {
+          this.UnknownFields = unknownFields.Build();
+        }
+        return this;
+      }
+      
+      
+      public bool HasOrderBookId {
+        get { return result.hasOrderBookId; }
+      }
+      public ulong OrderBookId {
+        get { return result.OrderBookId; }
+        set { SetOrderBookId(value); }
+      }
+      public Builder SetOrderBookId(ulong value) {
+        PrepareBuilder();
+        result.hasOrderBookId = true;
+        result.orderBookId_ = value;
+        return this;
+      }
+      public Builder ClearOrderBookId() {
+        PrepareBuilder();
+        result.hasOrderBookId = false;
+        result.orderBookId_ = 0UL;
+        return this;
+      }
+    }
+    static CreateCSTradeResponse() {
+      object.ReferenceEquals(global::bnet.protocol.exchange.Proto.ExchangeService.Descriptor, null);
+    }
+  }
+  
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+  [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+  [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
   public sealed partial class GetOrderCountRequest : pb::GeneratedMessage<GetOrderCountRequest, GetOrderCountRequest.Builder> {
     private GetOrderCountRequest() { }
     private static readonly GetOrderCountRequest defaultInstance = new GetOrderCountRequest().MakeReadOnly();
@@ -21672,6 +23491,14 @@ namespace bnet.protocol.exchange {
         pb::IRpcController controller,
         global::bnet.protocol.exchange.HistoriesForCSRequest request,
         global::System.Action<global::bnet.protocol.exchange.HistoriesForCSResponse> done);
+    public abstract void CreateCSTradeItem(
+        pb::IRpcController controller,
+        global::bnet.protocol.exchange.CreateCSTradeItemRequest request,
+        global::System.Action<global::bnet.protocol.exchange.CreateCSTradeResponse> done);
+    public abstract void CreateCSTradeMoney(
+        pb::IRpcController controller,
+        global::bnet.protocol.exchange.CreateCSTradeMoneyRequest request,
+        global::System.Action<global::bnet.protocol.exchange.CreateCSTradeResponse> done);
     
     public static pbd::ServiceDescriptor Descriptor {
       get { return Proto.ExchangeService.Descriptor.Services[0]; }
@@ -21910,6 +23737,16 @@ namespace bnet.protocol.exchange {
               pb::RpcUtil.SpecializeCallback<global::bnet.protocol.exchange.HistoriesForCSResponse>(
               done));
           return;
+        case 44:
+          this.CreateCSTradeItem(controller, (global::bnet.protocol.exchange.CreateCSTradeItemRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.exchange.CreateCSTradeResponse>(
+              done));
+          return;
+        case 45:
+          this.CreateCSTradeMoney(controller, (global::bnet.protocol.exchange.CreateCSTradeMoneyRequest) request,
+              pb::RpcUtil.SpecializeCallback<global::bnet.protocol.exchange.CreateCSTradeResponse>(
+              done));
+          return;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -22009,6 +23846,10 @@ namespace bnet.protocol.exchange {
           return global::bnet.protocol.exchange.HistoriesForCSRequest.DefaultInstance;
         case 43:
           return global::bnet.protocol.exchange.HistoriesForCSRequest.DefaultInstance;
+        case 44:
+          return global::bnet.protocol.exchange.CreateCSTradeItemRequest.DefaultInstance;
+        case 45:
+          return global::bnet.protocol.exchange.CreateCSTradeMoneyRequest.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -22108,6 +23949,10 @@ namespace bnet.protocol.exchange {
           return global::bnet.protocol.exchange.HistoriesForCSResponse.DefaultInstance;
         case 43:
           return global::bnet.protocol.exchange.HistoriesForCSResponse.DefaultInstance;
+        case 44:
+          return global::bnet.protocol.exchange.CreateCSTradeResponse.DefaultInstance;
+        case 45:
+          return global::bnet.protocol.exchange.CreateCSTradeResponse.DefaultInstance;
         default:
           throw new global::System.InvalidOperationException("Can't get here.");
       }
@@ -22525,6 +24370,24 @@ namespace bnet.protocol.exchange {
         channel.CallMethod(Descriptor.Methods[43],
             controller, request, global::bnet.protocol.exchange.HistoriesForCSResponse.DefaultInstance,
             pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.exchange.HistoriesForCSResponse, global::bnet.protocol.exchange.HistoriesForCSResponse.Builder>(done, global::bnet.protocol.exchange.HistoriesForCSResponse.DefaultInstance));
+      }
+      
+      public override void CreateCSTradeItem(
+          pb::IRpcController controller,
+          global::bnet.protocol.exchange.CreateCSTradeItemRequest request,
+          global::System.Action<global::bnet.protocol.exchange.CreateCSTradeResponse> done) {
+        channel.CallMethod(Descriptor.Methods[44],
+            controller, request, global::bnet.protocol.exchange.CreateCSTradeResponse.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.exchange.CreateCSTradeResponse, global::bnet.protocol.exchange.CreateCSTradeResponse.Builder>(done, global::bnet.protocol.exchange.CreateCSTradeResponse.DefaultInstance));
+      }
+      
+      public override void CreateCSTradeMoney(
+          pb::IRpcController controller,
+          global::bnet.protocol.exchange.CreateCSTradeMoneyRequest request,
+          global::System.Action<global::bnet.protocol.exchange.CreateCSTradeResponse> done) {
+        channel.CallMethod(Descriptor.Methods[45],
+            controller, request, global::bnet.protocol.exchange.CreateCSTradeResponse.DefaultInstance,
+            pb::RpcUtil.GeneralizeCallback<global::bnet.protocol.exchange.CreateCSTradeResponse, global::bnet.protocol.exchange.CreateCSTradeResponse.Builder>(done, global::bnet.protocol.exchange.CreateCSTradeResponse.DefaultInstance));
       }
     }
   }
