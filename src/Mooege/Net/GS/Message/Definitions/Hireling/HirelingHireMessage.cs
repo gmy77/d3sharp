@@ -29,6 +29,8 @@ namespace Mooege.Net.GS.Message.Definitions.Hireling
         {
         }
 
+        public uint HirelingId;
+
         public override void Parse(GameBitBuffer buffer)
         {
         }
@@ -44,6 +46,7 @@ namespace Mooege.Net.GS.Message.Definitions.Hireling
             b.AppendLine("HirelingHireMessage:");
             b.Append(' ', pad++);
             b.AppendLine("{");
+            b.Append(' ', pad); b.AppendLine("HirelingId: 0x" + HirelingId.ToString("X8") + " (" + HirelingId + ")");
             b.Append(' ', --pad);
             b.AppendLine("}");
         }
