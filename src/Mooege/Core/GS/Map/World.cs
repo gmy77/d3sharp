@@ -337,7 +337,7 @@ namespace Mooege.Core.GS.Map
         public void SpawnMonster(int monsterSNOId, Vector3D position)
         {
             var monster = ActorFactory.Create(this, monsterSNOId, new TagMap());
-            monster.Scale = 1.35f;
+            //monster.Scale = 1.35f; // this shoudln't be here
             monster.EnterWorld(position);
         }
 
