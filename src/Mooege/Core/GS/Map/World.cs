@@ -380,6 +380,55 @@ namespace Mooege.Core.GS.Map
         }
 
         /// <summary>
+        /// Returns the first actor found with a given sno id
+        /// </summary>
+        /// <param name="sno"></param>
+        /// <returns></returns>
+        public Actor GetActorBySNO(int sno)
+        {
+            foreach (var actor in this._actors.Values)
+            {
+                if (actor.ActorSNO.Id == sno)
+                    return actor;
+            } return null;
+        }
+
+        /// <summary>
+        /// Returns true if any actors exist under a well defined group
+        /// </summary>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        public bool HasActorsInGroup(string group)
+        {
+            var groupHash = Mooege.Common.Helpers.Hash.StringHashHelper.HashItemName(group);
+            foreach (var actor in this._actors.Values)
+            {
+                if (actor.Tags != null)
+                    if (actor.Tags.ContainsKey(MarkerKeys.Group1Hash))
+                        if (actor.Tags[MarkerKeys.Group1Hash] == groupHash) return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns all actors matching a group
+        /// </summary>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        public List<Actor> GetActorsInGroup(string group)
+        {
+            List<Actor> matchingActors = new List<Actor>();
+            var groupHash = Mooege.Common.Helpers.Hash.StringHashHelper.HashItemName(group);
+            foreach (var actor in this._actors.Values)
+            {
+                if (actor.Tags != null)
+                    if (actor.Tags.ContainsKey(MarkerKeys.Group1Hash))
+                        if (actor.Tags[MarkerKeys.Group1Hash] == groupHash) matchingActors.Add(actor);
+            }
+            return matchingActors;
+        }
+
+        /// <summary>
         /// Spanws a health-globe for given player.
         /// </summary>
         /// <param name="player">The player.</param>

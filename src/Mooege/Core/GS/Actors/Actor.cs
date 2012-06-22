@@ -138,7 +138,7 @@ namespace Mooege.Core.GS.Actors
         /// <summary>
         /// The QuestRange specifies the visibility of an actor, depending on quest progress
         /// </summary>
-        private Mooege.Common.MPQ.FileFormats.QuestRange _questRange;
+        public Mooege.Common.MPQ.FileFormats.QuestRange _questRange;
 
         protected Mooege.Common.MPQ.FileFormats.ConversationList ConversationList;
         public Vector3D CheckPointPosition { get; set; }
@@ -238,6 +238,11 @@ namespace Mooege.Core.GS.Actors
         protected Actor(World world, int snoId)
             : this(world, snoId, null)
         { }
+
+        protected virtual void quest_OnQuestProgress(Quest quest)
+        {
+            UpdateQuestRangeVisbility();
+        }
 
         /// <summary>
         /// Unregister from quest events when object is destroyed 
@@ -652,10 +657,6 @@ namespace Mooege.Core.GS.Actors
 
         #region events
 
-        private void quest_OnQuestProgress(Quest quest)
-        {
-            UpdateQuestRangeVisbility();
-        }
 
         public virtual void OnEnter(World world)
         {

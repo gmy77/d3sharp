@@ -422,6 +422,17 @@ namespace Mooege.Core.GS.Players
         }
 
         /// <summary>
+        /// Returns true when the conversation playing finishes.
+        /// </summary>
+        private bool _conversationTrigger = false;
+        public bool ConversationRunning()
+        {
+            var status = _conversationTrigger;
+            _conversationTrigger = false;
+            return status;
+        }
+
+        /// <summary>
         /// Update all open conversations
         /// </summary>
         /// <param name="gameTick"></param>
