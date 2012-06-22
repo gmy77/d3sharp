@@ -8,6 +8,7 @@ namespace Mooege.Net.GS.Message.Definitions.Hireling
     [Message(Opcodes.HirelingRetrainMessage, Consumers.SelectedNPC)]
     public class HirelingRetrainMessage : GameMessage
     {
+        public uint HirelingId;
 
         public HirelingRetrainMessage()
             : base(Opcodes.HirelingRetrainMessage)
