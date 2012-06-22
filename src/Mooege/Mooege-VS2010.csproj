@@ -141,6 +141,7 @@
     <Compile Include="Common\Storage\DBSessions.cs" />
     <Compile Include="Common\Extensions\StringExtensions.cs" />
     <Compile Include="Core\GS\Actors\Actions\PowerAction.cs" />
+    <Compile Include="Core\GS\Actors\Spawner.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Door.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Minions\AncientKorlic.cs" />
     <Compile Include="Core\GS\Actors\Implementations\Minions\AncientMawdawc.cs" />
@@ -334,6 +335,10 @@
     <Compile Include="Core\GS\Players\Equipment.cs" />
     <Compile Include="Core\GS\Powers\Skill.cs" />
     <Compile Include="Core\GS\Powers\TargetList.cs" />
+    <Compile Include="Core\GS\QuestEvents\Implementions\151087.cs" />
+    <Compile Include="Core\GS\QuestEvents\Implementions\151123.cs" />
+    <Compile Include="Core\GS\QuestEvents\Implementions\198503.cs" />
+    <Compile Include="Core\GS\QuestEvents\QuestEvent.cs" />
     <Compile Include="Core\GS\Ticker\SteppedTickTimer.cs" />
     <Compile Include="Core\GS\Ticker\TickTimer.cs" />
     <Compile Include="Core\GS\Web\GSWebService.cs" />
