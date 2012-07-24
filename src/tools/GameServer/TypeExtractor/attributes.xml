@@ -1,0 +1,826 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Attributes Count="823">
+  <Entry Id="0" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Axe_Bad_Data" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="1" U2="0" U3="5" U4="0" U5="1" ScriptA="" ScriptB="" Name="Attribute_Timer" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="2" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Attribute_Pool" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="3" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Death_Count" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="4" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="DualWield_Hand" EncodingType="IntMinMax" U10="1" Min="0" Max="2" BitCount="2" />
+  <Entry Id="5" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="DualWield_Hand_Next" EncodingType="IntMinMax" U10="1" Min="0" Max="2" BitCount="2" />
+  <Entry Id="6" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="DualWield_Hands_Swapped" EncodingType="IntMinMax" U10="1" Min="0" Max="1" BitCount="1" />
+  <Entry Id="7" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Respawn_Game_Time" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="8" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Backpack_Slots" EncodingType="IntMinMax" U10="1" Min="0" Max="128" BitCount="8" />
+  <Entry Id="9" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Shared_Stash_Slots" EncodingType="IntMinMax" U10="1" Min="0" Max="210" BitCount="8" />
+  <Entry Id="10" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Strength" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="11" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Dexterity" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="12" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Intelligence" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="13" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Vitality" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="14" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="((Strength + Stats_All_Bonus + Strength_Bonus + (Strength_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Strength_Bonus_Percent)) * (1 - Strength_Reduction_Percent)" Name="Strength_Total" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="15" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="((Dexterity + Stats_All_Bonus + Dexterity_Bonus + (Dexterity_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Dexterity_Bonus_Percent)) * (1 - Dexterity_Reduction_Percent)" Name="Dexterity_Total" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="16" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="((Intelligence + Stats_All_Bonus + Intelligence_Bonus + (Intelligence_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Intelligence_Bonus_Percent)) * (1 - Intelligence_Reduction_Percent)" Name="Intelligence_Total" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="17" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="((Vitality + Stats_All_Bonus + Vitality_Bonus + (Vitality_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Vitality_Bonus_Percent)) * (1 - Vitality_Reduction_Percent)" Name="Vitality_Total" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="18" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Strength_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="19" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Dexterity_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="20" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Intelligence_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="21" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Vitality_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="22" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Strength_Bonus_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="23" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Dexterity_Bonus_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="24" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Intelligence_Bonus_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="25" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Vitality_Bonus_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="26" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Strength_Reduction_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="27" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Dexterity_Reduction_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="28" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Intelligence_Reduction_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="29" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Vitality_Reduction_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="30" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Primary_Damage_Attribute" EncodingType="IntMinMax" U10="31" Min="-1" Max="3" BitCount="3" />
+  <Entry Id="31" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Attack" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="32" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Precision" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="33" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Defense" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="34" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="((Attack + Stats_All_Bonus + Attack_Bonus) * (1 + Attack_Bonus_Percent)) * (1 - Attack_Reduction_Percent)" Name="Attack_Total" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="35" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="((Precision + Stats_All_Bonus + Precision_Bonus) * (1 + Precision_Bonus_Percent)) * (1 - Precision_Reduction_Percent)" Name="Precision_Total" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="36" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="((Defense + Stats_All_Bonus + Defense_Bonus) * (1 + Defense_Bonus_Percent)) * (1 - Defense_Reduction_Percent)" Name="Defense_Total" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="37" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Attack_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="38" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Precision_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="39" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Defense_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="40" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Attack_Bonus_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="41" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Precision_Bonus_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="42" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Defense_Bonus_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="43" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Attack_Reduction_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="44" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Precision_Reduction_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="45" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Defense_Reduction_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="46" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Armor" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="47" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Armor_Bonus_Percent" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="48" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="0" Name="Armor_Item" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="49" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Armor_Bonus_Item" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="50" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="0" Name="Armor_Item_Percent" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="51" U2="0" U3="-1" U4="0" U5="0" ScriptA="FLOOR((Armor_Item + Armor_Bonus_Item) * (Armor_Item_Percent + 1))" ScriptB="" Name="Armor_Item_SubTotal" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="52" U2="0" U3="-1" U4="0" U5="0" ScriptA="(Armor_Item &gt; 0)?(Max(Armor_Item_SubTotal, 1)):Armor_Item_SubTotal" ScriptB="" Name="Armor_Item_Total" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="53" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="FLOOR((Armor + Armor_Item_Total + Strength_Total) * (Armor_Bonus_Percent + 1))" Name="Armor_Total" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="54" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Experience_Granted" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="55" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Experience_Next" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="56" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Gold_Granted" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="57" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Gold" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="58" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Gold_Find" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="59" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Level" EncodingType="IntMinMax" U10="31" Min="-1" Max="127" BitCount="8" />
+  <Entry Id="60" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Level_Cap" EncodingType="IntMinMax" U10="1" Min="-1" Max="127" BitCount="8" />
+  <Entry Id="61" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Magic_Find" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="62" U2="0" U3="14" U4="0" U5="0" ScriptA="" ScriptB="" Name="Treasure_Find" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="63" U2="0" U3="10" U4="0" U5="1" ScriptA="" ScriptB="" Name="Resource_Cost_Reduction_Amount" EncodingType="IntMinMax" U10="9" Min="-4095" Max="16383" BitCount="15" />
+  <Entry Id="64" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="Resource_Cost_Reduction_Amount" Name="Resource_Cost_Reduction_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="65" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Set_Point_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="66" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Faster_Healing_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="67" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Spending_Resource_Heals_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="68" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Bonus_Healing_Received_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="69" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Reduced_Healing_Received_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="70" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Experience_Bonus" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="71" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Experience_Bonus_Percent" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="72" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Health_Globe_Bonus_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="73" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Health_Globe_Bonus_Mult_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="74" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Health_Globe_Bonus_Health" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="75" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Increased_Health_From_Globes_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="76" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Increased_Health_From_Globes_Percent" Name="Increased_Health_From_Globes_Percent_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="77" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Bonus_Health_Percent_Per_Second_From_Globes" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="78" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Bonus_Health_Percent_Per_Second_From_Globes" Name="Bonus_Health_Percent_Per_Second_From_Globes_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="79" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Mana_Gained_From_Globes_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="80" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Mana_Gained_From_Globes" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="81" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resistance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="82" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resistance_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="83" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="(Resistance + Resistance_All#NONE + Resistance_From_Intelligence#NONE) * ((Resistance_Percent_All#NONE + Resistance_Percent + 1))" Name="Resistance_Total" EncodingType="Float16Or32" U10="31" Min="0" Max="0" BitCount="0" />
+  <Entry Id="84" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resistance_All" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="85" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resistance_Percent_All" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="86" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="(Intelligence_Total * 0.1)" Name="Resistance_From_Intelligence" EncodingType="Float16" U10="1" Min="0" Max="0" BitCount="16" />
+  <Entry Id="87" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Class_Damage_Reduction_Percent" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="88" U2="0" U3="4" U4="0" U5="1" ScriptA="" ScriptB="" Name="Skill" EncodingType="IntMinMax" U10="9" Min="0" Max="4095" BitCount="12" />
+  <Entry Id="89" U2="0" U3="4" U4="0" U5="1" ScriptA="" ScriptB="Skill" Name="Skill_Total" EncodingType="IntMinMax" U10="9" Min="0" Max="4095" BitCount="12" />
+  <Entry Id="90" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="TeamID" EncodingType="IntMinMax" U10="31" Min="-1" Max="23" BitCount="5" />
+  <Entry Id="91" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Team_Override" EncodingType="IntMinMax" U10="31" Min="-1" Max="23" BitCount="5" />
+  <Entry Id="92" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Invulnerable" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="93" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Loading" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="94" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Loading_Player_ACD" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="95" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Loading_Power_SNO" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="96" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Loading_Anim_Tag" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="97" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Loading_NewGame" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="98" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Auto_Porting_To_Save_Point" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="99" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="No_Damage" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="100" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="No_AutoPickup" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="101" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Light_Radius_Percent_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="102" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Min(Hitpoints_Cur.Agg, Hitpoints_Max_Total)" Name="Hitpoints_Cur" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="103" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hitpoints_Factor_Level" EncodingType="Float16Or32" U10="31" Min="0" Max="0" BitCount="0" />
+  <Entry Id="104" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hitpoints_Factor_Vitality" EncodingType="Float16Or32" U10="31" Min="0" Max="0" BitCount="0" />
+  <Entry Id="105" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Vitality_Total * Hitpoints_Factor_Vitality" Name="Hitpoints_Total_From_Vitality" EncodingType="Float16Or32" U10="31" Min="0" Max="0" BitCount="0" />
+  <Entry Id="106" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="(Level - 1) * Hitpoints_Factor_Level" Name="Hitpoints_Total_From_Level" EncodingType="Float16Or32" U10="31" Min="0" Max="0" BitCount="0" />
+  <Entry Id="107" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hitpoints_Granted" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="108" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Hitpoints_Granted_Duration" EncodingType="IntMinMax" U10="31" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="109" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hitpoints_Max" EncodingType="Float16Or32" U10="31" Min="0" Max="0" BitCount="0" />
+  <Entry Id="110" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hitpoints_Max_Bonus" EncodingType="Float16Or32" U10="31" Min="0" Max="0" BitCount="0" />
+  <Entry Id="111" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Max((Hitpoints_Max + Hitpoints_Total_From_Level + Hitpoints_Total_From_Vitality + Hitpoints_Max_Bonus) * (Hitpoints_Max_Percent_Bonus + Hitpoints_Max_Percent_Bonus_Item + 1), 1)" Name="Hitpoints_Max_Total" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="112" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hitpoints_Percent" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="113" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hitpoints_Regen_Per_Second" EncodingType="Float16Or32" U10="31" Min="0" Max="0" BitCount="0" />
+  <Entry Id="114" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hitpoints_Max_Percent_Bonus" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="115" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hitpoints_Max_Percent_Bonus_Item" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="116" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hitpoints_Healed_Target" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="117" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Resource_Type_Primary" EncodingType="IntMinMax" U10="1" Min="-1" Max="7" BitCount="4" />
+  <Entry Id="118" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Resource_Type_Secondary" EncodingType="IntMinMax" U10="1" Min="-1" Max="7" BitCount="4" />
+  <Entry Id="119" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="Max(Resource_Cur.Agg, 0)" Name="Resource_Cur" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="120" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Max" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="121" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Max_Bonus" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="122" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="Max((Resource_Max + ((Level#NONE - 1) * Resource_Factor_Level) + Resource_Max_Bonus) * (Resource_Max_Percent_Bonus + 1), 0)" Name="Resource_Max_Total" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="123" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Factor_Level" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="124" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Granted" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="125" U2="0" U3="10" U4="0" U5="1" ScriptA="" ScriptB="" Name="Resource_Granted_Duration" EncodingType="IntMinMax" U10="9" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="126" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="127" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Regen_Per_Second" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="128" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Regen_Bonus_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="129" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="Resource_Regen_Per_Second * (1 + Resource_Regen_Bonus_Percent) + (Resource_Regen_Percent_Per_Second * Resource_Max_Total)" Name="Resource_Regen_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="130" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="Resource_Percent" Name="Resource_Max_Percent_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="131" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Capacity_Used" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="132" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="Resource_Max_Total - Resource_Capacity_Used" Name="Resource_Effective_Max" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="133" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Regen_Percent_Per_Second" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="134" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Degeneration_Stop_Point" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="135" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Movement_Scalar" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="136" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Walking_Rate" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="137" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Running_Rate" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="138" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Sprinting_Rate" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="139" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Strafing_Rate" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="140" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Walking_Rate * Movement_Scalar_Total" Name="Walking_Rate_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="141" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Running_Rate * Movement_Scalar_Total" Name="Running_Rate_Total" EncodingType="Float16" U10="41" Min="0" Max="0" BitCount="16" />
+  <Entry Id="142" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Last_Running_Rate" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="143" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Sprinting_Rate * Movement_Scalar_Total" Name="Sprinting_Rate_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="144" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Strafing_Rate * Movement_Scalar_Total" Name="Strafing_Rate_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="145" U2="0" U3="-1" U4="-1" U5="0" ScriptA="0" ScriptB="Movement_Bonus_Run_Speed" Name="Movement_Bonus_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="146" U2="0" U3="-1" U4="0" U5="0" ScriptA="0" ScriptB="Max(0.1, Movement_Scalar) * (1 + Movement_Bonus_Total) * (1 - Movement_Scalar_Reduction_Percent * (1 - Min(1, Movement_Scalar_Reduction_Resistance)))" Name="Movement_Scalar_Subtotal" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="147" U2="0" U3="-1" U4="0" U5="0" ScriptA="0" ScriptB="Min(1.25, Movement_Scalar_Subtotal)" Name="Movement_Scalar_Capped_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="148" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Movement_Scalar_Uncapped_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="149" U2="0" U3="-1" U4="0" U5="0" ScriptA="0" ScriptB="Movement_Scalar_Capped_Total + Movement_Scalar_Uncapped_Bonus" Name="Movement_Scalar_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="150" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Movement_Bonus_Run_Speed" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="151" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Casting_Speed" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="152" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Casting_Speed_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="153" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="(Casting_Speed + Casting_Speed_Bonus) * Max(0.1, 1 + Casting_Speed_Percent)" Name="Casting_Speed_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="154" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Always_Hits" EncodingType="IntMinMax" U10="3" Min="0" Max="1" BitCount="1" />
+  <Entry Id="155" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hit_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="156" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="0" Name="Attacks_Per_Second_Item" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="157" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="0" Name="Attacks_Per_Second_Item_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="158" U2="0" U3="-1" U4="0" U5="0" ScriptA="Attacks_Per_Second_Item * (1 + Attacks_Per_Second_Item_Percent)" ScriptB="0" Name="Attacks_Per_Second_Item_Subtotal" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="159" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Attacks_Per_Second_Item_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="160" U2="0" U3="-1" U4="0" U5="0" ScriptA="(Attacks_Per_Second_Item_Subtotal + Attacks_Per_Second_Item_Bonus)" ScriptB="" Name="Attacks_Per_Second_Item_Total" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="161" U2="0" U3="-1" U4="0" U5="0" ScriptA="0" ScriptB="" Name="Attacks_Per_Second" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="162" U2="0" U3="-1" U4="0" U5="0" ScriptA="0" ScriptB="" Name="Attacks_Per_Second_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="163" U2="0" U3="-1" U4="0" U5="0" ScriptA="0" ScriptB="Max(0.01, (((Attacks_Per_Second_Item_CurrentHand &gt; 0.0) ? Attacks_Per_Second_Item_CurrentHand : Attacks_Per_Second) + Attacks_Per_Second_Bonus + Attacks_Per_Second_Item_Bonus) * Max(0.1, (1 + Attacks_Per_Second_Percent)))" Name="Attacks_Per_Second_Total" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="164" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Attacks_Per_Second_Percent" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="165" U2="0" U3="-1" U4="0" U5="0" ScriptA="0" ScriptB="" Name="AI_Cooldown_Reduction_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="166" U2="0" U3="-1" U4="0" U5="0" ScriptA="0" ScriptB="" Name="Power_Cooldown_Reduction_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="167" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Delta" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="168" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="Max(Damage_Delta - Damage_Bonus_Min + Damage_Weapon_Delta_Total_CurrentHand, 0)" Name="Damage_Delta_Total" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="169" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Min" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="170" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Bonus_Min" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="171" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="Damage_Min_Subtotal + Damage_Type_Percent_Bonus * Damage_Min_Subtotal#Physical" Name="Damage_Min_Total" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="172" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="Damage_Min + Damage_Bonus_Min + Damage_Weapon_Min_Total_CurrentHand" Name="Damage_Min_Subtotal" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="173" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_All_From_Skills" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="174" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Weapon_Delta" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="175" U2="0" U3="0" U4="0" U5="0" ScriptA="(Damage_Weapon_Delta &gt; 0.0) ? (Max(1, Damage_Weapon_Delta - Damage_Weapon_Bonus_Min)) : Damage_Weapon_Delta" ScriptB="" Name="Damage_Weapon_Delta_SubTotal" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="176" U2="0" U3="0" U4="0" U5="0" ScriptA="(Damage_Weapon_Min + Damage_Weapon_Delta)" ScriptB="" Name="Damage_Weapon_Max" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="177" U2="0" U3="0" U4="0" U5="0" ScriptA="(Damage_Weapon_Min_Total + Damage_Weapon_Delta_Total)" ScriptB="" Name="Damage_Weapon_Max_Total" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="178" U2="0" U3="-1" U4="0" U5="0" ScriptA="(Damage_Weapon_Max_Total#Physical + Damage_Weapon_Max_Total#Fire + Damage_Weapon_Max_Total#Cold + Damage_Weapon_Max_Total#Lightning + Damage_Weapon_Max_Total#Poison + Damage_Weapon_Max_Total#Arcane + Damage_Weapon_Max_Total#Holy)" ScriptB="" Name="Damage_Weapon_Max_Total_All" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="179" U2="0" U3="0" U4="0" U5="0" ScriptA="Max((Damage_Weapon_Delta_SubTotal + Damage_Weapon_Bonus_Delta) * (1 + Damage_Weapon_Percent_Total), 0)" ScriptB="" Name="Damage_Weapon_Delta_Total" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="180" U2="0" U3="-1" U4="0" U5="0" ScriptA="(Damage_Weapon_Delta_Total#Physical + Damage_Weapon_Delta_Total#Fire + Damage_Weapon_Delta_Total#Cold + Damage_Weapon_Delta_Total#Lightning + Damage_Weapon_Delta_Total#Poison + Damage_Weapon_Delta_Total#Arcane + Damage_Weapon_Delta_Total#Holy)" ScriptB="" Name="Damage_Weapon_Delta_Total_All" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="181" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Weapon_Bonus_Delta" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="182" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Weapon_Min" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="183" U2="0" U3="0" U4="0" U5="0" ScriptA="(Damage_Weapon_Min + Damage_Weapon_Bonus_Min) * (1 + Damage_Weapon_Percent_Total)" ScriptB="" Name="Damage_Weapon_Min_Total" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="184" U2="0" U3="-1" U4="0" U5="0" ScriptA="(Damage_Weapon_Min_Total#Physical + Damage_Weapon_Min_Total#Fire + Damage_Weapon_Min_Total#Cold + Damage_Weapon_Min_Total#Lightning + Damage_Weapon_Min_Total#Poison + Damage_Weapon_Min_Total#Arcane + Damage_Weapon_Min_Total#Holy)" ScriptB="" Name="Damage_Weapon_Min_Total_All" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="185" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Weapon_Bonus_Min" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="186" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Weapon_Percent_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="187" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Weapon_Percent_All" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="188" U2="0" U3="0" U4="0" U5="0" ScriptA="Damage_Weapon_Percent_Bonus + Damage_Weapon_Percent_All#NONE" ScriptB="" Name="Damage_Weapon_Percent_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="189" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Type_Percent_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="190" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Bonus_Witchdoctor" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="191" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Bonus_Wizard" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="192" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Crit_Percent_Base" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="193" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Crit_Percent_Bonus_Capped" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="194" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Crit_Percent_Bonus_Uncapped" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="195" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Crit_Percent_Cap" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="196" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Crit_Damage_Percent" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="197" U2="0" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Crit_Effect_Time" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="198" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Pierce_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="199" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Absorb_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="200" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Reduction_Total" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="201" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Reduction_Current" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="202" U2="0" U3="0" U4="3" U5="1" ScriptA="" ScriptB="" Name="Damage_Reduction_Last_Tick" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="203" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Block_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="204" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Block_Chance + Block_Chance_Item_Total" Name="Block_Chance_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="205" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Block_Chance_Bonus_Item" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="206" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="0" Name="Block_Chance_Item" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="207" U2="0" U3="-1" U4="0" U5="0" ScriptA="Block_Chance_Item + Block_Chance_Bonus_Item" ScriptB="" Name="Block_Chance_Item_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="208" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Block_Amount" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="209" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Block_Amount_Bonus_Percent" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="210" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="(Block_Amount + Block_Amount_Item_Min + Block_Amount_Item_Bonus) * (1 + Block_Amount_Bonus_Percent)" Name="Block_Amount_Total_Min" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="211" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="(Block_Amount + Block_Amount_Item_Min + Block_Amount_Item_Delta + Block_Amount_Item_Bonus) * (1 + Block_Amount_Bonus_Percent)" Name="Block_Amount_Total_Max" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="212" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Block_Amount_Item_Min" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="213" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Block_Amount_Item_Delta" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="214" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Block_Amount_Item_Bonus" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="215" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Dodge_Chance_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="216" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Dodge_Chance_Bonus_Melee" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="217" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Dodge_Chance_Bonus_Ranged" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="218" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Get_Hit_Current" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="219" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Get_Hit_Max_Base" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="220" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Get_Hit_Max_Per_Level" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="221" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Get_Hit_Max_Base + (Get_Hit_Max_Per_Level * Level)" Name="Get_Hit_Max" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="222" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Get_Hit_Recovery_Base" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="223" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Get_Hit_Recovery_Per_Level" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="224" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Get_Hit_Recovery_Base + (Get_Hit_Recovery_Per_Level * Level)" Name="Get_Hit_Recovery" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="225" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Get_Hit_Damage" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="226" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Get_Hit_Damage_Scalar" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="227" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Last_Damage_MainActor" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="228" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Last_ACD_Attacked" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="229" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Ignores_Critical_Hits" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="230" U2="0" U3="0" U4="1" U5="1" ScriptA="" ScriptB="" Name="Immunity" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="231" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Untargetable" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="232" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Immobolize" EncodingType="IntMinMax" U10="1" Min="0" Max="1" BitCount="1" />
+  <Entry Id="233" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Immune_To_Knockback" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="234" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Immobilize" EncodingType="IntMinMax" U10="1" Min="0" Max="1" BitCount="1" />
+  <Entry Id="235" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Stun_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="236" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Stun_Length" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="237" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Stun_Recovery" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="238" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Stun_Recovery_Speed" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="239" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Stunned" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="240" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Stun_Immune" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="241" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Poison_Length_Reduction" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="242" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Poisoned" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="243" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Bleeding" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="244" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Bleed_Duration" EncodingType="Float16" U10="1" Min="0" Max="0" BitCount="16" />
+  <Entry Id="245" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Chilled" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="246" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Freeze_Length_Reduction" EncodingType="Float16" U10="1" Min="0" Max="0" BitCount="16" />
+  <Entry Id="247" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Freeze_Immune" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="248" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Webbed" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="249" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Slow" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="250" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="FireAura" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="251" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="LightningAura" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="252" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="ColdAura" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="253" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="PoisonAura" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="254" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Blind" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="255" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Enraged" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="256" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Slowdown_Immune" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="257" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Gethit_Immune" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="258" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Suffocation_Per_Second" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="259" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Suffocation_Unit_Value" EncodingType="Float16Or32" U10="1" Min="0" Max="0" BitCount="0" />
+  <Entry Id="260" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Thorns_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="261" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Thorns_Percent_All" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="262" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="Thorns_Percent + Thorns_Percent_All#NONE" Name="Thorns_Percent_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="263" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Thorns_Fixed" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="264" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Steal_Health_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="265" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Steal_Mana_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="266" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_On_Hit" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="267" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_On_Kill" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="268" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_On_Crit" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="269" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hitpoints_On_Hit" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="270" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Hitpoints_On_Kill" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="271" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_To_Mana" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="272" U2="0" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Last_Proc_Time" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="273" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Power_Delta" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="274" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Power_Min" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="275" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Rope_Overlay" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="276" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="General_Cooldown" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="277" U2="-1" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Cooldown" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="278" U2="-1" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Cooldown_Start" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="279" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Proc_Cooldown" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="280" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Emote_Cooldown" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="281" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Projectile_Speed" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="282" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Projectile_Speed_Increase_Percent" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="283" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Destroy When Path Blocked" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="284" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Skill_Toggled_State" EncodingType="IntMinMax" U10="1" Min="0" Max="1" BitCount="1" />
+  <Entry Id="285" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Act" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="286" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Difficulty" EncodingType="IntMinMax" U10="9" Min="-1" Max="4" BitCount="3" />
+  <Entry Id="287" U2="-1" U3="-1" U4="3" U5="0" ScriptA="" ScriptB="" Name="Last_Damage_Amount" EncodingType="Float16Or32" U10="0" Min="0" Max="0" BitCount="0" />
+  <Entry Id="288" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="In_Knockback" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="289" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Amplify_Damage_Type_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="290" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Amplify_Damage_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="291" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Durability_Cur" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="292" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Durability_Max" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="293" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Durability_Last_Damage" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="294" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Item_Quality_Level" EncodingType="IntMinMax" U10="8" Min="-1" Max="11" BitCount="4" />
+  <Entry Id="295" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Item_Cost_Percent_Bonus" EncodingType="Float16" U10="8" Min="0" Max="0" BitCount="16" />
+  <Entry Id="296" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Item_Equipped" EncodingType="IntMinMax" U10="8" Min="0" Max="1" BitCount="1" />
+  <Entry Id="297" U2="0" U3="1" U4="1" U5="0" ScriptA="FLOOR(Requirement.Agg * (1 + Requirements_Ease_Percent#NONE))" ScriptB="" Name="Requirement" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="298" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="0" Name="Requirements_Ease_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="299" U2="0" U3="1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Requirement_When_Equipped" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="300" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="0" Name="Sockets" EncodingType="IntMinMax" U10="8" Min="0" Max="3" BitCount="2" />
+  <Entry Id="301" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="0" Name="Sockets_Filled" EncodingType="IntMinMax" U10="8" Min="0" Max="3" BitCount="2" />
+  <Entry Id="302" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Stats_All_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="303" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="0" Name="Item_Bound_To_ACD" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="304" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="0" Name="Item_Locked_To_ACD" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="305" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="0" Name="Item_Binding_Level_Override" EncodingType="IntMinMax" U10="8" Min="0" Max="5" BitCount="3" />
+  <Entry Id="306" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="" Name="ItemStackQuantityHi" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="307" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="" Name="ItemStackQuantityLo" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="308" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Run_Speed_Granted" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="309" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Run_Speed_Duration" EncodingType="IntMinMax" U10="9" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="310" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="IdentifyCost" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="311" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="0" Name="Seed" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="312" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="0" Name="IsCrafted" EncodingType="IntMinMax" U10="8" Min="0" Max="1" BitCount="1" />
+  <Entry Id="313" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="0" Name="DyeType" EncodingType="IntMinMax" U10="8" Min="-1" Max="30" BitCount="5" />
+  <Entry Id="314" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="0" Name="EnchantAffix" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="315" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="0" Name="EnchantRangeVal" EncodingType="IntMinMax" U10="8" Min="0" Max="255" BitCount="8" />
+  <Entry Id="316" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="0" Name="HighlySalvageable" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="317" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="" Name="ItemUnlockTimeHi" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="318" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="" Name="ItemUnlockTimeLo" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="319" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Always_Plays_GetHit" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="320" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Hidden" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="321" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="RActor_Fade_Group" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="322" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Quest Range" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="323" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Attack_Cooldown_Min" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="324" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Attack_Cooldown_Delta" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="325" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="InitialCooldownMin / Attacks_Per_Second_Total" Name="InitialCooldownMinTotal" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="326" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="InitialCooldownDelta / Attacks_Per_Second_Total" Name="InitialCooldownDeltaTotal" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="327" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="Attack_Cooldown_Min / Attacks_Per_Second_Total" Name="Attack_Cooldown_Min_Total" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="328" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="Attack_Cooldown_Delta / Attacks_Per_Second_Total" Name="Attack_Cooldown_Delta_Total" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="329" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Closing_Cooldown_Min_Total" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="330" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Closing_Cooldown_Delta_Total" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="331" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Quest_Monster" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="332" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Quest_Monster Effect" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="333" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Treasure_Class" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="334" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Removes_Body_On_Death" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="335" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="InitialCooldownMin" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="336" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="InitialCooldownDelta" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="337" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Knockback_Weight" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="338" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="UntargetableByPets" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="339" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Damage_State_Current" EncodingType="IntMinMax" U10="31" Min="0" Max="15" BitCount="4" />
+  <Entry Id="340" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Damage_State_Max" EncodingType="IntMinMax" U10="31" Min="0" Max="15" BitCount="4" />
+  <Entry Id="341" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Is_Player_Decoy" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="342" U2="0" U3="3" U4="0" U5="0" ScriptA="" ScriptB="" Name="Custom_Target_Weight" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="343" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Gizmo_State" EncodingType="IntMinMax" U10="4" Min="-1" Max="30" BitCount="5" />
+  <Entry Id="344" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Gizmo_Charges" EncodingType="IntMinMax" U10="4" Min="-1" Max="30" BitCount="5" />
+  <Entry Id="345" U2="0" U3="3" U4="0" U5="1" ScriptA="" ScriptB="" Name="Chest_Open" EncodingType="IntMinMax" U10="4" Min="0" Max="1" BitCount="1" />
+  <Entry Id="346" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Door_Locked" EncodingType="IntMinMax" U10="4" Min="0" Max="1" BitCount="1" />
+  <Entry Id="347" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Door_Timer" EncodingType="Int" U10="4" Min="0" Max="0" BitCount="32" />
+  <Entry Id="348" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Gizmo_Disabled_By_Script" EncodingType="IntMinMax" U10="4" Min="0" Max="1" BitCount="1" />
+  <Entry Id="349" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Gizmo_Operator_ACDID" EncodingType="Int" U10="4" Min="0" Max="0" BitCount="32" />
+  <Entry Id="350" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Triggering_Count" EncodingType="Int" U10="4" Min="0" Max="0" BitCount="32" />
+  <Entry Id="351" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Gate_Position" EncodingType="Float16" U10="4" Min="0" Max="0" BitCount="16" />
+  <Entry Id="352" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Gate_Velocity" EncodingType="Float16" U10="4" Min="0" Max="0" BitCount="16" />
+  <Entry Id="353" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Gizmo_Has_Been_Operated" EncodingType="IntMinMax" U10="4" Min="0" Max="1" BitCount="1" />
+  <Entry Id="354" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Pet_Owner" EncodingType="IntMinMax" U10="31" Min="-1" Max="8" BitCount="4" />
+  <Entry Id="355" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Pet_Creator" EncodingType="IntMinMax" U10="31" Min="-1" Max="8" BitCount="4" />
+  <Entry Id="356" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Pet_Type" EncodingType="IntMinMax" U10="31" Min="-1" Max="24" BitCount="5" />
+  <Entry Id="357" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="DropsNoLoot" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="358" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="GrantsNoXP" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="359" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Hireling_Class" EncodingType="IntMinMax" U10="31" Min="0" Max="4" BitCount="3" />
+  <Entry Id="360" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Summoned_By_SNO" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="361" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Is_NPC" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="362" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="NPC_Is_Operatable" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="363" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="NPC_Is_Escorting" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="364" U2="0" U3="12" U4="1" U5="1" ScriptA="" ScriptB="" Name="NPC_Has_Interact_Options" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="365" U2="-1" U3="12" U4="3" U5="1" ScriptA="" ScriptB="" Name="Conversation_Icon" EncodingType="IntMinMax" U10="31" Min="-1" Max="6" BitCount="3" />
+  <Entry Id="366" U2="-1" U3="16" U4="1" U5="1" ScriptA="" ScriptB="" Name="Callout_Cooldown" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="367" U2="-1" U3="16" U4="1" U5="1" ScriptA="" ScriptB="" Name="Banter_Cooldown" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="368" U2="0" U3="16" U4="1" U5="1" ScriptA="" ScriptB="" Name="Conversation_Heard_Count" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="369" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Last_Tick_Shop_Entered" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="370" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Is_Helper" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="371" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Axe" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="372" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Axe2H" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="373" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="ThrowingAxe" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="374" U2="0" U3="-1" U4="0" U5="0" ScriptA="Pin(Axe + Axe2H + ThrowingAxe, 0, 1)" ScriptB="Pin(Axe + Axe2H + ThrowingAxe, 0, 1)" Name="AxeAny" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="375" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Bow" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="376" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Crossbow" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="377" U2="0" U3="-1" U4="0" U5="0" ScriptA="Pin(Bow + Crossbow, 0, 1)" ScriptB="Pin(Bow + Crossbow, 0, 1)" Name="BowAny" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="378" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Club" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="379" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Club2H" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="380" U2="0" U3="-1" U4="0" U5="0" ScriptA="Pin(Club + Club2H, 0, 1)" ScriptB="Pin(Club + Club2H, 0, 1)" Name="ClubAny" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="381" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Dagger" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="382" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Mace" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="383" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Mace2H" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="384" U2="0" U3="-1" U4="0" U5="0" ScriptA="Pin(Mace + Mace2H, 0, 1)" ScriptB="Pin(Mace + Mace2H, 0, 1)" Name="MaceAny" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="385" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Sword" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="386" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Sword2H" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="387" U2="0" U3="-1" U4="0" U5="0" ScriptA="Pin(Sword + Sword2H, 0, 1)" ScriptB="Pin(Sword + Sword2H, 0, 1)" Name="SwordAny" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="388" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Polearm" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="389" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Spear" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="390" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Wand" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="391" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="ColdStaff" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="392" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="FireStaff" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="393" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="LightningStaff" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="394" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="PoisonStaff" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="395" U2="0" U3="-1" U4="0" U5="0" ScriptA="Pin(ColdStaff + FireStaff + LightningStaff + PoisonStaff, 0, 1)" ScriptB="Pin(ColdStaff + FireStaff + LightningStaff + PoisonStaff, 0, 1)" Name="StaffAny" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="396" U2="0" U3="-1" U4="0" U5="0" ScriptA="Pin(Axe + Club + Dagger + Mace + Sword + Wand, 0, 1)" ScriptB="Pin(Axe + Club + Dagger + Mace + Sword + Wand, 0, 1)" Name="Weapon1H" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="397" U2="0" U3="-1" U4="0" U5="0" ScriptA="Pin(Axe2H + BowAny + Club2H + Mace2H + Sword2H + Polearm + Spear + StaffAny, 0, 1)" ScriptB="Pin(Axe2H + BowAny + Club2H + Mace2H + Sword2H + Polearm + Spear + StaffAny, 0, 1)" Name="Weapon2H" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="398" U2="0" U3="-1" U4="0" U5="0" ScriptA="Pin(Axe + Axe2H + ClubAny + Dagger + MaceAny + SwordAny + Polearm + Spear + Wand + StaffAny, 0, 1)" ScriptB="Pin(Axe + Axe2H + ClubAny + Dagger + MaceAny + SwordAny + Polearm + Spear + Wand + StaffAny, 0, 1)" Name="WeaponMelee" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="399" U2="0" U3="-1" U4="0" U5="0" ScriptA="Pin(ThrowingAxe + BowAny, 0, 1)" ScriptB="Pin(ThrowingAxe + BowAny, 0, 1)" Name="WeaponRanged" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="400" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Quiver" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="401" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Reincarnation_Buff" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="402" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Dead_Body_AnimTag" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="403" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Spawned_by_ACDID" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="404" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Summoned_By_ACDID" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="405" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Summoner_ID" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="406" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Banner_ACDID" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="407" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Breakable_Shield_HP" EncodingType="Float16Or32" U10="0" Min="0" Max="0" BitCount="0" />
+  <Entry Id="408" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Current_WeaponClass" EncodingType="IntMinMax" U10="31" Min="-1" Max="19" BitCount="5" />
+  <Entry Id="409" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Weapons_Sheathed" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="410" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="0" Name="Held_In_OffHand" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="411" U2="0" U3="-1" U4="0" U5="0" ScriptA="(Held_In_OffHand ? 0 : Attacks_Per_Second_Item_Subtotal )" ScriptB="" Name="Attacks_Per_Second_Item_MainHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="412" U2="0" U3="-1" U4="0" U5="0" ScriptA="(Held_In_OffHand ? Attacks_Per_Second_Item_Subtotal : 0)" ScriptB="" Name="Attacks_Per_Second_Item_OffHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="413" U2="0" U3="-1" U4="0" U5="0" ScriptA="Attacks_Per_Second_Item_MainHand + Attacks_Per_Second_Item_Bonus" ScriptB="" Name="Attacks_Per_Second_Item_Total_MainHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="414" U2="0" U3="-1" U4="0" U5="0" ScriptA="Attacks_Per_Second_Item_OffHand + Attacks_Per_Second_Item_Bonus" ScriptB="" Name="Attacks_Per_Second_Item_Total_OffHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="415" U2="0" U3="0" U4="0" U5="0" ScriptA="(Held_In_OffHand#NONE ? 0 : Damage_Weapon_Min_Total )" ScriptB="" Name="Damage_Weapon_Min_Total_MainHand" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="416" U2="0" U3="0" U4="0" U5="0" ScriptA="(Held_In_OffHand#NONE ? Damage_Weapon_Min_Total : 0)" ScriptB="" Name="Damage_Weapon_Min_Total_OffHand" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="417" U2="0" U3="0" U4="0" U5="0" ScriptA="(Held_In_OffHand#NONE ? 0 : Damage_Weapon_Delta_Total )" ScriptB="" Name="Damage_Weapon_Delta_Total_MainHand" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="418" U2="0" U3="0" U4="0" U5="0" ScriptA="(Held_In_OffHand#NONE ? Damage_Weapon_Delta_Total : 0)" ScriptB="" Name="Damage_Weapon_Delta_Total_OffHand" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="419" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Attacks_Per_Second_Item_OffHand : Attacks_Per_Second_Item_MainHand)" Name="Attacks_Per_Second_Item_CurrentHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="420" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="(DualWield_Hand#NONE ? Damage_Weapon_Min_Total_OffHand : Damage_Weapon_Min_Total_MainHand)" Name="Damage_Weapon_Min_Total_CurrentHand" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="421" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="(DualWield_Hand#NONE ? Damage_Weapon_Delta_Total_OffHand : Damage_Weapon_Delta_Total_MainHand)" Name="Damage_Weapon_Delta_Total_CurrentHand" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="422" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Has_Special_Death_AnimTag" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="423" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Death_Type_Override" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="424" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="In_Combat" EncodingType="IntMinMax" U10="1" Min="0" Max="1" BitCount="1" />
+  <Entry Id="425" U2="0" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="In_Conversation" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="426" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Last_Tick_Potion_Used" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="427" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Potion_Dilution_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="428" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Out_Of_Combat_Health_Regen_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="429" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Out_Of_Combat_Mana_Regen_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="430" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Potion_Dilution_Duration" EncodingType="IntMinMax" U10="0" Min="-1" Max="16777214" BitCount="24" />
+  <Entry Id="431" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Potion_Dilution_Scalar" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="432" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Feared" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="433" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Fear_Immune" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="434" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Last_Damage_ACD" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="435" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Attached_To_ACD" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="436" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Attachment_ACD" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="437" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Normal_Attack_Replacement_Power_SNO" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="438" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Type_Override" EncodingType="Float16Or32" U10="0" Min="0" Max="0" BitCount="0" />
+  <Entry Id="439" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Minion_Count_Bonus_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="440" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Champion_Teleport_Next_Tick" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="441" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Champion_Teleport_Time_Min_In_Seconds" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="442" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Champion_Teleport_Time_Delta_In_Seconds" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="443" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Champion_Clone_Next_Tick" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="444" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Champion_Clone_Time_Min_In_Seconds" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="445" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Champion_Clone_Time_Delta_In_Seconds" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="446" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Champion_Clone_Hitpoint_Bonus_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="447" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Champion_Clone_Damage_Bonus_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="448" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Champion_Ghostly_Next_Tick" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="449" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Champion_Ghostly_Inactive_Time_Min_In_Seconds" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="450" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Champion_Ghostly_Inactive_Time_Delta_In_Seconds" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="451" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Champion_Ghostly_Active_Time_Min_In_Seconds" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="452" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Champion_Ghostly_Active_Time_Delta_In_Seconds" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="453" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Champion_Ghostly_Saved_Dodge_Chance" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="454" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Champion_Ghostly" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="455" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Base_Element" EncodingType="IntMinMax" U10="0" Min="-1" Max="7" BitCount="4" />
+  <Entry Id="456" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Projectile_Amount_Bonus_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="457" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Projectile_Reflect_Chance" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="458" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Attack_Fear_Chance" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="459" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Attack_Fear_Time_Min" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="460" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Attack_Fear_Time_Delta" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="461" U2="0" U3="9" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Visual_Effect" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="462" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Start_Tick0" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="463" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Start_Tick1" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="464" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Start_Tick2" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="465" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Start_Tick3" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="466" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Start_Tick4" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="467" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Start_Tick5" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="468" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Start_Tick6" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="469" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Start_Tick7" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="470" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_End_Tick0" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="471" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_End_Tick1" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="472" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_End_Tick2" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="473" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_End_Tick3" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="474" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_End_Tick4" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="475" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_End_Tick5" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="476" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_End_Tick6" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="477" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_End_Tick7" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="478" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Could_Have_Ragdolled" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="479" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Ambient_Damage_Effect_Last_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="480" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Scale_Bonus" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="481" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Deleted_On_Server" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="482" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Scripted_Fade_Time" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="483" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Does_No_Damage" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="484" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Does_Fake_Damage" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="485" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="SlowTime_Debuff" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="486" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Blocks_Projectiles" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="487" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Frozen" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="488" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Freeze_Damage_Percent_Bonus" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="489" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Buff_Active" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="490" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="DualWield_BothAttack_Chance" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="491" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Summon_Expiration_Tick" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="492" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Summon_Count" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="493" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Uninterruptible" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="494" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Queue Death" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="495" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="CantStartDisplayedPowers" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="496" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Wizard_Slowtime_Proxy_ACD" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="497" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="DPS" EncodingType="Float16Or32" U10="31" Min="0" Max="0" BitCount="0" />
+  <Entry Id="498" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Resurrection_Power" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="499" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Freeze_Damage" EncodingType="Float16Or32" U10="31" Min="0" Max="0" BitCount="0" />
+  <Entry Id="500" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Freeze_Capacity" EncodingType="Float16Or32" U10="0" Min="0" Max="0" BitCount="0" />
+  <Entry Id="501" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Thaw_Rate" EncodingType="Float16Or32" U10="0" Min="0" Max="0" BitCount="0" />
+  <Entry Id="502" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Chilled_Dur_Bonus_Percent" EncodingType="Float16Or32" U10="0" Min="0" Max="0" BitCount="0" />
+  <Entry Id="503" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="DOT_DPS" EncodingType="Float16Or32" U10="31" Min="0" Max="0" BitCount="0" />
+  <Entry Id="504" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="DamageCap_Percent" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="505" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Item_Time_Sold" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="506" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Forced_Hireling_Power" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="507" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="IsRooted" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="508" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="RootTargetACD" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="509" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="RootAutoDecayPerSecond" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="510" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="RootUnitValue" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="511" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="RootTotalTicks" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="512" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Hide_Affixes" EncodingType="IntMinMax" U10="8" Min="0" Max="1" BitCount="1" />
+  <Entry Id="513" U2="0" U3="11" U4="0" U5="1" ScriptA="" ScriptB="" Name="Rune_A" EncodingType="IntMinMax" U10="31" Min="0" Max="255" BitCount="8" />
+  <Entry Id="514" U2="0" U3="11" U4="0" U5="1" ScriptA="" ScriptB="" Name="Rune_B" EncodingType="IntMinMax" U10="31" Min="0" Max="255" BitCount="8" />
+  <Entry Id="515" U2="0" U3="11" U4="0" U5="1" ScriptA="" ScriptB="" Name="Rune_C" EncodingType="IntMinMax" U10="31" Min="0" Max="255" BitCount="8" />
+  <Entry Id="516" U2="0" U3="11" U4="0" U5="1" ScriptA="" ScriptB="" Name="Rune_D" EncodingType="IntMinMax" U10="31" Min="0" Max="255" BitCount="8" />
+  <Entry Id="517" U2="0" U3="11" U4="0" U5="1" ScriptA="" ScriptB="" Name="Rune_E" EncodingType="IntMinMax" U10="31" Min="0" Max="255" BitCount="8" />
+  <Entry Id="518" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resistance_Stun" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="519" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Resistance_Stun + Resistance_StunRootFreeze" Name="Resistance_Stun_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="520" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resistance_Root" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="521" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Resistance_Root + Resistance_StunRootFreeze" Name="Resistance_Root_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="522" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resistance_Freeze" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="523" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="Resistance_Freeze + Resistance_StunRootFreeze" Name="Resistance_Freeze_Total" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="524" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resistance_StunRootFreeze" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="525" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="CrowdControl_Reduction" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="526" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Displays_Team_Effect" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="527" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Cannot_Be_Added_To_AI_Target_List" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="528" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="SkillKit" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="529" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Immune_To_Charm" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="530" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Immune_To_Blind" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="531" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Damage_Shield" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="532" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Silenced" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="533" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Diseased" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="534" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Guard_Object_ACDID" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="535" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Follow_Target_ACDID" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="536" U2="0" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Follow_Target_Type" EncodingType="IntMinMax" U10="0" Min="0" Max="2" BitCount="2" />
+  <Entry Id="537" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Forced_Enemy_ACDID" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="538" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="NPC_Talk_Target_ANN" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="539" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="NPC_Conv_Target_ANN" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="540" U2="-1" U3="3" U4="3" U5="1" ScriptA="" ScriptB="" Name="Script_Target_ACDID" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="541" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Look_Target_Server_ANN" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="542" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Look_Target_Broadcast_Intensity" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="543" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Look_Target_Broadcast_Radius" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="544" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Stealthed" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="545" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="" Name="GemQuality" EncodingType="IntMinMax" U10="8" Min="0" Max="14" BitCount="4" />
+  <Entry Id="546" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="0" Name="ItemBuffIcon" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="547" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="0" Name="ScrollDuration" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="548" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Gizmo_Actor_SNO_To_Spawn" EncodingType="Int" U10="4" Min="0" Max="0" BitCount="32" />
+  <Entry Id="549" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Gizmo_Actor_To_Spawn_Scale" EncodingType="Float16" U10="4" Min="0" Max="0" BitCount="16" />
+  <Entry Id="550" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Death_Replacement_Power_SNO" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="551" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Attachment_Handled_By_Client" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="552" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="AI_In_Special_State" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="553" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="AI_Used_Scripted_Spawn_Anim" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="554" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="AI_Spawned_By_Inactive_Marker" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="555" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Headstone_Player_ANN" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="556" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Cost_Reduction_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="557" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resistance_Penetration" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="558" U2="0" U3="0" U4="0" U5="0" ScriptA="" ScriptB="(Resistance_Penetration + Resistance_Penetration_All#NONE) * (Resistance_Penetration_Percent_All#NONE + 1)" Name="Resistance_Penetration_Total" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="559" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resistance_Penetration_All" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="560" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resistance_Penetration_Percent_All" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="561" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Fury_Effect_Level" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="562" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Health_Potion_Bonus_Heal_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="563" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Free_Cast" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="564" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Free_Cast_All" EncodingType="IntMinMax" U10="9" Min="0" Max="1" BitCount="1" />
+  <Entry Id="565" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Movement_Scalar_Reduction_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="566" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Movement_Scalar_Reduction_Resistance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="567" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Damage_Absorb_Percent_All" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="568" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="World_Seed" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="569" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Kill_Count_Record" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="570" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Object_Destruction_Record" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="571" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Single_Attack_Record" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="572" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Environment_Attack_Record" EncodingType="IntMinMax" U10="0" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="573" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Root_Immune" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="574" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Monster_Play_Get_Hit_Bonus" EncodingType="Float16Or32" U10="0" Min="0" Max="0" BitCount="0" />
+  <Entry Id="575" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Stored_Contact_Frame" EncodingType="IntMinMax" U10="0" Min="0" Max="4" BitCount="3" />
+  <Entry Id="576" U2="0" U3="4" U4="0" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Count0" EncodingType="IntMinMax" U10="31" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="577" U2="0" U3="4" U4="0" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Count1" EncodingType="IntMinMax" U10="31" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="578" U2="0" U3="4" U4="0" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Count2" EncodingType="IntMinMax" U10="31" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="579" U2="0" U3="4" U4="0" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Count3" EncodingType="IntMinMax" U10="31" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="580" U2="0" U3="4" U4="0" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Count4" EncodingType="IntMinMax" U10="31" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="581" U2="0" U3="4" U4="0" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Count5" EncodingType="IntMinMax" U10="31" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="582" U2="0" U3="4" U4="0" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Count6" EncodingType="IntMinMax" U10="31" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="583" U2="0" U3="4" U4="0" U5="1" ScriptA="" ScriptB="" Name="Buff_Icon_Count7" EncodingType="IntMinMax" U10="31" Min="0" Max="16777215" BitCount="24" />
+  <Entry Id="584" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Observer" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="585" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Resurrect_As_Observer" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="586" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Combo_Level" EncodingType="IntMinMax" U10="0" Min="0" Max="3" BitCount="2" />
+  <Entry Id="587" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Combo_Time_Last_Move" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="588" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Burrowed" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="589" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Death_Replacement_Effect_Group_SNO" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="590" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Checkpoint_Resurrection_Allowed_Game_Time" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="591" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Checkpoint_Resurrection_Forced_Game_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="592" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Controlling_TimedEvent_SNO" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="593" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Casting_Speed_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="594" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Using_Bossbar" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="595" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_0_Visual_Effect" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="596" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_1_Visual_Effect" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="597" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_2_Visual_Effect" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="598" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_3_Visual_Effect" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="599" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_4_Visual_Effect" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="600" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_5_Visual_Effect" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="601" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_6_Visual_Effect" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="602" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_7_Visual_Effect" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="603" U2="0" U3="0" U4="3" U5="1" ScriptA="" ScriptB="" Name="Store SNO" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="604" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Busy" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="605" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Afk" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="606" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Last Action Timestamp" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="607" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Portal Next Time" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="608" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Repair_Discount_Percent" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="609" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Resource_Degeneration_Prevented" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="610" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="" Name="Operatable" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="611" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Look_Override" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="612" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Spawner_Concurrent_Count_ID" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="613" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Disabled" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="614" U2="-1" U3="3" U4="1" U5="1" ScriptA="" ScriptB="" Name="Skill_Override" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="615" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Skill_Override_Active" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="616" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Skill_Override_Ended" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="617" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Skill_Override_Ended_Active" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="618" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Is_Power_Proxy" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="619" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Force_No_Death_Animation" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="620" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Player_WeaponClass_Anim_Override" EncodingType="IntMinMax" U10="31" Min="-1" Max="19" BitCount="5" />
+  <Entry Id="621" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Operatable_Story_Gizmo" EncodingType="IntMinMax" U10="4" Min="0" Max="1" BitCount="1" />
+  <Entry Id="622" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_0_Visual_Effect_None" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="623" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_0_Visual_Effect_A" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="624" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_0_Visual_Effect_B" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="625" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_0_Visual_Effect_C" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="626" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_0_Visual_Effect_D" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="627" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_0_Visual_Effect_E" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="628" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_1_Visual_Effect_None" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="629" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_1_Visual_Effect_A" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="630" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_1_Visual_Effect_B" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="631" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_1_Visual_Effect_C" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="632" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_1_Visual_Effect_D" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="633" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_1_Visual_Effect_E" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="634" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_2_Visual_Effect_None" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="635" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_2_Visual_Effect_A" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="636" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_2_Visual_Effect_B" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="637" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_2_Visual_Effect_C" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="638" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_2_Visual_Effect_D" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="639" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_2_Visual_Effect_E" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="640" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_3_Visual_Effect_None" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="641" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_3_Visual_Effect_A" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="642" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_3_Visual_Effect_B" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="643" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_3_Visual_Effect_C" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="644" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_3_Visual_Effect_D" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="645" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_3_Visual_Effect_E" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="646" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_4_Visual_Effect_None" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="647" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_4_Visual_Effect_A" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="648" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_4_Visual_Effect_B" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="649" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_4_Visual_Effect_C" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="650" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_4_Visual_Effect_D" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="651" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_4_Visual_Effect_E" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="652" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_5_Visual_Effect_None" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="653" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_5_Visual_Effect_A" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="654" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_5_Visual_Effect_B" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="655" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_5_Visual_Effect_C" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="656" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_5_Visual_Effect_D" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="657" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_5_Visual_Effect_E" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="658" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_6_Visual_Effect_None" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="659" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_6_Visual_Effect_A" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="660" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_6_Visual_Effect_B" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="661" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_6_Visual_Effect_C" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="662" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_6_Visual_Effect_D" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="663" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_6_Visual_Effect_E" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="664" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_7_Visual_Effect_None" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="665" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_7_Visual_Effect_A" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="666" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_7_Visual_Effect_B" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="667" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_7_Visual_Effect_C" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="668" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_7_Visual_Effect_D" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="669" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_7_Visual_Effect_E" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="670" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Walk_Passability_Power_SNO" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="671" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Passability_Power_SNO" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="672" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Flippy_ID" EncodingType="Int" U10="8" Min="0" Max="0" BitCount="32" />
+  <Entry Id="673" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Summoning_Machine_Num_Casters" EncodingType="IntMinMax" U10="0" Min="0" Max="255" BitCount="8" />
+  <Entry Id="674" U2="0" U3="15" U4="0" U5="1" ScriptA="" ScriptB="" Name="Summoning_Machine_Spawn_Count" EncodingType="IntMinMax" U10="0" Min="0" Max="4095" BitCount="12" />
+  <Entry Id="675" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Summoning_Machine_Next_Spawn_Ticks" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="676" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Summoning_Machine_Spawn_Team" EncodingType="IntMinMax" U10="0" Min="-1" Max="23" BitCount="5" />
+  <Entry Id="677" U2="1114636288" U3="-1" U4="3" U5="0" ScriptA="" ScriptB="" Name="Screen_Attack_Radius_Constant" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="678" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Damage_Done_Reduction_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="679" U2="0" U3="17" U4="0" U5="1" ScriptA="" ScriptB="" Name="Set_Item_Count" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="680" U2="0" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Spawner_Countdown_Percent" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="681" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Attack_Slow" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="682" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Power_Disabled" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="683" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Weapon_Effect_Override" EncodingType="IntMinMax" U10="31" Min="0" Max="14" BitCount="4" />
+  <Entry Id="684" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Debuff_Duration_Reduction_Percent" EncodingType="Float16" U10="0" Min="0" Max="0" BitCount="16" />
+  <Entry Id="685" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Uses_PvP_Power_Tags" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="686" U2="0" U3="4" U4="1" U5="1" ScriptA="" ScriptB="" Name="Trait" EncodingType="IntMinMax" U10="31" Min="-1" Max="30" BitCount="5" />
+  <Entry Id="687" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Last_ACD_Attacked_By" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="688" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Gold_PickUp_Radius" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="689" U2="0" U3="12" U4="1" U5="1" ScriptA="" ScriptB="" Name="Client Only Effect" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="690" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Has_Doppelganger_Cloned" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="691" U2="0" U3="10" U4="0" U5="0" ScriptA="" ScriptB="" Name="Resource_Gain_Bonus_Percent" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="692" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Looping_Animation_Start_Time" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="693" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Looping_Animation_End_Time" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="694" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Looping_Animation_Suppress_Item_Tooltips" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="695" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Heal_Effect_Last_Played_Tick" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="696" U2="-1" U3="10" U4="3" U5="1" ScriptA="" ScriptB="" Name="Resource_Effect_Last_Played_tick" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="697" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Thorns_Effect_Last_Played_tick" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="698" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="PVP_Kills" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="699" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="PVP_Deaths" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="700" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="PVP_Assists" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="701" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="PVP_Progression_Points_Gained" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="702" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="PVP_Current_Kill_Streak" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="703" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="PVP_Current_Death_Streak" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="704" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="PVP_Longest_Kill_Streak" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="705" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="PVP_Longest_Death_Streak" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="706" U2="1065353216" U3="-1" U4="5" U5="0" ScriptA="" ScriptB="" Name="Turn_Rate_Scalar" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="707" U2="1065353216" U3="-1" U4="5" U5="0" ScriptA="" ScriptB="" Name="Turn_Accel_Scalar" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="708" U2="1065353216" U3="-1" U4="5" U5="0" ScriptA="" ScriptB="" Name="Turn_Deccel_Scalar" EncodingType="Float16" U10="31" Min="0" Max="0" BitCount="16" />
+  <Entry Id="709" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="No_Health_Drop" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="710" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Leader" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="711" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="IsContentRestrictedActor" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="712" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="InBossEncounter" EncodingType="IntMinMax" U10="1" Min="0" Max="1" BitCount="1" />
+  <Entry Id="713" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="God" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="714" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="MinimapActive" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="715" U2="-1" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="MinimapIconOverride" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="716" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="MinimapDisableArrow" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="717" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Last_Blocked_ACD" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="718" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Last_Blocked_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="719" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Deactivate Lure" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="720" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Weapons_Hidden" EncodingType="IntMinMax" U10="31" Min="0" Max="1" BitCount="1" />
+  <Entry Id="721" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Actor_Updates_Attributes_From_Owner" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="722" U2="-1" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Taunt_Target_ACD" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="723" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="UI_Only_Percent_Damage_Increase" EncodingType="Float16" U10="1" Min="0" Max="0" BitCount="16" />
+  <Entry Id="724" U2="-1" U3="-1" U4="3" U5="1" ScriptA="" ScriptB="" Name="Projectile_Effect_SNO" EncodingType="Int" U10="31" Min="0" Max="0" BitCount="32" />
+  <Entry Id="725" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Fear_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="726" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Stun_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="727" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Blind_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="728" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Freeze_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="729" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Chill_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="730" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Slow_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="731" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Immobilize_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="732" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Knockback_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="733" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Bleed_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="734" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Bleed_Proc_Damage_Base" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="735" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="On_Hit_Bleed_Proc_Damage_Delta" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="736" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Reduction_From_Ranged" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="737" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Reduction_From_Melee" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="738" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Reduction_Turns_Into_Heal" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="739" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Reduction_From_Elites" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="740" U2="0" U3="0" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Reduction_From_Type" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="741" U2="0" U3="18" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Bonus_Vs_Monster_Type" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="742" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Damage_Percent_Bonus_Vs_Elites" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="743" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="" Name="Item_Manipulation_Timeout" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="744" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="" Name="Picked_Up_Time" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="745" U2="1" U3="19" U4="4" U5="1" ScriptA="" ScriptB="" Name="Unequipped Time" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="746" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="" Name="Last_ACD_Killed_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="747" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="CannotDieDuring" EncodingType="IntMinMax" U10="0" Min="0" Max="1" BitCount="1" />
+  <Entry Id="748" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Weapon_On_Hit_Fear_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="749" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Weapon_On_Hit_Stun_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="750" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Weapon_On_Hit_Blind_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="751" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Weapon_On_Hit_Freeze_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="752" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Weapon_On_Hit_Chill_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="753" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Weapon_On_Hit_Slow_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="754" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Weapon_On_Hit_Immobilize_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="755" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Weapon_On_Hit_Knockback_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="756" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Weapon_On_Hit_Bleed_Proc_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="757" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Weapon_On_Hit_Bleed_Proc_Damage_Base" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="758" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Weapon_On_Hit_Bleed_Proc_Damage_Delta" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="759" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? 0 : Weapon_On_Hit_Fear_Proc_Chance )" ScriptB="" Name="Weapon_On_Hit_Fear_Proc_Chance_MainHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="760" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? Weapon_On_Hit_Fear_Proc_Chance : 0)" ScriptB="" Name="Weapon_On_Hit_Fear_Proc_Chance_OffHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="761" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Weapon_On_Hit_Fear_Proc_Chance_OffHand : Weapon_On_Hit_Fear_Proc_Chance_MainHand)" Name="Weapon_On_Hit_Fear_Proc_Chance_CurrentHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="762" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? 0 : Weapon_On_Hit_Stun_Proc_Chance )" ScriptB="" Name="Weapon_On_Hit_Stun_Proc_Chance_MainHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="763" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? Weapon_On_Hit_Stun_Proc_Chance : 0)" ScriptB="" Name="Weapon_On_Hit_Stun_Proc_Chance_OffHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="764" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Weapon_On_Hit_Stun_Proc_Chance_OffHand : Weapon_On_Hit_Stun_Proc_Chance_MainHand)" Name="Weapon_On_Hit_Stun_Proc_Chance_CurrentHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="765" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? 0 : Weapon_On_Hit_Blind_Proc_Chance )" ScriptB="" Name="Weapon_On_Hit_Blind_Proc_Chance_MainHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="766" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? Weapon_On_Hit_Blind_Proc_Chance : 0)" ScriptB="" Name="Weapon_On_Hit_Blind_Proc_Chance_OffHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="767" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Weapon_On_Hit_Blind_Proc_Chance_OffHand : Weapon_On_Hit_Blind_Proc_Chance_MainHand)" Name="Weapon_On_Hit_Blind_Proc_Chance_CurrentHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="768" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? 0 : Weapon_On_Hit_Freeze_Proc_Chance )" ScriptB="" Name="Weapon_On_Hit_Freeze_Proc_Chance_MainHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="769" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? Weapon_On_Hit_Freeze_Proc_Chance : 0)" ScriptB="" Name="Weapon_On_Hit_Freeze_Proc_Chance_OffHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="770" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Weapon_On_Hit_Freeze_Proc_Chance_OffHand : Weapon_On_Hit_Freeze_Proc_Chance_MainHand)" Name="Weapon_On_Hit_Freeze_Proc_Chance_CurrentHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="771" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? 0 : Weapon_On_Hit_Chill_Proc_Chance )" ScriptB="" Name="Weapon_On_Hit_Chill_Proc_Chance_MainHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="772" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? Weapon_On_Hit_Chill_Proc_Chance : 0)" ScriptB="" Name="Weapon_On_Hit_Chill_Proc_Chance_OffHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="773" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Weapon_On_Hit_Chill_Proc_Chance_OffHand : Weapon_On_Hit_Chill_Proc_Chance_MainHand)" Name="Weapon_On_Hit_Chill_Proc_Chance_CurrentHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="774" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? 0 : Weapon_On_Hit_Slow_Proc_Chance )" ScriptB="" Name="Weapon_On_Hit_Slow_Proc_Chance_MainHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="775" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? Weapon_On_Hit_Slow_Proc_Chance : 0)" ScriptB="" Name="Weapon_On_Hit_Slow_Proc_Chance_OffHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="776" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Weapon_On_Hit_Slow_Proc_Chance_OffHand : Weapon_On_Hit_Slow_Proc_Chance_MainHand)" Name="Weapon_On_Hit_Slow_Proc_Chance_CurrentHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="777" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? 0 : Weapon_On_Hit_Immobilize_Proc_Chance )" ScriptB="" Name="Weapon_On_Hit_Immobilize_Proc_Chance_MainHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="778" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? Weapon_On_Hit_Immobilize_Proc_Chance : 0)" ScriptB="" Name="Weapon_On_Hit_Immobilize_Proc_Chance_OffHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="779" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Weapon_On_Hit_Immobilize_Proc_Chance_OffHand : Weapon_On_Hit_Immobilize_Proc_Chance_MainHand)" Name="Weapon_On_Hit_Immobilize_Proc_Chance_CurrentHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="780" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? 0 : Weapon_On_Hit_Knockback_Proc_Chance )" ScriptB="" Name="Weapon_On_Hit_Knockback_Proc_Chance_MainHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="781" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? Weapon_On_Hit_Knockback_Proc_Chance : 0)" ScriptB="" Name="Weapon_On_Hit_Knockback_Proc_Chance_OffHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="782" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Weapon_On_Hit_Knockback_Proc_Chance_OffHand : Weapon_On_Hit_Knockback_Proc_Chance_MainHand)" Name="Weapon_On_Hit_Knockback_Proc_Chance_CurrentHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="783" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? 0 : Weapon_On_Hit_Bleed_Proc_Chance )" ScriptB="" Name="Weapon_On_Hit_Bleed_Proc_Chance_MainHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="784" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? Weapon_On_Hit_Bleed_Proc_Chance : 0)" ScriptB="" Name="Weapon_On_Hit_Bleed_Proc_Chance_OffHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="785" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Weapon_On_Hit_Bleed_Proc_Chance_OffHand : Weapon_On_Hit_Bleed_Proc_Chance_MainHand)" Name="Weapon_On_Hit_Bleed_Proc_Chance_CurrentHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="786" U2="0" U3="-1" U4="0" U5="0" ScriptA="(Held_In_OffHand ? 0 : Weapon_On_Hit_Bleed_Proc_Damage_Base )" ScriptB="" Name="Weapon_On_Hit_Bleed_Proc_Damage_Base_MainHand" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="787" U2="0" U3="-1" U4="0" U5="0" ScriptA="(Held_In_OffHand ? Weapon_On_Hit_Bleed_Proc_Damage_Base : 0)" ScriptB="" Name="Weapon_On_Hit_Bleed_Proc_Damage_Base_OffHand" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="788" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Weapon_On_Hit_Bleed_Proc_Damage_Base_OffHand : Weapon_On_Hit_Bleed_Proc_Damage_Base_MainHand)" Name="Weapon_On_Hit_Bleed_Proc_Damage_Base_CurrentHand" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="789" U2="0" U3="-1" U4="0" U5="0" ScriptA="(Held_In_OffHand ? 0 : Weapon_On_Hit_Bleed_Proc_Damage_Delta )" ScriptB="" Name="Weapon_On_Hit_Bleed_Proc_Damage_Delta_MainHand" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="790" U2="0" U3="-1" U4="0" U5="0" ScriptA="(Held_In_OffHand ? Weapon_On_Hit_Bleed_Proc_Damage_Delta : 0)" ScriptB="" Name="Weapon_On_Hit_Bleed_Proc_Damage_Delta_OffHand" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="791" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Weapon_On_Hit_Bleed_Proc_Damage_Delta_OffHand : Weapon_On_Hit_Bleed_Proc_Damage_Delta_MainHand)" Name="Weapon_On_Hit_Bleed_Proc_Damage_Delta_CurrentHand" EncodingType="Float16Or32" U10="9" Min="0" Max="0" BitCount="0" />
+  <Entry Id="792" U2="0" U3="4" U4="0" U5="0" ScriptA="" ScriptB="" Name="Power_Damage_Percent_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="793" U2="0" U3="4" U4="0" U5="0" ScriptA="" ScriptB="" Name="Power_Resource_Reduction" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="794" U2="0" U3="4" U4="0" U5="0" ScriptA="" ScriptB="" Name="Power_Cooldown_Reduction" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="795" U2="0" U3="4" U4="0" U5="0" ScriptA="" ScriptB="" Name="Power_Duration_Increase" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="796" U2="0" U3="4" U4="0" U5="0" ScriptA="" ScriptB="" Name="Power_Crit_Percent_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="797" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="" Name="Weapon_Crit_Chance" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="798" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? 0 : Weapon_Crit_Chance )" ScriptB="" Name="Weapon_Crit_Chance_MainHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="799" U2="0" U3="-1" U4="7" U5="0" ScriptA="(Held_In_OffHand ? Weapon_Crit_Chance : 0)" ScriptB="" Name="Weapon_Crit_Chance_OffHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="800" U2="0" U3="-1" U4="7" U5="0" ScriptA="" ScriptB="(DualWield_Hand ? Weapon_Crit_Chance_OffHand : Weapon_Crit_Chance_MainHand)" Name="Weapon_Crit_Chance_CurrentHand" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="801" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Strength_Item" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="802" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Dexterity_Item" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="803" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Intelligence_Item" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="804" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Vitality_Item" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="805" U2="0" U3="-1" U4="0" U5="1" ScriptA="" ScriptB="" Name="Item_Level_Requirement_Reduction" EncodingType="Int" U10="9" Min="0" Max="0" BitCount="32" />
+  <Entry Id="806" U2="0" U3="-1" U4="0" U5="0" ScriptA="" ScriptB="" Name="Item_Durability_Percent_Bonus" EncodingType="Float16" U10="9" Min="0" Max="0" BitCount="16" />
+  <Entry Id="807" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Item_Indestructible" EncodingType="IntMinMax" U10="8" Min="0" Max="1" BitCount="1" />
+  <Entry Id="808" U2="1065353216" U3="-1" U4="1" U5="0" ScriptA="" ScriptB="" Name="Core_Attributes_From_Item_Bonus_Multiplier" EncodingType="Int" U10="1" Min="0" Max="0" BitCount="32" />
+  <Entry Id="809" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Waiting_To_Accept_Resurrection" EncodingType="IntMinMax" U10="1" Min="0" Max="1" BitCount="1" />
+  <Entry Id="810" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Ghosted" EncodingType="IntMinMax" U10="1" Min="0" Max="1" BitCount="1" />
+  <Entry Id="811" U2="0" U3="-1" U4="1" U5="1" ScriptA="" ScriptB="" Name="Special_Inventory_Has_Sold" EncodingType="IntMinMax" U10="2" Min="0" Max="1" BitCount="1" />
+  <Entry Id="812" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="" Name="Power_Channel_Lockout_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="813" U2="0" U3="4" U4="4" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_0_Lockout_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="814" U2="0" U3="4" U4="4" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_1_Lockout_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="815" U2="0" U3="4" U4="4" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_2_Lockout_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="816" U2="0" U3="4" U4="4" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_3_Lockout_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="817" U2="0" U3="4" U4="4" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_4_Lockout_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="818" U2="0" U3="4" U4="4" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_5_Lockout_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="819" U2="0" U3="4" U4="4" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_6_Lockout_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="820" U2="0" U3="4" U4="4" U5="1" ScriptA="" ScriptB="" Name="Power_Buff_7_Lockout_Time" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="821" U2="-1" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="" Name="Known_By_Owner" EncodingType="Int" U10="0" Min="0" Max="0" BitCount="32" />
+  <Entry Id="822" U2="0" U3="-1" U4="4" U5="1" ScriptA="" ScriptB="" Name="Projectile_Detonate_Time" EncodingType="Int" U10="64" Min="0" Max="0" BitCount="32" />
+</Attributes>

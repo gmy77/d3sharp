@@ -1,0 +1,14 @@
+== mooege Runtime/Framework Compatibility File ==
+
+Currently supported:
+
+* Language: C# 4.0
+* .NET Framework Version: .NET FX 4.0
+* Microsoft Runtime: .NET 4.0
+* Mono Runtime: 2.10.5
+* Game Version: 1.0.1 (9558)
+
+Requirements:
+
+* OpenSSL-1.0.0.e
+* SQLite 

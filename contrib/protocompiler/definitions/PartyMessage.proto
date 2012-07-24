@@ -1,0 +1,30 @@
+import "OnlineService.proto";
+
+package D3.PartyMessage;
+
+message ScreenStatus
+{
+    required int32 screen = 1;
+    required int32 status = 2;
+}
+
+message SearchForPublicGameParams
+{
+    optional sint64 start_time = 1;
+    optional uint32 seconds_to_search = 2;
+    optional .D3.OnlineService.GameCreateParams game_params = 3;
+    optional int32 remove_reason = 4;
+}
+
+message EnterGamePartyMember
+{
+    required .D3.OnlineService.EntityId account_id = 1;
+    required .D3.OnlineService.EntityId hero_id = 2;
+}
+
+message EnterGamePartyMemberList
+{
+    repeated .D3.PartyMessage.EnterGamePartyMember member = 1;
+    optional int32 requester_index = 2;
+}
+

@@ -1,2 +1,0 @@
-EXPORTS
-	StartDll = _Z8StartDlli @2

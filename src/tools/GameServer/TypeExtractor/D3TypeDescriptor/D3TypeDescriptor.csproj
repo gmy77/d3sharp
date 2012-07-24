@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F4367152-8294-4CF1-A984-3CD7B58DDEAD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>D3TypeDescriptor</RootNamespace>
+    <AssemblyName>D3TypeDescriptor</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+    </Reference>
+    <Reference Include="System.Core">
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+    </Reference>
+    <Reference Include="System.Data">
+    </Reference>
+    <Reference Include="System.Xml">
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BasicTypeDescriptor.cs" />
+    <Compile Include="GameMessageDescriptor.cs" />
+    <Compile Include="Overrides\AttributeSetValueMessage.cs" />
+    <Compile Include="Overrides\AttributesSetValuesMessage.cs" />
+    <Compile Include="Overrides\DT_ACCEL.cs" />
+    <Compile Include="Overrides\DT_ANGLE.cs" />
+    <Compile Include="Overrides\DT_ANGULARVELOCITY.cs" />
+    <Compile Include="Overrides\DT_ATTRIBUTEPARAM.cs" />
+    <Compile Include="Overrides\DT_BYTE.cs" />
+    <Compile Include="Overrides\DT_CHARARRAY.cs" />
+    <Compile Include="Overrides\DT_CSTRING.cs" />
+    <Compile Include="Overrides\DT_DATAID.cs" />
+    <Compile Include="Overrides\DT_ENUM.cs" />
+    <Compile Include="Overrides\DT_FIXEDARRAY.cs" />
+    <Compile Include="Overrides\DT_FLAG.cs" />
+    <Compile Include="Overrides\DT_FLOAT.cs" />
+    <Compile Include="Overrides\DT_FORMULA.cs" />
+    <Compile Include="Overrides\DT_GBID.cs" />
+    <Compile Include="Overrides\DT_HIGHPRECISIONPERCENT.cs" />
+    <Compile Include="Overrides\DT_IMPULSE.cs" />
+    <Compile Include="Overrides\DT_INT.cs" />
+    <Compile Include="Overrides\DT_INT64.cs" />
+    <Compile Include="Overrides\DT_MASS.cs" />
+    <Compile Include="Overrides\DT_OPTIONAL.cs" />
+    <Compile Include="Overrides\DT_PERCENT.cs" />
+    <Compile Include="Overrides\DT_SNO.cs" />
+    <Compile Include="Overrides\DT_SNONAME_HANDLE.cs" />
+    <Compile Include="Overrides\DT_SNO_GROUP.cs" />
+    <Compile Include="Overrides\DT_TAGMAP.cs" />
+    <Compile Include="Overrides\DT_TIME.cs" />
+    <Compile Include="Overrides\DT_TRANSLATEABLE.cs" />
+    <Compile Include="Overrides\DT_VARIABLEARRAY.cs" />
+    <Compile Include="Overrides\DT_VELOCITY.cs" />
+    <Compile Include="Overrides\DT_WORD.cs" />
+    <Compile Include="NetAttribute.cs" />
+    <Compile Include="Overrides\GenericBlobMessage.cs" />
+    <Compile Include="Overrides\NetAttributeKeyValue.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BitBuffer.cs" />
+    <Compile Include="FieldDescriptor.cs" />
+    <Compile Include="TypeDescriptor.cs" />
+    <Compile Include="StructureTypeDescriptor.cs" />
+    <Compile Include="Extensions.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
