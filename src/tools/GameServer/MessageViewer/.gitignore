@@ -1,0 +1,8 @@
+
+*.manifest
+*.pdb
+*.exe
+*.dll
+bin/Debug/
+/obj/
+/*.suo

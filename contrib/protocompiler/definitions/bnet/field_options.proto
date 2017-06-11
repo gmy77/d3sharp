@@ -1,0 +1,15 @@
+import "google/protobuf/descriptor.proto";
+
+package bnet.protocol;
+
+enum LogOption
+{
+    HIDDEN = 1;
+    HEX = 2;
+}
+
+extend .google.protobuf.FieldOptions
+{
+    optional .bnet.protocol.LogOption log = 50000;
+}
+

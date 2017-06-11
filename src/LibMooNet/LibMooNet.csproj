@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4CC19847-6F24-4453-9E31-126F94308AB9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>LibMooNet</RootNamespace>
+    <AssemblyName>LibMooNet</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Google.ProtocolBuffers">
+      <HintPath>..\..\dep\protobuf-csharp\Google.ProtocolBuffers.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="bnet\protocol\account\AccountTypes.cs" />
+    <Compile Include="bnet\protocol\achievements\AchievementsService.cs" />
+    <Compile Include="bnet\protocol\authentication\AuthenticationService.cs" />
+    <Compile Include="bnet\protocol\challenge\ChallengeService.cs" />
+    <Compile Include="bnet\protocol\channel\ChannelService.cs" />
+    <Compile Include="bnet\protocol\channel_invitation\ChannelInvitationService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="bnet\protocol\config\Locale.cs" />
+    <Compile Include="bnet\protocol\config\RpcConfig.cs" />
+    <Compile Include="bnet\protocol\connection\ConnectionService.cs" />
+    <Compile Include="bnet\protocol\exchange\Exchange.cs" />
+    <Compile Include="bnet\protocol\exchange_object_provider\ExchangeObjectProviderTypes.cs" />
+    <Compile Include="bnet\protocol\exchange_risk\ExchangeRiskTypes.cs" />
+    <Compile Include="bnet\protocol\FieldOptions.cs" />
+    <Compile Include="bnet\protocol\friends\FriendsService.cs" />
+    <Compile Include="bnet\protocol\game_master\GameMasterService.cs" />
+    <Compile Include="bnet\protocol\game_utilities\GameUtilitiesService.cs" />
+    <Compile Include="bnet\protocol\invitation\InvitationTypes.cs" />
+    <Compile Include="bnet\protocol\notification\NotificationService.cs" />
+    <Compile Include="bnet\protocol\presence\PresenceService.cs" />
+    <Compile Include="bnet\protocol\report\ReportService.cs" />
+    <Compile Include="bnet\protocol\resources\ResourceService.cs" />
+    <Compile Include="bnet\protocol\ResourceTypes.cs" />
+    <Compile Include="bnet\protocol\RoleSet.cs" />
+    <Compile Include="bnet\protocol\search\SearchService.cs" />
+    <Compile Include="bnet\protocol\server_pool\ServerPoolService.cs" />
+    <Compile Include="bnet\protocol\session\SessionService.cs" />
+    <Compile Include="bnet\protocol\user_manager\UserManagerService.cs" />
+    <Compile Include="bnet\protocol\user_manager\UserManagerTypes.cs" />
+    <Compile Include="D3\AuctionHouse\AuctionHouse.cs" />
+    <Compile Include="D3\CS\CS.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="bnet\protocol\achievements\AchievementsStaticData.cs" />
+    <Compile Include="bnet\protocol\channel_invitation\ChannelInvitationTypes.cs" />
+    <Compile Include="bnet\protocol\ContentHandle.cs" />
+    <Compile Include="bnet\protocol\Entity.cs" />
+    <Compile Include="bnet\protocol\exchange\ExchangeService.cs" />
+    <Compile Include="bnet\protocol\Rpc.cs" />
+    <Compile Include="bnet\protocol\attribute\Attribute.cs" />
+    <Compile Include="bnet\protocol\channel\ChannelOwner.cs" />
+    <Compile Include="bnet\protocol\channel\ChannelTypes.cs" />
+    <Compile Include="bnet\protocol\chat\ChatTypes.cs" />
+    <Compile Include="bnet\protocol\exchange\ExchangeTypes.cs" />
+    <Compile Include="bnet\protocol\friends\FriendsTypes.cs" />
+    <Compile Include="bnet\protocol\game_master\GameFactory.cs" />
+    <Compile Include="bnet\protocol\game_master\GameMasterTypes.cs" />
+    <Compile Include="bnet\protocol\presence\PresenceTypes.cs" />
+    <Compile Include="bnet\protocol\profanity\Profanity.cs" />
+    <Compile Include="bnet\protocol\search\SearchTypes.cs" />
+    <Compile Include="D3\Account\Account.cs" />
+    <Compile Include="D3\AttributeSerializer\AttributeSerializer.cs" />
+    <Compile Include="D3\Client\Settings.cs" />
+    <Compile Include="D3\GameBalance\GBHandle.cs" />
+    <Compile Include="D3\GameMessage\GameMessage.cs" />
+    <Compile Include="D3\Hero\Hero.cs" />
+    <Compile Include="D3\Hireling\Hireling.cs" />
+    <Compile Include="D3\ItemCrafting\ItemCrafting.cs" />
+    <Compile Include="D3\Items\Items.cs" />
+    <Compile Include="D3\OnlineService\OnlineService.cs" />
+    <Compile Include="D3\PartyMessage\PartyMessage.cs" />
+    <Compile Include="D3\Profile\Profile.cs" />
+    <Compile Include="D3\Quests\Quest.cs" />
+  </ItemGroup>
+  <ItemGroup />
+</Project>
