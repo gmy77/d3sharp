@@ -1,0 +1,83 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MooNetHelpers", "..\..\..\src\tools\MooNet\Helpers\MooNetHelpers.csproj", "{1519D483-C89D-4B86-8A48-2E4F05440423}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringViewer", "..\..\..\src\tools\MooNet\StringViewer\StringViewer.csproj", "{16031196-6376-47C3-AC91-0BBA17F1F7C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMooNet", "..\..\..\src\LibMooNet\LibMooNet.csproj", "{4CC19847-6F24-4453-9E31-126F94308AB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeaderViewer", "..\..\..\src\tools\MooNet\HeaderViewer\HeaderViewer.csproj", "{19F1717B-23ED-475F-AC31-1ACD1155B590}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtoExtractor", "..\..\..\src\tools\MooNet\ProtoExtractor\ProtoExtractor.csproj", "{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1519D483-C89D-4B86-8A48-2E4F05440423}.Release|x86.ActiveCfg = Release|Any CPU
+		{16031196-6376-47C3-AC91-0BBA17F1F7C6}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{16031196-6376-47C3-AC91-0BBA17F1F7C6}.Debug|Any CPU.Build.0 = Debug|x86
+		{16031196-6376-47C3-AC91-0BBA17F1F7C6}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{16031196-6376-47C3-AC91-0BBA17F1F7C6}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{16031196-6376-47C3-AC91-0BBA17F1F7C6}.Debug|x86.ActiveCfg = Debug|x86
+		{16031196-6376-47C3-AC91-0BBA17F1F7C6}.Debug|x86.Build.0 = Debug|x86
+		{16031196-6376-47C3-AC91-0BBA17F1F7C6}.Release|Any CPU.ActiveCfg = Release|x86
+		{16031196-6376-47C3-AC91-0BBA17F1F7C6}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{16031196-6376-47C3-AC91-0BBA17F1F7C6}.Release|Mixed Platforms.Build.0 = Release|x86
+		{16031196-6376-47C3-AC91-0BBA17F1F7C6}.Release|x86.ActiveCfg = Release|x86
+		{16031196-6376-47C3-AC91-0BBA17F1F7C6}.Release|x86.Build.0 = Release|x86
+		{4CC19847-6F24-4453-9E31-126F94308AB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CC19847-6F24-4453-9E31-126F94308AB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CC19847-6F24-4453-9E31-126F94308AB9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4CC19847-6F24-4453-9E31-126F94308AB9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4CC19847-6F24-4453-9E31-126F94308AB9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4CC19847-6F24-4453-9E31-126F94308AB9}.Release|x86.ActiveCfg = Release|Any CPU
+		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Debug|Any CPU.Build.0 = Debug|x86
+		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Debug|x86.ActiveCfg = Debug|x86
+		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Debug|x86.Build.0 = Debug|x86
+		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Release|Any CPU.ActiveCfg = Release|x86
+		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Release|Mixed Platforms.Build.0 = Release|x86
+		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Release|x86.ActiveCfg = Release|x86
+		{19F1717B-23ED-475F-AC31-1ACD1155B590}.Release|x86.Build.0 = Release|x86
+		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Debug|x86.ActiveCfg = Debug|x86
+		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Debug|x86.Build.0 = Debug|x86
+		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Release|Any CPU.ActiveCfg = Release|x86
+		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Release|Mixed Platforms.Build.0 = Release|x86
+		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Release|x86.ActiveCfg = Release|x86
+		{5CAAB5DB-0280-47B0-B867-ACF2B01D37AE}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = ..\..\..\src\tools\MooNet\HeaderViewer\HeaderViewer.csproj
+	EndGlobalSection
+EndGlobal
