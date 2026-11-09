@@ -1,0 +1,5 @@
+version: 1
+defaultPath: path/to/translation_file.ts # Path to the default translation file
+languages:
+  - relativePath: de.ts # Relative path to the auto-translated file
+    language: German # English name of the language to be translated to.
